@@ -83,8 +83,6 @@ def test_very_basics():
     assert isinstance(coviz, CovizModel)
 
 def test_model():
-    # print(geometry_collection)
-    coviz = CovizModel('/scratch/fmu/sago/3_r001_reek_seismatch')
     scratchdir = '/scratch/fmu/sago/3_r001_reek_seismatch'
     
     #Some output not stored on scratch

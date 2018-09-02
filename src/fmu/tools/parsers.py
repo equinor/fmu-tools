@@ -107,19 +107,19 @@ class RmsVolumeFileParser(object):
             usedcolumns.update(self.totalcolumns)
         # Checks which columns to use and pick up column dtypes to use
         for index, data in enumerate(header):
-            for key, value in usedcolumns.iteritems():
+            for key in usedcolumns.keys():
                 if key in data:
                     header[index] = data.replace(key, usedcolumns[key])
                     usedcolumntypes[usedcolumns[key]
                                    ] = self.columntypes[usedcolumns[key]]
-        df = pd.DataFrame(columns=header)
+        dframe = pd.DataFrame(columns=header)
         # Remove all lines with 'Totals'
-        for i in range(headerline + 1, len(lines)):
-            if not 'Totals' in lines[i]:
-                values = lines[i].split()
+        for index in range(headerline + 1, len(lines)):
+            if not 'Totals' in lines[index]:
+                values = lines[index].split()
                 line = pd.Series(values, header)
-                df = df.append(line, ignore_index=True)
+                dframe = dframe.append(line, ignore_index=True)
         # Set column dtypes
-        df = df.astype(usedcolumntypes)
+        dframe = dframe.astype(usedcolumntypes)
         volfile.close()
-        return df
+        return dframe
