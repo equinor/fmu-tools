@@ -95,9 +95,19 @@ def test_model():
     
     coviz = CovizModel(scratchdir)
     spatial_collection = SpatialFileNameCollection(firstReal).as_dict
+    
+
+    scol = spatial_collection['values'][0]
+    assert scol['base0'] == 'ds_extracted_horizons'
+    assert scol['base1'] == ['topupperreek', 'topmidreek', 'toplowerreek', 'baselowerreek']
+    assert scol['base2'] == None
+    
+    scol = spatial_collection['values'][-1]
+    assert scol['base0'] == 'seismatch_rms'
+    assert scol['base1'] == ['topmidreek']
+    assert scol['base2'] == ['20000101', '20010601_20000101', '20030101_20000101', '20030101_20010601']
+    
     coviz.set_spatial_collection(spatial_collection)
-    
-    
     for ensemble in iters:
         data = []
         vol_df = collect_volfiles(scratchdir, ensemble, reals)
@@ -117,10 +127,16 @@ def test_model():
     data = json.loads(coviz.__repr__())
 
     assert data['id'] == 6181126438477286346
-    assert data['ensembles'][0]['data'][0]['name'] == 'volume_data'
-    assert data['ensembles'][0]['data'][0]['values'][0]['BULK_OIL'] == 324035109.87
-    assert data['ensembles'][0]['data'][0]['correlations'][0][0] == 1.0
-    assert data['ensembles'][0]['data'][0]['corr_columns'][0] == 'REGION'
+    ensdata = data['ensembles'][0]['data'][0]
+    assert ensdata['name'] == 'volume_data'
+    assert ensdata['values'][0]['BULK_OIL'] == 324035109.87
+    assert ensdata['correlations'][0][0] == 1.0
+    assert ensdata['corr_columns'][0] == 'REGION'
 
-
-
+    scol = data['spatial_collection']['values']
+    assert scol[0]['base0'] == 'ds_extracted_horizons'
+    assert scol[0]['base1'] == ['topupperreek', 'topmidreek', 'toplowerreek', 'baselowerreek']
+    assert scol[0]['base2'] == None
+    assert scol[-1]['base0'] == 'seismatch_rms'
+    assert scol[-1]['base1'] == ['topmidreek']
+    assert scol[-1]['base2'] == ['20000101', '20010601_20000101', '20030101_20000101', '20030101_20010601']
