@@ -1,0 +1,34 @@
+# Design input .xlsx or .csv format
+design:
+  designpath: ../tests/data/sensitivities/distributions
+  designname: design.csv
+
+# Result input, should be on csv format and Realization column named 'REAL'
+results:
+  resultpath: /scratch/fmu/tral/doe_110_20180307/share/results/eclipse_hist
+  resultname: doe_110_20180307_hist.csv
+  # If renaming of columns is necessary , e.g from CSV_EXPORT1
+  renamecolumns: Yes
+  renaming: # From name : To name
+    Realization: REAL
+    Iteration: ITER
+
+# Which tornado plots to calculate
+calculations:
+  responses:
+    - FOPT
+    - FGPT
+  # Should be list of lists, each item a string
+  selections:
+    Date: [['2013-07-11']]
+  menuprefix: ECL
+  
+# Tornado plot options
+tornadooptions:
+  # Choose seed sensitivity or a single realisation number as reference
+  reference: seed
+  # Choose absolute or percentage (relative to reference average)
+  scale: absolute
+  # Choose Yes if sensitivities smaller than seed should be excluded from plot
+  cutbyseed: Yes
+  
