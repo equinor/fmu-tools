@@ -10,13 +10,33 @@ def summarize_design(filename, sheetname='DesignSheet01'):
      Summarizes the design set up for one by one sensitivities
      specified in a design matrix on standard fmu format.
 
-    :returns: A pandas dataframe with summary of sensitivities,
-     corresponding realisation numbers, senstype('mc' or 'scalar')
-     and senscase (name of high and low cases).
-     Each row represents one sensitivity with 1-2 cases (low/high)
-    :param filename: path to excel or csv file containting designmatrix
-    :param sheetname: if excel input, name of sheet in excel workbook that
-     contains the designmatrix
+    Args:
+        filename (str): Path to excel or csv file containting designmatrix
+                        for one by one sensitivities on standard FMU format.
+        sheetname (str, optional): Name of sheet in excel workbook which
+                                   contains the designmatrix
+                                   (only for excel input). Defaults to
+                                   'DesignSheet01'.
+
+    Returns:
+        pandas.DataFrame: Summary of sensitivities,
+        corresponding realisation numbers,
+        senstype('mc' or 'scalar')
+        and senscase (name of high and low cases).
+
+        Each row represents one sensitivity
+        with 1-2 cases (low/high).
+
+        Column names are ['sensno', 'sensname',
+        'senstype', 'casename1', 'startreal1', 'endreal1',
+        'casename2', 'startreal2', 'endreal2']
+
+    Example:
+        >>> from fmu.tools.sensitivities import summarize_design
+        >>> designname = 'design_filename.xlsx'
+        >>> designsheet = 'DesignSheet01'
+        >>> designtable = summarize_design(designname, designsheet)
+
     """
 
     # Initialisation of dataframe to store results
