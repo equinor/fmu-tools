@@ -3,23 +3,26 @@
 
 
 def find_combinations(selections):
-    """
-    :returns: A list of all possible combinations of the chosen selections
-    :param selections: ordered dictionary where each key (selector) is
-     a string and the value (filtering choices for this selector)
-     is a list of lists
-    :Example:
+    """ Finds combinations of values in OrderedDict
 
-    >>> from collections import OrderedDict
-    >>> exampleinput = {'numbers': ['one', 'two', 'three'],
-                        'letters': ['a', 'b']}
-    >>> find_combinations(exampleinput)
-    [['one', 'a'],
-    ['two', 'a'],
-    ['three', 'a'],
-    ['one', 'b'],
-    ['two', 'b'],
-    ['three', 'b']]
+    Args:
+        selections: Ordered dictionary where for each key
+                    the value is a list of lists.
+
+    Returns:
+        list: List of all possible combinations of the list items
+
+    Example:
+        >>> from collections import OrderedDict
+        >>> exampleinput = {'zones': [['zone_a', 'zone_b'], 'zone_c'],
+                           'regions': ['reg_1', 'reg_2']}
+        >>> find_combinations(exampleinput)
+        [
+        ['reg_1', ['zone_a', 'zone_b']],
+        ['reg_1', 'zone_c'],
+        ['reg_2', ['zone_a', 'zone_b']],
+        ['reg_2', 'zone_c']
+        ]
 
     """
     # create list of lists with values from dictionary
