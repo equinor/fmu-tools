@@ -56,22 +56,52 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
                       selection, reference='seed', scale='percentage',
                       cutbyseed=False):
     """
-     Calculates values to be plotted in a webviz TornadoPlot for one response
+     Calculates input values for a webviz TornadoPlot for one response
      and one design set up
 
-    :returns tornadoinput: dataframe on format for webviz.TornadoPlot class
-    :returns  ref_average: average for reference sensitivity
-    :param designsummary: pandas dataframe with summary of designmatrix
-    :param resultfile: a pandas dataframe with all results collected
-     and 'REAL' as one of the headers
-    :param response(str): name of response in resultfile to plot tornado for
-    :param selectors(list of strings): which selectors to choose/filter on
-    :param selections(list of lists): what to filter on for each selector
-    :param reference: specifying what is the reference for the tornado plots
-     valid choices are 'seed' or a realisation number
-    :param scale: whether to plot absolute numbers or percentage compared
-     to reference mean valid choices are 'percentage' and 'absolute'
-    :param cutbyseed: If True sensitivities smaller than seed are excluded
+    Args:
+        response(str): name of response in resultfile to plot tornado for
+        selectors(list of strings): Selectors to choose/filter on
+        selections(list of lists): Values to filter on for each selector.
+        reference(str, optional): Specifying what the reference is for
+                                  the tornado plots. Defaults to 'seed'.
+                                  Valid choices are 'seed' or a
+                                  realisation number.
+        scale(str, optional): Whether to plot absolute numbers or percentage
+                              compared to reference mean.
+                              Defaults to 'percentage'.
+                              Valid choices are 'percentage' and 'absolute'.
+        cutbyseed (bool, optional): If True sensitivities smaller than seed
+                                    are excluded. Defaults to False.
+        designsummary (pandas DataFrame): Summary of designmatrix as output
+                                          from summarize_design.
+        resultfile (pandas.DataFrame): DataFrame with collected results
+                                       for different realizations where
+                                       'REAL' is one of the columns.
+
+    Returns:
+        tuple:
+
+            * (pandas.DataFrame): tornadoinput for DataFrame in for
+                                  webviz.TornadoPlot class
+            * (int): Average response value for realizations in
+                     reference sensitivity.
+
+    Example:
+        >>> import pandas as pd
+        >>> from fmu.tools.sensitivities import calc_tornadoplot
+        >>> designtable = pd.read_csv('designsummary.csv')
+        >>> results = pd.read_csv('resultfile.csv')
+        >>> response = 'STOIIP_OIL'
+        >>> selectors = ['ZONE', 'REGION']
+        >>> selection = [['Nansen','Larsson'], ['SegmentA']]
+        >>> reference = 'seed'
+        >>> scale = 'percentage'
+        >>> cutbyseed = True
+        >>> (tornadotable, ref_value) = calc_tornadoinput(
+            designtable, results, response,
+            selectors, selection, reference, scale, cutbyseed)
+
     """
     # Check that chosen response exists in resultfile
     check_response(resultfile, response)

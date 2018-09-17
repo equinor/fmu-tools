@@ -95,11 +95,25 @@ def gatherresults(config):
 
 def add_webviz_tornadoplots(web, configfile):
     """
-     Generating a set of TornadoPlots for webviz on webviz Pages
+    Generating a set of TornadoPlots for webviz on webviz Pages
 
-    :returns: webviz SubMenu with set of tornado plot on webviz Pages
-    :param web: webportal where submenu should be added
-    :param configfile: yaml configuration file for tornado calculations
+    Args:
+        web: webportal where submenu should be added
+        configfile(str): yaml configuration file for tornado calculations
+
+    Returns:
+        webviz.SubMenu: Set of webviz.Pages with tornado plots
+
+    Example:
+        >>> from fmu.tools import sensitivities as sens
+        >>> from webportal import Webportal
+        >>> html_foldername = './webportal_example'
+        >>> title = 'Snorreberg'
+        >>> web = Webportal(title)
+        >>> configfile ='../input/config/config_filename.yaml'
+        >>> sens.add_webviz_tornadoplots(web, configfile)
+        >>> web.write_html(html_foldername, overwrite=True, display=True)
+
     """
 
     yamlfile = configfile
