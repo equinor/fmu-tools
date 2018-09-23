@@ -8,11 +8,6 @@ __version__ = get_versions()['version']
 del get_versions
 
 from .tools import Tools  # noqa
-from .parsers import RmsVolumeFileParser # noqa
-from .coviz import SpatialFileNameCollection# noqa 
-from .coviz import DataArray # noqa
-from .coviz import StatisticsArray # noqa
-from .coviz import CovizModel # noqa
 from .sensitivities import summarize_design # noqa
 from .sensitivities import calc_tornadoinput # noqa
 from .sensitivities import find_combinations # noqa
