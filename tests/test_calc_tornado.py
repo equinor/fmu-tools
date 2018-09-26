@@ -9,7 +9,7 @@ import os
 import pandas as pd
 
 from fmu import config
-from fmu.tools import sensitivities
+from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
 from collections import OrderedDict
 
 fmux = config.etc.Interaction()
@@ -27,7 +27,7 @@ def test_combine_selectors():
     shortdict = OrderedDict()
     shortdict['key1'] = [1, 2, 3]
     shortdict['key2'] = ['a', 'b', 'c']
-    shortcomb = sensitivities.find_combinations(shortdict)
+    shortcomb = find_combinations(shortdict)
     assert len(shortcomb) == 9
 
     # Test on combinations of lists of lists, typical tornado usage
@@ -48,7 +48,7 @@ def test_combine_selectors():
                            ['all']
                            ]
 
-    comb = sensitivities.find_combinations(selections)
+    comb = find_combinations(selections)
 
     # Check correct number of combinations 1*4*3 and result of (1,1,1)
     assert len(comb) == 12
@@ -77,7 +77,7 @@ def test_calc_tornadoinput():
               '/data/sensitivities/results/geovolumes_collected.csv')
 
     # Calculate and check results of one tornado calculation
-    (tornadotable, ref_value) = sensitivities.calc_tornadoinput(
+    (tornadotable, ref_value) = calc_tornadoinput(
                                 des_summary, results,
                                 'STOIIP_OIL',
                                 ['ITER', 'ZONE', 'REGION'],
@@ -93,7 +93,7 @@ def test_calc_tornadoinput():
     assert int(ref_value) == 9330662
 
     # Check summing over all zones and regions before calculations
-    (tornadotable, ref_value) = sensitivities.calc_tornadoinput(
+    (tornadotable, ref_value) = calc_tornadoinput(
                                 des_summary, results,
                                 'STOIIP_OIL',
                                 ['ITER', 'ZONE', 'REGION'],

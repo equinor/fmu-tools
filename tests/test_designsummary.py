@@ -8,7 +8,7 @@ from __future__ import print_function
 import os
 
 from fmu import config
-from fmu.tools import sensitivities
+from fmu.tools.sensitivities import summarize_design
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -26,7 +26,7 @@ def test_designsummary():
     else:
         testdir = os.path.abspath('.')
 
-    fossekalldesign = sensitivities.summarize_design(
+    fossekalldesign = summarize_design(
                       testdir +
                       '/data/sensitivities/distributions/' +
                       'design.xlsx',
@@ -39,7 +39,7 @@ def test_designsummary():
     assert fossekalldesign['endreal1'].sum() == 333
 
     # Test same also when design matrix is in .csv format
-    designcsv = sensitivities.summarize_design(
+    designcsv = summarize_design(
                 testdir +
                 '/data/sensitivities/distributions/' +
                 'design.csv')
