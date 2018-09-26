@@ -10,7 +10,7 @@ Adding sets of tornado plots to webportal
 -----------------------------------------
 This example shows how sets of tornado plots from a single sensitivitiy run can be added to a webportal using yaml configuration files and the 'add_webviz_tornadoplot'.
 
-Snorreberg on-by-one sensitivities run with design matrix is further explained on FMU wiki portal.
+Snorreberg one-by-one sensitivities run with design matrix is further explained on FMU wiki portal.
 
 
 Yaml file for tornado from rms volumes
@@ -42,20 +42,20 @@ Python example using yaml input
 
     #!/usr/bin/env python
     # -*- coding: utf-8 -*-
-    from fmu.tools import sensitivities as sens
-    from webportal import Webportal
+    from fmu.tools.sensitivities import add_webviz_tornadoplots
+    from webviz import Webviz
  
-    html_foldername = './webportal_example'
+    html_foldername = './webviz_example'
     title = 'Snorreberg'
  
-    web = Webportal(title)
+    web = Webviz(title, theme='equinor')
     configpath = '../input/config/'
  
-    # add different types of plots to webportal
-    sens.add_webviz_tornadoplots(web, configpath +
-                             'config_example_geovolume.yaml') 
-    sens.add_webviz_tornadoplots(web, configpath +
-                             'config_example_eclipse.yaml')
+    # add different types of plots to webviz project in SubMenus
+    add_webviz_tornadoplots(web, configpath +
+                            'config_example_geovolume.yaml') 
+    add_webviz_tornadoplots(web, configpath +
+                            'config_example_eclipse.yaml')
  
     # Finally, write html
     web.write_html(html_foldername, overwrite=True, display=True)
@@ -108,14 +108,12 @@ Using calc_tornadoplot with a 'designsummary' and a resultfile as input, and cal
     selection = [['Nansen','Larsson'], ['SegmentA']] # Will sum Nansen and Larsson volumes first
     reference = 'seed' # Alternatively a single realisation number
     scale = 'percentage' # Alterntively 'absolute'
-    cutbyseed = True # If excluding sensitivities smaller than seed, default is False 
  
     (tornadotable, ref_value) = calc_tornadoinput(
-        designtable,
-        results, response,
-        selectors, selection,
-        reference, scale, cutbyseed)
+        designtable, results, response, selectors,
+        selection, reference, scale)
  
+    # Other options: specify cutbyseed = True and sortsens = False (see documentation).
     # tornadotable is a pandas DataFrame for visualisation of TornadoPlot in webviz
-    # ref_value is the average of the reference. 
-    # Can be useful to include in label/title in webviz
+    # ref_value is the average of the reference, 
+    # which can be useful to include in label/title in webviz
