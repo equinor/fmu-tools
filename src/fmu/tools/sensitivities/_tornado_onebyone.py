@@ -52,14 +52,28 @@ def cut_by_seed(tornadotable):
     return dfr_filtered
 
 
+def sort_by_max(tornadotable):
+    """ Sorts table based on max(abs('low', 'high')) """
+    tornadotable['max'] = (tornadotable[['low', 'high']].apply(
+        lambda x: max(x.min(), x.max(), key=abs), axis=1).abs())
+    df_sorted = tornadotable.sort_values('max', ascending=True)
+    df_sorted.drop(['max'], axis=1, inplace=True)
+    return df_sorted
+
+
 def calc_tornadoinput(designsummary, resultfile, response, selectors,
                       selection, reference='seed', scale='percentage',
-                      cutbyseed=False):
+                      cutbyseed=False, sortsens=True):
     """
      Calculates input values for a webviz TornadoPlot for one response
      and one design set up
 
     Args:
+        designsummary (pandas DataFrame): Summary of designmatrix as output
+                                          from summarize_design.
+        resultfile (pandas.DataFrame): DataFrame with collected results
+                                       for different realizations where
+                                       'REAL' is one of the columns.
         response(str): name of response in resultfile to plot tornado for
         selectors(list of strings): Selectors to choose/filter on
         selections(list of lists): Values to filter on for each selector.
@@ -73,11 +87,8 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
                               Valid choices are 'percentage' and 'absolute'.
         cutbyseed (bool, optional): If True sensitivities smaller than seed
                                     are excluded. Defaults to False.
-        designsummary (pandas DataFrame): Summary of designmatrix as output
-                                          from summarize_design.
-        resultfile (pandas.DataFrame): DataFrame with collected results
-                                       for different realizations where
-                                       'REAL' is one of the columns.
+        sortsens (bool, optional): If True sensitivities are sorted so that
+                                   largest comes first. Defaults to True.
 
     Returns:
         tuple:
@@ -98,9 +109,10 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         >>> reference = 'seed'
         >>> scale = 'percentage'
         >>> cutbyseed = True
+        >>> sortsens = False
         >>> (tornadotable, ref_value) = calc_tornadoinput(
-            designtable, results, response,
-            selectors, selection, reference, scale, cutbyseed)
+            designtable, results, response, selectors,
+            selection, reference, scale, cutbyseed, sortsens)
 
     """
     # Check that chosen response exists in resultfile
@@ -204,6 +216,10 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
     # Drops sensitivities smaller than seed if specified
     if cutbyseed and tornadoinput['sensname'].str.contains('seed').any():
         tornadoinput = cut_by_seed(tornadoinput)
+
+    # Sorts so that largest sensitivities comes first
+    if sortsens:
+        tornadoinput = sort_by_max(tornadoinput)
 
     # Return results that can be used for plotted in e.g. webviz
     tornadoinput = tornadoinput.drop(['sensno'], axis=1).set_index('sensname')

@@ -5,16 +5,14 @@ for webviz on webviz Pages. """
 from __future__ import division, print_function, absolute_import
 import os.path
 import copy
-import sys
 from collections import OrderedDict
 import pandas as pd
-sys.path.insert(0, "/project/res/webviz_multiuse") # noqa
 import yaml
-from webportal import SubMenu, Page
-import webportal.visualisations as webvis
-from fmu import ensemble
+from webviz import SubMenu, Page
+from webviz.page_elements import TornadoPlot
 from fmu.tools.sensitivities import summarize_design
 from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
+from fmu import ensemble
 
 
 def yconfig(inputfile):
@@ -74,8 +72,8 @@ def make_xlabel(ref_value, scale='percentage', reference='seed'):
 def gatherresults(config):
     """ Gathers .csv files from different realisations into one"""
     ensemblepaths = config['results']['ensemblepaths']
+    print('Gathering csv files from:')
     print(ensemblepaths)
-    print(type(ensemblepaths))
     singleresultfile = config['results']['singleresultfile']
     print(singleresultfile)
 
@@ -105,13 +103,13 @@ def add_webviz_tornadoplots(web, configfile):
         webviz.SubMenu: Set of webviz.Pages with tornado plots
 
     Example:
-        >>> from fmu.tools import sensitivities as sens
-        >>> from webportal import Webportal
+        >>> from fmu.tools.sensitivities import add_webviz_tornadoplots
+        >>> from webviz import Webviz
         >>> html_foldername = './webportal_example'
         >>> title = 'Snorreberg'
-        >>> web = Webportal(title)
+        >>> web = Webviz(title)
         >>> configfile ='../input/config/config_filename.yaml'
-        >>> sens.add_webviz_tornadoplots(web, configfile)
+        >>> add_webviz_tornadoplots(web, configfile)
         >>> web.write_html(html_foldername, overwrite=True, display=True)
 
     """
@@ -185,8 +183,11 @@ def add_webviz_tornadoplots(web, configfile):
             with pd.option_context('expand_frame_repr', False):
                 print(tornadotable)
             print('\n')
-            xlabel = make_xlabel(ref_value, scale, reference)
-            tornado_plot = webvis.TornadoPlot(tornadotable, xlabel, pagetitle)
+            # While waiting for webviz issues 84 and 85 to be solved
+            # xlabel = make_xlabel(ref_value, scale, reference)
+            # tornado_plot = \
+            # TornadoPlot(tornadotable, xlabel, pagetitle)
+            tornado_plot = TornadoPlot(tornadotable)
             pge.add_content(tornado_plot)
             smn.add_page(pge)
 
