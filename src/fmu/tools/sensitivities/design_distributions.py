@@ -14,16 +14,18 @@ def prepare_distribution(distname, dist_parameters):
     """
     Prepare scipy distributions with parameters
 
-    TO DO:
-        -Implement exceptions
-        -Implement missing distributions:
-            discrete uniform,
-            discrete123,
-            discrete uniform with weights
+    TO DO
+    1) Implement exceptions
+    2) Implement missing distributions
+    discrete uniform,
+    discrete123,
+    discrete uniform with weights
 
     Args:
         distname (str): distribution name 'normal',
                         'triang', 'uniform' or 'logunif'
+        dist_parameters (list): list with parameters for distribution
+
     Returns:
         scipy.stats distribution with parameters
     """

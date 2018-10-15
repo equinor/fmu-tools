@@ -83,9 +83,9 @@ class DesignMatrix(object):
                     counter = counter + numreal
                 self.add_sensitivity(sensitivity)
 
-    def to_csv(self, filename,
-               designsheet='DesignSheet01',
-               defaultsheet='DefaultValues'):
+    def to_xlsx(self, filename,
+                designsheet='DesignSheet01',
+                defaultsheet='DefaultValues'):
         """Writing design matrix to excel on standard fmu format
         to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW
 

@@ -5,6 +5,37 @@ Examples to learn from
 .. Notice that YAML files included are also input to testing
    and this secures consistency!
 
+-------------------------------------------------
+Create design matrix for one by one sensitivities
+-------------------------------------------------
+This example shows use of DesignMatrix to generate design matrices automatically. Input is given as a dictionary read from a yaml file
+
+Yaml file for one by one sensitivity with repeating seeds
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+In this input three single sensitivities are defined. The first one is testing the effect of only one parameter with two alternative cases. The second sensitivity is testing a group of three parameters with low and high cases. The third is a monte carlo sensitivity of three parameters, where different distributions are used for each
+
+.. literalinclude:: ../tests/data/sensitivities/config/config_design_input.yaml
+    :language: yaml
+	       
+Python example using yaml input
+"""""""""""""""""""""""""""""""
+
+.. code-block:: python
+
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+    from fmu.config import oyaml as yaml
+    from fmu.tools.sensitivities import DesignMatrix
+
+    with open('../input/config/config_design_input.yaml') as input_file:
+        input_dict = yaml.load(input_file)
+
+    design = DesignMatrix()
+    design.set_defaultvalues(input_dict['defaultvalues'])
+    design.generate(input_dict)
+    # Writing design to excel file
+    design.to_xlsx('Design01.xlsx')
+
 -----------------------------------------
 Adding sets of tornado plots to webportal
 -----------------------------------------
