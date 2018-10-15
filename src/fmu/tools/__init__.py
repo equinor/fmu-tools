@@ -8,6 +8,7 @@ __version__ = get_versions()['version']
 del get_versions
 
 from .tools import Tools  # noqa
+from .sensitivities import DesignMatrix # noqa
 from .sensitivities import summarize_design # noqa
 from .sensitivities import calc_tornadoinput # noqa
 from .sensitivities import find_combinations # noqa
