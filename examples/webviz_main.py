@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+Example of adding tornado plots to webviz project
 before running, currently using:
-source /project/res/komodo/testing/enable
-export PYTHONPATH=/project/res/webviz_multiuse/webviz_20180919/:$PYTHONPATH
+source /project/res/komodo/testing/enable for webviz
 """
 from __future__ import division, print_function, absolute_import
 from fmu.tools.sensitivities import add_webviz_tornadoplots
