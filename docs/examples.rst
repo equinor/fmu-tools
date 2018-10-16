@@ -31,7 +31,6 @@ Python example using yaml input
         input_dict = yaml.load(input_file)
 
     design = DesignMatrix()
-    design.set_defaultvalues(input_dict['defaultvalues'])
     design.generate(input_dict)
     # Writing design to excel file
     design.to_xlsx('Design01.xlsx')

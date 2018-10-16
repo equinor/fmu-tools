@@ -32,13 +32,13 @@ def prepare_distribution(distname, dist_parameters):
     if distname == 'normal':
         dist_mean = dist_parameters[0]
         dist_stddev = dist_parameters[1]
-        if is_number(dist_mean) and is_number(dist_stddev):
+        if _is_number(dist_mean) and _is_number(dist_stddev):
             return scipy.stats.norm(float(dist_mean), float(dist_stddev))
     elif distname == 'uniform':
         low = dist_parameters[0]
         high = dist_parameters[1]
         uscale = high - low
-        if is_number(low) and is_number(high):
+        if _is_number(low) and _is_number(high):
             return scipy.stats.uniform(loc=low, scale=uscale)
     elif distname == 'triang':
         low = dist_parameters[0]
@@ -46,12 +46,12 @@ def prepare_distribution(distname, dist_parameters):
         high = dist_parameters[2]
         dist_scale = high - low
         shape = (mode-low)/dist_scale
-        if is_number(low) and is_number(mode) and is_number(high):
+        if _is_number(low) and _is_number(mode) and _is_number(high):
             return scipy.stats.triang(shape, loc=low, scale=dist_scale)
     elif distname == 'logunif':
         low = dist_parameters[0]
         high = dist_parameters[1]
-        if is_number(low) and is_number(high):
+        if _is_number(low) and _is_number(high):
             loglow = numpy.log10(low)
             loghigh = numpy.log10(high)
             logscale = loghigh - loglow
@@ -76,7 +76,7 @@ def generate_mcvalues(distribution, mcreals):
     return montecarlo_values
 
 
-def is_number(teststring):
+def _is_number(teststring):
     """ Test if a string can be parsed as a float"""
     try:
         if not numpy.isnan(float(teststring)):
