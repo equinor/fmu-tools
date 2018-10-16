@@ -13,7 +13,6 @@ with open(design_configfile) as input_file:
     input_dict=yaml.load(input_file)
 
 design1 = DesignMatrix()
-design1.set_defaultvalues(input_dict['defaultvalues'])
 design1.generate(input_dict)
 print(design1.designvalues)
-design1.to_csv('design.xlsx')
+design1.to_xlsx('design.xlsx')

@@ -7,6 +7,7 @@ from __future__ import division
 from __future__ import print_function
 import pandas as pd
 from fmu.tools.sensitivities import design_distributions as design_dist
+from collections import OrderedDict
 
 
 class DesignMatrix(object):
@@ -27,13 +28,13 @@ class DesignMatrix(object):
         defaultvalues: dictionary of default/base case values
         """
         self.designvalues = pd.DataFrame(columns=['REAL'])
-        self.defaultvalues = dict()
+        self.defaultvalues = OrderedDict()
 
     def set_defaultvalues(self, defaults):
         """ Set default values to use for sensitivities
 
         Args:
-            defaults (dict): (key, value) is (parameter_name, value)
+            defaults (OrderedDict): (key, value) is (parameter_name, value)
         """
         self.defaultvalues = defaults
 
@@ -50,12 +51,15 @@ class DesignMatrix(object):
 
     def generate(self, inputdata):
         """Generating design matrix from input dictionary
+        Adding default values.
         Looping through sensitivities and adding to design
 
         Args:
             inputdata (OrderedDict): input parameters for design
         """
         seedtype = inputdata['seeds']
+        default_dict = inputdata['defaultvalues']
+        self.set_defaultvalues(default_dict)
         if inputdata['designtype'] == 'onebyone':
             counter = 0
             for key in inputdata['sensitivities'].keys():
