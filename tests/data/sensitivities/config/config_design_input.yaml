@@ -1,39 +1,58 @@
 designtype: onebyone
-repeats: 10
-seeds: None
+repeats: 10  # Number of seeds repeated for each case if not specified individually
+seeds: default # None or default (which will give 1000-1001-1002 (in future also from file)
 sensitivities:
 #
-  sens1:
-    senstype: scalar
-    cases:
-      low:  {param1: value_low}
+  sens1: # sensname becomes 'sens1'
+    senstype: scalar # scalar or mc (mc uses correlations if provided)
+    cases: 
+      low:  {param1: value_low} # senscase becomes 'low', {parameter name, value}
       high: {param1: value_high}
 #
   sens2:
     senstype: scalar
-    numreal: 5
+    numreal: 5 # Using 5 realisations instead of repeats = 10
     cases:
       low: {param4: value1l, param5: value2l, param6: value3l}
       high: {param4: value1h, param5: value2h, param6: value3h}
 #
   sens3:
     senstype: mc
-    numreal: 50
+    numreal: 50 # using 50 realizations instead of 10
     parameters:
       param6:
-      - normal
-      - [0, 1]
+      - normal # distribution names: normal, uniform, triang, logunif (more will come)
+      - [0, 1] # distribution parameters [mean, std dev]
       param7:
       - uniform
-      - [0, 1]
+      - [0, 1] # [from, to]
       param8:
       - triang
-      - [1 ,3, 5]
+      - [1 ,3, 5] # [low, mode, high]
       param9:
       - logunif
-      - [1,10]
+      - [1,10]  # [from, to]
+      
+# Monte carlo with correlated parameters. Not in use yet.
+#  sens4:
+#    senstype: mc
+#    numreal: 50
+#    parameters:
+#      param6:
+#      - normal
+#      - [0, 1]
+#      param7:
+#      - uniform
+#      - [0, 1]
+#      param8:
+#      - triang
+#      - [1 ,3, 5]
+#      param9:
+#      - logunif
+#      - [1,10]
+#    correlations:
+#      inputfile: correlations.csv
 
-#
 defaultvalues:
   default: 1
   default2: 2

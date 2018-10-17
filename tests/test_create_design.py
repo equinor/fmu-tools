@@ -38,6 +38,6 @@ def test_generate_onebyone():
     design.generate(input_dict)
 
     # Checking dimensions of design matrix
-    assert design.designvalues.shape == (80, 10)
+    assert design.designvalues.shape == (80, 11)
 
     # Add more tests...

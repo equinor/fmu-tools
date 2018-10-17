@@ -5,9 +5,9 @@ and DESIGN_KW in FMU/ERT.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from collections import OrderedDict
 import pandas as pd
 from fmu.tools.sensitivities import design_distributions as design_dist
-from collections import OrderedDict
 
 
 class DesignMatrix(object):
@@ -80,10 +80,16 @@ class DesignMatrix(object):
                         sensitivity.add_case(temp_case)
                         counter = counter + numreal
                 elif sens['senstype'] == 'mc':
+                    if 'correlations' not in sens.keys():
+                        sens['correlations'] = None
+                        correlations = None
+                    if sens['correlations'] is not None:
+                        correlations = design_dist.read_correlations(
+                            sens['correlations'])
                     sensitivity = MonteCarloSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['parameters'], seedtype)
+                        sens['parameters'], seedtype, correlations)
                     counter = counter + numreal
                 self.add_sensitivity(sensitivity)
 
@@ -131,9 +137,9 @@ class SingleSensitivity(object):
 
     def __init__(self, sensname):
         """
-            Args:
-                sensname (str): Name of sensitivity.
-                    Equals SENSNAME in design matrix
+        Args:
+            sensname (str): Name of sensitivity.
+                Equals SENSNAME in design matrix
         """
         self.sensname = sensname
         self.case1 = None
@@ -142,7 +148,7 @@ class SingleSensitivity(object):
 
     def add_case(self, senscase):
         """
-        Adds a SingleSensitivityCase instance to a SingleSensitivity object
+        Adds a SingleSensitivityCase instance to a SingleSensitivity object.
 
         Args:
             senscase (SingleSensitivityCase)
@@ -300,7 +306,7 @@ class MonteCarloSensitivity(object):
                 mc_values = design_dist.generate_mcvalues(
                     distribution, len(realnums))
                 if dist_name == 'logunif':  # not in scipy, uses unif
-                    mc_values == 10**mc_values
+                    mc_values = 10**mc_values
                 self.sensvalues[key] = mc_values
         else:
             print('TO DO: Implement with correlations')
