@@ -15,9 +15,7 @@ def prepare_distribution(distname, dist_parameters):
     """
     Prepare scipy distributions with parameters
 
-    TO DO
-    1) Implement exceptions
-    2) Implement missing distributions
+    To do -  Implement missing distributions
     discrete uniform,
     discrete123,
     discrete uniform with weights
@@ -30,33 +28,42 @@ def prepare_distribution(distname, dist_parameters):
     Returns:
         scipy.stats distribution with parameters
     """
-    if distname == 'normal':
+    distribution = None
+    if distname[0:4].lower() == 'norm':
         dist_mean = dist_parameters[0]
         dist_stddev = dist_parameters[1]
         if _is_number(dist_mean) and _is_number(dist_stddev):
-            return scipy.stats.norm(float(dist_mean), float(dist_stddev))
-    elif distname == 'uniform':
+            distribution = scipy.stats.norm(
+                float(dist_mean), float(dist_stddev))
+    elif distname[0:4].lower() == 'unif':
         low = dist_parameters[0]
         high = dist_parameters[1]
         uscale = high - low
         if _is_number(low) and _is_number(high):
-            return scipy.stats.uniform(loc=low, scale=uscale)
-    elif distname == 'triang':
+            distribution = scipy.stats.uniform(loc=low, scale=uscale)
+    elif distname[0:6].lower() == 'triang':
         low = dist_parameters[0]
         mode = dist_parameters[1]
         high = dist_parameters[2]
         dist_scale = high - low
         shape = (mode-low)/dist_scale
         if _is_number(low) and _is_number(mode) and _is_number(high):
-            return scipy.stats.triang(shape, loc=low, scale=dist_scale)
-    elif distname == 'logunif':
+            distribution = scipy.stats.triang(
+                shape, loc=low, scale=dist_scale)
+    elif distname[0:7].lower() == 'logunif':
         low = dist_parameters[0]
         high = dist_parameters[1]
         if _is_number(low) and _is_number(high):
             loglow = numpy.log10(low)
             loghigh = numpy.log10(high)
             logscale = loghigh - loglow
-            return scipy.stats.uniform(loc=loglow, scale=logscale)
+            distribution = scipy.stats.uniform(
+                loc=loglow, scale=logscale)
+    else:
+        raise ValueError(
+            'distribution name {} is not implemented'
+            .format(distname))
+    return distribution
 
 
 def generate_mcvalues(distribution, mcreals):
@@ -97,18 +104,97 @@ def read_correlations(corr_dict):
         pandas DataFrame with parameter names
             as column and index
     """
-    correlations = pd.DataFrame()
-    if 'input' in corr_dict.keys():
+    correlations = None
+    if 'inputfile' in corr_dict.keys():
         filename = corr_dict['inputfile']
         if filename.endswith('.xlsx'):
             correlations = pd.read_excel(filename)
-        elif filename.endswith('.csv'):
-            correlations = pd.read_csv(filename)
         else:
             raise ValueError(
-                'Design matrix filename should be on Excel or csv format'
-                ' and end with .xlsx or .csv')
-        return correlations
+                'Correlation matrix filename should be on'
+                'Excel format and end with .xlsx')
+    else:
+        raise ValueError('correlations specified but inputfile'
+                         'not specified in configuration')
+    return correlations
+
+
+def mc_correlated(params, correls, numreals):
+    """Generating random values when parameters are correlated
+
+    Args:
+        parameters (OrderedDict):
+            dictionary of parameters and distributions
+            correlations: matrix with correlations
+    """
+    multivariate_parameters = correls.index.values
+    cov_matrix = make_covariance_matrix(correls)
+    normalscoremeans = len(multivariate_parameters) * [0]
+    normalscoresamples = numpy.random.multivariate_normal(
+        normalscoremeans, cov_matrix, size=numreals)
+    normalscoresamples_df = pd.DataFrame(
+        data=normalscoresamples,
+        columns=multivariate_parameters)
+    samples_df = pd.DataFrame(columns=multivariate_parameters)
+    for key in params.keys():
+        if key in multivariate_parameters:
+            dist_name = params[key][0].lower()
+            dist_params = params[key][1]
+            if dist_name == 'normal':
+                dist_mean = dist_params[0]
+                dist_stddev = dist_params[1]
+                samples_df[key] = scipy.stats.norm.ppf(
+                    scipy.stats.norm.cdf(
+                        normalscoresamples_df[key]),
+                    loc=dist_mean,
+                    scale=dist_stddev)
+            elif dist_name[0:6].lower() == 'triang':
+                low = dist_params[0]
+                mode = dist_params[1]
+                high = dist_params[2]
+                dist_scale = high - low
+                shape = (mode-low)/dist_scale
+                samples_df[key] = scipy.stats.triang.ppf(
+                    scipy.stats.norm.cdf(
+                        normalscoresamples_df[key]),
+                    shape,
+                    loc=low,
+                    scale=dist_scale)
+            elif dist_name[0:4].lower() == 'unif':
+                low = dist_params[0]
+                high = dist_params[1]
+                uscale = high - low
+                samples_df[key] = scipy.stats.uniform.ppf(
+                    scipy.stats.norm.cdf(
+                        normalscoresamples_df[key]),
+                    loc=low,
+                    scale=uscale)
+            elif dist_name[0:7].lower() == 'logunif':
+                low = dist_params[0]
+                high = dist_params[1]
+                loglow = numpy.log10(low)
+                loghigh = numpy.log10(high)
+                logscale = loghigh - loglow
+                samples_df[key] = scipy.stats.uniform.ppf(
+                    scipy.stats.norm.cdf(
+                        normalscoresamples_df[key]),
+                    loc=loglow,
+                    scale=logscale)
+                samples_df[key] = 10**samples_df[key]
+            else:
+                raise ValueError(
+                    'Parameter distribution {}'
+                    'not supported'.format(dist_name))
+            # Rounding if specified in config
+            if len(params[key]) == 3:
+                decimals = params[key][2]
+                samples_df[key] = (samples_df[key].
+                                   astype(float).round(int(decimals)))
+        else:
+            raise ValueError(
+                'Parameter {} was not found in correlation matrix'
+                .format(key))
+    return samples_df
 
 
 def make_covariance_matrix(df_correlations, stddevs=None):
@@ -130,14 +216,14 @@ def make_covariance_matrix(df_correlations, stddevs=None):
             names in keys must also exist in index and vice versa.
     """
 
-    corr_matrix = numpy.matrix(df_correlations.values)
+    corr_matrix = numpy.array(df_correlations.values)
 
     # Assume upper triangular is empty, fill it:
     i_upper = numpy.triu_indices(len(df_correlations.columns), 1)
     corr_matrix[i_upper] = corr_matrix.T[i_upper]
 
     # Project to nearest symmetric positive definite matrix
-    corr_matrix = nearPD(corr_matrix)
+    corr_matrix = near_positive_definite(corr_matrix)
     # Previously negative eigenvalues are now close to zero,
     # but might still be negative, that can be ignored
 
@@ -146,47 +232,59 @@ def make_covariance_matrix(df_correlations, stddevs=None):
         stddevs = len(corr_matrix) * [1]
 
     # Now generate the covariance matrix
-    n = len(stddevs)
-    D = numpy.identity(n)
-    D[range(n), range(n)] = stddevs
-    cov_matrix = numpy.dot(D, corr_matrix)
-    cov_matrix = numpy.dot(cov_matrix, D)
+    dim = len(stddevs)
+    diag = numpy.identity(dim)
+    diag[range(dim), range(dim)] = stddevs
+    cov_matrix = numpy.dot(diag, corr_matrix)
+    cov_matrix = numpy.dot(cov_matrix, diag)
 
     return cov_matrix
 
 # Implementation based on Higham (2000), used in make_covariance_matrix
 # Taken from:
-#  https://stackoverflow.com/questions/10939213/how-can-i-calculate-the-nearest-positive-semi-definite-matrix
+#  https://stackoverflow.com/questions/10939213/
+#  how-can-i-calculate-the-nearest-positive-semi-definite-matrix
 
 
-def _getAplus(A):
-    eigval, eigvec = numpy.linalg.eig(A)
-    Q = numpy.matrix(eigvec)
-    xdiag = numpy.matrix(numpy.diag(numpy.maximum(eigval, 0)))
-    return Q*xdiag*Q.T
+def _get_a_plus(a_matrix):
+    eigval, eigvec = numpy.linalg.eig(a_matrix)
+    q_matrix = numpy.array(eigvec)
+    xdiag = numpy.array(numpy.diag(numpy.maximum(eigval, 0)))
+    return q_matrix*xdiag*q_matrix.T
 
 
-def _getPs(A, W=None):
-    W05 = numpy.matrix(W**.5)
-    return W05.I * _getAplus(W05 * A * W05) * W05.I
+def _get_p_s(a_matrix, w_matrix=None):
+    w05 = numpy.array(w_matrix**.5)
+    return (numpy.linalg.inv(w05) *
+            _get_a_plus(w05 * a_matrix * w05) *
+            numpy.linalg.inv(w05))
 
 
-def _getPu(A, W=None):
-    Aret = numpy.array(A.copy())
-    Aret[W > 0] = numpy.array(W)[W > 0]
-    return numpy.matrix(Aret)
+def _get_p_u(a_matrix, w_matrix=None):
+    a_ret = numpy.array(a_matrix.copy())
+    a_ret[w_matrix > 0] = numpy.array(w_matrix)[w_matrix > 0]
+    return numpy.array(a_ret)
 
 
-def nearPD(A, nit=10):
-    n = A.shape[0]
-    W = numpy.identity(n)
+def near_positive_definite(a_matrix, nit=10):
+    """Finding nearest positive semi definite matrix.
+    Args:
+        a_matrix (numpy matrix): correlation matrix
+        nit (int): number of iterations (defaulted to 10)
+    Returns:
+        nearest postivie semi definite matrix
+    """
+    zero_matrix = a_matrix.shape[0]
+    w_matrix = numpy.identity(zero_matrix)
     # W is the matrix used for the norm (assumed to be Identity matrix here)
     # the algorithm should work for any diagonal W
-    deltaS = 0
-    Yk = A.copy()
-    for k in range(nit):
-        Rk = Yk - deltaS
-        Xk = _getPs(Rk, W=W)
-        deltaS = Xk - Rk
-        Yk = _getPu(Xk, W=W)
-    return Yk
+    delta_s = 0
+    y_k = a_matrix.copy()
+    iterations = 0
+    while iterations < nit:
+        r_k = y_k - delta_s
+        x_k = _get_p_s(r_k, w_matrix=w_matrix)
+        delta_s = x_k - r_k
+        y_k = _get_p_u(x_k, w_matrix=w_matrix)
+        iterations += 1
+    return y_k

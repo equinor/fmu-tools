@@ -41,7 +41,8 @@ class DesignMatrix(object):
     def add_sensitivity(self, sensitivity):
         """Adding a sensitivity to the design"""
         prior_values = self.designvalues.copy()
-        self.designvalues = prior_values.append(sensitivity.sensvalues)
+        self.designvalues = prior_values.append(
+            sensitivity.sensvalues, sort=False)
         for key in self.designvalues.keys():
             if key in self.defaultvalues.keys():
                 self.designvalues[key].fillna(
@@ -61,6 +62,8 @@ class DesignMatrix(object):
         default_dict = inputdata['defaultvalues']
         self.set_defaultvalues(default_dict)
         if inputdata['designtype'] == 'onebyone':
+            self.designvalues['SENSNAME'] = None
+            self.designvalues['SENSCASE'] = None
             counter = 0
             for key in inputdata['sensitivities'].keys():
                 sens = inputdata['sensitivities'][key]
@@ -82,10 +85,11 @@ class DesignMatrix(object):
                 elif sens['senstype'] == 'mc':
                     if 'correlations' not in sens.keys():
                         sens['correlations'] = None
-                        correlations = None
                     if sens['correlations'] is not None:
                         correlations = design_dist.read_correlations(
                             sens['correlations'])
+                    else:
+                        correlations = None
                     sensitivity = MonteCarloSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
@@ -160,7 +164,8 @@ class SingleSensitivity(object):
                 self.case2 = senscase
                 senscase.casevalues['SENSNAME'] = self.sensname
                 self.sensvalues = pd.concat([
-                    self.sensvalues, senscase.casevalues])
+                    self.sensvalues, senscase.casevalues],
+                                            sort=True)
         else:  # This is the first case
             if (
                     'REAL' in senscase.casevalues.keys()
@@ -211,11 +216,11 @@ class SingleSensitivityCase(object):
         """
 
         if seeds != 'None':
-            if seeds == 'default':
+            if seeds.lower() == 'default':
                 seed_numbers = [nmr + seedstart - realnums[0]
                                 for nmr in realnums]
                 self.casevalues['RMS_SEED'] = seed_numbers
-            elif seeds == 'xtern':
+            elif seeds.lower() == 'xtern':
                 print('TO DO: Reed from xternal seeds')
             else:
                 print('TO DO: Inform only "default" and "xtern" valid choices')
@@ -273,10 +278,10 @@ class MonteCarloSensitivity(object):
         """
 
         if seeds != 'None':
-            if seeds == 'default':
+            if seeds.lower() == 'default':
                 seed_numbers = [nmr + 1000 - realnums[0] for nmr in realnums]
                 self.sensvalues['RMS_SEED'] = seed_numbers
-            elif seeds == 'xtern':
+            elif seeds.lower() == 'xtern':
                 print('TO DO: Read from xternal seeds')
             else:
                 print('TO DO: Only "None", "default" and "xtern"')
@@ -296,9 +301,9 @@ class MonteCarloSensitivity(object):
         """
         self.sensvalues = pd.DataFrame(
             columns=parameters.keys(), index=realnums)
-        if not correlations:
+        if correlations is None:
             for key in parameters.keys():
-                dist_name = parameters[key][0]
+                dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
                 # print(realnums,key, dist_name, dist_params)
                 distribution = design_dist.prepare_distribution(
@@ -307,9 +312,16 @@ class MonteCarloSensitivity(object):
                     distribution, len(realnums))
                 if dist_name == 'logunif':  # not in scipy, uses unif
                     mc_values = 10**mc_values
+                if len(parameters[key]) == 3:
+                    decimals = parameters[key][2]
+                    mc_values = (mc_values.
+                                 astype(float).round(int(decimals)))
                 self.sensvalues[key] = mc_values
         else:
-            print('TO DO: Implement with correlations')
+            print(correlations)
+            numreals = len(realnums)  # number of realizations
+            self.sensvalues = design_dist.mc_correlated(
+                parameters, correlations, numreals)
         self.sensvalues['REAL'] = realnums
         self.sensvalues['SENSNAME'] = self.sensname
         self.sensvalues['SENSCASE'] = 'p10_p90'

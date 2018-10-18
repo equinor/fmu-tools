@@ -6,8 +6,10 @@ Example: generation of design matrix
 from __future__ import division, print_function, absolute_import
 from fmu.tools.sensitivities import DesignMatrix
 from fmu.config import oyaml as yaml
+import os
 
-design_configfile = '../tests/data/sensitivities/config/config_design_input.yaml'
+os.chdir('../')
+design_configfile = './tests/data/sensitivities/config/config_design_input.yaml'
 
 with open(design_configfile) as input_file:
     input_dict=yaml.load(input_file)
@@ -15,4 +17,4 @@ with open(design_configfile) as input_file:
 design1 = DesignMatrix()
 design1.generate(input_dict)
 print(design1.designvalues)
-design1.to_xlsx('design.xlsx')
+design1.to_xlsx('examples/output/design.xlsx')
