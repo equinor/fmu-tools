@@ -50,29 +50,33 @@ class DesignMatrix(object):
             elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
                 print('No defaultvalues given for {}'.format(key))
 
-    def generate(self, inputdata):
+    def generate(self, inputdict):
         """Generating design matrix from input dictionary
         Adding default values.
         Looping through sensitivities and adding to design
 
         Args:
-            inputdata (OrderedDict): input parameters for design
+            inputdict (OrderedDict): input parameters for design
         """
-        seedtype = inputdata['seeds']
-        default_dict = inputdata['defaultvalues']
+        seedtype = inputdict['seeds']
+        default_dict = inputdict['defaultvalues']
         self.set_defaultvalues(default_dict)
-        if inputdata['designtype'] == 'onebyone':
+        if inputdict['designtype'] == 'onebyone':
             self.designvalues['SENSNAME'] = None
             self.designvalues['SENSCASE'] = None
             counter = 0
-            for key in inputdata['sensitivities'].keys():
-                sens = inputdata['sensitivities'][key]
+            for key in inputdict['sensitivities'].keys():
+                sens = inputdict['sensitivities'][key]
                 if 'numreal' in sens.keys():
                     numreal = sens['numreal']
                 else:
-                    numreal = inputdata['repeats']
-
-                if sens['senstype'] == 'scalar':
+                    numreal = inputdict['repeats']
+                if key == 'seed':
+                    sensitivity = SeedSensitivity(key)
+                    sensitivity.generate(
+                        range(counter, counter + numreal),
+                        sens['parametername'], seedtype)
+                elif sens['senstype'] == 'scalar':
                     sensitivity = SingleSensitivity(key)
                     for casekey in sens['cases'].keys():
                         case = sens['cases'][casekey]
@@ -121,6 +125,51 @@ class DesignMatrix(object):
                           index=False, header=False)
         xlsxwriter.save()
         print('Have written to xlsxfile')
+
+
+class SeedSensitivity(object):
+    """
+    A seed sensitivity is normally the reference for one by one sensitivitie
+    It contains a list of seeds to be repeated for each sensitivity
+    If used for RMS parameter name should be RMS_SEED
+    It will be assigned the type 'p10_p90' since p10 and p90 will be
+    shown in tornado plots
+
+    Attributes:
+        sensname (str): shall be 'seed'
+        sensvalues (dataframe):  design values for the sensitivity
+
+    """
+
+    def __init__(self, sensname):
+        """Args:
+                sensname (str): Name of sensitivity.
+                    Defines SENSNAME in design matrix
+        """
+        self.sensname = sensname
+        self.sensvalues = None
+
+    def generate(self, realnums, param_name, seeds):
+        """Generates parameter values for a seed sensitivity
+
+        Args:
+            realnums (list): list of intergers with realization numbers
+            param_name (str):
+            seeds (str): default or xtern
+        """
+        self.sensvalues = pd.DataFrame(index=realnums)
+        if seeds.lower() == 'default':
+            seed_numbers = [nmr + 1000 - realnums[0] for nmr in realnums]
+            self.sensvalues[param_name] = seed_numbers
+        elif seeds.lower() == 'xtern':
+            print('TO DO: Implement read from xternal seeds')
+        else:
+            raise ValueError(
+                'Only default and xtern are valid choices for a'
+                'seed sensitivity. {} cannot be used'.format(seeds))
+        self.sensvalues['REAL'] = realnums
+        self.sensvalues['SENSNAME'] = self.sensname
+        self.sensvalues['SENSCASE'] = 'p10_p90'
 
 
 class SingleSensitivity(object):
