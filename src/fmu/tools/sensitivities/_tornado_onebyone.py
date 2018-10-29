@@ -30,6 +30,8 @@ def check_selection(resultfile, selector, selection):
                 raise ValueError("Selection ", sel,
                                  " not found in column",
                                  selector, "in resultfile")
+        else:
+            resultfile[selector].values.astype(str)
 
 
 def check_response(resultfile, response):
@@ -124,6 +126,7 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         sel_stripped = str(sel).strip('[]').lower()
         check_selector(resultfile, selectors[itr])
         if sel_stripped != "'all'":
+            resultfile[header] = resultfile[header].astype(str)
             check_selection(resultfile, selectors[itr], sel)
             resultfile = resultfile[(resultfile[header].isin(sel))]
 
@@ -165,10 +168,22 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         endreal = designsummary.loc[sensno]['endreal1']
         mask = real_mask(dfr_summed, startreal, endreal)
         numreal1 = len(dfr_summed.REAL[mask])
-        avg1 = dfr_summed[mask][response].mean()-ref_avg
+        if numreal1 > 0:
+            avg1 = dfr_summed[mask][response].mean()-ref_avg
+        else:
+            avg1 = 0
+            print('Warning: Number of ok realizations is 0 in'
+                  'sensitivity {} case1'.format(sensname))
+
         if designsummary.loc[sensno]['senstype'] == 'mc':
-            p90 = dfr_summed[mask][response].quantile(0.10)-ref_avg
-            p10 = dfr_summed[mask][response].quantile(0.90)-ref_avg
+            if numreal1 > 0:
+                p90 = dfr_summed[mask][response].quantile(0.10)-ref_avg
+                p10 = dfr_summed[mask][response].quantile(0.90)-ref_avg
+            else:
+                p90 = 0
+                p10 = 0
+                print('Warning: Number of ok realizations is 0 in'
+                      'sensitivity {}'.format(sensname))
             subset1name = 'p90'
             subset2name = 'p10'
             tornadoinput.loc[sensno] = [sensno, sensname,
@@ -183,7 +198,12 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
                 endreal = designsummary.loc[sensno]['endreal2']
                 mask = real_mask(dfr_summed, startreal, endreal)
                 numreal2 = len(dfr_summed.REAL[mask])
-                avg2 = dfr_summed[mask][response].mean()-ref_avg
+                if numreal2 > 0:
+                    avg2 = dfr_summed[mask][response].mean()-ref_avg
+                else:
+                    avg2 = 0
+                    print('Warning: Number of ok realizations is 0 in'
+                          'sensitivity {} case2'.format(sensname))
                 subset2name = designsummary.loc[sensno]['casename2']
             else:
                 avg2 = 0
@@ -202,8 +222,8 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
                              + designsummary.loc[sensno]['senstype'] + '\n'
                              + "Something wrong with designsummary?")
 
-    tornadoinput['true_low'] = (tornadoinput['low']+ref_avg).astype(int)
-    tornadoinput['true_high'] = (tornadoinput['high']+ref_avg).astype(int)
+    tornadoinput['true_low'] = (tornadoinput['low']+ref_avg).round(2)
+    tornadoinput['true_high'] = (tornadoinput['high']+ref_avg).round(2)
 
     if scale == 'percentage':
         if ref_avg != 0:
@@ -212,6 +232,10 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         else:
             tornadoinput['low'] = 0
             tornadoinput['high'] = 0
+
+    # Cut decimals for display
+    tornadoinput['low'] = tornadoinput['low'].round(2)
+    tornadoinput['high'] = tornadoinput['high'].round(2)
 
     # Drops sensitivities smaller than seed if specified
     if cutbyseed and tornadoinput['sensname'].str.contains('seed').any():

@@ -78,7 +78,7 @@ def gatherresults(config):
     print(singleresultfile)
 
     doe_ensemble = ensemble.ScratchEnsemble('doe_ensemble', ensemblepaths)
-    results = doe_ensemble.from_csv(singleresultfile)
+    results = doe_ensemble.load_csv(singleresultfile)
 
     if config['results']['writeresultfile']:
         outdir = config['results']['exportdir']
@@ -186,7 +186,7 @@ def add_webviz_tornadoplots(web, configfile):
             # While waiting for webviz issues 84 and 85 to be solved
             # xlabel = make_xlabel(ref_value, scale, reference)
             # tornado_plot = \
-            # TornadoPlot(tornadotable, xlabel, pagetitle)
+            # tornado_plot = TornadoPlot(tornadotable, xlabel, pagetitle)
             tornado_plot = TornadoPlot(tornadotable)
             pge.add_content(tornado_plot)
             smn.add_page(pge)
