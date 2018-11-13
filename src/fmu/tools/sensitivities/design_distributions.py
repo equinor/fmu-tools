@@ -5,6 +5,7 @@ distributions. For use in generation of design matrices
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from math import exp
 import numpy
 import numpy.linalg
 import scipy.stats
@@ -16,9 +17,7 @@ def prepare_distribution(distname, dist_parameters):
     Prepare scipy distributions with parameters
 
     To do -  Implement missing distributions
-    discrete uniform,
-    discrete123,
-    discrete uniform with weights
+    lognormal
 
     Args:
         distname (str): distribution name 'normal',
@@ -30,11 +29,41 @@ def prepare_distribution(distname, dist_parameters):
     """
     distribution = None
     if distname[0:4].lower() == 'norm':
-        dist_mean = dist_parameters[0]
-        dist_stddev = dist_parameters[1]
-        if _is_number(dist_mean) and _is_number(dist_stddev):
-            distribution = scipy.stats.norm(
-                float(dist_mean), float(dist_stddev))
+        if len(dist_parameters) == 2:  # normal
+            dist_mean = dist_parameters[0]
+            dist_stddev = dist_parameters[1]
+            if _is_number(dist_mean) and _is_number(dist_stddev):
+                distribution = scipy.stats.norm(
+                    float(dist_mean), float(dist_stddev))
+        elif len(dist_parameters) == 4:  # truncated normal
+            dist_mean = dist_parameters[0]
+            dist_stddev = dist_parameters[1]
+            clip1 = dist_parameters[2]
+            clip2 = dist_parameters[3]
+            if (
+                    _is_number(dist_mean) and
+                    _is_number(dist_stddev) and
+                    _is_number(clip1) and
+                    _is_number(clip2)
+            ):
+                low = (float(clip1)-float(dist_mean))/float(dist_stddev)
+                high = (float(clip2)-float(dist_mean))/float(dist_stddev)
+                distribution = scipy.stats.truncnorm(
+                    low, high, loc=float(dist_mean), scale=float(dist_stddev))
+    elif distname[0:7].lower() == 'lognorm':
+        if len(dist_parameters) == 2:  # lognormal
+            dist_mu = dist_parameters[0]
+            sigma = dist_parameters[1]
+            if _is_number(dist_mu) and _is_number(sigma):
+                shape = float(sigma)
+                dist_scale = exp(float(dist_mu))
+                distribution = scipy.stats.lognorm(
+                    shape, scale=dist_scale)
+        if len(dist_parameters) == 4:  # lognormal
+            raise ValueError(
+                'Truncated lognormal is '
+                'not implemented \n'
+                'Exiting')
     elif distname[0:4].lower() == 'unif':
         low = dist_parameters[0]
         high = dist_parameters[1]
@@ -51,8 +80,17 @@ def prepare_distribution(distname, dist_parameters):
             distribution = scipy.stats.triang(
                 shape, loc=low, scale=dist_scale)
     elif distname[0:7].lower() == 'logunif':
-        low = dist_parameters[0]
-        high = dist_parameters[1]
+        low = float(dist_parameters[0])
+        high = float(dist_parameters[1])
+        if _is_number(low) and _is_number(high):
+            loglow = numpy.log10(low)
+            loghigh = numpy.log10(high)
+            logscale = loghigh - loglow
+            distribution = scipy.stats.uniform(
+                loc=loglow, scale=logscale)
+    elif distname[0:4].lower() == 'disc':
+        low = float(dist_parameters[0])
+        high = float(dist_parameters[1])
         if _is_number(low) and _is_number(high):
             loglow = numpy.log10(low)
             loghigh = numpy.log10(high)
@@ -214,6 +252,9 @@ def make_covariance_matrix(df_correlations, stddevs=None):
         df_correlations (DataFrame): correlation coefficients where
             columns and index are both parameter names. All parameter
             names in keys must also exist in index and vice versa.
+
+    Returns:
+        covariance matrix
     """
 
     corr_matrix = numpy.array(df_correlations.values)
