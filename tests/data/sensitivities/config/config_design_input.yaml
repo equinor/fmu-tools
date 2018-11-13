@@ -7,19 +7,19 @@ sensitivities:
     parametername: RMS_SEED
 #
   sens2: # sensname becomes 'sens1'
-    senstype: scalar # scalar or mc (mc uses correlations if provided)
+    senstype: scenario # scalar or mc (mc uses correlations if provided)
     cases: 
       low:  {param1: value_low} # senscase becomes 'low', {parameter name, value}
       high: {param1: value_high}
 #
   sens3:
-    senstype: scalar
+    senstype: scenario
     cases:
       low: {param2: value1l, param3: value2l, param4: value3l}
       high: {param2: value1h, param3: value2h, param4: value3h}
 #
   sens4:
-    senstype: mc
+    senstype: dist
     numreal: 30 # using 30 realizations instead of 10
     parameters:
       param5:
@@ -37,7 +37,7 @@ sensitivities:
       
 #  Monte carlo with correlated parameters. Not in use yet.
   sens5:
-    senstype: mc
+    senstype: dist
     numreal: 30
     parameters:
       param9:

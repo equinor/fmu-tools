@@ -12,3 +12,4 @@ from .sensitivities import summarize_design # noqa
 from .sensitivities import calc_tornadoinput # noqa
 from .sensitivities import find_combinations # noqa
 from .sensitivities import add_webviz_tornadoplots # noqa
+from .sensitivities import excel2dict_design # noqa
