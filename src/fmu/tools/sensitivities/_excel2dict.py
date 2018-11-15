@@ -159,7 +159,7 @@ def _read_defaultvalues(filename, sheetname):
     default_df = pd.read_excel(
         filename,
         sheetname,
-        header=None,
+        header=0,
         index_col=0)
     for row in default_df.itertuples():
         default_dict[str(row[0])] = row[1]
@@ -210,6 +210,7 @@ def _read_scenario_sensitivity(sensgroup):
     for scenario sensitivities
     """
     sdict = OrderedDict()
+    sdict['cases'] = OrderedDict()
     casedict1 = OrderedDict()
     casedict2 = OrderedDict()
     for row in sensgroup.itertuples():
@@ -217,13 +218,13 @@ def _read_scenario_sensitivity(sensgroup):
     if _has_value(sensgroup['senscase2'].iloc[0]):
         for row in sensgroup.itertuples():
             casedict2[str(row.param_name)] = row.value2
-        sdict['cases'] = {
-            str(sensgroup['senscase1'].iloc[0]): casedict1,
-            str(sensgroup['senscase2'].iloc[0]): casedict2
-            }
+        sdict['cases'][
+            str(sensgroup['senscase1'].iloc[0])] = casedict1
+        sdict['cases'][
+            str(sensgroup['senscase2'].iloc[0])] = casedict2
     else:
-        sdict['cases'] = {
-            str(sensgroup['senscase1'].iloc[0]): casedict1}
+        sdict['cases'][
+            str(sensgroup['senscase1'].iloc[0])] = casedict1
     return sdict
 
 

@@ -8,8 +8,7 @@ from __future__ import print_function
 import os
 
 from fmu import config
-from fmu.config import oyaml as yaml
-from fmu.tools.sensitivities import DesignMatrix
+from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -30,14 +29,13 @@ def test_generate_onebyone():
     with open(
             testdir +
             '/data/sensitivities/config/' +
-            'config_design_input.yaml') as input_file:
-        input_dict = yaml.load(input_file)
+            'design_input_example1.xlsx') as input_file:
+        input_dict = excel2dict_design(input_file)
 
     design = DesignMatrix()
-    design.set_defaultvalues(input_dict['defaultvalues'])
     design.generate(input_dict)
 
     # Checking dimensions of design matrix
-    assert design.designvalues.shape == (110, 16)
+    assert design.designvalues.shape == (80, 10)
 
     # Add more tests...
