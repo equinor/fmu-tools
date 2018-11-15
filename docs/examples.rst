@@ -5,6 +5,93 @@ Examples to learn from
 .. Notice that YAML files included are also input to testing
    and this secures consistency!
 
+-------------------------------------------------
+Create design matrix for one by one sensitivities
+-------------------------------------------------
+These examples show use of the ``fmu.tools.sensitivities`` package to generate design matrices automatically. Input is given as a dictionary which can be generated from an excel workbook. The excel workbook must be set up using a specific format. These examples explain how to set up the workbook.
+
+Example1: Excel file for one by one sensitivities with repeating seeds
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+The excel workbook contains several sheets. The three sheets **general_input**, **designinput** and **defaultvalues** need to exist with these exact names in the input workbook.
+
+The general_input sheet contains the *designtype*, which has to be set to onebyone. The parameter *repeats* tells how many seeds that should be repeated for each sensitivity. This is also the default number of realisations per sensitivity. The *seeds* is here set to *default* which means we will use seed numbers 1000, 1001, 1002, ... These seed numbers are repeated for each sensitivity/sensitivity case. *background* is set to *None* here, but is further explained in example 3.
+
+.. image:: images/design_general_input.png
+
+In the **designinput** sheet, the parameters and values for each sensitivity are specified. See figure below.  We can here choose between four types of sensitivities:
+
+seed
+    This is normally the reference sensitivity to which all the others are compared to. All the parameters will be at their base case values taken from the defaultvalues sheet. Only the RMS_SEED will be varying.
+scanario
+    This is a sensitivity where the parameter(s) are set to their extreme values (high/low values) One or two cases can exist for each sensitivity. Each of the two cases must be given a name.
+dist
+    This is a monte carlo sensitivity where one or several parameters are sampled from the specified distribution(s). The distribution name is given in the *dist_name* column, and the distribution parameters are given in *dist_parm1*, *dist_param2*, *dist_param3*, *dist_param4*. Currently these distributions are implemented:
+    
+    * normal (mean, std dev)
+    * normal (mean, std dev, min, max)  which is a truncated gaussian distribution
+    * uniform (min,max)
+    * loguniform (min,max)
+    * triangular (min, mode, max)
+    * discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))  which is a  discrete distribution with weights
+    * TO DO:
+      
+          * lognormal (mean(ln(X)), stddev(ln(X)))  Distribution parameters:  mean and std dev of the natural logarithm of the variable
+
+In the example shown below four sensitivities are specified in addition to the seed sensitivity. In the *faults* sensitivity two alternative values for the parameter *fault_position* are specified, which will be compared to the seed sensitivity where the *fault_position* is set at its default value (0).  In the *velocity* sensitivity only one alternative case is specified. In the *contacts* sensitivity three parameters are varied at the same time. In the *shallow* case, all contacts are set shallow, and opposite in the *deep* sensitiviy case.
+
+The last sensitivity is a monte carlo sensitivity where the parameter *multz_ile* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The seed numbers will for these 20 realisations be from 1000 to 1019. .
+
+.. image:: images/design_designinput.png
+
+The **defaultvalues** sheet contains default values for the design. For parameters that also exist in the designinput sheet, the defaultvalues are used as 'base case value' in the deisgnmatrix. In addition all the parameters in the defaultvalues sheet will be written to the corresponding defaultvalues sheet in the output excel designmatrix workbook.
+	   
+.. image:: images/design_defaultvalues.png
+	   
+To generate the design matrix, the following code is used:
+
+.. code-block:: python
+
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+    from fmu.config import oyaml as yaml
+    from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
+
+    with open('../input/config/design_input_example1.xlsx') as input_file:
+        input_dict = excel2dict_design(input_file)
+
+    design = DesignMatrix()
+    design.generate(input_dict)
+    # Writing design matrix to excel file
+    design.to_xlsx('../input/distributions/design01.xlsx')
+
+    
+Example 2: Excel input for sensitivities with group of (correlated) parameters sampled from distributions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+In this example the general_input is the same as for Example 1 but the designinput is a bit different. For sensitivity *sens6* there are several parameters sampled from different distributions. Note that for the *normal* and *lognormal* distributions the truncated versions will be used if *dist_param3* (min) and *dist_param4* (max) are specified in addition to *dist_param1* (mean) and *dist_param2* (standard deviation).
+
+For sensitivity sens7 *corr1* is specified in the *corr_sheet* column. This means that the parameters for this sensitivity should be correlated, and the correlations are specified in the sheet with the same name. If there are several sensitivities with correlated parameters there can be several correlations sheets with different names.
+
+Note also theat the integer value in the *decimals* columns specifies how many decimals that should be output in the design matrix for this parameter.
+
+Sensitivity sens8 is defined to be read from an external file by providing a file path in the *extern_file* column. This needs to point to an excel spreadsheet with parameter names as column headers, and no row index.
+
+.. image:: images/design_designinput2.png
+
+The corr1 sheet used for sens7 looks like this:
+
+.. image:: images/design_corr1.png
+	   
+Example 3: Excel input for sensitivities with background parameters
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+In this example the one by one design is put on top of a set of *background parameters* randomly sampled from distributions. This means that in the set of realisations for each sensitivity it is not only the seed that is varied, but also the background parameters. However each sensitivity/sensitivity case uses the same list of seeds and the same set of sampled background parameters.
+
+The use of background parameters is flagged in the general_input sheet by changing *background* from *None* to either a name of the sheet where the background parameters are specified, or a path to an excel file where the only/first sheet is specifying the background parameters. The specification of the background parameters is the same as for a monte carlo sensitivity:  distribution types, distribution parameters, and optionally decimals and correlation sheet. The background sheet is shown in the figure below.
+
+.. image:: images/design_backgroundvalues.png
+
+
+
+
 -----------------------------------------
 Adding sets of tornado plots to webportal
 -----------------------------------------

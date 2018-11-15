@@ -1,0 +1,74 @@
+designtype: onebyone
+repeats: 10  # Number of seeds repeated for each case if not specified individually
+seeds: default # None or default (which will give 1000-1001-1002 (in future also from file)
+sensitivities:
+#
+  seed: # First sensitivity normally seed which is used as reference for tornado
+    parametername: RMS_SEED
+#
+  sens2: # sensname becomes 'sens1'
+    senstype: scenario # scalar or mc (mc uses correlations if provided)
+    cases: 
+      low:  {param1: value_low} # senscase becomes 'low', {parameter name, value}
+      high: {param1: value_high}
+#
+  sens3:
+    senstype: scenario
+    cases:
+      low: {param2: value1l, param3: value2l, param4: value3l}
+      high: {param2: value1h, param3: value2h, param4: value3h}
+#
+  sens4:
+    senstype: dist
+    numreal: 30 # using 30 realizations instead of 10
+    parameters:
+      param5:
+      - normal # distribution names: normal, uniform, triang, logunif (more will come)
+      - [0, 1] # distribution parameters [mean, std dev]
+      param6:
+      - uniform
+      - [0, 1] # [from, to]
+      param7:
+      - triang
+      - [1 ,3, 5] # [low, mode, high]
+      param8:
+      - logunif
+      - [1,10]  # [from, to]
+      
+#  Monte carlo with correlated parameters. Not in use yet.
+  sens5:
+    senstype: dist
+    numreal: 30
+    parameters:
+      param9:
+      - normal
+      - [0, 1]
+      param10:
+      - uniform
+      - [0, 1]
+      - 2 # Round values to 2 decimals. If no number, no rounding
+      param11:
+      - triang
+      - [1 ,3, 5]
+      param12:
+      - logunif
+      - [1,10]
+    correlations:
+      inputfile: ./tests/data/sensitivities/config/correlations.xlsx # correlations provided in excel spreadsheet
+
+defaultvalues:
+  default: 1
+  default2: 2
+  default3: 3
+  param1: base1
+  param2: base2
+  param3: base3
+  param4: base4
+  param5: base5
+  param6: base6
+  param7: base7
+  param8: base8
+  param9: base9
+  param10: base10
+  param11: base11
+  param12: base12
