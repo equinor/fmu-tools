@@ -32,7 +32,7 @@ def prepare_distribution(distname, dist_parameters):
         if len(dist_parameters) == 2:  # normal
             dist_mean = dist_parameters[0]
             dist_stddev = dist_parameters[1]
-            if _is_number(dist_mean) and _is_number(dist_stddev):
+            if is_number(dist_mean) and is_number(dist_stddev):
                 distribution = scipy.stats.norm(
                     float(dist_mean), float(dist_stddev))
         elif len(dist_parameters) == 4:  # truncated normal
@@ -41,10 +41,10 @@ def prepare_distribution(distname, dist_parameters):
             clip1 = dist_parameters[2]
             clip2 = dist_parameters[3]
             if (
-                    _is_number(dist_mean) and
-                    _is_number(dist_stddev) and
-                    _is_number(clip1) and
-                    _is_number(clip2)
+                    is_number(dist_mean) and
+                    is_number(dist_stddev) and
+                    is_number(clip1) and
+                    is_number(clip2)
             ):
                 low = (float(clip1)-float(dist_mean))/float(dist_stddev)
                 high = (float(clip2)-float(dist_mean))/float(dist_stddev)
@@ -54,7 +54,7 @@ def prepare_distribution(distname, dist_parameters):
         if len(dist_parameters) == 2:  # lognormal
             dist_mu = dist_parameters[0]
             sigma = dist_parameters[1]
-            if _is_number(dist_mu) and _is_number(sigma):
+            if is_number(dist_mu) and is_number(sigma):
                 shape = float(sigma)
                 dist_scale = exp(float(dist_mu))
                 distribution = scipy.stats.lognorm(
@@ -68,7 +68,7 @@ def prepare_distribution(distname, dist_parameters):
         low = dist_parameters[0]
         high = dist_parameters[1]
         uscale = high - low
-        if _is_number(low) and _is_number(high):
+        if is_number(low) and is_number(high):
             distribution = scipy.stats.uniform(loc=low, scale=uscale)
     elif distname[0:6].lower() == 'triang':
         low = dist_parameters[0]
@@ -76,13 +76,13 @@ def prepare_distribution(distname, dist_parameters):
         high = dist_parameters[2]
         dist_scale = high - low
         shape = (mode-low)/dist_scale
-        if _is_number(low) and _is_number(mode) and _is_number(high):
+        if is_number(low) and is_number(mode) and is_number(high):
             distribution = scipy.stats.triang(
                 shape, loc=low, scale=dist_scale)
     elif distname[0:7].lower() == 'logunif':
         low = float(dist_parameters[0])
         high = float(dist_parameters[1])
-        if _is_number(low) and _is_number(high):
+        if is_number(low) and is_number(high):
             loglow = numpy.log10(low)
             loghigh = numpy.log10(high)
             logscale = loghigh - loglow
@@ -91,7 +91,7 @@ def prepare_distribution(distname, dist_parameters):
     elif distname[0:4].lower() == 'disc':
         low = float(dist_parameters[0])
         high = float(dist_parameters[1])
-        if _is_number(low) and _is_number(high):
+        if is_number(low) and is_number(high):
             loglow = numpy.log10(low)
             loghigh = numpy.log10(high)
             logscale = loghigh - loglow
@@ -121,7 +121,7 @@ def generate_mcvalues(distribution, mcreals):
     return montecarlo_values
 
 
-def _is_number(teststring):
+def is_number(teststring):
     """ Test if a string can be parsed as a float"""
     try:
         if not numpy.isnan(float(teststring)):

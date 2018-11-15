@@ -37,49 +37,10 @@ class DesignMatrix(object):
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
 
-    def set_defaultvalues(self, defaults):
-        """ Set default values to use for sensitivities
-
-        Args:
-            defaults (OrderedDict): (key, value) is (parameter_name, value)
-        """
-        self.defaultvalues = defaults
-
-    def add_background(self, back_dict, max_values):
-        """Adding background values if specified. Either from
-        external file or from distributions in background
-        dictionary
-
-        Args:
-            back_dict (OrderedDict): how to generate background values
-            max_values (int): number of background values
-        """
-        if back_dict is None:
-            self.backgroundvalues = None
-        elif 'extern' in back_dict.keys():
-            self.backgroundvalues = _parameters_from_extern(
-                back_dict['extern'])
-        elif 'parameters' in back_dict.keys():
-            self._add_dist_background(back_dict, max_values)
-
-    def background_to_excel(self, filename,
-                            backgroundsheet='Background'):
-        """Writing background values to an Excel spreadsheet
-
-        Args:
-            filename (string): output filename (extension .xlsx)
-            backgroundsheet (string): name of excel sheet
-        """
-        xlsxwriter = pd.ExcelWriter(filename)
-        self.backgroundvalues.to_excel(
-            xlsxwriter, sheet_name=backgroundsheet, index=False, header=True)
-        xlsxwriter.save()
-        print('Backgroundvalues written to {}'.format(filename))
-
     def generate(self, inputdict):
-        """Generating design matrix from input dictionary
-        Adding default values.
-        Looping through sensitivities and adding to design
+        """Generating design matrix from input dictionary in specific
+        format. Adding default values and background values if existing.
+        Looping through sensitivities and adding them to designvalues.
 
         Args:
             inputdict (OrderedDict): input parameters for design
@@ -163,7 +124,7 @@ class DesignMatrix(object):
     def to_xlsx(self, filename,
                 designsheet='DesignSheet01',
                 defaultsheet='DefaultValues'):
-        """Writing design matrix to excel on standard fmu format
+        """Writing design matrix to excel workfbook on standard fmu format
         to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW
 
         Args:
@@ -184,6 +145,45 @@ class DesignMatrix(object):
                           index=False, header=False)
         xlsxwriter.save()
         print('Designmatrix written to {}'.format(filename))
+
+    def set_defaultvalues(self, defaults):
+        """ Add default values
+
+        Args:
+            defaults (OrderedDict): (key, value) is (parameter_name, value)
+        """
+        self.defaultvalues = defaults
+
+    def add_background(self, back_dict, max_values):
+        """Adding background as specified in dictionary.
+        Either from external file or from distributions in background
+        dictionary
+
+        Args:
+            back_dict (OrderedDict): how to generate background values
+            max_values (int): number of background values to generate
+        """
+        if back_dict is None:
+            self.backgroundvalues = None
+        elif 'extern' in back_dict.keys():
+            self.backgroundvalues = _parameters_from_extern(
+                back_dict['extern'])
+        elif 'parameters' in back_dict.keys():
+            self._add_dist_background(back_dict, max_values)
+
+    def background_to_excel(self, filename,
+                            backgroundsheet='Background'):
+        """Writing background values to an Excel spreadsheet
+
+        Args:
+            filename (string): output filename (extension .xlsx)
+            backgroundsheet (string): name of excel sheet
+        """
+        xlsxwriter = pd.ExcelWriter(filename)
+        self.backgroundvalues.to_excel(
+            xlsxwriter, sheet_name=backgroundsheet, index=False, header=True)
+        xlsxwriter.save()
+        print('Backgroundvalues written to {}'.format(filename))
 
     def _add_sensitivity(self, sensitivity):
         """Adding a sensitivity to the design
@@ -242,7 +242,7 @@ class DesignMatrix(object):
         # Rounding of background values as specified
         if 'decimals' in back_dict.keys():
             for key in back_dict['decimals'].keys():
-                if design_dist._is_number(
+                if design_dist.is_number(
                         mc_backgroundvalues[key].iloc[0]):
                     mc_backgroundvalues[key] = (
                         mc_backgroundvalues[key].astype(float).
@@ -259,7 +259,7 @@ class DesignMatrix(object):
         """
         for key in self.designvalues.keys():
             if key in dict_decimals.keys():
-                if design_dist._is_number(
+                if design_dist.is_number(
                         self.designvalues[key].iloc[0]):
                     self.designvalues[key] = (
                         self.designvalues[key].astype(float).
@@ -271,11 +271,11 @@ class DesignMatrix(object):
 
 class SeedSensitivity(object):
     """
-    A seed sensitivity is normally the reference for one by one sensitivitie
+    A seed sensitivity is normally the reference for one by one sensitivities
     It contains a list of seeds to be repeated for each sensitivity
-    If used for RMS parameter name should be RMS_SEED
-    It will be assigned the type 'p10_p90' since p10 and p90 will be
-    shown in tornado plots
+    If used for RMS_SEED, the parameter name should be RMS_SEED
+    It will be assigned the sensname 'p10_p90' which will be written to
+    the SENSCASE column in the output.
 
     Attributes:
         sensname (str): shall be 'seed'
@@ -322,9 +322,12 @@ class ScenarioSensitivity(object):
 
     The ScenarioSensitivity class is used for sensitivities where all
     realizatons in a ScenarioSensitivityCase have identical values
-    (from defaultvalues)
+    but one or more parameter has a different values from the other
+    ScenarioSensitivityCase.
+
     Exception is the seed value and the special case where
-    varying background parameters are specified.
+    varying background parameters are specified. Then these are varying
+    within the case.
 
     Attributes:
         case1 (ScenarioSensitivityCase): first case, e.g. 'low case'
@@ -378,7 +381,8 @@ class ScenarioSensitivityCase(object):
     The 1-2 cases are typically 'low' and 'high' cases for one or
     a set of  parameters, where all realisatons in
     the case have identical values except the seed value
-    and in special cases specified background values.
+    and in special cases specified background values which may
+    vary within the case.
 
     One or two ScenarioSensitivityCase instances can be added to each
     ScenarioSensitivity object.
@@ -388,8 +392,9 @@ class ScenarioSensitivityCase(object):
     Attributes:
         casename (str): name of the sensitivity case,
                         equals SENSCASE in design matrix
-        casevalues (pandas Dataframe): contains parameter names and
-            values for the case
+        casevalues (pandas Dataframe): parameters and values
+            for the sensitivity
+            with realisation numbers as index.
 
     """
 
@@ -453,7 +458,8 @@ class MonteCarloSensitivity(object):
     Attributes:
         sensname (string):  name for the sensitivity.
             Equals SENSNAME in design matrix.
-        sensvalues (DataFrame):  design values for the sensitivity
+        sensvalues (DataFrame):  parameters and values for the sensitivity
+            with realisation numbers as index.
     """
 
     def __init__(self, sensname):
