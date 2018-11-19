@@ -22,7 +22,7 @@ In the **designinput** sheet, the parameters and values for each sensitivity are
 
 seed
     This is normally the reference sensitivity to which all the others are compared to. All the parameters will be at their base case values taken from the defaultvalues sheet. Only the RMS_SEED will be varying.
-scanario
+scenario
     This is a sensitivity where the parameter(s) are set to their extreme values (high/low values) One or two cases can exist for each sensitivity. Each of the two cases must be given a name.
 dist
     This is a monte carlo sensitivity where one or several parameters are sampled from the specified distribution(s). The distribution name is given in the *dist_name* column, and the distribution parameters are given in *dist_parm1*, *dist_param2*, *dist_param3*, *dist_param4*. Currently these distributions are implemented:
@@ -39,11 +39,11 @@ dist
 
 In the example shown below four sensitivities are specified in addition to the seed sensitivity. In the *faults* sensitivity two alternative values for the parameter *fault_position* are specified, which will be compared to the seed sensitivity where the *fault_position* is set at its default value (0).  In the *velocity* sensitivity only one alternative case is specified. In the *contacts* sensitivity three parameters are varied at the same time. In the *shallow* case, all contacts are set shallow, and opposite in the *deep* sensitiviy case.
 
-The last sensitivity is a monte carlo sensitivity where the parameter *multz_ile* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The seed numbers will for these 20 realisations be from 1000 to 1019. .
+The last sensitivity is a Monte Carlo sensitivity where the parameter *multz_ile* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The seed numbers will for these 20 realisations be from 1000 to 1019. .
 
 .. image:: images/design_designinput.png
 
-The **defaultvalues** sheet contains default values for the design. For parameters that also exist in the designinput sheet, the defaultvalues are used as 'base case value' in the deisgnmatrix. In addition all the parameters in the defaultvalues sheet will be written to the corresponding defaultvalues sheet in the output excel designmatrix workbook.
+The **defaultvalues** sheet contains default values for the design. For parameters that also exist in the designinput sheet, the defaultvalues are used as 'base case value' in the designmatrix. In addition all the parameters in the defaultvalues sheet will be written to the corresponding defaultvalues sheet in the output excel designmatrix workbook.
 	   
 .. image:: images/design_defaultvalues.png
 	   
