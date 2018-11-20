@@ -37,7 +37,7 @@ TOPSRCAPPLICATION := src/fmu
 DOCSINSTALL := /project/sdpdocs/FMU/lib
 
 # A list of the applications
-# RUNAPPS := fmutools
+RUNAPPS := fmudesign
 
 BROWSER := firefox
 
@@ -156,15 +156,15 @@ siteinstall: dist ## Install in /project/res (Trondheim) using $TARGET
 	PYTHONUSERBASE=${TARGET} pip install --user .
 	/project/res/bin/res_perm ${FULLTARGET}/${APPLICATIONROOT}*
 	@echo "Install run scripts..."
-	# $(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
-	# $(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )
+	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${BININSTALL}/.; )
+#	$(foreach RUNAPP, ${RUNAPPS}, /project/res/bin/res_perm ${BININSTALL}/${RUNAPP}; )
 
 userinstall: dist ## Install on user directory (need a MY_BINDIST env variable)
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATION}
 	\rm -fr  ${FULLUSRPYPATH}/${APPLICATIONPKG}*
 	@echo ${USRPYPATH}
 	PYTHONUSERBASE=${USRPYPATH} pip install --user .
-	# $(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${MYBINDIST}/bin/.; )
+	$(foreach RUNAPP, ${RUNAPPS}, rsync -av --delete bin/${RUNAPP} ${MYBINDIST}/bin/.; )
 
 
 docsinstall: docsrun
