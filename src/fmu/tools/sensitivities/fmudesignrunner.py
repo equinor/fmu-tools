@@ -59,7 +59,7 @@ def main(args=None):
 
     folder = os.path.dirname(args.destination)
 
-    if not os.path.exists(folder) and folder !='':
+    if not os.path.exists(folder) and folder != '':
         raise ValueError('Folder "{}" for output file '
                          'does not exist.'
                          'Create in advance'.format(folder))
