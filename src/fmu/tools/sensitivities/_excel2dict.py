@@ -134,10 +134,11 @@ def _excel2dict_onebyone(input_filename):
                 'Sensitivity {} does not have a valid sensitivity type'
                 .format(sensname))
 
-        if _has_value(group['numreal'].iloc[0]):
-            # Using default number of realisations:
-            # 'repeats' from general_input sheet
-            sensdict['numreal'] = int(group['numreal'].iloc[0])
+        if 'numreal' in group.keys():
+            if _has_value(group['numreal'].iloc[0]):
+                # Using default number of realisations:
+                # 'repeats' from general_input sheet
+                sensdict['numreal'] = int(group['numreal'].iloc[0])
 
         inputdict['sensitivities'][str(sensname)] = sensdict
 
@@ -232,6 +233,14 @@ def _read_dist_sensitivity(sensgroup):
     """Reads parameters and distributions
     for monte carlo sensitivities
     """
+    if 'dist_param1' not in sensgroup.columns.values:
+        sensgroup['dist_param1'] = float('NaN')
+    if 'dist_param2' not in sensgroup.columns.values:
+        sensgroup['dist_param2'] = float('NaN')
+    if 'dist_param3' not in sensgroup.columns.values:
+        sensgroup['dist_param3'] = float('NaN')
+    if 'dist_param4' not in sensgroup.columns.values:
+        sensgroup['dist_param4'] = float('NaN')
     paramdict = OrderedDict()
     for row in sensgroup.itertuples():
         distparams = [item for item in [
