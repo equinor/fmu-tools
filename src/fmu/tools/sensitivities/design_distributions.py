@@ -6,6 +6,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from math import exp
+import re
 import numpy
 import numpy.linalg
 import scipy.stats
@@ -88,20 +89,41 @@ def prepare_distribution(distname, dist_parameters):
             logscale = loghigh - loglow
             distribution = scipy.stats.uniform(
                 loc=loglow, scale=logscale)
-    elif distname[0:4].lower() == 'disc':
-        low = float(dist_parameters[0])
-        high = float(dist_parameters[1])
-        if is_number(low) and is_number(high):
-            loglow = numpy.log10(low)
-            loghigh = numpy.log10(high)
-            logscale = loghigh - loglow
-            distribution = scipy.stats.uniform(
-                loc=loglow, scale=logscale)
     else:
         raise ValueError(
             'distribution name {} is not implemented'
             .format(distname))
     return distribution
+
+
+def sample_discrete(dist_params, realnums):
+    """Sample from discrete distribution
+
+    Args:
+        dist_params(list): parameters for distribution
+            dist_params[0] is possible outcomes separated
+            by comma
+            dist_params[1] is probabilities for each outcome,
+            separated by comma
+        realnums(list): list of realisation numbers(integers)
+
+    Returns:
+        numpy.ndarray: values drawn from distribution
+    """
+
+    outcomes = re.split(',', dist_params[0])
+    if len(dist_params) == 2:  # non uniform
+        fractions = re.split(',', dist_params[1])
+        values = numpy.random.choice(
+            outcomes, len(realnums),
+            fractions)
+    elif len(dist_params) == 1:  # uniform
+        values = numpy.random.choice(
+            outcomes, len(realnums))
+    else:
+        raise ValueError('Wrong input for discrete '
+                         'distribution')
+    return values
 
 
 def generate_mcvalues(distribution, mcreals):

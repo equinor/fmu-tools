@@ -6,9 +6,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from collections import OrderedDict
-import re
 import pandas as pd
-import numpy as np
 from fmu.tools.sensitivities import design_distributions as design_dist
 
 
@@ -486,11 +484,8 @@ class MonteCarloSensitivity(object):
                 dist_params = parameters[key][1]
                 # print(realnums,key, dist_name, dist_params)
                 if dist_name == 'discrete':
-                    outcomes = re.split(',', dist_params[0])
-                    fractions = re.split(',', dist_params[1])
-                    mc_values = np.random.choice(
-                        outcomes, len(realnums),
-                        fractions)
+                    mc_values = design_dist.sample_discrete(
+                        dist_params, realnums)
                 else:
                     distribution = design_dist.prepare_distribution(
                         dist_name, dist_params)
