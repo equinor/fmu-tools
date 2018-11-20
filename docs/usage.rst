@@ -15,6 +15,17 @@ The current functionallity is:
 * Automatic generation of design matrices to be run with DESIGN2PARAMS and DESIGN_KW in ERT
 * Post processing of onebyone sensitivities and plotting in TornadoPlot in webviz
 
+
+Generation of a design matrix can be run with a script::
+
+    fmudesign <design_input.xlsx> <output_matrix.xlsx>
+
+where <design_input.xlsx> is the path to the input for generating the design matrix
+and <output_matrix.xlsx> is the path to the output design matrix.
+Study the examples for how to configure the input for the design matrix
+
+Post processing of onebyone sensitivities will be run from a python script
+using fmu.tools.sensitivities
 Study the examples to learn how to use it.
 
  
