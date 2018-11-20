@@ -30,13 +30,11 @@ def _do_parse_args(args):
                         help=('Input design config filename '
                               'on Excel format'))
 
-    parser.add_argument('--destination',
-                        dest='destination',
-                        default='../input/distributions/fmudesign.xlsx',
+    parser.add_argument('destination',
                         type=str,
                         help='Destination folder for design matrix')
 
-    if len(args) < 1:
+    if len(args) < 2:
         parser.print_help()
         print('QUIT')
         raise SystemExit
@@ -58,6 +56,13 @@ def main(args=None):
     design = DesignMatrix()
 
     design.generate(input_dict)
+
+    folder = os.path.dirname(args.destination)
+
+    if not os.path.exists(folder) and folder !='':
+        raise ValueError('Folder "{}" for output file '
+                         'does not exist.'
+                         'Create in advance'.format(folder))
 
     design.to_xlsx(args.destination)
 
