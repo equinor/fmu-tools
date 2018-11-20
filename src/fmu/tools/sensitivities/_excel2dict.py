@@ -243,6 +243,21 @@ def _read_dist_sensitivity(sensgroup):
         sensgroup['dist_param4'] = float('NaN')
     paramdict = OrderedDict()
     for row in sensgroup.itertuples():
+        if not _has_value(row.dist_param1):
+            raise ValueError('Parameter {} has been input '
+                             'as type "dist" but with empty '
+                             'first distribution parameter '
+                             .format(row.param_name))
+        if not _has_value(row.dist_param2) and _has_value(row.dist_param3):
+            raise ValueError('Parameter {} has been input with '
+                             'value for "dist_param3" while '
+                             '"dist_param2" is empty. This is not '
+                             'allowed'.format(row.param_name))
+        if not _has_value(row.dist_param3) and _has_value(row.dist_param4):
+            raise ValueError('Parameter {} has been input with '
+                             'value for "dist_param4" while '
+                             '"dist_param3" is empty. This is not '
+                             'allowed'.format(row.param_name))
         distparams = [item for item in [
             row.dist_param1, row.dist_param2, row.dist_param3, row.dist_param4]
                       if _has_value(item)]
