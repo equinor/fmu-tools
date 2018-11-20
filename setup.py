@@ -26,8 +26,8 @@ test_requirements = [
     'pytest',
 ]
 
-# fmutools_function = ('fmutools='
-#                      'fmu.tools.fmutoolsrunner:main')
+fmutools_function = ('fmudesign='
+                     'fmu.tools.sensitivities.fmudesignrunner:main')
 
 setup(
     name='fmu_tools',
@@ -41,9 +41,9 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-    # entry_points={
-    #     'console_scripts': [fmutools_function]
-    # },
+    entry_points={
+        'console_scripts': [fmutools_function]
+    },
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
