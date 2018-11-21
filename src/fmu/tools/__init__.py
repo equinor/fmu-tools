@@ -2,10 +2,10 @@
 
 """Top-level package for fmu_tools"""
 
-from ._version import get_versions
-__version__ = get_versions()['version']
+from ._theversion import theversion
+__version__ = theversion()
 
-del get_versions
+del theversion
 
 from .sensitivities import DesignMatrix # noqa
 from .sensitivities import summarize_design # noqa
