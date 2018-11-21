@@ -62,32 +62,14 @@ dist
     * uniform (min,max)
     * loguniform (min,max)
     * triangular (min, mode, max)
-    * discrete ((value1, value2, .. value_n),(weight1,
-      weight2, .. weight_n)) which is a discrete distribution with
-      weights
+    * discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.
     * TO DO:
       
-          * lognormal (mean(ln(X)), stddev(ln(X))) Distribution
-            parameters: mean and std dev of the natural logarithm of
-            the variable
+          * lognormal (mean(ln(X)), stddev(ln(X)))  Distribution parameters:  mean and std dev of the natural logarithm of the variable
 
-In the example shown below four sensitivities are specified in
-addition to the seed sensitivity. In the *faults* sensitivity two
-alternative values for the parameter *fault_position* are specified,
-which will be compared to the seed sensitivity where the
-*fault_position* is set at its default value (0).  In the *velocity*
-sensitivity only one alternative case is specified. In the *contacts*
-sensitivity three parameters are varied at the same time. In the
-*shallow* case, all contacts are set shallow, and opposite in the
-*deep* sensitiviy case.
+In the example shown below four sensitivities are specified in addition to the seed sensitivity. In the *faults* sensitivity two alternative values for the parameter *fault_position* are specified, which will be compared to the seed sensitivity where the *fault_position* is set at its default value (0).  In the *velmodel* sensitivity only one alternative case is specified. In the *contacts* sensitivity three parameters are varied at the same time. In the *shallow* case, all contacts are set shallow, and opposite in the *deep* sensitiviy case.
 
-The last sensitivity is a Monte Carlo sensitivity where the parameter
-*multz_ile* has values sampled from the distribution
-*loguniform(0.0001, 1)*. Note that for this last sensitivity the
-numbers of realisations *(numreal)* is set to 20, which overrides the
-default number of realisations given in the *general_input*
-spreadsheet. The seed numbers will for these 20 realisations be from
-1000 to 1019. .
+The last sensitivity is a monte carlo sensitivity where the parameter *multz_ile* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The seed numbers will for these 20 realisations be from 1000 to 1019.
 
 .. image:: images/design_designinput.png
 
@@ -100,12 +82,10 @@ designmatrix workbook.
 	   
 .. image:: images/design_defaultvalues.png
 	   
-To generate the design matrix, the following code is used:
+To generate the design matrix from this input use the *fmudesign* script (see Usage). Alternatively from a notebook:
 
 .. code-block:: python
 
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
     from fmu.config import oyaml as yaml
     from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
@@ -147,7 +127,7 @@ row index.
 
 .. image:: images/design_designinput2.png
 
-The corr1 sheet used for sens7 looks like this:
+The *corr1* sheet used for *sens7* looks like this:
 
 .. image:: images/design_corr1.png
 	   
