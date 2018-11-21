@@ -96,7 +96,7 @@ def prepare_distribution(distname, dist_parameters):
     return distribution
 
 
-def sample_discrete(dist_params, realnums):
+def sample_discrete(dist_params, numreals):
     """Sample from discrete distribution
 
     Args:
@@ -105,7 +105,7 @@ def sample_discrete(dist_params, realnums):
             by comma
             dist_params[1] is probabilities for each outcome,
             separated by comma
-        realnums(list): list of realisation numbers(integers)
+        numreals (int): number of realisations to draw
 
     Returns:
         numpy.ndarray: values drawn from distribution
@@ -115,11 +115,11 @@ def sample_discrete(dist_params, realnums):
     if len(dist_params) == 2:  # non uniform
         fractions = re.split(',', dist_params[1])
         values = numpy.random.choice(
-            outcomes, len(realnums),
+            outcomes, numreals,
             fractions)
     elif len(dist_params) == 1:  # uniform
         values = numpy.random.choice(
-            outcomes, len(realnums))
+            outcomes, numreals)
     else:
         raise ValueError('Wrong input for discrete '
                          'distribution')
