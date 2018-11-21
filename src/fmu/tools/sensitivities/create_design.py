@@ -482,10 +482,9 @@ class MonteCarloSensitivity(object):
             for key in parameters.keys():
                 dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
-                # print(realnums,key, dist_name, dist_params)
                 if dist_name == 'discrete':
                     mc_values = design_dist.sample_discrete(
-                        dist_params, realnums)
+                        dist_params, len(realnums))
                 else:
                     distribution = design_dist.prepare_distribution(
                         dist_name, dist_params)
