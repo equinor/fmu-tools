@@ -14,11 +14,14 @@ fmu-tools is designed for use in several scenarios:
 
 The current functionallity is:
 
-* Automatic generation of design matrices to be run with DESIGN2PARAMS
-  and DESIGN_KW in ERT
-* Post processing of onebyone sensitivities and plotting in
-  TornadoPlot in webviz
+1. Automatic generation of design matrices to be run with DESIGN2PARAMS and DESIGN_KW in ERT. Generation of a design matrix can be run with a script::
 
-Study the examples to learn how to use it.
+    fmudesign <design_input.xlsx> <output_matrix.xlsx>
+
+where <design_input.xlsx> is the path to the input for generating the design matrix
+and <output_matrix.xlsx> is the path to the output design matrix.
+Study the examples for how to configure the input for the design matrix
+
+2. Post processing of onebyone sensitivities and plotting in TornadoPlot in webviz. This can be run from a python script using fmu.tools.sensitivities. Study the examples to learn how to use it.
 
  
