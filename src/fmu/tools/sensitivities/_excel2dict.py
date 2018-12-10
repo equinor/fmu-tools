@@ -67,6 +67,7 @@ def _excel2dict_onebyone(input_filename):
         header=None,
         index_col=0)
 
+    seedname = 'RMS_SEED'
     inputdict['designtype'] = generalinput[1]['designtype']
     inputdict['seeds'] = generalinput[1]['seeds']
     inputdict['repeats'] = generalinput[1]['repeats']
@@ -96,6 +97,7 @@ def _excel2dict_onebyone(input_filename):
     designinput = pd.read_excel(
         input_filename,
         'designinput')
+
     designinput['sensname'].fillna(method='ffill', inplace=True)
 
     # Read decimals
@@ -112,9 +114,19 @@ def _excel2dict_onebyone(input_filename):
 
         sensdict = OrderedDict()
 
-        if group['type'].iloc[0] == 'seed':
-            sensdict['parametername'] = str(group['param_name'].iloc[0])
+        if group['type'].iloc[0] == 'ref':
+            sensdict['senstype'] = 'ref'
+
+        elif group['type'].iloc[0] == 'background':
+            sensdict['senstype'] = 'background'
+
+        elif group['type'].iloc[0] == 'seed':
+            sensdict['seedname'] = seedname
             sensdict['senstype'] = 'seed'
+            if _has_value(group['param_name'].iloc[0]):
+                sensdict['parameters'] = _read_constants(group)
+            else:
+                sensdict['parameters'] = None
 
         elif group['type'].iloc[0] == 'scenario':
             sensdict = _read_scenario_sensitivity(group)
@@ -122,6 +134,14 @@ def _excel2dict_onebyone(input_filename):
 
         elif group['type'].iloc[0] == 'dist':
             sensdict['parameters'] = _read_dist_sensitivity(group)
+            corrsheet = _read_correlations(group)
+            if corrsheet is not None:
+                corr_dict = OrderedDict()
+                corr_dict['inputfile'] = input_filename
+                corr_dict['corrsheet'] = corrsheet
+            else:
+                corr_dict = None
+            sensdict['correlations'] = corr_dict
             sensdict['senstype'] = 'dist'
 
         elif group['type'].iloc[0] == 'extern':
@@ -216,17 +236,35 @@ def _read_scenario_sensitivity(sensgroup):
     casedict2 = OrderedDict()
     for row in sensgroup.itertuples():
         casedict1[str(row.param_name)] = row.value1
-    if _has_value(sensgroup['senscase2'].iloc[0]):
+    if _has_value(sensgroup['casename2'].iloc[0]):
         for row in sensgroup.itertuples():
             casedict2[str(row.param_name)] = row.value2
         sdict['cases'][
-            str(sensgroup['senscase1'].iloc[0])] = casedict1
+            str(sensgroup['casename1'].iloc[0])] = casedict1
         sdict['cases'][
-            str(sensgroup['senscase2'].iloc[0])] = casedict2
+            str(sensgroup['casename2'].iloc[0])] = casedict2
     else:
         sdict['cases'][
-            str(sensgroup['senscase1'].iloc[0])] = casedict1
+            str(sensgroup['casename1'].iloc[0])] = casedict1
     return sdict
+
+
+def _read_constants(sensgroup):
+    """Reads constants to be used together with
+    seed sensitivity"""
+    if 'dist_param1' not in sensgroup.columns.values:
+        sensgroup['dist_param1'] = float('NaN')
+    paramdict = OrderedDict()
+    for row in sensgroup.itertuples():
+        if not _has_value(row.dist_param1):
+            raise ValueError('Parameter {} has been input '
+                             'in a sensitivity of type "seed"'
+                             'but without "const" in dist_name '
+                             'and a value in "dist_param1" '
+                             .format(row.param_name))
+        distparams = row.dist_param1
+        paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
+    return paramdict
 
 
 def _read_dist_sensitivity(sensgroup):
@@ -262,7 +300,23 @@ def _read_dist_sensitivity(sensgroup):
             row.dist_param1, row.dist_param2, row.dist_param3, row.dist_param4]
                       if _has_value(item)]
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
+
     return paramdict
+
+
+def _read_correlations(sensgroup):
+
+    if 'corr_sheet' in sensgroup.keys():
+        if _has_value(
+                sensgroup['corr_sheet'].iloc[0]):
+            correlations = OrderedDict()
+            correlations = sensgroup['corr_sheet'].iloc[0]
+        else:
+            correlations = None
+    else:
+        correlations = None
+
+    return correlations
 
 
 def _has_value(value):

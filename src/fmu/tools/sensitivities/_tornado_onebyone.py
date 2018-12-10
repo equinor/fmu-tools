@@ -41,16 +41,16 @@ def check_response(resultfile, response):
                          "resultfile")
 
 
-def cut_by_seed(tornadotable):
-    """ Removes sensitivities smaller than seed sensitivity from table """
-    maskseed = tornadotable.sensname == 'seed'
-    seedlow = tornadotable[maskseed].low.abs()
-    seedhigh = tornadotable[maskseed].high.abs()
-    seedmax = max(float(seedlow), float(seedhigh))
+def cut_by_ref(tornadotable, refname):
+    """ Removes sensitivities smaller than reference sensitivity from table """
+    maskref = tornadotable.sensname == refname
+    reflow = tornadotable[maskref].low.abs()
+    refhigh = tornadotable[maskref].high.abs()
+    refmax = max(float(reflow), float(refhigh))
     dfr_filtered = (tornadotable.loc[
-        (tornadotable['sensname'] == 'seed') |
-        ((tornadotable['low'].abs() >= seedmax) |
-         (tornadotable['high'].abs() >= seedmax))])
+        (tornadotable['sensname'] == refname) |
+        ((tornadotable['low'].abs() >= refmax) |
+         (tornadotable['high'].abs() >= refmax))])
     return dfr_filtered
 
 
@@ -64,8 +64,8 @@ def sort_by_max(tornadotable):
 
 
 def calc_tornadoinput(designsummary, resultfile, response, selectors,
-                      selection, reference='seed', scale='percentage',
-                      cutbyseed=False, sortsens=True):
+                      selection, reference='rms_seed', scale='percentage',
+                      cutbyref=False, sortsens=True):
     """
      Calculates input values for a webviz TornadoPlot for one response
      and one design set up
@@ -80,14 +80,14 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         selectors(list of strings): Selectors to choose/filter on
         selections(list of lists): Values to filter on for each selector.
         reference(str, optional): Specifying what the reference is for
-                                  the tornado plots. Defaults to 'seed'.
-                                  Valid choices are 'seed' or a
+                                  the tornado plots. Defaults to 'rms_seed'.
+                                  Valid choices are a sensname or a
                                   realisation number.
         scale(str, optional): Whether to plot absolute numbers or percentage
                               compared to reference mean.
                               Defaults to 'percentage'.
                               Valid choices are 'percentage' and 'absolute'.
-        cutbyseed (bool, optional): If True sensitivities smaller than seed
+        cutbyref (bool, optional): If True sensitivities smaller than ref
                                     are excluded. Defaults to False.
         sortsens (bool, optional): If True sensitivities are sorted so that
                                    largest comes first. Defaults to True.
@@ -108,13 +108,13 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
         >>> response = 'STOIIP_OIL'
         >>> selectors = ['ZONE', 'REGION']
         >>> selection = [['Nansen','Larsson'], ['SegmentA']]
-        >>> reference = 'seed'
+        >>> reference = 'rms_seed'
         >>> scale = 'percentage'
-        >>> cutbyseed = True
+        >>> cutbyref = True
         >>> sortsens = False
         >>> (tornadotable, ref_value) = calc_tornadoinput(
             designtable, results, response, selectors,
-            selection, reference, scale, cutbyseed, sortsens)
+            selection, reference, scale, cutbyref, sortsens)
 
     """
     # Check that chosen response exists in resultfile
@@ -144,11 +144,11 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
                                          'numreal1', 'numreal2'])
 
     # Calculate mean for reference
-    if reference == 'seed':
+    if reference in designsummary['sensname'].values:
         startreal = int(designsummary[
-            designsummary['sensname'] == 'seed']['startreal1'])
+            designsummary['sensname'] == reference]['startreal1'])
         endreal = int(designsummary[
-            designsummary['sensname'] == 'seed']['endreal1'])
+            designsummary['sensname'] == reference]['endreal1'])
         mask = real_mask(dfr_summed, startreal, endreal)
         ref_avg = dfr_summed[mask][response].mean()
     elif reference.isdigit():
@@ -158,7 +158,7 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
             mask = real_mask(dfr_summed, startreal, endreal)
             ref_avg = dfr_summed[mask][response].mean()
     else:
-        raise ValueError("Reference should be 'seed' or a real number",
+        raise ValueError("Reference should be a sensname or a real number",
                          reference)
 
     # for each sensitivity calculate statistics
@@ -217,6 +217,8 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
             tornadoinput.loc[sensno] = [sensno, sensname, avg1, avg2,
                                         subset1name, subset2name,
                                         numreal1, numreal2]
+        elif designsummary.loc[sensno]['senstype'] == 'ref':
+            continue
         else:
             raise ValueError("Sensitivity type should be 'mc' or 'scalar': "
                              + designsummary.loc[sensno]['senstype'] + '\n'
@@ -237,9 +239,9 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
     tornadoinput['low'] = tornadoinput['low'].round(2)
     tornadoinput['high'] = tornadoinput['high'].round(2)
 
-    # Drops sensitivities smaller than seed if specified
-    if cutbyseed and tornadoinput['sensname'].str.contains('seed').any():
-        tornadoinput = cut_by_seed(tornadoinput)
+    # Drops sensitivities smaller than reference if specified
+    if cutbyref and tornadoinput['sensname'].str.contains(reference).any():
+        tornadoinput = cut_by_ref(tornadoinput, reference)
 
     # Sorts so that largest sensitivities comes first
     if sortsens:

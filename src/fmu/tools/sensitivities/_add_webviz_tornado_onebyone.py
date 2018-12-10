@@ -37,8 +37,14 @@ def yconfig_set_defaults(config):
     if 'scale' not in newconfig['tornadooptions']:
         newconfig['tornadooptions']['scale'] = 'absolute'
 
-    if 'cutbyseed' not in newconfig['tornadooptions']:
-        newconfig['tornadooptions']['scale'] = 'No'
+    if 'cutbyref' not in newconfig['tornadooptions']:
+        if 'cutbyseed' in newconfig['tornadooptions']:
+            print('Warning: Use of cutbyseed will be phased out.'
+                  'Use cutbyref instead')
+            newconfig['tornadooptions']['cutbyref'] =\
+                newconfig['tornadooptions']['cutbyseed']
+        else:
+            newconfig['tornadooptions']['cutbyref'] = 'No'
 
     if 'designsheet' not in newconfig['design']:
         newconfig['design']['designsheet'] = 'DesignSheet01'
@@ -132,7 +138,7 @@ def add_webviz_tornadoplots(web, configfile):
 
     reference = str(config['tornadooptions']['reference'])
     scale = config['tornadooptions']['scale']
-    cutbyseed = config['tornadooptions']['cutbyseed']
+    cutbyref = config['tornadooptions']['cutbyref']
     menuprefix = config['calculations']['menuprefix']
 
     # Option: results from single realisation csv files needs gathering first
@@ -174,12 +180,12 @@ def add_webviz_tornadoplots(web, configfile):
                 designtable,
                 results, res,
                 selectors, cmb,
-                reference, scale, cutbyseed)
+                reference, scale, cutbyref)
             print('For response and selections: ')
             print(pagetitle)
             print('reference average: ', ref_value)
-            print('Calculation settings: ', scale, ', Cut by seed: ',
-                  cutbyseed, ',  Reference: ', reference)
+            print('Calculation settings: ', scale, ', Cut by reference: ',
+                  cutbyref, ',  Reference: ', reference)
             with pd.option_context('expand_frame_repr', False):
                 print(tornadotable)
             print('\n')

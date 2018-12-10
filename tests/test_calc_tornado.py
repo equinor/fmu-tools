@@ -86,7 +86,7 @@ def test_calc_tornadoinput():
                                  ['Nansen', 'Larsson'],
                                  ['oil_zone_Nansen_Larsson']
                                 ],
-                                'seed', 'percentage')
+                                'rms_seed', 'percentage')
 
     assert int(tornadotable['low'].sum()) == -21
     assert int(tornadotable['high'].sum()) == 11
@@ -98,7 +98,7 @@ def test_calc_tornadoinput():
                                 'STOIIP_OIL',
                                 ['ITER', 'ZONE', 'REGION'],
                                 [['all'], ['all'], ['all']],
-                                'seed', 'absolute')
+                                'rms_seed', 'absolute')
 
     assert int(tornadotable['low'].sum()) == -2142167
     assert int(tornadotable['high'].sum()) == 1478053

@@ -25,10 +25,10 @@ calculations:
   
 # Tornado plot options
 tornadooptions:
-  # Choose seed sensitivity or a single realisation number as reference
-  reference: seed
+  # Choose reference sensitivity or a single realisation number as reference
+  reference: rms_seed
   # Choose absolute or percentage (relative to reference average)
   scale: absolute
-  # Choose Yes if sensitivities smaller than seed should be excluded from plot
-  cutbyseed: Yes
+  # Choose Yes if sensitivities smaller than reference sensitivity should be excluded from plot
+  cutbyref: Yes
   

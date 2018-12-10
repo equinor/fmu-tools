@@ -15,8 +15,9 @@ os.chdir('../')
 #    input_dict=yaml.load(input_file)
 
 
+design_configfile = './tests/data/sensitivities/config/design_input_singlereference_and_seed.xlsx'
 # design_configfile = './tests/data/sensitivities/config/fossekall_design.xlsx'
-design_configfile = './tests/data/sensitivities/config/design_input_onebyone.xlsx'
+# design_configfile = './tests/data/sensitivities/config/design_input_example_velocities.xlsx'
 
 input_dict = excel2dict_design(design_configfile)
 inputdict_to_yaml(input_dict, 'examples/output/design_inut_dict_dumped.yaml')

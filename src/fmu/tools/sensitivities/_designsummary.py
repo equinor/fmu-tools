@@ -59,22 +59,14 @@ def summarize_design(filename, sheetname='DesignSheet01'):
             'Design matrix filename should be on Excel or csv format'
             ' and end with .xlsx or .csv')
 
-    # Check whether realisation 0 is a seed P10_P90 realisation
-    if (dgn.loc[0]['SENSNAME'] == 'seed' and
-            dgn.loc[0]['SENSCASE'] == 'P10_P90'):
-        sensname = 'seed'
-        casename1 = 'P10_P90'
+    sensname = dgn.loc[0]['SENSNAME']
+    casename1 = dgn.loc[0]['SENSCASE']
+    if casename1.lower() == 'p10_p90':
         senstype = 'mc'
+    elif casename1.lower() == 'ref':
+        senstype = 'ref'
     else:
-        print('warning: did not find seed case at realization 0. \n')
-        print('was expecting sensename "seed" and')
-        print('senstype "P10_P90" as first sensitivity')
-        sensname = dgn.loc[0]['SENSNAME']
-        casename1 = dgn.loc[0]['SENSCASE']
-        if casename1 == 'P10_P90':
-            senstype = 'mc'
-        else:
-            senstype = 'scalar'
+        senstype = 'scalar'
 
     currentsensname = sensname
     currentsenscase = casename1
@@ -119,7 +111,7 @@ def summarize_design(filename, sheetname='DesignSheet01'):
             sensname = row.SENSNAME
             currentsenscase = casename1
             currentsensname = sensname
-            if row.SENSCASE == 'P10_P90':
+            if row.SENSCASE.lower() == 'p10_p90':
                 senstype = 'mc'
             elif row.SENSCASE.lower() == 'skip':
                 senstype = 'skip'
