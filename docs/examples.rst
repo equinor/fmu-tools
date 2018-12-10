@@ -8,7 +8,12 @@ Examples to learn from
 -------------------------------------------------
 Create design matrix for one by one sensitivities
 -------------------------------------------------
-These examples show use of the ``fmu.tools.sensitivities`` package to generate design matrices automatically. Input is given as a dictionary which can be generated from an excel workbook. The excel workbook must be set up using a specific format. These examples explain how to set up the workbook.
+
+These examples show use of the ``fmu.tools.sensitivities`` package to
+generate design matrices automatically. Input is given as a dictionary
+which can be generated from an excel workbook. The excel workbook must
+be set up using a specific format. These examples explain how to set
+up the workbook.
 
 What are the types of sensitivities that can be set up
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -123,7 +128,6 @@ The last sensitivity explores the full velocity uncertainty by combining velocit
 	   
 Example 4: Excel input for sensitivities with background parameters
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In this example the one by one design is put on top of a set of *background parameters* randomly sampled from distributions. This means that in the set of realisations for each sensitivity it is not only the seed that is varied, but also the background parameters. However each sensitivity/sensitivity case uses the same list of seeds and the same set of sampled background parameters.
 
 The use of background parameters is flagged in the general_input sheet by changing *background* from *None* to either a name of the sheet where the background parameters are specified, or a path to an excel file where the only/first sheet is specifying the background parameters. The specification of the background parameters is the same as for a sensitivity of type 'dist':  distribution types, distribution parameters, and optionally decimals and correlation sheet. The background sheet for this example is shown in the figure below.
 
@@ -154,28 +158,44 @@ The set of values for the background parameters are either sampled from distribu
 -----------------------------------------
 Adding sets of tornado plots to webportal
 -----------------------------------------
-This example shows how sets of tornado plots from a single sensitivitiy run can be added to a webportal using yaml configuration files and the 'add_webviz_tornadoplot'.
 
-Fossekall one-by-one sensitivities run with design matrix is further explained on FMU wiki portal.
+This example shows how sets of tornado plots from a single
+sensitivitiy run can be added to a webportal using yaml configuration
+files and the 'add_webviz_tornadoplot'.
+
+Fossekall one-by-one sensitivities run with design matrix is further
+explained on FMU wiki portal.
 
 
 Yaml file for tornado from rms volumes
 """"""""""""""""""""""""""""""""""""""
-In this example the volume result files have been exported to csv using geogrid_volume.ipl and results from different realisation have been aggregated to one file.
+
+In this example the volume result files have been exported to csv
+using geogrid_volume.ipl and results from different realisation have
+been aggregated to one file.
 
 .. literalinclude:: ../tests/data/sensitivities/config/config_example_geovolume.yaml
     :language: yaml
 
 Yaml file for aggregating rms volume files to one before tornado calculations
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In this example the volume result files have been exported to csv using geogrid_volume.ipl, but the result files from different realisations must be aggregated to one file before tornado calculations are done.
+
+In this example the volume result files have been exported to csv
+using geogrid_volume.ipl, but the result files from different
+realisations must be aggregated to one file before tornado
+calculations are done.
 
 .. literalinclude:: ../tests/data/sensitivities/config/config_example_geovolume_ensemble.yaml
     :language: yaml
 
 Yaml file for tornado plots from eclipse volumes
 """"""""""""""""""""""""""""""""""""""""""""""""
-In this example the result file has already been created using CSV_EXPORT1, so there is no need to collect results from different realisations. We want to create tornado plots for FOPT (field oil production total) and FGPT (field gas production total) at end of history (Date = 2013-07-11).
+
+In this example the result file has already been created using
+CSV_EXPORT1, so there is no need to collect results from different
+realisations. We want to create tornado plots for FOPT (field oil
+production total) and FGPT (field gas production total) at end of
+history (Date = 2013-07-11).
 
 .. literalinclude:: ../tests/data/sensitivities/config/config_example_eclipse.yaml
     :language: yaml
@@ -210,12 +230,17 @@ Python example using yaml input
 Use parts in your own set up
 ----------------------------
 
-If you want another design and setup than provided with 'add_webviz_tornadoplot'
-you can use the functionallity in fmu.tools.sensitivity and make your own script.
+If you want another design and setup than provided with
+'add_webviz_tornadoplot' you can use the functionallity in
+fmu.tools.sensitivity and make your own script.
 
 Example: summary of design matrix
 """""""""""""""""""""""""""""""""
-Use summarize_design on a design matrix on standard fmu format for one-by-one sensitivities to summarize the realisation numbers for each SENSNAME and SENSTYPE, and whether they are scalar sensitivities or monte carlo sensitivities.
+
+Use summarize_design on a design matrix on standard fmu format for
+one-by-one sensitivities to summarize the realisation numbers for each
+SENSNAME and SENSTYPE, and whether they are scalar sensitivities or
+monte carlo sensitivities.
 
 .. code-block:: python
 
@@ -236,7 +261,17 @@ Use summarize_design on a design matrix on standard fmu format for one-by-one se
 
 Example: calculating one tornadotable 
 """"""""""""""""""""""""""""""""""""""
-Using calc_tornadoplot with a 'designsummary' and a resultfile as input, and calculating statistics to visualize in a tornado plot for a given choice of SELECTOR (e.g. ZONE:'Ile') and RESPONSE (e.g. STOIIP_OIL). The reference is usually the mean of the realizations in the "seed sensitivity", but it can also be specified as a single realisation number, e.g. if you have a reference case in realization 0. Statistics showing the difference to the reference can be calculated as absolute values, or as percentages. You could also choose to exclude from the plot, sensitivities that are smaller than the seed sensitivity P10/P90.
+
+Using calc_tornadoplot with a 'designsummary' and a resultfile as
+input, and calculating statistics to visualize in a tornado plot for a
+given choice of SELECTOR (e.g. ZONE:'Ile') and RESPONSE
+(e.g. STOIIP_OIL). The reference is usually the mean of the
+realizations in the "seed sensitivity", but it can also be specified
+as a single realisation number, e.g. if you have a reference case in
+realization 0. Statistics showing the difference to the reference can
+be calculated as absolute values, or as percentages. You could also
+choose to exclude from the plot, sensitivities that are smaller than
+the seed sensitivity P10/P90.
 
 .. code-block:: python
 
