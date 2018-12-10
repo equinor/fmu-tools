@@ -8,7 +8,7 @@ from __future__ import print_function
 from math import exp
 import re
 import numpy
-import numpy.linalg
+import numpy.linalg as la
 import scipy.stats
 import pandas as pd
 
@@ -51,15 +51,13 @@ def prepare_distribution(distname, dist_parameters):
                 high = (float(clip2)-float(dist_mean))/float(dist_stddev)
                 distribution = scipy.stats.truncnorm(
                     low, high, loc=float(dist_mean), scale=float(dist_stddev))
-    elif distname[0:7].lower() == 'lognorm':
+    elif distname[0:4].lower() == 'logn':
         if len(dist_parameters) == 2:  # lognormal
-            dist_mu = dist_parameters[0]
+            mean = dist_parameters[0]
             sigma = dist_parameters[1]
-            if is_number(dist_mu) and is_number(sigma):
-                shape = float(sigma)
-                dist_scale = exp(float(dist_mu))
+            if is_number(mean) and is_number(sigma):
                 distribution = scipy.stats.lognorm(
-                    shape, scale=dist_scale)
+                    s=float(sigma), scale=exp(float(mean)))
         if len(dist_parameters) == 4:  # lognormal
             raise ValueError(
                 'Truncated lognormal is '
@@ -165,16 +163,18 @@ def read_correlations(corr_dict):
             as column and index
     """
     correlations = None
-    if 'inputfile' in corr_dict.keys():
+    if 'inputfile' in corr_dict.keys() and \
+       'corrsheet' in corr_dict.keys():
         filename = corr_dict['inputfile']
         if filename.endswith('.xlsx'):
-            correlations = pd.read_excel(filename)
+            correlations = pd.read_excel(
+                filename, corr_dict['corrsheet'])
         else:
             raise ValueError(
                 'Correlation matrix filename should be on'
                 'Excel format and end with .xlsx')
     else:
-        raise ValueError('correlations specified but inputfile'
+        raise ValueError('correlations specified but inputfile '
                          'not specified in configuration')
     return correlations
 
@@ -185,7 +185,8 @@ def mc_correlated(params, correls, numreals):
     Args:
         parameters (OrderedDict):
             dictionary of parameters and distributions
-            correlations: matrix with correlations
+        correls: dataframe with correlations
+        numreals: number of realisations to generate
     """
     multivariate_parameters = correls.index.values
     cov_matrix = make_covariance_matrix(correls)
@@ -197,17 +198,41 @@ def mc_correlated(params, correls, numreals):
         columns=multivariate_parameters)
     samples_df = pd.DataFrame(columns=multivariate_parameters)
     for key in params.keys():
+        dist_name = params[key][0].lower()
+        dist_params = params[key][1]
         if key in multivariate_parameters:
-            dist_name = params[key][0].lower()
-            dist_params = params[key][1]
             if dist_name == 'normal':
-                dist_mean = dist_params[0]
-                dist_stddev = dist_params[1]
-                samples_df[key] = scipy.stats.norm.ppf(
-                    scipy.stats.norm.cdf(
-                        normalscoresamples_df[key]),
-                    loc=dist_mean,
-                    scale=dist_stddev)
+                if len(dist_params) == 2:  # normal
+                    dist_mean = dist_params[0]
+                    dist_stddev = dist_params[1]
+                    if is_number(dist_mean) and is_number(dist_stddev):
+                        samples_df[key] = scipy.stats.norm.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            loc=float(dist_mean),
+                            scale=float(dist_stddev))
+                elif len(dist_params) == 4:  # trunc normal
+                    dist_mean = dist_params[0]
+                    dist_stddev = dist_params[1]
+                    clip1 = dist_params[2]
+                    clip2 = dist_params[3]
+                    if (
+                            is_number(dist_mean) and
+                            is_number(dist_stddev) and
+                            is_number(clip1) and
+                            is_number(clip2)
+                    ):
+                        low = (
+                            float(clip1)-float(dist_mean))/float(dist_stddev)
+                        high = (
+                            float(clip2)-float(dist_mean))/float(dist_stddev)
+                        samples_df[key] = scipy.stats.truncnorm.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            low,
+                            high,
+                            loc=float(dist_mean),
+                            scale=float(dist_stddev))
             elif dist_name[0:6].lower() == 'triang':
                 low = dist_params[0]
                 mode = dist_params[1]
@@ -241,19 +266,33 @@ def mc_correlated(params, correls, numreals):
                     loc=loglow,
                     scale=logscale)
                 samples_df[key] = 10**samples_df[key]
+            elif dist_name[0:4].lower() == 'logn':
+                mean = dist_params[0]
+                sigma = dist_params[1]
+                samples_df[key] = scipy.stats.lognorm.ppf(
+                    scipy.stats.norm.cdf(
+                        normalscoresamples_df[key]),
+                    s=sigma, loc=0, scale=exp(mean))
             else:
                 raise ValueError(
-                    'Parameter distribution {}'
-                    'not supported'.format(dist_name))
+                    'Parameter distribution {} assigned for {} '
+                    'cannot be used when in correlation matrix  '
+                    .format(dist_name, key))
             # Rounding if specified in config
             if len(params[key]) == 3:
                 decimals = params[key][2]
                 samples_df[key] = (samples_df[key].
                                    astype(float).round(int(decimals)))
+        elif dist_name[0:5].lower() == 'const':
+            samples_df[key] = [dist_params[0]] * numreals
+        elif dist_name[0:4].lower() == 'disc':
+            samples_df[key] = sample_discrete(
+                dist_params, numreals)
         else:
-            raise ValueError(
-                'Parameter {} was not found in correlation matrix'
-                .format(key))
+            raise ValueError('Parameter {} defined with distribution but '
+                             'not found in correlation matrix '
+                             'and not defined as a constant or discrete'
+                             .format(key))
     return samples_df
 
 
@@ -286,7 +325,7 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     corr_matrix[i_upper] = corr_matrix.T[i_upper]
 
     # Project to nearest symmetric positive definite matrix
-    corr_matrix = near_positive_definite(corr_matrix)
+    corr_matrix = _nearest_positive_definite(corr_matrix)
     # Previously negative eigenvalues are now close to zero,
     # but might still be negative, that can be ignored
 
@@ -303,51 +342,40 @@ def make_covariance_matrix(df_correlations, stddevs=None):
 
     return cov_matrix
 
-# Implementation based on Higham (2000), used in make_covariance_matrix
-# Taken from:
-#  https://stackoverflow.com/questions/10939213/
-#  how-can-i-calculate-the-nearest-positive-semi-definite-matrix
 
-
-def _get_a_plus(a_matrix):
-    eigval, eigvec = numpy.linalg.eig(a_matrix)
-    q_matrix = numpy.array(eigvec)
-    xdiag = numpy.array(numpy.diag(numpy.maximum(eigval, 0)))
-    return q_matrix*xdiag*q_matrix.T
-
-
-def _get_p_s(a_matrix, w_matrix=None):
-    w05 = numpy.array(w_matrix**.5)
-    return (numpy.linalg.inv(w05) *
-            _get_a_plus(w05 * a_matrix * w05) *
-            numpy.linalg.inv(w05))
-
-
-def _get_p_u(a_matrix, w_matrix=None):
-    a_ret = numpy.array(a_matrix.copy())
-    a_ret[w_matrix > 0] = numpy.array(w_matrix)[w_matrix > 0]
-    return numpy.array(a_ret)
-
-
-def near_positive_definite(a_matrix, nit=10):
-    """Finding nearest positive semi definite matrix.
-    Args:
-        a_matrix (numpy matrix): correlation matrix
-        nit (int): number of iterations (defaulted to 10)
-    Returns:
-        nearest postivie semi definite matrix
+def _nearest_positive_definite(a_mat):
+    """Implementation taken from:
+    https://stackoverflow.com/questions/43238173/
+    python-convert-matrix-to-positive-semi-definite/43244194#43244194
     """
-    zero_matrix = a_matrix.shape[0]
-    w_matrix = numpy.identity(zero_matrix)
-    # W is the matrix used for the norm (assumed to be Identity matrix here)
-    # the algorithm should work for any diagonal W
-    delta_s = 0
-    y_k = a_matrix.copy()
-    iterations = 0
-    while iterations < nit:
-        r_k = y_k - delta_s
-        x_k = _get_p_s(r_k, w_matrix=w_matrix)
-        delta_s = x_k - r_k
-        y_k = _get_p_u(x_k, w_matrix=w_matrix)
-        iterations += 1
-    return y_k
+
+    b_mat = (a_mat + a_mat.T) / 2
+    _, s_mat, v_mat = la.svd(b_mat)
+
+    h_mat = numpy.dot(v_mat.T, numpy.dot(numpy.diag(s_mat), v_mat))
+
+    a2_mat = (b_mat + h_mat) / 2
+
+    a3_mat = (a2_mat + a2_mat.T) / 2
+
+    if _is_positive_definite(a3_mat):
+        return a3_mat
+
+    spacing = numpy.spacing(la.norm(a_mat))
+    identity = numpy.eye(a_mat.shape[0])
+    kiter = 1
+    while not _is_positive_definite(a3_mat):
+        mineig = numpy.min(numpy.real(la.eigvals(a3_mat)))
+        a3_mat += identity * (-mineig * kiter**2 + spacing)
+        kiter += 1
+
+    return a3_mat
+
+
+def _is_positive_definite(b_mat):
+    """Returns true when input is positive-definite, via Cholesky"""
+    try:
+        _ = la.cholesky(b_mat)
+        return True
+    except la.LinAlgError:
+        return False
