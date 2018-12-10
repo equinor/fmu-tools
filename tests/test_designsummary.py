@@ -33,7 +33,7 @@ def test_designsummary():
                       'DesignSheet01')
     # checking dimensions and some values in summary of design matrix
     assert snorrebergdesign.shape == (7, 9)
-    assert snorrebergdesign['sensname'][0] == 'seed'
+    assert snorrebergdesign['sensname'][0] == 'rms_seed'
     assert snorrebergdesign['startreal2'][6] == 100
     assert snorrebergdesign['endreal2'][6] == 109
     assert snorrebergdesign['endreal1'].sum() == 333
@@ -46,7 +46,7 @@ def test_designsummary():
 
     # checking dimensions and some values in summary of design matrix
     assert designcsv.shape == (7, 9)
-    assert designcsv['sensname'][0] == 'seed'
+    assert designcsv['sensname'][0] == 'rms_seed'
     assert designcsv['startreal2'][6] == 100
     assert designcsv['endreal2'][6] == 109
     assert designcsv['endreal1'].sum() == 333

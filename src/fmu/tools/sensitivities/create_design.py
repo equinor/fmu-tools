@@ -68,12 +68,25 @@ class DesignMatrix(object):
                     numreal = sens['numreal']
                 else:
                     numreal = inputdict['repeats']
-                if key == 'seed':
+                if sens['senstype'] == 'ref':
+                    sensitivity = SingleRealisationReference(key)
+                    sensitivity.generate(
+                        range(counter, counter + numreal))
+                    counter += numreal
+                    self._add_sensitivity(sensitivity)
+                elif sens['senstype'] == 'background':
+                    sensitivity = BackgroundSensitivity(key)
+                    sensitivity.generate(
+                        range(counter, counter + numreal))
+                    counter += numreal
+                    self._add_sensitivity(sensitivity)
+                elif sens['senstype'] == 'seed':
                     sensitivity = SeedSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['parametername'], seedtype)
-                    counter = counter + numreal
+                        sens['seedname'], seedtype,
+                        sens['parameters'])
+                    counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens['senstype'] == 'scenario':
                     sensitivity = ScenarioSensitivity(key)
@@ -84,7 +97,7 @@ class DesignMatrix(object):
                             range(counter, counter+numreal),
                             case, seedtype)
                         sensitivity.add_case(temp_case)
-                        counter = counter + numreal
+                        counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens['senstype'] == 'dist':
                     if 'correlations' not in sens.keys():
@@ -98,7 +111,7 @@ class DesignMatrix(object):
                     sensitivity.generate(
                         range(counter, counter + numreal),
                         sens['parameters'], seedtype, correlations)
-                    counter = counter + numreal
+                    counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens['senstype'] == 'extern':
                     sensitivity = ExternSensitivity(key)
@@ -106,8 +119,9 @@ class DesignMatrix(object):
                         range(counter, counter + numreal),
                         sens['extern_file'],
                         sens['parameters'], seedtype)
-                    counter = counter + numreal
+                    counter += numreal
                     self._add_sensitivity(sensitivity)
+                print('Added sensitivity :', sensitivity.sensname)
             if 'background' in inputdict.keys():
                 self._fill_with_background_values()
             self._fill_with_defaultvalues()
@@ -194,18 +208,42 @@ class DesignMatrix(object):
             sensitivity.sensvalues, sort=False)
 
     def _fill_with_background_values(self):
-        """Substituting NaNs with background values or default values"""
+        """Substituting NaNs with background values if existing.
+        background values not in design are added as separate colums
+        """
         if self.backgroundvalues is not None:
             grouped = self.designvalues.groupby(
                 ['SENSNAME', 'SENSCASE'], sort=False)
             result_values = pd.DataFrame()
-            for casename, case in grouped:
+            for sensname, case in grouped:
                 temp_df = case.reset_index()
                 temp_df.fillna(self.backgroundvalues, inplace=True)
                 temp_df.set_index('index')
+                for key in self.backgroundvalues.keys():
+                    if key not in case.keys():
+                        temp_df[key] = self.backgroundvalues[key]
+                        if len(temp_df) > len(self.backgroundvalues):
+                            raise ValueError(
+                                'Provided number of background values '
+                                '{} is smaller than number'
+                                ' of realisations for sensitivity {}'
+                                .format(len(self.backgroundvalues), sensname))
+                    else:
+                        if len(temp_df) > len(self.backgroundvalues):
+                            print(
+                                'Provided number of background values '
+                                '({}) is smaller than number'
+                                ' of realisations for sensitivity {}'
+                                ' and parameter {}. '
+                                'Will be filled with default values.'
+                                .format(
+                                    len(self.backgroundvalues),
+                                    sensname,
+                                    key))
                 existing_values = result_values.copy()
                 result_values = existing_values.append(
                     temp_df, sort=False)
+
             result_values = result_values.drop(['index'], axis=1)
             self.designvalues = result_values
 
@@ -271,12 +309,12 @@ class SeedSensitivity(object):
     """
     A seed sensitivity is normally the reference for one by one sensitivities
     It contains a list of seeds to be repeated for each sensitivity
-    If used for RMS_SEED, the parameter name should be RMS_SEED
+    The parameter name is hardcoded to RMS_SEED
     It will be assigned the sensname 'p10_p90' which will be written to
     the SENSCASE column in the output.
 
     Attributes:
-        sensname (str): shall be 'seed'
+        sensname (str): name of sensitivity
         sensvalues (dataframe):  design values for the sensitivity
 
     """
@@ -289,7 +327,7 @@ class SeedSensitivity(object):
         self.sensname = sensname
         self.sensvalues = None
 
-    def generate(self, realnums, param_name, seeds):
+    def generate(self, realnums, seedname, seeds, parameters):
         """Generates parameter values for a seed sensitivity
 
         Args:
@@ -300,7 +338,7 @@ class SeedSensitivity(object):
         self.sensvalues = pd.DataFrame(index=realnums)
         if seeds.lower() == 'default':
             seed_numbers = [nmr + 1000 - realnums[0] for nmr in realnums]
-            self.sensvalues[param_name] = seed_numbers
+            self.sensvalues[seedname] = seed_numbers
         elif seeds.lower() == 'extern':
             print('TO DO: Implement read from external seeds')
         else:
@@ -308,6 +346,89 @@ class SeedSensitivity(object):
                 'Only default and extern are valid choices for a'
                 'seed sensitivity. Specified "{}" cannot be used'
                 .format(seeds))
+        if parameters is not None:
+            for key in parameters.keys():
+                dist_name = parameters[key][0].lower()
+                constant = parameters[key][1]
+                if dist_name != 'const':
+                    raise ValueError(
+                        'A sensitivity of type "seed" can only have '
+                        'additional parameters where dist_name is '
+                        '"const". Check sensitivity {}"'
+                        .format(self.sensname))
+                else:
+                    self.sensvalues[key] = constant
+
+        self.sensvalues['REAL'] = realnums
+        self.sensvalues['SENSNAME'] = self.sensname
+        self.sensvalues['SENSCASE'] = 'p10_p90'
+
+
+class SingleRealisationReference(object):
+    """
+    The class is used in set-ups where one wants a single realisation
+    containing only default values as a reference, but the realisation
+    itself is not included in a sensitivity.
+    Typically used when RMS_SEED is not a parameter.
+    SENSCASE will be set to 'ref' in design matrix, to flag that it should be
+    excluded as a sensitivity in the plot.
+
+    Attributes:
+        sensname (str): name of sensitivity
+        sensvalues (dataframe):  design values for the sensitivity
+
+    """
+
+    def __init__(self, sensname):
+        """Args:
+                sensname (str): Name of sensitivity.
+                    Defines SENSNAME in design matrix
+        """
+        self.sensname = sensname
+        self.sensvalues = None
+
+    def generate(self, realnums):
+        """Generates realisation number only
+
+        Args:
+            realnums (list): list of intergers with realization numbers
+        """
+        self.sensvalues = pd.DataFrame(index=realnums)
+        self.sensvalues['REAL'] = realnums
+        self.sensvalues['SENSNAME'] = self.sensname
+        self.sensvalues['SENSCASE'] = 'ref'
+
+
+class BackgroundSensitivity(object):
+    """
+    The class is used in set-ups where one sensitivities
+    are run on top of varying background parameters.
+    Typically used when RMS_SEED is not a parameter, so the reference
+    for tornadoplots will be the realisations with all parameters
+    at their default values except the background parameters.
+    SENSCASE will be set to 'p10_p90' in design matrix.
+
+    Attributes:
+        sensname (str): name of sensitivity
+        sensvalues (dataframe):  design values for the sensitivity
+
+    """
+
+    def __init__(self, sensname):
+        """Args:
+                sensname (str): Name of sensitivity.
+                    Defines SENSNAME in design matrix
+        """
+        self.sensname = sensname
+        self.sensvalues = None
+
+    def generate(self, realnums):
+        """Generates realisation number only
+
+        Args:
+            realnums (list): list of intergers with realization numbers
+        """
+        self.sensvalues = pd.DataFrame(index=realnums)
         self.sensvalues['REAL'] = realnums
         self.sensvalues['SENSNAME'] = self.sensname
         self.sensvalues['SENSCASE'] = 'p10_p90'
@@ -482,7 +603,9 @@ class MonteCarloSensitivity(object):
             for key in parameters.keys():
                 dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
-                if dist_name == 'discrete':
+                if dist_name == 'const':
+                    mc_values = [dist_params[0]] * len(realnums)
+                elif dist_name == 'discrete':
                     mc_values = design_dist.sample_discrete(
                         dist_params, len(realnums))
                 else:
@@ -494,7 +617,6 @@ class MonteCarloSensitivity(object):
                         mc_values = 10**mc_values
                 self.sensvalues[key] = mc_values
         else:
-            print(correlations)
             numreals = len(realnums)  # number of realizations
             self.sensvalues = design_dist.mc_correlated(
                 parameters, correlations, numreals)
@@ -610,6 +732,7 @@ class ExternSensitivity(object):
 
 
 # Support functions used with several classes
+
 
 def _parameters_from_extern(filename):
     """ Read parameter values or background values
