@@ -236,16 +236,16 @@ def _read_scenario_sensitivity(sensgroup):
     casedict2 = OrderedDict()
     for row in sensgroup.itertuples():
         casedict1[str(row.param_name)] = row.value1
-    if _has_value(sensgroup['casename2'].iloc[0]):
+    if _has_value(sensgroup['senscase2'].iloc[0]):
         for row in sensgroup.itertuples():
             casedict2[str(row.param_name)] = row.value2
         sdict['cases'][
-            str(sensgroup['casename1'].iloc[0])] = casedict1
+            str(sensgroup['senscase1'].iloc[0])] = casedict1
         sdict['cases'][
-            str(sensgroup['casename2'].iloc[0])] = casedict2
+            str(sensgroup['senscase2'].iloc[0])] = casedict2
     else:
         sdict['cases'][
-            str(sensgroup['casename1'].iloc[0])] = casedict1
+            str(sensgroup['senscase1'].iloc[0])] = casedict1
     return sdict
 
 
