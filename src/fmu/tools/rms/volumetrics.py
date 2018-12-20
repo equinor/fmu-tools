@@ -48,7 +48,8 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=dict(), phase=None,
                 break
             else:
                 headerline = headerline + 1
-    df = pd.read_table(txtfile, sep=r'\s\s+', skiprows=headerline)
+    df = pd.read_table(txtfile, sep=r'\s\s+', skiprows=headerline,
+                       engine='python')
 
     # Enforce FMU standard:
     # https://wiki.statoil.no/wiki/index.php/FMU_standards
@@ -76,7 +77,8 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=dict(), phase=None,
                'Pore': 'PORE_' + phase,
                'Stoiip': 'STOIIP_' + phase,
                'Giip': 'GIIP_' + phase,
-               'Assoc.Liquid': 'ASSOCIATEDOIL_' + phase}
+               'Assoc.Liquid': 'ASSOCIATEDOIL_' + phase,
+               'Assoc.Gas': 'ASSOCIATEDGAS_' + phase}
     if columnrenamer:
         # Overwrite with user supplied column conversion
         columns.update(columnrenamer)
