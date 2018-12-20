@@ -13,6 +13,124 @@ import scipy.stats
 import pandas as pd
 
 
+def _check_dist_params_normal(dist_params):
+    if len(dist_params) != 2 and len(dist_params) != 4:
+        status = False
+        msg = ('Normal distribution must have 2 parameters'
+               ' or 4 for a truncated normal, '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif len(dist_params) == 2:  # normal
+        if not (is_number(dist_params[0]) and is_number(dist_params[1])):
+            status = False
+            msg = 'Parameters for normal distribution must be numbers. '
+        elif float(dist_params[1]) < 0:
+            status = False
+            msg = 'Stddev for normal distribution must be >= 0. '
+        else:
+            status = True
+            msg = ''
+    elif len(dist_params) == 4:  # truncated normal
+        if not (is_number(dist_params[0])
+                and is_number(dist_params[1])
+                and is_number(dist_params[2])
+                and is_number(dist_params[3])):
+            status = False
+            msg = ('Parameters for truncated normal '
+                   'distribution must be numbers. ')
+        elif float(dist_params[1]) < 0:
+            status = False
+            msg = ('Truncated normal distribution must have'
+                   ' stddev > 0. ')
+        else:
+            status = True
+            msg = ''
+
+    return status, msg
+
+
+def _check_dist_params_lognormal(dist_params):
+    if len(dist_params) != 2:
+        status = False
+        msg = ('Lognormal distribution must have 2 parameters, '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif not (is_number(dist_params[0])
+              and is_number(dist_params[1])):
+        status = False
+        msg = 'Parameters for lognormal distribution must be numbers. '
+    elif float(dist_params[1]) < 0:
+        status = False
+        msg = ('Lognormal distribution must have'
+               ' stddev > 0. ')
+    else:
+        status = True
+        msg = ''
+
+    return status, msg
+
+
+def _check_dist_params_uniform(dist_params):
+    if len(dist_params) != 2:
+        status = False
+        msg = ('Uniform distribution must have 2 parameters, '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif not (is_number(dist_params[0])
+              and is_number(dist_params[1])):
+        status = False
+        msg = 'Parameters for uniform distribution must be numbers. '
+    elif float(dist_params[1]) < float(dist_params[0]):
+        status = False
+        msg = ('Uniform distribution must have dist_param2'
+               ' >= dist_param1')
+    else:
+        status = True
+        msg = ''
+
+    return status, msg
+
+
+def _check_dist_params_triang(dist_params):
+    if len(dist_params) != 3:
+        status = False
+        msg = ('Triangular distribution must have 3 parameters, '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif not (is_number(dist_params[0])
+              and is_number(dist_params[1])
+              and is_number(dist_params[2])):
+        status = False
+        msg = 'Parameters for triangular distribution must be numbers. '
+    elif not ((float(dist_params[2]) >= float(dist_params[1])) and
+              (float(dist_params[1]) >= float(dist_params[0]))):
+        status = False
+        msg = ('Triangular distribution must have: '
+               'low <= mode <= high. ')
+    else:
+        status = True
+        msg = ''
+
+    return status, msg
+
+
+def _check_dist_params_logunif(dist_params):
+    if len(dist_params) != 2:
+        status = False
+        msg = ('Log uniform distribution must have 2 parameters. '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif not (is_number(dist_params[0])
+              and is_number(dist_params[1])):
+        status = False
+        msg = 'Parameters for log uniform distribution must be numbers. '
+    elif not ((float(dist_params[0]) > 0) and
+              (float(dist_params[1]) >= float(dist_params[0]))):
+        status = False
+        msg = ('loguniform distribution must have'
+               ' low > 0 and high >=low. ')
+    else:
+        status = True
+        msg = ''
+
+    return status, msg
+
+
 def prepare_distribution(distname, dist_parameters):
     """
     Prepare scipy distributions with parameters
@@ -31,66 +149,80 @@ def prepare_distribution(distname, dist_parameters):
     distribution = None
     if distname[0:4].lower() == 'norm':
         if len(dist_parameters) == 2:  # normal
-            dist_mean = dist_parameters[0]
-            dist_stddev = dist_parameters[1]
-            if is_number(dist_mean) and is_number(dist_stddev):
+            status, msg = _check_dist_params_normal(dist_parameters)
+            if status:
+                dist_mean = dist_parameters[0]
+                dist_stddev = dist_parameters[1]
                 distribution = scipy.stats.norm(
                     float(dist_mean), float(dist_stddev))
-        elif len(dist_parameters) == 4:  # truncated normal
-            dist_mean = dist_parameters[0]
-            dist_stddev = dist_parameters[1]
-            clip1 = dist_parameters[2]
-            clip2 = dist_parameters[3]
-            if (
-                    is_number(dist_mean) and
-                    is_number(dist_stddev) and
-                    is_number(clip1) and
-                    is_number(clip2)
-            ):
-                low = (float(clip1)-float(dist_mean))/float(dist_stddev)
-                high = (float(clip2)-float(dist_mean))/float(dist_stddev)
+            else:
+                raise ValueError(msg)
+        else:  # truncated normal or invalid
+            status, msg = _check_dist_params_normal(dist_parameters)
+            if status:
+                mean = dist_parameters[0]
+                sigma = dist_parameters[1]
+                clip1 = dist_parameters[2]
+                clip2 = dist_parameters[3]
+                low = (float(clip1)-float(mean))/float(sigma)
+                high = (float(clip2)-float(mean))/float(sigma)
                 distribution = scipy.stats.truncnorm(
-                    low, high, loc=float(dist_mean), scale=float(dist_stddev))
+                    low, high, loc=float(mean), scale=float(sigma))
+            else:
+                raise ValueError(msg)
+
     elif distname[0:4].lower() == 'logn':
-        if len(dist_parameters) == 2:  # lognormal
+        status, msg = _check_dist_params_lognormal(dist_parameters)
+        if status:
             mean = dist_parameters[0]
             sigma = dist_parameters[1]
-            if is_number(mean) and is_number(sigma):
-                distribution = scipy.stats.lognorm(
-                    s=float(sigma), scale=exp(float(mean)))
-        if len(dist_parameters) == 4:  # lognormal
-            raise ValueError(
-                'Truncated lognormal is '
-                'not implemented \n'
-                'Exiting')
+            distribution = scipy.stats.lognorm(
+                s=float(sigma), scale=exp(float(mean)))
+        else:
+            raise ValueError(msg)
+
     elif distname[0:4].lower() == 'unif':
-        low = dist_parameters[0]
-        high = dist_parameters[1]
-        uscale = high - low
-        if is_number(low) and is_number(high):
+        status, msg = _check_dist_params_uniform(dist_parameters)
+        if status:
+            low = dist_parameters[0]
+            high = dist_parameters[1]
+            uscale = high - low
             distribution = scipy.stats.uniform(loc=low, scale=uscale)
+        else:
+            raise ValueError(msg)
+
     elif distname[0:6].lower() == 'triang':
-        low = dist_parameters[0]
-        mode = dist_parameters[1]
-        high = dist_parameters[2]
-        dist_scale = high - low
-        shape = (mode-low)/dist_scale
-        if is_number(low) and is_number(mode) and is_number(high):
-            distribution = scipy.stats.triang(
-                shape, loc=low, scale=dist_scale)
+        status, msg = _check_dist_params_triang(dist_parameters)
+        if status:
+            low = dist_parameters[0]
+            mode = dist_parameters[1]
+            high = dist_parameters[2]
+            if high == low:  # collapsed distribution
+                print('Low and high parameters for triangular distribution'
+                      ' are equal. Using constant {}'.format(low))
+                distribution = scipy.stats.uniform(loc=low, scale=0)
+            else:
+                dist_scale = high - low
+                shape = (mode-low)/dist_scale
+                distribution = scipy.stats.triang(
+                    shape, loc=low, scale=dist_scale)
+        else:
+            raise ValueError(msg)
+
     elif distname[0:7].lower() == 'logunif':
-        low = float(dist_parameters[0])
-        high = float(dist_parameters[1])
-        if is_number(low) and is_number(high):
-            loglow = numpy.log10(low)
-            loghigh = numpy.log10(high)
-            logscale = loghigh - loglow
-            distribution = scipy.stats.uniform(
-                loc=loglow, scale=logscale)
+        status, msg = _check_dist_params_logunif(dist_parameters)
+        if status:
+            low = float(dist_parameters[0])
+            high = float(dist_parameters[1])
+            distribution = scipy.stats.reciprocal(low, high)
+        else:
+            raise ValueError(msg)
+
     else:
         raise ValueError(
             'distribution name {} is not implemented'
             .format(distname))
+
     return distribution
 
 
@@ -112,15 +244,20 @@ def sample_discrete(dist_params, numreals):
     outcomes = re.split(',', dist_params[0])
     if len(dist_params) == 2:  # non uniform
         fractions = re.split(',', dist_params[1])
-        values = numpy.random.choice(
-            outcomes, numreals,
-            fractions)
+        if len(outcomes) != len(fractions):
+            raise ValueError(
+                'Number of weights for discrete distribution '
+                'is not the same as number of values.')
+        else:
+            values = numpy.random.choice(
+                outcomes, numreals,
+                fractions)
     elif len(dist_params) == 1:  # uniform
         values = numpy.random.choice(
             outcomes, numreals)
     else:
-        raise ValueError('Wrong input for discrete '
-                         'distribution')
+        values = ('Wrong input for discrete '
+                  'distribution')
     return values
 
 
@@ -201,27 +338,27 @@ def mc_correlated(params, correls, numreals):
         dist_name = params[key][0].lower()
         dist_params = params[key][1]
         if key in multivariate_parameters:
-            if dist_name == 'normal':
+            if dist_name[0:4] == 'norm':
                 if len(dist_params) == 2:  # normal
-                    dist_mean = dist_params[0]
-                    dist_stddev = dist_params[1]
-                    if is_number(dist_mean) and is_number(dist_stddev):
+                    status, msg = _check_dist_params_normal(dist_params)
+                    if status:
+                        dist_mean = dist_params[0]
+                        dist_stddev = dist_params[1]
                         samples_df[key] = scipy.stats.norm.ppf(
                             scipy.stats.norm.cdf(
                                 normalscoresamples_df[key]),
                             loc=float(dist_mean),
                             scale=float(dist_stddev))
-                elif len(dist_params) == 4:  # trunc normal
-                    dist_mean = dist_params[0]
-                    dist_stddev = dist_params[1]
-                    clip1 = dist_params[2]
-                    clip2 = dist_params[3]
-                    if (
-                            is_number(dist_mean) and
-                            is_number(dist_stddev) and
-                            is_number(clip1) and
-                            is_number(clip2)
-                    ):
+                    else:
+                        raise ValueError(msg)
+
+                else:
+                    status, msg = _check_dist_params_normal(dist_params)
+                    if status:
+                        dist_mean = dist_params[0]
+                        dist_stddev = dist_params[1]
+                        clip1 = dist_params[2]
+                        clip2 = dist_params[3]
                         low = (
                             float(clip1)-float(dist_mean))/float(dist_stddev)
                         high = (
@@ -233,61 +370,96 @@ def mc_correlated(params, correls, numreals):
                             high,
                             loc=float(dist_mean),
                             scale=float(dist_stddev))
+                    else:
+                        raise ValueError(msg)
+
             elif dist_name[0:6].lower() == 'triang':
-                low = dist_params[0]
-                mode = dist_params[1]
-                high = dist_params[2]
-                dist_scale = high - low
-                shape = (mode-low)/dist_scale
-                samples_df[key] = scipy.stats.triang.ppf(
-                    scipy.stats.norm.cdf(
-                        normalscoresamples_df[key]),
-                    shape,
-                    loc=low,
-                    scale=dist_scale)
+                status, msg = _check_dist_params_triang(dist_params)
+                if status:
+                    low = dist_params[0]
+                    mode = dist_params[1]
+                    high = dist_params[2]
+                    if high == low:  # collapsed distribution
+                        print('Low and high parameters for triangular distribution'
+                              ' are equal. Using constant {}'.format(low))
+                        samples_df[key] = scipy.stats.uniform.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            loc=low,
+                            scale=0)
+                    else:
+                        dist_scale = high - low
+                        shape = (mode-low)/dist_scale
+                        samples_df[key] = scipy.stats.triang.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            shape,
+                            loc=low,
+                            scale=dist_scale)
+                else:
+                    raise ValueError(msg)
+
             elif dist_name[0:4].lower() == 'unif':
-                low = dist_params[0]
-                high = dist_params[1]
-                uscale = high - low
-                samples_df[key] = scipy.stats.uniform.ppf(
-                    scipy.stats.norm.cdf(
-                        normalscoresamples_df[key]),
-                    loc=low,
-                    scale=uscale)
+                status, msg = _check_dist_params_uniform(dist_params)
+                if status:
+                    low = dist_params[0]
+                    high = dist_params[1]
+                    uscale = high - low
+                    samples_df[key] = scipy.stats.uniform.ppf(
+                        scipy.stats.norm.cdf(
+                            normalscoresamples_df[key]),
+                        loc=low,
+                        scale=uscale)
+                else:
+                    raise ValueError(msg)
+
             elif dist_name[0:7].lower() == 'logunif':
-                low = dist_params[0]
-                high = dist_params[1]
-                loglow = numpy.log10(low)
-                loghigh = numpy.log10(high)
-                logscale = loghigh - loglow
-                samples_df[key] = scipy.stats.uniform.ppf(
-                    scipy.stats.norm.cdf(
-                        normalscoresamples_df[key]),
-                    loc=loglow,
-                    scale=logscale)
-                samples_df[key] = 10**samples_df[key]
+                status, msg = _check_dist_params_logunif(dist_params)
+                if status:
+                    low = float(dist_params[0])
+                    high = float(dist_params[1])
+                    samples_df[key] = scipy.stats.reciprocal.ppf(
+                        scipy.stats.norm.cdf(
+                            normalscoresamples_df[key]),
+                        low, high)
+                else:
+                    raise ValueError(msg)
+
             elif dist_name[0:4].lower() == 'logn':
-                mean = dist_params[0]
-                sigma = dist_params[1]
-                samples_df[key] = scipy.stats.lognorm.ppf(
-                    scipy.stats.norm.cdf(
-                        normalscoresamples_df[key]),
-                    s=sigma, loc=0, scale=exp(mean))
-            else:
+                status, msg = _check_dist_params_lognormal(dist_params)
+                if status:
+                    mean = dist_params[0]
+                    sigma = dist_params[1]
+                    samples_df[key] = scipy.stats.lognorm.ppf(
+                        scipy.stats.norm.cdf(
+                            normalscoresamples_df[key]),
+                        s=sigma, loc=0, scale=exp(mean))
+                else:
+                    raise ValueError(msg)
+            elif dist_name[0:5].lower() in ['const', 'disc']:
                 raise ValueError(
-                    'Parameter distribution {} assigned for {} '
+                    'Parameter distribution {} specified for {} '
                     'cannot be used when in correlation matrix  '
                     .format(dist_name, key))
+            else:
+                raise ValueError(
+                    'Parameter distribution "{}" specified for {} '
+                    'is not implemented. '.format(
+                        dist_name, key))
             # Rounding if specified in config
-            if len(params[key]) == 3:
+            if len(params[key]) == 3 and status:
                 decimals = params[key][2]
                 samples_df[key] = (samples_df[key].
                                    astype(float).round(int(decimals)))
         elif dist_name[0:5].lower() == 'const':
             samples_df[key] = [dist_params[0]] * numreals
         elif dist_name[0:4].lower() == 'disc':
-            samples_df[key] = sample_discrete(
+            status, result = sample_discrete(
                 dist_params, numreals)
+            if status:
+                samples_df[key] = result
+            else:
+                raise ValueError(result)
         else:
             raise ValueError('Parameter {} defined with distribution but '
                              'not found in correlation matrix '

@@ -606,26 +606,41 @@ class MonteCarloSensitivity(object):
                 if dist_name == 'const':
                     mc_values = [dist_params[0]] * len(realnums)
                 elif dist_name == 'discrete':
-                    mc_values = design_dist.sample_discrete(
-                        dist_params, len(realnums))
+                    try:
+                        mc_values = design_dist.sample_discrete(
+                            dist_params, len(realnums))
+                    except ValueError as error:
+                        raise ValueError('Problem in sensitivity '
+                                         'with sensname {}: {}.'.format(
+                                             self.sensname, error.args[0]))
                 else:
-                    distribution = design_dist.prepare_distribution(
-                        dist_name, dist_params)
-                    mc_values = design_dist.generate_mcvalues(
-                        distribution, len(realnums))
-                    if dist_name == 'logunif':  # not in scipy, uses unif
-                        mc_values = 10**mc_values
+                    try:
+                        distribution = design_dist.prepare_distribution(
+                            dist_name, dist_params)
+                    except ValueError as error:
+                        raise ValueError('Problem in sensitivity'
+                                         ' with sensname {}: {}'.format(
+                                             self.sensname, error.args[0]))
+                    else:
+                        mc_values = design_dist.generate_mcvalues(
+                            distribution, len(realnums))
                 self.sensvalues[key] = mc_values
         else:
-            numreals = len(realnums)  # number of realizations
-            self.sensvalues = design_dist.mc_correlated(
-                parameters, correlations, numreals)
+            numreals = len(realnums)
+            try:
+                self.sensvalues = design_dist.mc_correlated(
+                    parameters, correlations, numreals)
+            except ValueError as error:
+                raise ValueError('Problem in sensitivity'
+                                 ' with sensname {}: {}'.format(
+                                     self.sensname, error.args[0]))
 
         if self.sensname != 'background':
             self.sensvalues['REAL'] = realnums
             self.sensvalues['SENSNAME'] = self.sensname
             self.sensvalues['SENSCASE'] = 'p10_p90'
-            self._add_seeds(realnums, seeds)
+            if 'RMS_SEED' not in self.sensvalues.keys():
+                self._add_seeds(realnums, seeds)
 
     def _add_seeds(self, realnums, seeds, seedstart=1000):
         """Add RMS_SEED as column.
