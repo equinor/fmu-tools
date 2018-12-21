@@ -22,7 +22,7 @@ The types of sensitivities that are covered are:
 
 seed
     This is normally the reference sensitivity to which all the others are compared to. All the parameters will be at their base case values taken from the defaultvalues sheet. Only the RMS_SEED will be varying. It is possible to overwrite default values with other constant values. It is possible to have several sensitivities of type 'seed' in a set up, for instance looking at how RMS_SEED variation affects structure, how it affects facies or how it affects petrophysical modelling, see examples. It is possible to specify one or several parameters to another constant value than the default value by filling in parameter names, dist_name = const and dist_param1 = <value> in addition.
-scanario
+scenario
     This is a sensitivity where the parameter(s) are set to their extreme values (high/low values) One or two cases can exist for each sensitivity. Each of the two cases must be given a name.
 dist
     This is a monte carlo sensitivity where one or several parameters are sampled from the specified distribution(s). The distribution name is given in the *dist_name* column, and the distribution parameters are given in *dist_parm1*, *dist_param2*, *dist_param3*, *dist_param4*. Currently these distributions are implemented:
@@ -80,7 +80,7 @@ To generate the design matrix from this input use the *fmudesign* script (see al
 
 .. code-block:: python
 		
-    fmudesign <path_to_input_design_input_example1.xlsx> <path_to_output_design_matrix.xlsx>
+    fmudesign <path_to_design_input_example1.xlsx> <path_to_output_design_matrix.xlsx>
     
 Alternatively from a notebook:
 
