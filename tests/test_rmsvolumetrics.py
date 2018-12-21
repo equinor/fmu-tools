@@ -34,12 +34,27 @@ def test_volumetrics():
 
         # Check that we did get some data: 
         assert len(df) > 0
-        
+
         # Check for no non-uppercase column names:
         collist = list(df.columns)
         assert [x.upper() for x in collist] == collist
 
         # Check for no string 'Totals' in any cell
-        assert 'Totals' not in str(df)
-        
-    
+        assert 'Totals' not in df.to_string()
+
+    # Test zone renamer:
+    def myrenamer(s):
+        return s.replace('Eiriksson', 'E')
+    df = volumetrics.rmsvolumetrics_txt2df(testdir + '/data/rmsvolumetrics/' +
+                                           '14_geo_gas_1.txt',
+                                           zonerenamer=myrenamer)
+    assert 'Eiriksson' not in df.to_string()
+    assert 'E3_1' in df.to_string()
+
+    # Test columnrenamer:
+    columnrenamer = {'Region index': 'FAULTSEGMENT'}  # this will override
+    df = volumetrics.rmsvolumetrics_txt2df(testdir + '/data/rmsvolumetrics/' +
+                                           '14_geo_gas_1.txt',
+                                           columnrenamer=columnrenamer)
+    assert 'FAULTSEGMENT' in df.columns
+
