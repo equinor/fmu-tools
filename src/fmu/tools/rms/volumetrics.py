@@ -8,7 +8,7 @@ import os
 import pandas as pd
 
 
-def rmsvolumetrics_txt2df(txtfile, columnrenamer=dict(), phase=None,
+def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
                           outfile=None,
                           regionrenamer=None,
                           zonerenamer=None):
@@ -48,16 +48,16 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=dict(), phase=None,
                 break
             else:
                 headerline = headerline + 1
-    df = pd.read_table(txtfile, sep=r'\s\s+', skiprows=headerline,
-                       engine='python')
+    vol_df = pd.read_table(txtfile, sep=r'\s\s+', skiprows=headerline,
+                           engine='python')
 
     # Enforce FMU standard:
     # https://wiki.statoil.no/wiki/index.php/FMU_standards
     # on column names
 
     # The Real column from RMS is not real.. Ignore it.
-    if 'Real' in df.columns:
-        df.drop('Real', axis=1, inplace=True)
+    if 'Real' in vol_df.columns:
+        vol_df.drop('Real', axis=1, inplace=True)
 
     if not phase:
         if 'oil' in txtfile:
@@ -82,27 +82,27 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=dict(), phase=None,
     if columnrenamer:
         # Overwrite with user supplied column conversion
         columns.update(columnrenamer)
-    df.rename(columns, axis=1, inplace=True)
+    vol_df.rename(columns, axis=1, inplace=True)
 
     # Work on the data itself:
     if regionrenamer:
-        df['REGION'] = df['REGION'].apply(regionrenamer)
+        vol_df['REGION'] = vol_df['REGION'].apply(regionrenamer)
     if zonerenamer:
-        df['ZONE'] = df['ZONE'].apply(zonerenamer)
+        vol_df['ZONE'] = vol_df['ZONE'].apply(zonerenamer)
 
     # Remove the Totals rows in case they are present.
     #  (todo: do this for all columns that are not not of numeric type)
-    checkfortotals = [ 'ZONE', 'REGION', 'LICENSE', 'FACIES']
+    checkfortotals = ['ZONE', 'REGION', 'LICENSE', 'FACIES']
 
-    totalsrows = pd.Series([False] * len(df))
+    totalsrows = pd.Series([False] * len(vol_df))
     for col in checkfortotals:
-        if col in df.columns:
-            totalsrows = totalsrows | (df[col] == 'Totals')
-    df = df[~totalsrows].reset_index(drop=True)
+        if col in vol_df.columns:
+            totalsrows = totalsrows | (vol_df[col] == 'Totals')
+    vol_df = vol_df[~totalsrows].reset_index(drop=True)
 
     if outfile:
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))
-        df.to_csv(outfile, index=False)
+        vol_df.to_csv(outfile, index=False)
 
-    return df
+    return vol_df

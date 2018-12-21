@@ -9,7 +9,7 @@ import os
 import glob
 
 from fmu import config
-from fmu.tools.rms import volumetrics 
+from fmu.tools.rms import volumetrics
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -32,7 +32,7 @@ def test_volumetrics():
     for file in volfiles:
         df = volumetrics.rmsvolumetrics_txt2df(file)
 
-        # Check that we did get some data: 
+        # Check that we did get some data:
         assert len(df) > 0
 
         # Check for no non-uppercase column names:
@@ -57,4 +57,3 @@ def test_volumetrics():
                                            '14_geo_gas_1.txt',
                                            columnrenamer=columnrenamer)
     assert 'FAULTSEGMENT' in df.columns
-
