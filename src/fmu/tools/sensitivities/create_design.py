@@ -35,6 +35,11 @@ class DesignMatrix(object):
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
 
+    def reset(self):
+        self.designvalues = pd.DataFrame(columns=['REAL'])
+        self.defaultvalues = OrderedDict()
+        self.backgroundvalues = None
+
     def generate(self, inputdict):
         """Generating design matrix from input dictionary in specific
         format. Adding default values and background values if existing.
@@ -43,6 +48,7 @@ class DesignMatrix(object):
         Args:
             inputdict (OrderedDict): input parameters for design
         """
+        self.reset()  # Emptying if regenerating matrix
         seedtype = inputdict['seeds']
         default_dict = inputdict['defaultvalues']
         self.set_defaultvalues(default_dict)

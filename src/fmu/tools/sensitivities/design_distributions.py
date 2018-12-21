@@ -40,7 +40,7 @@ def _check_dist_params_normal(dist_params):
         elif float(dist_params[1]) < 0:
             status = False
             msg = ('Truncated normal distribution must have'
-                   ' stddev > 0. ')
+                   ' stddev >= 0. ')
         else:
             status = True
             msg = ''
@@ -60,7 +60,7 @@ def _check_dist_params_lognormal(dist_params):
     elif float(dist_params[1]) < 0:
         status = False
         msg = ('Lognormal distribution must have'
-               ' stddev > 0. ')
+               ' stddev >= 0. ')
     else:
         status = True
         msg = ''
@@ -151,41 +151,41 @@ def prepare_distribution(distname, dist_parameters):
         if len(dist_parameters) == 2:  # normal
             status, msg = _check_dist_params_normal(dist_parameters)
             if status:
-                dist_mean = dist_parameters[0]
-                dist_stddev = dist_parameters[1]
+                dist_mean = float(dist_parameters[0])
+                dist_stddev = float(dist_parameters[1])
                 distribution = scipy.stats.norm(
-                    float(dist_mean), float(dist_stddev))
+                    dist_mean, dist_stddev)
             else:
                 raise ValueError(msg)
         else:  # truncated normal or invalid
             status, msg = _check_dist_params_normal(dist_parameters)
             if status:
-                mean = dist_parameters[0]
-                sigma = dist_parameters[1]
-                clip1 = dist_parameters[2]
-                clip2 = dist_parameters[3]
-                low = (float(clip1)-float(mean))/float(sigma)
-                high = (float(clip2)-float(mean))/float(sigma)
+                mean = float(dist_parameters[0])
+                sigma = float(dist_parameters[1])
+                clip1 = float(dist_parameters[2])
+                clip2 = float(dist_parameters[3])
+                low = (clip1-mean)/sigma
+                high = (clip2-mean)/sigma
                 distribution = scipy.stats.truncnorm(
-                    low, high, loc=float(mean), scale=float(sigma))
+                    low, high, loc=mean, scale=sigma)
             else:
                 raise ValueError(msg)
 
     elif distname[0:4].lower() == 'logn':
         status, msg = _check_dist_params_lognormal(dist_parameters)
         if status:
-            mean = dist_parameters[0]
-            sigma = dist_parameters[1]
+            mean = float(dist_parameters[0])
+            sigma = float(dist_parameters[1])
             distribution = scipy.stats.lognorm(
-                s=float(sigma), scale=exp(float(mean)))
+                s=sigma, scale=exp(mean))
         else:
             raise ValueError(msg)
 
     elif distname[0:4].lower() == 'unif':
         status, msg = _check_dist_params_uniform(dist_parameters)
         if status:
-            low = dist_parameters[0]
-            high = dist_parameters[1]
+            low = float(dist_parameters[0])
+            high = float(dist_parameters[1])
             uscale = high - low
             distribution = scipy.stats.uniform(loc=low, scale=uscale)
         else:
@@ -194,9 +194,9 @@ def prepare_distribution(distname, dist_parameters):
     elif distname[0:6].lower() == 'triang':
         status, msg = _check_dist_params_triang(dist_parameters)
         if status:
-            low = dist_parameters[0]
-            mode = dist_parameters[1]
-            high = dist_parameters[2]
+            low = float(dist_parameters[0])
+            mode = float(dist_parameters[1])
+            high = float(dist_parameters[2])
             if high == low:  # collapsed distribution
                 print('Low and high parameters for triangular distribution'
                       ' are equal. Using constant {}'.format(low))
@@ -308,11 +308,11 @@ def read_correlations(corr_dict):
                 filename, corr_dict['corrsheet'])
         else:
             raise ValueError(
-                'Correlation matrix filename should be on'
-                'Excel format and end with .xlsx')
+                'Correlation matrix filename should be on '
+                'Excel format and end with .xlsx ')
     else:
-        raise ValueError('correlations specified but inputfile '
-                         'not specified in configuration')
+        raise ValueError('Correlations specified but inputfile '
+                         'not specified in configuration. ')
     return correlations
 
 
@@ -342,46 +342,45 @@ def mc_correlated(params, correls, numreals):
                 if len(dist_params) == 2:  # normal
                     status, msg = _check_dist_params_normal(dist_params)
                     if status:
-                        dist_mean = dist_params[0]
-                        dist_stddev = dist_params[1]
+                        dist_mean = float(dist_params[0])
+                        dist_stddev = float(dist_params[1])
                         samples_df[key] = scipy.stats.norm.ppf(
                             scipy.stats.norm.cdf(
                                 normalscoresamples_df[key]),
-                            loc=float(dist_mean),
-                            scale=float(dist_stddev))
+                            loc=dist_mean,
+                            scale=dist_stddev)
                     else:
                         raise ValueError(msg)
 
                 else:
                     status, msg = _check_dist_params_normal(dist_params)
                     if status:
-                        dist_mean = dist_params[0]
-                        dist_stddev = dist_params[1]
-                        clip1 = dist_params[2]
-                        clip2 = dist_params[3]
-                        low = (
-                            float(clip1)-float(dist_mean))/float(dist_stddev)
-                        high = (
-                            float(clip2)-float(dist_mean))/float(dist_stddev)
+                        dist_mean = float(dist_params[0])
+                        dist_stddev = float(dist_params[1])
+                        clip1 = float(dist_params[2])
+                        clip2 = float(dist_params[3])
+                        low = (clip1-dist_mean)/dist_stddev
+                        high = (clip2-dist_mean)/dist_stddev
                         samples_df[key] = scipy.stats.truncnorm.ppf(
                             scipy.stats.norm.cdf(
                                 normalscoresamples_df[key]),
                             low,
                             high,
-                            loc=float(dist_mean),
-                            scale=float(dist_stddev))
+                            loc=dist_mean,
+                            scale=dist_stddev)
                     else:
                         raise ValueError(msg)
 
             elif dist_name[0:6].lower() == 'triang':
                 status, msg = _check_dist_params_triang(dist_params)
                 if status:
-                    low = dist_params[0]
-                    mode = dist_params[1]
-                    high = dist_params[2]
+                    low = float(dist_params[0])
+                    mode = float(dist_params[1])
+                    high = float(dist_params[2])
                     if high == low:  # collapsed distribution
-                        print('Low and high parameters for triangular distribution'
-                              ' are equal. Using constant {}'.format(low))
+                        print('Low and high parameters for triangular '
+                              'distribution are equal. '
+                              'Using constant {} .'.format(low))
                         samples_df[key] = scipy.stats.uniform.ppf(
                             scipy.stats.norm.cdf(
                                 normalscoresamples_df[key]),
@@ -402,8 +401,8 @@ def mc_correlated(params, correls, numreals):
             elif dist_name[0:4].lower() == 'unif':
                 status, msg = _check_dist_params_uniform(dist_params)
                 if status:
-                    low = dist_params[0]
-                    high = dist_params[1]
+                    low = float(dist_params[0])
+                    high = float(dist_params[1])
                     uscale = high - low
                     samples_df[key] = scipy.stats.uniform.ppf(
                         scipy.stats.norm.cdf(
@@ -428,8 +427,8 @@ def mc_correlated(params, correls, numreals):
             elif dist_name[0:4].lower() == 'logn':
                 status, msg = _check_dist_params_lognormal(dist_params)
                 if status:
-                    mean = dist_params[0]
-                    sigma = dist_params[1]
+                    mean = float(dist_params[0])
+                    sigma = float(dist_params[1])
                     samples_df[key] = scipy.stats.lognorm.ppf(
                         scipy.stats.norm.cdf(
                             normalscoresamples_df[key]),
@@ -439,7 +438,7 @@ def mc_correlated(params, correls, numreals):
             elif dist_name[0:5].lower() in ['const', 'disc']:
                 raise ValueError(
                     'Parameter distribution {} specified for {} '
-                    'cannot be used when in correlation matrix  '
+                    'cannot be used for correlated parameters.  '
                     .format(dist_name, key))
             else:
                 raise ValueError(
@@ -448,9 +447,9 @@ def mc_correlated(params, correls, numreals):
                         dist_name, key))
             # Rounding if specified in config
             if len(params[key]) == 3 and status:
-                decimals = params[key][2]
+                decimals = int(params[key][2])
                 samples_df[key] = (samples_df[key].
-                                   astype(float).round(int(decimals)))
+                                   astype(float).round(decimals))
         elif dist_name[0:5].lower() == 'const':
             samples_df[key] = [dist_params[0]] * numreals
         elif dist_name[0:4].lower() == 'disc':
