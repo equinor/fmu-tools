@@ -20,9 +20,10 @@ def excel2dict_design(input_filename):
     Returns:
         OrderedDict on formate for DesignMatrix.generate
     """
+    gen_input_sheet = _find_geninput_sheetname(input_filename)
     generalinput = pd.read_excel(
         input_filename,
-        'general_input',
+        gen_input_sheet,
         header=None,
         index_col=0)
 
@@ -48,6 +49,61 @@ def inputdict_to_yaml(inputdict, filename):
     yaml.dump(inputdict, stream)
 
 
+def _find_geninput_sheetname(input_filename):
+    """Finding general input sheet, allowing for name
+    variations."""
+    xls = pd.ExcelFile(input_filename, on_demand=True)
+    sheets = xls.sheet_names
+    general_input_sheet = []
+    for sheet in sheets:
+        if sheet in ['general_input', 'generalinput',
+                     'GeneralInput', 'Generalinput',
+                     'General_Input', 'General_input']:
+            general_input_sheet.append(sheet)
+    if len(general_input_sheet) > 1:
+        raise ValueError('More than one sheet with general input'
+                         'Sheetnames are {} '.format(general_input_sheet))
+    elif len(general_input_sheet) == []:
+        raise ValueError('No general_input sheet provided in Excel file {} '
+                         ''.format(input_filename))
+
+    return general_input_sheet[0]
+
+
+def _find_onebyone_sheet_names(input_filename):
+    """Finds correct sheet names to use when parsing excel file"""
+    xls = pd.ExcelFile(input_filename, on_demand=True)
+    sheets = xls.sheet_names
+
+    default_values_sheet = []
+    design_input_sheet = []
+
+    for sheet in sheets:
+        if sheet in ['default_values', 'defaultvalues',
+                     'DefaultValues', 'Defaultvalues',
+                     'Default_Values', 'Default_values']:
+            default_values_sheet.append(sheet)
+    if len(default_values_sheet) > 1:
+        raise ValueError('More than one sheet with default values'
+                         'Sheetnames are {} '.format(default_values_sheet))
+    elif len(default_values_sheet) == []:
+        raise ValueError('No defaultvalues sheet provided in Excel file {} '
+                         ''.format(input_filename))
+
+    for sheet in sheets:
+        if sheet in ['design_input', 'designinput',
+                     'DesignInput', 'Designinput',
+                     'Design_Input', 'Design_input']:
+            design_input_sheet.append(sheet)
+    if len(design_input_sheet) > 1:
+        raise ValueError('More than one sheet with design input'
+                         'Sheetnames are {} '.format(design_input_sheet))
+    elif len(design_input_sheet) == []:
+        raise ValueError('No designinput sheet provided in Excel file {} '
+                         ''.format(input_filename))
+    return default_values_sheet[0], design_input_sheet[0]
+
+
 def _excel2dict_onebyone(input_filename):
     """Reads spesification for onebyone design
 
@@ -58,16 +114,21 @@ def _excel2dict_onebyone(input_filename):
         OrderedDict on format for DesignMatrix.generate
     """
 
+    seedname = 'RMS_SEED'
     inputdict = OrderedDict()
+
+    # Determine sheet names
+    gen_input_sheet = _find_geninput_sheetname(input_filename)
+    (default_val_sheet, design_inp_sheet) =\
+        _find_onebyone_sheet_names(input_filename)
 
     # Read general input
     generalinput = pd.read_excel(
         input_filename,
-        'general_input',
+        gen_input_sheet,
         header=None,
         index_col=0)
 
-    seedname = 'RMS_SEED'
     inputdict['designtype'] = generalinput[1]['designtype']
     inputdict['seeds'] = generalinput[1]['seeds']
     inputdict['repeats'] = generalinput[1]['repeats']
@@ -90,25 +151,26 @@ def _excel2dict_onebyone(input_filename):
 
     # Read default values
     inputdict['defaultvalues'] = _read_defaultvalues(
-        input_filename, 'defaultvalues')
+        input_filename, default_val_sheet)
 
     # Read input for sensitivities
     inputdict['sensitivities'] = OrderedDict()
     designinput = pd.read_excel(
         input_filename,
-        'designinput')
+        design_inp_sheet)
 
     designinput['sensname'].fillna(method='ffill', inplace=True)
 
     # Read decimals
     if 'decimals' in designinput.keys():
-        decimals = OrderedDict()
+        inputdict['decimals'] = OrderedDict()
         for row in designinput.itertuples():
             if _has_value(row.decimals) and _is_int(row.decimals):
-                decimals[row.param_name] = int(row.decimals)
-        inputdict['decimals'] = decimals
+                inputdict['decimals'][row.param_name] = \
+                    int(row.decimals)
 
     grouped = designinput.groupby('sensname', sort=False)
+
     # Read each sensitivity
     for sensname, group in grouped:
 
