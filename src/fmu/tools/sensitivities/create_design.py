@@ -36,6 +36,8 @@ class DesignMatrix(object):
         self.backgroundvalues = None
 
     def reset(self):
+        """Resets DesignMatrix to empty. Necessary iin case method generate
+        is used several times for same instance of DesignMatrix"""
         self.designvalues = pd.DataFrame(columns=['REAL'])
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
@@ -260,7 +262,8 @@ class DesignMatrix(object):
                 self.designvalues[key].fillna(
                     self.defaultvalues[key], inplace=True)
             elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
-                print('No defaultvalues given for {}'.format(key))
+                raise LookupError('No defaultvalues given for parameter{}'
+                                  ''.format(key))
 
     def _add_dist_background(self, back_dict, numreal):
         """Drawing background values from distributions
@@ -337,9 +340,11 @@ class SeedSensitivity(object):
         """Generates parameter values for a seed sensitivity
 
         Args:
-            realnums (list): list of intergers with realization numbers
-            param_name (str):
-            seeds (str): default or xtern
+            realnums (list): list of integers with realization numbers
+            seedname (str): name of seed parameter to add
+            seeds (str): default (1000, 1001, 1002,...) or xtern
+            parameters (OrderedDict): parameter names and
+                distributions or values.
         """
         self.sensvalues = pd.DataFrame(index=realnums)
         if seeds.lower() == 'default':
