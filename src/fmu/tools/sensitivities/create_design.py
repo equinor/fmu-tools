@@ -262,7 +262,8 @@ class DesignMatrix(object):
                 self.designvalues[key].fillna(
                     self.defaultvalues[key], inplace=True)
             elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
-                print('No defaultvalues given for {}'.format(key))
+                raise LookupError('No defaultvalues given for parameter{}'
+                                  ''.format(key))
 
     def _add_dist_background(self, back_dict, numreal):
         """Drawing background values from distributions
