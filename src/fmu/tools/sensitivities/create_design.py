@@ -36,6 +36,8 @@ class DesignMatrix(object):
         self.backgroundvalues = None
 
     def reset(self):
+        """Resets DesignMatrix to empty. Necessary iin case method generate
+        is used several times for same instance of DesignMatrix"""
         self.designvalues = pd.DataFrame(columns=['REAL'])
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
@@ -337,9 +339,11 @@ class SeedSensitivity(object):
         """Generates parameter values for a seed sensitivity
 
         Args:
-            realnums (list): list of intergers with realization numbers
-            param_name (str):
-            seeds (str): default or xtern
+            realnums (list): list of integers with realization numbers
+            seedname (str): name of seed parameter to add
+            seeds (str): default (1000, 1001, 1002,...) or xtern
+            parameters (OrderedDict): parameter names and
+                distributions or values.
         """
         self.sensvalues = pd.DataFrame(index=realnums)
         if seeds.lower() == 'default':
