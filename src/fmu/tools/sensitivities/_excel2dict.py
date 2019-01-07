@@ -9,18 +9,25 @@ import pandas as pd
 from fmu.config import oyaml as yaml
 
 
-def excel2dict_design(input_filename):
+def excel2dict_design(input_filename, sheetnames=None):
     """Read excel file with input to design setup
     Currently only specification of
     onebyone design is implemented
 
     Args:
         input_filename (str): Name of excel input file
+        sheetnames (dict): Dictionary of worksheet names to load
+            information from. Supported keys: general_input, defaultvalues,
+            and designinput.
 
     Returns:
-        OrderedDict on formate for DesignMatrix.generate
+        OrderedDict on format for DesignMatrix.generate
     """
-    gen_input_sheet = _find_geninput_sheetname(input_filename)
+    if not sheetnames or 'general_input' not in sheetnames:
+        gen_input_sheet = _find_geninput_sheetname(input_filename)
+    else:
+        gen_input_sheet = sheetnames['general_input']
+
     generalinput = pd.read_excel(
         input_filename,
         gen_input_sheet,
@@ -28,7 +35,7 @@ def excel2dict_design(input_filename):
         index_col=0)
 
     if str(generalinput[1]['designtype']) == 'onebyone':
-        returndict = _excel2dict_onebyone(input_filename)
+        returndict = _excel2dict_onebyone(input_filename, sheetnames)
     else:
         raise ValueError('Generation of DesignMatrix only '
                          'implemented for type onebyone '
@@ -104,11 +111,14 @@ def _find_onebyone_sheet_names(input_filename):
     return default_values_sheet[0], design_input_sheet[0]
 
 
-def _excel2dict_onebyone(input_filename):
+def _excel2dict_onebyone(input_filename, sheetnames=None):
     """Reads spesification for onebyone design
 
     Args:
         input_filename(path): path to excel workbook
+        sheetnames (dict): Dictionary of worksheet names to load
+            information from. Supported keys: general_input, defaultvalues,
+            and designinput.
 
     Returns:
         OrderedDict on format for DesignMatrix.generate
@@ -117,10 +127,20 @@ def _excel2dict_onebyone(input_filename):
     seedname = 'RMS_SEED'
     inputdict = OrderedDict()
 
-    # Determine sheet names
-    gen_input_sheet = _find_geninput_sheetname(input_filename)
-    (default_val_sheet, design_inp_sheet) =\
-        _find_onebyone_sheet_names(input_filename)
+    if not sheetnames or 'general_input' not in sheetnames:
+        gen_input_sheet = _find_geninput_sheetname(input_filename)
+    else:
+        gen_input_sheet = sheetnames['general_input']
+
+    if not sheetnames or 'designinput' not in sheetnames:
+        design_inp_sheet = _find_onebyone_sheet_names(input_filename)[1]
+    else:
+        design_inp_sheet = sheetnames['designinput']
+
+    if not sheetnames or 'defaultvalues' not in sheetnames:
+        default_val_sheet = _find_onebyone_sheet_names(input_filename)[0]
+    else:
+        default_val_sheet = sheetnames['defaultvalues']
 
     # Read general input
     generalinput = pd.read_excel(
