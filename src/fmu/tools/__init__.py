@@ -7,6 +7,8 @@ __version__ = theversion()
 
 del theversion
 
+from .rms import volumetrics # noqa
+
 from .sensitivities import DesignMatrix # noqa
 from .sensitivities import summarize_design # noqa
 from .sensitivities import calc_tornadoinput # noqa
