@@ -240,18 +240,19 @@ def sample_discrete(dist_params, numreals):
     Returns:
         numpy.ndarray: values drawn from distribution
     """
-
     outcomes = re.split(',', dist_params[0])
     if len(dist_params) == 2:  # non uniform
-        fractions = re.split(',', dist_params[1])
-        if len(outcomes) != len(fractions):
+        weights = re.split(',', dist_params[1])
+        if len(outcomes) != len(weights):
             raise ValueError(
                 'Number of weights for discrete distribution '
                 'is not the same as number of values.')
         else:
+            weightnmbr = [float(weight) for weight in weights]
+            fractions = [weight/sum(weightnmbr) for weight in weightnmbr]
             values = numpy.random.choice(
                 outcomes, numreals,
-                fractions)
+                p=fractions)
     elif len(dist_params) == 1:  # uniform
         values = numpy.random.choice(
             outcomes, numreals)
