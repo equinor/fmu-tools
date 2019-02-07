@@ -59,7 +59,7 @@ def inputdict_to_yaml(inputdict, filename):
 def _find_geninput_sheetname(input_filename):
     """Finding general input sheet, allowing for name
     variations."""
-    xls = pd.ExcelFile(input_filename, on_demand=True)
+    xls = pd.ExcelFile(input_filename)
     sheets = xls.sheet_names
     general_input_sheet = []
     for sheet in sheets:
@@ -79,7 +79,7 @@ def _find_geninput_sheetname(input_filename):
 
 def _find_onebyone_sheet_names(input_filename):
     """Finds correct sheet names to use when parsing excel file"""
-    xls = pd.ExcelFile(input_filename, on_demand=True)
+    xls = pd.ExcelFile(input_filename)
     sheets = xls.sheet_names
 
     default_values_sheet = []
