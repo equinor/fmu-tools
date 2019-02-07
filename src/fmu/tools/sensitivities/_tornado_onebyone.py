@@ -135,7 +135,7 @@ def calc_tornadoinput(designsummary, resultfile, response, selectors,
     resultcopy = resultfile.copy()
     resultcopy.set_index(headers, inplace=True)
     resultcopy.sort_index(inplace=True)
-    dfr_summed = resultcopy.groupby(['REAL']).sum()
+    dfr_summed = resultcopy.groupby(['REAL']).sum(min_count=1)
     dfr_summed.reset_index(inplace=True)
 
     # Creates empty dfr to store stats in, webportal tornadoplot input format
