@@ -19,31 +19,15 @@ def _check_dist_params_normal(dist_params):
         msg = ('Normal distribution must have 2 parameters'
                ' or 4 for a truncated normal, '
                'but had ' + str(len(dist_params)) + ' parameters. ')
-    elif len(dist_params) == 2:  # normal
-        if not (is_number(dist_params[0]) and is_number(dist_params[1])):
-            status = False
-            msg = 'Parameters for normal distribution must be numbers. '
-        elif float(dist_params[1]) < 0:
-            status = False
-            msg = 'Stddev for normal distribution must be >= 0. '
-        else:
-            status = True
-            msg = ''
-    elif len(dist_params) == 4:  # truncated normal
-        if not (is_number(dist_params[0])
-                and is_number(dist_params[1])
-                and is_number(dist_params[2])
-                and is_number(dist_params[3])):
-            status = False
-            msg = ('Parameters for truncated normal '
-                   'distribution must be numbers. ')
-        elif float(dist_params[1]) < 0:
-            status = False
-            msg = ('Truncated normal distribution must have'
-                   ' stddev >= 0. ')
-        else:
-            status = True
-            msg = ''
+    elif not all(is_number(param) for param in dist_params):
+        status = False
+        msg = 'Parameters for normal distribution must be numbers. '
+    elif float(dist_params[1]) < 0:
+        status = False
+        msg = 'Stddev for normal distribution must be >= 0. '
+    else:
+        status = True
+        msg = ''
 
     return status, msg
 
@@ -93,15 +77,33 @@ def _check_dist_params_triang(dist_params):
         status = False
         msg = ('Triangular distribution must have 3 parameters, '
                'but had ' + str(len(dist_params)) + ' parameters. ')
-    elif not (is_number(dist_params[0])
-              and is_number(dist_params[1])
-              and is_number(dist_params[2])):
+    elif not all(is_number(param) for param in dist_params):
         status = False
         msg = 'Parameters for triangular distribution must be numbers. '
     elif not ((float(dist_params[2]) >= float(dist_params[1])) and
               (float(dist_params[1]) >= float(dist_params[0]))):
         status = False
         msg = ('Triangular distribution must have: '
+               'low <= mode <= high. ')
+    else:
+        status = True
+        msg = ''
+
+    return status, msg
+
+
+def _check_dist_params_pert(dist_params):
+    if len(dist_params) not in [3, 4]:
+        status = False
+        msg = ('pert distribution must have 3 or 4 parameters, '
+               'but had ' + str(len(dist_params)) + ' parameters. ')
+    elif not all(is_number(param) for param in dist_params):
+        status = False
+        msg = 'Parameters for pert distribution must be numbers. '
+    elif not ((float(dist_params[2]) >= float(dist_params[1])) and
+              (float(dist_params[1]) >= float(dist_params[0]))):
+        status = False
+        msg = ('Pert distribution must have: '
                'low <= mode <= high. ')
     else:
         status = True
@@ -135,12 +137,9 @@ def prepare_distribution(distname, dist_parameters):
     """
     Prepare scipy distributions with parameters
 
-    To do -  Implement missing distributions
-    lognormal
-
     Args:
-        distname (str): distribution name 'normal',
-                        'triang', 'uniform' or 'logunif'
+        distname (str): distribution name 'normal', 'lognormal', 'triang',
+                        'uniform', 'logunif', 'discrete', 'pert'
         dist_parameters (list): list with parameters for distribution
 
     Returns:
@@ -207,6 +206,37 @@ def prepare_distribution(distname, dist_parameters):
                 distribution = scipy.stats.triang(
                     shape, loc=low, scale=dist_scale)
         else:
+            raise ValueError(msg)
+
+    elif distname[0:4].lower() == 'pert':
+
+        status, msg = _check_dist_params_pert(dist_parameters)
+        if status:
+            low = float(dist_parameters[0])
+            mode = float(dist_parameters[1])
+            high = float(dist_parameters[2])
+            if len(dist_parameters) == 4:
+                scale = float(dist_parameters[3])
+            else:
+                scale = 4  # pert 3 parameter distribution
+
+            if high == low:  # collapsed distribution
+                print('Low and high parameters for pert distribution'
+                      ' are equal. Using constant {}'.format(low))
+                distribution = scipy.stats.uniform(loc=low, scale=0)
+            else:
+                muval = (low + high + scale*mode)/(scale+2)
+                if muval == mode:
+                    alpha1 = (scale/2)+1
+                else:
+                    alpha1 = ((muval-low)*(2*mode-low-high)) / (
+                        (mode-muval)*(high-low))
+
+                alpha2 = alpha1*(high-muval)/(muval-low)
+                distribution = scipy.stats.beta(
+                    alpha1, alpha2)
+        else:
+
             raise ValueError(msg)
 
     elif distname[0:7].lower() == 'logunif':
@@ -424,6 +454,40 @@ def mc_correlated(params, correls, numreals):
                         low, high)
                 else:
                     raise ValueError(msg)
+            elif dist_name[0:4].lower() == 'pert':
+                status, msg = _check_dist_params_pert(dist_params)
+                if status:
+                    low = float(dist_params[0])
+                    mode = float(dist_params[1])
+                    high = float(dist_params[2])
+                    if len(dist_params) == 4:
+                        scale = float(dist_params[3])
+                    else:
+                        scale = 4  # pert 3 parameter distribution
+
+                    if high == low:  # collapsed distribution
+                        print('Low and high parameters for pert distribution'
+                              ' are equal. Using constant {}'.format(low))
+                        samples_df[key] = scipy.stats.uniform.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            loc=low, scale=0)
+                    else:
+                        muval = (low + high + scale * mode) / (scale + 2)
+                        if muval == mode:
+                            alpha1 = (scale / 2) + 1
+                        else:
+                            alpha1 = (
+                                ((muval - low) * (2 * mode - low - high)) /
+                                ((mode - muval) * (high - low)))
+
+                        alpha2 = alpha1 * (high - muval) / (muval - low)
+                        samples_df[key] = scipy.stats.beta.ppf(
+                            scipy.stats.norm.cdf(
+                                normalscoresamples_df[key]),
+                            alpha1, alpha2)
+                else:
+                    raise ValueError(msg)
 
             elif dist_name[0:4].lower() == 'logn':
                 status, msg = _check_dist_params_lognormal(dist_params)
@@ -484,7 +548,7 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     Args:
         df_correlations (DataFrame): correlation coefficients where
             columns and index are both parameter names. All parameter
-            names in keys must also exist in index and vice versa.
+            names in keys muvalst also exist in index and vice versa.
 
     Returns:
         covariance matrix
