@@ -4,9 +4,17 @@
 Example: generation of design matrix
 """
 from __future__ import division, print_function, absolute_import
-from fmu.tools.sensitivities import DesignMatrix, excel2dict_design, inputdict_to_yaml
+print('start importing')
 from fmu.config import oyaml as yaml
+print('imported config')
 import os
+print('imported os')
+from fmu.tools.sensitivities import DesignMatrix
+print('imported DesignMatrix')
+from fmu.tools.sensitivities import excel2dict_design
+print('imported excel2dict_design')
+from fmu.tools.sensitivities import inputdict_to_yaml
+print('imported inputdict_to_yaml')
 
 os.chdir('../')
 
@@ -14,16 +22,28 @@ os.chdir('../')
 #with open(design_configfile) as input_file:
 #    input_dict=yaml.load(input_file)
 
+path = './tests/data/sensitivities/config/'
+prefix = 'design_input_'
+postfix='.xlsx'
+config = [
+    'example1',
+    'example2',
+    'example_velocities',
+    'singlereference',
+    'singlereference_and_seed',
+    'default_no_seed',
+    'onebyone',
+    'background_no_seed',
+    'background_extseeds'
+    ]
 
-design_configfile = './tests/data/sensitivities/config/design_input_singlereference_and_seed.xlsx'
-# design_configfile = './tests/data/sensitivities/config/fossekall_design.xlsx'
-# design_configfile = './tests/data/sensitivities/config/design_input_example_velocities.xlsx'
-
-input_dict = excel2dict_design(design_configfile)
-inputdict_to_yaml(input_dict, 'examples/output/design_inut_dict_dumped.yaml')
-
-design1 = DesignMatrix()
-design1.generate(input_dict)
-design1.to_xlsx('examples/output/design.xlsx')
-if design1.backgroundvalues is not None:
-    design1.background_to_excel('examples/output/background.xlsx')
+for input in range(len(config)):
+    filename = path+prefix+config[input]+postfix
+    print('Reading {}'.format(filename))
+    input_dict = excel2dict_design(filename)
+    #input_dict.to_yaml(input_dict, 'examples/output/'+config[input]+'.yaml')
+    design = DesignMatrix()
+    design.generate(input_dict)
+    design.to_xlsx('examples/output/design_'+config[input]+postfix)
+    #if design.backgroundvalues is not None:
+        #design.background_to_excel('examples/output/background.xlsx')
