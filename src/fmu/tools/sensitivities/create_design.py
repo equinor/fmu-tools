@@ -629,6 +629,9 @@ class MonteCarloSensitivity(object):
                     else:
                         mc_values = design_dist.generate_mcvalues(
                             distribution, len(realnums))
+                        if dist_name == 'pert':
+                            mc_values = mc_values*(
+                                dist_params[2]-dist_params[0]) + dist_params[0]
                 self.sensvalues[key] = mc_values
         else:
             numreals = len(realnums)
