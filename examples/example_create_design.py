@@ -4,17 +4,9 @@
 Example: generation of design matrix
 """
 from __future__ import division, print_function, absolute_import
-print('start importing')
 from fmu.config import oyaml as yaml
-print('imported config')
 import os
-print('imported os')
-from fmu.tools.sensitivities import DesignMatrix
-print('imported DesignMatrix')
-from fmu.tools.sensitivities import excel2dict_design
-print('imported excel2dict_design')
-from fmu.tools.sensitivities import inputdict_to_yaml
-print('imported inputdict_to_yaml')
+from fmu.tools.sensitivities import DesignMatrix, excel2dict_design, inputdict_to_yaml
 
 os.chdir('../')
 
