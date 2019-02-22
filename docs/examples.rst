@@ -39,6 +39,7 @@ dist
     * **uniform (min,max)**
     * **loguniform (min,max)** A stochastic variable is log uniformly distributed if its natural logarithm is uniformly distributed. Arguments are the minimum and maximum of the *output* variable
     * **triangular (min, mode, max)**
+    * **pert (min, mode, max)**
     * **discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))**  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.
     * **lognormal(mu, sigma)** A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the *logarithm* of the variable.
     * **const(value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of seed type.
