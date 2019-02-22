@@ -32,16 +32,16 @@ def _do_parse_args(args):
                         help='Destination filename for design matrix',
                         default='generateddesignmatrix.xlsx')
     parser.add_argument('--designinput', type=str,
-                        help='Alternative sheetname for the ' + \
-                        'worksheet designinput',
+                        help=('Alternative sheetname for the '
+                              'worksheet designinput'),
                         default='designinput')
     parser.add_argument('--defaultvalues', type=str,
-                        help='Alternative sheetname for ' + \
-                        'worksheet defaultvalues',
+                        help=('Alternative sheetname for '
+                              'worksheet defaultvalues'),
                         default='defaultvalues')
     parser.add_argument('--general_input', type=str,
-                        help='Alternative sheetname for the' +\
-                        'worksheet general_input',
+                        help=('Alternative sheetname for the'
+                              'worksheet general_input'),
                         default='general_input')
 
     args = parser.parse_args(args)
@@ -73,7 +73,7 @@ def main(args=None):
     if args.general_input:
         sheetnames['general_input'] = args.general_input
 
-    if len(sheetnames):
+    if sheetnames:
         print("Worksheets changed from default:")
         print(sheetnames)
 
