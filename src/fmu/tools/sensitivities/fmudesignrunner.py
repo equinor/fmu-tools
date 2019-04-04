@@ -88,10 +88,8 @@ def main(args=None):
 
     folder = os.path.dirname(args.destination)
 
-    if not os.path.exists(folder) and folder != '':
-        raise ValueError('Folder "{}" for output file '
-                         'does not exist.'
-                         'Create in advance'.format(folder))
+    if folder and not os.path.exists(folder):
+        os.makedirs(folder)
 
     design.to_xlsx(args.destination)
 
