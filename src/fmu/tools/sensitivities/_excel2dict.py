@@ -70,20 +70,24 @@ def _find_geninput_sheetname(input_filename):
     if len(general_input_sheet) > 1:
         raise ValueError('More than one sheet with general input'
                          'Sheetnames are {} '.format(general_input_sheet))
-    elif len(general_input_sheet) == []:
+    elif not general_input_sheet:
         raise ValueError('No general_input sheet provided in Excel file {} '
                          ''.format(input_filename))
 
     return general_input_sheet[0]
 
 
-def _find_onebyone_sheet_names(input_filename):
-    """Finds correct sheet names to use when parsing excel file"""
+def _find_onebyone_defaults_sheet(input_filename):
+    """Finds correct sheet name for default values to use when parsing
+    excel file.
+
+    Returns:
+        string, name of a sheet in the excel file
+    """
     xls = pd.ExcelFile(input_filename)
     sheets = xls.sheet_names
 
     default_values_sheet = []
-    design_input_sheet = []
 
     for sheet in sheets:
         if sheet in ['default_values', 'defaultvalues',
@@ -97,6 +101,20 @@ def _find_onebyone_sheet_names(input_filename):
         raise ValueError('No defaultvalues sheet provided in Excel file {} '
                          ''.format(input_filename))
 
+    return default_values_sheet[0]
+
+
+def _find_onebyone_input_sheet(input_filename):
+    """Finds correct sheet name for input to use when parsing excel file.
+
+    Returns:
+        string, name of a sheet in the excel file
+    """
+    xls = pd.ExcelFile(input_filename)
+    sheets = xls.sheet_names
+
+    design_input_sheet = []
+
     for sheet in sheets:
         if sheet in ['design_input', 'designinput',
                      'DesignInput', 'Designinput',
@@ -105,10 +123,10 @@ def _find_onebyone_sheet_names(input_filename):
     if len(design_input_sheet) > 1:
         raise ValueError('More than one sheet with design input'
                          'Sheetnames are {} '.format(design_input_sheet))
-    elif len(design_input_sheet) == []:
+    elif not design_input_sheet:
         raise ValueError('No designinput sheet provided in Excel file {} '
                          ''.format(input_filename))
-    return default_values_sheet[0], design_input_sheet[0]
+    return design_input_sheet[0]
 
 
 def _excel2dict_onebyone(input_filename, sheetnames=None):
@@ -133,12 +151,12 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
         gen_input_sheet = sheetnames['general_input']
 
     if not sheetnames or 'designinput' not in sheetnames:
-        design_inp_sheet = _find_onebyone_sheet_names(input_filename)[1]
+        design_inp_sheet = _find_onebyone_input_sheet(input_filename)
     else:
         design_inp_sheet = sheetnames['designinput']
 
     if not sheetnames or 'defaultvalues' not in sheetnames:
-        default_val_sheet = _find_onebyone_sheet_names(input_filename)[0]
+        default_val_sheet = _find_onebyone_defaults_sheet(input_filename)
     else:
         default_val_sheet = sheetnames['defaultvalues']
 
