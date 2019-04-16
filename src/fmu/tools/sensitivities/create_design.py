@@ -170,6 +170,8 @@ class DesignMatrix(object):
         defaults.to_excel(xlsxwriter, sheet_name=defaultsheet,
                           index=False, header=False)
         xlsxwriter.save()
+        print('A total of {} realizations were generated'
+              .format(len(self.designvalues['REAL'])))
         print('Designmatrix written to {}'.format(filename))
 
     def set_defaultvalues(self, defaults):
