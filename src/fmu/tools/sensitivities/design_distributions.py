@@ -336,7 +336,8 @@ def read_correlations(corr_dict):
         filename = corr_dict['inputfile']
         if filename.endswith('.xlsx'):
             correlations = pd.read_excel(
-                filename, corr_dict['corrsheet'])
+                filename, corr_dict['corrsheet'],
+                index_col=0)
         else:
             raise ValueError(
                 'Correlation matrix filename should be on '
