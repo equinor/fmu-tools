@@ -141,6 +141,11 @@ class DesignMatrix(object):
             self._fill_with_defaultvalues()
             if 'decimals' in inputdict.keys():
                 self._set_decimals(inputdict['decimals'])
+            # Re-order columns
+            start_cols = ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']
+            self.designvalues = self.designvalues[
+                [col for col in start_cols if col in self.designvalues] +
+                [col for col in self.designvalues if col not in start_cols]]
         else:
             raise ValueError('Generation of DesignMatrix only'
                              'implemented for type onebyone'
