@@ -41,8 +41,10 @@ dist
     * **triangular (min, mode, max)**
     * **pert (min, mode, max)**
     * **discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))**  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.
-    * **lognormal(mu, sigma)** A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the *logarithm* of the variable.
-    * **const(value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of seed type.
+    * **lognormal (mu, sigma)** A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the *logarithm* of the variable.
+    * **const (value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of seed type.
+
+    Use the whole name for the distributions in the *dist_name* column, or alternatively the short version names: norm, unif, logunif, triang, pert, disc, logn, const. Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above. 
 
 ref
     This creates a **single** realisation with parameter values set to default values. Typically used if no seed variation or background distributions are used, but a realisation with default values is needed as a reference for tornado calculations. Note that this realisation will **not** itself be plotted as a sensitivity in the tornadoplot. This is flagged by SENSCASE set to 'ref' in the output design matrix.
@@ -164,6 +166,11 @@ This set up might be used if running a one by one design on top of varying backg
 
 .. image:: images/design_designinput_background_noseed.png
 
+Example 8: Full monte carlo sensitivity
+"""""""""""""""""""""""""""""""""""""""
+This example shows a full monte carlo design with correlated parameters. This means all the parameters are randomly drawn from their distributions, and could have correlations as provided in the correlation sheet *corr1*. In this case there is actually only one *sensname* as all the parameters belong to the same sensitivity. The number of realisations can either be provided in the *general_input* sheet, or in the *numreal* column in the *designinput* sheet. All parameters in the design must also be included in the correlation matrix in the *corr1* sheet and in the *defaultvalues* sheet.
+
+.. image:: images/design_fullmc_corr.png
 
 -----------------------------------------
 Adding sets of tornado plots to webportal
