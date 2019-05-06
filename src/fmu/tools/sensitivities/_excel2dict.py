@@ -334,16 +334,46 @@ def _read_scenario_sensitivity(sensgroup):
     sdict['cases'] = OrderedDict()
     casedict1 = OrderedDict()
     casedict2 = OrderedDict()
+
+    if not _has_value(sensgroup['senscase1'].iloc[0]):
+        raise ValueError('Sensitivity {} has been input '
+                         'as a scenario sensitivity, but '
+                         'without a name in senscase1 column.'
+                         .format(sensgroup['sensname'].iloc[0]))
+
     for row in sensgroup.itertuples():
-        casedict1[str(row.param_name)] = row.value1
+        if not _has_value(row.value1):
+            raise ValueError('Parameter {} har been input '
+                             'as type "scenario" but with empty '
+                             'value in value1 column '
+                             .format(row.param_name))
+        else:
+            casedict1[str(row.param_name)] = row.value1
     if _has_value(sensgroup['senscase2'].iloc[0]):
         for row in sensgroup.itertuples():
-            casedict2[str(row.param_name)] = row.value2
+            if not _has_value(row.value2):
+                raise ValueError('Sensitivity {} has been input '
+                                 'with a name in senscase2 column '
+                                 'but without a value for parameter {} '
+                                 'in value2 column.'
+                                 .format(sensgroup['sensname'].iloc[0],
+                                         row.param_name))
+            else:
+                casedict2[str(row.param_name)] = row.value2
         sdict['cases'][
             str(sensgroup['senscase1'].iloc[0])] = casedict1
         sdict['cases'][
             str(sensgroup['senscase2'].iloc[0])] = casedict2
     else:
+        for row in sensgroup.itertuples():
+            if _has_value(row.value2):
+                raise ValueError('Sensitivity {} has been input '
+                                 'with a value for parameter {} '
+                                 'in value2 column '
+                                 'but without a name for the scenario '
+                                 'in senscase2 column.'
+                                 .format(sensgroup['sensname'].iloc[0],
+                                         row.param_name))
         sdict['cases'][
             str(sensgroup['senscase1'].iloc[0])] = casedict1
     return sdict
@@ -357,11 +387,18 @@ def _read_constants(sensgroup):
     paramdict = OrderedDict()
     for row in sensgroup.itertuples():
         if not _has_value(row.dist_param1):
-            raise ValueError('Parameter {} has been input '
-                             'in a sensitivity of type "seed"'
-                             'but without "const" in dist_name '
-                             'and a value in "dist_param1" '
-                             .format(row.param_name))
+            raise ValueError('Parameter name {} has been input '
+                             'in a sensitivity of type "seed". \n'
+                             'If {} was meant to be the name of '
+                             'the seed parameter, this is '
+                             'unfortunately not allowed. '
+                             'The seed parameter name is standardised '
+                             'to RMS_SEED and should not be specified.\n '
+                             'If you instead meant to specify a constant '
+                             'value for another parameter in the seed '
+                             'sensitivity, please remember "const" in '
+                             'dist_name and a value in "dist_param1". '
+                             .format(row.param_name, row.param_name))
         distparams = row.dist_param1
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
     return paramdict
