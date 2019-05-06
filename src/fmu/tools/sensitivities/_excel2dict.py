@@ -339,11 +339,18 @@ def _read_constants(sensgroup):
     paramdict = OrderedDict()
     for row in sensgroup.itertuples():
         if not _has_value(row.dist_param1):
-            raise ValueError('Parameter {} has been input '
-                             'in a sensitivity of type "seed"'
-                             'but without "const" in dist_name '
-                             'and a value in "dist_param1" '
-                             .format(row.param_name))
+            raise ValueError('Parameter name {} has been input '
+                             'in a sensitivity of type "seed". \n'
+                             'If {} was meant to be the name of '
+                             'the seed parameter, this is '
+                             'unfortunately not allowed. '
+                             'The seed parameter name is standardised '
+                             'to RMS_SEED and should not be specified.\n '
+                             'If you instead meant to specify a constant '
+                             'value for another parameter in the seed '
+                             'sensitivity, please remember "const" in '
+                             'dist_name and a value in "dist_param1". '
+                             .format(row.param_name, row.param_name))
         distparams = row.dist_param1
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
     return paramdict
