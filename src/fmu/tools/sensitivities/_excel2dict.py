@@ -305,14 +305,16 @@ def _read_background(inp_filename, bck_sheet):
 
     for row in bck_input.itertuples():
         distparams = [item for item in [
-            row.dist_param1, row.dist_param2, row.dist_param3]
+            row.dist_param1, row.dist_param2, row.dist_param3, row.dist_param4]
                       if _has_value(item)]
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
     backdict['parameters'] = paramdict
 
     if ('corr_sheet' in bck_input.keys() and _has_value(
-            bck_input['corr_sheet'][1])):
-        backdict['correlations'] = bck_input['corr_sheet'][1]
+            bck_input['corr_sheet'].iloc[0])):
+        backdict['correlations'] = OrderedDict()
+        backdict['correlations']['inputfile'] = inp_filename
+        backdict['correlations']['corrsheet'] = bck_input['corr_sheet'].iloc[0]
     else:
         backdict['correlations'] = None
 
@@ -446,8 +448,7 @@ def _read_correlations(sensgroup):
     if 'corr_sheet' in sensgroup.keys():
         if _has_value(
                 sensgroup['corr_sheet'].iloc[0]):
-            correlations = OrderedDict()
-            correlations = sensgroup['corr_sheet'].iloc[0]
+            correlations = str(sensgroup['corr_sheet'].iloc[0])
         else:
             correlations = None
     else:
