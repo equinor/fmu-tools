@@ -114,15 +114,15 @@ Example 2: Excel input for sensitivities with group of (correlated) parameters s
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 In this example the *general_input* and *defaultvalues* are the same as for Example 1 but the designinput is a bit different. For sensitivity *sens6* there are several parameters sampled from different distributions. Note that for the *normal* distributions the truncated versions will be used if *dist_param3* (min) and *dist_param4* (max) are specified in addition to *dist_param1* (mean) and *dist_param2* (standard deviation).
 
-For sensitivity *sens7* *corr1* is specified in the *corr_sheet* column. This means that the parameters for this sensitivity should be correlated, and the correlations should be read from the sheet with the same name. If there are several sensitivities with correlated parameters there can be several correlations sheets with different names.
+For sensitivity *sens7* *corr1* is specified in the *corr_sheet* column. This means that the parameters for this sensitivity should be correlated, and the correlations should be read from the sheet with the same name. If there are several groups of correlated parameters within a sensitivity, there can be several correlations sheets with different names. Specify the name of the correlation sheet the parameter belongs to in the *corr_sheet* column.
 
-Note also that the integer value in the *decimals* columns specifies how many decimals that should be output in the design matrix for this parameter. Only used for sensitivities of type *dist*. The *numreal* and *decimals* columns are optional.
+Note also that the integer value in the *decimals* columns specifies how many decimals the parameter value should be rounded to before output in the design matrix. Only used for sensitivities of type *dist*. The *numreal* and *decimals* columns are optional.
 
 Sensitivity *sens8* is defined to be read from an external file by providing a file path in the *extern_file* column. This needs to point to an excel spreadsheet with parameter names as column headers, and no row index. The *extern_file* column is optional if no sensitivities of type 'extern' are used.
 
 .. image:: images/design_designinput2.png
 
-The *corr1* sheet used for *sens7* looks like this. Include all parameters used in the sensitivity, except parameters of type 'const' or 'discrete'.:
+The *corr1* sheet used for *sens7* looks like this. Parameters of type 'const' or 'discrete' can not be correlated.:
 
 .. image:: images/design_corr1.png
 
@@ -168,7 +168,7 @@ This set up might be used if running a one by one design on top of varying backg
 
 Example 8: Full monte carlo sensitivity
 """""""""""""""""""""""""""""""""""""""
-This example shows a full monte carlo design with correlated parameters. This means all the parameters are randomly drawn from their distributions, and could have correlations as provided in the correlation sheet *corr1*. In this case there is actually only one *sensname* as all the parameters belong to the same sensitivity. The number of realisations can either be provided in the *general_input* sheet, or in the *numreal* column in the *designinput* sheet. All parameters in the design must also be included in the correlation matrix in the *corr1* sheet and in the *defaultvalues* sheet.
+This example shows a full monte carlo design with correlated parameters. This means all the parameters are randomly drawn from their distributions, and could have correlations as provided in the correlation sheet. In this example there are two groups of correlated parameters, and their correlation matrices are specified in the sheets *corr1* and *corr2*. The remaining parameters are not correlated. In this case there is actually only one *sensname* as all the parameters belong to the same sensitivity. The number of realisations can either be provided in the *general_input* sheet, or in the *numreal* column in the *designinput* sheet. All parameters in the design must also be included in the *defaultvalues* sheet.
 
 .. image:: images/design_fullmc_corr.png
 

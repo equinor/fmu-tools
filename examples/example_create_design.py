@@ -26,7 +26,9 @@ config = [
     'default_no_seed',
     'onebyone',
     'background_no_seed',
-    'background_extseeds'
+    'background_extseeds',
+    'mc_with_correls',
+    'montecarlo_full'
     ]
 
 for input in range(len(config)):
