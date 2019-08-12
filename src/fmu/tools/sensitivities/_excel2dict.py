@@ -70,20 +70,24 @@ def _find_geninput_sheetname(input_filename):
     if len(general_input_sheet) > 1:
         raise ValueError('More than one sheet with general input'
                          'Sheetnames are {} '.format(general_input_sheet))
-    elif len(general_input_sheet) == []:
+    elif not general_input_sheet:
         raise ValueError('No general_input sheet provided in Excel file {} '
                          ''.format(input_filename))
 
     return general_input_sheet[0]
 
 
-def _find_onebyone_sheet_names(input_filename):
-    """Finds correct sheet names to use when parsing excel file"""
+def _find_onebyone_defaults_sheet(input_filename):
+    """Finds correct sheet name for default values to use when parsing
+    excel file.
+
+    Returns:
+        string, name of a sheet in the excel file
+    """
     xls = pd.ExcelFile(input_filename)
     sheets = xls.sheet_names
 
     default_values_sheet = []
-    design_input_sheet = []
 
     for sheet in sheets:
         if sheet in ['default_values', 'defaultvalues',
@@ -97,6 +101,20 @@ def _find_onebyone_sheet_names(input_filename):
         raise ValueError('No defaultvalues sheet provided in Excel file {} '
                          ''.format(input_filename))
 
+    return default_values_sheet[0]
+
+
+def _find_onebyone_input_sheet(input_filename):
+    """Finds correct sheet name for input to use when parsing excel file.
+
+    Returns:
+        string, name of a sheet in the excel file
+    """
+    xls = pd.ExcelFile(input_filename)
+    sheets = xls.sheet_names
+
+    design_input_sheet = []
+
     for sheet in sheets:
         if sheet in ['design_input', 'designinput',
                      'DesignInput', 'Designinput',
@@ -105,10 +123,10 @@ def _find_onebyone_sheet_names(input_filename):
     if len(design_input_sheet) > 1:
         raise ValueError('More than one sheet with design input'
                          'Sheetnames are {} '.format(design_input_sheet))
-    elif len(design_input_sheet) == []:
+    elif not design_input_sheet:
         raise ValueError('No designinput sheet provided in Excel file {} '
                          ''.format(input_filename))
-    return default_values_sheet[0], design_input_sheet[0]
+    return design_input_sheet[0]
 
 
 def _excel2dict_onebyone(input_filename, sheetnames=None):
@@ -133,12 +151,12 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
         gen_input_sheet = sheetnames['general_input']
 
     if not sheetnames or 'designinput' not in sheetnames:
-        design_inp_sheet = _find_onebyone_sheet_names(input_filename)[1]
+        design_inp_sheet = _find_onebyone_input_sheet(input_filename)
     else:
         design_inp_sheet = sheetnames['designinput']
 
     if not sheetnames or 'defaultvalues' not in sheetnames:
-        default_val_sheet = _find_onebyone_sheet_names(input_filename)[0]
+        default_val_sheet = _find_onebyone_defaults_sheet(input_filename)
     else:
         default_val_sheet = sheetnames['defaultvalues']
 
@@ -215,16 +233,12 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
             sensdict['senstype'] = 'scenario'
 
         elif group['type'].iloc[0] == 'dist':
-            sensdict['parameters'] = _read_dist_sensitivity(group)
-            corrsheet = _read_correlations(group)
-            if corrsheet is not None:
-                corr_dict = OrderedDict()
-                corr_dict['inputfile'] = input_filename
-                corr_dict['corrsheet'] = corrsheet
-            else:
-                corr_dict = None
-            sensdict['correlations'] = corr_dict
             sensdict['senstype'] = 'dist'
+            sensdict['parameters'] = _read_dist_sensitivity(group)
+            sensdict['correlations'] = None
+            if 'corr_sheet' in group.keys():
+                sensdict['correlations'] = _read_correlations(
+                    group, input_filename)
 
         elif group['type'].iloc[0] == 'extern':
             sensdict['extern_file'] = str(group['extern_file'].iloc[0])
@@ -285,20 +299,54 @@ def _read_background(inp_filename, bck_sheet):
         inp_filename,
         bck_sheet)
 
+    backdict['correlations'] = None
+    if 'corr_sheet' in bck_input.keys():
+        backdict['correlations'] = _read_correlations(bck_input, inp_filename)
+
+    if 'dist_param1' not in bck_input.columns.values:
+        bck_input['dist_param1'] = float('NaN')
+    if 'dist_param2' not in bck_input.columns.values:
+        bck_input['dist_param2'] = float('NaN')
+    if 'dist_param3' not in bck_input.columns.values:
+        bck_input['dist_param3'] = float('NaN')
+    if 'dist_param4' not in bck_input.columns.values:
+        bck_input['dist_param4'] = float('NaN')
+
     for row in bck_input.itertuples():
+        if not _has_value(row.param_name):
+            raise ValueError('Background parameters specified '
+                             'where one line has empty parameter '
+                             'name ')
+        if not _has_value(row.dist_param1):
+            raise ValueError('Parameter {} has been input '
+                             'in background sheet but with empty '
+                             'first distribution parameter '
+                             .format(row.param_name))
+        if not _has_value(row.dist_param2) and _has_value(row.dist_param3):
+            raise ValueError('Parameter {} has been input in '
+                             'background sheet with '
+                             'value for "dist_param3" while '
+                             '"dist_param2" is empty. This is not '
+                             'allowed'.format(row.param_name))
+        if not _has_value(row.dist_param3) and _has_value(row.dist_param4):
+            raise ValueError('Parameter {} has been input in '
+                             'background sheet with '
+                             'value for "dist_param4" while '
+                             '"dist_param3" is empty. This is not '
+                             'allowed'.format(row.param_name))
         distparams = [item for item in [
             row.dist_param1, row.dist_param2, row.dist_param3, row.dist_param4]
                       if _has_value(item)]
-        paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
+        if 'corr_sheet' in bck_input.keys():
+            if not _has_value(row.corr_sheet):
+                corrsheet = None
+            else:
+                corrsheet = row.corr_sheet
+        else:
+            corrsheet = None
+        paramdict[str(row.param_name)] = [
+            str(row.dist_name), distparams, corrsheet]
     backdict['parameters'] = paramdict
-
-    if ('corr_sheet' in bck_input.keys() and _has_value(
-            bck_input['corr_sheet'].iloc[0])):
-        backdict['correlations'] = OrderedDict()
-        backdict['correlations']['inputfile'] = inp_filename
-        backdict['correlations']['corrsheet'] = bck_input['corr_sheet'].iloc[0]
-    else:
-        backdict['correlations'] = None
 
     if 'decimals' in bck_input.keys():
         decimals = OrderedDict()
@@ -326,6 +374,11 @@ def _read_scenario_sensitivity(sensgroup):
                          .format(sensgroup['sensname'].iloc[0]))
 
     for row in sensgroup.itertuples():
+        if not _has_value(row.param_name):
+            raise ValueError('Scenario sensitivity {} specified '
+                             'where one line has empty parameter '
+                             'name '
+                             .format(row.sensname))
         if not _has_value(row.value1):
             raise ValueError('Parameter {} har been input '
                              'as type "scenario" but with empty '
@@ -402,6 +455,11 @@ def _read_dist_sensitivity(sensgroup):
         sensgroup['dist_param4'] = float('NaN')
     paramdict = OrderedDict()
     for row in sensgroup.itertuples():
+        if not _has_value(row.param_name):
+            raise ValueError('Dist sensitivity {} specified '
+                             'where one line has empty parameter '
+                             'name '
+                             .format(row.sensname))
         if not _has_value(row.dist_param1):
             raise ValueError('Parameter {} has been input '
                              'as type "dist" but with empty '
@@ -420,17 +478,31 @@ def _read_dist_sensitivity(sensgroup):
         distparams = [item for item in [
             row.dist_param1, row.dist_param2, row.dist_param3, row.dist_param4]
                       if _has_value(item)]
-        paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
+        if 'corr_sheet' in sensgroup.keys():
+            if not _has_value(row.corr_sheet):
+                corrsheet = None
+            else:
+                corrsheet = row.corr_sheet
+        else:
+            corrsheet = None
+        paramdict[str(row.param_name)] = [
+            str(row.dist_name), distparams, corrsheet]
 
     return paramdict
 
 
-def _read_correlations(sensgroup):
+def _read_correlations(sensgroup, inputfile):
 
     if 'corr_sheet' in sensgroup.keys():
-        if _has_value(
-                sensgroup['corr_sheet'].iloc[0]):
-            correlations = str(sensgroup['corr_sheet'].iloc[0])
+        if not sensgroup['corr_sheet'].dropna().empty:
+            correlations = OrderedDict()
+            correlations['inputfile'] = inputfile
+            correlations['sheetnames'] = []
+            for index, row in sensgroup.iterrows():
+                if _has_value(row['corr_sheet']):
+                    if row['corr_sheet'] not in correlations['sheetnames']:
+                        correlations['sheetnames'].append(
+                            row['corr_sheet'])
         else:
             correlations = None
     else:
