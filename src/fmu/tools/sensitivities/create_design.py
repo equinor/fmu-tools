@@ -8,6 +8,7 @@ from __future__ import print_function
 from collections import OrderedDict
 import os
 import pandas as pd
+import numpy
 from fmu.tools.sensitivities import design_distributions as design_dist
 
 
@@ -114,17 +115,12 @@ class DesignMatrix(object):
                         counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens['senstype'] == 'dist':
-                    if 'correlations' not in sens.keys():
-                        sens['correlations'] = None
-                    if sens['correlations'] is not None:
-                        correlations = design_dist.read_correlations(
-                            sens['correlations'])
-                    else:
-                        correlations = None
                     sensitivity = MonteCarloSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['parameters'], self.seedvalues, correlations)
+                        sens['parameters'],
+                        self.seedvalues,
+                        sens['correlations'])
                     counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens['senstype'] == 'extern':
@@ -297,7 +293,7 @@ class DesignMatrix(object):
                 self.designvalues[key].fillna(
                     self.defaultvalues[key], inplace=True)
             elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
-                raise LookupError('No defaultvalues given for parameter{}'
+                raise LookupError('No defaultvalues given for parameter {} '
                                   ''.format(key))
 
     def _add_dist_background(self, back_dict, numreal):
@@ -308,15 +304,10 @@ class DesignMatrix(object):
             back_dict (OrderedDict): parameters and distributions
             numreal (int): Number of samples to generate
         """
-        if back_dict['correlations'] is not None:
-            correlations = design_dist.read_correlations(
-                back_dict['correlations'])
-        else:
-            correlations = None
         mc_background = MonteCarloSensitivity('background')
         mc_background.generate(
             range(numreal),
-            back_dict['parameters'], 'None', correlations)
+            back_dict['parameters'], 'None', back_dict['correlations'])
         mc_backgroundvalues = mc_background.sensvalues
 
         # Rounding of background values as specified
@@ -598,7 +589,7 @@ class MonteCarloSensitivity(object):
         self.sensvalues = None
 
     def generate(self, realnums, parameters,
-                 seedvalues, correlations=None):
+                 seedvalues, corrdict):
         """Generates parameter values by drawing from
         defined distributions.
 
@@ -607,48 +598,90 @@ class MonteCarloSensitivity(object):
             parameters (OrderedDict):
                 dictionary of parameters and distributions
             seeds (str): default or None
-            correlations: matrix with correlations.
+            corrdict(OrderedDict): correlation info
         """
         self.sensvalues = pd.DataFrame(
             columns=parameters.keys(), index=realnums)
-        if correlations is None:
+        numreals = len(realnums)
+        if corrdict is None:
             for key in parameters.keys():
                 dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
-                if dist_name == 'const':
-                    mc_values = [dist_params[0]] * len(realnums)
-                elif dist_name == 'discrete':
-                    try:
-                        mc_values = design_dist.sample_discrete(
-                            dist_params, len(realnums))
-                    except ValueError as error:
-                        raise ValueError('Problem in sensitivity '
-                                         'with sensname {}: {}.'.format(
-                                             self.sensname, error.args[0]))
-                else:
-                    try:
-                        distribution = design_dist.prepare_distribution(
-                            dist_name, dist_params)
-                    except ValueError as error:
-                        raise ValueError('Problem in sensitivity'
-                                         ' with sensname {}: {}'.format(
-                                             self.sensname, error.args[0]))
-                    else:
-                        mc_values = design_dist.generate_mcvalues(
-                            distribution, len(realnums))
-                        if dist_name == 'pert':
-                            mc_values = mc_values*(
-                                dist_params[2]-dist_params[0]) + dist_params[0]
-                self.sensvalues[key] = mc_values
-        else:
-            numreals = len(realnums)
-            try:
-                self.sensvalues = design_dist.mc_correlated(
-                    parameters, correlations, numreals)
-            except ValueError as error:
-                raise ValueError('Problem in sensitivity'
-                                 ' with sensname {}: {}'.format(
-                                     self.sensname, error.args[0]))
+                try:
+                    self.sensvalues[key] = design_dist.draw_values(
+                        dist_name, dist_params, numreals)
+                except ValueError as error:
+                    raise ValueError(
+                        'Problem with parameter {} in sensitivity '
+                        'with sensname {}: {}.'.format(
+                            key, self.sensname, error.args[0]))
+        else:  # Some or all parameters are correlated
+            df_params = pd.DataFrame.from_dict(
+                parameters,
+                orient='index',
+                columns=['dist_name', 'dist_params', 'corr_sheet'])
+            df_params['corr_sheet'].fillna('nocorr', inplace=True)
+            df_params.reset_index(inplace=True)
+            df_params.rename(columns={'index': 'param_name'}, inplace=True)
+            param_groups = df_params.groupby(['corr_sheet'])
+
+            for correl, group in param_groups:
+                param_dict = OrderedDict()
+                for index, row in group.iterrows():
+                    param_dict[row['param_name']] = [
+                        row['dist_name'],
+                        row['dist_params']]
+                if not correl == 'nocorr':
+                    if len(group) == 1:
+                        _printwarning(correl)
+                    df_correlations = design_dist.read_correlations(
+                        corrdict, correl)
+                    multivariate_parameters = df_correlations.index.values
+                    print(multivariate_parameters)
+                    cov_matrix = design_dist.make_covariance_matrix(
+                        df_correlations)
+                    normalscoremeans = len(multivariate_parameters) * [0]
+                    normalscoresamples = numpy.random.multivariate_normal(
+                        normalscoremeans, cov_matrix, size=numreals)
+                    normalscoresamples_df = pd.DataFrame(
+                        data=normalscoresamples,
+                        columns=multivariate_parameters)
+                    for key in param_dict.keys():
+                        dist_name = param_dict[key][0].lower()
+                        dist_parameters = param_dict[key][1]
+                        if key in multivariate_parameters:
+                            try:
+                                self.sensvalues[key] = design_dist.draw_values(
+                                    dist_name,
+                                    dist_parameters,
+                                    numreals,
+                                    normalscoresamples_df[key])
+                            except ValueError as error:
+                                raise ValueError('Problem in sensitivity '
+                                                 'with sensname {} for '
+                                                 'parameter {}: {}.'.format(
+                                                     self.sensname,
+                                                     key,
+                                                     error.args[0]))
+                        else:
+                            raise ValueError(
+                                'Parameter{} specified with correlation '
+                                'matrix {} but is not listed in '
+                                'that sheet'.format(key, correl))
+                else:  # group nocorr where correlation matrix is not defined
+                    for key in param_dict.keys():
+                        dist_name = param_dict[key][0].lower()
+                        dist_parameters = param_dict[key][1]
+                        try:
+                            self.sensvalues[key] = design_dist.draw_values(
+                                dist_name, dist_parameters, numreals)
+                        except ValueError as error:
+                            raise ValueError('Problem in sensitivity '
+                                             'with sensname {} for parameter '
+                                             '{}: {}.'.format(
+                                                 self.sensname,
+                                                 key,
+                                                 error.args[0]))
 
         if self.sensname != 'background':
             self.sensvalues['REAL'] = realnums
@@ -774,3 +807,27 @@ def _find_max_realisations(inputdict):
             max_reals = max(
                 sens['numreal'], max_reals)
     return max_reals
+
+
+def _printwarning(corrgroup):
+    print('#######################################################\n'
+          'fmudesign Warning:                                     \n'
+          'Using designinput sheets where '
+          'corr_sheet is only specified for one parameter '
+          'will cause non-correlated parameters .\n'
+          'ONLY ONE PARAMETER WAS SPECIFIED TO USE CORR_SHEET {}\n'
+          '\n'
+          'Note change in how correlated parameters are specified \n'
+          'from fmudeisgn version 1.0.1 in August 2019 :\n'
+          'Name of correlation sheet must be specified for each '
+          'parameter in correlation matrix. \n'
+          'This to enable use of several correlation sheets. '
+          'This also means non-correlated parameters do not '
+          'have to be included in correlation matrix. \n '
+          'See documentation: \n'
+          'https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/'
+          'html/examples.html#create-design-matrix-for-'
+          'one-by-one-sensitivities\n'
+          '\n'
+          '####################################################\n'
+          ''.format(corrgroup))
