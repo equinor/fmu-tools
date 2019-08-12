@@ -203,7 +203,7 @@ class DesignMatrix(object):
             raise ValueError('Valid choices for seeds are None, '
                              '"default" or an existing filename. '
                              'Neither was found in this case. seeds '
-                             'was set to {} .'.format(seeds))
+                             'had been specified as {} .'.format(seeds))
 
     def add_background(self, back_dict, max_values):
         """Adding background as specified in dictionary.
@@ -637,7 +637,6 @@ class MonteCarloSensitivity(object):
                     df_correlations = design_dist.read_correlations(
                         corrdict, correl)
                     multivariate_parameters = df_correlations.index.values
-                    print(multivariate_parameters)
                     cov_matrix = design_dist.make_covariance_matrix(
                         df_correlations)
                     normalscoremeans = len(multivariate_parameters) * [0]
