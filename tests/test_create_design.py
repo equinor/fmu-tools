@@ -26,16 +26,34 @@ def test_generate_onebyone():
     else:
         testdir = os.path.abspath('.')
 
-    with open(
-            testdir +
-            '/data/sensitivities/config/' +
-            'design_input_example1.xlsx') as input_file:
-        input_dict = excel2dict_design(input_file)
+    inputfile = testdir + \
+        '/data/sensitivities/config/' + \
+        'design_input_example1.xlsx'
+    input_dict = excel2dict_design(inputfile)
+
+    design = DesignMatrix()
+    design.generate(input_dict)
+    # Checking dimensions of design matrix
+    assert design.designvalues.shape == (80, 10)
+
+
+def test_generate_full_mc():
+
+    if '__file__' in globals():
+        # Easen up copying test code into interactive sessions
+        testdir = os.path.dirname(os.path.abspath(__file__))
+    else:
+        testdir = os.path.abspath('.')
+
+    inputfile = testdir + \
+        '/data/sensitivities/config/' + \
+        'design_input_mc_with_correls.xlsx'
+    input_dict = excel2dict_design(inputfile)
 
     design = DesignMatrix()
     design.generate(input_dict)
 
     # Checking dimensions of design matrix
-    assert design.designvalues.shape == (80, 10)
+    assert design.designvalues.shape == (500, 16)
 
     # Add more tests...
