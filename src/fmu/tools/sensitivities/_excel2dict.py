@@ -199,6 +199,16 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     designinput['sensname'].fillna(method='ffill', inplace=True)
 
+    # Read dependencies
+    if 'dependencies' in designinput.keys():
+        inputdict['dependencies'] = OrderedDict()
+        for row in designinput.itertuples():
+            if _has_value(row.dependencies):
+                inputdict['dependencies'][row.param_name] = \
+                    _read_dependencies(input_filename,
+                                       row.dependencies,
+                                       row.param_name)
+
     # Read decimals
     if 'decimals' in designinput.keys():
         inputdict['decimals'] = OrderedDict()
@@ -281,6 +291,35 @@ def _read_defaultvalues(filename, sheetname):
     for row in default_df.itertuples():
         default_dict[str(row[0])] = row[1]
     return default_dict
+
+
+def _read_dependencies(filename, sheetname, from_parameter):
+    """Reads parameters that are set from other parameters
+
+    Args:
+        filename(path): path to excel file
+        sheetname (string): name of dependency sheet
+
+    Returns:
+        OrderedDict with design parameter, dependent parameters
+        and values
+   """
+    depend_dict = OrderedDict()
+    depend_df = pd.read_excel(
+        filename,
+        sheetname)
+    if from_parameter in depend_df.keys():
+        depend_dict['from_values'] = depend_df[from_parameter].tolist()
+        depend_dict['to_params'] = OrderedDict()
+        for key in depend_df.keys():
+            if key != from_parameter:
+                depend_dict['to_params'][key] = depend_df[key].tolist()
+    else:
+        raise ValueError('Parameter {} specified to have derived parameters, '
+                         'but the sheet specifying the dependencies {} does '
+                         'not contain the input parameter. '
+                         .format(from_parameter, sheetname))
+    return depend_dict
 
 
 def _read_background(inp_filename, bck_sheet):
