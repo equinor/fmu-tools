@@ -135,6 +135,10 @@ class DesignMatrix(object):
             if 'background' in inputdict.keys():
                 self._fill_with_background_values()
             self._fill_with_defaultvalues()
+
+            if 'dependencies' in inputdict.keys():
+                self._fill_derived_params(inputdict['dependencies'])
+
             if 'decimals' in inputdict.keys():
                 self._set_decimals(inputdict['decimals'])
             # Re-order columns
@@ -295,6 +299,24 @@ class DesignMatrix(object):
             elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
                 raise LookupError('No defaultvalues given for parameter {} '
                                   ''.format(key))
+
+    def _fill_derived_params(self, depend_dict):
+        for from_param in depend_dict.keys():
+            if from_param in self.designvalues.keys():
+                for param in depend_dict[from_param]['to_params'].keys():
+                    self.designvalues[param] = numpy.nan
+                    for index in range(
+                            len(depend_dict[from_param]['from_values'])):
+                        ip = depend_dict[from_param]['from_values'][index]
+                        op = depend_dict[from_param]['to_params'][param][index]
+                        self.designvalues[param].mask(
+                            self.designvalues[from_param] ==
+                            ip, op, inplace=True)
+                    if self.designvalues[param].isnull().any():
+                        raise ValueError('Column for derived parameter {} '
+                                         'contains NaN. Check input '
+                                         'defining dependencies '
+                                         .format(param))
 
     def _add_dist_background(self, back_dict, numreal):
         """Drawing background values from distributions

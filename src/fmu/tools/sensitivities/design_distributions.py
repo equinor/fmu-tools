@@ -483,6 +483,7 @@ def sample_discrete(dist_params, numreals):
     """
     status = True
     outcomes = re.split(',', dist_params[0])
+    outcomes = [item.strip() for item in outcomes]
     if len(dist_params) == 2:  # non uniform
         weights = re.split(',', dist_params[1])
         if len(outcomes) != len(weights):
