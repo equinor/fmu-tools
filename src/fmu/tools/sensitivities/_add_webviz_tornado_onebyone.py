@@ -8,8 +8,20 @@ import copy
 from collections import OrderedDict
 import pandas as pd
 import yaml
-from webviz import SubMenu, Page
-from webviz.page_elements import TornadoPlot
+try:
+    from webviz import SubMenu, Page
+    from webviz.page_elements import TornadoPlot
+    HAS_WEBVIZ_STATIC=True
+except ImportError:
+    HAS_WEBVIZ_STATIC=False
+
+WEBVIZ_STATIC_DEPRECIATION_WARNING = """
+  **** Depreciation warning ****
+This tornado plot generator is using a version of webviz
+that is being deprecated and will not be supported throughout 2020
+"""
+
+
 from fmu.tools.sensitivities import summarize_design
 from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
 from fmu import ensemble
@@ -119,6 +131,10 @@ def add_webviz_tornadoplots(web, configfile):
         >>> web.write_html(html_foldername, overwrite=True, display=True)
 
     """
+    if not HAS_WEBVIZ_STATIC:
+        print("ERROR: Cannot make Tornado plots without Webviz static")
+        return None
+    print(WEBVIZ_STATIC_DEPRECIATION_WARNING)
 
     yamlfile = configfile
 
