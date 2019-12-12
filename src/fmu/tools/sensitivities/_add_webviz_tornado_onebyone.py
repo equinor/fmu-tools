@@ -18,7 +18,10 @@ except ImportError:
 WEBVIZ_STATIC_DEPRECIATION_WARNING = """
   **** Depreciation warning ****
 This tornado plot generator is using a version of webviz
-that is being deprecated and will not be supported throughout 2020
+that is being deprecated and will not be supported throughout 2020.
+
+Check https://github.com/equinor/webviz-subsurface for sensitivity
+visualization using the new framework.
 """
 
 
