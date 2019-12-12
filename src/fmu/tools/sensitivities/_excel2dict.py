@@ -307,7 +307,8 @@ def _read_dependencies(filename, sheetname, from_parameter):
     depend_dict = OrderedDict()
     depend_df = pd.read_excel(
         filename,
-        sheetname)
+        sheetname,
+        dtype=str)
     if from_parameter in depend_df.keys():
         depend_dict['from_values'] = depend_df[from_parameter].tolist()
         depend_dict['to_params'] = OrderedDict()
