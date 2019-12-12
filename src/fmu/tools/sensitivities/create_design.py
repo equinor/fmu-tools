@@ -315,7 +315,11 @@ class DesignMatrix(object):
                     if self.designvalues[param].isnull().any():
                         raise ValueError('Column for derived parameter {} '
                                          'contains NaN. Check input '
-                                         'defining dependencies '
+                                         'defining dependencies. '
+                                         'Could be Wrong values or that '
+                                         'values for input variable  in '
+                                         'dependencies sheet '
+                                         'should be specified as strings.'
                                          .format(param))
 
     def _add_dist_background(self, back_dict, numreal):
