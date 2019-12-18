@@ -19,5 +19,5 @@ from .sensitivities import excel2dict_design # noqa
 
 try:
     from .sensitivities import add_webviz_tornadoplots # noqa
-except ImportError:
-    logging.warning("Webviz not found, cannot make Tornado charts")
+except (ImportError, ModuleNotFoundError):
+    pass  # Separate warning in _add_webviz_tornadoplots
