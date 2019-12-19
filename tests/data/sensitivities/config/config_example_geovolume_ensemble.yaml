@@ -8,10 +8,10 @@ design:
 # Result input, example when result .csv files for must be gathered first
 results:
   gatherresults: Yes # If yes, specify ensemblepaths and csv filename
-  ensemblepaths: /scratch/fmu/tral/doe_110_20180307/realization-*/iter-0
+  ensemblepaths: /scratch/fmu/tral/fossekall_design_20190222/realization-*/iter-0
   singleresultfile: share/results/volumes/geogrid_volume.csv
   writeresultfile: Yes # If yes, specify exportdir and exportfilename (.csv)
-  exportdir: /scratch/fmu/tral/doe_110_20180307/share/results/volumes
+  exportdir: /scratch/fmu/tral/fossekall_design_20190222/share/results/volumes
   exportfilename: ensemble_geovolume.csv
 
 # Which tornado plots to calculate
