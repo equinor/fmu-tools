@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Top-level package for fmu_tools"""
-import logging
 
 import logging
 
