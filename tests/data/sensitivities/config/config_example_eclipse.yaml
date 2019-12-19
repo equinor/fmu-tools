@@ -5,8 +5,8 @@ design:
 
 # Result input, should be on csv format and Realization column named 'REAL'
 results:
-  resultpath: /scratch/fmu/tral/doe_110_20180307/share/results/eclipse_hist
-  resultname: doe_110_20180307_hist.csv
+  resultpath: /scratch/fmu/tral/snorreberg_design_20190222/share/results/eclipse_hist
+  resultname: snorreberg_design_20190222_hist.csv
   # If renaming of columns is necessary , e.g from CSV_EXPORT1
   renamecolumns: Yes
   renaming: # From name : To name

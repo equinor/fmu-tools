@@ -7,7 +7,7 @@ design:
 
 # Result input, should be on csv format and Realization column named 'REAL'
 results:
-  resultpath: /scratch/fmu/tral/doe_110_20180307/share/results/volumes
+  resultpath: /scratch/fmu/tral/snorreberg_design_20190222/share/results/volumes
   resultname: ensemble_geovolume.csv
 
 # Which tornado plots to calculate
