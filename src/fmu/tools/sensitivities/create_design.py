@@ -166,7 +166,7 @@ class DesignMatrix(object):
                 values (optional, defaults to 'DefaultValues')
         """
         basename, extension = os.path.splitext(filename)
-        if extension != 'xlsx':
+        if extension != '.xlsx':
             filename = basename+'.xlsx'
             print('Warning: Output filename did not have extension .xlsx '
                   'but the export format is Excel .xlsx .  '
