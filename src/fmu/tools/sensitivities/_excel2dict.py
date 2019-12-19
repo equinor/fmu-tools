@@ -52,7 +52,7 @@ def inputdict_to_yaml(inputdict, filename):
         inputdict (OrderedDict)
         filename (str): path for where to write file
     """
-    stream = open(filename, 'w')
+    stream = file(filename, 'w')
     yaml.dump(inputdict, stream)
 
 
