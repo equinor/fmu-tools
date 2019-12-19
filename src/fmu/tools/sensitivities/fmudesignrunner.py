@@ -82,6 +82,11 @@ def main(args=None):
             raise IOError('Input file {} does not exist'.format(args.config))
         input_dict = excel2dict_design(args.config, sheetnames)
 
+    if args.config == args.destination:
+        raise IOError('Identical name "{}" have been provided for the input'
+                      'file and the output file. '
+                      ' Exiting.....'.format(args.config))
+
     design = DesignMatrix()
 
     design.generate(input_dict)
