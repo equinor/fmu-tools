@@ -25,10 +25,7 @@ def find_combinations(selections):
         ]
 
     """
-    # create list of lists with values from dictionary
-    values = []
-    for item in range(len(selections)):
-        values.append(selections.values()[item])
+    values = list(selections.values())
 
     # find all possible combinations
     combinations = [[]]
