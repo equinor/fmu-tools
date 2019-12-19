@@ -165,7 +165,14 @@ class DesignMatrix(object):
             defaultsheet (string): name of excel sheet containing default
                 values (optional, defaults to 'DefaultValues')
         """
-        xlsxwriter = pd.ExcelWriter(filename)
+        basename, extension = os.path.splitext(filename)
+        if extension != 'xlsx':
+            filename = basename+'.xlsx'
+            print('Warning: Output filename did not have extension .xlsx '
+                  'but the export format is Excel .xlsx .  '
+                  'Changing outputname to {}'.format(filename))
+
+        xlsxwriter = pd.ExcelWriter(filename, engine='openpyxl')
         self.designvalues.to_excel(
             xlsxwriter, sheet_name=designsheet, index=False, header=True)
         # Default values from OrderdDictionay to pandas dataframe
