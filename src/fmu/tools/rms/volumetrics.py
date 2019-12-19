@@ -48,8 +48,8 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
                 break
             else:
                 headerline = headerline + 1
-    vol_df = pd.read_table(txtfile, sep=r'\s\s+', skiprows=headerline,
-                           engine='python')
+    vol_df = pd.read_csv(txtfile, sep=r'\s\s+', skiprows=headerline,
+                         engine='python')
 
     # Enforce FMU standard:
     # https://wiki.statoil.no/wiki/index.php/FMU_standards
