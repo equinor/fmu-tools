@@ -30,7 +30,7 @@ project_root = os.path.dirname(cwd) + '/src'
 # This lets us ensure that the source package is imported, and that its
 # version is used.
 sys.path.insert(0, project_root)
-sys.path.insert(0,os.path.join(os.getcwd(),'..','..','fmu-config','src'))
+sys.path.insert(0,os.path.join(os.getcwd(),'..','..','fmu-tools','src'))
 print('SYS!', sys.path)
 
 import fmu.tools
@@ -58,7 +58,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'fmu-config'
+project = u'fmu-tools'
 copyright = u"Equinor"
 
 # The version info for the project you're documenting, acts as replacement
@@ -196,7 +196,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'fmu-config-doc'
+htmlhelp_basename = 'fmu-tools-doc'
 
 
 # -- Options for LaTeX output ------------------------------------------
@@ -216,8 +216,8 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto/manual]).
 latex_documents = [
-    ('index', 'fmu-config.tex',
-     u'fmu-config Documentation',
+    ('index', 'fmu-tools.tex',
+     u'fmu-tools Documentation',
      u'Jan C. Rivenaes', 'manual'),
 ]
 
@@ -247,9 +247,9 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'fmu-config',
-     u'fmu-config Documentation',
-     [u'Jan C. Rivenaes'], 1)
+    ('index', 'fmu-tools',
+     u'fmu-tools Documentation',
+     [u'Trine Alsos'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -262,10 +262,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'fmu-config',
-     u'fmu-config Documentation',
-     u'Jan C. Rivenaes',
-     'fmu-config',
+    ('index', 'fmu-tools',
+     u'fmu-tools Documentation',
+     u'Trine Alsos',
+     'fmu-tools',
      'One line description of project.',
      'Miscellaneous'),
 ]

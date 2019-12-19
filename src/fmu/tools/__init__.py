@@ -3,6 +3,8 @@
 """Top-level package for fmu_tools"""
 import logging
 
+import logging
+
 from ._theversion import theversion
 __version__ = theversion()
 
