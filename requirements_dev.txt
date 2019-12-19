@@ -13,3 +13,7 @@ pytest-runner>=4.2
 versioneer==0.18
 astroid
 pylint
+pandas
+numpy
+scipy
+xlrd>=1.0.0
