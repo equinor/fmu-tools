@@ -29,6 +29,22 @@ from fmu.tools.sensitivities import summarize_design
 from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
 from fmu import ensemble
 
+try:
+    from webviz import SubMenu, Page
+    from webviz.page_elements import TornadoPlot
+    HAS_WEBVIZ_STATIC = True
+except (ImportError, ModuleNotFoundError):
+    HAS_WEBVIZ_STATIC = False
+
+WEBVIZ_STATIC_DEPRECIATION_WARNING = """
+  **** Depreciation warning ****
+This tornado plot generator is using a version of webviz
+that is being deprecated and will not be supported throughout 2020.
+
+Check https://github.com/equinor/webviz-subsurface for sensitivity
+visualization using the new framework.
+"""
+
 
 def yconfig(inputfile):
     """Read from YAML file."""
