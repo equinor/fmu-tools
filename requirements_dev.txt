@@ -16,4 +16,3 @@ pylint
 pandas
 numpy
 scipy
-xlrd>=1.0.0
