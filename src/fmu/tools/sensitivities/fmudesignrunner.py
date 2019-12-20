@@ -29,6 +29,7 @@ def _do_parse_args(args):
                               'in Excel format'))
     parser.add_argument('destination',
                         type=str,
+                        nargs='?',
                         help='Destination filename for design matrix',
                         default='generateddesignmatrix.xlsx')
     parser.add_argument('--designinput', type=str,
