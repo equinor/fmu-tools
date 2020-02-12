@@ -17,7 +17,8 @@ from .sensitivities import calc_tornadoinput # noqa
 from .sensitivities import find_combinations # noqa
 from .sensitivities import excel2dict_design # noqa
 
+
 try:
     from .sensitivities import add_webviz_tornadoplots # noqa
-except (ImportError, ModuleNotFoundError):
+except ImportError:
     pass  # Separate warning in _add_webviz_tornadoplots

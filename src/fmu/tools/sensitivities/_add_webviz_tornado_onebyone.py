@@ -12,7 +12,7 @@ try:
     from webviz import SubMenu, Page
     from webviz.page_elements import TornadoPlot
     HAS_WEBVIZ_STATIC = True
-except (ImportError, ModuleNotFoundError):
+except ImportError:
     HAS_WEBVIZ_STATIC = False
 
 WEBVIZ_STATIC_DEPRECIATION_WARNING = """
