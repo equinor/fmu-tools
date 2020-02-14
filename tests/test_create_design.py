@@ -6,6 +6,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import pandas as pd
 
 from fmu import config
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
@@ -17,18 +18,16 @@ if not fmux.testsetup():
     raise SystemExit()
 
 
-def test_generate_onebyone():
+def test_generate_onebyone(tmpdir):
     """Test generation of onebyone design"""
 
-    if '__file__' in globals():
+    if "__file__" in globals():
         # Easen up copying test code into interactive sessions
         testdir = os.path.dirname(os.path.abspath(__file__))
     else:
-        testdir = os.path.abspath('.')
+        testdir = os.path.abspath(".")
 
-    inputfile = testdir + \
-        '/data/sensitivities/config/' + \
-        'design_input_example1.xlsx'
+    inputfile = testdir + "/data/sensitivities/config/" + "design_input_example1.xlsx"
     input_dict = excel2dict_design(inputfile)
 
     design = DesignMatrix()
@@ -36,18 +35,32 @@ def test_generate_onebyone():
     # Checking dimensions of design matrix
     assert design.designvalues.shape == (80, 10)
 
+    # Write to disk and check some validity
+    tmpdir.chdir()
+    design.to_xlsx("designmatrix.xlsx")
+    assert os.path.exists("designmatrix.xlsx")
+    diskdesign = pd.read_excel("designmatrix.xlsx")
+    assert "REAL" in diskdesign
+    assert "SENSNAME" in diskdesign
+    assert "SENSCASE" in diskdesign
+    assert not diskdesign.empty
 
-def test_generate_full_mc():
+    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    assert not diskdefaults.empty
+    assert len(diskdefaults.columns) == 2
 
-    if '__file__' in globals():
+
+def test_generate_full_mc(tmpdir):
+
+    if "__file__" in globals():
         # Easen up copying test code into interactive sessions
         testdir = os.path.dirname(os.path.abspath(__file__))
     else:
-        testdir = os.path.abspath('.')
+        testdir = os.path.abspath(".")
 
-    inputfile = testdir + \
-        '/data/sensitivities/config/' + \
-        'design_input_mc_with_correls.xlsx'
+    inputfile = (
+        testdir + "/data/sensitivities/config/" + "design_input_mc_with_correls.xlsx"
+    )
     input_dict = excel2dict_design(inputfile)
 
     design = DesignMatrix()
@@ -56,4 +69,22 @@ def test_generate_full_mc():
     # Checking dimensions of design matrix
     assert design.designvalues.shape == (500, 16)
 
-    # Add more tests...
+    # Write to disk and check some validity
+    tmpdir.chdir()
+    design.to_xlsx("designmatrix.xlsx")
+    assert os.path.exists("designmatrix.xlsx")
+    diskdesign = pd.read_excel("designmatrix.xlsx", sheet_name="DesignSheet01")
+    assert "REAL" in diskdesign
+    assert "SENSNAME" in diskdesign
+    assert "SENSCASE" in diskdesign
+    assert not diskdesign.empty
+
+    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    assert not diskdefaults.empty
+    assert len(diskdefaults.columns) == 2
+
+
+if __name__ == "__main__":
+    # This is relevant when run in clean Komodo environment where pytest is missing
+    test_generate_onebyone()
+    test_generate_full_mc()
