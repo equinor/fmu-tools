@@ -8,8 +8,12 @@ from __future__ import print_function
 import os
 import sys
 
+import pandas as pd
+
 from fmu import config
 from fmu.tools.sensitivities import summarize_design, fmudesignrunner
+
+from test_designmatrix import valid_designmatrix
 
 fmux = config.etc.Interaction()
 logger = fmux.basiclogger(__name__)
@@ -63,6 +67,7 @@ def test_endpoint():
     sys.argv = ["fmudesign", examplefile]
     fmudesignrunner.main()
     assert os.path.exists("generateddesignmatrix.xlsx")  # Default output file
+    valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx"))
 
     sys.argv = ["fmudesign", examplefile, "anotheroutput.xlsx"]
     fmudesignrunner.main()
