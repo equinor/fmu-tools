@@ -15,30 +15,33 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
     Columns will be renamed according to FMU standard,
-    https://wiki.statoil.no/wiki/index.php/FMU_standards
+    https://wiki.equinor.com/wiki/index.php/FMU_standards
 
     Args:
-        txtfile - string with path to file emitted by RMS Volumetrics job
-        columnrenamer - dictionary for renaming column. Will be merged
+        txtfile (string): path to file emitted by RMS Volumetrics job
+        columnrenamer (dict): dictionary for renaming column. Will be merged
             with a default renaming dictionary (anything specified here will
             override any defaults)
-        phase - string stating typically 'GAS', 'OIL' or 'TOTAL', signifying
+        phase (string): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
             which part of the reservoir model is included
-        outfile - string with filename to write CSV data to.
+        outfile (string): filename to write CSV data to.
             If directory does not exist, it will be made.
-        regionrenamer - a function that when applied on strings, return a
+        regionrenamer: a function that when applied on strings, return a
             new string. If used, will be applied to every region value,
             using pandas.Series.apply()
-        zonerenamer - ditto for the zone column
-
-    The renamer functions could be defined like this
-
-    def myregionrenamer(s):
-        return s.replace('Equilibrium_region_', '')
-    or the same using a lambda expression.
+        zonerenamer: ditto for the zone column
 
     Return:
         pandas.DataFrame
+
+    The renamer functions could be defined like this::
+
+        def myregionrenamer(s):
+            return s.replace('Equilibrium_region_', '')
+
+    or the same using a lambda expression.
+
+
     """
     # First find out which row the data starts at:
     headerline = 0  # 0 is the first line
