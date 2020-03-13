@@ -57,13 +57,17 @@ class DesignMatrix(object):
         """
         self.reset()  # Emptying if regenerating matrix
 
+        if 'distribution_seed' in inputdict.keys():
+            if inputdict['distribution_seed']:
+                numpy.random.seed(inputdict['distribution_seed'])
+
         # Reading default values
         default_dict = inputdict['defaultvalues']
         self.set_defaultvalues(default_dict)
 
         max_reals = _find_max_realisations(inputdict)
 
-        # Reading or generating seed values
+        # Reading or generating rms seed values
         if 'seeds' in inputdict.keys():
             self.add_seeds(
                 inputdict['seeds'], max_reals)

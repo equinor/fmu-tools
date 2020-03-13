@@ -42,7 +42,7 @@ dist
     * **pert (min, mode, max)**
     * **discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))**  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.
     * **lognormal (mu, sigma)** A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the *logarithm* of the variable.
-    * **const (value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of seed type.
+    * **const (value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of type *seed*.
 
     Use the whole name for the distributions in the *dist_name* column, or alternatively the short version names: norm, unif, logunif, triang, pert, disc, logn, const. Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above. 
 
@@ -61,9 +61,10 @@ Input configuration format
 Currently supported is configuration in an excel workbook. 
 The excel workbook contains several sheets. The three sheets **general_input**, **designinput** and **defaultvalues** need to exist in the input workbook (although variants like GeneralInput, generalinput, Generalinput etc. are also supported).
 
-The *general_input* sheet contains the *designtype*, which has to be set to *onebyone*. The parameter *repeats* tells how many seeds that should be repeated for each sensitivity. This is also the default number of realisations per sensitivity. When *seeds* is set to *default* it means that seed numbers 1000, 1001, 1002, ... will be used. These seed numbers are repeated for each sensitivity/sensitivity case.
+The *general_input* sheet contains the *designtype*, which has to be set to *onebyone*. The parameter *repeats* tells how many RMS seeds (RMS_SEED) that should be repeated for each sensitivity. This is also the default number of realisations per sensitivity/sensitivity case. When *rms_seeds* is set to *default* it means that RMS_SEED numbers 1000, 1001, 1002, ... will be used. These RMS_SEED numbers are repeated for each sensitivity/sensitivity case.
 
 *background* is used in more advanced cases where single sensitivities are run on top of a background distribution and is further explained in the examples. Otherwise set it to *None*.
+*distribution_seed* is optional and can be used to freeze the seed for montecarlo sampling from the distributions (for sensitivities of type *dist*). By adding a distribution_seed fmudesign will generate identical design matrices if run twice from the same input configuration.
 
 .. image:: images/design_general_input.png
 
@@ -79,11 +80,11 @@ Optional additional sheets:
 * sheet defining background parameters and correlation sheet(s) for these
 
 
-Example1: Excel file for one by one sensitivities with repeating seeds
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Example1: Excel file for one by one sensitivities with repeating RMS seeds
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 In this first example the *general_input* and *defaultvalues* are as in the figures above. In the *designinput* sheet four sensitivities are specified in addition to the seed sensitivity: 'faults', 'velmodel', 'contacts' and 'multz'. Each sensitivity can contain one or several rows with parameters, but the sensitivity type and senscase (names for the 1-2 cases per scenario) is defined in the first row of the sensitivity. In the *faults* sensitivity two alternative values for the parameter *FAULT_POSITION* are specified, in senscase 'east' and 'west'.  Typically these will in tornado calculations be compared to the rms_seed sensitivity where the *FAULT_POSITION* will be set to its default value (0).  In the *velmodel* sensitivity only one alternative senscase is specified for the parameter *DC_MODEL*. In the *contacts* sensitivity three parameters are varied at the same time. In the *shallow* case, all contacts are set shallow, and opposite in the *deep* sensitiviy case.
 
-The last sensitivity is a monte carlo sensitivity where the parameter *MULTZ_ILE* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The seed numbers will for these 20 realisations be from 1000 to 1019, since *seeds* was set to *default* in the *general_input* sheet.
+The last sensitivity is a monte carlo sensitivity where the parameter *MULTZ_ILE* has values sampled from the distribution *loguniform(0.0001, 1)*. Note that for this last sensitivity the numbers of realisations *(numreal)* is set to 20, which overrides the default number of realisations given in the *general_input* spreadsheet. The RMS_SEED numbers will for these 20 realisations be from 1000 to 1019, since *rms_seeds* was set to *default* in the *general_input* sheet.
 
 .. image:: images/design_designinput1.png
 
@@ -128,11 +129,11 @@ The *corr1* sheet used for *sens7* looks like this. Parameters of type 'const' o
 
 Example 3: Testing different velocity  models with uncertainty
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-This example shows a set-up for testing the effects of different velocity models run with structural uncertainty (Simulation mode) with HUM in RMS. In the general_input tab *repeats* is set to 10 and *seeds* is set to 'default', so that for each sensitivity 10 realisations with seeds 1000, 1001, --, 1009 are created.
+This example shows a set-up for testing the effects of different velocity models run with structural uncertainty (Simulation mode) with HUM in RMS. In the general_input tab *repeats* is set to 10 and *rms_seeds* is set to 'default', so that for each sensitivity 10 realisations with RMS seeds 1000, 1001, --, 1009 are created.
 
 The reference sensitivity *rms_seed* is set up with COHIBA_MODE 'prediction', and VEL_MODEL (velocity model) number 1 read from *defaultvalues*. So for this sensitivity the seed variation will only affect other jobs using RMS_SEED, such as facies/property modelling.
 
-In the sensitivity *velmod1* COHIBA_MODE is set to 'simulation' which will control the HUM job to be run in simulation mode. Velocity model is set to model number 1. This explores the how the seed variation affects the structure for velocity model 1. Similarly the sensitivity *velmod2* will explore how the seed variation affects the structure for velocity model 2. Note that all these three first sensitivities are set up with *type* set to *seed* which flags that SENSCASE in the output design matrix should be set to *p10_p90* so that P10/P90 is calculated for the tornado plot.
+In the sensitivity *velmod1* COHIBA_MODE is set to 'simulation' which will control the HUM job to be run in simulation mode. Velocity model is set to model number 1. This explores the how the RMS seed variation affects the structure for velocity model 1. Similarly the sensitivity *velmod2* will explore how the RMS seed variation affects the structure for velocity model 2. Note that all these three first sensitivities are set up with *type* set to *seed* which flags that SENSCASE in the output design matrix should be set to *p10_p90* so that P10/P90 is calculated for the tornado plot.
 
 The last sensitivity *vel_combined* explores the full velocity uncertainty by combining velocity model 1 and 2 in simulation mode, by sampling model 1 or 2 with 60/40 % probability, both run in simulation. Here is defined that 30 realisations will be used for this sensitivity instead of the default number 10, from the general_input sheet.
 
@@ -150,12 +151,12 @@ The use of background parameters is flagged in the general_input sheet by changi
 	   
 Example 5: Sensitivities with a single reference realisation 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-This type of set up might be used if one do not want to include any seed variation or background parameters, but want to create a single realisation that can be used as reference for the tornado plot. In the *general_input* sheet *seed* is set to *None*. The first line in the *designinput* sheet is using *senstype* set to 'ref'. This is flagging that it should take parameter values from the *defaultvalues* sheet, and that it will get *SENSCASE* set to 'ref' in the output design matrix. This ensures it can only be used as a reference for tornado calculations, but will not itself plot as a sensitivity in the tornado plot. The next three sensitivities in this example are scenario sensitivities with only one realisation (as there is no seed variation), while the final one samples 10 values for MULTZ_ILE from a distribution.
+This type of set up might be used if one do not want to include any RMS seed variation or background parameters, but want to create a single realisation that can be used as reference for the tornado plot. In the *general_input* sheet *rms_seeds* is set to *None*. The first line in the *designinput* sheet is using *senstype* set to 'ref'. This is flagging that it should take parameter values from the *defaultvalues* sheet, and that it will get *SENSCASE* set to 'ref' in the output design matrix. This ensures it can only be used as a reference for tornado calculations, but will not itself plot as a sensitivity in the tornado plot. The next three sensitivities in this example are scenario sensitivities with only one realisation (as there is no RMS seed variation), while the final one samples 10 values for MULTZ_ILE from a distribution.
 
 .. image:: images/design_designinput_singlereference.png
 
-Example 6: Sensitivities with a single reference realisation and seed
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Example 6: Sensitivities with a single reference realisation and seed sensitivity
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 It is also possible to set up a design matrix that includes *both* a single reference realisation and a seed sensitivity that can be used as reference for tornado plots. In this example the single reference realisation will get the RMS_SEED value as specified in *defaultvalues*, while the other sensitivities will get the number of realisations and RMS_SEED values as specified in *general_input* tab. This allows the user to later choose which reference (realisation 0 or the sensitivity called 'rms_seed') to use for the tornado plots. 
 
 .. image:: images/design_designinput_singlereference_and_seed.png
@@ -171,6 +172,14 @@ Example 8: Full monte carlo sensitivity
 This example shows a full monte carlo design with correlated parameters. This means all the parameters are randomly drawn from their distributions, and could have correlations as provided in the correlation sheet. In this example there are two groups of correlated parameters, and their correlation matrices are specified in the sheets *corr1* and *corr2*. The remaining parameters are not correlated. In this case there is actually only one *sensname* as all the parameters belong to the same sensitivity. The number of realisations can either be provided in the *general_input* sheet, or in the *numreal* column in the *designinput* sheet. All parameters in the design must also be included in the *defaultvalues* sheet.
 
 .. image:: images/design_fullmc_corr.png
+
+Example 9: Adding dependent discrete parameters to monte carlo designs
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+If parameter A is sampled from a discrete distribution, and one or more additional parameters is to be set based on the value of parameter A, this can be specified in a separate sheet, and sheetname added to the designinput sheet in an optional column called *dependencies*. In this example the parameter LIFTCURVE_SINGLE is drawn from a weighted discrete distribution, while LIFTCURVE_DUAL and ANOTHER PARAMETER is set based on the value of LIFTCURVE_SINGLE. Note that there cannot be  more than one "mother" parameter, and you cannot have more complicated dependencies like if statements, formulas or inequalities. This solution is only provided for 100% correlated discrete parameters.
+
+.. image:: images/design_designinput_dependencies.png
+
+.. image:: images/design_depend1.png
 
 -----------------------------------------
 Adding sets of tornado plots to webportal
