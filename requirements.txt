@@ -1,3 +1,6 @@
 pandas
 numpy
 scipy
+xlrd
+openpyxl
+pyyaml

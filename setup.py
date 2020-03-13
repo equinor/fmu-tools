@@ -9,25 +9,23 @@ from os.path import splitext
 from setuptools import setup, find_packages
 import versioneer
 
-with open('README.rst') as readme_file:
+with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
+with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = [
-]
+requirements = []
 
 setup_requirements = [
-    'pytest-runner',
+    "pytest-runner",
 ]
 
 test_requirements = [
-    'pytest',
+    "pytest",
 ]
 
-fmutools_function = ('fmudesign='
-                     'fmu.tools.sensitivities.fmudesignrunner:main')
+fmutools_function = "fmudesign=" "fmu.tools.sensitivities.fmudesignrunner:main"
 
 # -----------------------------------------------------------------------------
 # Explaining versions:
@@ -56,55 +54,53 @@ def the_version():
     """
 
     version = versioneer.get_version()
-    sver = version.split('.')
-    print('\nFrom TAG description: {}'.format(sver))
+    sver = version.split(".")
+    print("\nFrom TAG description: {}".format(sver))
 
-    useversion = 'UNSET'
+    useversion = "UNSET"
     if len(sver) == 3:
         useversion = version
     else:
-        bugv = sver[2].replace('+', '.')
+        bugv = sver[2].replace("+", ".")
 
-        if 'dirty' in version:
-            ext = '.dev0'
+        if "dirty" in version:
+            ext = ".dev0"
         else:
-            ext = ''
-        useversion = '{}.{}.{}{}'.format(sver[0], sver[1], bugv, ext)
+            ext = ""
+        useversion = "{}.{}.{}{}".format(sver[0], sver[1], bugv, ext)
 
-    print('Using version {}\n'.format(useversion))
+    print("Using version {}\n".format(useversion))
     return useversion
 
 
 setup(
-    name='fmu_tools',
+    name="fmu_tools",
     version=the_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="Library for various tools scripts in FMU scope",
-    long_description=readme + '\n\n' + history,
+    long_description=readme + "\n\n" + history,
     author="Jan C. Rivenaes",
-    author_email='jriv@statoil.com',
-    url='https://git.equinor.com/fmu-utilities/fmu-tools',
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-    entry_points={
-        'console_scripts': [fmutools_function]
-    },
+    author_email="jriv@statoil.com",
+    url="https://git.equinor.com/fmu-utilities/fmu-tools",
+    packages=find_packages("src"),
+    package_dir={"": "src"},
+    py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
+    entry_points={"console_scripts": [fmutools_function]},
     include_package_data=True,
     install_requires=requirements,
     zip_safe=False,
-    keywords='fmu, tools',
+    keywords="fmu, tools",
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: Developers",
+        "Natural Language :: English",
         "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.6',
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.6",
     ],
-    test_suite='tests',
+    test_suite="tests",
     tests_require=test_requirements,
     setup_requires=setup_requirements,
 )
