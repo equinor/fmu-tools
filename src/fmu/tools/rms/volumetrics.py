@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module for handling volumetrics text files from RMS""
 from __future__ import print_function
 """
@@ -8,10 +7,14 @@ import os
 import pandas as pd
 
 
-def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
-                          outfile=None,
-                          regionrenamer=None,
-                          zonerenamer=None):
+def rmsvolumetrics_txt2df(
+    txtfile,
+    columnrenamer=None,
+    phase=None,
+    outfile=None,
+    regionrenamer=None,
+    zonerenamer=None,
+):
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
     Columns will be renamed according to FMU standard,
@@ -47,41 +50,43 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
     headerline = 0  # 0 is the first line
     with open(txtfile) as volfile:
         for line in volfile:
-            if 'Zone' in line or 'Region' in line or 'Facies' in line:
+            if "Zone" in line or "Region" in line or "Facies" in line:
                 break
-            else:
-                headerline = headerline + 1
-    vol_df = pd.read_csv(txtfile, sep=r'\s\s+', skiprows=headerline,
-                         engine='python')
+            headerline = headerline + 1
+    vol_df = pd.read_csv(txtfile, sep=r"\s\s+", skiprows=headerline, engine="python")
 
     # Enforce FMU standard:
     # https://wiki.statoil.no/wiki/index.php/FMU_standards
     # on column names
 
     # The Real column from RMS is not real.. Ignore it.
-    if 'Real' in vol_df.columns:
-        vol_df.drop('Real', axis=1, inplace=True)
+    if "Real" in vol_df.columns:
+        vol_df.drop("Real", axis=1, inplace=True)
 
     if not phase:
-        if 'oil' in txtfile:
-            phase = 'OIL'
-        elif 'gas' in txtfile:
-            phase = 'GAS'
-        elif 'total' in txtfile:
-            phase = 'TOTAL'
+        if "oil" in txtfile:
+            phase = "OIL"
+        elif "gas" in txtfile:
+            phase = "GAS"
+        elif "total" in txtfile:
+            phase = "TOTAL"
         else:
-            raise ValueError('You must supply phase for volumetrics-parsing')
+            raise ValueError("You must supply phase for volumetrics-parsing")
 
-    columns = {'Zone': 'ZONE', 'Region index': 'REGION',
-               'Facies': 'FACIES', 'License boundaries': 'LICENSE',
-               'Bulk': 'BULK_' + phase,
-               'Net': 'NET_' + phase,
-               'Hcpv': 'HCPV_' + phase,
-               'Pore': 'PORE_' + phase,
-               'Stoiip': 'STOIIP_' + phase,
-               'Giip': 'GIIP_' + phase,
-               'Assoc.Liquid': 'ASSOCIATEDOIL_' + phase,
-               'Assoc.Gas': 'ASSOCIATEDGAS_' + phase}
+    columns = {
+        "Zone": "ZONE",
+        "Region index": "REGION",
+        "Facies": "FACIES",
+        "License boundaries": "LICENSE",
+        "Bulk": "BULK_" + phase,
+        "Net": "NET_" + phase,
+        "Hcpv": "HCPV_" + phase,
+        "Pore": "PORE_" + phase,
+        "Stoiip": "STOIIP_" + phase,
+        "Giip": "GIIP_" + phase,
+        "Assoc.Liquid": "ASSOCIATEDOIL_" + phase,
+        "Assoc.Gas": "ASSOCIATEDGAS_" + phase,
+    }
     if columnrenamer:
         # Overwrite with user supplied column conversion
         columns.update(columnrenamer)
@@ -89,18 +94,18 @@ def rmsvolumetrics_txt2df(txtfile, columnrenamer=None, phase=None,
 
     # Work on the data itself:
     if regionrenamer:
-        vol_df['REGION'] = vol_df['REGION'].apply(regionrenamer)
+        vol_df["REGION"] = vol_df["REGION"].apply(regionrenamer)
     if zonerenamer:
-        vol_df['ZONE'] = vol_df['ZONE'].apply(zonerenamer)
+        vol_df["ZONE"] = vol_df["ZONE"].apply(zonerenamer)
 
     # Remove the Totals rows in case they are present.
     #  (todo: do this for all columns that are not not of numeric type)
-    checkfortotals = ['ZONE', 'REGION', 'LICENSE', 'FACIES']
+    checkfortotals = ["ZONE", "REGION", "LICENSE", "FACIES"]
 
     totalsrows = pd.Series([False] * len(vol_df))
     for col in checkfortotals:
         if col in vol_df.columns:
-            totalsrows = totalsrows | (vol_df[col] == 'Totals')
+            totalsrows = totalsrows | (vol_df[col] == "Totals")
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
 
     if outfile:
