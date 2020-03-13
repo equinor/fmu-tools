@@ -7,7 +7,7 @@ from collections import OrderedDict
 import warnings
 import numpy as np
 import pandas as pd
-from fmu.config import oyaml as yaml
+import yaml
 
 SEEDS_DEPRECATION_WARNING = """
 The keyword "seeds" in the "general_input" sheet is changed
