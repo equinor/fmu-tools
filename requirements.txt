@@ -1,6 +1,7 @@
-pandas
 numpy
+openpyxl
+openpyxl
+pandas
+pyyaml
 scipy
 xlrd
-openpyxl
-pyyaml
