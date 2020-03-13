@@ -8,15 +8,8 @@ from __future__ import print_function
 import os
 import pandas as pd
 
-from fmu import config
 from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
 from collections import OrderedDict
-
-fmux = config.etc.Interaction()
-logger = fmux.basiclogger(__name__)
-
-if not fmux.testsetup():
-    raise SystemExit()
 
 
 def test_combine_selectors():

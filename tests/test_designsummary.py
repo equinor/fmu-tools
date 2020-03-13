@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Testing fmu-ensemble."""
 
 from __future__ import absolute_import
@@ -10,16 +9,9 @@ import sys
 
 import pandas as pd
 
-from fmu import config
 from fmu.tools.sensitivities import summarize_design, fmudesignrunner
 
 from test_designmatrix import valid_designmatrix
-
-fmux = config.etc.Interaction()
-logger = fmux.basiclogger(__name__)
-
-if not fmux.testsetup():
-    raise SystemExit()
 
 
 def test_designsummary():
