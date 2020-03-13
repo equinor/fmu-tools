@@ -28,7 +28,8 @@ config = [
     'background_no_seed',
     'background_extseeds',
     'mc_with_correls',
-    'montecarlo_full'
+    'montecarlo_full',
+    'mc_corr_depend'
     ]
 
 for input in range(len(config)):

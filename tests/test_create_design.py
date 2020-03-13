@@ -69,6 +69,9 @@ def test_generate_full_mc(tmpdir):
     # Checking dimensions of design matrix
     assert design.designvalues.shape == (500, 16)
 
+    # Checking reproducibility from distribution_seed
+    assert design.designvalues['PARAM1'].sum() == 17.419
+
     # Write to disk and check some validity
     tmpdir.chdir()
     design.to_xlsx("designmatrix.xlsx")

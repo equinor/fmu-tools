@@ -4,9 +4,16 @@ a design matrix and converting to an OrderedDict that can be
 read by fmu.tools.DesignMatrix.generate
 """
 from collections import OrderedDict
+import warnings
 import numpy as np
 import pandas as pd
 from fmu.config import oyaml as yaml
+
+SEEDS_DEPRECATION_WARNING = """
+The keyword "seeds" in the "general_input" sheet is changed
+to "rms_seeds", and will be deprecated in a future version.
+Please update your excel spreadsheet
+"""
 
 
 def excel2dict_design(input_filename, sheetnames=None):
@@ -168,8 +175,32 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
         index_col=0)
 
     inputdict['designtype'] = generalinput[1]['designtype']
-    inputdict['seeds'] = generalinput[1]['seeds']
+
+    if 'rms_seeds' in generalinput[1]:
+        if str(generalinput[1]['rms_seeds']) == 'None':
+            inputdict['seeds'] = None
+        else:
+            inputdict['seeds'] = generalinput[1]['rms_seeds']
+    elif 'seeds' in generalinput[1]:
+        warnings.simplefilter('always')
+        warnings.warn(SEEDS_DEPRECATION_WARNING, DeprecationWarning)
+        if str(generalinput[1]['seeds']) == 'None':
+            inputdict['seeds'] = None
+        else:
+            inputdict['seeds'] = generalinput[1]['seeds']
+    else:
+        inputdict['seeds'] = None
+
     inputdict['repeats'] = generalinput[1]['repeats']
+
+    if 'distribution_seed' in generalinput[1]:
+        if str(generalinput[1]['distribution_seed']) == 'None':
+            inputdict['distribution_seed'] = None
+        else:
+            inputdict['distribution_seed'] = generalinput[1][
+                'distribution_seed']
+    else:
+        inputdict['distribution_seed'] = None
 
     # Read background
     if 'background' in generalinput.index:
