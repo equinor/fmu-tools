@@ -1,0 +1,42 @@
+name: fmu-tools
+
+on:
+  push:
+  release:
+    types:
+      - published
+  pull_request:
+    types: [created, synchronize]
+
+jobs:
+  fmu-tools:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['2.7', '3.6', '3.7', '3.8']
+
+    steps:
+
+    - name: Checkout commit locally
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install numpy for Python 2
+      if: matrix.python-version == '2.7'
+      run: |
+        pip install numpy==1.16.6
+
+    - name: Install requirements
+      run: |
+        pip install -r requirements.txt
+        pip install -r requirements_dev.txt
+        pip install git+https://github.com/equinor/libecl
+        pip install git+https://github.com/equinor/fmu-ensemble
+        pip install .
+        
+    - name: Run tests
+      run: pytest ./tests
