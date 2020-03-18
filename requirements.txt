@@ -1,7 +1,5 @@
-numpy
-openpyxl
-openpyxl
-pandas
-pyyaml
-scipy
-xlrd
+openpyxl~=2.6
+pandas~=0.24
+pyyaml~=5.3
+scipy~=1.2
+xlrd~=1.2
