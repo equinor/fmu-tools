@@ -69,3 +69,5 @@ target/
 # other
 .idea/
 .projectile
+.vscode
+src/fmu/tools/version.py
