@@ -11,7 +11,7 @@ ignore=_version.py, oyaml.py
 good-names=logger, fmux, xfmu
 
 [FORMAT]
-max-line-length=79
+max-line-length=88  # black
 max-module-lines=3000
 
 [DESIGN]
@@ -23,3 +23,14 @@ min-similarity-lines=4
 ignore-comments=yes
 ignore-docstrings=yes
 ignore-imports=yes
+
+[MESSAGES CONTROL]
+disable=
+    fixme,
+    missing-docstring,
+    protected-access,
+    C0330,
+    useless-object-inheritance,
+    import-outside-toplevel,
+    import-error,
+    no-name-in-module
