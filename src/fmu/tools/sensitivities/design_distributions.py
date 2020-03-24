@@ -576,7 +576,15 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     corr_matrix[i_upper] = corr_matrix.T[i_upper]
 
     # Project to nearest symmetric positive definite matrix
-    corr_matrix = _nearest_positive_definite(corr_matrix)
+    if not _is_positive_definite(corr_matrix):
+        input_corr_matrix = corr_matrix.copy()
+        corr_matrix = _nearest_positive_definite(corr_matrix)
+        print("Input correlation matrix: ")
+        with numpy.printoptions(precision=3, suppress=True):
+            print(input_corr_matrix)
+        print("Used closest positive semi-definite correlation matrix:")
+        with numpy.printoptions(precision=3, suppress=True):
+            print(corr_matrix)
     # Previously negative eigenvalues are now close to zero,
     # but might still be negative, that can be ignored
 
