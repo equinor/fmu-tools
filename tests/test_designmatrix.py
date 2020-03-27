@@ -4,12 +4,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
 import os
-from collections import OrderedDict
+import shutil
 
 import pandas as pd
 
-from fmu.tools.sensitivities import DesignMatrix
+from fmu.tools.sensitivities import DesignMatrix, fmudesignrunner
 
 
 def valid_designmatrix(dframe):
@@ -25,6 +26,7 @@ def valid_designmatrix(dframe):
 
     # There should be no empty cells in the dataframe:
     assert not dframe.isna().sum().sum()
+
 
 def test_designmatrix():
     """Test the DesignMatrix class"""
@@ -45,3 +47,34 @@ def test_designmatrix():
     valid_designmatrix(design.designvalues)
     assert len(design.designvalues) == 10
     assert isinstance(design.defaultvalues, dict)
+
+
+def test_endpoint(tmpdir):
+    """Test the installed endpoint
+
+    Will write generated design matrices to the pytest tmpdir directory,
+    usually /tmp/pytest-of-<username>/
+    """
+    testdatadir = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "data/sensitivities/config/"
+    )
+    designfile = "design_input_onebyone.xlsx"
+
+    # The xlsx file contains a relative path, relative to the input design sheet:
+    dependency = (
+        pd.read_excel(os.path.join(testdatadir, designfile), header=None, index=False)
+        .set_index([0])[1]
+        .to_dict()["background"]
+    )
+    tmpdir.chdir()
+    # Copy over input files:
+    shutil.copy(os.path.join(testdatadir, designfile), ".")
+    shutil.copy(os.path.join(testdatadir, dependency), ".")
+    sys.argv = ["fmudesign", designfile]
+    fmudesignrunner.main()
+    assert os.path.exists("generateddesignmatrix.xlsx")  # Default output file
+    valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx"))
+
+    sys.argv = ["fmudesign", designfile, "anotheroutput.xlsx"]
+    fmudesignrunner.main()
+    assert os.path.exists("anotheroutput.xlsx")
