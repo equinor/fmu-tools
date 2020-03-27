@@ -44,7 +44,7 @@ def test_generate_onebyone(tmpdir):
 
 
 def test_generate_full_mc(tmpdir):
-
+    """Test generation of full monte carlo"""
     if "__file__" in globals():
         # Easen up copying test code into interactive sessions
         testdir = os.path.dirname(os.path.abspath(__file__))
@@ -63,7 +63,7 @@ def test_generate_full_mc(tmpdir):
     assert design.designvalues.shape == (500, 16)
 
     # Checking reproducibility from distribution_seed
-    assert design.designvalues['PARAM1'].sum() == 17.419
+    assert design.designvalues["PARAM1"].sum() == 17.419
 
     # Write to disk and check some validity
     tmpdir.chdir()
