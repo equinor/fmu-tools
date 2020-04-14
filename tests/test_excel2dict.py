@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import pytest
 
 import pandas as pd
 
@@ -77,3 +78,55 @@ def test_excel2dict_design(tmpdir):
     inputdict_to_yaml(dict_design, "dictdesign.yaml")
     assert os.path.exists("dictdesign.yaml")
     assert "RMS_SEED" in "".join(open("dictdesign.yaml").readlines())
+
+
+def test_duplicate_sensname_exception(tmpdir):
+    mock_erroneous_designinput = pd.DataFrame(
+        data=[
+            ["sensname", "numreal", "type", "param_name"],
+            ["rms_seed", "", "seed"],
+            ["rms_seed", "", "seed"],
+        ]
+    )
+    tmpdir.chdir()
+    defaultvalues = pd.DataFrame()
+
+    writer = pd.ExcelWriter("designinput3.xlsx")
+    MOCK_GENERAL_INPUT.to_excel(
+        writer, sheet_name="general_input", index=False, header=None
+    )
+    mock_erroneous_designinput.to_excel(
+        writer, sheet_name="designinput", index=False, header=None
+    )
+    defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False, header=None)
+    writer.save()
+
+    with pytest.raises(
+        ValueError, match="Two sensitivities can not share the same sensname"
+    ):
+        dict_design = excel2dict_design("designinput3.xlsx")
+
+
+def test_mixed_senstype_exception(tmpdir):
+    mock_erroneous_designinput = pd.DataFrame(
+        data=[
+            ["sensname", "numreal", "type", "param_name"],
+            ["rms_seed", "", "seed"],
+            ["", "", "dist"],
+        ]
+    )
+    tmpdir.chdir()
+    defaultvalues = pd.DataFrame()
+
+    writer = pd.ExcelWriter("designinput4.xlsx")
+    MOCK_GENERAL_INPUT.to_excel(
+        writer, sheet_name="general_input", index=False, header=None
+    )
+    mock_erroneous_designinput.to_excel(
+        writer, sheet_name="designinput", index=False, header=None
+    )
+    defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False, header=None)
+    writer.save()
+
+    with pytest.raises(ValueError, match="contains more than one sensitivity type"):
+        dict_design = excel2dict_design("designinput4.xlsx")
