@@ -34,7 +34,7 @@ class DesignMatrix(object):
         backgroundvalues: dataframe with background parameters
         seedvalues: list of seed values
         """
-        self.designvalues = pd.DataFrame(columns=['REAL'])
+        self.designvalues = pd.DataFrame(columns=["REAL"])
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
         self.seedvalues = None
@@ -42,7 +42,7 @@ class DesignMatrix(object):
     def reset(self):
         """Resets DesignMatrix to empty. Necessary iin case method generate
         is used several times for same instance of DesignMatrix"""
-        self.designvalues = pd.DataFrame(columns=['REAL'])
+        self.designvalues = pd.DataFrame(columns=["REAL"])
         self.defaultvalues = OrderedDict()
         self.backgroundvalues = None
         self.seedvalues = None
@@ -57,108 +57,112 @@ class DesignMatrix(object):
         """
         self.reset()  # Emptying if regenerating matrix
 
-        if 'distribution_seed' in inputdict.keys():
-            if inputdict['distribution_seed']:
-                numpy.random.seed(inputdict['distribution_seed'])
+        if "distribution_seed" in inputdict.keys():
+            if inputdict["distribution_seed"]:
+                numpy.random.seed(inputdict["distribution_seed"])
 
         # Reading default values
-        default_dict = inputdict['defaultvalues']
+        default_dict = inputdict["defaultvalues"]
         self.set_defaultvalues(default_dict)
 
         max_reals = _find_max_realisations(inputdict)
 
         # Reading or generating rms seed values
-        if 'seeds' in inputdict.keys():
-            self.add_seeds(
-                inputdict['seeds'], max_reals)
+        if "seeds" in inputdict.keys():
+            self.add_seeds(inputdict["seeds"], max_reals)
 
         # If background values used - read or generate
-        if 'background' in inputdict.keys():
-            self.add_background(
-                inputdict['background'], max_reals)
+        if "background" in inputdict.keys():
+            self.add_background(inputdict["background"], max_reals)
 
-        if inputdict['designtype'] == 'onebyone':
-            self.designvalues['SENSNAME'] = None
-            self.designvalues['SENSCASE'] = None
+        if inputdict["designtype"] == "onebyone":
+            self.designvalues["SENSNAME"] = None
+            self.designvalues["SENSCASE"] = None
             counter = 0
-            for key in inputdict['sensitivities'].keys():
-                sens = inputdict['sensitivities'][key]
-                if 'numreal' in sens.keys():
-                    numreal = sens['numreal']
+            for key in inputdict["sensitivities"].keys():
+                sens = inputdict["sensitivities"][key]
+                if "numreal" in sens.keys():
+                    numreal = sens["numreal"]
                 else:
-                    numreal = inputdict['repeats']
-                if sens['senstype'] == 'ref':
+                    numreal = inputdict["repeats"]
+                if sens["senstype"] == "ref":
                     sensitivity = SingleRealisationReference(key)
-                    sensitivity.generate(
-                        range(counter, counter + numreal))
+                    sensitivity.generate(range(counter, counter + numreal))
                     counter += numreal
                     self._add_sensitivity(sensitivity)
-                elif sens['senstype'] == 'background':
+                elif sens["senstype"] == "background":
                     sensitivity = BackgroundSensitivity(key)
-                    sensitivity.generate(
-                        range(counter, counter + numreal))
+                    sensitivity.generate(range(counter, counter + numreal))
                     counter += numreal
                     self._add_sensitivity(sensitivity)
-                elif sens['senstype'] == 'seed':
+                elif sens["senstype"] == "seed":
                     sensitivity = SeedSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['seedname'], self.seedvalues,
-                        sens['parameters'])
+                        sens["seedname"],
+                        self.seedvalues,
+                        sens["parameters"],
+                    )
                     counter += numreal
                     self._add_sensitivity(sensitivity)
-                elif sens['senstype'] == 'scenario':
+                elif sens["senstype"] == "scenario":
                     sensitivity = ScenarioSensitivity(key)
-                    for casekey in sens['cases'].keys():
-                        case = sens['cases'][casekey]
+                    for casekey in sens["cases"].keys():
+                        case = sens["cases"][casekey]
                         temp_case = ScenarioSensitivityCase(casekey)
                         temp_case.generate(
-                            range(counter, counter+numreal),
-                            case, self.seedvalues)
+                            range(counter, counter + numreal), case, self.seedvalues
+                        )
                         sensitivity.add_case(temp_case)
                         counter += numreal
                     self._add_sensitivity(sensitivity)
-                elif sens['senstype'] == 'dist':
+                elif sens["senstype"] == "dist":
                     sensitivity = MonteCarloSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['parameters'],
+                        sens["parameters"],
                         self.seedvalues,
-                        sens['correlations'])
+                        sens["correlations"],
+                    )
                     counter += numreal
                     self._add_sensitivity(sensitivity)
-                elif sens['senstype'] == 'extern':
+                elif sens["senstype"] == "extern":
                     sensitivity = ExternSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
-                        sens['extern_file'],
-                        sens['parameters'], self.seedvalues)
+                        sens["extern_file"],
+                        sens["parameters"],
+                        self.seedvalues,
+                    )
                     counter += numreal
                     self._add_sensitivity(sensitivity)
-                print('Added sensitivity :', sensitivity.sensname)
-            if 'background' in inputdict.keys():
+                print("Added sensitivity :", sensitivity.sensname)
+            if "background" in inputdict.keys():
                 self._fill_with_background_values()
             self._fill_with_defaultvalues()
 
-            if 'dependencies' in inputdict.keys():
-                self._fill_derived_params(inputdict['dependencies'])
+            if "dependencies" in inputdict.keys():
+                self._fill_derived_params(inputdict["dependencies"])
 
-            if 'decimals' in inputdict.keys():
-                self._set_decimals(inputdict['decimals'])
+            if "decimals" in inputdict.keys():
+                self._set_decimals(inputdict["decimals"])
             # Re-order columns
-            start_cols = ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']
+            start_cols = ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]
             self.designvalues = self.designvalues[
-                [col for col in start_cols if col in self.designvalues] +
-                [col for col in self.designvalues if col not in start_cols]]
+                [col for col in start_cols if col in self.designvalues]
+                + [col for col in self.designvalues if col not in start_cols]
+            ]
         else:
-            raise ValueError('Generation of DesignMatrix only'
-                             'implemented for type onebyone'
-                             'In general_input designtype is'
-                             'set to {}'.format(inputdict['designtype']))
+            raise ValueError(
+                "Generation of DesignMatrix only"
+                "implemented for type onebyone"
+                "In general_input designtype is"
+                "set to {}".format(inputdict["designtype"])
+            )
 
-    def to_xlsx(self, filename,
-                designsheet='DesignSheet01',
-                defaultsheet='DefaultValues'):
+    def to_xlsx(
+        self, filename, designsheet="DesignSheet01", defaultsheet="DefaultValues"
+    ):
         """Writing design matrix to excel workfbook on standard fmu format
         to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW
 
@@ -170,25 +174,32 @@ class DesignMatrix(object):
                 values (optional, defaults to 'DefaultValues')
         """
         basename, extension = os.path.splitext(filename)
-        if extension != '.xlsx':
-            filename = basename+'.xlsx'
-            print('Warning: Output filename did not have extension .xlsx '
-                  'but the export format is Excel .xlsx .  '
-                  'Changing outputname to {}'.format(filename))
+        if extension != ".xlsx":
+            filename = basename + ".xlsx"
+            print(
+                "Warning: Output filename did not have extension .xlsx "
+                "but the export format is Excel .xlsx .  "
+                "Changing outputname to {}".format(filename)
+            )
 
-        xlsxwriter = pd.ExcelWriter(filename, engine='openpyxl')
+        xlsxwriter = pd.ExcelWriter(filename, engine="openpyxl")
         self.designvalues.to_excel(
-            xlsxwriter, sheet_name=designsheet, index=False, header=True)
+            xlsxwriter, sheet_name=designsheet, index=False, header=True
+        )
         # Default values from OrderdDictionay to pandas dataframe
-        defaults = pd.DataFrame(columns=['defaultparameters', 'defaultvalue'])
-        defaults['defaultparameters'] = self.defaultvalues.keys()
-        defaults['defaultvalue'] = self.defaultvalues.values()
-        defaults.to_excel(xlsxwriter, sheet_name=defaultsheet,
-                          index=False, header=False)
+        defaults = pd.DataFrame(columns=["defaultparameters", "defaultvalue"])
+        defaults["defaultparameters"] = self.defaultvalues.keys()
+        defaults["defaultvalue"] = self.defaultvalues.values()
+        defaults.to_excel(
+            xlsxwriter, sheet_name=defaultsheet, index=False, header=False
+        )
         xlsxwriter.save()
-        print('A total of {} realizations were generated'
-              .format(len(self.designvalues['REAL'])))
-        print('Designmatrix written to {}'.format(filename))
+        print(
+            "A total of {} realizations were generated".format(
+                len(self.designvalues["REAL"])
+            )
+        )
+        print("Designmatrix written to {}".format(filename))
 
     def set_defaultvalues(self, defaults):
         """ Add default values
@@ -207,18 +218,20 @@ class DesignMatrix(object):
             back_dict (OrderedDict): how to generate background values
             max_values (int): number of background values to generate
         """
-        if seeds in [None, 'None']:
+        if seeds in [None, "None"]:
             self.seedvalues = None
-            print('seeds is set to None in general_input')
-        elif seeds.lower() == 'default':
+            print("seeds is set to None in general_input")
+        elif seeds.lower() == "default":
             self.seedvalues = [item + 1000 for item in range(max_reals)]
         elif os.path.isfile(seeds):
             self.seedvalues = _seeds_from_extern(seeds, max_reals)
         else:
-            raise ValueError('Valid choices for seeds are None, '
-                             '"default" or an existing filename. '
-                             'Neither was found in this case. seeds '
-                             'had been specified as {} .'.format(seeds))
+            raise ValueError(
+                "Valid choices for seeds are None, "
+                '"default" or an existing filename. '
+                "Neither was found in this case. seeds "
+                "had been specified as {} .".format(seeds)
+            )
 
     def add_background(self, back_dict, max_values):
         """Adding background as specified in dictionary.
@@ -231,14 +244,12 @@ class DesignMatrix(object):
         """
         if back_dict is None:
             self.backgroundvalues = None
-        elif 'extern' in back_dict.keys():
-            self.backgroundvalues = _parameters_from_extern(
-                back_dict['extern'])
-        elif 'parameters' in back_dict.keys():
+        elif "extern" in back_dict.keys():
+            self.backgroundvalues = _parameters_from_extern(back_dict["extern"])
+        elif "parameters" in back_dict.keys():
             self._add_dist_background(back_dict, max_values)
 
-    def background_to_excel(self, filename,
-                            backgroundsheet='Background'):
+    def background_to_excel(self, filename, backgroundsheet="Background"):
         """Writing background values to an Excel spreadsheet
 
         Args:
@@ -247,9 +258,10 @@ class DesignMatrix(object):
         """
         xlsxwriter = pd.ExcelWriter(filename)
         self.backgroundvalues.to_excel(
-            xlsxwriter, sheet_name=backgroundsheet, index=False, header=True)
+            xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
+        )
         xlsxwriter.save()
-        print('Backgroundvalues written to {}'.format(filename))
+        print("Backgroundvalues written to {}".format(filename))
 
     def _add_sensitivity(self, sensitivity):
         """Adding a sensitivity to the design
@@ -258,80 +270,78 @@ class DesignMatrix(object):
             sensitivity of class Scenario, MonteCarlo or Extern
         """
         existing_values = self.designvalues.copy()
-        self.designvalues = existing_values.append(
-            sensitivity.sensvalues, sort=False)
+        self.designvalues = existing_values.append(sensitivity.sensvalues, sort=False)
 
     def _fill_with_background_values(self):
         """Substituting NaNs with background values if existing.
         background values not in design are added as separate colums
         """
         if self.backgroundvalues is not None:
-            grouped = self.designvalues.groupby(
-                ['SENSNAME', 'SENSCASE'], sort=False)
+            grouped = self.designvalues.groupby(["SENSNAME", "SENSCASE"], sort=False)
             result_values = pd.DataFrame()
             for sensname, case in grouped:
                 temp_df = case.reset_index()
                 temp_df.fillna(self.backgroundvalues, inplace=True)
-                temp_df.set_index('index')
+                temp_df.set_index("index")
                 for key in self.backgroundvalues.keys():
                     if key not in case.keys():
                         temp_df[key] = self.backgroundvalues[key]
                         if len(temp_df) > len(self.backgroundvalues):
                             raise ValueError(
-                                'Provided number of background values '
-                                '{} is smaller than number'
-                                ' of realisations for sensitivity {}'
-                                .format(len(self.backgroundvalues), sensname))
+                                "Provided number of background values "
+                                "{} is smaller than number"
+                                " of realisations for sensitivity {}".format(
+                                    len(self.backgroundvalues), sensname
+                                )
+                            )
                     else:
                         if len(temp_df) > len(self.backgroundvalues):
                             print(
-                                'Provided number of background values '
-                                '({}) is smaller than number'
-                                ' of realisations for sensitivity {}'
-                                ' and parameter {}. '
-                                'Will be filled with default values.'
-                                .format(
-                                    len(self.backgroundvalues),
-                                    sensname,
-                                    key))
+                                "Provided number of background values "
+                                "({}) is smaller than number"
+                                " of realisations for sensitivity {}"
+                                " and parameter {}. "
+                                "Will be filled with default values.".format(
+                                    len(self.backgroundvalues), sensname, key
+                                )
+                            )
                 existing_values = result_values.copy()
-                result_values = existing_values.append(
-                    temp_df, sort=False)
+                result_values = existing_values.append(temp_df, sort=False)
 
-            result_values = result_values.drop(['index'], axis=1)
+            result_values = result_values.drop(["index"], axis=1)
             self.designvalues = result_values
 
     def _fill_with_defaultvalues(self):
         """Filling NaNs with default values"""
         for key in self.designvalues.keys():
             if key in self.defaultvalues.keys():
-                self.designvalues[key].fillna(
-                    self.defaultvalues[key], inplace=True)
-            elif key not in ['REAL', 'SENSNAME', 'SENSCASE', 'RMS_SEED']:
-                raise LookupError('No defaultvalues given for parameter {} '
-                                  ''.format(key))
+                self.designvalues[key].fillna(self.defaultvalues[key], inplace=True)
+            elif key not in ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]:
+                raise LookupError(
+                    "No defaultvalues given for parameter {} " "".format(key)
+                )
 
     def _fill_derived_params(self, depend_dict):
         for from_param in depend_dict.keys():
             if from_param in self.designvalues.keys():
-                for param in depend_dict[from_param]['to_params'].keys():
+                for param in depend_dict[from_param]["to_params"].keys():
                     self.designvalues[param] = numpy.nan
-                    for index in range(
-                            len(depend_dict[from_param]['from_values'])):
-                        ip = depend_dict[from_param]['from_values'][index]
-                        op = depend_dict[from_param]['to_params'][param][index]
+                    for index in range(len(depend_dict[from_param]["from_values"])):
+                        ip = depend_dict[from_param]["from_values"][index]
+                        op = depend_dict[from_param]["to_params"][param][index]
                         self.designvalues[param].mask(
-                            self.designvalues[from_param] ==
-                            ip, op, inplace=True)
+                            self.designvalues[from_param] == ip, op, inplace=True
+                        )
                     if self.designvalues[param].isnull().any():
-                        raise ValueError('Column for derived parameter {} '
-                                         'contains NaN. Check input '
-                                         'defining dependencies. '
-                                         'Could be Wrong values or that '
-                                         'values for input variable  in '
-                                         'dependencies sheet '
-                                         'should be specified as strings.'
-                                         .format(param))
+                        raise ValueError(
+                            "Column for derived parameter {} "
+                            "contains NaN. Check input "
+                            "defining dependencies. "
+                            "Could be Wrong values or that "
+                            "values for input variable  in "
+                            "dependencies sheet "
+                            "should be specified as strings.".format(param)
+                        )
 
     def _add_dist_background(self, back_dict, numreal):
         """Drawing background values from distributions
@@ -341,22 +351,23 @@ class DesignMatrix(object):
             back_dict (OrderedDict): parameters and distributions
             numreal (int): Number of samples to generate
         """
-        mc_background = MonteCarloSensitivity('background')
+        mc_background = MonteCarloSensitivity("background")
         mc_background.generate(
-            range(numreal),
-            back_dict['parameters'], 'None', back_dict['correlations'])
+            range(numreal), back_dict["parameters"], "None", back_dict["correlations"]
+        )
         mc_backgroundvalues = mc_background.sensvalues
 
         # Rounding of background values as specified
-        if 'decimals' in back_dict.keys():
-            for key in back_dict['decimals'].keys():
-                if design_dist.is_number(
-                        mc_backgroundvalues[key].iloc[0]):
+        if "decimals" in back_dict.keys():
+            for key in back_dict["decimals"].keys():
+                if design_dist.is_number(mc_backgroundvalues[key].iloc[0]):
                     mc_backgroundvalues[key] = (
-                        mc_backgroundvalues[key].astype(float).
-                        round(int(back_dict['decimals'][key])))
+                        mc_backgroundvalues[key]
+                        .astype(float)
+                        .round(int(back_dict["decimals"][key]))
+                    )
                 else:
-                    raise ValueError('Cannot round a string parameter')
+                    raise ValueError("Cannot round a string parameter")
         self.backgroundvalues = mc_backgroundvalues.copy()
 
     def _set_decimals(self, dict_decimals):
@@ -367,14 +378,14 @@ class DesignMatrix(object):
         """
         for key in self.designvalues.keys():
             if key in dict_decimals.keys():
-                if design_dist.is_number(
-                        self.designvalues[key].iloc[0]):
+                if design_dist.is_number(self.designvalues[key].iloc[0]):
                     self.designvalues[key] = (
-                        self.designvalues[key].astype(float).
-                        round(int(dict_decimals[key])))
+                        self.designvalues[key]
+                        .astype(float)
+                        .round(int(dict_decimals[key]))
+                    )
                 else:
-                    raise ValueError(
-                        'Cannot round a string parameter {}'.format(key))
+                    raise ValueError("Cannot round a string parameter {}".format(key))
 
 
 class SeedSensitivity(object):
@@ -410,24 +421,24 @@ class SeedSensitivity(object):
                 distributions or values.
         """
         self.sensvalues = pd.DataFrame(index=realnums)
-        self.sensvalues[seedname] = seedvalues[0:len(realnums)]
+        self.sensvalues[seedname] = seedvalues[0 : len(realnums)]
 
         if parameters is not None:
             for key in parameters.keys():
                 dist_name = parameters[key][0].lower()
                 constant = parameters[key][1]
-                if dist_name != 'const':
+                if dist_name != "const":
                     raise ValueError(
                         'A sensitivity of type "seed" can only have '
-                        'additional parameters where dist_name is '
-                        '"const". Check sensitivity {}"'
-                        .format(self.sensname))
+                        "additional parameters where dist_name is "
+                        '"const". Check sensitivity {}"'.format(self.sensname)
+                    )
                 else:
                     self.sensvalues[key] = constant
 
-        self.sensvalues['REAL'] = realnums
-        self.sensvalues['SENSNAME'] = self.sensname
-        self.sensvalues['SENSCASE'] = 'p10_p90'
+        self.sensvalues["REAL"] = realnums
+        self.sensvalues["SENSNAME"] = self.sensname
+        self.sensvalues["SENSCASE"] = "p10_p90"
 
 
 class SingleRealisationReference(object):
@@ -460,9 +471,9 @@ class SingleRealisationReference(object):
             realnums (list): list of intergers with realization numbers
         """
         self.sensvalues = pd.DataFrame(index=realnums)
-        self.sensvalues['REAL'] = realnums
-        self.sensvalues['SENSNAME'] = self.sensname
-        self.sensvalues['SENSCASE'] = 'ref'
+        self.sensvalues["REAL"] = realnums
+        self.sensvalues["SENSNAME"] = self.sensname
+        self.sensvalues["SENSCASE"] = "ref"
 
 
 class BackgroundSensitivity(object):
@@ -495,9 +506,9 @@ class BackgroundSensitivity(object):
             realnums (list): list of intergers with realization numbers
         """
         self.sensvalues = pd.DataFrame(index=realnums)
-        self.sensvalues['REAL'] = realnums
-        self.sensvalues['SENSNAME'] = self.sensname
-        self.sensvalues['SENSCASE'] = 'p10_p90'
+        self.sensvalues["REAL"] = realnums
+        self.sensvalues["SENSNAME"] = self.sensname
+        self.sensvalues["SENSCASE"] = "p10_p90"
 
 
 class ScenarioSensitivity(object):
@@ -543,20 +554,22 @@ class ScenarioSensitivity(object):
         """
         if self.case1 is not None:  # Case 1 has been read, this is case2
             if (
-                    'REAL' in senscase.casevalues.keys() and
-                    'SENSCASE' in senscase.casevalues.keys()):
+                "REAL" in senscase.casevalues.keys()
+                and "SENSCASE" in senscase.casevalues.keys()
+            ):
                 self.case2 = senscase
-                senscase.casevalues['SENSNAME'] = self.sensname
-                self.sensvalues = pd.concat([
-                    self.sensvalues, senscase.casevalues],
-                                            sort=True)
+                senscase.casevalues["SENSNAME"] = self.sensname
+                self.sensvalues = pd.concat(
+                    [self.sensvalues, senscase.casevalues], sort=True
+                )
         else:  # This is the first case
             if (
-                    'REAL' in senscase.casevalues.keys()
-                    and 'SENSCASE' in senscase.casevalues.keys()):
+                "REAL" in senscase.casevalues.keys()
+                and "SENSCASE" in senscase.casevalues.keys()
+            ):
                 self.case1 = senscase
                 self.sensvalues = senscase.casevalues.copy()
-                self.sensvalues['SENSNAME'] = self.sensname
+                self.sensvalues["SENSNAME"] = self.sensname
 
 
 class ScenarioSensitivityCase(object):
@@ -595,15 +608,14 @@ class ScenarioSensitivityCase(object):
                 seeds (str): default or None
         """
 
-        self.casevalues = pd.DataFrame(
-            columns=parameters.keys(), index=realnums)
+        self.casevalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
         for key in parameters.keys():
             self.casevalues[key] = parameters[key]
-        self.casevalues['REAL'] = realnums
-        self.casevalues['SENSCASE'] = self.casename
+        self.casevalues["REAL"] = realnums
+        self.casevalues["SENSCASE"] = self.casename
 
         if seedvalues:
-            self.casevalues['RMS_SEED'] = seedvalues[:len(realnums)]
+            self.casevalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
 class MonteCarloSensitivity(object):
@@ -625,8 +637,7 @@ class MonteCarloSensitivity(object):
         self.sensname = sensname
         self.sensvalues = None
 
-    def generate(self, realnums, parameters,
-                 seedvalues, corrdict):
+    def generate(self, realnums, parameters, seedvalues, corrdict):
         """Generates parameter values by drawing from
         defined distributions.
 
@@ -637,8 +648,7 @@ class MonteCarloSensitivity(object):
             seeds (str): default or None
             corrdict(OrderedDict): correlation info
         """
-        self.sensvalues = pd.DataFrame(
-            columns=parameters.keys(), index=realnums)
+        self.sensvalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
         numreals = len(realnums)
         if corrdict is None:
             for key in parameters.keys():
@@ -646,42 +656,46 @@ class MonteCarloSensitivity(object):
                 dist_params = parameters[key][1]
                 try:
                     self.sensvalues[key] = design_dist.draw_values(
-                        dist_name, dist_params, numreals)
+                        dist_name, dist_params, numreals
+                    )
                 except ValueError as error:
                     raise ValueError(
-                        'Problem with parameter {} in sensitivity '
-                        'with sensname {}: {}.'.format(
-                            key, self.sensname, error.args[0]))
+                        "Problem with parameter {} in sensitivity "
+                        "with sensname {}: {}.".format(
+                            key, self.sensname, error.args[0]
+                        )
+                    )
         else:  # Some or all parameters are correlated
             df_params = pd.DataFrame.from_dict(
                 parameters,
-                orient='index',
-                columns=['dist_name', 'dist_params', 'corr_sheet'])
-            df_params['corr_sheet'].fillna('nocorr', inplace=True)
+                orient="index",
+                columns=["dist_name", "dist_params", "corr_sheet"],
+            )
+            df_params["corr_sheet"].fillna("nocorr", inplace=True)
             df_params.reset_index(inplace=True)
-            df_params.rename(columns={'index': 'param_name'}, inplace=True)
-            param_groups = df_params.groupby(['corr_sheet'])
+            df_params.rename(columns={"index": "param_name"}, inplace=True)
+            param_groups = df_params.groupby(["corr_sheet"])
 
             for correl, group in param_groups:
                 param_dict = OrderedDict()
                 for index, row in group.iterrows():
-                    param_dict[row['param_name']] = [
-                        row['dist_name'],
-                        row['dist_params']]
-                if not correl == 'nocorr':
+                    param_dict[row["param_name"]] = [
+                        row["dist_name"],
+                        row["dist_params"],
+                    ]
+                if not correl == "nocorr":
                     if len(group) == 1:
                         _printwarning(correl)
-                    df_correlations = design_dist.read_correlations(
-                        corrdict, correl)
+                    df_correlations = design_dist.read_correlations(corrdict, correl)
                     multivariate_parameters = df_correlations.index.values
-                    cov_matrix = design_dist.make_covariance_matrix(
-                        df_correlations)
+                    cov_matrix = design_dist.make_covariance_matrix(df_correlations)
                     normalscoremeans = len(multivariate_parameters) * [0]
                     normalscoresamples = numpy.random.multivariate_normal(
-                        normalscoremeans, cov_matrix, size=numreals)
+                        normalscoremeans, cov_matrix, size=numreals
+                    )
                     normalscoresamples_df = pd.DataFrame(
-                        data=normalscoresamples,
-                        columns=multivariate_parameters)
+                        data=normalscoresamples, columns=multivariate_parameters
+                    )
                     for key in param_dict.keys():
                         dist_name = param_dict[key][0].lower()
                         dist_parameters = param_dict[key][1]
@@ -691,40 +705,43 @@ class MonteCarloSensitivity(object):
                                     dist_name,
                                     dist_parameters,
                                     numreals,
-                                    normalscoresamples_df[key])
+                                    normalscoresamples_df[key],
+                                )
                             except ValueError as error:
-                                raise ValueError('Problem in sensitivity '
-                                                 'with sensname {} for '
-                                                 'parameter {}: {}.'.format(
-                                                     self.sensname,
-                                                     key,
-                                                     error.args[0]))
+                                raise ValueError(
+                                    "Problem in sensitivity "
+                                    "with sensname {} for "
+                                    "parameter {}: {}.".format(
+                                        self.sensname, key, error.args[0]
+                                    )
+                                )
                         else:
                             raise ValueError(
-                                'Parameter{} specified with correlation '
-                                'matrix {} but is not listed in '
-                                'that sheet'.format(key, correl))
+                                "Parameter{} specified with correlation "
+                                "matrix {} but is not listed in "
+                                "that sheet".format(key, correl)
+                            )
                 else:  # group nocorr where correlation matrix is not defined
                     for key in param_dict.keys():
                         dist_name = param_dict[key][0].lower()
                         dist_parameters = param_dict[key][1]
                         try:
                             self.sensvalues[key] = design_dist.draw_values(
-                                dist_name, dist_parameters, numreals)
+                                dist_name, dist_parameters, numreals
+                            )
                         except ValueError as error:
-                            raise ValueError('Problem in sensitivity '
-                                             'with sensname {} for parameter '
-                                             '{}: {}.'.format(
-                                                 self.sensname,
-                                                 key,
-                                                 error.args[0]))
+                            raise ValueError(
+                                "Problem in sensitivity "
+                                "with sensname {} for parameter "
+                                "{}: {}.".format(self.sensname, key, error.args[0])
+                            )
 
-        if self.sensname != 'background':
-            self.sensvalues['REAL'] = realnums
-            self.sensvalues['SENSNAME'] = self.sensname
-            self.sensvalues['SENSCASE'] = 'p10_p90'
-            if ('RMS_SEED' not in self.sensvalues.keys() and seedvalues):
-                self.sensvalues['RMS_SEED'] = seedvalues[:len(realnums)]
+        if self.sensname != "background":
+            self.sensvalues["REAL"] = realnums
+            self.sensvalues["SENSNAME"] = self.sensname
+            self.sensvalues["SENSCASE"] = "p10_p90"
+            if "RMS_SEED" not in self.sensvalues.keys() and seedvalues:
+                self.sensvalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
 class ExternSensitivity(object):
@@ -744,8 +761,7 @@ class ExternSensitivity(object):
         self.sensname = sensname
         self.sensvalues = None
 
-    def generate(self, realnums, filename, parameters,
-                 seedvalues):
+    def generate(self, realnums, filename, parameters, seedvalues):
         """Reads parameter values for a monte carlo sensitivity
         from file
 
@@ -755,29 +771,25 @@ class ExternSensitivity(object):
             parameters (list): list with parameter names
             seeds (str): default or None
         """
-        self.sensvalues = pd.DataFrame(
-            columns=parameters, index=realnums)
+        self.sensvalues = pd.DataFrame(columns=parameters, index=realnums)
         extern_values = _parameters_from_extern(filename)
         if len(realnums) > len(extern_values):
             raise ValueError(
-                'Number of realisations {} specified for '
-                'sensitivity {} is larger than rows in '
-                'file {}'.format(
-                    len(realnums), self.sensname, filename))
+                "Number of realisations {} specified for "
+                "sensitivity {} is larger than rows in "
+                "file {}".format(len(realnums), self.sensname, filename)
+            )
         for param in parameters:
             if param in extern_values.keys():
-                self.sensvalues[param] = list(
-                    extern_values[param][:len(realnums)])
+                self.sensvalues[param] = list(extern_values[param][: len(realnums)])
             else:
-                raise ValueError(
-                    'Parameter {} not in external file'
-                    .format(param))
-        self.sensvalues['REAL'] = realnums
-        self.sensvalues['SENSNAME'] = self.sensname
-        self.sensvalues['SENSCASE'] = 'p10_p90'
+                raise ValueError("Parameter {} not in external file".format(param))
+        self.sensvalues["REAL"] = realnums
+        self.sensvalues["SENSNAME"] = self.sensname
+        self.sensvalues["SENSCASE"] = "p10_p90"
 
         if seedvalues:
-            self.sensvalues['RMS_SEED'] = seedvalues[:len(realnums)]
+            self.sensvalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
 # Support functions used with several classes
@@ -791,15 +803,16 @@ def _parameters_from_extern(filename):
     Args:
         filename (str): path to file
     """
-    if filename.endswith('.xlsx'):
+    if filename.endswith(".xlsx"):
         parameters = pd.read_excel(filename)
-    elif filename.endswith('.csv'):
+    elif filename.endswith(".csv"):
         parameters = pd.read_csv(filename)
     else:
         raise ValueError(
-            'External file with parameter values should '
-            'be on Excel or csv format '
-            'and end with .xlsx or .csv')
+            "External file with parameter values should "
+            "be on Excel or csv format "
+            "and end with .xlsx or .csv"
+        )
     return parameters
 
 
@@ -811,59 +824,64 @@ def _seeds_from_extern(filename, max_reals):
     Args:
         filename (str): path to file
     """
-    if filename.endswith('.xlsx'):
+    if filename.endswith(".xlsx"):
         df_seeds = pd.read_excel(filename, header=None)
         seed_numbers = df_seeds[df_seeds.columns[0]].tolist()
-    elif filename.endswith('.csv') or filename.endswith('.txt'):
+    elif filename.endswith(".csv") or filename.endswith(".txt"):
         df_seeds = pd.read_csv(filename, header=None)
         seed_numbers = df_seeds[df_seeds.columns[0]].tolist()
     else:
         raise ValueError(
-            'External file with seed values should '
-            'be on Excel or csv format '
-            'and end with .xlsx .csv or .txt')
+            "External file with seed values should "
+            "be on Excel or csv format "
+            "and end with .xlsx .csv or .txt"
+        )
 
     if len(seed_numbers) < max_reals:
-        print('Provided number of seed values in external file {} '
-              'is lower than the maximum number of realisations '
-              'found for the design {}, and is for those '
-              'sensitivities used repeatedly. ')
-        seed_numbers = [seed_numbers[item % len(seed_numbers)] for
-                        item in range(max_reals)]
+        print(
+            "Provided number of seed values in external file {} "
+            "is lower than the maximum number of realisations "
+            "found for the design {}, and is for those "
+            "sensitivities used repeatedly. "
+        )
+        seed_numbers = [
+            seed_numbers[item % len(seed_numbers)] for item in range(max_reals)
+        ]
     return seed_numbers
 
 
 def _find_max_realisations(inputdict):
     """Finds the maximum number of realisations
     in a sensitivity case """
-    max_reals = inputdict['repeats']
-    for key in inputdict['sensitivities'].keys():
-        sens = inputdict['sensitivities'][key]
-        if 'numreal' in sens.keys():
-            max_reals = max(
-                sens['numreal'], max_reals)
+    max_reals = inputdict["repeats"]
+    for key in inputdict["sensitivities"].keys():
+        sens = inputdict["sensitivities"][key]
+        if "numreal" in sens.keys():
+            max_reals = max(sens["numreal"], max_reals)
     return max_reals
 
 
 def _printwarning(corrgroup):
-    print('#######################################################\n'
-          'fmudesign Warning:                                     \n'
-          'Using designinput sheets where '
-          'corr_sheet is only specified for one parameter '
-          'will cause non-correlated parameters .\n'
-          'ONLY ONE PARAMETER WAS SPECIFIED TO USE CORR_SHEET {}\n'
-          '\n'
-          'Note change in how correlated parameters are specified \n'
-          'from fmudeisgn version 1.0.1 in August 2019 :\n'
-          'Name of correlation sheet must be specified for each '
-          'parameter in correlation matrix. \n'
-          'This to enable use of several correlation sheets. '
-          'This also means non-correlated parameters do not '
-          'have to be included in correlation matrix. \n '
-          'See documentation: \n'
-          'https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/'
-          'html/examples.html#create-design-matrix-for-'
-          'one-by-one-sensitivities\n'
-          '\n'
-          '####################################################\n'
-          ''.format(corrgroup))
+    print(
+        "#######################################################\n"
+        "fmudesign Warning:                                     \n"
+        "Using designinput sheets where "
+        "corr_sheet is only specified for one parameter "
+        "will cause non-correlated parameters .\n"
+        "ONLY ONE PARAMETER WAS SPECIFIED TO USE CORR_SHEET {}\n"
+        "\n"
+        "Note change in how correlated parameters are specified \n"
+        "from fmudeisgn version 1.0.1 in August 2019 :\n"
+        "Name of correlation sheet must be specified for each "
+        "parameter in correlation matrix. \n"
+        "This to enable use of several correlation sheets. "
+        "This also means non-correlated parameters do not "
+        "have to be included in correlation matrix. \n "
+        "See documentation: \n"
+        "https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/"
+        "html/examples.html#create-design-matrix-for-"
+        "one-by-one-sensitivities\n"
+        "\n"
+        "####################################################\n"
+        "".format(corrgroup)
+    )
