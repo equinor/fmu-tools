@@ -332,7 +332,16 @@ def _read_defaultvalues(filename, sheetname):
     default_dict = OrderedDict()
     default_df = pd.read_excel(filename, sheetname, header=0, index_col=0)
     for row in default_df.itertuples():
-        default_dict[str(row[0])] = row[1]
+        if str(row[0]) in default_dict.keys():
+            print(
+                "WARNING: The default value '{}' "
+                "is listed twice in the sheet '{}'. "
+                "Only the first entry will be used in output file".format(
+                    row[0], sheetname
+                )
+            )
+        else:
+            default_dict[str(row[0])] = row[1]
     return default_dict
 
 
