@@ -161,6 +161,38 @@ def _find_onebyone_input_sheet(input_filename):
     return design_input_sheet[0]
 
 
+def _check_designinput(dsgn_input):
+    """Checks for valid input in designinput sheet"""
+
+    # Check for duplicate sensnames
+    sensitivity_names = []
+    for row in dsgn_input.itertuples():
+        if _has_value(row.sensname):
+            if row.sensname in sensitivity_names:
+                raise ValueError(
+                    "sensname '{}' was found on more than one row in designinput sheet. "
+                    "Two sensitivities can not share the same sensname. "
+                    "Please correct this and rerun".format(row.sensname)
+                )
+            else:
+                sensitivity_names.append(row.sensname)
+
+
+def _check_for_mixed_sensitivities(sens_name, sens_group):
+    """Checks for valid input in designinput sheet. A sensitivity cannot contain
+two different sensitivity types"""
+
+    types = sens_group.groupby("type", sort=False)
+    if len(types) > 1:
+        raise ValueError(
+            "The sensitivity with sensname '{}' in designinput sheet contains more "
+            "than one sensitivity type. For each sensname all parameters must be specified "
+            "using the same type (seed, scenario, dist, ref, background, extern)".format(
+                sens_name
+            )
+        )
+
+
 def _excel2dict_onebyone(input_filename, sheetnames=None):
     """Reads spesification for onebyone design
 
@@ -246,6 +278,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
     # Read input for sensitivities
     inputdict["sensitivities"] = OrderedDict()
     designinput = pd.read_excel(input_filename, design_inp_sheet)
+    _check_designinput(designinput)
 
     designinput["sensname"].fillna(method="ffill", inplace=True)
 
@@ -269,6 +302,8 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     # Read each sensitivity
     for sensname, group in grouped:
+
+        _check_for_mixed_sensitivities(sensname, group)
 
         sensdict = OrderedDict()
 
