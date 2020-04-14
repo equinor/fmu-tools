@@ -12,6 +12,7 @@ from fmu.tools.sensitivities import design_distributions as dists
 
 # pylint: disable=protected-access
 
+
 def test_check_dist_params_normal():
     """Test normal dist param checker"""
     # First element in returned 2-tuple is True or False:

@@ -33,7 +33,7 @@ def find_combinations(selections):
         tempcomb = []
         for yitem in xitem:
             for combitem in combinations:
-                tempcomb.append(combitem+[yitem])
+                tempcomb.append(combitem + [yitem])
         combinations = tempcomb
 
     return combinations
