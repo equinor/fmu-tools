@@ -104,7 +104,44 @@ def test_duplicate_sensname_exception(tmpdir):
     with pytest.raises(
         ValueError, match="Two sensitivities can not share the same sensname"
     ):
-        dict_design = excel2dict_design("designinput3.xlsx")
+        dict_design = excel2dict_design("designinput3.xlsx")  # noqa
+
+
+def test_strip_spaces(tmpdir):
+    """Spaces before and after parameter names are probabaly
+    invisible user errors in Excel sheets. Remove them."""
+    mock_spacious_designinput = pd.DataFrame(
+        data=[
+            ["sensname", "numreal", "type", "param_name"],
+            ["rms_seed   ", "", "seed"],
+        ]
+    )
+    defaultvalues_spacious = pd.DataFrame(
+        data=[
+            ["parametername", "value"],
+            ["  spacious_multiplier", 1.2],
+            ["spacious2  ", 3.3],
+        ]
+    )
+    tmpdir.chdir()
+    writer = pd.ExcelWriter("designinput_spaces.xlsx")
+    MOCK_GENERAL_INPUT.to_excel(
+        writer, sheet_name="general_input", index=False, header=None
+    )
+    mock_spacious_designinput.to_excel(
+        writer, sheet_name="designinput", index=False, header=None
+    )
+    defaultvalues_spacious.to_excel(
+        writer, sheet_name="defaultvalues", index=False, header=None
+    )
+    writer.save()
+
+    dict_design = excel2dict_design("designinput_spaces.xlsx")
+    assert list(dict_design["sensitivities"].keys())[0] == "rms_seed"
+
+    # Check default values parameter names:
+    def_params = list(dict_design["defaultvalues"].keys())
+    assert [par.strip() for par in def_params] == def_params
 
 
 def test_mixed_senstype_exception(tmpdir):
@@ -129,4 +166,4 @@ def test_mixed_senstype_exception(tmpdir):
     writer.save()
 
     with pytest.raises(ValueError, match="contains more than one sensitivity type"):
-        dict_design = excel2dict_design("designinput4.xlsx")
+        dict_design = excel2dict_design("designinput4.xlsx")  # noqa

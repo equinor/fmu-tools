@@ -12,7 +12,7 @@ from .sensitivities import calc_tornadoinput  # noqa
 from .sensitivities import find_combinations  # noqa
 from .sensitivities import excel2dict_design  # noqa
 
-from .qcforward import qcforward
+from .qcforward import qcforward  # noqa
 
 try:
     from .sensitivities import add_webviz_tornadoplots  # noqa
