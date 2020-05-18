@@ -9,6 +9,10 @@ from collections import OrderedDict
 import pandas as pd
 import yaml
 
+from fmu.tools.sensitivities import summarize_design
+from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
+from fmu import ensemble
+
 try:
     from webviz import SubMenu, Page
     from webviz.page_elements import TornadoPlot
@@ -25,11 +29,6 @@ that is being deprecated and will not be supported throughout 2020.
 Check https://github.com/equinor/webviz-subsurface for sensitivity
 visualization using the new framework.
 """
-
-
-from fmu.tools.sensitivities import summarize_design
-from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
-from fmu import ensemble
 
 
 def yconfig(inputfile):

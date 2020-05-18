@@ -8,6 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import yaml
+import six
 
 SEEDS_DEPRECATION_WARNING = """
 The keyword "seeds" in the "general_input" sheet is changed
@@ -170,8 +171,8 @@ def _check_designinput(dsgn_input):
         if _has_value(row.sensname):
             if row.sensname in sensitivity_names:
                 raise ValueError(
-                    "sensname '{}' was found on more than one row in designinput sheet. "
-                    "Two sensitivities can not share the same sensname. "
+                    "sensname '{}' was found on more than one row in designinput "
+                    "sheet. Two sensitivities can not share the same sensname. "
                     "Please correct this and rerun".format(row.sensname)
                 )
             else:
@@ -186,10 +187,9 @@ two different sensitivity types"""
     if len(types) > 1:
         raise ValueError(
             "The sensitivity with sensname '{}' in designinput sheet contains more "
-            "than one sensitivity type. For each sensname all parameters must be specified "
-            "using the same type (seed, scenario, dist, ref, background, extern)".format(
-                sens_name
-            )
+            "than one sensitivity type. For each sensname all parameters must be "
+            "specified using the same type (seed, scenario, dist, ref, background, "
+            "extern)".format(sens_name)
         )
 
 
@@ -278,6 +278,14 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
     # Read input for sensitivities
     inputdict["sensitivities"] = OrderedDict()
     designinput = pd.read_excel(input_filename, design_inp_sheet)
+
+    # First column with parameter names should have spaces stripped,
+    # but we need to preserve NaNs:
+    not_nan_sensnames = ~designinput["sensname"].isnull()
+    designinput.loc[not_nan_sensnames, "sensname"] = (
+        designinput.loc[not_nan_sensnames, "sensname"].astype(str).str.strip()
+    )
+
     _check_designinput(designinput)
 
     designinput["sensname"].fillna(method="ffill", inplace=True)
@@ -366,6 +374,12 @@ def _read_defaultvalues(filename, sheetname):
     """
     default_dict = OrderedDict()
     default_df = pd.read_excel(filename, sheetname, header=0, index_col=0)
+    # Strip spaces before and after parameter names, if they are there
+    # it is probably invisible user errors in Excel.
+    default_df.index = [
+        paramname.strip() if isinstance(paramname, six.string_types) else paramname
+        for paramname in default_df.index
+    ]
     for row in default_df.itertuples():
         if str(row[0]) in default_dict.keys():
             print(
