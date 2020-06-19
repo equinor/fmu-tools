@@ -43,6 +43,7 @@ TEST_REQUIREMENTS = [
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
+    "rmsvolumetrics2csv=fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main",
 ]
 
 
