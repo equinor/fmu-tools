@@ -9,4 +9,6 @@ for FMU (Fast Model Update).
 This library will contain tools for setting up and analysing sensitivities, 
 and tools for visualization (coviz).
 
-This software is internal to Equinor ASA and shall not be shared externally.
+This software is released under LGPLv3.
+
+Copyright 2018-2020 Equinor ASA.
