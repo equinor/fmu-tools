@@ -7,7 +7,7 @@ of various issues during an ensemble run.
 Design philosophy
 -----------------
 
-* The ``qcforward`` shall be possibleto run both inside RMS and outside RMS
+* The ``qcforward`` shall be possible to run both inside RMS and outside RMS
 * All method shall have a similar appearance
 * etc
 
