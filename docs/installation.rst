@@ -4,13 +4,14 @@
 Installation
 ============
 
+The installation will be available on PYPI.
 
-For FMU users
---------------
 
-The stable release is distributed for all Equinor users through
-``/project/res``. Eventually it will be distribued through Komodo,
-with access to stable, testing and bleeding versions.
+For Equinor
+-----------
+
+For all Equinor users  `fmu-tools` will be installed through
+Komodo, with access to stable, testing and bleeding versions.
 
 
 For developers

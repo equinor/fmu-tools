@@ -1,19 +1,26 @@
-The qcforward class (DOC PREVIEW!)
+The qcforward class (in prep.)
 ==================================
 
-The ``qcforwards`` class provides a set of methods (function) to check the result
+The ``qcforward`` class provides a set of methods (function) to check the result
 of various issues during an ensemble run.
 
+Design philosophy
+-----------------
 
-Check: wellzonation_vs_grid
+* The ``qcforward`` shall be possibleto run both inside RMS and outside RMS
+* All method shall have a similar appearance
+* etc
+
+
+wellzonation_vs_grid
 ---------------------------
 
 This method check how the zonelog matches with zonation in the 3D grid. If worse than
 a given set of limits, either are warning is given or a full stop of the workflow
 is forced.
 
-This workf low will work both in RMS (using ``rmsproject`` key) or outside RMS (using
-``gridfile`` and ``wellfiles`` keyes).
+This workflow will work both in RMS (using ``rmsproject`` key) or outside RMS (using
+``gridfile`` and ``wellfiles`` keys).
 
 .. code-block:: python
 
@@ -44,12 +51,7 @@ This workf low will work both in RMS (using ``rmsproject`` key) or outside RMS (
     if  __name__ == "__main__":
         check()
 
+grid_statistics
+---------------
 
-That is all for now, folks.
-
-
-
-
-
-
-
+in prep.

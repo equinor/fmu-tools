@@ -2,11 +2,15 @@ name: fmu-tools
 
 on:
   push:
+
+  pull_request:
+    branches:
+      - master
+    types: [created, synchronize]
+
   release:
     types:
       - published
-  pull_request:
-    types: [created, synchronize]
 
 jobs:
   fmu-tools:
@@ -32,11 +36,12 @@ jobs:
 
     - name: Install requirements
       run: |
-        pip install -r requirements.txt
-        pip install -r requirements_dev.txt
+        pip install pip -U
         pip install git+https://github.com/equinor/libecl
         pip install git+https://github.com/equinor/fmu-ensemble
         pip install .
-        
+
     - name: Run tests
-      run: pytest ./tests
+      run: |
+        pip install pytest
+        pytest ./tests

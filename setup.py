@@ -47,10 +47,10 @@ CONSOLE_SCRIPTS = [
 ]
 
 
-with open("README.rst") as readme_file:
+with open("README.md") as readme_file:
     README = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
+with open("HISTORY.md") as history_file:
     HISTORY = history_file.read()
 
 
@@ -69,6 +69,7 @@ class CleanUp(_clean):
         "pip-wheel-metadata",
         ".eggs",
         "dist",
+        "build",
         "sdist",
         "wheel",
         ".pytest_cache",

@@ -8,9 +8,8 @@ Contents:
 
    readme
    installation
-   usage
-   examples
-   modules
+   fmudesign
+   qcforward
    contributing
    authors
    history
