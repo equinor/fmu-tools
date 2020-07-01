@@ -14,6 +14,9 @@ from .sensitivities import excel2dict_design  # noqa
 
 from .qcforward import qcforward  # noqa
 
+from .fmu_postprocess import qc_fmu_postprocess  # noqa
+from .fmu_postprocess import fm_fmu_postprocess  # noqa
+
 try:
     from .sensitivities import add_webviz_tornadoplots  # noqa
 except ImportError:
