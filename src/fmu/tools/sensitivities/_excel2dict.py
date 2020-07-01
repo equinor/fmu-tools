@@ -246,6 +246,9 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
     else:
         inputdict["seeds"] = None
 
+    if "repeats" not in generalinput[1]:
+        raise LookupError('"repeats" must be specified in general_input sheet')
+
     inputdict["repeats"] = generalinput[1]["repeats"]
 
     if "distribution_seed" in generalinput[1]:
