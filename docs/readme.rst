@@ -1,1 +1,4 @@
-.. include:: ../README.rst
+The script library *fmu.tools*
+==============================
+
+.. include:: ../README.md

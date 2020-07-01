@@ -10,4 +10,6 @@ sphinx_rtd_theme>=0.4.1
 pytest>=3.8
 pytest-runner>=4.2
 setuptools_scm
-Sphinx>=1.7.8
+recommonmark
+black; python_version >= "3.6"
+pylint

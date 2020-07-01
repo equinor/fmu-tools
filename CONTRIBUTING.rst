@@ -66,8 +66,8 @@ It is required to be complient to code standards. A summary:
 PEP8 and PEP20
 ~~~~~~~~~~~~~~
 
-* We use PEP8 standard (https://www.python.org/dev/peps/pep-0008/) with `blacks` line
-  length excpetion and PEP20 philosophy.
+* We use PEP8 standard (https://www.python.org/dev/peps/pep-0008/) with `black's` line
+  length exception and PEP20 philosophy.
 
   This implies:
 
@@ -160,5 +160,3 @@ Generating docs for preliminary view
 .. code-block:: bash
 
   $ python setup.py build_sphinx
-
-
