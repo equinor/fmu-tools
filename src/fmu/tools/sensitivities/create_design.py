@@ -421,7 +421,7 @@ class SeedSensitivity(object):
                 distributions or values.
         """
         self.sensvalues = pd.DataFrame(index=realnums)
-        self.sensvalues[seedname] = seedvalues[0:len(realnums)]
+        self.sensvalues[seedname] = seedvalues[0 : len(realnums)]
 
         if parameters is not None:
             for key in parameters.keys():

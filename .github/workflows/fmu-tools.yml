@@ -34,6 +34,14 @@ jobs:
       run: |
         pip install numpy==1.16.6
 
+    - name: Check code style
+      if: matrix.python-version != '2.7'
+      run: |
+        pip install black
+        black --check .
+        pip install flake8
+        flake8 .
+
     - name: Install requirements
       run: |
         pip install pip -U

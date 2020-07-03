@@ -63,7 +63,12 @@ def test_combine_selectors():
     # Test on combinations of lists of lists, typical tornado usage
     selections = OrderedDict()
     selections["ITER"] = [["iter-0"]]
-    selections["ZONE"] = [["Nansen", "Larsson"], ["Eiriksson2.13"], ["Eiriksson2.12"], ["all"]]
+    selections["ZONE"] = [
+        ["Nansen", "Larsson"],
+        ["Eiriksson2.13"],
+        ["Eiriksson2.12"],
+        ["all"],
+    ]
 
     selections["REGION"] = [["oil_zone_Nansen_Larsson"], ["gas_zone_P1"], ["all"]]
 
