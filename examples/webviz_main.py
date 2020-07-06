@@ -10,19 +10,16 @@ from fmu.tools.sensitivities import add_webviz_tornadoplots
 from webviz import Webviz
 
 
-html_foldername = './webviz_example'
-title = 'Snorreberg'
+html_foldername = "./webviz_example"
+title = "Snorreberg"
 
-web = Webviz(title, theme='equinor')
-configpath = '../tests/data/sensitivities/config/'
+web = Webviz(title, theme="equinor")
+configpath = "../tests/data/sensitivities/config/"
 
 # add different types of plots to webportal
-add_webviz_tornadoplots(web, configpath +
-                         'config_example_geovolume_ensemble.yaml')
-add_webviz_tornadoplots(web, configpath +
-                         'config_example_geovolume.yaml')
-add_webviz_tornadoplots(web, configpath +
-                         'config_example_eclipse.yaml')
+add_webviz_tornadoplots(web, configpath + "config_example_geovolume_ensemble.yaml")
+add_webviz_tornadoplots(web, configpath + "config_example_geovolume.yaml")
+add_webviz_tornadoplots(web, configpath + "config_example_eclipse.yaml")
 
 # Finally, write html
 web.write_html(html_foldername, overwrite=True, display=True)
