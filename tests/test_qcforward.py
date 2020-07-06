@@ -2,18 +2,38 @@
 
 from __future__ import absolute_import, division, print_function  # PY2
 
-
 from fmu.tools import qcforward as qcf
+import xtgeo
+
+GRIDFILE = "tests/data/xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff"
+ZONENAME = "Zone"
+ZONEFILE = "tests/data/xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff"
+WELLFILES = [
+    "tests/data/xtgeo-testdata/wells/reek/1/OP*.w",
+    "tests/data/xtgeo-testdata/wells/reek/1/WI*.w",
+]
+
+ZONELOGNAME = "Zonelog"
+MDLOGNAME = "MDepth"
 
 
 def test_zonelog_vs_grid_asfiles():
     """Testing the zonelog vs grid functionality using files"""
 
-    myqc = qcf.QCForward()
+    data = {
+        "grid": GRIDFILE,
+        "zone": {ZONENAME: ZONEFILE},
+        "wells": WELLFILES,
+        "zonelogname": {ZONENAME: ZONELOGNAME},
+        "mdlogname": MDLOGNAME,
+    }
 
-    assert isinstance(myqc, qcf.QCForward)
+    wellcheck = qcf.QCForward()
+    wellcheck.wellzonation_vs_grid(data)
 
-    myqc.wellzonation_vs_grid()
+    # check private members
+    assert isinstance(wellcheck._grid, xtgeo.Grid)
+    assert isinstance(wellcheck._gridzone, xtgeo.GridProperty)
 
 
 def test_zonelog_vs_grid_asrms():
@@ -22,5 +42,3 @@ def test_zonelog_vs_grid_asrms():
     myqc = qcf.QCForward()
 
     assert isinstance(myqc, qcf.QCForward)
-
-    myqc.wellzonation_vs_grid()
