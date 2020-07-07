@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function  # PY2
 
 from fmu.tools import qcforward as qcf
+import pytest
 import xtgeo
 
 GRIDFILE = "tests/data/xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff"
@@ -17,6 +18,7 @@ ZONELOGNAME = "Zonelog"
 MDLOGNAME = "MDepth"
 
 
+@pytest.fixture(scope="module")
 def test_zonelog_vs_grid_asfiles():
     """Testing the zonelog vs grid functionality using files"""
 
