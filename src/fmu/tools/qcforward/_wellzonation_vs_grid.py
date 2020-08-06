@@ -2,7 +2,6 @@
 This private module in qcforward is used to check wellzonation vs grid
 """
 
-from warnings import warn
 import collections
 import numpy as np
 from . import _parse_data
@@ -65,7 +64,7 @@ def _parse_wzong(data):
     return wzong
 
 
-def wellzonation_vs_grid(self, data):
+def wellzonation_vs_grid(self, data, dryrun=False):
 
     # parsing data stored is self._xxx (general data like grid)
     _parse_data.parse(self, data)
@@ -73,13 +72,17 @@ def wellzonation_vs_grid(self, data):
     # parse data that are special for this check
     wzong = _parse_wzong(data)
 
+    if dryrun:
+        self._print_info("Dryrun only, not much done, return")
+        return
+
     match_all = []
 
     for wll in self._wells.wells:
 
         res = self._grid.report_zone_mismatch(
             well=wll,
-            zonelogname=data["zonelogname"],
+            zonelogname=self._zonelogname,
             zoneprop=self._gridzone,
             zonelogrange=wzong.zonelogrange,
             depthrange=[1300, 9999],

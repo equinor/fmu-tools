@@ -38,35 +38,6 @@ def _get_verbosity(self, data):
             self._verbosity = 0
 
 
-def _read_from_rms(self, data):
-    """Read data inside RMS"""
-
-    _get_verbosity(self, data)
-
-    self._project = data["project"]
-
-    if "grid" in data.keys():
-
-        gridname = data["grid"]
-        self.print_debug("GRIDPATH: {}".format(gridname))
-        self._grid = xtgeo.grid_from_roxar(self._project, gridname)
-
-    if "zone" in data.keys():
-        self._gridzone = xtgeo.gridproperty_from_roxar(
-            self._project, data["grid"], data["zone"]
-        )
-
-    if "wells" in data.keys():
-        if isinstance(data["wells"], list):
-            for welldata in data["wells"]:
-                for wellentry in glob(abswelldata):
-                    wdata.append(xtgeo.well_from_roxar(self._project, wll))
-                    self.print_debug(wellentry)
-
-        self._wells = xtgeo.Wells()
-        self._wells.wells = wdata
-
-
 def _read_from_disk(self, data):
 
     _get_verbosity(self, data)
@@ -76,18 +47,30 @@ def _read_from_disk(self, data):
         self.print_debug("PATH: {}".format(data["path"]))
         self._path = data["path"]
 
+    reuse_grid = False
     if "grid" in data.keys():
 
         gridpath = join(self._path, data["grid"])
-        self.print_debug("GRIDPATH: {}".format(gridpath))
-        self._grid = xtgeo.Grid(gridpath)
+        if gridpath == self._gridname:
+            self._print_info("Grid is already loaded")
+            reuse_grid = True
+        else:
+            self.print_debug("GRIDPATH: {}".format(gridpath))
+            self._grid = xtgeo.Grid(gridpath)
+            self._gridname = gridpath
 
     if "zone" in data.keys():
         zonedict = data["zone"]
         zonename, zonefile = _unpack_dict1(zonedict)
 
         zonefile = join(self._path, zonefile)
-        self._gridzone = xtgeo.GridProperty(zonefile, name=zonename)
+
+        # since grid can be different but zonefile may the same (rare for files...)
+        if reuse_grid and zonefile == self._gridzonename:
+            self._print_info("Grid zone is already loaded")
+        else:
+            self._gridzone = xtgeo.GridProperty(zonefile, name=zonename)
+            self._gridzonename = zonefile
 
     if "wells" in data.keys():
         # fields may contain wildcards for "globbing"
@@ -101,3 +84,52 @@ def _read_from_disk(self, data):
 
         self._wells = xtgeo.Wells()
         self._wells.wells = wdata
+
+
+def _read_from_rms(self, data):
+    """Read data from inside RMS or via Roxar API"""
+
+    _get_verbosity(self, data)
+
+    self._project = data["project"]
+
+    reuse_grid = False
+    if "grid" in data.keys():
+
+        gridname = data["grid"]
+
+        if gridname == self._gridname:
+            self._print_info("Grid is already loaded")
+            reuse_grid = True  # grid is already loaded
+        else:
+            self.print_debug("GRIDPATH: {}".format(gridname))
+            self._grid = xtgeo.grid_from_roxar(self._project, gridname)
+            self._gridname = gridname
+
+    if "zone" in data.keys():
+        if reuse_grid and data["zone"] == self._gridzonename:
+            self._print_info("Grid zone is already loaded")
+        else:
+            self._gridzone = xtgeo.gridproperty_from_roxar(
+                self._project, data["grid"], data["zone"]
+            )
+
+    if "wells" in data.keys():
+        wdata = []
+        if isinstance(data["wells"], list):
+            for welldata in data["wells"]:
+                for wellentry in welldata:
+                    wdata.append(
+                        xtgeo.well_from_roxar(
+                            self._project,
+                            welldata,
+                            logrun=self._wlogrun,
+                            trajectory=self._wtrajectory,
+                            lognames=[self._zonelogname],
+                        )
+                    )
+                    self.print_debug(wellentry)
+
+        self._wells = xtgeo.Wells()
+        self._wells.wells = wdata
+

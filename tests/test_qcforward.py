@@ -38,10 +38,12 @@ ZONELOGNAME = "Zonelog"
 # RMS project data
 TESTPATH = abspath("../xtgeo-testdata-equinor/data/rmsprojects")
 PROJ = dict()
-PROJ["1.3"] = os.path.join(TESTPATH, "reek.rms11.1.0")
+PROJ = os.path.join(TESTPATH, "reek.rms11.1.0")
 GRID = "Geogrid"
 ZONENAME = "Zone"
-WELLS = ["OP*.w", "WI*.w"]
+WELLS = (["OP*.w", "WI*.w"],)
+WLOGRUN = ("log",)
+WTRAJ = "traj"
 ZONELOGNAME = "Zonelog"
 
 # ======================================================================================
@@ -77,18 +79,22 @@ def test_zonelog_vs_grid_asfiles():
 def test_zonelog_vs_grid_asrms():
     """Testing the zonelog vs grid functionality inside RMS"""
 
-    # data = {
-    #     "verbosity": "debug",
-    #     "grid": "Geogrid",
-    #     "zone": "Zone",
-    #     "wells": WELLS,
-    #     "zonelogname": ZONELOGNAME,
-    #     "zonelogrange": [1, 3],  # inclusive range at both ends
-    #     "depthrange": [1580, 9999],
-    #     "actions_each": {"warnthreshold": 50, "stopthreshold": 40},
-    #     "actions_all": {"warnthreshold": 80, "stopthreshold": 60},
-    # }
+    data = {
+        "verbosity": "debug",
+        "project": PROJ,
+        "grid": "Geogrid",
+        "zone": "Zone",
+        "wells": WELLS,
+        "wlogrun": WLOGRUN,
+        "wtrajectory": WTRAJ,
+        "zonelogname": ZONELOGNAME,
+        "zonelogrange": [1, 3],  # inclusive range at both ends
+        "depthrange": [1580, 9999],
+        "actions_each": {"warnthreshold": 50, "stopthreshold": 40},
+        "actions_all": {"warnthreshold": 80, "stopthreshold": 60},
+    }
 
-    myqc = qcf.QCForward()
+    wellcheck = qcf.QCForward()
+    wellcheck.wellzonation_vs_grid(data, dryrun=True)
 
     assert isinstance(myqc, qcf.QCForward)
