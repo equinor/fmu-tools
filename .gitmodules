@@ -1,3 +1,0 @@
-[submodule "tests/data/xtgeo-testdata"]
-	path = tests/data/xtgeo-testdata
-	url = https://github.com/equinor/xtgeo-testdata
