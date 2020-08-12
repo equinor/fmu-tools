@@ -50,6 +50,7 @@ jobs:
         pip install .
 
     - name: Run tests
+      if: matrix.python-version != '2.7'
       run: |
         pip install pytest
         pytest ./tests
