@@ -1,7 +1,9 @@
 """The qcforward module"""
 
 import sys
-
+from os.path import join
+from copy import deepcopy
+import yaml
 from fmu import tools
 from . import _wellzonation_vs_grid as _wzong
 from . import _grid_statistics as _gstat
@@ -73,10 +75,27 @@ class QCForward(object):
 
         sys.exit(string)
 
+    def handle_data(self, data):
+        if isinstance(data, str):
+            try:
+                with open(data, "r") as stream:
+                    xdata = yaml.safe_load(stream)
+            except FileNotFoundError as err:
+                raise RuntimeError(err)
+        else:
+            xdata = deepcopy(data)
+
+        if "dump_yaml" in xdata and xdata["dump_yaml"]:
+            xdata.pop("dump_yaml", None)
+            with open(join(self._path, "wellzonation_vs_grid.yml"), "w") as stream:
+                yaml.dump(xdata, stream, default_flow_style=None)
+
+        return xdata
+
     # QC methods:
     # ==================================================================================
 
-    def wellzonation_vs_grid(self, data, dryrun=False):
+    def wellzonation_vs_grid(self, data):
         """Check well zonation or perforations vs 3D grid.
 
         Args:
@@ -87,7 +106,7 @@ class QCForward(object):
 
         self._method = "wellzonation_vs_grid"
 
-        _wzong.wellzonation_vs_grid(self, data, dryrun=dryrun)
+        _wzong.wellzonation_vs_grid(self, data)
 
     def grid_statistics(self, data):
         """Check grid statistics..."""

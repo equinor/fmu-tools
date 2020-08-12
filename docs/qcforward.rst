@@ -7,8 +7,8 @@ of various issues during an ensemble run.
 Design philosophy
 -----------------
 
-* The scripts shall be small and simple and easy to use also for modellers with
-  little Python experience.
+* The client (user) scripts shall be small and simple and easy to use also
+  for modellers with little Python experience.
 * Input will be a python dictionary, or a YAML file
 * The ``qcforward`` methods shall be possible to run both inside RMS and outside RMS
   (e.g. from an ERT job)
@@ -28,30 +28,43 @@ Signature
 
 The input to this method is a python dictionary with the following keys:
 
-If ran inside RMS:
 
-* wells: A list of wellnames which in turn can have wildcards.
-* zonelog: Name of zonelog
-* perflog: Perforations shall be present as flag log, where values > 0 means that a
-  perforation is present
-* trajectory: Name of trajectory in RMS
-* logrun: Name of logrun
-* grid: Name of grid (if inside RMS) or name of grid file (outside RMS)
-* zone: Name of "Zone" property (if inside RMS) or dictionary with name of Zone and
-  assosiated filename (if outside RMS)
-* limits: This is a new dictionary...
+Common fields (same input inside or outside RMS)
+
+verbosity
+  Level of output while running None, "info" or "debug", default is None.
+
+zonelogname
+  Name of zonelog
+
+actions_each
+  This is a dictionary that shows what actions which shall be performed per well,
+  for example ``{"warnthreshold": 50, "stopthreshold": 30}`` which means that match
+  less or equal than 50% will trigger a warning, while a match <= 30% will trigger
+  a stop in work flow.
+
+Keys if ran inside RMS:
+
+wells
+  A list of wellnames which in turn can have python valid regular expressions,
+  see examples.
+logrun
+  Name of logrun in RMS
+trajectory
+  Name of trajectory in RMS
+
 
 If ran outside RSM:
 
-* wells: Outside RMS, wells must be on RMS ascii well format and a separate log
-  representing measured depth (MD) must be present.
-* zonelog: Name of zonelog
-* mdlog: Name of log representing measured depth (MD)
-* perflog: Perforations shall be present as flag log, where values > 0 means that a
-  perforation is present
-* grid: Name of grid file
-* zone: A dictionary with name of Zone and assosiated filename
-* limits: This is a new dictionary...
+wells
+  Outside RMS, wells must be on RMS ascii well format. File wildcards are
+  allowed, se example.
+grid
+  Name of file with grid (on ROFF or EGRID or GRDECL format)
+zone
+  A dictionary with name of Zone and assosiated filename, for example
+  ``{"Zone", "zone.roff"}``
+
 
 
 Known issues

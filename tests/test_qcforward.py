@@ -31,9 +31,10 @@ def test_zonelog_vs_grid_asfiles():
         "zonelogname": ZONELOGNAME,
         "zonelogrange": [1, 3],  # inclusive range at both ends
         "depthrange": [1580, 9999],
-        "actions_each": {"warnthreshold": 50, "stopthreshold": 30},
-        "actions_all": {"warnthreshold": 80, "stopthreshold": 60},
-        "report": ["somereport.csv", "write"],
+        "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
+        "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
+        "report": {"file": "somereport.csv", "mode": "write"},
+        "dump_yaml": True,
     }
 
     wellcheck = qcf.QCForward()
@@ -43,3 +44,10 @@ def test_zonelog_vs_grid_asfiles():
     assert isinstance(wellcheck._grid, xtgeo.Grid)
     assert isinstance(wellcheck._gridzone, xtgeo.GridProperty)
     assert isinstance(wellcheck._wells, xtgeo.Wells)
+
+    # now read the dump file:
+    wellcheck.wellzonation_vs_grid("wellzonation_vs_grid.yml")
+
+
+if __name__ == "__main__":
+    test_zonelog_vs_grid_asfiles()

@@ -1,11 +1,16 @@
 """
 This private module in qcforward is used to check wellzonation vs grid
 """
-
+import logging
+import sys
+from os.path import join
 import collections
 import numpy as np
 import pandas as pd
 from . import _parse_data
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.CRITICAL)
 
 WZong = collections.namedtuple(
     "WZong", "zonelogrange depthrange actions_each actions_all report"
@@ -20,7 +25,7 @@ def _parse_wzong(data):
     depthrange = (0, 9999)
     actions_each = {"warnthreshold": 99, "stopthreshold": 50}
     actions_all = {"warnthreshold": 99, "stopthreshold": 88}
-    report = (None, "write")
+    report = {"file": None, "write": "write"}
 
     if "zonelogrange" in data:
         zlrange = data["zonelogrange"]
@@ -58,7 +63,7 @@ def _parse_wzong(data):
 
     if "report" in data:
         # todo check data
-        report = tuple(data["report"])
+        report = data["report"]
 
     wzong = WZong(
         zonelogrange=zonelogrange,
@@ -71,7 +76,29 @@ def _parse_wzong(data):
     return wzong
 
 
-def wellzonation_vs_grid(self, data, dryrun=False):
+def _make_report(wzong, data, well_all, match_all, well_warn, well_stop, well_status):
+    """Make a report which e.g. can be used in webviz plotting"""
+
+    res = collections.OrderedDict()
+    res["WELL"] = well_all
+    res["MATCH"] = match_all
+    res["WARN_LIMIT"] = well_warn
+    res["STOP_LIMIT"] = well_stop
+    res["STATUS"] = well_status
+
+    dfr = pd.DataFrame(res)
+
+    if wzong.report["file"]:
+        reportfile = join(data["path"], wzong.report["file"])
+        if wzong.report["mode"] == "append":
+            dfr.to_csv(reportfile, index=False, mode="a", header=None)
+        else:
+            dfr.to_csv(reportfile, index=False)
+
+    return dfr
+
+
+def wellzonation_vs_grid(self, data):
 
     # parsing data stored is self._xxx (general data like grid)
     self.print_info("Parsing data...")
@@ -81,14 +108,11 @@ def wellzonation_vs_grid(self, data, dryrun=False):
     self.print_info("Parsing additional data...")
     wzong = _parse_wzong(data)
 
-    if dryrun:
-        self.print_info("Dryrun only, not much done, return")
-        return
-
     match_all = []
     well_all = []
-    well_warn = []
-    well_stop = []
+    well_warn_limit = []
+    well_stop_limit = []
+    well_status = []
 
     for wll in self._wells.wells:
         self.print_debug("Working with well {}".format(wll.name))
@@ -111,25 +135,22 @@ def wellzonation_vs_grid(self, data, dryrun=False):
             self.print_info("Well: {0:30s} - {1: 5.3f}".format(wname, match))
             wlimit = wzong.actions_each["warnthreshold"]
             slimit = wzong.actions_each["stopthreshold"]
-            well_warn.append(wlimit)
-            well_stop.append(slimit)
+            well_warn_limit.append(wlimit)
+            well_stop_limit.append(slimit)
 
+            status = "OK"
             if match < wlimit:
-                self.give_warn(
-                    "Well {} has zonelogmatch = {} < {}".format(wname, match, wlimit)
-                )
-
+                status = "WARN"
             if match < slimit:
-                msg = "Well {} has zonelogmatch = {} < {}".format(wname, match, slimit)
-                self.force_stop(
-                    "Well {} has zonelogmatch = {} < {}".format(wname, match, slimit)
-                )
+                status = "STOP"
 
             match_all.append(match)
+            well_status.append(status)
         else:
             match_all.append(0.0)
-            well_warn.append("?")
-            well_stop.append("?")
+            well_warn_limit.append("?")
+            well_stop_limit.append("?")
+            well_status.append("?")
 
     # all data (look at averages)
     match_allv = np.array(match_all)
@@ -139,27 +160,30 @@ def wellzonation_vs_grid(self, data, dryrun=False):
 
     well_all.append("SUM_WELLS")
     match_all.append(mmean)
-    well_warn.append(wlimit)
-    well_stop.append(slimit)
+    well_warn_limit.append(wlimit)
+    well_stop_limit.append(slimit)
+
+    status = "OK"
+    if mmean < wlimit:
+        status = "WARN"
+    if mmean < slimit:
+        status = "STOP"
+
+    well_status.append(status)
+
+    dfr = _make_report(
+        wzong, data, well_all, match_all, well_warn_limit, well_stop_limit, well_status,
+    )
 
     self.print_debug("Results:")
+    print(dfr)
 
-    if wzong.report[0]:
-        res = collections.OrderedDict()
-        res["WELL"] = well_all
-        res["MATCH"] = match_all
-        res["WARN_LIMIT"] = well_warn
-        res["STOP_LIMIT"] = well_stop
+    dfr_warn = dfr[dfr["STATUS"] == "WARN"]
+    if len(dfr_warn) > 0:
+        print(dfr_warn)
 
-        dfr = pd.DataFrame(res)
-        if wzong.report[1] == "append":
-            dfr.to_csv(wzong.report[0], mode="a", header=None)
-        else:
-            dfr.to_csv(wzong.report[0])
-
-    if mmean < wlimit:
-        self.give_warn("Well average zonelogmatch = {} < {}".format(mmean, wlimit))
-
-    if mmean < slimit:
-        msg = "Well average zonelogmatch = {} < {}".format(mmean, slimit)
+    dfr_stop = dfr[dfr["STATUS"] == "STOP"]
+    if len(dfr_stop) > 0:
+        print(dfr_stop, file=sys.stderr)
+        msg = "One or more wells has status = STOP"
         self.force_stop(msg)

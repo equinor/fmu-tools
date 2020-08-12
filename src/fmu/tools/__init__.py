@@ -1,23 +1,31 @@
 # -*- coding: utf-8 -*-
 
 """Top-level package for fmu-tools"""
-
-# import logging
-
-# from .rms import volumetrics  # noqa
-
-# from .sensitivities import DesignMatrix  # noqa
-# from .sensitivities import summarize_design  # noqa
-# from .sensitivities import calc_tornadoinput  # noqa
-# from .sensitivities import find_combinations  # noqa
-# from .sensitivities import excel2dict_design  # noqa
+import logging
 
 from .qcforward import qcforward  # noqa
 
-# try:
-#     from .sensitivities import add_webviz_tornadoplots  # noqa
-# except ImportError:
-#     pass  # Separate warning in _add_webviz_tornadoplots
+try:
+    import roxar
+
+    ROXAR = True
+except ImportError:
+    ROXAR = False
+
+if not ROXAR:
+
+    from .rms import volumetrics  # noqa
+
+    from .sensitivities import DesignMatrix  # noqa
+    from .sensitivities import summarize_design  # noqa
+    from .sensitivities import calc_tornadoinput  # noqa
+    from .sensitivities import find_combinations  # noqa
+    from .sensitivities import excel2dict_design  # noqa
+
+    try:
+        from .sensitivities import add_webviz_tornadoplots  # noqa
+    except ImportError:
+        pass  # Separate warning in _add_webviz_tornadoplots
 
 try:
     from .version import version
