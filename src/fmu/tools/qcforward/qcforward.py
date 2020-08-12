@@ -2,6 +2,7 @@
 
 import sys
 
+from fmu import tools
 from . import _wellzonation_vs_grid as _wzong
 from . import _grid_statistics as _gstat
 
@@ -11,6 +12,16 @@ class QCForward(object):
     The QCforward class which has a set of QC functions that can be ran from
     either RMS python, or on disk. The input `data` will be
     somewhat different for the two run environents.
+
+    It should be easy to add new functions to this class. The idea is to reuse
+    as much as possible, and principles are:
+
+    * For the client (user), the callings scripts shall be lean
+
+    * All methods shal have a rich documention with examples, i.e. it shall
+      be possible for users with less skills in scripting to copy/paste and then modify
+      to their needs.
+
     """
 
     def __init__(self):
@@ -46,11 +57,24 @@ class QCForward(object):
         """Give warning to user"""
         print("WARN  >>", string)
 
-    @staticmethod
-    def force_stop(string):
-        """Give stop message and stop process"""
-        print("STOP! >>", string)
+    def force_stop(self, string):
+        """Give stop message to STDERR and stop process"""
+        mode = sys.stderr
+        print()
+        print(
+            "QCForward:{} from fmu.tools version: {}".format(
+                self._method, tools.__version__
+            )
+        )
+        print("!" * 70, file=mode)
+        print("STOP! >>", string, file=mode)
+        print("!" * 70, file=mode)
+        print()
+
         sys.exit(string)
+
+    # QC methods:
+    # ==================================================================================
 
     def wellzonation_vs_grid(self, data, dryrun=False):
         """Check well zonation or perforations vs 3D grid.

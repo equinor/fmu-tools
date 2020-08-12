@@ -3,6 +3,7 @@ This private module in qcforward is used to parse data
 """
 from os.path import join
 from glob import glob
+import re
 import xtgeo
 
 
@@ -52,7 +53,7 @@ def _read_from_disk(self, data):
 
         gridpath = join(self._path, data["grid"])
         if gridpath == self._gridname:
-            self._print_info("Grid is already loaded")
+            self.print_info("Grid is already loaded")
             reuse_grid = True
         else:
             self.print_debug("GRIDPATH: {}".format(gridpath))
@@ -67,7 +68,7 @@ def _read_from_disk(self, data):
 
         # since grid can be different but zonefile may the same (rare for files...)
         if reuse_grid and zonefile == self._gridzonename:
-            self._print_info("Grid zone is already loaded")
+            self.print_info("Grid zone is already loaded")
         else:
             self._gridzone = xtgeo.GridProperty(zonefile, name=zonename)
             self._gridzonename = zonefile
@@ -99,37 +100,54 @@ def _read_from_rms(self, data):
         gridname = data["grid"]
 
         if gridname == self._gridname:
-            self._print_info("Grid is already loaded")
+            self.print_info("Grid is already loaded")
             reuse_grid = True  # grid is already loaded
         else:
-            self.print_debug("GRIDPATH: {}".format(gridname))
+            self.print_info("Reading grid...")
+            self.print_debug("GRIDNAME: {}".format(gridname))
             self._grid = xtgeo.grid_from_roxar(self._project, gridname)
             self._gridname = gridname
 
+    self.print_debug("Looking for zone...")
     if "zone" in data.keys():
         if reuse_grid and data["zone"] == self._gridzonename:
-            self._print_info("Grid zone is already loaded")
+            self.print_info("Grid zone is already loaded")
         else:
             self._gridzone = xtgeo.gridproperty_from_roxar(
                 self._project, data["grid"], data["zone"]
             )
+            self._gridzonename = data["zone"]
+            self.print_debug("GRIDZONE: {}".format(self._gridzonename))
 
     if "wells" in data.keys():
+        # wells area allowed to spesified by regular expressions, e.g.
+        # ["55_33-[123]", "55_33-.*A.*"]
+
+        if "zonelogname" in data:
+            self._zonelogname = data["zonelogname"]
+
         wdata = []
-        if isinstance(data["wells"], list):
-            for welldata in data["wells"]:
-                for wellentry in welldata:
+
+        rmswells = [wll.name for wll in self._project.wells]
+        self.print_debug("All RMS wells: {}".format(rmswells))
+        if not isinstance(data["wells"], list):
+            raise ValueError("Wells input must be a list")
+
+        self.print_debug("Data wells to match: {}".format(data["wells"]))
+        for rmswell in rmswells:
+            for wreg in data["wells"]:
+                self.print_debug("Trying match {} vs re {}".format(rmswell, wreg))
+                if re.match(wreg, rmswell):
                     wdata.append(
                         xtgeo.well_from_roxar(
                             self._project,
-                            welldata,
+                            rmswell,
                             logrun=self._wlogrun,
                             trajectory=self._wtrajectory,
                             lognames=[self._zonelogname],
                         )
                     )
-                    self.print_debug(wellentry)
+                    self.print_info("Regex match found, RMS well: {}".format(rmswell))
 
         self._wells = xtgeo.Wells()
         self._wells.wells = wdata
-
