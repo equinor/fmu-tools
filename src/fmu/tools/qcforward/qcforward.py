@@ -2,9 +2,9 @@
 
 import sys
 from os.path import join
-from copy import deepcopy
-import yaml
+
 from fmu import tools
+import yaml
 from . import _wellzonation_vs_grid as _wzong
 from . import _grid_statistics as _gstat
 
@@ -83,7 +83,7 @@ class QCForward(object):
             except FileNotFoundError as err:
                 raise RuntimeError(err)
         else:
-            xdata = deepcopy(data)
+            xdata = data.copy()
 
         if "dump_yaml" in xdata and xdata["dump_yaml"]:
             xdata.pop("dump_yaml", None)
