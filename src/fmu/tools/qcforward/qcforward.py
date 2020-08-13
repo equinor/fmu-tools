@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function  # PY2
 import sys
 from os.path import join
 
-from fmu import tools
+import fmu.tools
 import yaml
 from . import _wellzonation_vs_grid as _wzong
 from . import _grid_statistics as _gstat
@@ -66,7 +66,7 @@ class QCForward(object):
         print()
         print(
             "QCForward:{} from fmu.tools version: {}".format(
-                self._method, tools.__version__
+                self._method, fmu.tools.__version__
             )
         )
         print("!" * 70, file=mode)
