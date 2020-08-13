@@ -1,6 +1,8 @@
 """
 This private module in qcforward is used to check wellzonation vs grid
 """
+from __future__ import absolute_import, division, print_function  # PY2
+
 import logging
 import sys
 from os.path import join

@@ -1,4 +1,5 @@
 """The qcforward module"""
+from __future__ import absolute_import, division, print_function  # PY2
 
 import sys
 from os.path import join
