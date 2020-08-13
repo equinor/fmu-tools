@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function  # PY2
 
 import os
+import sys
 from os.path import abspath
 from fmu.tools import qcforward as qcf
 import pytest
@@ -23,6 +24,7 @@ ZONELOGNAME = "Zonelog"
 REPORT = abspath("./somefile.csv")
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
 def test_zonelog_vs_grid_asfiles():
     """Testing the zonelog vs grid functionality using files"""
 
@@ -59,6 +61,7 @@ def test_zonelog_vs_grid_asfiles():
     os.unlink(REPORT)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
 def test_zonelog_vs_grid_asfiles_shall_stop():
     """Testing the zonelog vs grid functionality using files"""
 
