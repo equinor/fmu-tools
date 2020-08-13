@@ -54,7 +54,7 @@ def test_zonelog_vs_grid_asfiles():
 
     dfr = pd.read_csv(REPORT)
     print(dfr)
-    assert dfr["MATCH"][3] == pytest.approx(64.367816, 0.001)
+    assert dfr.loc[11, "MATCH"] == pytest.approx(58.15, 0.01)
     os.unlink("somefile.yml")
     os.unlink(REPORT)
 
