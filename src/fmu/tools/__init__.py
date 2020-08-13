@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Top-level package for fmu-tools"""
-import logging
 
 from .qcforward import qcforward  # noqa
 
 try:
-    import roxar
+    import roxar  # noqa
 
     ROXAR = True
 except ImportError:
