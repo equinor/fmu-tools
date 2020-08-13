@@ -87,8 +87,9 @@ class QCForward(object):
 
         if "dump_yaml" in xdata and xdata["dump_yaml"]:
             xdata.pop("dump_yaml", None)
-            with open(join(self._path, "wellzonation_vs_grid.yml"), "w") as stream:
+            with open(join(self._path, data["dump_yaml"]), "w") as stream:
                 yaml.dump(xdata, stream, default_flow_style=None)
+            self.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
 
         return xdata
 
@@ -105,6 +106,7 @@ class QCForward(object):
         """
 
         self._method = "wellzonation_vs_grid"
+        data = self.handle_data(data)
 
         _wzong.wellzonation_vs_grid(self, data)
 

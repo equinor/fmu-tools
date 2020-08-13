@@ -76,7 +76,9 @@ def _parse_wzong(data):
     return wzong
 
 
-def _make_report(wzong, data, well_all, match_all, well_warn, well_stop, well_status):
+def _make_report(
+    self, wzong, data, well_all, match_all, well_warn, well_stop, well_status
+):
     """Make a report which e.g. can be used in webviz plotting"""
 
     res = collections.OrderedDict()
@@ -89,7 +91,7 @@ def _make_report(wzong, data, well_all, match_all, well_warn, well_stop, well_st
     dfr = pd.DataFrame(res)
 
     if wzong.report["file"]:
-        reportfile = join(data["path"], wzong.report["file"])
+        reportfile = join(self._path, wzong.report["file"])
         if wzong.report["mode"] == "append":
             dfr.to_csv(reportfile, index=False, mode="a", header=None)
         else:
@@ -98,7 +100,9 @@ def _make_report(wzong, data, well_all, match_all, well_warn, well_stop, well_st
     return dfr
 
 
-def wellzonation_vs_grid(self, data):
+def wellzonation_vs_grid(
+    self, data
+):  # pylint: disable=too-many-locals, too-many-statements
 
     # parsing data stored is self._xxx (general data like grid)
     self.print_info("Parsing data...")
@@ -122,7 +126,7 @@ def wellzonation_vs_grid(self, data):
             zonelogname=self._zonelogname,
             zoneprop=self._gridzone,
             zonelogrange=wzong.zonelogrange,
-            depthrange=[1300, 9999],
+            depthrange=wzong.depthrange,
             resultformat=2,
         )
         self.print_debug(res)
@@ -172,7 +176,14 @@ def wellzonation_vs_grid(self, data):
     well_status.append(status)
 
     dfr = _make_report(
-        wzong, data, well_all, match_all, well_warn_limit, well_stop_limit, well_status,
+        self,
+        wzong,
+        data,
+        well_all,
+        match_all,
+        well_warn_limit,
+        well_stop_limit,
+        well_status,
     )
 
     self.print_debug("Results:")

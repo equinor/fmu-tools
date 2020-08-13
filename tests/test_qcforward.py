@@ -2,8 +2,11 @@
 
 from __future__ import absolute_import, division, print_function  # PY2
 
+import os
 from os.path import abspath
 from fmu.tools import qcforward as qcf
+import pytest
+import pandas as pd
 import xtgeo
 
 # filedata
@@ -17,6 +20,7 @@ WELLFILES = [
 ]
 
 ZONELOGNAME = "Zonelog"
+REPORT = abspath("./somefile.csv")
 
 
 def test_zonelog_vs_grid_asfiles():
@@ -33,8 +37,8 @@ def test_zonelog_vs_grid_asfiles():
         "depthrange": [1580, 9999],
         "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
         "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
-        "report": {"file": "somereport.csv", "mode": "write"},
-        "dump_yaml": True,
+        "report": {"file": REPORT, "mode": "write"},
+        "dump_yaml": "somefile.yml",
     }
 
     wellcheck = qcf.QCForward()
@@ -46,8 +50,32 @@ def test_zonelog_vs_grid_asfiles():
     assert isinstance(wellcheck._wells, xtgeo.Wells)
 
     # now read the dump file:
-    wellcheck.wellzonation_vs_grid("wellzonation_vs_grid.yml")
+    wellcheck.wellzonation_vs_grid("somefile.yml")
+
+    dfr = pd.read_csv(REPORT)
+    print(dfr)
+    assert dfr["MATCH"][3] == pytest.approx(64.367816, 0.001)
+    os.unlink("somefile.yml")
+    os.unlink(REPORT)
 
 
-if __name__ == "__main__":
-    test_zonelog_vs_grid_asfiles()
+def test_zonelog_vs_grid_asfiles_shall_stop():
+    """Testing the zonelog vs grid functionality using files"""
+
+    data = {
+        "verbosity": "debug",
+        "path": PATH,
+        "grid": GRIDFILE,
+        "zone": {ZONENAME: ZONEFILE},
+        "wells": WELLFILES,
+        "zonelogname": ZONELOGNAME,
+        "zonelogrange": [1, 3],  # inclusive range at both ends
+        "depthrange": [1580, 9999],
+        "actions_each": {"warnthreshold": 50, "stopthreshold": 70},
+        "actions_all": {"warnthreshold": 80, "stopthreshold": 70},
+    }
+
+    wellcheck = qcf.QCForward()
+
+    with pytest.raises(SystemExit):
+        wellcheck.wellzonation_vs_grid(data)
