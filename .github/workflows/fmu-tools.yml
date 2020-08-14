@@ -51,5 +51,6 @@ jobs:
 
     - name: Run tests
       run: |
+        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
         pip install pytest
         pytest ./tests
