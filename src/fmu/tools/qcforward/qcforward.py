@@ -21,7 +21,7 @@ class QCForward(object):
 
     * For the client (user), the callings scripts shall be lean
 
-    * All methods shal have a rich documention with examples, i.e. it shall
+    * All methods shall have a rich documention with examples, i.e. it shall
       be possible for users with less skills in scripting to copy/paste and then modify
       to their needs.
 
@@ -32,7 +32,7 @@ class QCForward(object):
         self._data = None
 
         self._verbosity = 0
-        self._project = None  # Roxar API project
+        self._project = None  # Roxar API project, if any
         self._path = "."
 
         self._grid = None  # the primary XTGeo Grid() object
@@ -102,7 +102,6 @@ class QCForward(object):
 
         Args:
             data (dict): This is dictonary telling where data comes from
-            dryrun (bool): Just for testing without actually reading data etc.
 
         """
 
