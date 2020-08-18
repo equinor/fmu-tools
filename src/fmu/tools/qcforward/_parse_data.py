@@ -92,6 +92,7 @@ class _QCForwardData(object):
                 self._grid = xtgeo.Grid(gridpath)
                 self._gridid = gridpath
 
+        # read from RMS/ROXAPI
         elif "grid" in self._data and self._project:
             gridname = data["grid"]
 
@@ -104,7 +105,6 @@ class _QCForwardData(object):
                 self._grid = xtgeo.grid_from_roxar(self._project, gridname)
                 self._gridid = gridname
 
-
     def read_gridprops(self):
         """Read 3D grid if requested, from file or RMS"""
 
@@ -114,7 +114,7 @@ class _QCForwardData(object):
         if gridname == self._gridid:
             reusegrid = True
 
-        if "gridprops" in self._data and self._project:
+        if "gridprops" in self._data.keys() and self._project:
             gridname = data["grid"]
 
             if gridname == self._gridid:
@@ -125,7 +125,7 @@ class _QCForwardData(object):
                 self._grid = xtgeo.grid_from_roxar(self._project, gridname)
                 self._gridid = gridname
 
-        elif "grid" in self._data and self._project is None:
+        elif "gridprops" in self._data.keys() and self._project is None:
             gridpath = join(self._path, data["grid"])
             if gridpath == self._gridid:
                 self.print_info("Grid is already loaded")
