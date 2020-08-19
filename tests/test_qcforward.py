@@ -9,6 +9,7 @@ from fmu.tools import qcforward as qcf
 import pytest
 import pandas as pd
 import xtgeo
+from jsonschema.exceptions import ValidationError
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
@@ -22,6 +23,25 @@ WELLFILES = [
 
 ZONELOGNAME = "Zonelog"
 REPORT = abspath("./somefile.csv")
+
+
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
+def test_zonelog_vs_grid_validation():
+    wellcheck = qcf.QCForward()
+
+    data = {
+        "path": PATH,
+        "grid": GRIDFILE,
+        "zone": {ZONENAME: ZONEFILE},
+        "wells": WELLFILES,
+        "zonelogname": ZONELOGNAME,
+        "zonelogrange": [1, 3],  # inclusive range at both ends
+        "depthrange": ["THISISNOTVALIDDEPTH", 9999],
+    }
+    wellcheck = qcf.QCForward()
+
+    with pytest.raises(ValidationError):
+        wellcheck.wellzonation_vs_grid(data)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")

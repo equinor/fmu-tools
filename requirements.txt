@@ -6,3 +6,4 @@ xlrd~=1.2
 fmu-ensemble>=1.2
 libecl>=2.9
 xtgeo>=2.8
+jsonschema>=3.2.0

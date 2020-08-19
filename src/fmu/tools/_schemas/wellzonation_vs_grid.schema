@@ -1,0 +1,154 @@
+{
+    "title": "zonelog_vs_grid",
+    "description": "Input configuration for zonelog vs grid method",
+    "required": [
+        "path",
+        "grid",
+        "zone",
+        "wells",
+        "zonelogname",
+        "zonelogrange"
+    ],
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "properties": {
+        "verbosity": {
+            "description": "Log detail level",
+            "type": "string",
+            "examples": [
+                "debug"
+            ]
+        },
+        "path": {
+            "description": "Path to some folder",
+            "type": "string",
+            "examples": [
+                "/path/to/some/folder"
+            ]
+        },
+        "grid": {
+            "description": "Name of grid",
+            "type": "string",
+            "examples": [
+                "mygrid.roff"
+            ]
+        },
+        "zone": {
+            "description": "Name/Path of zone ",
+            "type": "object",
+            "patternProperties": {
+                "^.*$": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        "wells": {
+            "description": "List of well names",
+            "type": "array",
+            "contains": {
+                "type": "string"
+            }
+        },
+        "zonelogname": {
+            "description": "Name of zonelog",
+            "type": "string",
+            "examples": [
+                "ZONELOG"
+            ]
+        },
+        "zonelogrange": {
+            "description": "Range of zonelog values to use",
+            "type": "array",
+            "items": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "number"
+                }
+            ]
+        },
+        "depthrange": {
+            "description": "Range of well trajectory to use",
+            "type": "array",
+            "items": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "number"
+                }
+            ]
+        },
+        "actions_each": {
+            "type": "object",
+            "description": "Thresholds for each action",
+            "properties": {
+                "warnthreshold": {
+                    "description": "Values below will raise warning",
+                    "type": "number",
+                    "examples": [
+                        50
+                    ]
+                },
+                "stopthreshold": {
+                    "description": "Values below will halt",
+                    "type": "number",
+                    "examples": [
+                        50
+                    ]
+                }
+            }
+        },
+        "actions_all": {
+            "type": "object",
+            "description": "Threshold for total action",
+            "properties": {
+                "warnthreshold": {
+                    "description": "Values below will raise warning",
+                    "type": "number",
+                    "examples": [
+                        50
+                    ]
+                },
+                "stopthreshold": {
+                    "description": "Values below will halt",
+                    "type": "number",
+                    "examples": [
+                        50
+                    ]
+                }
+            }
+        },
+        "report": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string",
+                    "description": "Path to report file",
+                    "examples": [
+                        "/path/to/some/file"
+                    ]
+                },
+                "mode": {
+                    "type": "string",
+                    "enum": [
+                        "write",
+                        "append"
+                    ]
+                }
+            }
+        },
+        "dump_yaml": {
+            "type": "string",
+            "description": "Write configuration to yaml",
+            "examples": [
+                "/path/to/some/file"
+            ]
+        }
+    }
+}

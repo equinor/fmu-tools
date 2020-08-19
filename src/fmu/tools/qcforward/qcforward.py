@@ -3,9 +3,12 @@ from __future__ import absolute_import, division, print_function  # PY2
 
 import sys
 from os.path import join
-
-import fmu.tools
+from pathlib import Path
+import json
 import yaml
+
+from jsonschema import validate
+import fmu.tools
 from . import _wellzonation_vs_grid as _wzong
 from . import _grid_statistics as _gstat
 
@@ -108,6 +111,7 @@ class QCForward(object):
 
         self._method = "wellzonation_vs_grid"
         data = self.handle_data(data)
+        validate_input("wellzonation_vs_grid.schema", data)
 
         _wzong.wellzonation_vs_grid(self, data)
 
@@ -117,3 +121,10 @@ class QCForward(object):
         self._method = "grid_statistics"
 
         _gstat.grid_statistics(self, data)
+
+
+def validate_input(schema, data):
+    schemapath = Path(fmu.tools.__file__).parent / "_schemas"
+    with open((schemapath / "wellzonation_vs_grid.schema"), "r") as schemafile:
+        schema = json.load(schemafile)
+    validate(instance=data, schema=schema)
