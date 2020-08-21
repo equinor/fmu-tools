@@ -22,6 +22,8 @@ This method check how the zonelog and/or a perforation log matches with zonation
 the 3D grid. If worse than a given set of limits, either are warning is given or a
 full stop of the workflow is forced.
 
+<https://xtgeo.readthedocs.io/en/latest/_images/zone-well-mismatch-plain.svg>
+
 
 Signature
 ~~~~~~~~~
@@ -72,36 +74,29 @@ Keys if ran inside RMS
 ^^^^^^^^^^^^^^^^^^^^^^
 
 wells
-  A list of wellnames which in turn can have python valid regular expressions,
-  see examples. (required)
-
-logrun
-  Name of logrun in RMS, default is "log" (required)
-
-trajectory
-  Name of trajectory in RMS, default is "Drilled trajectory" (required)
+  A list of wellnames which in turn can have python valid regular expressions, and also
+  a the trajectory name and logrun name needs to be present, see examples. (required)
 
 grid
   Name of grid icon in RMS (required)
 
-zone
-  Name of zone icon in RMS (required)
+gridprops
+  A list of grid properties, in this case the name of zone icon in RMS (required)
 
 
 If ran in normal python (terminal or ERT job)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 wells
-  Outside RMS, wells must be on RMS ascii well format. File wildcards are
+  Outside RMS, wells is a list of files on RMS ascii well format. File wildcards are
   allowed, se example. (required)
 
 grid
   Name of file with grid (on ROFF or EGRID or GRDECL format) (required)
 
-zone
-  A dictionary with name of Zone and assosiated filename, for example
-  ``{"Zone", "zone.roff"}``
-
+gridprops
+  A list of list where the inner list is a pair with name of Zone and assosiated
+  filename, for example ``[("Zone", "zone.roff")]``
 
 
 Known issues
@@ -111,14 +106,12 @@ Known issues
   is non-unique as corner point cells are not necessarly well defined in 3D. Hence
   one may encounter different results if another tool is applied.
 
-* Current only cover ZONELOG match; PERFORATIONS will come
-
 
 Examples
 ~~~~~~~~
 
-Example when ran inside RMS:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example when ran inside RMS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -143,10 +136,9 @@ Example when ran inside RMS:
     def check():
 
         usedata = {
-            wells: WELLS,
+            wells: {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ,
+                    "zonelog": ZONELOGNAME}
             zonelogname: ZONELOGNAME,
-            trajectory: TRAJ,
-            logrun: LOGRUN,
             grid: GRIDNAME,
             zone: ZONEGRIDNAME,
             actions_each: ACT_EACH
@@ -182,10 +174,9 @@ Example when ran from python script in terminal:
     def check():
 
         usedata = {
-            wells: WELLS,
-            zonelog: ZONELOGNAME,
+            wells: {"files": WELLS, "zonelog": ZONELOGNAME}
             grid: GRIDNAME,
-            zone: ZONEGRIDNAME,
+            gridprops: [("Zone", ZONEGRIDNAME)],
             actions_each: ACT_EACH
             actions_all: ACT_ALL
             report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}

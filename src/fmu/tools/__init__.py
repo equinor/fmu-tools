@@ -2,7 +2,7 @@
 
 """Top-level package for fmu-tools"""
 
-from .qcforward import qcforward  # noqa
+from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
 
 try:
     import roxar  # noqa

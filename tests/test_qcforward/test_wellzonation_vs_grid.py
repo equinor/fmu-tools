@@ -1,14 +1,16 @@
-"""Testing qcforward methods"""
-
-from __future__ import absolute_import, division, print_function  # PY2
+"""Testing qcforward method wellzonation vs grid"""
 
 import os
 import sys
 from os.path import abspath
-from fmu.tools import qcforward as qcf
 import pytest
 import pandas as pd
+
+import fmu.tools.qcforward as qcf
+
+
 import xtgeo
+
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
@@ -24,41 +26,36 @@ ZONELOGNAME = "Zonelog"
 PERFLOGNAME = "Perflog"
 REPORT = abspath("./somefile.csv")
 
+DATA1 = {
+    "nametag": "MYDATA1",
+    "verbosity": "debug",
+    "path": PATH,
+    "grid": GRIDFILE,
+    "gridprops": [[ZONENAME, ZONEFILE]],
+    "wells": WELLFILES,
+    "zonelog": {"name": ZONELOGNAME, "range": [1, 3]},
+    "depthrange": [1580, 9999],
+    "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
+    "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
+    "report": {"file": REPORT, "mode": "write"},
+    "dump_yaml": "somefile.yml",
+}
+
 
 @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
 def test_zonelog_vs_grid_asfiles():
     """Testing the zonelog vs grid functionality using files"""
 
-    data = {
-        "verbosity": "debug",
-        "path": PATH,
-        "grid": GRIDFILE,
-        "gridprops": {ZONENAME: ZONEFILE},
-        "wells": WELLFILES,
-        "zonelog": {"name": ZONELOGNAME, "range": [1, 3]},
-        "depthrange": [1580, 9999],
-        "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
-        "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
-        "report": {"file": REPORT, "mode": "write"},
-        "dump_yaml": "somefile.yml",
-    }
-
-    wellcheck = qcf.QCForward()
-    wellcheck.wellzonation_vs_grid(data)
-
-    # check private members
-    assert isinstance(wellcheck._grid, xtgeo.Grid)
-    assert isinstance(wellcheck._gridzone, xtgeo.GridProperty)
-    assert isinstance(wellcheck._wells, xtgeo.Wells)
+    qcf.wellzonation_vs_grid(DATA1)
 
     # now read the dump file:
-    wellcheck.wellzonation_vs_grid("somefile.yml")
+    qcf.wellzonation_vs_grid("somefile.yml")
 
     dfr = pd.read_csv(REPORT)
     print(dfr)
-    assert dfr.loc[11, "MATCH"] == pytest.approx(58.15, 0.01)
-    os.unlink("somefile.yml")
-    os.unlink(REPORT)
+    assert dfr.loc[11, "MATCH"] == pytest.approx(63.967, 0.01)
+    # os.unlink("somefile.yml")
+    # os.unlink(REPORT)
 
 
 # @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
