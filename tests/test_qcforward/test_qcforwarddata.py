@@ -6,7 +6,7 @@ from os.path import abspath
 import pytest
 
 from fmu.tools.qcforward._qcforward import QCForward
-from fmu.tools.qcforward._parse_data import _QCForwardData
+from fmu.tools.qcforward._qcforward_data import _QCForwardData
 
 import xtgeo
 

@@ -6,6 +6,8 @@ The resulting data will be stored as class instance attributes, e.g. self._grid
 """
 from os.path import join
 from glob import glob
+import re
+
 import xtgeo
 from . import _common
 
@@ -45,13 +47,13 @@ class _QCForwardData(object):
         # TODO: validate dictionary that holds data
         self._data = data
 
+        self.set_path()
+        self.set_report()
+        self.set_nametag()
         self.parse_project()
         gridalreadyloaded = self.read_grid()
         self.read_gridprops(gridalreadyloaded)
         self.read_wells()
-        self.read_wells()
-        self.set_report()
-        self.set_nametag()
 
     @property
     def path(self):
@@ -103,6 +105,21 @@ class _QCForwardData(object):
         value = list(mydict.values())[0]
         return key, value
 
+    def set_path(self):
+        """General path prefix settings"""
+        self._path = self._data.get("path", ".")
+
+    def set_report(self):
+        """General report settings"""
+        myreport = self._data.get("report", {"file": "default.yml", "mode": "write"})
+
+        self._reportfile = myreport["file"]
+        self._reportmode = myreport["mode"]
+
+    def set_nametag(self):
+        """General nametag settings"""
+        self._nametag = self._data.get("nametag", {"file": "unset_nametag"})
+
     def parse_project(self):
         """Get the RoxarAPI project magics"""
 
@@ -113,11 +130,13 @@ class _QCForwardData(object):
             self._project = None
 
     def read_grid(self):
-        """Read 3D grid if requested, from file or RMS"""
+        """Read 3D grid (which is required), from file or RMS"""
 
         alreadyloaded = False
-        if "grid" in self._data and self._project is None:
+
+        if self._project is None:
             gridpath = join(self._path, self._data["grid"])
+
             if gridpath == self._grid_id:
                 CMN.print_info("Grid is already loaded")
                 alreadyloaded = True
@@ -127,7 +146,7 @@ class _QCForwardData(object):
                 self._grid_id = gridpath
 
         # read from RMS/ROXAPI
-        elif "grid" in self._data and self._project:
+        else:
             gridname = self._data["grid"]
 
             if gridname == self._grid_id:
@@ -142,15 +161,14 @@ class _QCForwardData(object):
         return alreadyloaded
 
     def read_gridprops(self, gridalreadyloaded):
-        """Read 3D grid props if requested, from file or RMS"""
-
-        self._gridprops = xtgeo.GridProperties()
+        """Read 3D grid props (required data), from file or RMS"""
 
         CMN.print_debug("Grid is alreay loaded: {}".format(gridalreadyloaded))
 
-        if "gridprops" in self._data.keys() and self._project is None:
+        gprops = []
+        if self._project is None:
 
-            # todo, check and handle if grid gridprops already loaded
+            # TODO check and handle if grid gridprops already loaded
             for mytuple in self._data["gridprops"]:
                 pname, pfile = mytuple
 
@@ -158,16 +176,23 @@ class _QCForwardData(object):
                 current = xtgeo.gridproperty_from_file(
                     gridproppath, name=pname, grid=self.grid
                 )
-                print(current)
-                self._gridprops.append_props([current])
+                gprops.append(current)
+        else:
+            for pname in self._data["gridprops"]:
+                current = xtgeo.gridproperty_from_roxar(
+                    self._project, self._data["grid"], pname
+                )
+                gprops.append(current)
 
-        # elif "gridprops" in self._data.keys() and self._project:
-        #     gridname = self._data["grid"]
+        self._gridprops = xtgeo.GridProperties()
+        self._gridprops.append_props(gprops)
 
     def read_wells(self):
-        if "wells" in self._data.keys() and self._project is None:
+        """Reading wells (required data)"""
+
+        wdata = []
+        if self._project is None:
             # fields may contain wildcards for "globbing"
-            wdata = []
             if isinstance(self._data["wells"], list):
                 for welldata in self._data["wells"]:
                     abswelldata = join(self._path, welldata)
@@ -178,86 +203,41 @@ class _QCForwardData(object):
             self._wells = xtgeo.Wells()
             self._wells.wells = wdata
 
-    def set_report(self):
-        """General report settings"""
-        myreport = self._data.get("report", {"file": "default.yml", "mode": "write"})
+        else:
 
-        self._reportfile = myreport["file"]
-        self._reportmode = myreport["mode"]
+            # roxar API input:
+            # wells: {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ,
+            #         "zonelog": ZONELOGNAME}
 
-    def set_nametag(self):
-        """General nametag settings"""
-        self._nametag = self._data.get("nametag", {"file": "unset_nametag"})
+            wnames = self._data["wells"].get("names", None)
+            wlogrun = self._data["wells"].get("logrun", "log")
+            wtraj = self._data["wells"].get("trajectory", "Drilled trajectory")
+            zlogname = self._data["wells"].get("zonelog", "Zonelog")
 
-    def set_path(self):
-        """General path prefix settings"""
-        self._path = self._data.get("path", ".")
+            rmswells = [wll.name for wll in self._project.wells]
+            CMN.print_debug("All RMS wells: {}".format(rmswells))
 
-    # if "wells" in data.keys():
-    #     # wells area allowed to spesified by regular expressions, e.g.
-    #     # ["55_33-[123]", "55_33-.*A.*"]
+            if not isinstance(self._data["wells"], list):
+                raise ValueError("Wells input must be a list")
 
-    #     if "zonelogname" in data:
-    #         self._zonelogname = self._data["zonelogname"]
+            CMN.print_debug("Data wells to match: {}".format(self._data["wells"]))
 
-    #     wdata = []
+            for rmswell in rmswells:
+                for wreg in wnames:
+                    CMN.print_debug("Trying match {} vs re {}".format(rmswell, wreg))
+                    if re.match(wreg, rmswell):
+                        wdata.append(
+                            xtgeo.well_from_roxar(
+                                self._project,
+                                rmswell,
+                                logrun=wlogrun,
+                                trajectory=wtraj,
+                                lognames=[zlogname],
+                            )
+                        )
+                        CMN.print_info(
+                            "Regex match found, RMS well: {}".format(rmswell)
+                        )
 
-    #     rmswells = [wll.name for wll in self._project.wells]
-    #     self.print_debug("All RMS wells: {}".format(rmswells))
-    #     if not isinstance(self._data["wells"], list):
-    #         raise ValueError("Wells input must be a list")
-
-    #     self.print_debug("Data wells to match: {}".format(self._data["wells"]))
-    #     for rmswell in rmswells:
-    #         for wreg in self._data["wells"]:
-    #             self.print_debug("Trying match {} vs re {}".format(rmswell, wreg))
-    #             if re.match(wreg, rmswell):
-    #                 wdata.append(
-    #                     xtgeo.well_from_roxar(
-    #                         self._project,
-    #                         rmswell,
-    #                         logrun=self._wlogrun,
-    #                         trajectory=self._wtrajectory,
-    #                         lognames=[self._zonelogname],
-    #                     )
-    #                 )
-    #                 self.print_info("Regex match found, RMS well: {}".format(rmswell))
-
-    #     self._wells = xtgeo.Wells()
-    #     self._wells.wells = wdata
-
-    # if "zone" in data.keys():
-    #     zonedict = self._data["zone"]
-    #     zonename, zonefile = _unpack_dict1(zonedict)
-
-    #     zonefile = join(self._path, zonefile)
-
-    #     # since grid can be different but zonefile may the same (rare for files...)
-    #     if reuse_grid and zonefile == self._gridzonename:
-    #         self.print_info("Grid zone is already loaded")
-    #     else:
-    #         self._gridzone = xtgeo.GridProperty(zonefile, name=zonename)
-    #         self._gridzonename = zonefile
-
-
-# def _read_from_rms(self, data):
-#     """Read data from inside RMS or via Roxar API"""
-
-#     _get_verbosity(self, data)
-
-#     self._project = self._data["project"]
-
-#     reuse_grid = False
-#     if "grid" in data.keys():
-
-
-#     self.print_debug("Looking for zone...")
-#     if "zone" in data.keys():
-#         if reuse_grid and self._data["zone"] == self._gridzonename:
-#             self.print_info("Grid zone is already loaded")
-#         else:
-#             self._gridzone = xtgeo.gridproperty_from_roxar(
-#                 self._project, self._data["grid"], self._data["zone"]
-#             )
-#             self._gridzonename = self._data["zone"]
-#             self.print_debug("GRIDZONE: {}".format(self._gridzonename))
+            self._wells = xtgeo.Wells()
+            self._wells.wells = wdata

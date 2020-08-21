@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 
 import fmu.tools
-from ._parse_data import _QCForwardData
+from ._qcforward_data import _QCForwardData
 from ._common import _QCCommon
 from ._qcforward import QCForward
 
@@ -210,7 +210,6 @@ class WellZonationVsGrid(QCForward):
         """Make a report which e.g. can be used in webviz plotting
 
         Args:
-            self (instance): The QCForward instance
             results (dict): Results table
 
         Returns:
@@ -228,80 +227,3 @@ class WellZonationVsGrid(QCForward):
                 dfr.to_csv(reportfile, index=False)
 
         return dfr
-
-
-# def run_wellzonation_vs_grid():
-
-#     wzong = WellZonationVsGrid()
-#     wzong.main()
-
-# cmn = _common._QCCommon(data["verbosity"])
-
-# # defaults:
-# zonelogname = "Zonelog"
-# zonelogrange = (1, 99)
-# depthrange = (0, 9999)
-# actions_each = {"warnthreshold": 99, "stopthreshold": 50}
-# actions_all = {"warnthreshold": 99, "stopthreshold": 88}
-# report = {"file": None, "write": "write"}
-# perflogname = None
-# perflogrange = (1, 9999)
-
-# if "zonelog" in data:
-#     zonelogname = data["zonelog"].get("name", "Zonelog")
-#     zlrange = data["zonelog"].get("range", zonelogrange)
-#     if (
-#         isinstance(zlrange, list)
-#         and len(zlrange) == 2
-#         and isinstance(zlrange[0], int)
-#         and isinstance(zlrange[1], int)
-#         and zlrange[1] >= zlrange[0]
-#     ):
-#         zonelogrange = tuple(zlrange)
-#     else:
-#         raise ValueError("zonelogrange on wrong format: ", zlrange)
-# else:
-#     raise ValueError("Key zonelog is missing in data")
-
-# if "depthrange" in data:
-#     drange = data["depthrange"]
-#     if (
-#         isinstance(drange, list)
-#         and len(drange) == 2
-#         and isinstance(drange[0], (int, float))
-#         and isinstance(drange[1], (int, float))
-#         and drange[1] > drange[0]
-#     ):
-#         depthrange = tuple(drange)
-#     else:
-#         raise ValueError("depthrange on wrong format: ", drange)
-
-# if "perforationlog" in data:
-#     perflogname = data["perforationlog"].get("name", "PERFLOG")
-#     perflogrange = tuple(data["perforationlog"].get("range", [1, 9999]))
-
-# if "actions_each" in data:
-#     # todo check data
-#     actions_each = data["actions_each"]
-
-# if "actions_all" in data:
-#     # todo check data
-#     actions_all = data["actions_all"]
-
-# if "report" in data:
-#     # todo check data
-#     report = data["report"]
-
-# wzong = WZong(
-#     zonelogname=zonelogname,
-#     zonelogrange=zonelogrange,
-#     depthrange=depthrange,
-#     actions_each=actions_each,
-#     actions_all=actions_all,
-#     report=report,
-#     perflogname=perflogname,
-#     perflogrange=perflogrange,
-# )
-
-# return wzong
-

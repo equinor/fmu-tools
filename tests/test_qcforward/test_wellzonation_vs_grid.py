@@ -1,6 +1,6 @@
 """Testing qcforward method wellzonation vs grid"""
 
-import os
+import pathlib
 import sys
 from os.path import abspath
 import pytest
@@ -24,7 +24,8 @@ WELLFILES = [
 
 ZONELOGNAME = "Zonelog"
 PERFLOGNAME = "Perflog"
-REPORT = abspath("./somefile.csv")
+REPORT = abspath("/tmp/somefile.csv")
+SOMEYAML = abspath("/tmp/somefile.yml")
 
 DATA1 = {
     "nametag": "MYDATA1",
@@ -38,27 +39,26 @@ DATA1 = {
     "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
     "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
     "report": {"file": REPORT, "mode": "write"},
-    "dump_yaml": "somefile.yml",
+    "dump_yaml": SOMEYAML,
 }
 
 
-@pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
 def test_zonelog_vs_grid_asfiles():
     """Testing the zonelog vs grid functionality using files"""
 
     qcf.wellzonation_vs_grid(DATA1)
 
     # now read the dump file:
-    qcf.wellzonation_vs_grid("somefile.yml")
+    qcf.wellzonation_vs_grid(SOMEYAML)
 
     dfr = pd.read_csv(REPORT)
     print(dfr)
     assert dfr.loc[11, "MATCH"] == pytest.approx(63.967, 0.01)
-    # os.unlink("somefile.yml")
-    # os.unlink(REPORT)
+
+    pathlib.Path(REPORT).unlink()
+    pathlib.Path(SOMEYAML).unlink()
 
 
-# @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
 # def test_zonelog_vs_grid_asfiles_shall_stop():
 #     """Testing the zonelog vs grid functionality using files"""
 

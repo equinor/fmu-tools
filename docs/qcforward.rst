@@ -140,7 +140,7 @@ Example when ran inside RMS
                     "zonelog": ZONELOGNAME}
             zonelogname: ZONELOGNAME,
             grid: GRIDNAME,
-            zone: ZONEGRIDNAME,
+            gridprops: [ZONEGRIDNAME],
             actions_each: ACT_EACH
             actions_all: ACT_ALL
             report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
