@@ -1,0 +1,14 @@
+actions_all: {stopthreshold: 20, warnthreshold: 80}
+actions_each: {stopthreshold: 20, warnthreshold: 50}
+depthrange: [1580, 9999]
+grid: ../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff
+gridprops:
+- [Zone, ../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff]
+nametag: MYDATA1
+path: /home/jan/work/git/fmu-tools
+report: {file: /tmp/somefile.csv, mode: write}
+verbosity: debug
+wells: [../xtgeo-testdata/wells/reek/1/OP*.w, ../xtgeo-testdata/wells/reek/1/WI*.w]
+zonelog:
+  name: Zonelog
+  range: [1, 3]
