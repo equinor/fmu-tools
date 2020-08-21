@@ -59,26 +59,26 @@ def test_zonelog_vs_grid_asfiles():
     pathlib.Path(SOMEYAML).unlink()
 
 
-# def test_zonelog_vs_grid_asfiles_shall_stop():
-#     """Testing the zonelog vs grid functionality using files"""
+def test_zonelog_vs_grid_asfiles_shall_stop():
+    """Testing the zonelog vs grid functionality using files"""
 
-#     data = {
-#         "verbosity": "debug",
-#         "path": PATH,
-#         "grid": GRIDFILE,
-#         "zone": {ZONENAME: ZONEFILE},
-#         "wells": WELLFILES,
-#         "zonelogname": ZONELOGNAME,
-#         "zonelogrange": [1, 3],  # inclusive range at both ends
-#         "depthrange": [1580, 9999],
-#         "actions_each": {"warnthreshold": 50, "stopthreshold": 70},
-#         "actions_all": {"warnthreshold": 80, "stopthreshold": 70},
-#     }
+    newdata = DATA1.copy()
+    newdata["actions_each"] = {"warnthreshold": 90, "stopthreshold": 80}
 
-#     wellcheck = qcf.QCForward()
+    with pytest.raises(SystemExit):
+        qcf.wellzonation_vs_grid(newdata)
 
-#     with pytest.raises(SystemExit):
-#         wellcheck.wellzonation_vs_grid(data)
+
+def test_zonelog_vs_grid_asfiles_reuse_instance():
+    """Testing reusing the instance"""
+
+    newdata = DATA1.copy()
+    newdata["actions_each"] = {"warnthreshold": 33, "stopthreshold": 22}
+
+    case1 = qcf.wellzonation_vs_grid(DATA1)
+    case2 = qcf.wellzonation_vs_grid(newdata, reuse=case1)
+
+    assert case1 == case2
 
 
 # @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")

@@ -27,7 +27,10 @@ class _QCForwardData(object):
     of two different instances of the _QCForwardData()
     """
 
-    def __init__(self, data):
+    def __init__(self):
+
+        # if this is true, then heavy stuff such as grids are tried reused if possible
+        self._reuse = False
 
         self._path = "."  # usually not needed to set explisit
         self._project = None  # pointing to  RMS project ID if any
@@ -42,18 +45,7 @@ class _QCForwardData(object):
         self._reportmode = "write"  # report file settings
         self._nametag = "unset_nametag"
 
-        CMN.verbosity = data.get("verbosity", None)
-
-        # TODO: validate dictionary that holds data
-        self._data = data
-
-        self.set_path()
-        self.set_report()
-        self.set_nametag()
-        self.parse_project()
-        gridalreadyloaded = self.read_grid()
-        self.read_gridprops(gridalreadyloaded)
-        self.read_wells()
+        self._data = None
 
     @property
     def path(self):
@@ -104,6 +96,22 @@ class _QCForwardData(object):
         key = list(mydict.keys())[0]
         value = list(mydict.values())[0]
         return key, value
+
+    def parse(self, data, reuse=False):
+
+        CMN.verbosity = data.get("verbosity", None)
+        self._reuse = reuse
+
+        # TODO: validate dictionary that holds data
+        self._data = data
+
+        self.set_path()
+        self.set_report()
+        self.set_nametag()
+        self.parse_project()
+        gridalreadyloaded = self.read_grid()
+        self.read_gridprops(gridalreadyloaded)
+        self.read_wells()
 
     def set_path(self):
         """General path prefix settings"""

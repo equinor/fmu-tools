@@ -115,7 +115,7 @@ Example when ran inside RMS
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward as qcf
 
     # will match all wells starting with 33_10 and all 34_11 wells containing "A"
     # Note that these are python regular expressions!
@@ -146,7 +146,7 @@ Example when ran inside RMS
             report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
         }
 
-        QCJOB.wellzonation_vs_grid(usedata)
+        qcf.wellzonation_vs_grid(usedata)
 
     if  __name__ == "__main__":
         check()
@@ -157,7 +157,7 @@ Example when ran from python script in terminal:
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward as qcf
 
     WPATH = "../output/wells/"
 
@@ -168,8 +168,6 @@ Example when ran from python script in terminal:
 
     GRIDNAME = "../output/checks/simgrid.roff"
     ZONEGRIDNAME = {"Zone": "../output/checks/simgrid_zone.roff"}
-
-    QCJOB = QCForward()
 
     def check():
 
@@ -182,7 +180,7 @@ Example when ran from python script in terminal:
             report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
         }
 
-        QCJOB.wellzonation_vs_grid(usedata)
+        qcf.wellzonation_vs_grid(usedata)
 
     if  __name__ == "__main__":
         check()
@@ -192,14 +190,13 @@ Example in terminal with setting from a YAML file:
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward as qcf
     import yaml
 
     USEDATA = yaml.load("../input/qc/somefile.yml")
-    QCJOB = QCForward()
 
     def check():
-        QCJOB.wellzonation_vs_grid(USEDATA)
+        qcf.wellzonation_vs_grid(USEDATA)
 
     if  __name__ == "__main__":
         check()
@@ -229,8 +226,7 @@ than other wells.
 
 .. code-block:: python
 
-    from copy import deepcopy
-    from fmu.tools import QCForward
+    import fmu.tools.qcforwards as qcf
 
     # will match all wells starting with 33_10 and all 34_11 wells containing "A"
     # Note that these are python regular expressions!
@@ -250,8 +246,6 @@ than other wells.
 
     ACT_EACH2 = {"warnthreshold": 60, "stopthreshold": 40}
     ACT_ALL2 = {"warnthreshold": 65, "stopthreshold": 50}
-
-    QCJOB = QCForward()
 
     def check():
 
@@ -274,9 +268,8 @@ than other wells.
         usedata2["actions_all"] = ACT_ALL2
         usedata2["report"] = {"file": "../output/qc/well_vs_grid.csv", mode: "append"}
 
-        QCJOB.wellzonation_vs_grid(usedata1)
-        QCJOB.wellzonation_vs_grid(usedata2)
-
+        qcf.wellzonation_vs_grid(usedata1)
+        qcf.wellzonation_vs_grid(usedata2)
 
     if  __name__ == "__main__":
         check()

@@ -2,7 +2,7 @@
 from ._wellzonation_vs_grid import WellZonationVsGrid
 
 
-def wellzonation_vs_grid(data):
+def wellzonation_vs_grid(data, reuse=None):
     """Check well zonation or perforations vs 3D grid.
 
     Args:
@@ -10,8 +10,13 @@ def wellzonation_vs_grid(data):
 
     """
 
-    wzong = WellZonationVsGrid()
-    wzong.main(data)
+    if not reuse:
+        wzong = WellZonationVsGrid()
+        wzong.main(data)
+        return wzong
+
+    reuse.main(data, reuse=True)
+    return reuse
 
 
 # def grid_statistics(self, data):

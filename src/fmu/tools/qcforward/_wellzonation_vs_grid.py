@@ -54,7 +54,7 @@ class _LocalData(object):  # pylint: disable=too-few-public-methods
 
 
 class WellZonationVsGrid(QCForward):
-    def main(self, data):
+    def main(self, data, reuse=False):
         """Main routine for evaulating well zonation match in 3D grids.
 
         The routine depends on existing XTGeo functions for this purpose
@@ -68,7 +68,12 @@ class WellZonationVsGrid(QCForward):
 
         # parsing data stored is self._xxx (general data like grid)
         QCC.print_info("Parsing general data...")
-        self.gdata = _QCForwardData(data)
+
+        if reuse and isinstance(self.gdata, _QCForwardData):
+            self.gdata.parse(data)
+        else:
+            self.gdata = _QCForwardData()
+            self.gdata.parse(data)
 
         # parse data that are special for this check
         QCC.print_info("Parsing additional data...")
