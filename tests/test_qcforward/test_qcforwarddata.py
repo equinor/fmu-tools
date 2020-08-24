@@ -49,7 +49,8 @@ def test_qcforward():
 def test_qcforwarddata():
     """Testing getting data with _QCForwardData class"""
 
-    qcdata = _QCForwardData(DATA1)
+    qcdata = _QCForwardData()
+    qcdata.parse(DATA1)
 
     assert isinstance(qcdata, _QCForwardData)
     assert isinstance(qcdata.grid, xtgeo.Grid)

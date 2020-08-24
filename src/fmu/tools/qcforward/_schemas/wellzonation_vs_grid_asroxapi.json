@@ -31,21 +31,22 @@
             ]
         },
         "grid": {
-            "description": "Name of grid file",
+            "description": "Name of grid",
             "type": "string",
             "examples": [
-                "mygrid.roff",
-                "MYSIM.EGRID"
+                "Simgrid",
+                "Geogrid"
             ]
         },
         "gridprops": {
-            "description": "Name and Path of zone as list in list",
+            "description": "Names of grid properties as list",
             "type": "array",
             "items": {
-                "type": "array"
+                "type": "string"
             },
             "examples": [
-                "[[\"Zone\", \"zonefile.roff\"]]"
+                "Zone",
+                "Facies"
             ]
         }
     }
