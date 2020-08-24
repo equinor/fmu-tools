@@ -9,11 +9,11 @@ import collections
 from pathlib import Path
 
 import json
+from jsonschema import validate
 import numpy as np
 import pandas as pd
 
 import fmu.tools
-from jsonschema import validate
 
 from ._qcforward_data import _QCForwardData
 from ._common import _QCCommon
@@ -288,7 +288,7 @@ class WellZonationVsGrid(QCForward):
         dfr = pd.DataFrame(results)
         dfr["NAMETAG"] = self.gdata.nametag
 
-        if self.gdata.reportfile:
+        if self.gdata.reportfile is not None:
             reportfile = join(self._path, self.gdata.reportfile)
             if self.gdata.reportmode in ("append", "a"):
                 dfr.to_csv(reportfile, index=False, mode="a", header=None)

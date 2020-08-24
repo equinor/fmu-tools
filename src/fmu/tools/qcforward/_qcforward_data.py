@@ -42,10 +42,13 @@ class _QCForwardData(object):
         self._wells_depthrange = None
         self._wells_rescale = None
 
+        self._bwells = None
+
         self._surfaces = None  # XTGeo Surfaces() instance (in prep)
 
-        self._reportfile = "default.csv"  # report file settings
+        self._reportfile = None  # report file settings
         self._reportmode = "write"  # report file settings
+        self._initial_report = True  # used to set write/append mode on report
         self._nametag = "unset_nametag"
 
         self._data = None
@@ -74,6 +77,11 @@ class _QCForwardData(object):
     def wells(self):
         """Wells attribute as XTGeo Wells() instance"""
         return self._wells
+
+    @property
+    def bwells(self):
+        """Wells attribute as XTGeo BlockedWells() instance"""
+        return self._bwells
 
     @property
     def reportfile(self):
@@ -141,6 +149,7 @@ class _QCForwardData(object):
         self.read_grid()
         self.read_gridprops()
         self.read_wells()
+        self.read_bwells()
 
     def set_path(self):
         """General path prefix settings"""
@@ -148,10 +157,17 @@ class _QCForwardData(object):
 
     def set_report(self):
         """General report settings"""
-        myreport = self._data.get("report", {"file": "default.csv", "mode": "write"})
-
-        self._reportfile = myreport["file"]
-        self._reportmode = myreport["mode"]
+        if "report" in self._data:
+            if isinstance(self._data["report"], str):
+                self._reportfile = self._data["report"]
+                if self._initial_report:
+                    self._reportmode = "write"
+                    self._initial_report = False
+                else:
+                    self._reportmode = "append"
+            else:
+                self._reportfile = self._data["report"].get("file")
+                self._reportmode = self._data["report"].get("mode")
 
     def set_nametag(self):
         """General nametag settings"""
@@ -208,11 +224,15 @@ class _QCForwardData(object):
 
             for mytuple in self._data["gridprops"]:
                 pname, pfile = mytuple
-
                 gridproppath = join(self._path, pfile)
-                current = xtgeo.gridproperty_from_file(
-                    gridproppath, name=pname, grid=self.grid
-                )
+                if pname is not None:
+                    current = xtgeo.gridproperty_from_file(
+                        gridproppath, name=pname, grid=self.grid
+                    )
+                else:
+                    current = xtgeo.gridproperty_from_file(gridproppath, grid=self.grid)
+                    current.name = pfile
+
                 gprops.append(current)
         else:
             for pname in self._data["gridprops"]:
@@ -272,28 +292,96 @@ class _QCForwardData(object):
             CMN.print_debug("Data wells to match: {}".format(wnames))
 
             for rmswell in rmswells:
+                if any(re.match(wreg + "$", rmswell) for wreg in wnames):
+
+                    try:
+                        mywell = xtgeo.well_from_roxar(
+                            self._project,
+                            rmswell,
+                            lognames=self._wells_lognames,
+                            logrun=wlogrun,
+                            trajectory=wtraj,
+                        )
+
+                        CMN.print_info(
+                            "Regex match found, RMS well: {}".format(rmswell)
+                        )
+
+                        if self._wells_depthrange:
+                            tmin, tmax = self._wells_depthrange
+                            mywell.limit_tvd(tmin, tmax)
+
+                        if self._wells_rescale:
+                            mywell.rescale(self._wells_rescale)
+
+                        wdata.append(mywell)
+
+                    except ValueError as verr:
+                        print("Could not read well {}: {}".format(rmswell, verr))
+
+            CMN.print_debug("All valid welldata: {}".format(wdata))
+
+        if wdata:
+            self._wells = xtgeo.Wells()
+            self._wells.wells = wdata
+        else:
+            raise RuntimeError("No wells read, wrong settings?")
+
+    def read_bwells(self):  # pylint: disable=too-many-branches
+        """Reading wells"""
+
+        if "bwells" in self._reuse:
+            CMN.print_info("Reuse current blocked wells...")
+            return
+
+        if "bwells" not in self._data.keys():
+            return
+
+        CMN.print_info("Reading blocked wells...")
+        wdata = []
+
+        # pylint: disable=too-many-nested-blocks
+        if self._project is None:
+            # fields may contain wildcards for "globbing"
+            if isinstance(self._data["bwells"], list):
+                for welldata in self._data["bwells"]:
+                    abswelldata = join(self._path, welldata)
+                    for wellentry in glob(abswelldata):
+                        mywell = xtgeo.BlockedWell()
+                        mywell.from_file(wellentry, lognames=self._wells_lognames)
+                        wdata.append(mywell)
+                        CMN.print_debug(wellentry)
+
+        else:
+
+            # roxar API input:
+            # wells: {"names": WELLS, "bwname": BW, "grid": GRID}
+
+            wnames = self._data["bwells"].get("names", None)
+            bwname = self._data["bwells"].get("bwname", "BW")
+            grid = self._data["bwells"].get("grid", "Geogrid")
+
+            rmswells = [wll.name for wll in self._project.wells]
+            CMN.print_debug("All RMS wells: {}".format(rmswells))
+
+            CMN.print_debug("Data wells to match: {}".format(wnames))
+
+            for rmswell in rmswells:
                 for wreg in wnames:
                     CMN.print_debug("Trying match {} vs re {}".format(rmswell, wreg))
                     if re.match(wreg + "$", rmswell):
                         try:
-                            mywell = xtgeo.well_from_roxar(
+                            mywell = xtgeo.blockedwell_from_roxar(
                                 self._project,
-                                rmswell,
+                                gname=grid,
+                                bwname=bwname,
+                                wname=rmswell,
                                 lognames=self._wells_lognames,
-                                logrun=wlogrun,
-                                trajectory=wtraj,
                             )
 
                             CMN.print_info(
                                 "Regex match found, RMS well: {}".format(rmswell)
                             )
-
-                            if self._wells_depthrange:
-                                tmin, tmax = self._wells_depthrange
-                                mywell.limit_tvd(tmin, tmax)
-
-                            if self._wells_rescale:
-                                mywell.rescale(self._wells_rescale)
 
                             wdata.append(mywell)
 
@@ -303,7 +391,7 @@ class _QCForwardData(object):
             CMN.print_debug("All valid welldata: {}".format(wdata))
 
         if wdata:
-            self._wells = xtgeo.Wells()
-            self._wells.wells = wdata
+            self._bwells = xtgeo.BlockedWells()
+            self._bwells.wells = wdata
         else:
             raise RuntimeError("No wells read, wrong settings?")
