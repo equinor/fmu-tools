@@ -75,10 +75,9 @@ def test_zonelog_vs_grid_asfiles_reuse_instance():
     newdata = DATA1.copy()
     newdata["actions_each"] = {"warnthreshold": 33, "stopthreshold": 22}
 
-    case1 = qcf.wellzonation_vs_grid(DATA1)
-    case2 = qcf.wellzonation_vs_grid(newdata, reuse=case1)
-
-    assert case1 == case2
+    job = qcf.WellZonationVsGrid()
+    job.run(DATA1)
+    job.run(newdata, reuse=True)
 
 
 # @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
