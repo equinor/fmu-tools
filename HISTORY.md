@@ -1,2 +1,3 @@
 
-See https://git.statoil.no/fmu-utilities/fmu-tools
+See https://github.com/equinor/fmu-tools
+
