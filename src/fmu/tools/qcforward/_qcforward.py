@@ -54,7 +54,7 @@ class QCForward(object):
     def ldata(self, data):
         self._ldata = data
 
-    def handle_data(self, data):
+    def handle_data(self, data, project):
 
         data_is_yaml = True
 
@@ -78,5 +78,9 @@ class QCForward(object):
                     xdata, stream, default_flow_style=None,
                 )
             QCC.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
+
+        if project:
+            xdata["project"] = project
+            QCC.print_info("Project type is {}".format(type(project)))
 
         return xdata

@@ -9,11 +9,12 @@ import collections
 from pathlib import Path
 
 import json
-from jsonschema import validate
 import numpy as np
 import pandas as pd
 
 import fmu.tools
+from jsonschema import validate
+
 from ._qcforward_data import _QCForwardData
 from ._common import _QCCommon
 from ._qcforward import QCForward
@@ -36,8 +37,10 @@ class _LocalData(object):  # pylint: disable=too-few-public-methods
         self.perflogrange = [1, 9999]
         self.gridzone = None
         self.gridzonerange = [1, 9999]
+        self.wellresample = None
+        self.infotext = "ZONELOG MATCH"
 
-    def parse_data(self, data, gdata):
+    def parse_data(self, data):
         """Parsing the actual data"""
 
         # TODO: verify and qc
@@ -50,37 +53,63 @@ class _LocalData(object):  # pylint: disable=too-few-public-methods
 
         self.actions_each = data["actions_each"]
         self.actions_all = data["actions_all"]
-        self.perflogname = None
-        self.perflogrange = [1, 9999]
-        self.gridzone = gdata.gridprops.props[0]
+        if "perflog" in data.keys() and data["perflog"]:
+            self.perflogname = data["perflog"].get("name", None)
+            self.perflogrange = data["perflog"].get("range", [1, 9999])
+            self.infotext = "PERFLOG MATCH"
+        if "well_resample" in data.keys():
+            self.wellresample = data.get("well_resample", None)
 
 
 class WellZonationVsGrid(QCForward):
-    def run(self, data, reuse=False):
+    def run(
+        self, data, reuse=False, project=None
+    ):  # pylint: disable=too-many-locals, too-many-statements
         """Main routine for evaulating well zonation match in 3D grids.
 
         The routine depends on existing XTGeo functions for this purpose
+
+        Args:
+            data (dict or str): The input data either as a Python dictionary or
+                a path to a YAML file
+            reuse (bool or list): Reusing some "timeconsuming to read" data in the
+                instance. If True, then grid and gridprops will be reused as default.
+                Alternatively it can be a list for more fine grained control, e.g.
+                ["grid", "gridprops", "wells"]
+            project (obj or str): For usage inside RMS
+
         """
-        self._data = self.handle_data(data)
+        self._data = self.handle_data(data, project)
         self._validate_input(self._data)
 
         data = self._data
 
         QCC.verbosity = data.get("verbosity", 0)
 
-        # parsing data stored is self._xxx (general data like grid)
-        QCC.print_info("Parsing general data...")
-
-        if isinstance(self.gdata, _QCForwardData):
-            self.gdata.parse(data, reuse=reuse)
-        else:
-            self.gdata = _QCForwardData()
-            self.gdata.parse(data)
-
         # parse data that are special for this check
         QCC.print_info("Parsing additional data...")
         self.ldata = _LocalData()
-        self.ldata.parse_data(data, self.gdata)
+        self.ldata.parse_data(data)
+
+        # parsing data stored is self._xxx (general data like grid)
+        QCC.print_info("Parsing general data...")
+        lognames = [self.ldata.zonelogname]
+        if self.ldata.perflogname:
+            lognames.append(self.ldata.perflogname)
+
+        wsettings = {
+            "lognames": lognames,
+            "depthrange": self.ldata.depthrange,
+            "rescale": self.ldata.wellresample,
+        }
+
+        if isinstance(self.gdata, _QCForwardData):
+            self.gdata.parse(data, reuse=reuse, wells_settings=wsettings)
+        else:
+            self.gdata = _QCForwardData()
+            self.gdata.parse(data, wells_settings=wsettings)
+
+        self.ldata.gridzone = self.gdata.gridprops.props[0]
 
         # results are stored in a dict based table which be turned into a Pandas
         # dataframe in the end (most efficient; then turn into pandas at end)
@@ -94,7 +123,8 @@ class WellZonationVsGrid(QCForward):
             ]
         )
 
-        QCC.print_info("Evaluate per well...")
+        QCC.print_info("Evaluate per well... {}".format(self.ldata.infotext))
+
         results = self._evaluate_per_well(results)
 
         # all data (look at averages)
@@ -103,7 +133,7 @@ class WellZonationVsGrid(QCForward):
         slimit = self.ldata.actions_all["stopthreshold"]
         mmean = np.nanmean(match_allv)
 
-        results["WELL"].append("SUM_WELLS")
+        results["WELL"].append("ALL_WELLS")
         results["MATCH"].append(mmean)
         results["WARN_LIMIT"].append(wlimit)
         results["STOP_LIMIT"].append(wlimit)
@@ -122,17 +152,29 @@ class WellZonationVsGrid(QCForward):
 
         dfr_ok = dfr[dfr["STATUS"] == "OK"]
         if len(dfr_ok) > 0:
-            print("\nWells with status OK ({})".format(self.gdata.nametag))
+            print(
+                "\nWells with status OK ({} - {})".format(
+                    self.gdata.nametag, self.ldata.infotext
+                )
+            )
             print(dfr_ok)
 
         dfr_warn = dfr[dfr["STATUS"] == "WARN"]
         if len(dfr_warn) > 0:
-            print("\nWells with status WARN ({})".format(self.gdata.nametag))
+            print(
+                "\nWells with status WARN ({} - {})".format(
+                    self.gdata.nametag, self.ldata.infotext
+                )
+            )
             print(dfr_warn)
 
         dfr_stop = dfr[dfr["STATUS"] == "STOP"]
         if len(dfr_stop) > 0:
-            print("\nWells with status STOP ({})".format(self.gdata.nametag))
+            print(
+                "\nWells with status STOP ({} - {})".format(
+                    self.gdata.nametag, self.ldata.infotext
+                )
+            )
             print(dfr_stop, file=sys.stderr)
             msg = "One or more wells has status = STOP"
             QCC.force_stop(msg)
@@ -174,25 +216,19 @@ class WellZonationVsGrid(QCForward):
 
             if wzong.zonelogname not in dfr.columns:
                 print(
-                    "Well {} have no requested zonelog and will be skipped".format(
-                        wll.name
+                    "Well {} have no requested zonelog <{}> and will be skipped".format(
+                        wll.name, wzong.zonelogname,
                     )
                 )
                 continue
 
-            useperflog = None
-            if wzong.perflogname and wzong.perflogname in dfr.columns:
-                useperflog = "PERF_local"
-                rng_min = wzong.perflogrange[0]
-                rng_max = wzong.perflogrange[1]
-                dfr[useperflog] = dfr[wzong.perflogname] * 0
-                dfr[useperflog].where(
-                    (dfr[wzong.perflogname] >= rng_min)
-                    & (dfr[wzong.perflogname] <= rng_max),
-                    1,
-                    inplace=True,
+            if wzong.perflogname and wzong.perflogname not in dfr.columns:
+                print(
+                    "Well {} have no requested perflog <{}> and will be skipped".format(
+                        wll.name, wzong.perflogname,
+                    )
                 )
-                wll.dataframe = dfr
+                continue
 
             QCC.print_debug("XTGeo work for {}...".format(wll.name))
             res = qcdata.grid.report_zone_mismatch(
@@ -202,7 +238,8 @@ class WellZonationVsGrid(QCForward):
                 zonelogrange=wzong.zonelogrange,
                 zonelogshift=wzong.zonelogshift,
                 depthrange=wzong.depthrange,
-                perflogname=useperflog,
+                perflogname=wzong.perflogname,
+                perflogrange=wzong.perflogrange,
                 resultformat=2,
             )
             QCC.print_debug("XTGeo work for {}... done".format(wll.name))

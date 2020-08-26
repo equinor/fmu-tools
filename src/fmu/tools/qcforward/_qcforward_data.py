@@ -29,14 +29,19 @@ class _QCForwardData(object):
 
     def __init__(self):
 
-        # if this is true, then heavy stuff such as grids are tried reused if possible
-        self._reuse = False
+        # if this is active, then heavy stuff such as grids are not read again
+        self._reuse = []
 
         self._path = "."  # usually not needed to set explisit
         self._project = None  # pointing to  RMS project ID if any
         self._grid = None  # A XTGeo Grid()
         self._gridprops = None  # XTGeo GridProperties() for multiple props
+
         self._wells = None  # XTGeo Wells() instance (multiple wells)
+        self._wells_lognames = "all"
+        self._wells_depthrange = None
+        self._wells_rescale = None
+
         self._surfaces = None  # XTGeo Surfaces() instance (in prep)
 
         self._reportfile = "default.csv"  # report file settings
@@ -95,12 +100,38 @@ class _QCForwardData(object):
         value = list(mydict.values())[0]
         return key, value
 
-    def parse(self, data, reuse=False):
+    def parse(self, data, reuse=False, wells_settings=None):
+        """Parse the actual data, such as grids, gridprops etc.
 
+        Args:
+            data (dict): The input data dictionary
+            reuse (bool or list): If True, do not reread grid and gridprops. Can also be
+                a list referring to key names.
+            wells_settings (dict): More granular settings for wells which may speed
+                up reading and/or execution. If set, this is a dictionary with keys
+                ``lognames``, ``depthrange``, ``resample``
+
+        Example::
+
+            wsettings = {"lognames": "all", "depthrange": (1300, 2800), resample=1.0}
+            self.gdata.parse(data, wells_settings=wsettings)
+
+        """
         CMN.verbosity = data.get("verbosity", None)
-        self._reuse = reuse
 
-        # TODO: validate dictionary that holds data
+        if isinstance(reuse, bool):
+            if reuse is True:
+                self._reuse = ["grid", "gridprops"]
+            else:
+                self._reuse = []
+        else:
+            self._reuse = reuse
+
+        if wells_settings:
+            self._wells_lognames = wells_settings.get("lognames", "all")
+            self._wells_depthrange = wells_settings.get("depthrange", None)
+            self._wells_rescale = wells_settings.get("rescale", None)
+
         self._data = data
 
         self.set_path()
@@ -129,7 +160,7 @@ class _QCForwardData(object):
     def parse_project(self):
         """Get the RoxarAPI project magics"""
 
-        if "project" in self._data.keys() and self._data["project"]:
+        if "project" in self._data.keys():
             rox = xtgeo.RoxUtils(self._data["project"])
             self._project = rox.project
 
@@ -139,10 +170,14 @@ class _QCForwardData(object):
     def read_grid(self):
         """Read 3D grid (which is required), from file or RMS"""
 
-        CMN.print_info("Reading grid geometry...")
-        if self._reuse:
+        if not "grid" in self._data.keys():
             return
 
+        if "grid" in self._reuse:
+            CMN.print_info("Reuse current grid...")
+            return
+
+        CMN.print_info("Reading grid geometry...")
         if self._project is None:
             gridpath = join(self._path, self._data["grid"])
 
@@ -158,10 +193,14 @@ class _QCForwardData(object):
             self._grid = xtgeo.grid_from_roxar(self._project, gridname)
 
     def read_gridprops(self):
-        """Read 3D grid props (required data), from file or RMS"""
+        """Read 3D grid props, from file or RMS"""
+
+        if "gridprops" in self._reuse:
+            CMN.print_info("Reuse current grid properties...")
+            return
 
         CMN.print_info("Reading grid properties...")
-        if self._reuse:
+        if not "gridprops" in self._data.keys():
             return
 
         gprops = []
@@ -185,18 +224,37 @@ class _QCForwardData(object):
         self._gridprops = xtgeo.GridProperties()
         self._gridprops.append_props(gprops)
 
-    def read_wells(self):
-        """Reading wells (required data)"""
+    def read_wells(self):  # pylint: disable=too-many-branches
+        """Reading wells"""
+
+        if "wells" in self._reuse:
+            CMN.print_info("Reuse current wells...")
+            return
+
+        if not "wells" in self._data.keys():
+            return
 
         CMN.print_info("Reading wells...")
         wdata = []
+
+        # pylint: disable=too-many-nested-blocks
         if self._project is None:
             # fields may contain wildcards for "globbing"
             if isinstance(self._data["wells"], list):
                 for welldata in self._data["wells"]:
                     abswelldata = join(self._path, welldata)
                     for wellentry in glob(abswelldata):
-                        wdata.append(xtgeo.Well(wellentry))
+                        mywell = xtgeo.Well()
+                        mywell.from_file(wellentry, lognames=self._wells_lognames)
+
+                        if self._wells_depthrange:
+                            tmin, tmax = self._wells_depthrange
+                            mywell.limit_tvd(tmin, tmax)
+
+                        if self._wells_rescale:
+                            mywell.rescale(self._wells_rescale)
+
+                        wdata.append(mywell)
                         CMN.print_debug(wellentry)
 
         else:
@@ -216,12 +274,12 @@ class _QCForwardData(object):
             for rmswell in rmswells:
                 for wreg in wnames:
                     CMN.print_debug("Trying match {} vs re {}".format(rmswell, wreg))
-                    if re.match(wreg, rmswell):
+                    if re.match(wreg + "$", rmswell):
                         try:
                             mywell = xtgeo.well_from_roxar(
                                 self._project,
                                 rmswell,
-                                lognames="all",
+                                lognames=self._wells_lognames,
                                 logrun=wlogrun,
                                 trajectory=wtraj,
                             )
@@ -229,7 +287,16 @@ class _QCForwardData(object):
                             CMN.print_info(
                                 "Regex match found, RMS well: {}".format(rmswell)
                             )
+
+                            if self._wells_depthrange:
+                                tmin, tmax = self._wells_depthrange
+                                mywell.limit_tvd(tmin, tmax)
+
+                            if self._wells_rescale:
+                                mywell.rescale(self._wells_rescale)
+
                             wdata.append(mywell)
+
                         except ValueError as verr:
                             print("Could not read well {}: {}".format(rmswell, verr))
 
