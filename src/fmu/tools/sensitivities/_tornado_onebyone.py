@@ -18,8 +18,8 @@ def check_selector(resultfile, selector):
 
 
 def check_selection(resultfile, selector, selection):
-    """ Checks whether selction is in resultfile values
-        in the column selector """
+    """Checks whether selction is in resultfile values
+    in the column selector"""
     for sel in selection:
         if sel not in resultfile[selector].values:
             if str(sel).strip("[]").lower() == "total":

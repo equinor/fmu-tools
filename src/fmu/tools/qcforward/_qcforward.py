@@ -75,7 +75,9 @@ class QCForward(object):
             xdata.pop("dump_yaml", None)
             with open(join(self._path, data["dump_yaml"]), "w") as stream:
                 yaml.safe_dump(
-                    xdata, stream, default_flow_style=None,
+                    xdata,
+                    stream,
+                    default_flow_style=None,
                 )
             QCC.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
 

@@ -218,7 +218,8 @@ class WellZonationVsGrid(QCForward):
             if wzong.zonelogname not in dfr.columns:
                 print(
                     "Well {} have no requested zonelog <{}> and will be skipped".format(
-                        wll.name, wzong.zonelogname,
+                        wll.name,
+                        wzong.zonelogname,
                     )
                 )
                 continue
@@ -226,7 +227,8 @@ class WellZonationVsGrid(QCForward):
             if wzong.perflogname and wzong.perflogname not in dfr.columns:
                 print(
                     "Well {} have no requested perflog <{}> and will be skipped".format(
-                        wll.name, wzong.perflogname,
+                        wll.name,
+                        wzong.perflogname,
                     )
                 )
                 continue
