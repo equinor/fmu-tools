@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import, division, print_function  # PY2
 
-from os.path import abspath, unlink
+import pathlib
+from os.path import abspath
 import pytest
 
 from fmu.tools.qcforward._qcforward import QCForward
@@ -70,4 +71,4 @@ def test_qcforwarddata():
 
     assert ZONELOGNAME in op1.dataframe.columns
 
-    os.unlink(REPORT)
+    pathlib.Path(REPORT).unlink()
