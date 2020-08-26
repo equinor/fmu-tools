@@ -170,7 +170,7 @@ class _QCForwardData(object):
     def read_grid(self):
         """Read 3D grid (which is required), from file or RMS"""
 
-        if not "grid" in self._data.keys():
+        if "grid" not in self._data.keys():
             return
 
         if "grid" in self._reuse:
@@ -200,7 +200,7 @@ class _QCForwardData(object):
             return
 
         CMN.print_info("Reading grid properties...")
-        if not "gridprops" in self._data.keys():
+        if "gridprops" not in self._data.keys():
             return
 
         gprops = []
@@ -231,7 +231,7 @@ class _QCForwardData(object):
             CMN.print_info("Reuse current wells...")
             return
 
-        if not "wells" in self._data.keys():
+        if "wells" not in self._data.keys():
             return
 
         CMN.print_info("Reading wells...")

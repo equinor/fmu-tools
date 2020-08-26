@@ -189,6 +189,7 @@ class WellZonationVsGrid(QCForward):
     def _validate_input(data):
         """Validate data against JSON schemas"""
 
+        # TODO: complete JSON files
         spath = Path(fmu.tools.__file__).parent / "qcforward" / "_schemas"
 
         schemafile = "wellzonation_vs_grid_asfile.json"

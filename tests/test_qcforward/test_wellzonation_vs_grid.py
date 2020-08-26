@@ -1,16 +1,11 @@
 """Testing qcforward method wellzonation vs grid"""
 
 import pathlib
-import sys
 from os.path import abspath
 import pytest
 import pandas as pd
 
 import fmu.tools.qcforward as qcf
-
-
-import xtgeo
-
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
@@ -23,7 +18,7 @@ WELLFILES = [
 ]
 
 ZONELOGNAME = "Zonelog"
-PERFLOGNAME = "Perflog"
+PERFLOGNAME = "PERF"
 REPORT = abspath("/tmp/somefile.csv")
 SOMEYAML = abspath("/tmp/somefile.yml")
 
@@ -51,9 +46,8 @@ def test_zonelog_vs_grid_asfiles():
     # now read the dump file:
     qcf.wellzonation_vs_grid(SOMEYAML)
 
-    dfr = pd.read_csv(REPORT)
-    print(dfr)
-    assert dfr.loc[11, "MATCH"] == pytest.approx(63.967, 0.01)
+    dfr = pd.read_csv(REPORT, index_col="WELL")
+    assert dfr.loc["ALL_WELLS", "MATCH"] == pytest.approx(63.967, 0.01)
 
     pathlib.Path(REPORT).unlink()
     pathlib.Path(SOMEYAML).unlink()
@@ -68,6 +62,9 @@ def test_zonelog_vs_grid_asfiles_shall_stop():
     with pytest.raises(SystemExit):
         qcf.wellzonation_vs_grid(newdata)
 
+    pathlib.Path(REPORT).unlink()
+    pathlib.Path(SOMEYAML).unlink()
+
 
 def test_zonelog_vs_grid_asfiles_reuse_instance():
     """Testing reusing the instance"""
@@ -79,40 +76,33 @@ def test_zonelog_vs_grid_asfiles_reuse_instance():
     job.run(DATA1)
     job.run(newdata, reuse=True)
 
-
-# @pytest.mark.skipif(sys.version_info < (3, 0), reason="requires Python3")
-# def test_perflog_vs_grid_asfiles():
-#     """
-#     Testing the perforation log as zonelog filter vs grid functionality using files.
-
-#     When a perflog is present, it means in this example
-#     that all intervals within a PERFLOG range will have a zonelog vs grid check,
-#     i.e. the PERFLOG acts a contrain/filter. In intervals with missing PERFLOG,
-#     or if PERFLOG is zero, then zonelog vs grid checks is ignored.
+    pathlib.Path(REPORT).unlink()
+    pathlib.Path(SOMEYAML).unlink()
 
 
-#     """
+def test_perflog_vs_grid_asfiles():
+    """
+    Testing the perforation log as zonelog filter vs grid functionality using files.
 
-#     data = {
-#         "verbosity": "debug",
-#         "path": PATH,
-#         "grid": GRIDFILE,
-#         "gridprops": [{ZONENAME: ZONEFILE}],
-#         "wells": WELLFILES,
-#         "zonelogname": ZONELOGNAME,
-#         "zonelogrange": [1, 3],  # inclusive range at both ends
-#         "depthrange": [1580, 9999],
-#         "perforationlog": {"name": PERFLOGNAME, "range": [1, 9999]},
-#         "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
-#         "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
-#         "report": {"file": REPORT, "mode": "write"},
-#         "dump_yaml": "somefile.yml",
-#     }
+    When a perflog is present, it means in this example
+    that all intervals within a PERFLOG range will have a zonelog vs grid check,
+    i.e. the PERFLOG acts a contrain/filter. In intervals with missing PERFLOG,
+    or if PERFLOG is outside range, then zonelog vs grid checks is ignored.
 
-#     wellcheck = qcf.QCForward()
-#     # wellcheck.wellzonation_vs_grid(data)
 
-#     # print(dfr)
-#     # assert dfr.loc[11, "MATCH"] == pytest.approx(58.15, 0.01)
-#     # os.unlink("somefile.yml")
-#     # os.unlink(REPORT)
+    """
+
+    mydata = DATA1.copy()
+    mydata["perflog"] = {"name": PERFLOGNAME, "range": [1, 5]}
+
+    wellcheck = qcf.WellZonationVsGrid()
+    wellcheck.run(mydata)
+
+    dfr = pd.read_csv(REPORT, index_col="WELL")
+
+    print(dfr)
+
+    assert dfr.loc["OP_1_PERF", "MATCH"] == pytest.approx(80.701, 0.01)
+
+    pathlib.Path(REPORT).unlink()
+    pathlib.Path(SOMEYAML).unlink()
