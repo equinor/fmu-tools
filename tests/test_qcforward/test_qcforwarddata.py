@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function  # PY2
 
-import pathlib
 from os.path import abspath
 import pytest
 
