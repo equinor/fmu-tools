@@ -70,5 +70,3 @@ def test_qcforwarddata():
     op1 = qcdata.wells.get_well("OP_1")
 
     assert ZONELOGNAME in op1.dataframe.columns
-
-    pathlib.Path(REPORT).unlink()
