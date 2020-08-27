@@ -1,5 +1,4 @@
 """The _qcforward module contains the base class"""
-from __future__ import absolute_import, division, print_function  # PY2
 
 from os.path import join
 
