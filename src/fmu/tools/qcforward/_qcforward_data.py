@@ -148,7 +148,7 @@ class _QCForwardData(object):
 
     def set_report(self):
         """General report settings"""
-        myreport = self._data.get("report", {"file": "default.yml", "mode": "write"})
+        myreport = self._data.get("report", {"file": "default.csv", "mode": "write"})
 
         self._reportfile = myreport["file"]
         self._reportmode = myreport["mode"]
