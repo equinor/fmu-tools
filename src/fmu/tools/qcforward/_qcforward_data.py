@@ -155,7 +155,7 @@ class _QCForwardData(object):
 
     def set_nametag(self):
         """General nametag settings"""
-        self._nametag = self._data.get("nametag", {"file": "unset_nametag"})
+        self._nametag = self._data.get("nametag", "unset_nametag")
 
     def parse_project(self):
         """Get the RoxarAPI project magics"""
