@@ -181,7 +181,7 @@ def _check_designinput(dsgn_input):
 
 def _check_for_mixed_sensitivities(sens_name, sens_group):
     """Checks for valid input in designinput sheet. A sensitivity cannot contain
-two different sensitivity types"""
+    two different sensitivity types"""
 
     types = sens_group.groupby("type", sort=False)
     if len(types) > 1:
@@ -407,7 +407,7 @@ def _read_dependencies(filename, sheetname, from_parameter):
     Returns:
         OrderedDict with design parameter, dependent parameters
         and values
-   """
+    """
     depend_dict = OrderedDict()
     depend_df = pd.read_excel(filename, sheetname, dtype=str)
     if from_parameter in depend_df.keys():

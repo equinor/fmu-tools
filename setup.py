@@ -37,9 +37,12 @@ SETUP_REQUIREMENTS = [
 ]
 
 TEST_REQUIREMENTS = [
+    "black==20.8b0; python_version >= '3'",
+    "flake8",
     "pytest",
 ]
 
+EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS}
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
@@ -172,4 +175,5 @@ setup(
     test_suite="tests",
     tests_require=TEST_REQUIREMENTS,
     setup_requires=SETUP_REQUIREMENTS,
+    extras_require=EXTRAS_REQUIRE,
 )

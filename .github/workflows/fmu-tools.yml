@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['2.7', '3.6', '3.7', '3.8']
+        python-version: ['3.6', '3.7', '3.8']
 
     steps:
 
@@ -29,28 +29,19 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install numpy for Python 2
-      if: matrix.python-version == '2.7'
-      run: |
-        pip install numpy==1.16.6
-
-    - name: Check code style
-      if: matrix.python-version != '2.7'
-      run: |
-        pip install black
-        black --check .
-        pip install flake8
-        flake8 .
-
     - name: Install requirements
       run: |
         pip install pip -U
         pip install git+https://github.com/equinor/libecl
         pip install git+https://github.com/equinor/fmu-ensemble
-        pip install .
+        pip install .[tests]
+
+    - name: Check code style
+      run: |
+        black --check .
+        flake8 .
 
     - name: Run tests
       run: |
         git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-        pip install pytest
         pytest ./tests
