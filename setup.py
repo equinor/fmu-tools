@@ -37,9 +37,12 @@ SETUP_REQUIREMENTS = [
 ]
 
 TEST_REQUIREMENTS = [
+    "black==20.8b0; python_version >= '3'",
+    "flake8",
     "pytest",
 ]
 
+EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS}
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
@@ -161,7 +164,10 @@ setup(
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Natural Language :: English",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -169,4 +175,5 @@ setup(
     test_suite="tests",
     tests_require=TEST_REQUIREMENTS,
     setup_requires=SETUP_REQUIREMENTS,
+    extras_require=EXTRAS_REQUIRE,
 )
