@@ -106,7 +106,7 @@ In addition:
 
 * Use pytest as testing engine
 
-* Code shall be Python 2.7.13 + (until mid 2020) and python 3.4 + compliant
+* Code shall be python 3.6 + compliant
 
 
 Use flake8 and/or pylint to check
@@ -142,6 +142,7 @@ Running, testing etc
 
   $ source <your virtual env>
   $ cd <your-fmu-tools-project-dir>
+  $ git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../.
   $ git pull upstream master
   $ git checkout -b <your-branch-name>
   $ python setup.py clean

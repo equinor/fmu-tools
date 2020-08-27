@@ -202,7 +202,7 @@ class DesignMatrix(object):
         print("Designmatrix written to {}".format(filename))
 
     def set_defaultvalues(self, defaults):
-        """ Add default values
+        """Add default values
 
         Args:
             defaults (OrderedDict): (key, value) is (parameter_name, value)
@@ -404,8 +404,8 @@ class SeedSensitivity(object):
 
     def __init__(self, sensname):
         """Args:
-                sensname (str): Name of sensitivity.
-                    Defines SENSNAME in design matrix
+        sensname (str): Name of sensitivity.
+            Defines SENSNAME in design matrix
         """
         self.sensname = sensname
         self.sensvalues = None
@@ -458,8 +458,8 @@ class SingleRealisationReference(object):
 
     def __init__(self, sensname):
         """Args:
-                sensname (str): Name of sensitivity.
-                    Defines SENSNAME in design matrix
+        sensname (str): Name of sensitivity.
+            Defines SENSNAME in design matrix
         """
         self.sensname = sensname
         self.sensvalues = None
@@ -493,8 +493,8 @@ class BackgroundSensitivity(object):
 
     def __init__(self, sensname):
         """Args:
-                sensname (str): Name of sensitivity.
-                    Defines SENSNAME in design matrix
+        sensname (str): Name of sensitivity.
+            Defines SENSNAME in design matrix
         """
         self.sensname = sensname
         self.sensvalues = None
@@ -601,11 +601,11 @@ class ScenarioSensitivityCase(object):
     def generate(self, realnums, parameters, seedvalues):
         """Generate casevalues for the ScenarioSensitivityCase
 
-            Args:
-                realnums (list): list of realizaton numbers for the case
-                parameters (OrderedDict):
-                    dictionary with parameter names and values
-                seeds (str): default or None
+        Args:
+            realnums (list): list of realizaton numbers for the case
+            parameters (OrderedDict):
+                dictionary with parameter names and values
+            seeds (str): default or None
         """
 
         self.casevalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
@@ -796,7 +796,7 @@ class ExternSensitivity(object):
 
 
 def _parameters_from_extern(filename):
-    """ Read parameter values or background values
+    """Read parameter values or background values
     from specified file. Format either Excel ('xlsx')
     or csv.
 
@@ -817,7 +817,7 @@ def _parameters_from_extern(filename):
 
 
 def _seeds_from_extern(filename, max_reals):
-    """ Read parameter values or background values
+    """Read parameter values or background values
     from specified file. Format either Excel ('xlsx')
     or csv.
 
@@ -852,7 +852,7 @@ def _seeds_from_extern(filename, max_reals):
 
 def _find_max_realisations(inputdict):
     """Finds the maximum number of realisations
-    in a sensitivity case """
+    in a sensitivity case"""
     max_reals = inputdict["repeats"]
     for key in inputdict["sensitivities"].keys():
         sens = inputdict["sensitivities"][key]

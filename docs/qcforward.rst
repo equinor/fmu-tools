@@ -22,11 +22,14 @@ This method check how the zonelog and/or a perforation log matches with zonation
 the 3D grid. If worse than a given set of limits, either are warning is given or a
 full stop of the workflow is forced.
 
+<https://xtgeo.readthedocs.io/en/latest/_images/zone-well-mismatch-plain.svg>
+
 
 Signature
 ~~~~~~~~~
 
-The input to this method is a python dictionary with the following keys:
+The input to this method is a python dictionary with some defined keys. Note that
+the order of keys does not matter.
 
 
 Common fields (same input inside or outside RMS)
@@ -35,12 +38,18 @@ Common fields (same input inside or outside RMS)
 verbosity
   Level of output while running None, "info" or "debug", default is None. (optional)
 
-zonelogname
-  Name of zonelog, default is "Zonelog" (required)
+zonelog:
+  A dictionary with keys ``name``, ``range`` and ``shift``, see examples (required)
 
-zonelogrange
-  A list with two entries, defining minimum and maximum zone to use (both ends
-  are inclusive). Default is [1, 99]. It is recommended to set range explicitly.
+perflog:
+  The name of the perforation log. A dictionary with keys ``name``, ``range``,
+  see examples (optional). If present, zonelog matching will be performed only
+  in perforation intervals.
+
+well_resample:
+  To speed up calulations (but on cost of less precision), the wells are resampled
+  every N.n units along the well path. E.g. the value of 3.0 means every 3 meter if a
+  metric unit system.
 
 depthrange
   A list with two entries, defining minimum and maximum depth to use (both ends
@@ -67,41 +76,37 @@ dump_yaml
   If present, should be a file name where the current data structure is dumped to YAML
   format. Later this YAML file can be edited and applied for a single line input
 
+nametag
+  A string to identify the data set. Recommended.
 
 Keys if ran inside RMS
 ^^^^^^^^^^^^^^^^^^^^^^
 
 wells
-  A list of wellnames which in turn can have python valid regular expressions,
-  see examples. (required)
-
-logrun
-  Name of logrun in RMS, default is "log" (required)
-
-trajectory
-  Name of trajectory in RMS, default is "Drilled trajectory" (required)
+  In RMS this is a dictionary with 3 fields: ``names``, ``logrun`` and ``trajectory``.
+  The names is a list of wellnames which in turn can have python valid regular
+  expressions. See examples. (required)
 
 grid
   Name of grid icon in RMS (required)
 
-zone
-  Name of zone icon in RMS (required)
+gridprops
+  A list of grid properties, in this case the name of zone icon in RMS (required)
 
 
 If ran in normal python (terminal or ERT job)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 wells
-  Outside RMS, wells must be on RMS ascii well format. File wildcards are
+  Outside RMS, wells is a list of files on RMS ascii well format. File wildcards are
   allowed, se example. (required)
 
 grid
   Name of file with grid (on ROFF or EGRID or GRDECL format) (required)
 
-zone
-  A dictionary with name of Zone and assosiated filename, for example
-  ``{"Zone", "zone.roff"}``
-
+gridprops
+  A list of list where the inner list is a pair with name of Zone and assosiated
+  filename, for example ``[["Zone", "zone.roff"]]``
 
 
 Known issues
@@ -111,18 +116,16 @@ Known issues
   is non-unique as corner point cells are not necessarly well defined in 3D. Hence
   one may encounter different results if another tool is applied.
 
-* Current only cover ZONELOG match; PERFORATIONS will come
-
 
 Examples
 ~~~~~~~~
 
-Example when ran inside RMS:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example when ran inside RMS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward
 
     # will match all wells starting with 33_10 and all 34_11 wells containing "A"
     # Note that these are python regular expressions!
@@ -134,27 +137,28 @@ Example when ran inside RMS:
 
     GRIDNAME = "SIMGRID"
     ZONEGRIDNAME = "Zone"
+    DRANGE = [2100, 3200]
 
     ACT_EACH = {"warnthreshold": 90, "stopthreshold": 70}
     ACT_ALL = {"warnthreshold": 95, "stopthreshold": 80}
 
-    QCJOB = QCForward()
+    QCJOB = qcforward.WellZonationVsGrid()
 
     def check():
 
         usedata = {
-            wells: WELLS,
-            zonelogname: ZONELOGNAME,
-            trajectory: TRAJ,
-            logrun: LOGRUN,
-            grid: GRIDNAME,
-            zone: ZONEGRIDNAME,
-            actions_each: ACT_EACH
-            actions_all: ACT_ALL
-            report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
+            "wells": {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ},
+            "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": -1},
+            "grid": GRIDNAME,
+            "depthrange": DRANGE,
+            "gridprops": [ZONEGRIDNAME],
+            "actions_each": ACT_EACH,
+            "actions_all": ACT_ALL,
+            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"},
+            "nametag": "ZONELOG",
         }
 
-        QCJOB.wellzonation_vs_grid(usedata)
+        qcf.run(usedata, project=project)
 
     if  __name__ == "__main__":
         check()
@@ -165,7 +169,7 @@ Example when ran from python script in terminal:
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward
 
     WPATH = "../output/wells/"
 
@@ -175,40 +179,38 @@ Example when ran from python script in terminal:
     PERFLOGNAME = "PERF"
 
     GRIDNAME = "../output/checks/simgrid.roff"
-    ZONEGRIDNAME = {"Zone": "../output/checks/simgrid_zone.roff"}
+    ZONEGRIDNAME = ["Zone", "../output/checks/simgrid_zone.roff"]
 
-    QCJOB = QCForward()
+    QCJOB = qcforward.WellZonationVsGrid()
 
     def check():
 
         usedata = {
-            wells: WELLS,
-            zonelog: ZONELOGNAME,
-            grid: GRIDNAME,
-            zone: ZONEGRIDNAME,
-            actions_each: ACT_EACH
-            actions_all: ACT_ALL
-            report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
+            "wells": WELLS"
+            "grid": GRIDNAME,
+            "gridprops": [ZONEGRIDNAME],
+            "actions_each": ACT_EACH
+            "actions_all": ACT_ALL
+            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
         }
 
-        QCJOB.wellzonation_vs_grid(usedata)
+        QCJOB.run(usedata)
 
     if  __name__ == "__main__":
         check()
 
-Example in terminal with setting from a YAML file:
+Example in RMS with setting from a YAML file:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    from fmu.tools import QCForward
+    from fmu.tools import qcforward as qcf
     import yaml
 
-    USEDATA = yaml.load("../input/qc/somefile.yml")
-    QCJOB = QCForward()
+    USEDATA = yaml.load("../input/qc/somefile.yml", project=project)
 
     def check():
-        QCJOB.wellzonation_vs_grid(USEDATA)
+        qcf.wellzonation_vs_grid(USEDATA, project=project)
 
     if  __name__ == "__main__":
         check()
@@ -218,16 +220,23 @@ The YAML file may in case look like:
 .. code-block:: yaml
 
     actions_all: {stopthreshold: 20, warnthreshold: 80}
-    actions_each: {stopthreshold: 20, warnthreshold: 50}
-    depthrange: [1580, 9999]
-    grid: ../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff
-    path: /home/jan/work/git/fmu-tools
-    report: {file: somereport.csv, mode: write}
-    verbosity: debug
-    wells: [../xtgeo-testdata/wells/reek/1/OP*.w, ../xtgeo-testdata/wells/reek/1/WI*.w]
-    zone: {Zone: ../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff}
-    zonelogname: Zonelog
-    zonelogrange: [1, 3]
+    actions_each: {stopthreshold: 30, warnthreshold: 50}
+    depthrange: [1300, 1900]
+    grid: Mothergrid
+    gridprops: [Zone]
+    nametag: TST2
+    perflog: null
+    report: {file: chk.csv, mode: write}
+    verbosity: info
+    well_resample: 3
+    wells:
+      logrun: log
+      names: [31_2-D-1_B.*$]
+      trajectory: Drilled trajectory
+    zonelog:
+      name: ZONELOG
+      range: [1, 18]
+      shift: -1
 
 
 Example when ran inside RMS with different settings for wells
@@ -238,8 +247,7 @@ than other wells.
 
 .. code-block:: python
 
-    from copy import deepcopy
-    from fmu.tools import QCForward
+    import fmu.tools.qcforward as qcf
 
     # will match all wells starting with 33_10 and all 34_11 wells containing "A"
     # Note that these are python regular expressions!
@@ -260,32 +268,32 @@ than other wells.
     ACT_EACH2 = {"warnthreshold": 60, "stopthreshold": 40}
     ACT_ALL2 = {"warnthreshold": 65, "stopthreshold": 50}
 
-    QCJOB = QCForward()
+    QCJOB = qcf.WellZonationVsGrid()
+
 
     def check():
 
         usedata1 = {
-            wells: WELLS1,
-            zonelogname: ZONELOGNAME,
-            trajectory: TRAJ,
-            logrun: LOGRUN,
-            grid: GRIDNAME,
-            zone: ZONEGRIDNAME,
-            actions_each: ACT_EACH1
-            actions_all: ACT_ALL1
-            report: {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
+            "wells": {"names": WELLS1, "logrun": LOGRUN, "trajectory": TRAJ},
+            "zonelog": {"name": ZONELOGNAME, "range": [1, 5], "shift": -2},
+            "grid": GRIDNAME,
+            "gridzones": [ZONEGRIDNAME],
+            "actions_each": ACT_EACH1,
+            "actions_all": ACT_ALL1,
+            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"},
+            "nametag": "SET1",
         }
 
         # make a copy and modify selected items
-        usedata2 = deepcopy(usedata1)
-        usedata2["wells"] = WELLS2
+        usedata2 = usedata1.copy()
+        usedata2["wells"]["names"] = WELLS2
         usedata2["actions_each"] = ACT_EACH2
         usedata2["actions_all"] = ACT_ALL2
         usedata2["report"] = {"file": "../output/qc/well_vs_grid.csv", mode: "append"}
+        usedata2["nametag"] = "SET2"
 
-        QCJOB.wellzonation_vs_grid(usedata1)
-        QCJOB.wellzonation_vs_grid(usedata2)
-
+        qcf.wellzonation_vs_grid(usedata1, project=project)
+        qcf.wellzonation_vs_grid(usedata2) project=project, reuse = True)
 
     if  __name__ == "__main__":
         check()

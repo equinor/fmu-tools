@@ -3,7 +3,7 @@
 
 
 def find_combinations(selections):
-    """ Finds combinations of values in OrderedDict
+    """Finds combinations of values in OrderedDict
 
     Args:
         selections: Ordered dictionary where for each key
