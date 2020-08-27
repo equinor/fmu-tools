@@ -195,14 +195,15 @@ class _QCForwardData(object):
     def read_gridprops(self):
         """Read 3D grid props, from file or RMS"""
 
+
+        if "gridprops" not in self._data.keys():
+            return
+            
         if "gridprops" in self._reuse:
             CMN.print_info("Reuse current grid properties...")
             return
 
         CMN.print_info("Reading grid properties...")
-        if "gridprops" not in self._data.keys():
-            return
-
         gprops = []
         if self._project is None:
 
