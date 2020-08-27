@@ -47,7 +47,7 @@ perflog:
   in perforation intervals.
 
 well_resample:
-  To speed up calulations (but on cost of less precision), the wells are resmapled
+  To speed up calulations (but on cost of less precision), the wells are resampled
   every N.n units along the well path. E.g. the value of 3.0 means every 3 meter if a
   metric unit system.
 
