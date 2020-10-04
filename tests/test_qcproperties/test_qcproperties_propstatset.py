@@ -16,7 +16,7 @@ WELLDATA = cfg["wells"][0]
 WELLDATA["path"] = abspath("../xtgeo-testdata/wells/reek/1/")
 
 BWELLDATA = cfg["blockedwells"][0]
-BWELLDATA["path"] = abspath("tests/data/propstatistics")
+BWELLDATA["path"] = abspath("../xtgeo-testdata/wells/reek/1/")
 
 
 def test_propstatset():
@@ -42,6 +42,6 @@ def test_propstatset_auto_combination():
 
     assert len(qcp.dataframe["ID"].unique()) == 2
 
-    qcp.get_bwell_statistics(BWELLDATA)
+    qcp.get_bwell_statistics(BWELLDATA, reuse=True)
 
     assert len(qcp.dataframe["ID"].unique()) == 3

@@ -1,11 +1,14 @@
 """ Private class in qcproperties """
 
 from typing import Union
+from fmu.tools._common import _QCCommon
+
+QCC = _QCCommon()
 
 
 class PropStatParameterData:
     """Class for preparing the input parameter data for use with a PropStat()
-    instance. Initializing this calss will combined and group the input data
+    instance. Initializing this class will combine and group the input data
     into different class attributes.
 
     Args:
@@ -25,7 +28,7 @@ class PropStatParameterData:
                 "include" or "exclude" (list): list of values to include/exclude
                 "codes" (dict): a dictionary of codenames to update existing codenames.
 
-        additional_filters (dict):
+        filters (dict):
             Additional filters, only discrete parameters are supported.
             The key is the name (or path) to the filter parameter / log, and the
             value is a dictionary with valid options:
@@ -41,14 +44,15 @@ class PropStatParameterData:
                     "codes": {1: "East", 2: "North"},
                 }
             },
-            additional_filters = {"Fluid": {"include": ["oil", "gas"]}}
+            filters = {"Fluid": {"include": ["oil", "gas"]}}
     """
 
     def __init__(
         self,
         properties: Union[dict, list],
         selectors: Union[dict, list] = None,
-        additional_filters: dict = None,
+        filters: dict = None,
+        verbosity: int = None,
     ):
 
         self._params = []
@@ -59,12 +63,14 @@ class PropStatParameterData:
         self._selectors = {}
         self._weights = {}
 
+        QCC.verbosity = verbosity
+
         # adjust format of properties and selectors if input as list
         self._properties, self._selectors = self._input_conversion(
             properties, selectors
         )
         # combine data and set different instance attributes
-        self._combine_data(additional_filters)
+        self._combine_data(filters)
 
     @property
     def properties(self):
@@ -98,7 +104,7 @@ class PropStatParameterData:
 
     @property
     def weights(self):
-        """Codenames attribute used to update codenames for dicrete parameters"""
+        """Weight attribute"""
         return self._weights
 
     # ==================================================================================
@@ -154,20 +160,25 @@ class PropStatParameterData:
             if "codes" in values:
                 self._codenames[prop] = values["codes"]
 
-    def _add_additional_filters(self, additional_filters):
+    def _add_filters(self, filters):
         """ Add additional filters to relevant attributes """
-        for prop, values in additional_filters.items():
+        for prop, values in filters.items():
             if prop not in self._params:
                 self._params.append(prop)
                 self._filters[prop] = values
                 self._disc_params.append(prop)
 
-            # support using a selector prop as additional filter if
-            # the selctor has no filters specified in its values
-            if prop in self._selectors and prop not in self._filters:
+            # support using a selector prop as filter. If the selctor
+            # has filters specified in its values, they will be ignored
+            if any(x["name"] == prop for x in self._selectors.values()):
+                if prop in self._filters:
+                    QCC.give_warn(
+                        f"Filters for {prop} found both in 'filters' and 'selectors'. "
+                        "The filter defined on the selector is ignored."
+                    )
                 self._filters[prop] = values
 
-    def _combine_data(self, additional_filters):
+    def _combine_data(self, filters):
         """ create combined lists of all data sources"""
 
         self._add_properties_data()
@@ -175,5 +186,9 @@ class PropStatParameterData:
         if self._selectors:
             self._add_selector_data()
 
-        if additional_filters is not None:
-            self._add_additional_filters(additional_filters)
+        if filters is not None:
+            self._add_filters(filters)
+
+        QCC.print_debug(f"All Properties: {self.properties}")
+        QCC.print_debug(f"All Selectors: {self.selectors}")
+        QCC.print_debug(f"All Filters: {self.filters}")

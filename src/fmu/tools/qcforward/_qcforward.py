@@ -3,12 +3,10 @@
 from os.path import join
 
 import yaml
+import pandas as pd
 
-from ._common import _QCCommon
-
-# from . import _grid_statistics as _gstat
-# from ._common import _QCCommon
-
+from fmu.tools._common import _QCCommon
+from fmu.tools.qcdata.qcdata import QCData
 
 QCC = _QCCommon()
 
@@ -34,16 +32,21 @@ class QCForward(object):
         self._method = None
         self._data = None  # input data dictionary
         self._path = "."
-        self._gdata = None  # QCForwardData instance, general data
+        self._gdata = QCData()  # QCData instance, stores XTGeo data
         self._ldata = None  # special data instance, for local data parsed per method
+        self._reports = []  # List of all report, used to determin write/append mode
+
+    @property
+    def reports(self):
+        return self._reports
+
+    @reports.setter
+    def reports(self, data):
+        self._reports = data
 
     @property
     def gdata(self):
         return self._gdata
-
-    @gdata.setter
-    def gdata(self, data):
-        self._gdata = data
 
     @property
     def ldata(self):
@@ -85,3 +88,20 @@ class QCForward(object):
             QCC.print_info("Project type is {}".format(type(project)))
 
         return xdata
+
+    def make_report(
+        self, results: dict, reportfile: str = None, nametag: str = None
+    ) -> pd.DataFrame():
+        """Make a report which e.g. can be used in webviz plotting"""
+
+        dfr = pd.DataFrame(results).assign(NAMETAG=nametag)
+
+        if reportfile is not None:
+            if not self.reports or reportfile not in self.reports:
+                dfr.to_csv(reportfile, index=False)
+                self._reports.append(reportfile)
+
+            elif reportfile in self.reports:
+                dfr.to_csv(reportfile, index=False, mode="a", header=None)
+
+        return dfr

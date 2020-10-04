@@ -5,12 +5,14 @@ from itertools import combinations
 
 def filter_df(dframe, filters):
     """Filter dataframe """
+    dframe = dframe.copy()
     for prop, filt in filters.items():
 
         if filt.get("include"):
             if isinstance(filt["include"], str):
                 filt["include"] = [filt["include"]]
             if all(x in dframe[prop].unique() for x in filt["include"]):
+
                 dframe = dframe[dframe[prop].isin(filt["include"])]
             else:
                 raise ValueError(

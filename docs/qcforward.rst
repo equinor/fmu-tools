@@ -356,7 +356,9 @@ actions
   
   warn_outside
     Same as warn_outside key above, but instead defines when to give a warning (optional).
-    
+  
+  description
+    A string to describe each action (optional).
 
 
 Optional fields
@@ -391,7 +393,7 @@ Example when executed inside RMS (basic):
 
     # Check average grid statistics for porosity and permeability
 
-    GRIDNAME = "simgrid.roff"
+    GRIDNAME = "SimGrid"
     REPORT = "somefile.csv"
     ACTIONS = [
         {
@@ -430,7 +432,7 @@ Example when executed inside RMS (more settings):
     # Check average grid statistics for the porosity in HC-zone
     # Separate checks for the different zones
 
-    GRIDNAME = "simgrid.roff"
+    GRIDNAME = "SimGrid"
     REPORT = "somefile.csv"
 
     ZONE_STOPS = {
@@ -439,31 +441,28 @@ Example when executed inside RMS (more settings):
         "Bottom_Zone": [0.1, 0.3],
     }
 
-    DATA = {
-        "nametag": "MYDATA1",
-        "path": PATH,
-        "grid": GRIDNAME,
-        "report": REPORT,
-    }
-
-    qcjob = qcf.GridStatistics()
-
     def check():
 
+        actions = []
         for zone, limits in ZONE_STOPS.items():
-
-            actions = [
+            actions.append(
                 {
                     "property": "PORO",
                     "selectors": {"ZONE": zone},
                     "filters": {"FLUID": {"include": ["Gas", "Oil"]}},
                     "stop_outside": limits,
                 },
-            ]
+            )
+            
+        usedata = {
+            "nametag": "MYDATA1",
+            "path": PATH,
+            "grid": GRIDNAME,
+            "report": REPORT,
+            "actions": actions,
+        }
 
-            usedata = DATA.copy()
-            usedata["actions"] = actions
-            qcjob.run(usedata, reuse=True)
+        qcf.grid_statistics(usedata, project=project)
 
     if  __name__ == "__main__":
         check()

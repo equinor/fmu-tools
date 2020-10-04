@@ -4,14 +4,12 @@ from os.path import abspath
 import pytest
 from fmu.tools.qcproperties.qcproperties import QCProperties
 
-PATH = abspath("tests/data/propstatistics")
+PATH = abspath("../xtgeo-testdata/wells/reek/1/")
 WELLS = ["OP_1.bw"]
 PROPERTIES = {
     "PORO": {"name": "Poro"},
-    "PERM": {"name": "Perm"},
 }
 SELECTORS = {
-    "ZONE": {"name": "Zonelog"},
     "FACIES": {"name": "Facies"},
 }
 
@@ -20,49 +18,46 @@ qcp = QCProperties()
 
 def test_full_dataframe():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
         "selectors": SELECTORS,
     }
 
-    stat = qcp.get_bwell_statistics(data)
+    stat = qcp.get_bwell_statistics(data, reuse=True)
 
-    assert set(stat.property_dataframe.columns) == set(
-        ["ZONE", "PERM", "PORO", "FACIES"]
-    )
-    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1673, abs=0.001)
+    assert set(stat.property_dataframe.columns) == set(["PORO", "FACIES"])
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1709, abs=0.001)
 
 
 def test_filters():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
         "selectors": {
-            "ZONE": {"name": "Zonelog", "exclude": "TopLowerReek_BaseLowerReek"},
             "FACIES": {"name": "Facies", "include": "Channel"},
         },
     }
 
-    stat = qcp.get_bwell_statistics(data)
+    stat = qcp.get_bwell_statistics(data, reuse=True)
 
     assert set(["Channel", "Total"]) == set(stat.dataframe["FACIES"].unique())
-    assert set(stat.dataframe["ZONE"].unique()) == set(
-        ["TopMidReek_TopLowerReek", "TopUpperReek_TopMidReek", "Total"]
-    )
 
 
 def test_statistics():
 
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
         "selectors": SELECTORS,
         "name": "Blocked_Logs",
     }
-    stat = qcp.get_bwell_statistics(data)
+    stat = qcp.get_bwell_statistics(data, reuse=True)
 
     assert set(stat.dataframe.columns) == set(
         [
@@ -74,28 +69,17 @@ def test_statistics():
             "P90",
             "PROPERTY",
             "Stddev",
-            "ZONE",
             "SOURCE",
             "ID",
         ]
     )
     assert list(stat.dataframe["ID"].unique())[0] == "Blocked_Logs"
-    assert set(stat.dataframe["PROPERTY"].unique()) == set(["PERM", "PORO"])
+    assert set(stat.dataframe["PROPERTY"].unique()) == set(["PORO"])
     assert stat.dataframe[stat.dataframe["PROPERTY"] == "PORO"][
         "Avg"
-    ].max() == pytest.approx(0.2913, abs=0.001)
-    assert set(stat.dataframe["ZONE"].unique()) == set(
-        [
-            "TopLowerReek_BaseLowerReek",
-            "TopMidReek_TopLowerReek",
-            "TopUpperReek_TopMidReek",
-            "Total",
-        ]
-    )
+    ].max() == pytest.approx(0.2678, abs=0.001)
 
     row = stat.dataframe[
-        (stat.dataframe["ZONE"] == "Total")
-        & (stat.dataframe["FACIES"] == "Total")
-        & (stat.dataframe["PROPERTY"] == "PORO")
+        (stat.dataframe["FACIES"] == "Total") & (stat.dataframe["PROPERTY"] == "PORO")
     ]
-    assert row["Avg"].values == pytest.approx(0.1673, abs=0.001)
+    assert row["Avg"].values == pytest.approx(0.1709, abs=0.001)

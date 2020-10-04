@@ -13,7 +13,7 @@ file can be used to enable an automatic run of the methods.
 All methods can be run from either RMS python, or from files (e.g. from an ERT job). 
 
 XTGeo is being utilized to get a dataframe from the input parameter data. XTGeo data 
-is reused in the instance to increase performance.
+can be reused in the instance to increase performance.
 
 
 Methods for extracting property statistics
@@ -42,8 +42,8 @@ different for the three methods, and for the two run environments (inside/outsid
 
 * ``data``: The input data as a Python dictionary (required). See valid keys below.
 * ``reuse``: Bool to define if XTGeo data should be reused in the instance (optional). 
-  Default is True, which means that grid and gridprops will be reused as default. Alternatively 
-  it can be a list for more fine grained control, e.g. ``["grid", "gridprops", "wells"]``
+  Default is False. Alternatively it can be a list for more fine grained control, 
+  e.g. ``["grid", "gridprops", "wells"]``
 * ``project``: Required for usage inside RMS 
 
 
@@ -62,13 +62,13 @@ Method specific fields:
         
         **get_well_statistics**: 
 
-        ``names``: List of wellnames. 
+        ``names``: List of wellnames (optional). Default is all wells.
         ``logrun``: Name of logrun. 
         ``trajectory``: Name of trajectory.
 
         **get_bwell_statistics**: 
 
-        ``names``: List of wellnames. 
+        ``names``: List of wellnames (optional). Default is all wells.
         ``bwname``: Name of BW object in RMS.
         ``grid``: Name of grid that contains the BW object.
 
@@ -106,10 +106,11 @@ Common fields:
                   combined statistics from. This is done by setting the same name on several code 
                   values, as it is the name that are used to group the data.
     
-    additional_filters
-        Dictionary with additional filters (optional). 
+    filters
+        Dictionary with additional filter (optional). 
         
-        Only discrete parameters are supported.
+        Only discrete parameters are supported. A selector can be input as a filter, this will 
+        override any existing filters specified directly on the selector. 
         The key is the name (or path) to the filter parameter / log, and the
         value is a dictionary with one of two options:
         
@@ -117,7 +118,16 @@ Common fields:
     
         ``exclude``: List of values to exclude (optional)
 
-        .. note:: It is recommended to filter away unnecessary data for increased performance.
+        .. seealso:: Option ``"multiple_filters"`` below which can be used to extract statistics 
+                     multiple times with different filters.
+
+    multiple_filters
+        Option for extract statistics multiple times with different filters (optional).
+
+        The input is a dictionariy where the keys are the "name" (ID string) for the dataset,
+        and the value is the dictionary of filters (Same format as ``filters`` above)
+
+        See examples.
     
     path
         Path to where files are located (optional)
@@ -148,6 +158,9 @@ Common fields:
     
     csvfile
         Path to output csvfile (optional). A csv-file will only be written, if argument is provided.
+    
+    verbosity
+      Level of output while running None, "info" or "debug", default is None. (optional)
 
 
 
@@ -201,7 +214,8 @@ Result is written to csv.
 
 **Example in RMS (detailed):**
 
-Example extracting statistics for porosity for each region,
+Example extracting statistics for porosity for each region. Filters 
+are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
 The porosity is weighted on a Total_Bulk parameter.
 
@@ -218,32 +232,30 @@ The porosity is weighted on a Total_Bulk parameter.
             "codes": {2: "NS", 3: "NS",},
         }
     }
-    FILTERS: {"Fluid": {"include": ["oil", "gas"]}}
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "additional_filters": FILTERS,
-        "grid": GRID,
-        "name": "HC_zone",
-        "csvfile": REPORT,
+    FLUID_FILTERS = {
+        "HC_zone": {"Fluid": {"include": ["oil", "gas"]}},
+        "Water_zone": {"Fluid": {"include": ["water"]}},
     }
 
-    def check():
+    def extract_statistics():
 
         qcp = QCProperties()
-        qcp.get_grid_statistics(data=usedata, project=project)
 
-        usedata2 = usedata.copy()
-        usedata2["additional_filters"] = {"Fluid": {"include": ["water"]}}
-        usedata2["name"] = "Water_zone"
-        qcp.get_grid_statistics(data=usedata2, project=project)
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "grid": GRID,
+            "multiple_filters": FLUID_FILTERS,
+        }
+    
+        qcp.get_grid_statistics(data=usedata, reuse=True, project=project)
 
         qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
 
 .. note:: The code is executed twice, filtering on the HC-zone first then the water-zone 
           in a second run. Alternatively the fluid parameter could have been used as a 
@@ -306,7 +318,7 @@ Result is written to csv.
       "logrun": "log",
       "trajectory": "Drilled trajectory",
     }
-    PROPERTIES = ["Phit", "Klogh"]
+    PROPERTIES = {"PERM": {"name": "Klogh"}}
     SELECTORS = ["Zonelog", "Facies_log"]
     REPORT = "../output/qc/somefile.csv"
 
@@ -376,6 +388,84 @@ To come....
 **Example when executed from files:**
 
 To come....
+
+
+Comparison of data from different sources
+-------------------------------------------
+
+Advice when comparing data from different sources
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When extracting statistics from different sources there are several tips for enabling easy comparison 
+in the post-analysis of the data in e.g. WebViz:
+
+* Input "properties" and "selectors" as dictionaries and keep property and selector keys identical 
+  between the sources. The keys will be the names seen in the dataframe.
+
+* Try to use the same selectors for all sources 
+
+* Keep the option "selector_combos" at True to get as much overlapping data as possible. 
+  For example, if well statistics only have ZONE as selector and the grid properties are calculated with 
+  selectors ZONE and REGION and "selector_combos" where True, the ZONE level statistics can be compared.
+
+* Use the "codes" field on the selectors to align and match the codenames for each selector. For example 
+  if the zone codes are coarser in the grid than in the zonelogs from the wells, this field can be used 
+  to merge codes in the zonelog together under one name.
+
+Example 
+^^^^^^^^^
+
+Example below collects statistical data from four different sources and writes result to a csv-file.
+Several steps have been to ensure consistency between the sources, making the resulting csv-file easy to compare:
+
+* "Poro" and "Perm" will be the property names 
+
+* "ZONE" will be the column name for the selector 
+
+* The zone codes "UpperReek", "MidReek", "LowerReek" is present in the two grids, to get the same codes in the wells
+  the codes are updated and redundant codes are excluded.
+
+.. code-block:: python
+
+    from fmu.tools import QCProperties
+
+    REPORT = "somefile.csv"
+
+    GEOGRIDDATA = {
+        "properties": ["Poro", "Perm"],
+        "selectors": {"ZONE": {"name":"Zone"}},
+        "grid": "Geogrid",
+    }
+    SIMGRIDDATA = {
+        "properties": {"Poro":{"name":"PORO"}, "Perm":{"name":"PERMX"}},
+        "selectors": {"ZONE": {"name":"Zone"}},
+        "grid": "Simgrid",
+    }
+    BWDATA = {
+        "properties": ["Poro", "Perm"],
+        "selectors": {"ZONE": {"name":"Zonelog", "codes":{1:"UpperReek", 2:"MidReek", 3:"LowerReek"}, "exclude":["Above_TopUpperReek", "Below_BaseLowerReek"]}},
+        "wells": {"bwname": "BW", "grid": "Geogrid"},
+    }
+    WDATA = {
+        "properties": ["Poro"],
+        "selectors": {"ZONE": {"name":"Zonelog", "codes":{1:"UpperReek", 2:"MidReek", 3:"LowerReek"}, "exclude":["Above_TopUpperReek", "Below_BaseLowerReek"]}},
+        "wells": {"logrun": "log", "trajectory": "Drilled trajectory"},
+    }
+
+    def extract_statistics():
+
+        qcp = QCProperties()
+
+        qcp.get_grid_statistics(data=GEOGRIDDATA, project=project)
+        qcp.get_grid_statistics(data=SIMGRIDDATA, project=project)
+        qcp.get_bwell_statistics(data=BWDATA, project=project)
+        qcp.get_well_statistics(data=WDATA, project=project)
+
+        qcp.to_csv(REPORT)
+
+    if  __name__ == "__main__":
+        extract_statistics()
+
 
 
 Using yaml input for auto execution
@@ -482,28 +572,32 @@ The YAML file may in case look like:
             name: Facies_log
 
 
-Advice for comparison of data from different sources
--------------------------------------------------------------
-When extracting statistics from different sources there are several tips for enabling easy comparison 
-in the post-analysis of the data in e.g. WebViz:
-
-* Input "properties" and "selectors" as dictionaries and keep property and selector keys identical 
-  between the sources. The keys will be the names seen in the dataframe.
-
-* Try to use the same selectors for all sources 
-
-* Keep the option "selector_combos" at True to get as much overlapping data as possible. 
-  For example, if well statistics only have ZONE as selector and the grid properties are calculated with 
-  selectors ZONE and REGION and "selector_combos" where True, the ZONE level statistics can be compared.
-
-* Use the "codes" field on the selectors to align and match the codenames for each selector. For example 
-  if the zone codes are coarser in the grid than in the zonelogs from the wells, this field can be used 
-  to merge codes in the zonelog together under one name.
 
 
 
-Known issues
--------------
+
+Additional Notes
+---------------------
+
+Advice on performance
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There are several settings that has an influence perfomance:
+
+* Keep the option ``reuse = True`` to avoid reloading data to XTGeo if it is previously used, 
+  e.g. extracting statistics from the same grid but with different filters. 
+
+* Filters can be used to remove unnecessary data, this will limit the input data before statistics
+  is calculated and will speed up execution.
+
+* If many selectors, the option ``selector_combos = False`` will have a large impact on performance 
+
+* Avoid using 
+
+* weights
+
+Comparison with statistics in RMS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * To avoid bias in the calculation, the code removes duplicates from both well and blocked well 
   data before calculating statistics. Duplicates are data points that have the same coordinates  
