@@ -22,8 +22,6 @@ common_bwell_data: &common_bwell_data
   properties:
     PORO:
       name: Poro
-    PERM:
-      name: Perm
 
 grid:
   - <<: *common_grid_data
@@ -69,17 +67,11 @@ wells:
 blockedwells:
   - <<: *common_bwell_data
     selectors:
-      ZONE:
-        name: Zonelog
       FACIES:
         name: Facies
   # with filters
   - <<: *common_bwell_data
     selectors:
-      ZONE:
-        name: Zonelog
-        exclude:
-          - TopLowerReek_BaseLowerReek
       FACIES:
         name: Facies
         include:

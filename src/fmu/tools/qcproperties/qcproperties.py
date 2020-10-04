@@ -1,14 +1,16 @@
 """The qcproperties module"""
-from pathlib import Path
 
 import pandas as pd
 import yaml
 
-from fmu.tools.qcforward._qcforward_data import _QCForwardData
+from fmu.tools._common import _QCCommon
+from fmu.tools.qcdata.qcdata import QCData
 
 from fmu.tools.qcproperties._combine_propstats import combine_property_statistics
 from fmu.tools.qcproperties._propstat_parameter_data import PropStatParameterData
 from fmu.tools.qcproperties._propstat import PropStat
+
+QCC = _QCCommon()
 
 
 class QCProperties:
@@ -45,9 +47,10 @@ class QCProperties:
     """
 
     def __init__(self):
-        self._gdata = None  # QCForwardData instance, general data
+
         self._propstats = []  # list of PropStat() instances
         self._dataframe = pd.DataFrame()  # merged dataframe of all statsistics data
+        self._xtgdata = QCData()  # QCData instance, general XTGeo data
 
     # Properties:
     # ==================================================================================
@@ -60,44 +63,93 @@ class QCProperties:
         if (self._propstats and self._dataframe.empty) or (
             len(self._propstats) != len(self._dataframe["ID"].unique())
         ):
-            self._dataframe = combine_property_statistics(self)
+            self._dataframe = combine_property_statistics(
+                self._propstats, verbosity=QCC.verbosity
+            )
 
         return self._dataframe
 
     @property
-    def gdata(self):
-        """Returns the genarel data attribute as string."""
-        return self._gdata
-
-    @gdata.setter
-    def gdata(self, data):
-        """Set the global data attribute."""
-        self._gdata = data
+    def xtgdata(self):
+        """The QCData instance"""
+        return self._xtgdata
 
     # Hidden methods:
     # ==================================================================================
 
-    @staticmethod
-    def _combine_parameter_data(data):
+    def _input_preparations(self, project, data, reuse, dtype, qcdata=None):
         """
-        Initialize a PropStatParameterData instance that groups the parameter
-        data from the different data sources into class attributes
+        Prepare the input parameter data for use with a PropStat() instance.
+        Parameters are loaded to XTGeo and can be reused in the instance.
         """
 
-        return PropStatParameterData(
+        data = data.copy()
+        data["dtype"] = dtype
+        data["project"] = project
+        if dtype == "bwells":
+            data["bwells"] = data.pop("wells")
+
+        pdata = PropStatParameterData(
             properties=data["properties"],
             selectors=data.get("selectors", {}),
-            additional_filters=data.get("additional_filters", None),
+            filters=data.get("filters", None),
+            verbosity=data.get("verbosity", 0),
         )
 
-    def _parse_data(self, data, reuse, wells_settings=None):
-        """Prepare and parse data (load to xtgeo) """
+        if dtype == "grid":
+            data["gridprops"] = pdata.params
 
-        if isinstance(self.gdata, _QCForwardData):
-            self.gdata.parse(data, reuse=reuse, wells_settings=wells_settings)
+        if qcdata is not None:
+            self._xtgdata = qcdata
+
+        self._xtgdata.parse(
+            project=data["project"],
+            data=data,
+            reuse=reuse,
+            wells_settings=None
+            if dtype == "grid"
+            else {
+                "lognames": pdata.params,
+            },
+        )
+
+        return pdata, data
+
+    def _dataload_and_calculation(self, project, data, reuse, dtype, qcdata=None):
+        """ Load data to XTGeo and xtract statistics. Can be  """
+        # create PropStatParameterData() instance and load parameters to xtgeo
+        pdata, data = self._input_preparations(project, data, reuse, dtype, qcdata)
+
+        QCC.print_info("Extracting property statistics...")
+        # compute statistics
+        propstat = PropStat(parameter_data=pdata, xtgeo_data=self._xtgdata, data=data)
+
+        self._propstats.append(propstat)
+        return propstat
+
+    def _extract_statistics(self, project, data, reuse, dtype, qcdata):
+        """
+        Single statistics extraction, or multiple if multiple filters are defined.
+        All PropStat() instances will be appended to the self._propstats list and
+        are used to create a merged dataframe for the instance.
+        """
+        QCC.verbosity = data.get("verbosity", 0)
+
+        if "multiple_filters" in data:
+            for item in data["multiple_filters"]:
+                QCC.print_info(
+                    f"Starting run with name '{item['name']}', "
+                    f"using filters {item['filters']}"
+                )
+                usedata = data.copy()
+                usedata["filters"] = item["filters"]
+                usedata["name"] = item["name"]
+                self._dataload_and_calculation(
+                    project, data=usedata, reuse=True, dtype=dtype, qcdata=qcdata
+                )
+            return self._propstats
         else:
-            self.gdata = _QCForwardData()
-            self.gdata.parse(data, wells_settings=wells_settings)
+            return self._dataload_and_calculation(project, data, reuse, dtype, qcdata)
 
     def _initiate_from_config(self, cfg, project=None, reuse=False):
         """ Run methods for statistics extraction based on entries in yaml-config"""
@@ -121,117 +173,40 @@ class QCProperties:
     # ==================================================================================
 
     def get_grid_statistics(
-        self, data: dict, project: object = None, reuse: bool = False
-    ):
+        self,
+        data: dict,
+        project: object = None,
+        reuse: bool = False,
+        qcdata: QCData = None,
+    ) -> PropStat:
         """Extract property statistics from 3D Grid"""
-
-        data = data.copy()
-
-        if project:
-            data["project"] = project
-
-        # create _PropStatParameterData() instance
-        pdata = self._combine_parameter_data(data)
-
-        # Parse data to initialize a XTGeo GridProperties() instance
-        if project:
-            data["project"] = project
-            data["gridprops"] = pdata.params
-        else:
-            data["gridprops"] = [[None, param] for param in pdata.params]
-
-        self._parse_data(data, reuse)
-
-        # compute statistics
-        propstat = PropStat(
-            parameter_data=pdata,
-            xtgeo_object=self.gdata.gridprops,
-            selector_combos=data.get("selector_combos", True),
-            name=data.get("name", None),
-            source=Path(data["grid"]).stem,
-            csvfile=data.get("csvfile", None),
+        return self._extract_statistics(
+            project, data, reuse, dtype="grid", qcdata=qcdata
         )
-
-        self._propstats.append(propstat)
-
-        return propstat
 
     def get_well_statistics(
-        self, data: dict, project: object = None, reuse: bool = False
-    ):
+        self,
+        data: dict,
+        project: object = None,
+        reuse: bool = False,
+        qcdata: QCData = None,
+    ) -> PropStat:
         """Extract property statistics from wells """
-
-        data = data.copy()
-
-        if "wells" not in data.keys():
-            raise ValueError("Key 'wells' not found in data")
-
-        if project:
-            data["project"] = project
-
-        # create _PropStatParameterData() instance
-        pdata = self._combine_parameter_data(data)
-
-        # Parse data to initialize a XTGeo Wells() instance
-        wsettings = {
-            "lognames": pdata.params,
-        }
-        self._parse_data(data, reuse, wells_settings=wsettings)
-
-        # compute statistics
-        propstat = PropStat(
-            parameter_data=pdata,
-            xtgeo_object=self.gdata.wells,
-            selector_combos=data.get("selector_combos", True),
-            name=data.get("name", None),
-            source="wells",
-            csvfile=data.get("csvfile", None),
+        return self._extract_statistics(
+            project, data, reuse, dtype="wells", qcdata=qcdata
         )
-
-        self._propstats.append(propstat)
-
-        return propstat
 
     def get_bwell_statistics(
-        self, data: dict, project: object = None, reuse: bool = False
-    ):
+        self,
+        data: dict,
+        project: object = None,
+        reuse: bool = False,
+        qcdata: QCData = None,
+    ) -> PropStat:
         """Extract property statistics from blocked wells """
-
-        data = data.copy()
-
-        if "wells" not in data.keys():
-            raise ValueError("Key 'wells' not found in data")
-
-        if project:
-            data["project"] = project
-
-        # create _PropStatParameterData() instance
-        pdata = self._combine_parameter_data(data)
-
-        # Parse data to initialize a XTGeo BlockedWells() instance
-        data["bwells"] = data.pop("wells")
-        wsettings = {
-            "lognames": pdata.params,
-        }
-        self._parse_data(data, reuse, wells_settings=wsettings)
-
-        # compute statistics
-        propstat = PropStat(
-            parameter_data=pdata,
-            xtgeo_object=self.gdata.bwells,
-            selector_combos=data.get("selector_combos", True),
-            name=data.get("name", None),
-            source=(
-                "blockedwells"
-                if project is None
-                else data["bwells"].get("bwname", "BW")
-            ),
-            csvfile=data.get("csvfile", None),
+        return self._extract_statistics(
+            project, data, reuse, dtype="bwells", qcdata=qcdata
         )
-
-        self._propstats.append(propstat)
-
-        return propstat
 
     def from_yaml(self, cfg: str, project: object = None, reuse: bool = False):
         """ Use yaml-configuration file to run the statistics extractions methods."""

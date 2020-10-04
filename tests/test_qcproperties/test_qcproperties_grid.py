@@ -18,21 +18,66 @@ SELECTORS = {
 qcp = QCProperties()
 
 
+def test_no_selectors():
+    data = {
+        "path": PATH,
+        "grid": GRID,
+        "properties": PROPERTIES,
+        "verbosity": 1,
+    }
+
+    stat = qcp.get_grid_statistics(data, reuse=True)
+
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
+    assert set(stat.property_dataframe.columns) == set(["PORO", "PERM"])
+    assert set(stat.dataframe.columns) == set(
+        ["Avg", "Stddev", "ID", "P90", "Min", "PROPERTY", "SOURCE", "Max", "P10"]
+    )
+
+
 def test_full_dataframe():
     data = {
         "path": PATH,
         "grid": GRID,
         "properties": PROPERTIES,
         "selectors": SELECTORS,
+        "verbosity": 1,
     }
 
-    stat = qcp.get_grid_statistics(data)
+    stat = qcp.get_grid_statistics(data, reuse=True)
 
     assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
     assert stat.property_dataframe["PORO"].max() == pytest.approx(0.3613, abs=0.001)
     assert set(stat.property_dataframe.columns) == set(
         ["PORO", "PERM", "ZONE", "FACIES"]
     )
+
+
+def multiple_filters():
+    data = {
+        "path": PATH,
+        "grid": GRID,
+        "properties": PROPERTIES,
+        "multiple_filters": {
+            "test1": {
+                "reek_sim_facies2.roff": {
+                    "include": ["SHALE"],
+                }
+            },
+            "test2": {
+                "reek_sim_facies2.roff": {
+                    "exclude": ["SHALE"],
+                }
+            },
+        },
+        "verbosity": 1,
+    }
+
+    qcp.get_grid_statistics(data, reuse=True)
+
+    assert qcp.dataframe[
+        (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
+    ].values == pytest.approx(0.1155, abs=0.001)
 
 
 def test_statistics():
@@ -42,9 +87,10 @@ def test_statistics():
         "properties": PROPERTIES,
         "selectors": SELECTORS,
         "name": "Test_case",
+        "verbosity": 1,
     }
 
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
+    stat = qcp.get_grid_statistics(data, reuse=True)
 
     assert set(stat.dataframe.columns) == set(
         [
@@ -75,49 +121,9 @@ def test_statistics():
     assert row["Avg"].values == pytest.approx(0.1677, abs=0.001)
 
 
-def test_no_selectors():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-    }
-
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
-
-    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
-    assert set(stat.property_dataframe.columns) == set(["PORO", "PERM"])
-    assert set(stat.dataframe.columns) == set(
-        ["Avg", "Stddev", "ID", "P90", "Min", "PROPERTY", "SOURCE", "Max", "P10"]
-    )
-
-
-def test_filters():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": {
-            "ZONE": {"name": "reek_sim_zone.roff", "exclude": ["Below_Top_reek"]},
-            "FACIES": {
-                "name": "reek_sim_facies2.roff",
-                "include": ["FINESAND", "COARSESAND"],
-            },
-        },
-    }
-
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
-
-    assert "Below_Top_reek" not in list(stat.property_dataframe["ZONE"].unique())
-    assert ["FINESAND", "COARSESAND"] == list(
-        stat.property_dataframe["FACIES"].unique()
-    )
-    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.2390, abs=0.001)
-
-    print(stat.codes)
-
-
 def test_statistics_no_combos():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "grid": GRID,
         "properties": PROPERTIES,
@@ -125,40 +131,26 @@ def test_statistics_no_combos():
         "selector_combos": False,
     }
 
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
+    stat = qcp.get_grid_statistics(data, reuse=True)
 
     assert ["Total"] == list(
         stat.dataframe[stat.dataframe["ZONE"] == "Total"]["FACIES"].unique()
     )
 
 
-def test_statistics_all_combos():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "selector_combos": True,
-    }
-
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
-
-    assert ["COARSESAND", "FINESAND", "SHALE", "Total"] == list(
-        stat.dataframe[stat.dataframe["ZONE"] == "Total"]["FACIES"].unique()
-    )
-
-
 def test_codenames():
     data_without_codes = {
+        "verbosity": 1,
         "path": PATH,
         "grid": GRID,
         "properties": PROPERTIES,
         "selectors": SELECTORS,
     }
 
-    stat_no_code = qcp.get_grid_statistics(data_without_codes, reuse=["grid"])
+    stat_no_code = qcp.get_grid_statistics(data_without_codes, reuse=True)
 
     data_with_codes = {
+        "verbosity": 1,
         "path": PATH,
         "grid": GRID,
         "properties": PROPERTIES,
@@ -170,7 +162,7 @@ def test_codenames():
         },
     }
 
-    stat = qcp.get_grid_statistics(data_with_codes, reuse=["grid"])
+    stat = qcp.get_grid_statistics(data_with_codes, reuse=True)
 
     assert set(["TOP", "MID", "Below_Low_reek"]) == {
         x for x in list(stat.property_dataframe["ZONE"].unique()) if x is not None
@@ -181,27 +173,3 @@ def test_codenames():
         for x in list(stat_no_code.property_dataframe["ZONE"].unique())
         if x is not None
     }
-
-
-def test_get_value():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-    }
-
-    stat = qcp.get_grid_statistics(data, reuse=["grid"])
-
-    assert stat.get_value("PORO") == pytest.approx(0.1677, abs=0.001)
-    assert stat.get_value("PORO", calculation="Max") == pytest.approx(0.3613, abs=0.001)
-
-    conditions = {"ZONE": "Below_Top_reek", "FACIES": "COARSESAND"}
-    assert stat.get_value("PORO", conditions=conditions) == pytest.approx(
-        0.3117, abs=0.001
-    )
-    conditions = {"ZONE": "Below_Top_reek"}
-
-    assert stat.get_value("PORO", conditions=conditions) == pytest.approx(
-        0.1595, abs=0.001
-    )

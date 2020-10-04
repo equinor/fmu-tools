@@ -1,24 +1,52 @@
 import pandas as pd
+from fmu.tools._common import _QCCommon
+
+QCC = _QCCommon()
 
 
-def _check_for_duplicate_names(self):
+def combine_property_statistics(propstats: list, verbosity=0) -> pd.DataFrame:
+    """
+    Combine property dataframes from each PropStat() instance in one dataframe
+    """
+    QCC.verbosity = verbosity
+
+    dfs = []
+    _check_for_duplicate_names(propstats)
+    all_selectors = _check_consistency_in_selectors(propstats)
+
+    for pstat in propstats:
+        dframe = pstat.dataframe
+        dframe["ID"] = pstat.name
+        dfs.append(dframe)
+
+    dframe = pd.concat(dfs)
+    # fill NaN with "Total" for PropStat()'s with missing selectors
+    dframe[all_selectors] = dframe[all_selectors].fillna("Total")
+
+    return dframe
+
+
+def _check_for_duplicate_names(propstats):
     """
     Check if PropStat() instances have similar names, adjust
     names by adding a number to get them unique.
     """
     names = []
 
-    for pstat in self._propstats:
+    for pstat in propstats:
         pstat.name = pstat.name if pstat.name is not None else pstat.source
 
         if pstat.name in names:
             count = len([x for x in names if x.startswith(pstat.name)])
-            pstat.name = f"{pstat.name}_{count+1}"
-
+            newname = f"{pstat.name}_{count+1}"
+            QCC.print_info(
+                f"Name {pstat.name} already in use, changing name to {newname}"
+            )
+            pstat.name = newname
         names.append(pstat.name)
 
 
-def _check_consistency_in_selectors(self):
+def _check_consistency_in_selectors(propstats):
     """
     Check if all PropStat() instances have the same selectors,
     give warning if not.
@@ -30,32 +58,15 @@ def _check_consistency_in_selectors(self):
     """
     ps_selectors = []
 
-    for pstat in self._propstats:
+    for pstat in propstats:
         ps_selectors.append(list(pstat.pdata.selectors.keys()))
 
-    if not all(value == next(iter(ps_selectors)) for value in ps_selectors):
-        print("WARNING: not all propstat elements have equal selectors")
-        print(
-            [
-                (f"name = {name} selectors = {sel}")
-                for name, sel in zip(
-                    [pstat.name for pstat in self._propstats], ps_selectors
-                )
-            ]
-        )
+    # create list of all unique selectors from the PropStat() instances
+    all_selectors = list(set(sum(ps_selectors, [])))
 
+    if not all(len(value) == len(all_selectors) for value in ps_selectors):
+        QCC.give_warn("Not all propstat elements have equal selectors")
+        for name, sel in zip([pstat.name for pstat in propstats], ps_selectors):
+            QCC.print_info(f"name = {name}, selectors = {sel}")
 
-def combine_property_statistics(self):
-    """Collect contents of dataframes from each ensemble"""
-
-    dfs = []
-
-    _check_for_duplicate_names(self)
-    _check_consistency_in_selectors(self)
-
-    for pstat in self._propstats:
-        dframe = pstat.dataframe
-        dframe["ID"] = pstat.name
-        dfs.append(dframe)
-
-    return pd.concat(dfs)
+    return all_selectors

@@ -7,7 +7,7 @@ import pytest
 from fmu.tools.qcproperties.qcproperties import QCProperties
 
 PATH = abspath("../xtgeo-testdata/wells/reek/1/")
-WELLS = ["OP_1.w"]
+WELLS = ["OP_*.w"]
 PROPERTIES = {
     "PORO": {"name": "Poro"},
     "PERM": {"name": "Perm"},
@@ -22,32 +22,41 @@ qcp = QCProperties()
 
 def test_full_dataframe():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
         "selectors": SELECTORS,
     }
 
-    stat = qcp.get_well_statistics(data)
+    stat = qcp.get_well_statistics(data, reuse=True)
 
     assert set(stat.property_dataframe.columns) == set(
         ["ZONE", "PERM", "PORO", "FACIES"]
     )
-    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1829, abs=0.001)
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1534, abs=0.001)
 
 
 def test_filters():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
         "selectors": {
-            "ZONE": {"name": "Zonelog", "exclude": "Below_TopMidReek"},
+            "ZONE": {
+                "name": "Zonelog",
+                "exclude": [
+                    "Below_TopMidReek",
+                    "Below_TopLowerReek",
+                    "Below_BaseLowerReek",
+                ],
+            },
             "FACIES": {"name": "Facies", "include": ["Crevasse", "Channel"]},
         },
     }
 
-    stat = qcp.get_well_statistics(data)
+    stat = qcp.get_well_statistics(data, reuse=True)
 
     assert set(["Crevasse", "Channel", "Total"]) == set(
         stat.dataframe["FACIES"].unique()
@@ -59,6 +68,7 @@ def test_filters():
 
 def test_statistics():
     data = {
+        "verbosity": 1,
         "path": PATH,
         "wells": WELLS,
         "properties": PROPERTIES,
@@ -66,7 +76,7 @@ def test_statistics():
         "name": "Raw_Logs",
     }
 
-    stat = qcp.get_well_statistics(data)
+    stat = qcp.get_well_statistics(data, reuse=True)
 
     assert set(stat.dataframe.columns) == set(
         [
@@ -87,13 +97,14 @@ def test_statistics():
     assert set(stat.dataframe["PROPERTY"].unique()) == set(["PORO", "PERM"])
     assert stat.dataframe[stat.dataframe["PROPERTY"] == "PORO"][
         "Avg"
-    ].max() == pytest.approx(0.3024, abs=0.001)
+    ].max() == pytest.approx(0.3059, abs=0.001)
     assert set(stat.dataframe["ZONE"].unique()) == set(
         [
             "Above_TopUpperReek",
             "Below_TopLowerReek",
             "Below_TopMidReek",
             "Below_TopUpperReek",
+            "Below_BaseLowerReek",
             "Total",
         ]
     )
@@ -103,4 +114,4 @@ def test_statistics():
         & (stat.dataframe["FACIES"] == "Total")
         & (stat.dataframe["PROPERTY"] == "PORO")
     ]
-    assert row["Avg"].values == pytest.approx(0.1829, abs=0.001)
+    assert row["Avg"].values == pytest.approx(0.1539, abs=0.001)

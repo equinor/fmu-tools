@@ -1,5 +1,5 @@
 """
-This private module in qcforward is used for some common functions
+This private module is used for some common functions
 """
 import sys
 
@@ -44,11 +44,6 @@ class _QCCommon(object):
         """Give stop message to STDERR and stop process"""
         mode = sys.stderr
         print()
-        print(
-            "QCForward:{} from fmu.tools version: {}".format(
-                "some_method", "some version"
-            )
-        )
         print("!" * 70, file=mode)
         print("STOP! >>", string, file=mode)
         print("!" * 70, file=mode)
