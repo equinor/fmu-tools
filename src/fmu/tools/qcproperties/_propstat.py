@@ -130,7 +130,7 @@ class PropStat:
             if self._dtype == "grid":
                 self._source = Path(self._data["grid"]).stem
             elif self._dtype == "bwells" and self._data["project"] is not None:
-                self._source = self._data["wells"].get("bwname", "BW")
+                self._source = self._data["bwells"].get("bwname", "BW")
 
         QCC.print_info(f"Source is set to: '{self._source}'")
 

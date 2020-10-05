@@ -213,7 +213,7 @@ class QCData(object):
 
             for rmswell in rmswells:
                 if any(re.match(wreg + "$", rmswell) for wreg in wnames):
-                    input_wells.append(wellentry)
+                    input_wells.append(rmswell)
 
         return input_wells
 
@@ -221,15 +221,15 @@ class QCData(object):
         """Reading wells"""
 
         settings = settings if settings else {}
-        wells = self._well_preparations(wells)
+        wellist = self._well_preparations(wells)
 
         CMN.print_info("Reading wells...")
         xtg_wells = []
         if "wells" in reuse:
-            reused_wells, wells = self._reuse_wells(wells, welltype)
+            reused_wells, wellist = self._reuse_wells(wellist, welltype)
             xtg_wells = reused_wells
 
-        for well in wells:
+        for well in wellist:
             try:
                 if welltype == "wells":
                     mywell = (
