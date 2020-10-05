@@ -22,9 +22,10 @@ I.e::
 
 """
 from ._wellzonation_vs_grid import WellZonationVsGrid
+from ._grid_statistics import GridStatistics
 
 
-def wellzonation_vs_grid(data):
+def wellzonation_vs_grid(data, project=None):
     """Check well zonation or perforations vs 3D grid.
 
     Args:
@@ -33,4 +34,16 @@ def wellzonation_vs_grid(data):
     """
 
     wzong = WellZonationVsGrid()
-    wzong.run(data)
+    wzong.run(data, project=project)
+
+
+def grid_statistics(data, project=None):
+    """Check statistics in 3D grid against user input.
+
+    Args:
+        data (dict or str): The input data either as a Python dictionary or
+            a path to a YAML file
+    """
+
+    gps = GridStatistics()
+    gps.run(data, project=project)

@@ -3,6 +3,7 @@
 """Top-level package for fmu-tools"""
 
 from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
+from fmu.tools.qcproperties.qcproperties import QCProperties  # noqa
 
 try:
     import roxar  # noqa

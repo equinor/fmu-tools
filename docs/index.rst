@@ -10,6 +10,7 @@ Contents:
    installation
    fmudesign
    qcforward
+   qcproperties
    contributing
    authors
    history

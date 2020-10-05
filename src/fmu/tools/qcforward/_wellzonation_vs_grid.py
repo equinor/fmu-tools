@@ -4,19 +4,15 @@ This private module in qcforward is used to check wellzonation vs grid zonation
 from __future__ import absolute_import, division, print_function  # PY2
 
 import sys
-from os.path import join
 import collections
 from pathlib import Path
 
 import json
+from jsonschema import validate
 import numpy as np
-import pandas as pd
 
 import fmu.tools
-from jsonschema import validate
-
-from ._qcforward_data import _QCForwardData
-from ._common import _QCCommon
+from fmu.tools._common import _QCCommon
 from ._qcforward import QCForward
 
 
@@ -39,11 +35,20 @@ class _LocalData(object):  # pylint: disable=too-few-public-methods
         self.gridzonerange = [1, 9999]
         self.wellresample = None
         self.infotext = "ZONELOG MATCH"
+        self.nametag = None
+        self.reportfile = None
 
     def parse_data(self, data):
         """Parsing the actual data"""
 
         # TODO: verify and qc
+        self.nametag = data.get("nametag", "unset_nametag")
+        if "report" in data:
+            self.reportfile = (
+                data["report"].get("file")
+                if isinstance(data["report"], dict)
+                else data["report"]
+            )
 
         self.zonelogname = data["zonelog"]["name"]
         self.zonelogrange = data["zonelog"]["range"]
@@ -103,11 +108,9 @@ class WellZonationVsGrid(QCForward):
             "rescale": self.ldata.wellresample,
         }
 
-        if isinstance(self.gdata, _QCForwardData):
-            self.gdata.parse(data, reuse=reuse, wells_settings=wsettings)
-        else:
-            self.gdata = _QCForwardData()
-            self.gdata.parse(data, wells_settings=wsettings)
+        self.gdata.parse(
+            project=project, data=data, reuse=reuse, wells_settings=wsettings
+        )
 
         self.ldata.gridzone = self.gdata.gridprops.props[0]
 
@@ -146,7 +149,9 @@ class WellZonationVsGrid(QCForward):
 
         results["STATUS"].append(status)
 
-        dfr = self._make_report(results)
+        dfr = self.make_report(
+            results, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
+        )
 
         QCC.print_debug("Results: \n{}".format(dfr))
 
@@ -154,7 +159,7 @@ class WellZonationVsGrid(QCForward):
         if len(dfr_ok) > 0:
             print(
                 "\nWells with status OK ({} - {})".format(
-                    self.gdata.nametag, self.ldata.infotext
+                    self.ldata.nametag, self.ldata.infotext
                 )
             )
             print(dfr_ok)
@@ -163,7 +168,7 @@ class WellZonationVsGrid(QCForward):
         if len(dfr_warn) > 0:
             print(
                 "\nWells with status WARN ({} - {})".format(
-                    self.gdata.nametag, self.ldata.infotext
+                    self.ldata.nametag, self.ldata.infotext
                 )
             )
             print(dfr_warn)
@@ -172,7 +177,7 @@ class WellZonationVsGrid(QCForward):
         if len(dfr_stop) > 0:
             print(
                 "\nWells with status STOP ({} - {})".format(
-                    self.gdata.nametag, self.ldata.infotext
+                    self.ldata.nametag, self.ldata.infotext
                 )
             )
             print(dfr_stop, file=sys.stderr)
@@ -181,7 +186,7 @@ class WellZonationVsGrid(QCForward):
 
         print(
             "\n== QC forward check {} ({}) finished ==".format(
-                self.__class__.__name__, self.gdata.nametag
+                self.__class__.__name__, self.ldata.nametag
             )
         )
 
@@ -274,25 +279,3 @@ class WellZonationVsGrid(QCForward):
                 results["STATUS"].append(float("nan"))
 
         return results
-
-    def _make_report(self, results):
-        """Make a report which e.g. can be used in webviz plotting
-
-        Args:
-            results (dict): Results table
-
-        Returns:
-            A Pandas dataframe
-        """
-
-        dfr = pd.DataFrame(results)
-        dfr["NAMETAG"] = self.gdata.nametag
-
-        if self.gdata.reportfile:
-            reportfile = join(self._path, self.gdata.reportfile)
-            if self.gdata.reportmode in ("append", "a"):
-                dfr.to_csv(reportfile, index=False, mode="a", header=None)
-            else:
-                dfr.to_csv(reportfile, index=False)
-
-        return dfr
