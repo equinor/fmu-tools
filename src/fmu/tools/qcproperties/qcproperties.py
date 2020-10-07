@@ -49,7 +49,8 @@ class QCProperties:
     def __init__(self):
 
         self._propstats = []  # list of PropStat() instances
-        self._dataframe = pd.DataFrame()  # merged dataframe of all statsistics data
+        self._dataframe = pd.DataFrame()  # merged dataframe with continous stats
+        self._dataframe_disc = pd.DataFrame()  # merged dataframe with discrete stats
         self._xtgdata = QCData()  # QCData instance, general XTGeo data
 
     # Properties:
@@ -58,16 +59,16 @@ class QCProperties:
     @property
     def dataframe(self):
         """A merged dataframe from all the PropStat() instances"""
-
-        # auto update dataframe if out of sync with self._propstats
-        if (self._propstats and self._dataframe.empty) or (
-            len(self._propstats) != len(self._dataframe["ID"].unique())
-        ):
-            self._dataframe = combine_property_statistics(
-                self._propstats, verbosity=QCC.verbosity
-            )
-
+        self._dataframe = self._create_dataframe(self._dataframe)
         return self._dataframe
+
+    @property
+    def dataframe_disc(self):
+        """A merged dataframe from all the PropStat() instances"""
+        self._dataframe_disc = self._create_dataframe(
+            self._dataframe_disc, discrete=True
+        )
+        return self._dataframe_disc
 
     @property
     def xtgdata(self):
@@ -132,22 +133,26 @@ class QCProperties:
         Single statistics extraction, or multiple if multiple filters are defined.
         All PropStat() instances will be appended to the self._propstats list and
         are used to create a merged dataframe for the instance.
+
+        Returns: A single PropStat() instance or a list of PropStat() intances if
+                 multiple filters are used.
         """
         QCC.verbosity = data.get("verbosity", 0)
 
         if "multiple_filters" in data:
-            for item in data["multiple_filters"]:
+            propstats = []
+            for name, filters in data["multiple_filters"].items():
                 QCC.print_info(
-                    f"Starting run with name '{item['name']}', "
-                    f"using filters {item['filters']}"
+                    f"Starting run with name '{name}', " f"using filters {filters}"
                 )
                 usedata = data.copy()
-                usedata["filters"] = item["filters"]
-                usedata["name"] = item["name"]
-                self._dataload_and_calculation(
+                usedata["filters"] = filters
+                usedata["name"] = name
+                pstat = self._dataload_and_calculation(
                     project, data=usedata, reuse=True, dtype=dtype, qcdata=qcdata
                 )
-            return self._propstats
+                propstats.append(pstat)
+            return propstats
         else:
             return self._dataload_and_calculation(project, data, reuse, dtype, qcdata)
 
@@ -168,6 +173,19 @@ class QCProperties:
         if "blockedwells" in data:
             for item in data["blockedwells"]:
                 self.get_bwell_statistics(data=item, project=project, reuse=reuse)
+
+    def _create_dataframe(self, dframe, discrete=False):
+        """
+        Combine dataframe from all PropStat() instances. Update dataframe if
+        out of sync with self._propstats
+        """
+        if (self._propstats and dframe.empty) or (
+            len(self._propstats) != len(dframe["ID"].unique())
+        ):
+            dframe = combine_property_statistics(
+                self._propstats, discrete=discrete, verbosity=QCC.verbosity
+            )
+        return dframe
 
     # QC methods:
     # ==================================================================================
@@ -212,6 +230,10 @@ class QCProperties:
         """ Use yaml-configuration file to run the statistics extractions methods."""
         self._initiate_from_config(cfg, project, reuse)
 
-    def to_csv(self, csvfile: str):
+    def to_csv(self, csvfile: str, disc: bool = False):
         """ Write combined dataframe to csv """
-        self.dataframe.to_csv(csvfile, index=False)
+        dframe = self.dataframe if not disc else self.dataframe_disc
+        dframe.to_csv(csvfile, index=False)
+
+        QCC.print_info(f"Dataframe with {'discrete' if disc else 'continous'} ")
+        QCC.print_info(f"property statistics written to {csvfile}")

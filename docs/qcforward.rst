@@ -154,7 +154,7 @@ Example when ran inside RMS
             "gridprops": [ZONEGRIDNAME],
             "actions_each": ACT_EACH,
             "actions_all": ACT_ALL,
-            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"},
+            "report": "../output/qc/well_vs_grid.csv",
             "nametag": "ZONELOG",
         }
 
@@ -191,7 +191,7 @@ Example when ran from python script in terminal:
             "gridprops": [ZONEGRIDNAME],
             "actions_each": ACT_EACH
             "actions_all": ACT_ALL
-            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"}
+            "report": "../output/qc/well_vs_grid.csv",
         }
 
         QCJOB.run(usedata)
@@ -332,8 +332,9 @@ actions
     Name of property (either a property icon in RMS, or a file name)
 
   calculation
-    Name of statistical value to check (optional). Default option is "Avg".
-    Other valid options are "Min, Max and Stddev"
+    Name of statistical value to check (optional). Default option is "Avg" for continous properties, 
+    while other valid options are "Min, Max and Stddev". Default option for discrete properties is "Percent".
+    
   
   selectors
     A dictionary of conditions to extract statistics from. e.g. a specific zone and/or region (optional). 
@@ -453,7 +454,7 @@ Example when executed inside RMS (more settings):
                     "stop_outside": limits,
                 },
             )
-            
+
         usedata = {
             "nametag": "MYDATA1",
             "path": PATH,

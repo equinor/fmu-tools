@@ -69,6 +69,7 @@ class PropStatParameterData:
         self._properties, self._selectors = self._input_conversion(
             properties, selectors
         )
+
         # combine data and set different instance attributes
         self._combine_data(filters)
 
@@ -91,6 +92,11 @@ class PropStatParameterData:
     def disc_params(self):
         """Discrete Parameters attribute"""
         return self._disc_params
+
+    @disc_params.setter
+    def disc_params(self, newdata):
+        """Update the discrete parameter list."""
+        self._disc_params = newdata
 
     @property
     def filters(self):
@@ -146,8 +152,10 @@ class PropStatParameterData:
         """ Add selector data to relevant attributes """
         for values in self._selectors.values():
             prop = values["name"]
-            self._params.append(prop)
-            self._disc_params.append(prop)
+            if prop not in self._params:
+                self._params.append(prop)
+            if prop not in self._disc_params:
+                self._disc_params.append(prop)
 
             if "include" in values and "exclude" in values:
                 raise ValueError("can't both include and exclude values in filtering")

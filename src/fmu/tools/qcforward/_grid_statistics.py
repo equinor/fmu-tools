@@ -36,7 +36,6 @@ class GridStatistics(QCForward):
     def run(
         self,
         data: dict,
-        reuse: Union[bool, list] = False,
         project: Union[object, str] = None,
     ):
         """Main routine for evaulating if statistics from 3D grids is
@@ -48,9 +47,6 @@ class GridStatistics(QCForward):
         Args:
             data (dict or str): The input data either as a Python dictionary or
                 a path to a YAML file
-            reuse (bool or list): If True, then grid and gridprops will be reused
-                as default. Alternatively it can be a list for more
-                fine grained control, e.g. ["grid", "gridprops"]
             project (obj or str): For usage inside RMS
 
         """
@@ -67,30 +63,33 @@ class GridStatistics(QCForward):
         self.ldata = _LocalData()
         self.ldata.parse_data(data)
 
-        # extract parameters from actions and compute statistics
-        QCC.print_info("Extracting statistics...")
-        data = self._extract_parameters_from_actions(data)
-        stat = QCProperties().get_grid_statistics(
-            project=project, data=data, reuse=reuse, qcdata=self.gdata
-        )
+        qcp = QCProperties()
 
-        QCC.print_info("Checking status for items in actions...")
         results = []
+        QCC.print_info("Checking status for items in actions...")
         for action in self.ldata.actions:
+            # extract parameters from actions and compute statistics
+            data_upd = self._extract_parameters_from_action(data, action)
+            stat = qcp.get_grid_statistics(
+                project=project, data=data_upd, reuse=True, qcdata=self.gdata
+            )
             selectors = (
                 list(action.get("selectors").values())
                 if "selectors" in action
                 else None
             )
             # Extract mean value if calculation is not given
-            calculation = (
-                action.get("calculation") if "calculation" in action else "Avg"
-            )
+            if "calculation" in action:
+                calculation = action["calculation"]
+            else:
+                calculation = "Avg" if action.get("codename") is None else "Percent"
+
             # Get value from statistics for given property and selectors
             value = stat.get_value(
                 action["property"],
                 conditions=action.get("selectors"),
                 calculation=calculation,
+                codename=action.get("codename"),
             )
 
             status = "OK"
@@ -150,36 +149,29 @@ class GridStatistics(QCForward):
 
         validate(instance=data, schema=schema)
 
-    def _extract_parameters_from_actions(self, data):
+    def _extract_parameters_from_action(self, data, action):
         # Function to extract property and selector data from actions
         # and convert to desired input format for QCProperties
-        properties = []
+        data = data.copy()
+
+        properties = {}
         selectors = []
         filters = {}
 
-        for action in self.ldata.actions:
+        if action["property"] not in properties:
+            properties[action["property"]] = {"name": action["property"]}
 
-            if action["property"] not in properties:
-                properties.append(action["property"])
+        if "filters" in action:
+            filters = action.get("filters")
 
-            if action.get("filters") is not None:
-                filters = action.get("filters")
-
-            if action.get("selectors") is not None:
-                for selector, filt in action["selectors"].items():
-                    if selector not in selectors:
-                        selectors.append(selector)
-                        filters[selector] = {"include": [filt]}
-                    else:
-                        if filt not in filters[selector]["include"]:
-                            filters[selector]["include"].append(filt)
+        if "selectors" in action:
+            for prop, filt in action["selectors"].items():
+                if prop not in selectors:
+                    selectors.append(prop)
+                filters[prop] = {"include": filt}
 
         data["properties"] = properties
         data["selectors"] = selectors
         data["filters"] = filters
-
-        QCC.print_debug(f"Properties: {properties}")
-        QCC.print_debug(f"Selectors: {selectors}")
-        QCC.print_debug(f"Filters: {filters}")
 
         return data
