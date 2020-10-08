@@ -4,7 +4,9 @@ from fmu.tools._common import _QCCommon
 QCC = _QCCommon()
 
 
-def combine_property_statistics(propstats: list, verbosity=0) -> pd.DataFrame:
+def combine_property_statistics(
+    propstats: list, discrete=False, verbosity=0
+) -> pd.DataFrame:
     """
     Combine property dataframes from each PropStat() instance in one dataframe
     """
@@ -15,7 +17,7 @@ def combine_property_statistics(propstats: list, verbosity=0) -> pd.DataFrame:
     all_selectors = _check_consistency_in_selectors(propstats)
 
     for pstat in propstats:
-        dframe = pstat.dataframe
+        dframe = pstat.dataframe if not discrete else pstat.dataframe_disc
         dframe["ID"] = pstat.name
         dfs.append(dframe)
 

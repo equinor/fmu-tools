@@ -97,11 +97,10 @@ class QCForward(object):
         dfr = pd.DataFrame(results).assign(NAMETAG=nametag)
 
         if reportfile is not None:
-            if not self.reports or reportfile not in self.reports:
+            if reportfile in self.reports:
+                dfr.to_csv(reportfile, index=False, mode="a", header=None)
+            else:
                 dfr.to_csv(reportfile, index=False)
                 self._reports.append(reportfile)
-
-            elif reportfile in self.reports:
-                dfr.to_csv(reportfile, index=False, mode="a", header=None)
 
         return dfr

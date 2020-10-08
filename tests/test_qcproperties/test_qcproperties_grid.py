@@ -14,37 +14,20 @@ SELECTORS = {
     "FACIES": {"name": "reek_sim_facies2.roff"},
 }
 
-
-qcp = QCProperties()
-
-
-def test_no_selectors():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "verbosity": 1,
-    }
-
-    stat = qcp.get_grid_statistics(data, reuse=True)
-
-    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
-    assert set(stat.property_dataframe.columns) == set(["PORO", "PERM"])
-    assert set(stat.dataframe.columns) == set(
-        ["Avg", "Stddev", "ID", "P90", "Min", "PROPERTY", "SOURCE", "Max", "P10"]
-    )
+data_orig = {
+    "path": PATH,
+    "grid": GRID,
+    "properties": PROPERTIES,
+    "selectors": SELECTORS,
+    "verbosity": 1,
+}
 
 
 def test_full_dataframe():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "verbosity": 1,
-    }
+    data = data_orig.copy()
 
-    stat = qcp.get_grid_statistics(data, reuse=True)
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
 
     assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
     assert stat.property_dataframe["PORO"].max() == pytest.approx(0.3613, abs=0.001)
@@ -53,47 +36,25 @@ def test_full_dataframe():
     )
 
 
-def multiple_filters():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "multiple_filters": {
-            "test1": {
-                "reek_sim_facies2.roff": {
-                    "include": ["SHALE"],
-                }
-            },
-            "test2": {
-                "reek_sim_facies2.roff": {
-                    "exclude": ["SHALE"],
-                }
-            },
-        },
-        "verbosity": 1,
-    }
+def test_no_selectors():
+    data = data_orig.copy()
+    data.pop("selectors", None)
 
-    qcp.get_grid_statistics(data, reuse=True)
-
-    assert qcp.dataframe[
-        (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
-    ].values == pytest.approx(0.1155, abs=0.001)
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
+    assert set(stat.property_dataframe.columns) == set(["PORO", "PERM"])
 
 
 def test_statistics():
-    data = {
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "name": "Test_case",
-        "verbosity": 1,
-    }
+    data = data_orig.copy()
+    data["name"] = "Test_case"
 
-    stat = qcp.get_grid_statistics(data, reuse=True)
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
 
     assert set(stat.dataframe.columns) == set(
         [
+            "Avg_Weighted",
             "Avg",
             "FACIES",
             "Max",
@@ -122,16 +83,11 @@ def test_statistics():
 
 
 def test_statistics_no_combos():
-    data = {
-        "verbosity": 1,
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "selector_combos": False,
-    }
+    data = data_orig.copy()
+    data["selector_combos"] = False
 
-    stat = qcp.get_grid_statistics(data, reuse=True)
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
 
     assert ["Total"] == list(
         stat.dataframe[stat.dataframe["ZONE"] == "Total"]["FACIES"].unique()
@@ -139,37 +95,141 @@ def test_statistics_no_combos():
 
 
 def test_codenames():
-    data_without_codes = {
-        "verbosity": 1,
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-    }
+    data = data_orig.copy()
 
-    stat_no_code = qcp.get_grid_statistics(data_without_codes, reuse=True)
+    qcp = QCProperties()
+    stat_no_code = qcp.get_grid_statistics(data)
 
-    data_with_codes = {
-        "verbosity": 1,
-        "path": PATH,
-        "grid": GRID,
-        "properties": PROPERTIES,
-        "selectors": {
-            "ZONE": {"name": "reek_sim_zone.roff", "codes": {1: "TOP", 2: "MID"}},
-            "FACIES": {
-                "name": "reek_sim_facies2.roff",
-            },
+    data["selectors"] = {
+        "ZONE": {"name": "reek_sim_zone.roff", "codes": {1: "TOP", 2: "MID"}},
+        "FACIES": {
+            "name": "reek_sim_facies2.roff",
         },
     }
 
-    stat = qcp.get_grid_statistics(data_with_codes, reuse=True)
+    stat = qcp.get_grid_statistics(data, reuse=True)
 
-    assert set(["TOP", "MID", "Below_Low_reek"]) == {
-        x for x in list(stat.property_dataframe["ZONE"].unique()) if x is not None
+    assert set(["TOP", "MID", "Below_Low_reek", "Total"]) == {
+        x for x in list(stat.dataframe["ZONE"].unique()) if x is not None
+    }
+    assert set(["Below_Top_reek", "Below_Mid_reek", "Below_Low_reek", "Total"]) == {
+        x for x in list(stat_no_code.dataframe["ZONE"].unique()) if x is not None
     }
 
-    assert set(["Below_Top_reek", "Below_Mid_reek", "Below_Low_reek"]) == {
-        x
-        for x in list(stat_no_code.property_dataframe["ZONE"].unique())
-        if x is not None
+
+def test_extract_statistics_update_filter_parameter():
+    """Test changing filters after initialization"""
+    data = data_orig.copy()
+    data["selectors"] = ["reek_sim_zone.roff"]
+
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
+
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
+    assert set(stat.property_dataframe.columns) == set(
+        [
+            "PORO",
+            "PERM",
+            "reek_sim_zone.roff",
+        ]
+    )
+    stat.extract_statistics(
+        filters={
+            "reek_sim_facies2.roff": {
+                "include": ["FINESAND", "COARSESAND"],
+            }
+        },
+    )
+
+    assert set(stat.property_dataframe.columns) == set(
+        [
+            "PORO",
+            "PERM",
+            "reek_sim_facies2.roff",
+            "reek_sim_zone.roff",
+        ]
+    )
+    assert ["FINESAND", "COARSESAND"] == list(
+        stat.property_dataframe["reek_sim_facies2.roff"].unique()
+    )
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.2374, abs=0.001)
+
+
+def test_extract_statistics_update_filter_values():
+    """Test changing filters after initialization"""
+    data = data_orig.copy()
+    data["selectors"] = {
+        "ZONE": {"name": "reek_sim_zone.roff", "exclude": ["Below_Top_reek"]},
+        "FACIES": {
+            "name": "reek_sim_facies2.roff",
+            "include": ["FINESAND", "COARSESAND"],
+        },
     }
+    data["filters"] = {
+        "reek_sim_facies2.roff": {
+            "include": ["FINESAND", "COARSESAND"],
+        }
+    }
+
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
+
+    assert "Below_Top_reek" not in list(stat.property_dataframe["ZONE"].unique())
+    assert ["FINESAND", "COARSESAND"] == list(
+        stat.property_dataframe["FACIES"].unique()
+    )
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.2390, abs=0.001)
+
+    stat.extract_statistics(
+        filters={
+            "reek_sim_facies2.roff": {
+                "include": ["SHALE"],
+            }
+        }
+    )
+    assert "Below_Top_reek" not in list(stat.property_dataframe["ZONE"].unique())
+    assert ["SHALE"] == list(stat.property_dataframe["FACIES"].unique())
+    assert stat.property_dataframe["PORO"].mean() == pytest.approx(0.1155, abs=0.001)
+
+
+def test_get_value():
+    data = data_orig.copy()
+
+    qcp = QCProperties()
+    stat = qcp.get_grid_statistics(data)
+
+    assert stat.get_value("PORO") == pytest.approx(0.1677, abs=0.001)
+    assert stat.get_value("PORO", calculation="Max") == pytest.approx(0.3613, abs=0.001)
+
+    conditions = {"ZONE": "Below_Top_reek", "FACIES": "COARSESAND"}
+    assert stat.get_value("PORO", conditions=conditions) == pytest.approx(
+        0.3117, abs=0.001
+    )
+    conditions = {"ZONE": "Below_Top_reek"}
+    assert stat.get_value("PORO", conditions=conditions) == pytest.approx(
+        0.1595, abs=0.001
+    )
+
+
+def multiple_filters():
+    data = data_orig.copy()
+    data.pop("selectors", None)
+    data["multiple_filters"] = {
+        "test1": {
+            "reek_sim_facies2.roff": {
+                "include": ["SHALE"],
+            }
+        },
+        "test2": {
+            "reek_sim_facies2.roff": {
+                "exclude": ["SHALE"],
+            }
+        },
+    }
+    qcp = QCProperties()
+    qcp.get_grid_statistics(data)
+
+    assert set(["test1", "test2"]) == set(qcp.dataframe["ID"].unique())
+    assert qcp.dataframe[
+        (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
+    ].values == pytest.approx(0.1155, abs=0.001)

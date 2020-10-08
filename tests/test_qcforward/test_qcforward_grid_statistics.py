@@ -11,8 +11,6 @@ GRID = "reek_sim_grid.roff"
 REPORT = abspath("/tmp/somefile.csv")
 SOMEYAML = abspath("/tmp/somefile.yml")
 
-qcjob = qcf.GridStatistics()
-
 
 def test_simple_action():
 
@@ -32,7 +30,7 @@ def test_simple_action():
         "report": REPORT,
         "actions": actions,
     }
-
+    qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
     dfr = pd.read_csv(REPORT)
@@ -40,6 +38,47 @@ def test_simple_action():
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.1677, 0.001
+    )
+
+    pathlib.Path(REPORT).unlink()
+
+
+def test_action_with_disc_and_cont_props():
+
+    actions = [
+        {
+            "property": "reek_sim_poro.roff",
+            "warn_outside": [0.18, 0.25],
+            "stop_outside": [0, 1],
+            "description": "test",
+        },
+        {
+            "property": "reek_sim_facies2.roff",
+            "codename": "SHALE",
+            "warn_outside": [30, 70],
+            "stop_outside": [0, 100],
+            "description": "test2",
+        },
+    ]
+
+    data = {
+        "nametag": "MYDATA1",
+        "path": PATH,
+        "grid": GRID,
+        "report": REPORT,
+        "actions": actions,
+    }
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
+
+    dfr = pd.read_csv(REPORT)
+
+    assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
+    assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
+        0.1677, 0.001
+    )
+    assert dfr.loc[dfr["CALCULATION"] == "Percent"].iloc[0]["VALUE"] == pytest.approx(
+        58.50, abs=0.01
     )
 
     pathlib.Path(REPORT).unlink()
@@ -71,7 +110,8 @@ def test_multiple_actions():
         )
 
     data["actions"] = actions
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     dfr = pd.read_csv(REPORT + "1")
     print(dfr)
@@ -96,8 +136,8 @@ def test_action_with_selectors():
         "report": REPORT + "2",
         "actions": actions,
     }
-
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     dfr = pd.read_csv(REPORT + "2")
 
@@ -132,8 +172,8 @@ def test_action_with_filters():
         "report": REPORT + "3",
         "actions": actions,
     }
-
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     dfr = pd.read_csv(REPORT + "3")
 
@@ -168,8 +208,8 @@ def test_action_with_filters_and_selectors():
         "report": REPORT + "4",
         "actions": actions,
     }
-
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     dfr = pd.read_csv(REPORT + "4")
 
@@ -197,9 +237,9 @@ def test_actions_shall_stop():
         "grid": GRID,
         "actions": actions,
     }
-
+    qcjob = qcf.GridStatistics()
     with pytest.raises(SystemExit):
-        qcjob.run(data, reuse=True)
+        qcjob.run(data)
 
 
 def test_actions_shall_stop_no_warnlimits():
@@ -217,9 +257,9 @@ def test_actions_shall_stop_no_warnlimits():
         "grid": GRID,
         "actions": actions,
     }
-
+    qcjob = qcf.GridStatistics()
     with pytest.raises(SystemExit):
-        qcjob.run(data, reuse=True)
+        qcjob.run(data)
 
 
 def test_actions_with_selectors():
@@ -243,7 +283,8 @@ def test_actions_with_selectors():
         "report": REPORT + "5",
         "actions": actions,
     }
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     dfr = pd.read_csv(REPORT + "5")
 
@@ -273,11 +314,11 @@ def test_yaml_dump():
         "actions": actions,
         "dump_yaml": SOMEYAML,
     }
-
-    qcjob.run(data, reuse=True)
+    qcjob = qcf.GridStatistics()
+    qcjob.run(data)
 
     # now read the dump file:
-    qcjob.run(data=SOMEYAML, reuse=True)
+    qcjob.run(data=SOMEYAML)
 
     dfr = pd.read_csv(REPORT + "6")
 
