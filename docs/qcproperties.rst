@@ -114,6 +114,8 @@ Common fields:
         ``name``: The actual name (or path) of the property / log.
     
         ``weight``: A weight parameter (name or path if outside RMS) (optional)
+  
+        ``pfile``: Name (or path) to file containing the parameter e.g. INIT file (optional)
 
     selectors
         Selectors are discrete properties/logs e.g. Zone. that are used to extract
@@ -131,6 +133,8 @@ Common fields:
     
         ``codes``: A dictionary of codenames to update some/all existing codenames (optional). 
 
+        ``pfile``: Name (or path) to file containing the parameter e.g. INIT file (optional)
+
         .. note:: The "codes" field can be used to merge code values that the user wants to extract 
                   combined statistics from. This is done by setting the same name on several code 
                   values, as it is the name that are used to group the data.
@@ -146,6 +150,8 @@ Common fields:
         ``include``: List of values to include (optional)
     
         ``exclude``: List of values to exclude (optional)
+
+        ``pfile``: Name (or path) to file containing the parameter e.g. INIT file (optional)
 
         .. seealso:: Option ``"multiple_filters"`` below which can be used to extract statistics 
                      multiple times with different filters.

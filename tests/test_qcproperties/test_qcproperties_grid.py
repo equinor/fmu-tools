@@ -211,7 +211,7 @@ def test_get_value():
     )
 
 
-def multiple_filters():
+def test_multiple_filters():
     data = data_orig.copy()
     data.pop("selectors", None)
     data["multiple_filters"] = {
@@ -232,4 +232,24 @@ def multiple_filters():
     assert set(["test1", "test2"]) == set(qcp.dataframe["ID"].unique())
     assert qcp.dataframe[
         (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
-    ].values == pytest.approx(0.1155, abs=0.001)
+    ]["Avg"].values == pytest.approx(0.1183, abs=0.001)
+
+
+def test_read_eclipse():
+    data = data_orig.copy()
+    data["grid"] = "REEK.EGRID"
+    data["properties"] = {
+        "PORO": {"name": "PORO", "pfile": "REEK.INIT"},
+        "PERM": {"name": "PERMX", "pfile": "REEK.INIT"},
+    }
+    data["selectors"] = {
+        "REGION": {"name": "FIPNUM", "pfile": "REEK.INIT"},
+    }
+
+    qcp = QCProperties()
+    qcp.get_grid_statistics(data)
+
+    assert set(["REEK"]) == set(qcp.dataframe["ID"].unique())
+    assert qcp.dataframe[
+        (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["REGION"] == "2")
+    ]["Avg"].values == pytest.approx(0.1661, abs=0.001)
