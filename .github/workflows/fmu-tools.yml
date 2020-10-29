@@ -35,6 +35,9 @@ jobs:
           pip install git+https://github.com/equinor/fmu-ensemble
           pip install .[tests]
 
+      - name: List all installed packages
+        run: pip freeze
+
       - name: Check code style
         run: |
           black --check .
