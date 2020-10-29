@@ -1,5 +1,6 @@
 """Module containing ....  """
 from pathlib import Path
+from typing import NoReturn
 import pandas as pd
 import numpy as np
 
@@ -43,10 +44,7 @@ class PropStat:
     ]
 
     def __init__(
-        self,
-        parameter_data: PropStatParameterData,
-        xtgeo_data: QCData,
-        data: dict,
+        self, parameter_data: PropStatParameterData, xtgeo_data: QCData, data: dict,
     ):
 
         """Initiate instance"""
@@ -192,6 +190,7 @@ class PropStat:
     def _codes_to_codenames(self, dframe):
         """Replace codes in dicrete parameters with codenames"""
         for param in self.pdata.disc_params:
+            codes = None
             if self._dtype == "grid":
                 xtg_prop = self._xtgdata.gridprops.get_prop_by_name(param)
 
@@ -202,7 +201,8 @@ class PropStat:
                     )
                 codes = xtg_prop.codes.copy()
             else:
-                codes = self._wells[0].get_logrecord(param).copy()
+                if self._wells[0].get_logrecord(param):
+                    codes = self._wells[0].get_logrecord(param).copy()
 
             if self.pdata.codenames is not None and param in self.pdata.codenames:
                 codes.update(self.pdata.codenames[param])
@@ -294,9 +294,7 @@ class PropStat:
                 reuse=reuse,
                 wells_settings=None
                 if self._dtype == "grid"
-                else {
-                    "lognames": self.pdata.params,
-                },
+                else {"lognames": self.pdata.params,},
             )
             self._prop_df_full = (
                 self._create_prop_df_from_grid_props()
