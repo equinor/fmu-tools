@@ -62,7 +62,7 @@ def test_endpoint(tmpdir):
 
     # The xlsx file contains a relative path, relative to the input design sheet:
     dependency = (
-        pd.read_excel(os.path.join(testdatadir, designfile), header=None, index=False)
+        pd.read_excel(os.path.join(testdatadir, designfile), header=None)
         .set_index([0])[1]
         .to_dict()["background"]
     )
