@@ -44,7 +44,10 @@ class PropStat:
     ]
 
     def __init__(
-        self, parameter_data: PropStatParameterData, xtgeo_data: QCData, data: dict,
+        self,
+        parameter_data: PropStatParameterData,
+        xtgeo_data: QCData,
+        data: dict,
     ):
 
         """Initiate instance"""
@@ -294,7 +297,9 @@ class PropStat:
                 reuse=reuse,
                 wells_settings=None
                 if self._dtype == "grid"
-                else {"lognames": self.pdata.params,},
+                else {
+                    "lognames": self.pdata.params,
+                },
             )
             self._prop_df_full = (
                 self._create_prop_df_from_grid_props()
