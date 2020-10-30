@@ -1,6 +1,5 @@
 """Module containing ....  """
 from pathlib import Path
-from typing import NoReturn
 import pandas as pd
 import numpy as np
 
