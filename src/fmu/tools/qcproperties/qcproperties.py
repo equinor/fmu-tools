@@ -98,7 +98,17 @@ class QCProperties:
         )
 
         if dtype == "grid":
-            data["gridprops"] = pdata.params
+            pfiles = {}
+            for elem in ["properties", "selectors", "filters"]:
+                if elem in data and isinstance(data[elem], dict):
+                    for values in data[elem].values():
+                        if "pfile" in values:
+                            pfiles[values["name"]] = values["pfile"]
+
+            data["gridprops"] = [
+                [param, pfiles[param]] if param in pfiles else ["unknown", param]
+                for param in pdata.params
+            ]
 
         if qcdata is not None:
             self._xtgdata = qcdata
