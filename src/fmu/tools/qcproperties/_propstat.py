@@ -243,6 +243,7 @@ class PropStat:
                 QCC.print_info(
                     f"Skipping {xtg_well.name} some dicrete logs are missing"
                 )
+                self._wells.remove(xtg_well)
                 continue
             # check that all selectors and filter logs are discrete in well
             for log in self.pdata.disc_params:
