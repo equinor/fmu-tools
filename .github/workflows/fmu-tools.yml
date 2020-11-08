@@ -1,4 +1,3 @@
-
 name: fmu-tools
 
 on:
@@ -18,31 +17,37 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8']
+        python-version: ["3.6", "3.7", "3.8"]
 
     steps:
+      - name: Checkout commit locally
+        uses: actions/checkout@v2
 
-    - name: Checkout commit locally
-      uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Install requirements
+        run: |
+          pip install pip -U
+          pip install git+https://github.com/equinor/libecl
+          pip install git+https://github.com/equinor/fmu-ensemble
+          pip install .[tests]
 
-    - name: Install requirements
-      run: |
-        pip install pip -U
-        pip install git+https://github.com/equinor/libecl
-        pip install git+https://github.com/equinor/fmu-ensemble
-        pip install .[tests]
+      - name: List all installed packages
+        run: pip freeze
 
-    - name: Check code style
-      run: |
-        black --check .
-        flake8 .
+      - name: Check code style
+        run: |
+          black --check .
+          flake8 .
 
-    - name: Run tests
-      run: |
-        git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-        pytest ./tests
+      - name: Where am i?
+        run: |
+          pwd
+
+      - name: Run tests
+        run: |
+          git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
+          pytest ./tests

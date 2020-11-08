@@ -1,0 +1,78 @@
+common_grid_data: &common_grid_data
+  path: ../xtgeo-testdata/3dgrids/reek/
+  grid: reek_sim_grid.roff
+  properties: &common_properties
+    PORO:
+      name: &poroname reek_sim_poro.roff
+    PERM:
+      name: &permname reek_sim_permx.roff
+
+common_well_data: &common_well_data
+  path: ../xtgeo-testdata/wells/reek/1/
+  wells: [OP_1.w]
+  properties:
+    PORO:
+      name: Poro
+    PERM:
+      name: Perm
+
+common_bwell_data: &common_bwell_data
+  path: tests/data/propstatistics
+  wells: [OP_1.bw]
+  properties:
+    PORO:
+      name: Poro
+
+grid:
+  - <<: *common_grid_data
+    selectors:
+      ZONE:
+        name: &zonename reek_sim_zone.roff
+      FACIES:
+        name: &faciesname reek_sim_facies2.roff
+  # with filters
+  - <<: *common_grid_data
+    selectors:
+      ZONE:
+        name: *zonename
+        exclude:
+          - Below_Top_reek
+      FACIES:
+        name: *faciesname
+        include:
+          - FINESAND
+          - COARSESAND
+  # no selectors
+  - <<: *common_grid_data
+
+wells:
+  - <<: *common_well_data
+    selectors:
+      ZONE:
+        name: Zonelog
+      FACIES:
+        name: Facies
+  # with filters
+  - <<: *common_well_data
+    selectors:
+      ZONE:
+        name: Zonelog
+        exclude:
+          - Below_TopMidReek
+      FACIES:
+        name: Facies
+        include:
+          - Crevasse
+          - Channel
+blockedwells:
+  - <<: *common_bwell_data
+    selectors:
+      FACIES:
+        name: Facies
+  # with filters
+  - <<: *common_bwell_data
+    selectors:
+      FACIES:
+        name: Facies
+        include:
+          - Channel
