@@ -1,24 +1,32 @@
+
+.. _qcforward-gridqualindicators:
+
 Grid quality indicators
 -----------------------
 
-This methods checks the grid quality. If worse than a given set of limits, either are
+This methods checks the grid quality in various ways, similar to the methods
+RMS use (with some exceptions). If worse than a given set of limits, either are
 warning is given or a full stop of the workflow is forced.
-
-
-Signature
-~~~~~~~~~
 
 The input to this method is a python dictionary with some defined keys. Note that
 the order of keys does not matter.
 
+
 Grid quality indicators keys
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following qridquality measures are currently supported:
+
 minangle_topbase
   Minimum angle per cell for top and base, in degrees
 maxangle_topbase
   Maximum angle per cell for top and base, in degress
-etc...
+minangle_topbase_proj
+  Minimum angle per cell for top and base, in degrees, projected in XY view
+maxangle_topbase
+  Maximum angle per cell for top and base, in degrees, projected in XY view
 
+etc...
 
 
 Common fields (same input inside or outside RMS)
@@ -60,7 +68,7 @@ grid
 Known issues
 ~~~~~~~~~~~~
 
-* Not all RMS grid quality indicators are present.
+* Not all RMS grid quality indicators are currently present.
 
 
 Examples
@@ -148,5 +156,3 @@ Example in RMS with setting from a YAML file:
 The YAML file may in case look like:
 
   TODO:
-
-
