@@ -1,5 +1,5 @@
 {
-    "title": "wellzonation_vs_grid_asfiles",
+    "title": "wellzonation_vs_grid_asfile",
     "description": "Input configuration for zonelog vs grid method (file mode)",
     "required": [
         "grid",
