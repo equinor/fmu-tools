@@ -1,52 +1,52 @@
 """
 This private module in qcforward is used to check grid quality
 """
-from __future__ import absolute_import, division, print_function  # PY2
 
-import sys
-from os.path import join
-import collections
 from pathlib import Path
-
 import json
-import numpy as np
-import pandas as pd
+from typing import OrderedDict
 
-import fmu.tools
 from jsonschema import validate
+import fmu.tools
 
-from ._qcforward_data import _QCForwardData
-from ._common import _QCCommon
+
+from fmu.tools._common import _QCCommon
+from fmu.tools.qcdata import QCData
 from ._qcforward import QCForward
 
 
 QCC = _QCCommon()
 
 
-class _LocalData(object):  # pylint: disable=too-few-public-methods
+class _LocalData(object):
     def __init__(self):
         """Defining and hold data local for this routine"""
 
-        self.actions_each = None
-        self.actions_all = None
+        self.actions = None
         self.infotext = "GRID QUALITY"
+        self.nametag = None
+        self.reportfile = None
 
     def parse_data(self, data):
         """Parsing the actual data"""
 
         # TODO: verify and qc
+        self.nametag = data.get("nametag", "unset_nametag")
+        if "report" in data:
+            self.reportfile = (
+                data["report"].get("file")
+                if isinstance(data["report"], dict)
+                else data["report"]
+            )
 
-        self.actions_each = data["actions_each"]
-        self.actions_all = data["actions_all"]
+        self.actions = data["actions"]
 
 
 class GridQuality(QCForward):
-    def run(
-        self, data, reuse=False, project=None
-    ):  # pylint: disable=too-many-locals, too-many-statements
+    def run(self, data, reuse=False, project=None):
         """Main routine for evaluating grid quality and stop/warn if too bad
 
-        The routine depends on existing XTGeo functions for this purpose
+        The routine depends on existing XTGeo functions for this purpose.
 
         Args:
             data (dict or str): The input data either as a Python dictionary or
@@ -59,93 +59,119 @@ class GridQuality(QCForward):
 
         """
         self._data = self.handle_data(data, project)
-        # self._validate_input(self._data)
+        self._validate_input(self._data)
 
-        data = self._data
-
-        QCC.verbosity = data.get("verbosity", 0)
+        QCC.verbosity = self._data.get("verbosity", 0)
 
         # parse data that are special for this check
         QCC.print_info("Parsing additional data...")
         self.ldata = _LocalData()
         self.ldata.parse_data(data)
 
-        if isinstance(self.gdata, _QCForwardData):
+        if isinstance(self.gdata, QCData):
             self.gdata.parse(data, reuse=reuse)
         else:
-            self.gdata = _QCForwardData()
+            self.gdata = QCData()
             self.gdata.parse(data)
 
-        # # results are stored in a dict based table which be turned into a Pandas
-        # # dataframe in the end (most efficient; then turn into pandas at end)
-        # results = collections.OrderedDict(
-        #     [
-        #         ("WELL", []),
-        #         ("MATCH", []),
-        #         ("WARN_LIMIT", []),
-        #         ("STOP_LIMIT", []),
-        #         ("STATUS", []),
-        #     ]
-        # )
-        # results = self._evaluate_per_cell(results)
+        dfr = self.check_gridquality()
+        QCC.print_debug(f"Results: \n{dfr}")
 
-        # # all data (look at averages)
-        # match_allv = np.array(results["MATCH"])
-        # wlimit = self.ldata.actions_all["warnthreshold"]
-        # slimit = self.ldata.actions_all["stopthreshold"]
-        # mmean = np.nanmean(match_allv)
+        self.evaluate_qcreport(dfr, "grid quality")
 
-        # results["WELL"].append("ALL_WELLS")
-        # results["MATCH"].append(mmean)
-        # results["WARN_LIMIT"].append(wlimit)
-        # results["STOP_LIMIT"].append(wlimit)
+    def check_gridquality(self):
+        """
+        Given data, do check of gridquality via XTGeo
 
-        # status = "OK"
-        # if mmean < wlimit:
-        #     status = "WARN"
-        # if mmean < slimit:
-        #     status = "STOP"
+        Final result will be a table like this:
 
-        # results["STATUS"].append(status)
+        GRIDQUALITY        WARNRULE         WARN%   STOPRULE        STOP%  STATUS...
 
-        # dfr = self._make_report(results)
+        minangle_top_base  if_>_10%_<_60deg 13.44   if_>_0%_<_40deg 2.32   WARN
+        collapsed          if_>_15%         12.25   if_>_30%"       0.0    OK
+        """
 
-        # QCC.print_debug("Results: \n{}".format(dfr))
+        # get a list of properties
+        gqc = self.gdata.grid.get_gridquality_properties()
 
-        # dfr_ok = dfr[dfr["STATUS"] == "OK"]
-        # if len(dfr_ok) > 0:
-        #     print(
-        #         "\nWells with status OK ({} - {})".format(
-        #             self.gdata.nametag, self.ldata.infotext
-        #         )
-        #     )
-        #     print(dfr_ok)
+        actions = self._data.get("actions", None)
+        if actions is None:
+            raise ValueError("No actions are defined for grid quality")
 
-        # dfr_warn = dfr[dfr["STATUS"] == "WARN"]
-        # if len(dfr_warn) > 0:
-        #     print(
-        #         "\nWells with status WARN ({} - {})".format(
-        #             self.gdata.nametag, self.ldata.infotext
-        #         )
-        #     )
-        #     print(dfr_warn)
+        result = OrderedDict()
+        result["GRIDQUALITY"] = list()
+        result["NO"] = list()
+        result["WARNRULE"] = list()
+        result["WARN%"] = list()
+        result["STOPRULE"] = list()
+        result["STOP%"] = list()
+        result["STATUS"] = list()
 
-        # dfr_stop = dfr[dfr["STATUS"] == "STOP"]
-        # if len(dfr_stop) > 0:
-        #     print(
-        #         "\nWells with status STOP ({} - {})".format(
-        #             self.gdata.nametag, self.ldata.infotext
-        #         )
-        #     )
-        #     print(dfr_stop, file=sys.stderr)
-        #     msg = "One or more wells has status = STOP"
-        #     QCC.force_stop(msg)
+        for prop in gqc.props:
 
-        # print(
-        #     "\n== QC forward check {} ({}) finished ==".format(
-        #         self.__class__.__name__, self.gdata.nametag
-        #     )
-        # )
+            therules = actions.get(prop.name, None)
+
+            if therules is None:
+                continue
+
+            for numrule, therule in enumerate(therules):
+                warnrule = therule.get("warn", None)
+                stoprule = therule.get("stop", None)
+                if stoprule is None or warnrule is None:
+                    raise ValueError("Rules for both warn and stop must be defined")
+
+                result["GRIDQUALITY"].append(prop.name)
+                result["NO"].append(numrule)
+
+                status = "OK"
+                for enum, issue in enumerate([warnrule, stoprule]):
+
+                    mode = "WARN" if enum == 0 else "STOP"
+
+                    theissue = issue.split("_")
+                    actualpercent = {}
+                    if len(theissue) == 5:
+                        criteria = float(theissue[4].strip("deg"))
+                        sign = theissue[3]
+                        percent = float(theissue[2].strip("%"))
+                        psign = theissue[1]
+
+                        ncell = prop.values.count()
+                        if sign == "<":
+                            nbyrule = (prop.values < criteria).sum()
+                        else:
+                            nbyrule = (prop.values > criteria).sum()
+                        actualpercent[mode] = (nbyrule / ncell) * 100
+
+                    elif len(theissue) == 3:
+                        percent = float(theissue[2].strip("%"))
+                        psign = theissue[1]
+
+                        ncell = prop.values.count()
+                        nbyrule = (prop.values == 1).sum()
+                        actualpercent[mode] = (nbyrule / ncell) * 100
+
+                    else:
+                        raise ValueError(f"Error in reading the rule: {warnrule}")
+
+                    if mode == "WARN":
+                        result["WARN%"].append(actualpercent[mode])
+                        result["WARNRULE"].append(warnrule)
+                    else:
+                        result["STOP%"].append(actualpercent[mode])
+                        result["STOPRULE"].append(stoprule)
+
+                    if psign == ">" and actualpercent[mode] > percent:
+                        status = mode
+                    elif psign == "<" and actualpercent[mode] < percent:
+                        status = mode
+
+                result["STATUS"].append(status)
+
+        dfr = self.make_report(
+            result, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
+        )
+        return dfr
 
     @staticmethod
     def _validate_input(data):
@@ -163,96 +189,3 @@ class GridQuality(QCForward):
             schema = json.load(thisschema)
 
         validate(instance=data, schema=schema)
-
-    # def _evaluate_per_well(self, inresults):  # pylint: disable=too-many-locals
-    #     """Do a check per well"""
-
-    #     qcdata = self.gdata
-    #     wzong = self.ldata
-
-    #     results = inresults.copy()
-
-    #     for wll in qcdata.wells.wells:
-    #         QCC.print_debug("Working with well {}".format(wll.name))
-
-    #         dfr = wll.dataframe
-
-    #         if wzong.zonelogname not in dfr.columns:
-    #             print(
-    #                 "Well {} have no requested zonelog <{}> and will be skipped".format(
-    #                     wll.name, wzong.zonelogname,
-    #                 )
-    #             )
-    #             continue
-
-    #         if wzong.perflogname and wzong.perflogname not in dfr.columns:
-    #             print(
-    #                 "Well {} have no requested perflog <{}> and will be skipped".format(
-    #                     wll.name, wzong.perflogname,
-    #                 )
-    #             )
-    #             continue
-
-    #         QCC.print_debug("XTGeo work for {}...".format(wll.name))
-    #         res = qcdata.grid.report_zone_mismatch(
-    #             well=wll,
-    #             zonelogname=wzong.zonelogname,
-    #             zoneprop=wzong.gridzone,
-    #             zonelogrange=wzong.zonelogrange,
-    #             zonelogshift=wzong.zonelogshift,
-    #             depthrange=wzong.depthrange,
-    #             perflogname=wzong.perflogname,
-    #             perflogrange=wzong.perflogrange,
-    #             resultformat=2,
-    #         )
-    #         QCC.print_debug("XTGeo work for {}... done".format(wll.name))
-
-    #         results["WELL"].append(wll.name)
-
-    #         if res:
-    #             wname = wll.name
-    #             match = res["MATCH2"]
-    #             QCC.print_info("Well: {0:30s} - {1: 5.3f}".format(wname, match))
-    #             wlimit = wzong.actions_each["warnthreshold"]
-    #             slimit = wzong.actions_each["stopthreshold"]
-    #             results["WARN_LIMIT"].append(wlimit)
-    #             results["STOP_LIMIT"].append(slimit)
-
-    #             status = "OK"
-    #             if match < wlimit:
-    #                 status = "WARN"
-    #             if match < slimit:
-    #                 status = "STOP"
-
-    #             results["MATCH"].append(match)
-    #             results["STATUS"].append(status)
-
-    #         else:
-    #             results["MATCH"].append(float("nan"))
-    #             results["WARN_LIMIT"].append(float("nan"))
-    #             results["STOP_LIMIT"].append(float("nan"))
-    #             results["STATUS"].append(float("nan"))
-
-    #     return results
-
-    # def _make_report(self, results):
-    #     """Make a report which e.g. can be used in webviz plotting
-
-    #     Args:
-    #         results (dict): Results table
-
-    #     Returns:
-    #         A Pandas dataframe
-    #     """
-
-    #     dfr = pd.DataFrame(results)
-    #     dfr["NAMETAG"] = self.gdata.nametag
-
-    #     if self.gdata.reportfile:
-    #         reportfile = join(self._path, self.gdata.reportfile)
-    #         if self.gdata.reportmode in ("append", "a"):
-    #             dfr.to_csv(reportfile, index=False, mode="a", header=None)
-    #         else:
-    #             dfr.to_csv(reportfile, index=False)
-
-    #     return dfr

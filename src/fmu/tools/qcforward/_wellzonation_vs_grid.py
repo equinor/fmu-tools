@@ -19,7 +19,7 @@ from ._qcforward import QCForward
 QCC = _QCCommon()
 
 
-class _LocalData(object):  # pylint: disable=too-few-public-methods
+class _LocalData(object):
     def __init__(self):
         """Defining and hold data local for this routine"""
 
@@ -84,10 +84,10 @@ class WellZonationVsGrid(QCForward):
             project (obj or str): For usage inside RMS
 
         """
-        self._data = self.handle_data(data, project)
+        data = self._data = self.handle_data(data, project)
         self._validate_input(self._data)
 
-        data = self._data
+        # data = self._data
 
         QCC.verbosity = data.get("verbosity", 0)
 
@@ -132,8 +132,8 @@ class WellZonationVsGrid(QCForward):
 
         # all data (look at averages)
         match_allv = np.array(results["MATCH"])
-        wlimit = self.ldata.actions_all["warnthreshold"]
-        slimit = self.ldata.actions_all["stopthreshold"]
+        wlimit = self.ldata.actions_all["warn<"]
+        slimit = self.ldata.actions_all["stop<"]
         mmean = np.nanmean(match_allv)
 
         results["WELL"].append("ALL_WELLS")
@@ -155,40 +155,7 @@ class WellZonationVsGrid(QCForward):
 
         QCC.print_debug("Results: \n{}".format(dfr))
 
-        dfr_ok = dfr[dfr["STATUS"] == "OK"]
-        if len(dfr_ok) > 0:
-            print(
-                "\nWells with status OK ({} - {})".format(
-                    self.ldata.nametag, self.ldata.infotext
-                )
-            )
-            print(dfr_ok)
-
-        dfr_warn = dfr[dfr["STATUS"] == "WARN"]
-        if len(dfr_warn) > 0:
-            print(
-                "\nWells with status WARN ({} - {})".format(
-                    self.ldata.nametag, self.ldata.infotext
-                )
-            )
-            print(dfr_warn)
-
-        dfr_stop = dfr[dfr["STATUS"] == "STOP"]
-        if len(dfr_stop) > 0:
-            print(
-                "\nWells with status STOP ({} - {})".format(
-                    self.ldata.nametag, self.ldata.infotext
-                )
-            )
-            print(dfr_stop, file=sys.stderr)
-            msg = "One or more wells has status = STOP"
-            QCC.force_stop(msg)
-
-        print(
-            "\n== QC forward check {} ({}) finished ==".format(
-                self.__class__.__name__, self.ldata.nametag
-            )
-        )
+        self.evaluate_qcreport(dfr, "well zonation vs grid")
 
     @staticmethod
     def _validate_input(data):
@@ -258,8 +225,8 @@ class WellZonationVsGrid(QCForward):
                 wname = wll.name
                 match = res["MATCH2"]
                 QCC.print_info("Well: {0:30s} - {1: 5.3f}".format(wname, match))
-                wlimit = wzong.actions_each["warnthreshold"]
-                slimit = wzong.actions_each["stopthreshold"]
+                wlimit = wzong.actions_each["warn<"]
+                slimit = wzong.actions_each["stop<"]
                 results["WARN_LIMIT"].append(wlimit)
                 results["STOP_LIMIT"].append(slimit)
 

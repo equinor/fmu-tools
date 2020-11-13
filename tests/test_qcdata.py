@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function  # PY2
 from os.path import abspath
 import pytest
 
-from fmu.tools.qcdata.qcdata import QCData
+from fmu.tools.qcdata import QCData
 
 import xtgeo
 

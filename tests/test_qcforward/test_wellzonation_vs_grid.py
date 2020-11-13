@@ -31,8 +31,8 @@ DATA1 = {
     "wells": WELLFILES,
     "zonelog": {"name": ZONELOGNAME, "range": [1, 3]},
     "depthrange": [1580, 9999],
-    "actions_each": {"warnthreshold": 50, "stopthreshold": 20},
-    "actions_all": {"warnthreshold": 80, "stopthreshold": 20},
+    "actions_each": {"warn<": 50, "stop<": 20},
+    "actions_all": {"warn<": 80, "stop<": 20},
     "report": {"file": REPORT, "mode": "write"},
     "dump_yaml": SOMEYAML,
 }
@@ -57,7 +57,7 @@ def test_zonelog_vs_grid_asfiles_shall_stop():
     """Testing the zonelog vs grid functionality using files"""
 
     newdata = DATA1.copy()
-    newdata["actions_each"] = {"warnthreshold": 90, "stopthreshold": 80}
+    newdata["actions_each"] = {"warn<": 90, "stop<": 80}
 
     with pytest.raises(SystemExit):
         qcf.wellzonation_vs_grid(newdata)
@@ -70,7 +70,7 @@ def test_zonelog_vs_grid_asfiles_reuse_instance():
     """Testing reusing the instance"""
 
     newdata = DATA1.copy()
-    newdata["actions_each"] = {"warnthreshold": 33, "stopthreshold": 22}
+    newdata["actions_each"] = {"warn<": 33, "stop<": 22}
 
     job = qcf.WellZonationVsGrid()
     job.run(DATA1)

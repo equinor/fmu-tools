@@ -70,7 +70,7 @@ class QCData(object):
 
     @property
     def xtgdata(self):
-        """Wells attribute as XTGeo BlockedWells() instance"""
+        """All xtgeo based data as a dictionay"""
         return self._xtgdata
 
     # Class methods:

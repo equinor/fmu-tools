@@ -1,12 +1,13 @@
 """The _qcforward module contains the base class"""
 
+import sys
 from os.path import join
 
 import yaml
 import pandas as pd
 
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcdata.qcdata import QCData
+from fmu.tools.qcdata import QCData
 
 QCC = _QCCommon()
 
@@ -104,3 +105,31 @@ class QCForward(object):
                 self._reports.append(reportfile)
 
         return dfr
+
+    def evaluate_qcreport(self, dfr, name):
+        """Evalute and do actions on dataframe which contains the gridquality report.
+
+        Args:
+            dfr (DataFrame): Pandas dataframe which needs a STATUS column with
+                "OK", "WARN" or "STOP"
+            name (str): Name of feature is under evaluation, e.g. "grid quality"
+
+        """
+
+        statuslist = ("OK", "WARN", "STOP")
+
+        for status in statuslist:
+            dfr_status = dfr[dfr["STATUS"] == status]
+            if len(dfr_status) > 0:
+                print(f"Status {status} for <{name}> nametag: {self.ldata.nametag})")
+
+                stream = sys.stderr if status == "STOP" else sys.stdout
+                print(f"{dfr_status}\n", file=stream)
+                if status == "STOP":
+                    QCC.force_stop("STOP criteria is found!")
+
+        print(
+            "\n== QC forward check {} ({}) finished ==".format(
+                self.__class__.__name__, self.ldata.nametag
+            )
+        )

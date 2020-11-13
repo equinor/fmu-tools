@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcdata.qcdata import QCData
+from fmu.tools.qcdata import QCData
 
 from fmu.tools.qcproperties._propstat_parameter_data import PropStatParameterData
 
