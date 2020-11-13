@@ -4,7 +4,7 @@ This private module in qcforward is used to check grid quality
 
 from pathlib import Path
 import json
-from typing import OrderedDict
+from collections import OrderedDict
 
 from jsonschema import validate
 import fmu.tools
