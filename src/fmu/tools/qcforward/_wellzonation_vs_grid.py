@@ -3,7 +3,6 @@ This private module in qcforward is used to check wellzonation vs grid zonation
 """
 from __future__ import absolute_import, division, print_function  # PY2
 
-import sys
 import collections
 from pathlib import Path
 
