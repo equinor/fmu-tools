@@ -5,7 +5,7 @@ Running grid_statistics
 
 
 This method checks if property statistics from 3D grids are within user specified
-thresholds. If worse than a given set of limits, either a warning is given or a 
+thresholds. If worse than a given set of limits, either a warning is given or a
 full stop of the workflow is forced.
 
 
@@ -24,7 +24,7 @@ grid
 
 actions
   This is a list of dictionaries. Each dictionary specifies a condition to check statistics for,
-  and what action should be performed if outside a given thresholds (either warn or stop the workflow). 
+  and what action should be performed if outside a given thresholds (either warn or stop the workflow).
   
   Input keys:
 

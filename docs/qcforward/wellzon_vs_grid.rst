@@ -40,13 +40,13 @@ depthrange
 
 actions_each
   This is a dictionary that shows what actions which shall be performed per well,
-  for example ``{"warnthreshold": 50, "stopthreshold": 30}`` which means that match
+  for example ``{"warn<": 50, "stop<": 30}`` which means that match
   < than 50% will trigger a warning, while a match < 30% will trigger
   a stop in work flow. (required)
 
 actions_all
   This is a dictionary that shows what actions which shall be performed at well average
-  level, for example ``{"warnthreshold": 50, "stopthreshold": 30}`` which means that
+  level, for example ``{"warn<": 50, "stop<": 30}`` which means that
   match < 50% will trigger a warning, while a match < 30% will trigger
   a stop in work flow. (required)
 
@@ -125,8 +125,8 @@ Example when ran inside RMS
     ZONEGRIDNAME = "Zone"
     DRANGE = [2100, 3200]
 
-    ACT_EACH = {"warnthreshold": 90, "stopthreshold": 70}
-    ACT_ALL = {"warnthreshold": 95, "stopthreshold": 80}
+    ACT_EACH = {"warn<": 90, "stop<": 70}
+    ACT_ALL = {"warn<": 95, "stop<": 80}
 
     QCJOB = qcforward.WellZonationVsGrid()
 
@@ -205,8 +205,8 @@ The YAML file may in case look like:
 
 .. code-block:: yaml
 
-    actions_all: {stopthreshold: 20, warnthreshold: 80}
-    actions_each: {stopthreshold: 30, warnthreshold: 50}
+    actions_all: {stop<: 20, warn<: 80}
+    actions_each: {stop<: 30, warn<: 50}
     depthrange: [1300, 1900]
     grid: Mothergrid
     gridprops: [Zone]
@@ -248,11 +248,11 @@ than other wells.
     GRIDNAME = "SIMGRID"
     ZONEGRIDNAME = "Zone"
 
-    ACT_EACH1 = {"warnthreshold": 90, "stopthreshold": 70}
-    ACT_ALL1 = {"warnthreshold": 95, "stopthreshold": 80}
+    ACT_EACH1 = {"warn<": 90, "stop<": 70}
+    ACT_ALL1 = {"warn<": 95, "stop<": 80}
 
-    ACT_EACH2 = {"warnthreshold": 60, "stopthreshold": 40}
-    ACT_ALL2 = {"warnthreshold": 65, "stopthreshold": 50}
+    ACT_EACH2 = {"warn<": 60, "stop<": 40}
+    ACT_ALL2 = {"warn<": 65, "stop<": 50}
 
     QCJOB = qcf.WellZonationVsGrid()
 

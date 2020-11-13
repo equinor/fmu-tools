@@ -18,15 +18,26 @@ Grid quality indicators keys
 The following qridquality measures are currently supported:
 
 minangle_topbase
-  Minimum angle per cell for top and base, in degrees
+  Minimum angle per cell for top and base, in degrees.
 maxangle_topbase
-  Maximum angle per cell for top and base, in degress
+  Maximum angle per cell for top and base, in degrees.
 minangle_topbase_proj
-  Minimum angle per cell for top and base, in degrees, projected in XY view
+  Minimum angle per cell for top and base, in degrees, projected in XY view.
 maxangle_topbase
-  Maximum angle per cell for top and base, in degrees, projected in XY view
+  Maximum angle per cell for top and base, in degrees, projected in XY view.
+minangle_sides
+  Minimum angle for all side surfaces.
+maxangle_sides
+  Maximum angle for all side surfaces.
+collapsed
+  One or more corners are collapsed in Z.
+faulted
+  Grid cell is faulted (which is very OK in most cases).
+negative_thickness
+  Assign value 1 if cell has negative thickness in one or more corners, 0 else.
+concave_proj
+  Assign value 1 if a cell is concave in projected XY (bird) view, 0 else.
 
-etc...
 
 
 Common fields (same input inside or outside RMS)
@@ -37,7 +48,7 @@ verbosity
 
 actions
   This is a dictionary that shows what actions which shall be performed at well average
-  level, for example ``{"warnthreshold": 50, "stopthreshold": 30}`` which means that
+  level, for example ``{"warn<": 50, "stop<": 30}`` which means that
   match < 50% will trigger a warning, while a match < 30% will trigger
   a stop in work flow. (required)
 
@@ -84,12 +95,12 @@ Example when ran inside RMS
     GRIDNAME = "SIMGRID"
 
     # criteria per cell; if a single cell breaks limits
-    ACTIONS_CELL = {"minangle_top_base: {"warnthreshold<": 60, "stopthreshold<": 40},
-                    "maxangle_top_base: {"warnthreshold>": 110, "stopthreshold>": 130}
+    ACTIONS_CELL = {"minangle_topbase: {"warn<": 60, "stop<": 40},
+                    "maxangle_topbase: {"warn>": 110, "stop>": 130}
                     }
 
-    ACTIONS_AVG = {"minangle_top_base: {"warnthreshold<": 80, "stopthreshold<": 75},
-                   "maxangle_top_base: {"warnthreshold>": 100, "stopthreshold>": 105}
+    ACTIONS_AVG = {"minangle_topbase: {"warn<": 80, "stop<": 75},
+                   "maxangle_topbase: {"warn>": 100, "stop>": 105}
                    }
 
     QCJOB = qcforward.GridQuality()
