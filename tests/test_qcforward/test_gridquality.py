@@ -14,10 +14,10 @@ SOMEYAML = "/tmp/somefile.yml"
 
 ACTIONS = {
     "minangle_topbase": [
-        {"warn": "if_>_1%_<_80deg", "stop": "if_>_1%_<_50deg"},
-        {"warn": "if_>_50%_<_85deg", "stop": "if_>_10%_<_50deg"},
+        {"warn": "allcells > 1% when < 80", "stop": "allcells > 1% when < 50"},
+        {"warn": "allcells > 50% when < 85", "stop": "allcells > 10% when < 50"},
     ],
-    "collapsed": [{"warn": "if_>_20%", "stop": "if_>_50%"}],
+    "collapsed": [{"warn": "allcells > 20%", "stop": "allcells > 50%"}],
 }
 
 
@@ -33,8 +33,7 @@ DATA1 = {
 
 
 def test_gridquality_asfiles():
-    """Testing the zonelog vs grid functionality using files"""
-
+    """Testing grid quality using files."""
     qcf.grid_quality(DATA1)
 
     dfr = pd.read_csv(REPORT)
@@ -44,11 +43,13 @@ def test_gridquality_asfiles():
     pathlib.Path(SOMEYAML).unlink()
 
 
-def test_zonelog_vs_grid_asfiles_shall_stop():
-    """Testing the zonelog vs grid functionality using files"""
+def test_gridquality_asfiles_shall_stop():
+    """Testing gridquality using files which should trigger a stop.
 
+    Here. also abbrevation "all" should here work as "allcells".
+    """
     newdata = DATA1.copy()
-    newdata["actions"] = {"faulted": [{"warn": "if_>_20%", "stop": "if_>_3%"}]}
+    newdata["actions"] = {"faulted": [{"warn": "all > 20%", "stop": "all > 3%"}]}
 
     with pytest.raises(SystemExit):
         qcf.grid_quality(newdata)

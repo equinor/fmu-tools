@@ -78,9 +78,7 @@ class QCForward(object):
             xdata.pop("dump_yaml", None)
             with open(join(self._path, data["dump_yaml"]), "w") as stream:
                 yaml.safe_dump(
-                    xdata,
-                    stream,
-                    default_flow_style=None,
+                    xdata, stream, default_flow_style=None,
                 )
             QCC.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
 
@@ -124,7 +122,9 @@ class QCForward(object):
                 print(f"Status {status} for <{name}> nametag: {self.ldata.nametag})")
 
                 stream = sys.stderr if status == "STOP" else sys.stdout
-                print(f"{dfr_status}\n", file=stream)
+
+                dfr_status_print = dfr_status.to_string()
+                print(f"{dfr_status_print}\n", file=stream)
                 if status == "STOP":
                     QCC.force_stop("STOP criteria is found!")
 
@@ -133,3 +133,59 @@ class QCForward(object):
                 self.__class__.__name__, self.ldata.nametag
             )
         )
+
+
+class ActionsParser:
+    def __init__(self, rule, mode="warn", verbosity="info"):
+
+        QCC.verbosity = verbosity
+        self.status = None  # in case no rule is set
+        self.all = True
+        self.compare = ">"
+        self.limit = 90
+        self.given = "<"
+        self.criteria = 50
+        self.mode = mode
+        self.expression = "UNDEF"
+
+        QCC.print_debug(f"Parse action: {rule}")
+
+        if rule:
+            self.parse(rule)
+
+    def parse(self, rule):
+        """Parse a rule given for an action.
+
+        Args:
+            rule (str): An expression on form "eachwell < 90%" or
+                "allcells < 80% when > 99"
+
+        """
+
+        items = rule.split()
+        self.status = "rule"
+        self.expression = rule.replace(" ", "")
+
+        if len(items) == 6:
+            # 'all > 3% when < 20'
+            self.all = "all" in items[0]
+            self.compare = items[1]
+            self.limit = float(items[2].replace("%", ""))
+            self.given = items[4]
+            self.criteria = float(items[5])
+
+        elif len(items) == 3:
+            self.all = "all" in items[0]
+            self.compare = items[1]
+            self.limit = float(items[2].replace("%", ""))
+            self.given = ""
+            self.criteria = ""
+
+        else:
+            raise ValueError(f"Input is wrong somehow: {rule}")
+
+        key = "all" if self.all else "any"
+        self.expression = key + self.compare + str(self.limit) + "%"
+        if self.given:
+            self.expression += "ifx" + self.given + str(self.criteria)
+

@@ -48,9 +48,7 @@ verbosity
 
 actions
   This is a dictionary that shows what actions which shall be performed at well average
-  level, for example ``{"warn<": 50, "stop<": 30}`` which means that
-  match < 50% will trigger a warning, while a match < 30% will trigger
-  a stop in work flow. (required)
+  level. An explanation is given below.
 
 report
   Result will be written in a CSV file (which e.g. can be used in plotting) on disk.
@@ -63,11 +61,31 @@ dump_yaml
 nametag
   A string to identify the data set. Recommended.
 
+The actions field explained
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The action field in the examples below can be explained likes this:
+
+.. code-block:: python
+
+    "minangle_topbase": [{"warn": "all > 1% when < 80", "stop": "all > 1% when < 50"}]
+
+The first warning is triggered if the perecentage of cells which minimum angle is
+less than than 80 degrees, is greater than 1%. Note that:
+
+* The first word must contain ``all`` or ``any``, e.g. ``allcells`` will also work
+* There must be spaces between words as shown in example above
+* The use of ``%`` is not required, e.g. ``"all > 1 when < 80"`` will also work
+* The ``when`` word can be replaces with e.g. ``if`` or ``given``; the important issue
+  is that a single word is present
+
 Keys if ran inside RMS
 ^^^^^^^^^^^^^^^^^^^^^^
 
 grid
   Name of grid icon in RMS (required)
+writeicon:
+  If inside RMS will write an icon under the given grid if True.
 
 
 If ran in normal python (terminal or ERT job)
@@ -94,14 +112,15 @@ Example when ran inside RMS
 
     GRIDNAME = "SIMGRID"
 
-    # criteria per cell; if a single cell breaks limits
-    ACTIONS_CELL = {"minangle_topbase: {"warn<": 60, "stop<": 40},
-                    "maxangle_topbase: {"warn>": 110, "stop>": 130}
-                    }
-
-    ACTIONS_AVG = {"minangle_topbase: {"warn<": 80, "stop<": 75},
-                   "maxangle_topbase: {"warn>": 100, "stop>": 105}
-                   }
+    ACTIONS = {
+        "minangle_topbase": [
+            {"warn": "allcells > 1% when < 80", "stop": "allcells > 1% when < 50"},
+            {"warn": "allcells > 50% when < 85", "stop": "all > 10% when < 50"},
+            {"warn": "allcells > 50% when < 85"},
+        ],
+        "collapsed": [{"warn": "all > 20%", "stop": "all > 50%"}],
+        "faulted": [{"warn": "all > 20%", "stop": "all > 50%"}],
+    }
 
     QCJOB = qcforward.GridQuality()
 
@@ -109,8 +128,7 @@ Example when ran inside RMS
 
         usedata = {
             "grid": GRIDNAME,
-            "actions_each": ACTIONS_CELL,
-            "actions_all": ACTIONS_AVG,
+            "actions": ACTIONS,
             "report": {"file": "../output/qc/gridquality.csv", mode: "write"},
             "nametag": "ZONELOG",
         }
@@ -138,8 +156,7 @@ Example when ran from python script in terminal:
 
         usedata = {
             "grid": GRIDNAME,
-            "actions_each": ACTIONS_CELL,
-            "actions_all": ACTIONS_AVG,
+            "actions": ACTIONS,
             "report": {"file": "../output/qc/gridquality.csv", mode: "write"}
         }
 
@@ -164,6 +181,3 @@ Example in RMS with setting from a YAML file:
     if  __name__ == "__main__":
         check()
 
-The YAML file may in case look like:
-
-  TODO:

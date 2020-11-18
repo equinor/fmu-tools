@@ -12,10 +12,12 @@ import fmu.tools
 
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
-from ._qcforward import QCForward
+from ._qcforward import QCForward, ActionsParser
 
 
 QCC = _QCCommon()
+
+UNDEF = "na"
 
 
 class _LocalData(object):
@@ -26,6 +28,7 @@ class _LocalData(object):
         self.infotext = "GRID QUALITY"
         self.nametag = None
         self.reportfile = None
+        self.writeicon = False
 
     def parse_data(self, data):
         """Parsing the actual data"""
@@ -40,6 +43,7 @@ class _LocalData(object):
             )
 
         self.actions = data["actions"]
+        self.writeicon = data.get("writeicon", False)
 
 
 class GridQuality(QCForward):
@@ -69,17 +73,17 @@ class GridQuality(QCForward):
         self.ldata.parse_data(data)
 
         if isinstance(self.gdata, QCData):
-            self.gdata.parse(data, reuse=reuse)
+            self.gdata.parse(data=data, reuse=reuse, project=project)
         else:
             self.gdata = QCData()
             self.gdata.parse(data)
 
-        dfr = self.check_gridquality()
+        dfr = self.check_gridquality(project)
         QCC.print_debug(f"Results: \n{dfr}")
 
         self.evaluate_qcreport(dfr, "grid quality")
 
-    def check_gridquality(self):
+    def check_gridquality(self, project):
         """
         Given data, do check of gridquality via XTGeo
 
@@ -87,8 +91,8 @@ class GridQuality(QCForward):
 
         GRIDQUALITY        WARNRULE         WARN%   STOPRULE        STOP%  STATUS...
 
-        minangle_top_base  if_>_10%_<_60deg 13.44   if_>_0%_<_40deg 2.32   WARN
-        collapsed          if_>_15%         12.25   if_>_30%"       0.0    OK
+        minangle_top_base  allcells>10%<60  13.44   allcells>0%<40  2.32   WARN
+        collapsed          allcells>15%     12.25   allcells>30%    0.0    OK
         """
 
         # get a list of properties
@@ -98,79 +102,81 @@ class GridQuality(QCForward):
         if actions is None:
             raise ValueError("No actions are defined for grid quality")
 
-        result = OrderedDict()
-        result["GRIDQUALITY"] = list()
-        result["NO"] = list()
-        result["WARNRULE"] = list()
-        result["WARN%"] = list()
-        result["STOPRULE"] = list()
-        result["STOP%"] = list()
-        result["STATUS"] = list()
+        result = OrderedDict(
+            [
+                ("GRIDQUALITY", []),
+                ("WARNRULE", []),
+                ("WARN%", []),
+                ("STOPRULE", []),
+                ("STOP%", []),
+                ("STATUS", []),
+            ]
+        )
 
         for prop in gqc.props:
 
             therules = actions.get(prop.name, None)
 
+            if self._ldata.writeicon and project and therules is not None:
+                QCC.print_info(f"Write icon for {prop.name}")
+                prop.to_roxar(project, self._data["grid"], prop.name)
+
             if therules is None:
                 continue
 
             for numrule, therule in enumerate(therules):
-                warnrule = therule.get("warn", None)
-                stoprule = therule.get("stop", None)
-                if stoprule is None or warnrule is None:
-                    raise ValueError("Rules for both warn and stop must be defined")
 
-                result["GRIDQUALITY"].append(prop.name)
-                result["NO"].append(numrule)
+                warnrule = ActionsParser(
+                    therule.get("warn", None), mode="warn", verbosity=QCC.verbosity
+                )
+                stoprule = ActionsParser(
+                    therule.get("stop", None), mode="stop", verbosity=QCC.verbosity
+                )
+
+                QCC.print_debug(f"WARN RULE {warnrule.status}")
+                QCC.print_debug(f"STOP RULE {stoprule.status}")
+
+                # if stoprule is None or warnrule is None:
+                #     raise ValueError("Rules for both warn and stop must be defined")
+
+                result["GRIDQUALITY"].append(f"{prop.name}[{numrule}]")
 
                 status = "OK"
-                for enum, issue in enumerate([warnrule, stoprule]):
+                for issue in [warnrule, stoprule]:
 
-                    mode = "WARN" if enum == 0 else "STOP"
+                    if issue.status is None:
+                        result[issue.mode.upper() + "%"].append(UNDEF)
+                        result[issue.mode.upper() + "RULE"].append(UNDEF)
+                        status = "OK"
+                        continue
 
-                    theissue = issue.split("_")
-                    actualpercent = {}
-                    if len(theissue) == 5:
-                        criteria = float(theissue[4].strip("deg"))
-                        sign = theissue[3]
-                        percent = float(theissue[2].strip("%"))
-                        psign = theissue[1]
+                    ncell = prop.values.count()
 
-                        ncell = prop.values.count()
-                        if sign == "<":
-                            nbyrule = (prop.values < criteria).sum()
-                        else:
-                            nbyrule = (prop.values > criteria).sum()
-                        actualpercent[mode] = (nbyrule / ncell) * 100
-
-                    elif len(theissue) == 3:
-                        percent = float(theissue[2].strip("%"))
-                        psign = theissue[1]
-
-                        ncell = prop.values.count()
-                        nbyrule = (prop.values == 1).sum()
-                        actualpercent[mode] = (nbyrule / ncell) * 100
-
+                    if issue.given == "<":
+                        nbyrule = (prop.values < issue.criteria).sum()
+                    elif issue.given == ">":
+                        nbyrule = (prop.values > issue.criteria).sum()
                     else:
-                        raise ValueError(f"Error in reading the rule: {warnrule}")
+                        nbyrule = (prop.values > 0).sum()
 
-                    if mode == "WARN":
-                        result["WARN%"].append(actualpercent[mode])
-                        result["WARNRULE"].append(warnrule)
+                    actualpercent = 100.0 * nbyrule / ncell
+
+                    result[issue.mode.upper() + "%"].append(actualpercent)
+                    result[issue.mode.upper() + "RULE"].append(issue.expression)
+
+                    if issue.compare == ">" and actualpercent > issue.limit:
+                        status = issue.mode.upper()
+                    elif issue.compare == "<" and actualpercent < issue.limit:
+                        status = issue.mode.upper()
                     else:
-                        result["STOP%"].append(actualpercent[mode])
-                        result["STOPRULE"].append(stoprule)
-
-                    if psign == ">" and actualpercent[mode] > percent:
-                        status = mode
-                    elif psign == "<" and actualpercent[mode] < percent:
-                        status = mode
+                        status = "OK"
 
                 result["STATUS"].append(status)
 
         dfr = self.make_report(
             result, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
         )
+        dfr.set_index("GRIDQUALITY", inplace=True)
         return dfr
 
     @staticmethod
