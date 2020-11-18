@@ -4,6 +4,7 @@ This private module in qcforward is used to check wellzonation vs grid zonation
 from __future__ import absolute_import, division, print_function  # PY2
 
 import collections
+from collections import OrderedDict
 from pathlib import Path
 
 import json
@@ -12,10 +13,11 @@ import numpy as np
 
 import fmu.tools
 from fmu.tools._common import _QCCommon
-from ._qcforward import QCForward
+from ._qcforward import QCForward, ActionsParser
 
 
 QCC = _QCCommon()
+UNDEF = float("nan")
 
 
 class _LocalData(object):
@@ -26,8 +28,7 @@ class _LocalData(object):
         self.zonelogrange = [0, 99]
         self.zonelogshift = 0
         self.depthrange = [0.0, 999999.0]
-        self.actions_each = None
-        self.actions_all = None
+        self.actions = None
         self.perflogname = None
         self.perflogrange = [1, 9999]
         self.gridzone = None
@@ -55,8 +56,7 @@ class _LocalData(object):
 
         self.depthrange = data.get("depthrange", [0.0, 99999.0])
 
-        self.actions_each = data["actions_each"]
-        self.actions_all = data["actions_all"]
+        self.actions = data["actions"]
         if "perflog" in data.keys() and data["perflog"]:
             self.perflogname = data["perflog"].get("name", None)
             self.perflogrange = data["perflog"].get("range", [1, 9999])
@@ -113,47 +113,78 @@ class WellZonationVsGrid(QCForward):
 
         self.ldata.gridzone = self.gdata.gridprops.props[0]
 
+        actions = self._data.get("actions", None)
+        if actions is None or not isinstance(actions, list):
+            raise ValueError("No actions are defined or wrong data-input for actions")
+
+        # need to evaluate once per well anyway, also of only "all"; this will fill
+        # the MATCH% and WELL column in the dataframe given as an OrderedDict
+        QCC.print_info("Each well find zonelog match")
+        wellmatches = self._evaluate_wells()
+        QCC.print_debug(list(wellmatches.keys()))
+        QCC.print_debug(list(wellmatches.values()))
+
         # results are stored in a dict based table which be turned into a Pandas
         # dataframe in the end (most efficient; then turn into pandas at end)
-        results = collections.OrderedDict(
+        result = collections.OrderedDict(
             [
                 ("WELL", []),
-                ("MATCH", []),
-                ("WARN_LIMIT", []),
-                ("STOP_LIMIT", []),
+                ("WARNRULE", []),
+                ("STOPRULE", []),
+                ("MATCH%", []),
                 ("STATUS", []),
             ]
         )
 
-        QCC.print_info("Evaluate per well... {}".format(self.ldata.infotext))
+        for therule in actions:
 
-        results = self._evaluate_per_well(results)
+            warnrule = ActionsParser(
+                therule.get("warn", None), mode="warn", verbosity=QCC.verbosity
+            )
+            stoprule = ActionsParser(
+                therule.get("stop", None), mode="stop", verbosity=QCC.verbosity
+            )
 
-        # all data (look at averages)
-        match_allv = np.array(results["MATCH"])
-        wlimit = self.ldata.actions_all["warn<"]
-        slimit = self.ldata.actions_all["stop<"]
-        mmean = np.nanmean(match_allv)
+            QCC.print_debug(f"WARN RULE {warnrule.status}  {warnrule.expression}")
+            QCC.print_debug(f"STOP RULE {stoprule.status}  {stoprule.expression}")
 
-        results["WELL"].append("ALL_WELLS")
-        results["MATCH"].append(mmean)
-        results["WARN_LIMIT"].append(wlimit)
-        results["STOP_LIMIT"].append(wlimit)
+            for well, actualmatch in wellmatches.items():
 
-        status = "OK"
-        if mmean < wlimit:
-            status = "WARN"
-        if mmean < slimit:
-            status = "STOP"
+                status = None
+                QCC.print_debug(f"Loop well {well} which has match {actualmatch}")
 
-        results["STATUS"].append(status)
+                for num, issue in enumerate([warnrule, stoprule]):
+                    # both issues will be on same line
+                    QCC.print_debug(f"Issue no {num} {issue.mode} {issue.expression}")
+
+                    if issue.all and well != "all" or not issue.all and well == "all":
+                        continue
+
+                    if status is None:
+                        status = "OK"
+
+                    if num == 0:
+                        result["WELL"].append(well)
+                        result["MATCH%"].append(actualmatch)
+
+                    if issue.status is None:
+                        result[issue.mode.upper() + "RULE"].append(UNDEF)
+                        status = "OK"
+                        continue
+
+                    result[issue.mode.upper() + "RULE"].append(issue.expression)
+                    if issue.compare == ">" and actualmatch > issue.limit:
+                        status = issue.mode.upper()
+                    elif issue.compare == "<" and actualmatch < issue.limit:
+                        status = issue.mode.upper()
+
+                if status is not None:
+                    result["STATUS"].append(status)
 
         dfr = self.make_report(
-            results, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
+            result, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
         )
-
-        QCC.print_debug("Results: \n{}".format(dfr))
-
+        dfr.set_index("WELL", inplace=True)
         self.evaluate_qcreport(dfr, "well zonation vs grid")
 
     @staticmethod
@@ -173,13 +204,14 @@ class WellZonationVsGrid(QCForward):
 
         validate(instance=data, schema=schema)
 
-    def _evaluate_per_well(self, inresults):  # pylint: disable=too-many-locals
-        """Do a check per well"""
+    def _evaluate_wells(self):
+        """Do a check per well and the sum; return an Ordered Dict"""
 
         qcdata = self.gdata
         wzong = self.ldata
 
-        results = inresults.copy()
+        wells = []
+        matches = []
 
         for wll in qcdata.wells.wells:
             QCC.print_debug("Working with well {}".format(wll.name))
@@ -189,8 +221,7 @@ class WellZonationVsGrid(QCForward):
             if wzong.zonelogname not in dfr.columns:
                 print(
                     "Well {} have no requested zonelog <{}> and will be skipped".format(
-                        wll.name,
-                        wzong.zonelogname,
+                        wll.name, wzong.zonelogname,
                     )
                 )
                 continue
@@ -198,8 +229,7 @@ class WellZonationVsGrid(QCForward):
             if wzong.perflogname and wzong.perflogname not in dfr.columns:
                 print(
                     "Well {} have no requested perflog <{}> and will be skipped".format(
-                        wll.name,
-                        wzong.perflogname,
+                        wll.name, wzong.perflogname,
                     )
                 )
                 continue
@@ -218,30 +248,18 @@ class WellZonationVsGrid(QCForward):
             )
             QCC.print_debug("XTGeo work for {}... done".format(wll.name))
 
-            results["WELL"].append(wll.name)
+            wells.append(wll.name)
 
             if res:
-                wname = wll.name
-                match = res["MATCH2"]
-                QCC.print_info("Well: {0:30s} - {1: 5.3f}".format(wname, match))
-                wlimit = wzong.actions_each["warn<"]
-                slimit = wzong.actions_each["stop<"]
-                results["WARN_LIMIT"].append(wlimit)
-                results["STOP_LIMIT"].append(slimit)
-
-                status = "OK"
-                if match < wlimit:
-                    status = "WARN"
-                if match < slimit:
-                    status = "STOP"
-
-                results["MATCH"].append(match)
-                results["STATUS"].append(status)
+                matches.append(res["MATCH2"])
 
             else:
-                results["MATCH"].append(float("nan"))
-                results["WARN_LIMIT"].append(float("nan"))
-                results["STOP_LIMIT"].append(float("nan"))
-                results["STATUS"].append(float("nan"))
+                matches.append(UNDEF)
 
-        return results
+        # finally averages, for "all" results
+        match_allv = np.array(matches)
+        mmean = float(np.nanmean(match_allv))
+        wells.append("all")
+        matches.append(mmean)
+
+        return OrderedDict(zip(wells, matches))

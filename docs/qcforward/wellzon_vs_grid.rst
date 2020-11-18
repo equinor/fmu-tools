@@ -38,17 +38,12 @@ depthrange
   are inclusive). Default is [0, 9999]. Setting this range to reservoir gross
   interval (e.g. [2200, 3400] will speed up calculations, so it is recommended.
 
-actions_each
-  This is a dictionary that shows what actions which shall be performed per well,
-  for example ``{"warn<": 50, "stop<": 30}`` which means that match
-  < than 50% will trigger a warning, while a match < 30% will trigger
-  a stop in work flow. (required)
-
-actions_all
-  This is a dictionary that shows what actions which shall be performed at well average
-  level, for example ``{"warn<": 50, "stop<": 30}`` which means that
-  match < 50% will trigger a warning, while a match < 30% will trigger
-  a stop in work flow. (required)
+actions
+  This is a list of dictionaries that shows what actions which shall be
+  performed per well (any) or for the average (all), for example ``{"warn": "all < 50", "stop": "all < 30"}``
+  which means that match < than 50% will trigger a warning, while a
+  match < 30% will trigger a stop in work flow. Note that ``any`` and ``all``
+  shall not be mixed in the same record (required).
 
 report
   Result will be written in a CSV file (which e.g. can be used in plotting) on disk.
@@ -125,8 +120,10 @@ Example when ran inside RMS
     ZONEGRIDNAME = "Zone"
     DRANGE = [2100, 3200]
 
-    ACT_EACH = {"warn<": 90, "stop<": 70}
-    ACT_ALL = {"warn<": 95, "stop<": 80}
+    ACT = [
+      {"warn": "any < 90", "stop": "any < 70"},
+      {"warn": "all < 95", "stop": "all < 80"},
+    ]
 
     QCJOB = qcforward.WellZonationVsGrid()
 
@@ -138,8 +135,7 @@ Example when ran inside RMS
             "grid": GRIDNAME,
             "depthrange": DRANGE,
             "gridprops": [ZONEGRIDNAME],
-            "actions_each": ACT_EACH,
-            "actions_all": ACT_ALL,
+            "actions": ACT,
             "report": "../output/qc/well_vs_grid.csv",
             "nametag": "ZONELOG",
         }
@@ -175,8 +171,7 @@ Example when ran from python script in terminal:
             "wells": WELLS"
             "grid": GRIDNAME,
             "gridprops": [ZONEGRIDNAME],
-            "actions_each": ACT_EACH
-            "actions_all": ACT_ALL
+            "actions": ACT,
             "report": "../output/qc/well_vs_grid.csv",
         }
 
@@ -195,6 +190,11 @@ Example in RMS with setting from a YAML file:
 
     USEDATA = yaml.load("../input/qc/somefile.yml", project=project)
 
+    ACT = [
+      {"warn": "any < 90", "stop": "any < 70"},
+      {"warn": "all < 95", "stop": "all < 80"},
+    ]
+
     def check():
         qcf.wellzonation_vs_grid(USEDATA, project=project)
 
@@ -205,8 +205,8 @@ The YAML file may in case look like:
 
 .. code-block:: yaml
 
-    actions_all: {stop<: 20, warn<: 80}
-    actions_each: {stop<: 30, warn<: 50}
+    actions:
+      - {"warn": "all < 70", "stop": "all < 60"}
     depthrange: [1300, 1900]
     grid: Mothergrid
     gridprops: [Zone]
@@ -248,11 +248,18 @@ than other wells.
     GRIDNAME = "SIMGRID"
     ZONEGRIDNAME = "Zone"
 
+    ACT1 = [
+      {"warn": "any < 90", "stop": "any < 70"},
+      {"warn": "all < 95", "stop": "all < 80"},
+    ]
+
+    ACT2 = [
+      {"warn": "any < 80", "stop": "any < 70"},
+      {"warn": "all < 75", "stop": "all < 60"},
+    ]
+
     ACT_EACH1 = {"warn<": 90, "stop<": 70}
     ACT_ALL1 = {"warn<": 95, "stop<": 80}
-
-    ACT_EACH2 = {"warn<": 60, "stop<": 40}
-    ACT_ALL2 = {"warn<": 65, "stop<": 50}
 
     QCJOB = qcf.WellZonationVsGrid()
 
@@ -264,8 +271,7 @@ than other wells.
             "zonelog": {"name": ZONELOGNAME, "range": [1, 5], "shift": -2},
             "grid": GRIDNAME,
             "gridzones": [ZONEGRIDNAME],
-            "actions_each": ACT_EACH1,
-            "actions_all": ACT_ALL1,
+            "actions": ACT1,
             "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"},
             "nametag": "SET1",
         }
@@ -273,13 +279,13 @@ than other wells.
         # make a copy and modify selected items
         usedata2 = usedata1.copy()
         usedata2["wells"]["names"] = WELLS2
-        usedata2["actions_each"] = ACT_EACH2
-        usedata2["actions_all"] = ACT_ALL2
+        usedata2["actions"] = ACT2,
         usedata2["report"] = {"file": "../output/qc/well_vs_grid.csv", mode: "append"}
         usedata2["nametag"] = "SET2"
 
+        # note the "reuse" use to avoid duplicate loading of data like the grid
         qcf.wellzonation_vs_grid(usedata1, project=project)
-        qcf.wellzonation_vs_grid(usedata2, project=project, reuse = True)
+        qcf.wellzonation_vs_grid(usedata2, project=project, reuse=True)
 
     if  __name__ == "__main__":
         check()
