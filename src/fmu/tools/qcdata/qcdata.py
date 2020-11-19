@@ -83,7 +83,11 @@ class QCData(object):
         self._xtgdata["bwells"] = {}
 
     def parse(
-        self, data=None, project=None, reuse=False, wells_settings=None,
+        self,
+        data=None,
+        project=None,
+        reuse=False,
+        wells_settings=None,
     ):
         """Parse the actual data, such as grids, gridprops etc.
 
