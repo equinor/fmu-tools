@@ -4,6 +4,7 @@ This private module in qcforward is used to check grid quality
 
 from pathlib import Path
 import json
+from copy import deepcopy
 from collections import OrderedDict
 
 from jsonschema import validate
@@ -17,7 +18,7 @@ from ._qcforward import QCForward, ActionsParser
 
 QCC = _QCCommon()
 
-UNDEF = "na"
+UNDEF = float("nan")
 
 
 class _LocalData(object):
@@ -59,11 +60,11 @@ class GridQuality(QCForward):
                 instance. If True, then grid and gridprops will be reused as default.
                 Alternatively it can be a list for more fine grained control, e.g.
                 ["grid", "gridprops", "wells"]
-            project (obj or str): For usage inside RMS
+            project (obj or str): For usage inside RMS, None if running files
 
         """
         self._data = self.handle_data(data, project)
-        self._validate_input(self._data)
+        self._validate_input(self._data, project)
 
         QCC.verbosity = self._data.get("verbosity", 0)
 
@@ -78,27 +79,27 @@ class GridQuality(QCForward):
             self.gdata = QCData()
             self.gdata.parse(data)
 
-        dfr = self.check_gridquality(project)
+        dfr = self.check_gridquality()
         QCC.print_debug(f"Results: \n{dfr}")
 
         self.evaluate_qcreport(dfr, "grid quality")
 
-    def check_gridquality(self, project):
+    def check_gridquality(self):
         """
         Given data, do check of gridquality via XTGeo
 
         Final result will be a table like this:
 
-        GRIDQUALITY        WARNRULE         WARN%   STOPRULE        STOP%  STATUS...
-
-        minangle_top_base  allcells>10%<60  13.44   allcells>0%<40  2.32   WARN
-        collapsed          allcells>15%     12.25   allcells>30%    0.0    OK
+                              WARNRULE       WARN%  STOPRULE      STOP%  STATUS...
+        GRIDQUALITY
+        minangle_top_base[0]  all>10%ifx<60  13.44  all>0%ifx<40  2.32   WARN
+        collapsed[0]          all>15%        12.25  allcells>30%  0.0    OK
         """
 
-        # get a list of properties
+        # get properties via XTGeo method get_gridquality_properties()
         gqc = self.gdata.grid.get_gridquality_properties()
 
-        actions = self._data.get("actions", None)
+        actions = self.ldata.actions
         if actions is None:
             raise ValueError("No actions are defined for grid quality")
 
@@ -114,12 +115,14 @@ class GridQuality(QCForward):
         )
 
         for prop in gqc.props:
+            # gqc.props is a list of all gridquality properties, but not all of these
+            # are defined in input actions.
 
             therules = actions.get(prop.name, None)
 
-            if self._ldata.writeicon and project and therules is not None:
-                QCC.print_info(f"Write icon for {prop.name}")
-                prop.to_roxar(project, self._data["grid"], prop.name)
+            if self.data["project"] and self.ldata.writeicon and therules is not None:
+                QCC.print_info(f"Write icon in RMS for {prop.name}")
+                prop.to_roxar(self.data["project"], self.data["grid"], prop.name)
 
             if therules is None:
                 continue
@@ -143,33 +146,7 @@ class GridQuality(QCForward):
 
                 status = "OK"
                 for issue in [warnrule, stoprule]:
-
-                    if issue.status is None:
-                        result[issue.mode.upper() + "%"].append(UNDEF)
-                        result[issue.mode.upper() + "RULE"].append(UNDEF)
-                        status = "OK"
-                        continue
-
-                    ncell = prop.values.count()
-
-                    if issue.given == "<":
-                        nbyrule = (prop.values < issue.criteria).sum()
-                    elif issue.given == ">":
-                        nbyrule = (prop.values > issue.criteria).sum()
-                    else:
-                        nbyrule = (prop.values > 0).sum()
-
-                    actualpercent = 100.0 * nbyrule / ncell
-
-                    result[issue.mode.upper() + "%"].append(actualpercent)
-                    result[issue.mode.upper() + "RULE"].append(issue.expression)
-
-                    if issue.compare == ">" and actualpercent > issue.limit:
-                        status = issue.mode.upper()
-                    elif issue.compare == "<" and actualpercent < issue.limit:
-                        status = issue.mode.upper()
-                    else:
-                        status = "OK"
+                    status, result = self._evaluate_allcells(issue, result, prop)
 
                 result["STATUS"].append(status)
 
@@ -180,15 +157,50 @@ class GridQuality(QCForward):
         return dfr
 
     @staticmethod
-    def _validate_input(data):
-        """Validate data against JSON schemas"""
+    def _evaluate_allcells(issue, inresult, prop):
+        """Evaluation of all cells per issue (warn or stop) given the criteria."""
 
-        # TODO: complete JSON files
+        result = deepcopy(inresult)
+
+        if issue.status is None:
+            result[issue.mode.upper() + "%"].append(UNDEF)
+            result[issue.mode.upper() + "RULE"].append(UNDEF)
+            status = "OK"
+            return status, result
+
+        ncell = prop.values.count()
+
+        if issue.given == "<":
+            nbyrule = (prop.values < issue.criteria).sum()
+        elif issue.given == ">":
+            nbyrule = (prop.values > issue.criteria).sum()
+        else:
+            # e.g. discrete qual parameters such as 'faulted' have only 0 or 1 values
+            nbyrule = (prop.values > 0).sum()
+
+        actualpercent = 100.0 * nbyrule / ncell
+
+        result[issue.mode.upper() + "%"].append(actualpercent)
+        result[issue.mode.upper() + "RULE"].append(issue.expression)
+
+        if issue.compare == ">" and actualpercent > issue.limit:
+            status = issue.mode.upper()
+        elif issue.compare == "<" and actualpercent < issue.limit:
+            status = issue.mode.upper()
+        else:
+            status = "OK"
+
+        return status, result
+
+    @staticmethod
+    def _validate_input(data, project):
+        """Validate data against JSON schemas, TODO complete schemas"""
+
         spath = Path(fmu.tools.__file__).parent / "qcforward" / "_schemas"
 
         schemafile = "gridquality_asfile.json"
 
-        if "project" in data.keys():
+        if project:
             schemafile = "gridquality_asroxapi.json"
 
         with open((spath / schemafile), "r") as thisschema:

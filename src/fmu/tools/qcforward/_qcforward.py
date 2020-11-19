@@ -46,7 +46,13 @@ class QCForward(object):
         self._reports = data
 
     @property
+    def data(self):
+        """The input data dictionary"""
+        return self._data
+
+    @property
     def gdata(self):
+        """A QCData() instance"""
         return self._gdata
 
     @property
@@ -84,6 +90,7 @@ class QCForward(object):
                 )
             QCC.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
 
+        xdata["project"] = None
         if project:
             xdata["project"] = project
             QCC.print_info("Project type is {}".format(type(project)))

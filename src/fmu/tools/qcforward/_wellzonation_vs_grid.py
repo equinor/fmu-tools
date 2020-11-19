@@ -57,10 +57,12 @@ class _LocalData(object):
         self.depthrange = data.get("depthrange", [0.0, 99999.0])
 
         self.actions = data["actions"]
+
         if "perflog" in data.keys() and data["perflog"]:
             self.perflogname = data["perflog"].get("name", None)
             self.perflogrange = data["perflog"].get("range", [1, 9999])
             self.infotext = "PERFLOG MATCH"
+
         if "well_resample" in data.keys():
             self.wellresample = data.get("well_resample", None)
 
@@ -84,19 +86,17 @@ class WellZonationVsGrid(QCForward):
 
         """
         data = self._data = self.handle_data(data, project)
-        self._validate_input(self._data)
-
-        # data = self._data
+        self._validate_input(self._data, project)
 
         QCC.verbosity = data.get("verbosity", 0)
 
-        # parse data that are special for this check
+        # parse data that are special (local) for this check
         QCC.print_info("Parsing additional data...")
         self.ldata = _LocalData()
         self.ldata.parse_data(data)
 
         # parsing data stored is self._xxx (general data like grid)
-        QCC.print_info("Parsing general data...")
+        QCC.print_info("Parsing local data...")
         lognames = [self.ldata.zonelogname]
         if self.ldata.perflogname:
             lognames.append(self.ldata.perflogname)
@@ -107,6 +107,7 @@ class WellZonationVsGrid(QCForward):
             "rescale": self.ldata.wellresample,
         }
 
+        QCC.print_info("Parsing grid, gridprops, .... data...")
         self.gdata.parse(
             project=project, data=data, reuse=reuse, wells_settings=wsettings
         )
@@ -121,6 +122,7 @@ class WellZonationVsGrid(QCForward):
         # the MATCH% and WELL column in the dataframe given as an OrderedDict
         QCC.print_info("Each well find zonelog match")
         wellmatches = self._evaluate_wells()
+
         QCC.print_debug(list(wellmatches.keys()))
         QCC.print_debug(list(wellmatches.values()))
 
@@ -188,15 +190,14 @@ class WellZonationVsGrid(QCForward):
         self.evaluate_qcreport(dfr, "well zonation vs grid")
 
     @staticmethod
-    def _validate_input(data):
-        """Validate data against JSON schemas"""
+    def _validate_input(data, project):
+        """Validate data against JSON schemas. TODO complete JSON files"""
 
-        # TODO: complete JSON files
         spath = Path(fmu.tools.__file__).parent / "qcforward" / "_schemas"
 
         schemafile = "wellzonation_vs_grid_asfile.json"
 
-        if "project" in data.keys():
+        if project:
             schemafile = "wellzonation_vs_grid_asroxapi.json"
 
         with open((spath / schemafile), "r") as thisschema:
@@ -207,45 +208,42 @@ class WellZonationVsGrid(QCForward):
     def _evaluate_wells(self):
         """Do a check per well and the sum; return an Ordered Dict"""
 
-        qcdata = self.gdata
-        wzong = self.ldata
-
         wells = []
         matches = []
 
-        for wll in qcdata.wells.wells:
+        for wll in self.gdata.wells.wells:
             QCC.print_debug("Working with well {}".format(wll.name))
 
             dfr = wll.dataframe
 
-            if wzong.zonelogname not in dfr.columns:
+            if self.ldata.zonelogname not in dfr.columns:
                 print(
                     "Well {} have no requested zonelog <{}> and will be skipped".format(
                         wll.name,
-                        wzong.zonelogname,
+                        self.ldata.zonelogname,
                     )
                 )
                 continue
 
-            if wzong.perflogname and wzong.perflogname not in dfr.columns:
+            if self.ldata.perflogname and self.ldata.perflogname not in dfr.columns:
                 print(
                     "Well {} have no requested perflog <{}> and will be skipped".format(
                         wll.name,
-                        wzong.perflogname,
+                        self.ldata.perflogname,
                     )
                 )
                 continue
 
             QCC.print_debug("XTGeo work for {}...".format(wll.name))
-            res = qcdata.grid.report_zone_mismatch(
+            res = self.gdata.grid.report_zone_mismatch(
                 well=wll,
-                zonelogname=wzong.zonelogname,
-                zoneprop=wzong.gridzone,
-                zonelogrange=wzong.zonelogrange,
-                zonelogshift=wzong.zonelogshift,
-                depthrange=wzong.depthrange,
-                perflogname=wzong.perflogname,
-                perflogrange=wzong.perflogrange,
+                zonelogname=self.ldata.zonelogname,
+                zoneprop=self.ldata.gridzone,
+                zonelogrange=self.ldata.zonelogrange,
+                zonelogshift=self.ldata.zonelogshift,
+                depthrange=self.ldata.depthrange,
+                perflogname=self.ldata.perflogname,
+                perflogrange=self.ldata.perflogrange,
                 resultformat=2,
             )
             QCC.print_debug("XTGeo work for {}... done".format(wll.name))
@@ -260,7 +258,7 @@ class WellZonationVsGrid(QCForward):
 
         # finally averages, for "all" results
         match_allv = np.array(matches)
-        mmean = float(np.nanmean(match_allv))
+        mmean = np.nanmean(match_allv)
         wells.append("all")
         matches.append(mmean)
 
