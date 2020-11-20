@@ -1,14 +1,8 @@
-# -*- coding: utf-8 -*-
 """Test code for RMS volumetrics parsing"""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-import os
 import sys
-import glob
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -17,19 +11,14 @@ import pandas as pd
 from fmu.tools.rms import volumetrics
 
 
+TESTDIR = Path(__file__).parent / "volumetricsdata"
+
+
 def test_volumetrics():
     """Test parsing of many real examples from RMS"""
 
-    if "__file__" in globals():
-        # Easen up copying test code into interactive sessions
-        testdir = os.path.dirname(os.path.abspath(__file__))
-    else:
-        testdir = os.path.abspath(".")
-
-    volfiles = glob.glob(testdir + "/data/rmsvolumetrics/*txt")
-
-    for file in volfiles:
-        dframe = volumetrics.rmsvolumetrics_txt2df(file)
+    for filename in TESTDIR.glob("*.txt"):
+        dframe = volumetrics.rmsvolumetrics_txt2df(str(filename))
 
         # Check that we did get some data:
         assert len(dframe) > 0
@@ -47,7 +36,7 @@ def test_volumetrics():
         return a_zone.replace("Larsson", "E")
 
     dframe = volumetrics.rmsvolumetrics_txt2df(
-        testdir + "/data/rmsvolumetrics/" + "14_geo_gas_1.txt", zonerenamer=myrenamer
+        TESTDIR / "14_geo_gas_1.txt", zonerenamer=myrenamer
     )
     assert "Larsson" not in dframe.to_string()
     assert "E3_1" in dframe.to_string()
@@ -55,7 +44,7 @@ def test_volumetrics():
     # Test columnrenamer:
     columnrenamer = {"Region index": "FAULTSEGMENT"}  # this will override
     dframe = volumetrics.rmsvolumetrics_txt2df(
-        testdir + "/data/rmsvolumetrics/" + "14_geo_gas_1.txt",
+        str(TESTDIR / "14_geo_gas_1.txt"),
         columnrenamer=columnrenamer,
     )
     assert "FAULTSEGMENT" in dframe.columns
@@ -71,12 +60,11 @@ def test_commandlineclient_installed():
 def test_commandlineclient(tmpdir):
     """Test endpoint"""
 
-    testdir = os.path.dirname(os.path.abspath(__file__))
     tmpdir.chdir()
 
     sys.argv = [
         "rmsvolumetrics2csv",
-        os.path.join(testdir, "data/rmsvolumetrics/1_geogrid_vol_oil_1.txt"),
+        str(TESTDIR / "1_geogrid_vol_oil_1.txt"),
         "--output",
         "geogrid_oil.csv",
     ]
@@ -87,7 +75,7 @@ def test_commandlineclient(tmpdir):
 
     sys.argv = [
         "rmsvolumetrics2csv",
-        os.path.join(testdir, "data/rmsvolumetrics/14_geo_gas_1.txt"),
+        str(TESTDIR / "14_geo_gas_1.txt"),
         "--output",
         "geo_gas.csv",
     ]
@@ -99,7 +87,7 @@ def test_commandlineclient(tmpdir):
 
     sys.argv = [
         "rmsvolumetrics2csv",
-        os.path.join(testdir, "data/rmsvolumetrics/14_geo_gas_1.txt"),
+        str(TESTDIR / "14_geo_gas_1.txt"),
         "--output",
         "geo_foophase.csv",
         "--phase",
@@ -108,11 +96,10 @@ def test_commandlineclient(tmpdir):
     volumetrics.rmsvolumetrics2csv_main()
     disk_df = pd.read_csv("geo_foophase.csv")
     assert "GIIP_FOOBAR" in disk_df
-
     # Test that parent directories will be created for output
     sys.argv = [
         "rmsvolumetrics2csv",
-        os.path.join(testdir, "data/rmsvolumetrics/14_geo_gas_1.txt"),
+        str(TESTDIR / "14_geo_gas_1.txt"),
         "--output",
         "foo/bar/com.csv",
     ]

@@ -1,6 +1,4 @@
-"""Module for handling volumetrics text files from RMS""
-from __future__ import print_function
-"""
+"""Module for handling volumetrics text files from RMS"""
 
 import os
 import sys
@@ -55,7 +53,7 @@ def rmsvolumetrics_txt2df(
     """
     # First find out which row the data starts at:
     headerline = 0  # 0 is the first line
-    with open(txtfile) as volfile:
+    with open(str(txtfile)) as volfile:
         for line in volfile:
             if "Zone" in line or "Region" in line or "Facies" in line:
                 break
@@ -71,11 +69,11 @@ def rmsvolumetrics_txt2df(
         vol_df.drop("Real", axis=1, inplace=True)
 
     if not phase:
-        if "oil" in txtfile.lower():
+        if "oil" in str(txtfile).lower():
             phase = "OIL"
-        elif "gas" in txtfile.lower():
+        elif "gas" in str(txtfile).lower():
             phase = "GAS"
-        elif "total" in txtfile.lower():
+        elif "total" in str(txtfile).lower():
             phase = "TOTAL"
         else:
             raise ValueError("You must supply phase for volumetrics-parsing")
