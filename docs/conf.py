@@ -47,8 +47,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
-    "recommonmark",
-    "sphinx.ext.autosectionlabel",
 ]
 
 autosectionlabel_prefix_document = True
