@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """The setup script for fmu-tools."""
 import os
 from glob import glob
@@ -13,6 +11,14 @@ from distutils.command.clean import clean as _clean
 from setuptools import setup, find_packages
 
 from setuptools_scm import get_version
+
+try:
+    from sphinx.setup_command import BuildDoc
+
+    cmdclass = {"build_sphinx": BuildDoc}
+except ImportError:
+    # sphinx not installed - do not provide build_sphinx cmd
+    cmdclass = {}
 
 # ======================================================================================
 # Requirements and README
@@ -42,7 +48,14 @@ TEST_REQUIREMENTS = [
     "pytest",
 ]
 
-EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS}
+DOCS_REQUIREMENTS = [
+    "rstcheck",
+    "sphinx",
+    "sphinx-argparse",
+    "sphinx_rtd_theme",
+]
+
+EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS, "docs": DOCS_REQUIREMENTS}
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
