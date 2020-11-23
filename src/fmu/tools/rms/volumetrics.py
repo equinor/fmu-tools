@@ -1,6 +1,4 @@
-"""Module for handling volumetrics text files from RMS""
-from __future__ import print_function
-"""
+"""Module for handling volumetrics text files from RMS"""
 
 import os
 import sys

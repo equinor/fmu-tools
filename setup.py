@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """The setup script for fmu-tools."""
 import os
 from glob import glob
@@ -12,7 +10,14 @@ import fnmatch
 from distutils.command.clean import clean as _clean
 from setuptools import setup, find_packages
 
-from setuptools_scm import get_version
+CMDCLASS = {}
+try:
+    from sphinx.setup_command import BuildDoc
+
+    CMDCLASS.update({"build_sphinx": BuildDoc})
+except ImportError:
+    # sphinx not installed - do not provide build_sphinx cmd
+    pass
 
 # ======================================================================================
 # Requirements and README
@@ -32,17 +37,24 @@ REQUIREMENTS = parse_requirements("requirements.txt")
 
 SETUP_REQUIREMENTS = [
     "pytest-runner",
-    "setuptools >=28",
+    "setuptools>=28",
     "setuptools_scm",
 ]
 
 TEST_REQUIREMENTS = [
-    "black==20.8b0; python_version >= '3'",
+    "black==20.8b0",
     "flake8",
     "pytest",
 ]
 
-EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS}
+DOCS_REQUIREMENTS = [
+    "rstcheck",
+    "sphinx",
+    "sphinx-argparse",
+    "sphinx_rtd_theme",
+]
+
+EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS, "docs": DOCS_REQUIREMENTS}
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
@@ -125,28 +137,13 @@ class CleanUp(_clean):
                 os.unlink(pfil)
 
 
-# ======================================================================================
-# Sphinx
-# ======================================================================================
+CMDCLASS.update({"clean": CleanUp})
 
-CMDSPHINX = {
-    "build_sphinx": {
-        "project": ("setup.py", "fmu_tools"),
-        "version": ("setup.py", get_version()),
-        "release": ("setup.py", ""),
-        "source_dir": ("setup.py", "docs"),
-    }
-}
-
-# ======================================================================================
-# setup
-# ======================================================================================
 
 setup(
     name="fmu_tools",
     use_scm_version={"write_to": "src/fmu/tools/version.py"},
-    cmdclass={"clean": CleanUp},
-    command_options=CMDSPHINX,
+    cmdclass=CMDCLASS,
     description="Library for various tools scripts in FMU scope",
     long_description=README + "\n\n" + HISTORY,
     author="Equinor R&T",
@@ -164,10 +161,7 @@ setup(
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Natural Language :: English",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",

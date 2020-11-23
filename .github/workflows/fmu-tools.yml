@@ -27,6 +27,11 @@ jobs:
       - name: Checkout commit locally
         uses: actions/checkout@v2
 
+      - name: Checkout tags
+        # This seems necessary for setuptools_scm to be able to infer
+        # the correct version.
+        run: git fetch --unshallow --tags
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
@@ -37,7 +42,7 @@ jobs:
           pip install pip -U
           pip install git+https://github.com/equinor/libecl
           pip install git+https://github.com/equinor/fmu-ensemble
-          pip install .[tests]
+          pip install .[docs,tests]
 
       - name: List all installed packages
         run: pip freeze
@@ -58,3 +63,11 @@ jobs:
           # Check that repository is untainted by test code:
           git status --porcelain
           test -z "$(git status --porcelain)"
+
+      - name: Syntax check on documentation
+        run: rstcheck -r docs
+
+      - name: Build documentation
+        run: |
+          sphinx-apidoc -f -H "API for fmu.tools" -o docs src
+          python setup.py build_sphinx
