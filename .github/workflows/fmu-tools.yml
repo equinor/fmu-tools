@@ -51,3 +51,6 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
           pytest ./tests
+          # Check that repository is untainted by test code:
+          git status --porcelain
+          test -z "$(git status --porcelain)"
