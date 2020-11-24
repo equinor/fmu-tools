@@ -31,7 +31,6 @@ jobs:
       - name: Install requirements
         run: |
           pip install pip -U
-          pip install xtgeo==2.13.0a4
           pip install git+https://github.com/equinor/libecl
           pip install git+https://github.com/equinor/fmu-ensemble
           pip install .[tests]
