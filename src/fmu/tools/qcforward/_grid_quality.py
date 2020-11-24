@@ -146,7 +146,9 @@ class GridQuality(QCForward):
 
                 status = "OK"
                 for issue in [warnrule, stoprule]:
-                    status, result = self._evaluate_allcells(issue, result, prop)
+                    status, result = self._evaluate_allcells(
+                        issue, result, prop, status
+                    )
 
                 result["STATUS"].append(status)
 
@@ -157,7 +159,7 @@ class GridQuality(QCForward):
         return dfr
 
     @staticmethod
-    def _evaluate_allcells(issue, inresult, prop):
+    def _evaluate_allcells(issue, inresult, prop, instatus):
         """Evaluation of all cells per issue (warn or stop) given the criteria."""
 
         result = deepcopy(inresult)
@@ -183,12 +185,15 @@ class GridQuality(QCForward):
         result[issue.mode.upper() + "%"].append(actualpercent)
         result[issue.mode.upper() + "RULE"].append(issue.expression)
 
+        print("XX", issue.limit, actualpercent)
+
         if issue.compare == ">" and actualpercent > issue.limit:
             status = issue.mode.upper()
+            print("XXX", status)
         elif issue.compare == "<" and actualpercent < issue.limit:
             status = issue.mode.upper()
         else:
-            status = "OK"
+            status = instatus
 
         return status, result
 
