@@ -66,3 +66,22 @@ jobs:
         run: |
           sphinx-apidoc -f -H "API for fmu.tools" -o docs src
           python setup.py build_sphinx
+
+      - name: Update GitHub pages
+        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/master' && matrix.python-version == '3.6'
+        run: |
+            cp -R ./build/sphinx/html ../html
+            git config --local user.email "fmu-tools-github-action"
+            git config --local user.name "fmu-tools-github-action"
+            git fetch origin gh-pages
+            git checkout --track origin/gh-pages
+            git clean -f -f -d -x
+            git rm -r *
+            cp -R ../html/* .
+            git add .
+            if git diff-index --quiet HEAD; then
+              echo "No changes in documentation. Skip documentation deploy."
+            else
+              git commit -m "Update Github Pages"
+              git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+            fi
