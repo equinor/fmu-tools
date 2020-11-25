@@ -1,0 +1,31 @@
+fmu.tools package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   fmu.tools.qcforward
+   fmu.tools.rms
+   fmu.tools.sensitivities
+
+Submodules
+----------
+
+fmu.tools.version module
+------------------------
+
+.. automodule:: fmu.tools.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools
+   :members:
+   :undoc-members:
+   :show-inheritance:

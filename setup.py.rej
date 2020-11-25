@@ -1,0 +1,11 @@
+--- setup.py
++++ setup.py
+@@ -43,6 +43,8 @@ TEST_REQUIREMENTS = [
+ 
+ CONSOLE_SCRIPTS = [
+     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
++    "fm_fmu_postprocess=fmu.tools.fmu_postprocess.fm_fmu_postprocess:main",
++    "qc_fmu_postprocess=fmu.tools.fmu_postprocess.qc_fmu_postprocess:main",
+ ]
+ 
+ 

@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fmu.tools.sensitivities._designsummary &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+          
+
+          
+            
+            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.1.dev8+g7adff42.d20201123
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu_tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.sensitivities._designsummary</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.sensitivities._designsummary</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Module for summarizing design set up for</span>
+<span class="sd">one by one sensitivities &quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="summarize_design"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.summarize_design">[docs]</a><span class="k">def</span> <span class="nf">summarize_design</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="s2">&quot;DesignSheet01&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Summarizes the design set up for one by one sensitivities</span>
+<span class="sd">     specified in a design matrix on standard fmu format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): Path to excel or csv file containting designmatrix</span>
+<span class="sd">                        for one by one sensitivities on standard FMU format.</span>
+<span class="sd">        sheetname (str, optional): Name of sheet in excel workbook which</span>
+<span class="sd">                                   contains the designmatrix</span>
+<span class="sd">                                   (only for excel input). Defaults to</span>
+<span class="sd">                                   &#39;DesignSheet01&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas.DataFrame: Summary of sensitivities,</span>
+<span class="sd">        corresponding realisation numbers,</span>
+<span class="sd">        senstype(&#39;mc&#39; or &#39;scalar&#39;)</span>
+<span class="sd">        and senscase (name of high and low cases).</span>
+
+<span class="sd">        Each row represents one sensitivity</span>
+<span class="sd">        with 1-2 cases (low/high).</span>
+
+<span class="sd">        Column names are [&#39;sensno&#39;, &#39;sensname&#39;,</span>
+<span class="sd">        &#39;senstype&#39;, &#39;casename1&#39;, &#39;startreal1&#39;, &#39;endreal1&#39;,</span>
+<span class="sd">        &#39;casename2&#39;, &#39;startreal2&#39;, &#39;endreal2&#39;]</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from fmu.tools.sensitivities import summarize_design</span>
+<span class="sd">        &gt;&gt;&gt; designname = &#39;design_filename.xlsx&#39;</span>
+<span class="sd">        &gt;&gt;&gt; designsheet = &#39;DesignSheet01&#39;</span>
+<span class="sd">        &gt;&gt;&gt; designtable = summarize_design(designname, designsheet)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initialisation of dataframe to store results</span>
+    <span class="n">designsummary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;sensno&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sensname&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;senstype&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;casename1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;startreal1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;endreal1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;casename2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;startreal2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;endreal2&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">sensno</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">startreal1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">endreal1</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Read design matrix and find realisation numbers for each sensitivity</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">):</span>
+        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Design matrix filename should be on Excel or csv format&quot;</span>
+            <span class="s2">&quot; and end with .xlsx or .csv&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">sensname</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span>
+    <span class="n">casename1</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">casename1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;p10_p90&quot;</span><span class="p">:</span>
+        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;mc&quot;</span>
+    <span class="k">elif</span> <span class="n">casename1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ref&quot;</span><span class="p">:</span>
+        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;ref&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;scalar&quot;</span>
+
+    <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">sensname</span>
+    <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename1</span>
+    <span class="c1"># starting with first case</span>
+    <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">casename2</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">startreal2</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endreal2</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dgn</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span> <span class="o">==</span> <span class="n">currentsensname</span> <span class="ow">and</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span> <span class="o">==</span> <span class="n">currentsenscase</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">endreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">endreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+        <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span> <span class="o">==</span> <span class="n">currentsensname</span><span class="p">:</span>
+            <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">startreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+            <span class="n">endreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+            <span class="n">casename2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span>
+            <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span>
+            <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">senstype</span> <span class="o">!=</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">sensno</span><span class="p">,</span>
+                        <span class="n">sensname</span><span class="p">,</span>
+                        <span class="n">senstype</span><span class="p">,</span>
+                        <span class="n">casename1</span><span class="p">,</span>
+                        <span class="n">startreal1</span><span class="p">,</span>
+                        <span class="n">endreal1</span><span class="p">,</span>
+                        <span class="n">casename2</span><span class="p">,</span>
+                        <span class="n">startreal2</span><span class="p">,</span>
+                        <span class="n">endreal2</span><span class="p">,</span>
+                    <span class="p">]</span>
+                    <span class="n">sensno</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">sensno</span><span class="p">,</span>
+                        <span class="n">sensname</span><span class="p">,</span>
+                        <span class="n">senstype</span><span class="p">,</span>
+                        <span class="n">casename1</span><span class="p">,</span>
+                        <span class="n">startreal1</span><span class="p">,</span>
+                        <span class="n">endreal1</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                    <span class="p">]</span>
+                    <span class="n">sensno</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">startreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+            <span class="n">endreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+
+            <span class="n">casename1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span>
+            <span class="n">sensname</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span>
+            <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename1</span>
+            <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">sensname</span>
+            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;p10_p90&quot;</span><span class="p">:</span>
+                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;mc&quot;</span>
+            <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
+                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;skip&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;scalar&quot;</span>
+
+    <span class="c1"># For last row</span>
+    <span class="k">if</span> <span class="n">senstype</span> <span class="o">!=</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sensno</span><span class="p">,</span>
+                <span class="n">sensname</span><span class="p">,</span>
+                <span class="n">senstype</span><span class="p">,</span>
+                <span class="n">casename1</span><span class="p">,</span>
+                <span class="n">startreal1</span><span class="p">,</span>
+                <span class="n">endreal1</span><span class="p">,</span>
+                <span class="n">casename2</span><span class="p">,</span>
+                <span class="n">startreal2</span><span class="p">,</span>
+                <span class="n">endreal2</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sensno</span><span class="p">,</span>
+                <span class="n">sensname</span><span class="p">,</span>
+                <span class="n">senstype</span><span class="p">,</span>
+                <span class="n">casename1</span><span class="p">,</span>
+                <span class="n">startreal1</span><span class="p">,</span>
+                <span class="n">endreal1</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">,</span>
+            <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">designsummary</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Equinor
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

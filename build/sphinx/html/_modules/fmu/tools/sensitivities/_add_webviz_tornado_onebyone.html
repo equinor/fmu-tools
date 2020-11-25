@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fmu.tools.sensitivities._add_webviz_tornado_onebyone &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+          
+
+          
+            
+            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.1.dev8+g7adff42.d20201123
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu_tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.sensitivities._add_webviz_tornado_onebyone</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.sensitivities._add_webviz_tornado_onebyone</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Module for generating a set of TornadoPlots</span>
+<span class="sd">for webviz on webviz Pages. &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">summarize_design</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">calc_tornadoinput</span><span class="p">,</span> <span class="n">find_combinations</span>
+<span class="kn">from</span> <span class="nn">fmu</span> <span class="kn">import</span> <span class="n">ensemble</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">webviz</span> <span class="kn">import</span> <span class="n">SubMenu</span><span class="p">,</span> <span class="n">Page</span>
+    <span class="kn">from</span> <span class="nn">webviz.page_elements</span> <span class="kn">import</span> <span class="n">TornadoPlot</span>
+
+    <span class="n">HAS_WEBVIZ_STATIC</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">HAS_WEBVIZ_STATIC</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">WEBVIZ_STATIC_DEPRECIATION_WARNING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">  **** Depreciation warning ****</span>
+<span class="s2">This tornado plot generator is using a version of webviz</span>
+<span class="s2">that is being deprecated and will not be supported throughout 2020.</span>
+
+<span class="s2">Check https://github.com/equinor/webviz-subsurface for sensitivity</span>
+<span class="s2">visualization using the new framework.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">yconfig</span><span class="p">(</span><span class="n">inputfile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read from YAML file.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input config YAML file &lt;</span><span class="si">{}</span><span class="s2">&gt; is read...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inputfile</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">config</span>
+
+
+<span class="k">def</span> <span class="nf">yconfig_set_defaults</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Override the YAML config with defaults where missing input.&quot;&quot;&quot;</span>
+    <span class="n">newconfig</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># some defaults if data is missing</span>
+    <span class="k">if</span> <span class="s2">&quot;webvizname&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;webvizname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;webviz_tornado&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;reference&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;reference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;scale&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;cutbyref&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;cutbyseed&quot;</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: Use of cutbyseed will be phased out.&quot;</span> <span class="s2">&quot;Use cutbyref instead&quot;</span>
+            <span class="p">)</span>
+            <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;cutbyref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;cutbyseed&quot;</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;cutbyref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;No&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;designsheet&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">][</span><span class="s2">&quot;designsheet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DesignSheet01&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;gatherresults&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;gatherresults&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="s2">&quot;printresultfile&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;printresult&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="s2">&quot;renamecolumns&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;renamecolumns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="s2">&quot;menuprefix&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;calculations&quot;</span><span class="p">]:</span>
+        <span class="n">newconfig</span><span class="p">[</span><span class="s2">&quot;calculations&quot;</span><span class="p">][</span><span class="s2">&quot;menuprefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">newconfig</span>
+
+
+<span class="k">def</span> <span class="nf">make_xlabel</span><span class="p">(</span><span class="n">ref_value</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="s2">&quot;seed&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Makes xlabel for tornadoplot from input &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">scale</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; change compared to ref value &quot;</span>
+    <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ref_value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.   &quot;</span>
+    <span class="k">if</span> <span class="n">reference</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;   Reference is realisation &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">+=</span> <span class="s2">&quot;   Reference is sensititivity &quot;</span> <span class="o">+</span> <span class="n">reference</span>
+    <span class="k">return</span> <span class="n">label</span>
+
+
+<span class="k">def</span> <span class="nf">gatherresults</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Gathers .csv files from different realisations into one&quot;&quot;&quot;</span>
+    <span class="n">ensemblepaths</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;ensemblepaths&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gathering csv files from:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">ensemblepaths</span><span class="p">)</span>
+    <span class="n">singleresultfile</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;singleresultfile&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">singleresultfile</span><span class="p">)</span>
+
+    <span class="n">doe_ensemble</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">ScratchEnsemble</span><span class="p">(</span><span class="s2">&quot;doe_ensemble&quot;</span><span class="p">,</span> <span class="n">ensemblepaths</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">doe_ensemble</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">singleresultfile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;writeresultfile&quot;</span><span class="p">]:</span>
+        <span class="n">outdir</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;exportdir&quot;</span><span class="p">]</span>
+        <span class="n">outfilename</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;exportfilename&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">outfilename</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<div class="viewcode-block" id="add_webviz_tornadoplots"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.add_webviz_tornadoplots">[docs]</a><span class="k">def</span> <span class="nf">add_webviz_tornadoplots</span><span class="p">(</span><span class="n">web</span><span class="p">,</span> <span class="n">configfile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generating a set of TornadoPlots for webviz on webviz Pages</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        web: webportal where submenu should be added</span>
+<span class="sd">        configfile(str): yaml configuration file for tornado calculations</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        webviz.SubMenu: Set of webviz.Pages with tornado plots</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from fmu.tools.sensitivities import add_webviz_tornadoplots</span>
+<span class="sd">        &gt;&gt;&gt; from webviz import Webviz</span>
+<span class="sd">        &gt;&gt;&gt; html_foldername = &#39;./webportal_example&#39;</span>
+<span class="sd">        &gt;&gt;&gt; title = &#39;Snorreberg&#39;</span>
+<span class="sd">        &gt;&gt;&gt; web = Webviz(title)</span>
+<span class="sd">        &gt;&gt;&gt; configfile =&#39;../input/config/config_filename.yaml&#39;</span>
+<span class="sd">        &gt;&gt;&gt; add_webviz_tornadoplots(web, configfile)</span>
+<span class="sd">        &gt;&gt;&gt; web.write_html(html_foldername, overwrite=True, display=True)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_WEBVIZ_STATIC</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: Cannot make Tornado plots without Webviz static&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">WEBVIZ_STATIC_DEPRECIATION_WARNING</span><span class="p">)</span>
+
+    <span class="n">yamlfile</span> <span class="o">=</span> <span class="n">configfile</span>
+
+    <span class="c1"># input</span>
+    <span class="n">inputfile</span> <span class="o">=</span> <span class="n">yconfig</span><span class="p">(</span><span class="n">yamlfile</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">yconfig_set_defaults</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span>
+
+    <span class="c1"># assign parameters from config</span>
+    <span class="n">designpath</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">][</span><span class="s2">&quot;designpath&quot;</span><span class="p">]</span>
+    <span class="n">designname</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">][</span><span class="s2">&quot;designname&quot;</span><span class="p">]</span>
+    <span class="n">designsheet</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">][</span><span class="s2">&quot;designsheet&quot;</span><span class="p">]</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;calculations&quot;</span><span class="p">][</span><span class="s2">&quot;responses&quot;</span><span class="p">]</span>
+
+    <span class="n">selections</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;calculations&quot;</span><span class="p">][</span><span class="s2">&quot;selections&quot;</span><span class="p">])</span>
+    <span class="n">selectors</span> <span class="o">=</span> <span class="n">selections</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="n">reference</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;reference&quot;</span><span class="p">])</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span>
+    <span class="n">cutbyref</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;tornadooptions&quot;</span><span class="p">][</span><span class="s2">&quot;cutbyref&quot;</span><span class="p">]</span>
+    <span class="n">menuprefix</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;calculations&quot;</span><span class="p">][</span><span class="s2">&quot;menuprefix&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Option: results from single realisation csv files needs gathering first</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;gatherresults&quot;</span><span class="p">]:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">gatherresults</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Default: concatenated result file already exists as csv</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;gatherresults&quot;</span><span class="p">]:</span>
+        <span class="n">resultpath</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;resultpath&quot;</span><span class="p">]</span>
+        <span class="n">resultname</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;resultname&quot;</span><span class="p">]</span>
+        <span class="n">resultfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resultpath</span><span class="p">,</span> <span class="n">resultname</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">resultfile</span><span class="p">)</span>
+
+    <span class="c1"># Option: renaming of columns in resultfile, e.g. from CSV_EXPORT1</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;renamecolumns&quot;</span><span class="p">]:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">][</span><span class="s2">&quot;renaming&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Read design matrix and find realisation numbers for each sensitivity</span>
+    <span class="n">designname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">designpath</span><span class="p">,</span> <span class="n">designname</span><span class="p">)</span>
+    <span class="n">designtable</span> <span class="o">=</span> <span class="n">summarize_design</span><span class="p">(</span><span class="n">designname</span><span class="p">,</span> <span class="n">designsheet</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary of design matrix:&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;expand_frame_repr&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">designtable</span><span class="p">)</span>
+
+    <span class="c1"># Find all combinations of selections to generate plots for</span>
+    <span class="n">comb</span> <span class="o">=</span> <span class="n">find_combinations</span><span class="p">(</span><span class="n">selections</span><span class="p">)</span>
+
+    <span class="c1"># Grouping calculation of tornado plots per response.</span>
+    <span class="c1"># One list of plots under each response</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+        <span class="n">smn</span> <span class="o">=</span> <span class="n">SubMenu</span><span class="p">(</span><span class="n">menuprefix</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">res</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cmb</span> <span class="ow">in</span> <span class="n">comb</span><span class="p">:</span>
+            <span class="n">pagetitle</span> <span class="o">=</span> <span class="n">res</span>
+            <span class="k">for</span> <span class="n">ksel</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selections</span><span class="p">)):</span>
+                <span class="n">pagetitle</span> <span class="o">+=</span> <span class="s2">&quot; ,  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">selections</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">ksel</span><span class="p">])</span>
+                <span class="n">pagetitle</span> <span class="o">+=</span> <span class="s2">&quot;  =  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmb</span><span class="p">[</span><span class="n">ksel</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;[]&quot;</span><span class="p">)</span>
+            <span class="n">pge</span> <span class="o">=</span> <span class="n">Page</span><span class="p">(</span><span class="n">pagetitle</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">tornadotable</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">)</span> <span class="o">=</span> <span class="n">calc_tornadoinput</span><span class="p">(</span>
+                <span class="n">designtable</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">cmb</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">cutbyref</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For response and selections: &quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">pagetitle</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reference average: &quot;</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Calculation settings: &quot;</span><span class="p">,</span>
+                <span class="n">scale</span><span class="p">,</span>
+                <span class="s2">&quot;, Cut by reference: &quot;</span><span class="p">,</span>
+                <span class="n">cutbyref</span><span class="p">,</span>
+                <span class="s2">&quot;,  Reference: &quot;</span><span class="p">,</span>
+                <span class="n">reference</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">option_context</span><span class="p">(</span><span class="s2">&quot;expand_frame_repr&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">tornadotable</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># While waiting for webviz issues 84 and 85 to be solved</span>
+            <span class="c1"># xlabel = make_xlabel(ref_value, scale, reference)</span>
+            <span class="c1"># tornado_plot = \</span>
+            <span class="c1"># tornado_plot = TornadoPlot(tornadotable, xlabel, pagetitle)</span>
+            <span class="n">tornado_plot</span> <span class="o">=</span> <span class="n">TornadoPlot</span><span class="p">(</span><span class="n">tornadotable</span><span class="p">)</span>
+            <span class="n">pge</span><span class="o">.</span><span class="n">add_content</span><span class="p">(</span><span class="n">tornado_plot</span><span class="p">)</span>
+            <span class="n">smn</span><span class="o">.</span><span class="n">add_page</span><span class="p">(</span><span class="n">pge</span><span class="p">)</span>
+
+        <span class="n">web</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">smn</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Equinor
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

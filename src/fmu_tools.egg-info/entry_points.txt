@@ -1,0 +1,4 @@
+[console_scripts]
+fmudesign = fmu.tools.sensitivities.fmudesignrunner:main
+rmsvolumetrics2csv = fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main
+

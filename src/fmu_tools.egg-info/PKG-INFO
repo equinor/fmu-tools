@@ -1,0 +1,40 @@
+Metadata-Version: 2.1
+Name: fmu-tools
+Version: 1.2.1.dev7+g3aa6d52.d20201123
+Summary: Library for various tools scripts in FMU scope
+Home-page: https://github.com/equinor/fmu-tools
+Author: Equinor R&T
+Author-email: jriv@equinor.com
+License: UNKNOWN
+Description: ![fmu-tools](https://github.com/equinor/fmu-tools/workflows/fmu-tools/badge.svg)
+        
+        
+        FMU tools is a Python library containing tools for pre and post processing
+        for FMU (Fast Model Update).
+        
+        This library will contain various tools for automatic QC, setting up and analysing sensitivities,
+        and tools for visualization (coviz).
+        
+        This software is released under LGPLv3.
+        
+        Copyright 2018-2020 Equinor ASA.
+        
+        
+        
+        See https://github.com/equinor/fmu-tools
+        
+        
+Keywords: fmu,tools
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Provides-Extra: tests
+Provides-Extra: docs
