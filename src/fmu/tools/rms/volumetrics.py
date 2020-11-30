@@ -1,11 +1,9 @@
-"""Module for handling volumetrics text files from RMS""
-from __future__ import print_function
-"""
+"""Module for handling volumetrics text files from RMS"""
 
-import os
 import sys
 import logging
 import argparse
+from pathlib import Path
 
 import pandas as pd
 
@@ -27,7 +25,8 @@ def rmsvolumetrics_txt2df(
     https://wiki.equinor.com/wiki/index.php/FMU_standards
 
     Args:
-        txtfile (string): path to file emitted by RMS Volumetrics job
+        txtfile (string): path to file emitted by RMS Volumetrics job.
+            Can also be a Path object.
         columnrenamer (dict): dictionary for renaming column. Will be merged
             with a default renaming dictionary (anything specified here will
             override any defaults)
@@ -55,11 +54,10 @@ def rmsvolumetrics_txt2df(
     """
     # First find out which row the data starts at:
     headerline = 0  # 0 is the first line
-    with open(txtfile) as volfile:
-        for line in volfile:
-            if "Zone" in line or "Region" in line or "Facies" in line:
-                break
-            headerline = headerline + 1
+    for line in Path(txtfile).read_text().splitlines():
+        if "Zone" in line or "Region" in line or "Facies" in line:
+            break
+        headerline = headerline + 1
     vol_df = pd.read_csv(txtfile, sep=r"\s\s+", skiprows=headerline, engine="python")
 
     # Enforce FMU standard:
@@ -71,11 +69,11 @@ def rmsvolumetrics_txt2df(
         vol_df.drop("Real", axis=1, inplace=True)
 
     if not phase:
-        if "oil" in txtfile.lower():
+        if "oil" in str(txtfile).lower():
             phase = "OIL"
-        elif "gas" in txtfile.lower():
+        elif "gas" in str(txtfile).lower():
             phase = "GAS"
-        elif "total" in txtfile.lower():
+        elif "total" in str(txtfile).lower():
             phase = "TOTAL"
         else:
             raise ValueError("You must supply phase for volumetrics-parsing")
@@ -116,8 +114,7 @@ def rmsvolumetrics_txt2df(
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
 
     if outfile:
-        if os.path.dirname(outfile) and not os.path.exists(os.path.dirname(outfile)):
-            os.makedirs(os.path.dirname(outfile))
+        Path(outfile).parent.mkdir(exists_ok=True, parents=True)
         vol_df.to_csv(outfile, index=False)
 
     return vol_df
@@ -168,9 +165,6 @@ def rmsvolumetrics2csv_main():
         signal(SIGPIPE, SIG_DFL)
         vol_df.to_csv(sys.stdout, index=False)
     else:
-        if os.path.dirname(args.output) and not os.path.exists(
-            os.path.dirname(args.output)
-        ):
-            os.makedirs(os.path.dirname(args.output))
+        Path(args.output).parent.mkdir(exist_ok=True, parents=True)
         vol_df.to_csv(args.output, index=False)
         print("Wrote to " + args.output)
