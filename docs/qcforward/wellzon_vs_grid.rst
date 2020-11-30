@@ -1,4 +1,3 @@
-.. _qcforward-welzonvsgrid:
 
 Compare well zonation and grid
 ------------------------------
@@ -88,8 +87,6 @@ gridprops
   filename, for example ``[["Zone", "zone.roff"]]``
 
 
-.. _welzon-vs-grid-known-issues:
-
 Known issues
 ~~~~~~~~~~~~
 
@@ -168,7 +165,7 @@ Example when ran from python script in terminal:
     def check():
 
         usedata = {
-            "wells": WELLS"
+            "wells": WELLS,
             "grid": GRIDNAME,
             "gridprops": [ZONEGRIDNAME],
             "actions": ACT,

@@ -1,5 +1,4 @@
 
-.. _qcforward-gridqualindicators:
 
 Grid quality indicators
 -----------------------
@@ -66,9 +65,9 @@ The actions field explained
 
 The action field in the examples below can be explained likes this:
 
-.. code-block:: python
+.. code-block::
 
-    "minangle_topbase": [{"warn": "all > 1% when < 80", "stop": "all > 1% when < 50"}]
+   "minangle_topbase": [{"warn": "all > 1% when < 80", "stop": "all > 1% when < 50"}]
 
 The first warning is triggered if the perecentage of cells which minimum angle is
 less than than 80 degrees, is greater than 1%. Note that:
@@ -180,4 +179,3 @@ Example in RMS with setting from a YAML file:
 
     if  __name__ == "__main__":
         check()
-
