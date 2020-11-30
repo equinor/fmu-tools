@@ -74,9 +74,10 @@ jobs:
             git config --local user.name "fmu-tools-github-action"
             git fetch origin gh-pages
             git checkout --track origin/gh-pages
-            git clean -f -d -x
+            git clean -f -f -d -x  # Double -f is intentional.
             git rm -r *
             cp -R ../html/* .
+            touch .nojekyll  # If not, github pages ignores _* directories.
             git add .
             if git diff-index --quiet HEAD; then
               echo "No changes in documentation. Skip documentation deploy."

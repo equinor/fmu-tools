@@ -7,6 +7,8 @@ for FMU (Fast Model Update).
 This library will contain various tools for automatic QC, setting up and analysing sensitivities,
 and tools for visualization (coviz).
 
+Documentation can be found on <https://equinor.github.io/fmu-tools/>
+
 This software is released under LGPLv3.
 
 Copyright 2018-2020 Equinor ASA.
