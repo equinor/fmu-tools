@@ -58,6 +58,8 @@ templates_path = ["_templates"]
 # (this is typically the object type specs for each functions docstring)
 nitpick_ignore = [
     ("py:class", "fmu.tools.qcforward._qcforward.QCForward"),
+    ("py:class", "pd.DataFrame"),
+    ("py:class", "np.ndarray"),
 ]
 
 # The suffix of source filenames.

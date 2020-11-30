@@ -25,15 +25,15 @@ def rmsvolumetrics_txt2df(
     https://wiki.equinor.com/wiki/index.php/FMU_standards
 
     Args:
-        txtfile (string): path to file emitted by RMS Volumetrics job.
+        txtfile (str): path to file emitted by RMS Volumetrics job.
             Can also be a Path object.
         columnrenamer (dict): dictionary for renaming column. Will be merged
             with a default renaming dictionary (anything specified here will
             override any defaults)
-        phase (string): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
+        phase (str): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
             what kind of data is in the file. Will be appended to column names,
             and is guessed from filename if not provided.
-        outfile (string): filename to write CSV data to.
+        outfile (str): filename to write CSV data to.
             If directory does not exist, it will be made.
         regionrenamer: a function that when applied on strings, return a
             new string. If used, will be applied to every region value,
