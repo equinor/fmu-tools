@@ -12,17 +12,6 @@ Subpackages
    fmu.tools.rms
    fmu.tools.sensitivities
 
-Submodules
-----------
-
-fmu.tools.version module
-------------------------
-
-.. automodule:: fmu.tools.version
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
