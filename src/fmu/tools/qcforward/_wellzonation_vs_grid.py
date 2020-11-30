@@ -82,7 +82,7 @@ class WellZonationVsGrid(QCForward):
                 instance. If True, then grid and gridprops will be reused as default.
                 Alternatively it can be a list for more fine grained control, e.g.
                 ["grid", "gridprops", "wells"]
-            project (obj or str): For usage inside RMS
+            project (Union[object, str]): For usage inside RMS
 
         """
         data = self._data = self.handle_data(data, project)

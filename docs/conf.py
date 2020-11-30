@@ -52,6 +52,14 @@ autosectionlabel_prefix_document = False
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
+# Avoid complaints, sphinx is run in nitpicky-mode (option "-n") to get
+# warnings for references it can't find, that means we need to add
+# ignore statements when we refer to objects outside subscript.
+# (this is typically the object type specs for each functions docstring)
+nitpick_ignore = [
+    ("py:class", "fmu.tools.qcforward._qcforward.QCForward"),
+]
+
 # The suffix of source filenames.
 source_suffix = [".rst", ".md"]
 

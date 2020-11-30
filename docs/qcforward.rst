@@ -18,12 +18,13 @@ All methods share a *design philosopy*
 
 Methods:
 
-* :ref:`Compare well zonation and grid<qcforward-welzonvsgrid>`
-* :ref:`Grid quality indicators<qcforward-gridqualindicators>`
-* :ref:`Run grid statistics<qcforward-gridstatistics>`
 
-.. include:: qcforward/wellzon_vs_grid.rst
+* :ref:`Compare well zonation and grid <qcforward-welzonvsgrid>`
+* :ref:`Grid quality indicators <qcforward-gridqualindicators>`
+* :ref:`Run grid statistics <qcforward-gridstatistics>`
 
-.. include:: qcforward/gridquality.rst
+.. include:: qcforward/wellzon_vs_grid.inc
 
-.. include:: qcforward/grid_statistics.rst
+.. include:: qcforward/gridquality.inc
+
+.. include:: qcforward/grid_statistics.inc

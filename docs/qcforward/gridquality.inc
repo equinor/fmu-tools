@@ -13,7 +13,7 @@ the order of keys does not matter.
 
 
 Grid quality indicators keys
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The following qridquality measures are currently supported:
 

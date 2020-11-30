@@ -60,7 +60,7 @@ class GridQuality(QCForward):
                 instance. If True, then grid and gridprops will be reused as default.
                 Alternatively it can be a list for more fine grained control, e.g.
                 ["grid", "gridprops", "wells"]
-            project (obj or str): For usage inside RMS, None if running files
+            project (Union[object, str]): For usage inside RMS, None if running files
 
         """
         self._data = self.handle_data(data, project)
@@ -88,12 +88,12 @@ class GridQuality(QCForward):
         """
         Given data, do check of gridquality via XTGeo
 
-        Final result will be a table like this:
+        Final result will be a table like this::
 
-                              WARNRULE       WARN%  STOPRULE      STOP%  STATUS...
-        GRIDQUALITY
-        minangle_top_base[0]  all>10%ifx<60  13.44  all>0%ifx<40  2.32   WARN
-        collapsed[0]          all>15%        12.25  allcells>30%  0.0    OK
+                                WARNRULE       WARN%  STOPRULE      STOP%  STATUS...
+          GRIDQUALITY
+          minangle_top_base[0]  all>10%ifx<60  13.44  all>0%ifx<40  2.32   WARN
+          collapsed[0]          all>15%        12.25  allcells>30%  0.0    OK
         """
 
         # get properties via XTGeo method get_gridquality_properties()
