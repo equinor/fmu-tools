@@ -10,7 +10,7 @@ import fnmatch
 from distutils.command.clean import clean as _clean
 from setuptools import setup, find_packages
 
-from setuptools_scm import get_version
+# from setuptools_scm import get_version
 
 try:
     from sphinx.setup_command import BuildDoc
@@ -146,7 +146,7 @@ class CleanUp(_clean):
 CMDSPHINX = {
     "build_sphinx": {
         "project": ("setup.py", "fmu_tools"),
-        "version": ("setup.py", get_version()),
+        # "version": ("setup.py", get_version()),
         "release": ("setup.py", ""),
         "source_dir": ("setup.py", "docs"),
     }
