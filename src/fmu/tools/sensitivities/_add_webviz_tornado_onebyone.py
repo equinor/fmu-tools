@@ -2,7 +2,6 @@
 """ Module for generating a set of TornadoPlots
 for webviz on webviz Pages. """
 
-from __future__ import division, print_function, absolute_import
 import os.path
 import copy
 from collections import OrderedDict
