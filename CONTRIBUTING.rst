@@ -125,7 +125,7 @@ Get Started!
 Ready to contribute? Here's how to set up `fmu-tools` for local development.
 
 1. Fork the `fmu-tools` repo in web browser to a personal fork
-2. Work in virtual envirionment, always!
+2. Work in virtual environment, always!
 3. Clone your fork locally::
 
      $ git clone git@github.com:<your-user>/fmu-tools.git

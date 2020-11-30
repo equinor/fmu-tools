@@ -75,7 +75,7 @@ jobs:
             git config --local user.name "fmu-tools-github-action"
             git fetch origin gh-pages
             git checkout --track origin/gh-pages
-            git clean -f -f -d -x
+            git clean -f -d -x
             git rm -r *
             cp -R ../html/* .
             git add .
