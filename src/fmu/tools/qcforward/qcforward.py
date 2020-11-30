@@ -23,6 +23,7 @@ I.e::
 """
 from ._wellzonation_vs_grid import WellZonationVsGrid
 from ._grid_statistics import GridStatistics
+from ._grid_quality import GridQuality
 
 
 def wellzonation_vs_grid(data, project=None):
@@ -47,3 +48,15 @@ def grid_statistics(data, project=None):
 
     gps = GridStatistics()
     gps.run(data, project=project)
+
+
+def grid_quality(data, project=None):
+    """Check grid quality in 3D grid against user input.
+
+    Args:
+        data (dict): The input data either as a Python dictionary or
+            a path to a YAML file
+    """
+
+    gqual = GridQuality()
+    gqual.run(data, project=project)

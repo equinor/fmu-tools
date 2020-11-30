@@ -1,13 +1,12 @@
 {
-    "title": "wellzonation_vs_grid_asfiles",
+    "title": "wellzonation_vs_grid_asfile",
     "description": "Input configuration for zonelog vs grid method (file mode)",
     "required": [
         "grid",
         "gridprops",
         "wells",
         "zonelog",
-        "actions_each",
-        "actions_all"
+        "actions"
     ],
     "$schema": "https://json-schema.org/draft-07/schema#",
     "type": "object",

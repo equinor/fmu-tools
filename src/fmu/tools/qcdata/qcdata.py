@@ -70,7 +70,7 @@ class QCData(object):
 
     @property
     def xtgdata(self):
-        """Wells attribute as XTGeo BlockedWells() instance"""
+        """All xtgeo based data as a dictionay"""
         return self._xtgdata
 
     # Class methods:
@@ -113,6 +113,7 @@ class QCData(object):
 
         if "grid" in data:
             self.read_grid(data["grid"], reuse)
+
         if "gridprops" in data:
             self.read_gridprops(data["gridprops"], data.get("grid"), reuse)
 
