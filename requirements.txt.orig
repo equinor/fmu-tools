@@ -1,8 +1,0 @@
-openpyxl~=2.6
-pandas~=0.24
-pyyaml~=5.3
-scipy~=1.2
-xlrd~=1.2
-fmu-ensemble>=1.2
-libecl>=2.9
-xtgeo>=2.8

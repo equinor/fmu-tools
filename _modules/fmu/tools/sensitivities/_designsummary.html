@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities._designsummary &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities._designsummary &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -175,26 +175,23 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        filename (str): Path to excel or csv file containting designmatrix</span>
-<span class="sd">                        for one by one sensitivities on standard FMU format.</span>
-<span class="sd">        sheetname (str, optional): Name of sheet in excel workbook which</span>
-<span class="sd">                                   contains the designmatrix</span>
-<span class="sd">                                   (only for excel input). Defaults to</span>
-<span class="sd">                                   &#39;DesignSheet01&#39;.</span>
+<span class="sd">            for one by one sensitivities on standard FMU format.</span>
+<span class="sd">        sheetname (str): Name of sheet in excel workbook which</span>
+<span class="sd">            contains the designmatrix (only for excel input). Defaults to</span>
+<span class="sd">            &#39;DesignSheet01&#39;.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        pandas.DataFrame: Summary of sensitivities,</span>
+<span class="sd">        pd.DataFrame: Summary of sensitivities,</span>
 <span class="sd">        corresponding realisation numbers,</span>
 <span class="sd">        senstype(&#39;mc&#39; or &#39;scalar&#39;)</span>
 <span class="sd">        and senscase (name of high and low cases).</span>
-
 <span class="sd">        Each row represents one sensitivity</span>
 <span class="sd">        with 1-2 cases (low/high).</span>
-
 <span class="sd">        Column names are [&#39;sensno&#39;, &#39;sensname&#39;,</span>
 <span class="sd">        &#39;senstype&#39;, &#39;casename1&#39;, &#39;startreal1&#39;, &#39;endreal1&#39;,</span>
 <span class="sd">        &#39;casename2&#39;, &#39;startreal2&#39;, &#39;endreal2&#39;]</span>
 
-<span class="sd">    Example:</span>
+<span class="sd">    Example::</span>
 <span class="sd">        &gt;&gt;&gt; from fmu.tools.sensitivities import summarize_design</span>
 <span class="sd">        &gt;&gt;&gt; designname = &#39;design_filename.xlsx&#39;</span>
 <span class="sd">        &gt;&gt;&gt; designsheet = &#39;DesignSheet01&#39;</span>

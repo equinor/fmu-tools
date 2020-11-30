@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.qcforward.qcforward &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.qcforward.qcforward &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -186,6 +186,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">._wellzonation_vs_grid</span> <span class="kn">import</span> <span class="n">WellZonationVsGrid</span>
 <span class="kn">from</span> <span class="nn">._grid_statistics</span> <span class="kn">import</span> <span class="n">GridStatistics</span>
+<span class="kn">from</span> <span class="nn">._grid_quality</span> <span class="kn">import</span> <span class="n">GridQuality</span>
 
 
 <div class="viewcode-block" id="wellzonation_vs_grid"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.wellzonation_vs_grid">[docs]</a><span class="k">def</span> <span class="nf">wellzonation_vs_grid</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -210,6 +211,18 @@
 
     <span class="n">gps</span> <span class="o">=</span> <span class="n">GridStatistics</span><span class="p">()</span>
     <span class="n">gps</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="grid_quality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_quality">[docs]</a><span class="k">def</span> <span class="nf">grid_quality</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check grid quality in 3D grid against user input.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict): The input data either as a Python dictionary or</span>
+<span class="sd">            a path to a YAML file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gqual</span> <span class="o">=</span> <span class="n">GridQuality</span><span class="p">()</span>
+    <span class="n">gqual</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

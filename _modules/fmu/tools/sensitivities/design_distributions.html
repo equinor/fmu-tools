@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -649,7 +649,7 @@
 <span class="sd">        numreals (int): number of realisations to draw</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        numpy.ndarray: values drawn from distribution</span>
+<span class="sd">        np.ndarray: values drawn from distribution</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">status</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">outcomes</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">dist_params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -692,7 +692,7 @@
 <span class="sd">        corr_dict (OrderedDict): correlation info</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        pandas DataFrame with correlations, parameter names</span>
+<span class="sd">        pd.DataFrame: Dataframe with correlations, parameter names</span>
 <span class="sd">            as column and index</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">correlations</span> <span class="o">=</span> <span class="kc">None</span>
@@ -728,7 +728,7 @@
 <span class="sd">    with a warning). The algorithm is according to Higham (2000)</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        df_correlations (DataFrame): correlation coefficients where</span>
+<span class="sd">        df_correlations (pd.DataFrame): correlation coefficients where</span>
 <span class="sd">            columns and index are both parameter names. All parameter</span>
 <span class="sd">            names in keys muvalst also exist in index and vice versa.</span>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities._add_webviz_tornado_onebyone &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities._add_webviz_tornado_onebyone &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -165,7 +165,6 @@
 <span class="sd">&quot;&quot;&quot; Module for generating a set of TornadoPlots</span>
 <span class="sd">for webviz on webviz Pages. &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
@@ -287,7 +286,7 @@
 <span class="sd">        configfile(str): yaml configuration file for tornado calculations</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        webviz.SubMenu: Set of webviz.Pages with tornado plots</span>
+<span class="sd">        object: Set of webviz.Pages with tornado plots</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; from fmu.tools.sensitivities import add_webviz_tornadoplots</span>

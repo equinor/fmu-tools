@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -180,11 +180,11 @@
 <span class="sd">    or a full montecarlo design.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        designvalues (DataFrame): design matrix on standard fmu format</span>
+<span class="sd">        designvalues (pd.DataFrame): design matrix on standard fmu format</span>
 <span class="sd">            contains columns &#39;REAL&#39; (realization number), and if a onebyone</span>
 <span class="sd">            design, also columns &#39;SENSNAME&#39; and &#39;SENSCASE&#39;</span>
-<span class="sd">        defaultvalues (OrderedDictionary): default values for design</span>
-<span class="sd">        backgroundvalues (DataFrame): Used when background parameters are</span>
+<span class="sd">        defaultvalues (OrderedDict): default values for design</span>
+<span class="sd">        backgroundvalues (pd.DataFrame): Used when background parameters are</span>
 <span class="sd">            not constant. Either a set is sampled from specified distributions</span>
 <span class="sd">            or they are read from a file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -330,10 +330,10 @@
 <span class="sd">        to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            filename (string): output filename (extension .xlsx)</span>
-<span class="sd">            designsheet (string): name of excel sheet containing design matrix</span>
+<span class="sd">            filename (str): output filename (extension .xlsx)</span>
+<span class="sd">            designsheet (str): name of excel sheet containing design matrix</span>
 <span class="sd">                (optional, defaults to &#39;DesignSheet01&#39;)</span>
-<span class="sd">            defaultsheet (string): name of excel sheet containing default</span>
+<span class="sd">            defaultsheet (str): name of excel sheet containing default</span>
 <span class="sd">                values (optional, defaults to &#39;DefaultValues&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">basename</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -416,8 +416,8 @@
         <span class="sd">&quot;&quot;&quot;Writing background values to an Excel spreadsheet</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            filename (string): output filename (extension .xlsx)</span>
-<span class="sd">            backgroundsheet (string): name of excel sheet</span>
+<span class="sd">            filename (str): output filename (extension .xlsx)</span>
+<span class="sd">            backgroundsheet (str): name of excel sheet</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xlsxwriter</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span>
@@ -561,7 +561,7 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        sensname (str): name of sensitivity</span>
-<span class="sd">        sensvalues (dataframe):  design values for the sensitivity</span>
+<span class="sd">        sensvalues (pd.DataFrame):  design values for the sensitivity</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -615,7 +615,7 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        sensname (str): name of sensitivity</span>
-<span class="sd">        sensvalues (dataframe):  design values for the sensitivity</span>
+<span class="sd">        sensvalues (pd.DataFrame):  design values for the sensitivity</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -650,7 +650,7 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        sensname (str): name of sensitivity</span>
-<span class="sd">        sensvalues (dataframe):  design values for the sensitivity</span>
+<span class="sd">        sensvalues (pd.DataFrame):  design values for the sensitivity</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -691,7 +691,7 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        case1 (ScenarioSensitivityCase): first case, e.g. &#39;low case&#39;</span>
 <span class="sd">        case2 (ScenarioSensitivityCase): second case, e.g. &#39;high case&#39;</span>
-<span class="sd">        sensvalues(DataFrame): design values for the sensitivity, containing</span>
+<span class="sd">        sensvalues (pd.DataFrame): design values for the sensitivity, containing</span>
 <span class="sd">           1-2 cases</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -750,10 +750,9 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        casename (str): name of the sensitivity case,</span>
-<span class="sd">                        equals SENSCASE in design matrix</span>
-<span class="sd">        casevalues (pandas Dataframe): parameters and values</span>
-<span class="sd">            for the sensitivity</span>
-<span class="sd">            with realisation numbers as index.</span>
+<span class="sd">            equals SENSCASE in design matrix.</span>
+<span class="sd">        casevalues (pd.DataFrame): parameters and values</span>
+<span class="sd">            for the sensitivity with realisation numbers as index.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -790,9 +789,9 @@
 <span class="sd">    design matrix to flag that p10_p90 should be calculated in TornadoPlot.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        sensname (string):  name for the sensitivity.</span>
+<span class="sd">        sensname (str):  name for the sensitivity.</span>
 <span class="sd">            Equals SENSNAME in design matrix.</span>
-<span class="sd">        sensvalues (DataFrame):  parameters and values for the sensitivity</span>
+<span class="sd">        sensvalues (pd.DataFrame):  parameters and values for the sensitivity</span>
 <span class="sd">            with realisation numbers as index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -916,7 +915,7 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        sensname (str): Name of sensitivity.</span>
 <span class="sd">            Defines SENSNAME in design matrix</span>
-<span class="sd">        sensvalues (dataframe):  design values for the sensitivity</span>
+<span class="sd">        sensvalues (pd.DataFrame):  design values for the sensitivity</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -930,7 +929,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            realnums (list): list of intergers with realization numbers</span>
-<span class="sd">            filename (string): path where to read values from</span>
+<span class="sd">            filename (str): path where to read values from</span>
 <span class="sd">            parameters (list): list with parameter names</span>
 <span class="sd">            seeds (str): default or None</span>
 <span class="sd">        &quot;&quot;&quot;</span>

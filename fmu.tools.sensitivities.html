@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities package &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -50,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -92,7 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
@@ -123,7 +123,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fmu_tools</a>
+          <a href="index.html">fmu-tools</a>
         
       </nav>
 
@@ -202,7 +202,7 @@ contains columns ‘REAL’ (realization number), and if a onebyone
 design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,7 +213,7 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dd><p>default values for design</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>OrderedDictionary</p>
+<dd class="field-odd"><p>OrderedDict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -226,7 +226,7 @@ not constant. Either a set is sampled from specified distributions
 or they are read from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -259,10 +259,10 @@ to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>string</em>) – output filename (extension .xlsx)</p></li>
-<li><p><strong>designsheet</strong> (<em>string</em>) – name of excel sheet containing design matrix
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>designsheet</strong> (<em>str</em>) – name of excel sheet containing design matrix
 (optional, defaults to ‘DesignSheet01’)</p></li>
-<li><p><strong>defaultsheet</strong> (<em>string</em>) – name of excel sheet containing default
+<li><p><strong>defaultsheet</strong> (<em>str</em>) – name of excel sheet containing default
 values (optional, defaults to ‘DefaultValues’)</p></li>
 </ul>
 </dd>
@@ -319,8 +319,8 @@ dictionary</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>string</em>) – output filename (extension .xlsx)</p></li>
-<li><p><strong>backgroundsheet</strong> (<em>string</em>) – name of excel sheet</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>backgroundsheet</strong> (<em>str</em>) – name of excel sheet</p></li>
 </ul>
 </dd>
 </dl>
@@ -354,7 +354,7 @@ the SENSCASE column in the output.</p>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dataframe</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,7 +405,7 @@ excluded as a sensitivity in the plot.</p>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dataframe</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -450,7 +450,7 @@ SENSCASE will be set to ‘p10_p90’ in design matrix.</p>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dataframe</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -511,7 +511,7 @@ within the case.</p>
 1-2 cases</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -547,7 +547,7 @@ ScenarioSensitivity object.</p>
 <dt id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename">
 <code class="sig-name descname">casename</code><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of the sensitivity case,
-equals SENSCASE in design matrix</p>
+equals SENSCASE in design matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
@@ -559,11 +559,10 @@ equals SENSCASE in design matrix</p>
 <dt id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues">
 <code class="sig-name descname">casevalues</code><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>parameters and values
-for the sensitivity
-with realisation numbers as index.</p>
+for the sensitivity with realisation numbers as index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pandas Dataframe</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -601,7 +600,7 @@ design matrix to flag that p10_p90 should be calculated in TornadoPlot.</p>
 Equals SENSNAME in design matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>string</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -613,7 +612,7 @@ Equals SENSNAME in design matrix.</p>
 with realisation numbers as index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -662,7 +661,7 @@ Defines SENSNAME in design matrix</p>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dataframe</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -676,7 +675,7 @@ from file</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>realnums</strong> (<em>list</em>) – list of intergers with realization numbers</p></li>
-<li><p><strong>filename</strong> (<em>string</em>) – path where to read values from</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – path where to read values from</p></li>
 <li><p><strong>parameters</strong> (<em>list</em>) – list with parameter names</p></li>
 <li><p><strong>seeds</strong> (<em>str</em>) – default or None</p></li>
 </ul>
@@ -839,7 +838,7 @@ separated by comma</p></li>
 <dd class="field-even"><p>values drawn from distribution</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.ndarray</p>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -861,10 +860,13 @@ monte carlo sensitivity</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><dl class="simple">
-<dt>pandas DataFrame with correlations, parameter names</dt><dd><p>as column and index</p>
+<dt>Dataframe with correlations, parameter names</dt><dd><p>as column and index</p>
 </dd>
 </dl>
 </p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -883,7 +885,7 @@ the matrix is projected onto the SDP manifold and returned (together
 with a warning). The algorithm is according to Higham (2000)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>df_correlations</strong> (<em>DataFrame</em>) – correlation coefficients where
+<dd class="field-odd"><p><strong>df_correlations</strong> (<em>pd.DataFrame</em>) – correlation coefficients where
 columns and index are both parameter names. All parameter
 names in keys muvalst also exist in index and vice versa.</p>
 </dd>
@@ -909,9 +911,7 @@ names in keys muvalst also exist in index and vice versa.</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.sensitivities" title="Permalink to this headline">¶</a></h2>
 <p>Used for pre and processing of ert sensitivities, such as
 setting up design matrix to run single sensitivities with ERT and
-post processing of results to create input for webviz tornado plot.
-Output of this module can either be used in <code class="xref py py-class docutils literal notranslate"><span class="pre">webviz.Webviz</span></code>
-or other custom standalone applications.</p>
+post processing of results to create input for webviz tornado plot.</p>
 <dl class="py function">
 <dt id="fmu.tools.sensitivities.summarize_design">
 <code class="sig-prename descclassname">fmu.tools.sensitivities.</code><code class="sig-name descname">summarize_design</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">sheetname</span><span class="o">=</span><span class="default_value">'DesignSheet01'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_designsummary.html#summarize_design"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.sensitivities.summarize_design" title="Permalink to this definition">¶</a></dt>
@@ -924,35 +924,35 @@ specified in a design matrix on standard fmu format.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Path to excel or csv file containting designmatrix
 for one by one sensitivities on standard FMU format.</p></li>
-<li><p><strong>sheetname</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of sheet in excel workbook which
-contains the designmatrix
-(only for excel input). Defaults to
+<li><p><strong>sheetname</strong> (<em>str</em>) – Name of sheet in excel workbook which
+contains the designmatrix (only for excel input). Defaults to
 ‘DesignSheet01’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>Summary of sensitivities,
+<dd class="field-even"><p>Summary of sensitivities,
 corresponding realisation numbers,
 senstype(‘mc’ or ‘scalar’)
-and senscase (name of high and low cases).</p>
-<p>Each row represents one sensitivity
-with 1-2 cases (low/high).</p>
-<p>Column names are [‘sensno’, ‘sensname’,
+and senscase (name of high and low cases).
+Each row represents one sensitivity
+with 1-2 cases (low/high).
+Column names are [‘sensno’, ‘sensname’,
 ‘senstype’, ‘casename1’, ‘startreal1’, ‘endreal1’,
 ‘casename2’, ‘startreal2’, ‘endreal2’]</p>
-</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">summarize_design</span>
+<dl>
+<dt>Example::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">summarize_design</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">designname</span> <span class="o">=</span> <span class="s1">&#39;design_filename.xlsx&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">designsheet</span> <span class="o">=</span> <span class="s1">&#39;DesignSheet01&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">designtable</span> <span class="o">=</span> <span class="n">summarize_design</span><span class="p">(</span><span class="n">designname</span><span class="p">,</span> <span class="n">designsheet</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -965,32 +965,31 @@ and one design set up</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>designsummary</strong> (<em>pandas DataFrame</em>) – Summary of designmatrix as output
+<li><p><strong>designsummary</strong> (<em>pd.DataFrame</em>) – Summary of designmatrix as output
 from summarize_design.</p></li>
-<li><p><strong>resultfile</strong> (<em>pandas.DataFrame</em>) – DataFrame with collected results
+<li><p><strong>resultfile</strong> (<em>pd.DataFrame</em>) – DataFrame with collected results
 for different realizations where
 ‘REAL’ is one of the columns.</p></li>
 <li><p><strong>response</strong> (<em>str</em>) – name of response in resultfile to plot tornado for</p></li>
-<li><p><strong>selectors</strong> (<em>list of strings</em>) – Selectors to choose/filter on</p></li>
-<li><p><strong>selections</strong> (<em>list of lists</em>) – Values to filter on for each selector.</p></li>
-<li><p><strong>reference</strong> (<em>str</em><em>, </em><em>optional</em>) – Specifying what the reference is for
+<li><p><strong>selectors</strong> (<em>list</em>) – List of strings. Selectors to choose/filter on</p></li>
+<li><p><strong>selections</strong> (<em>list</em>) – List of lists. Values to filter on for each selector.</p></li>
+<li><p><strong>reference</strong> (<em>str</em>) – Specifying what the reference is for
 the tornado plots. Defaults to ‘rms_seed’.
 Valid choices are a sensname or a
 realisation number.</p></li>
-<li><p><strong>scale</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether to plot absolute numbers or percentage
-compared to reference mean.
-Defaults to ‘percentage’.
+<li><p><strong>scale</strong> (<em>str</em>) – Whether to plot absolute numbers or percentage
+compared to reference mean.  Defaults to ‘percentage’.
 Valid choices are ‘percentage’ and ‘absolute’.</p></li>
-<li><p><strong>cutbyref</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True sensitivities smaller than ref
+<li><p><strong>cutbyref</strong> (<em>bool</em>) – If True sensitivities smaller than ref
 are excluded. Defaults to False.</p></li>
-<li><p><strong>sortsens</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True sensitivities are sorted so that
+<li><p><strong>sortsens</strong> (<em>bool</em>) – If True sensitivities are sorted so that
 largest comes first. Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><dl class="simple">
-<dt>(pandas.DataFrame): tornadoinput for DataFrame in for</dt><dd><p>webviz.TornadoPlot class</p>
+<dt>(pd.DataFrame): tornadoinput for DataFrame in for</dt><dd><p>webviz.TornadoPlot class</p>
 </dd>
 </dl>
 </li>
@@ -1006,8 +1005,8 @@ largest comes first. Defaults to True.</p></li>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<dl>
+<dt>Example::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">calc_tornadoplot</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">designtable</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;designsummary.csv&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;resultfile.csv&#39;</span><span class="p">)</span>
@@ -1023,6 +1022,8 @@ largest comes first. Defaults to True.</p></li>
 <span class="go">    selection, reference, scale, cutbyref, sortsens)</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1071,7 +1072,7 @@ the value is a list of lists.</p>
 <dd class="field-even"><p>Set of webviz.Pages with tornado plots</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>webviz.SubMenu</p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -1101,7 +1102,7 @@ contains columns ‘REAL’ (realization number), and if a onebyone
 design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1112,7 +1113,7 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dd><p>default values for design</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>OrderedDictionary</p>
+<dd class="field-odd"><p>OrderedDict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1125,7 +1126,7 @@ not constant. Either a set is sampled from specified distributions
 or they are read from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1158,10 +1159,10 @@ to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>string</em>) – output filename (extension .xlsx)</p></li>
-<li><p><strong>designsheet</strong> (<em>string</em>) – name of excel sheet containing design matrix
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>designsheet</strong> (<em>str</em>) – name of excel sheet containing design matrix
 (optional, defaults to ‘DesignSheet01’)</p></li>
-<li><p><strong>defaultsheet</strong> (<em>string</em>) – name of excel sheet containing default
+<li><p><strong>defaultsheet</strong> (<em>str</em>) – name of excel sheet containing default
 values (optional, defaults to ‘DefaultValues’)</p></li>
 </ul>
 </dd>
@@ -1218,8 +1219,8 @@ dictionary</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>string</em>) – output filename (extension .xlsx)</p></li>
-<li><p><strong>backgroundsheet</strong> (<em>string</em>) – name of excel sheet</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>backgroundsheet</strong> (<em>str</em>) – name of excel sheet</p></li>
 </ul>
 </dd>
 </dl>

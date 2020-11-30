@@ -1,4 +1,0 @@
-HISTORY
-=======
-
-.. include:: ../HISTORY.md

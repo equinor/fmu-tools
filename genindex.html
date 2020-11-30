@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>Index &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fmu_tools</a>
+          <a href="index.html">fmu-tools</a>
         
       </nav>
 
@@ -173,10 +173,13 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -212,14 +215,20 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.background_to_excel">(fmu.tools.sensitivities.DesignMatrix method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity">BackgroundSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.backgroundvalues">backgroundvalues (fmu.tools.sensitivities.create_design.DesignMatrix attribute)</a>
 
       <ul>
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.backgroundvalues">(fmu.tools.sensitivities.DesignMatrix attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.bwells">bwells() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.bwells">(fmu.tools.qcdata.qcdata.QCData property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -232,13 +241,15 @@
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case1">case1 (fmu.tools.sensitivities.create_design.ScenarioSensitivity attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case2">case2 (fmu.tools.sensitivities.create_design.ScenarioSensitivity attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename">casename (fmu.tools.sensitivities.create_design.ScenarioSensitivityCase attribute)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues">casevalues (fmu.tools.sensitivities.create_design.ScenarioSensitivityCase attribute)</a>
+</li>
+      <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">check_gridquality() (fmu.tools.qcforward.GridQuality method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -315,6 +326,20 @@
 </li>
       </ul></li>
       <li>
+    fmu.tools.qcdata
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmu.tools.qcdata.qcdata
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">module</a>
+</li>
+      </ul></li>
+      <li>
     fmu.tools.qcforward
 
       <ul>
@@ -328,6 +353,8 @@
         <li><a href="fmu.tools.qcforward.html#module-fmu.tools.qcforward.qcforward">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.rms
 
@@ -335,8 +362,6 @@
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.rms.volumetrics
 
@@ -403,16 +428,36 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.generate">(fmu.tools.sensitivities.DesignMatrix method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">get_parser() (in module fmu.tools.rms.volumetrics)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.grid">grid() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.grid">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.grid_quality">grid_quality() (in module fmu.tools.qcforward)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_quality">(in module fmu.tools.qcforward.qcforward)</a>
+</li>
+      </ul></li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.grid_statistics">grid_statistics() (in module fmu.tools.qcforward)</a>
 
       <ul>
         <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_statistics">(in module fmu.tools.qcforward.qcforward)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.gridprops">gridprops() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.gridprops">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality">GridQuality (class in fmu.tools.qcforward)</a>
+</li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics">GridStatistics (class in fmu.tools.qcforward)</a>
 </li>
   </ul></td>
@@ -445,6 +490,10 @@
 </li>
         <li><a href="fmu.tools.html#module-fmu.tools">fmu.tools</a>
 </li>
+        <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">fmu.tools.qcdata</a>
+</li>
+        <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">fmu.tools.qcdata.qcdata</a>
+</li>
         <li><a href="fmu.tools.qcforward.html#module-fmu.tools.qcforward">fmu.tools.qcforward</a>
 </li>
         <li><a href="fmu.tools.qcforward.html#module-fmu.tools.qcforward.qcforward">fmu.tools.qcforward.qcforward</a>
@@ -471,11 +520,69 @@
   </ul></td>
 </tr></table>
 
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.parse">parse() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse">(fmu.tools.qcdata.qcdata.QCData method)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.parse_project">parse_project() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project">(fmu.tools.qcdata.qcdata.QCData method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.project">project() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.project">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData">QCData (class in fmu.tools.qcdata)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData">(class in fmu.tools.qcdata.qcdata)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.read_correlations">read_correlations() (in module fmu.tools.sensitivities.design_distributions)</a>
 </li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_grid">read_grid() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_grid">(fmu.tools.qcdata.qcdata.QCData method)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_gridprops">read_gridprops() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_gridprops">(fmu.tools.qcdata.qcdata.QCData method)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_wells">read_wells() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells">(fmu.tools.qcdata.qcdata.QCData method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.reset">reset() (fmu.tools.sensitivities.create_design.DesignMatrix method)</a>
 
       <ul>
@@ -484,17 +591,17 @@
       </ul></li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">rmsvolumetrics2csv_main() (in module fmu.tools.rms.volumetrics)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.rmsvolumetrics_txt2df">rmsvolumetrics_txt2df() (in module fmu.tools.rms)</a>
 
       <ul>
         <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df">(in module fmu.tools.rms.volumetrics)</a>
 </li>
       </ul></li>
-      <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run">run() (fmu.tools.qcforward.GridStatistics method)</a>
+      <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.run">run() (fmu.tools.qcforward.GridQuality method)</a>
 
       <ul>
+        <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run">(fmu.tools.qcforward.GridStatistics method)</a>
+</li>
         <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run">(fmu.tools.qcforward.WellZonationVsGrid method)</a>
 </li>
       </ul></li>
@@ -524,8 +631,6 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensname">(fmu.tools.sensitivities.create_design.SingleRealisationReference attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensvalues">sensvalues (fmu.tools.sensitivities.create_design.BackgroundSensitivity attribute)</a>
 
       <ul>
@@ -540,10 +645,18 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensvalues">(fmu.tools.sensitivities.create_design.SingleRealisationReference attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues">set_defaultvalues() (fmu.tools.sensitivities.create_design.DesignMatrix method)</a>
 
       <ul>
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.set_defaultvalues">(fmu.tools.sensitivities.DesignMatrix method)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.set_path">set_path() (fmu.tools.qcdata.QCData method)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.set_path">(fmu.tools.qcdata.qcdata.QCData method)</a>
 </li>
       </ul></li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference">SingleRealisationReference (class in fmu.tools.sensitivities.create_design)</a>
@@ -568,16 +681,34 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.wells">wells() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.wells">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.wellzonation_vs_grid">wellzonation_vs_grid() (in module fmu.tools.qcforward)</a>
 
       <ul>
         <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.wellzonation_vs_grid">(in module fmu.tools.qcforward.qcforward)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid">WellZonationVsGrid (class in fmu.tools.qcforward)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.xtgdata">xtgdata() (fmu.tools.qcdata.QCData property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.xtgdata">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

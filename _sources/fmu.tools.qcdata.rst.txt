@@ -1,0 +1,21 @@
+fmu.tools.qcdata package
+========================
+
+Submodules
+----------
+
+fmu.tools.qcdata.qcdata module
+------------------------------
+
+.. automodule:: fmu.tools.qcdata.qcdata
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools.qcdata
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
@@ -112,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">fmu_tools</a>
+          <a href="../../../../index.html">fmu-tools</a>
         
       </nav>
 
@@ -245,36 +245,35 @@
 <span class="sd">     and one design set up</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        designsummary (pandas DataFrame): Summary of designmatrix as output</span>
-<span class="sd">                                          from summarize_design.</span>
-<span class="sd">        resultfile (pandas.DataFrame): DataFrame with collected results</span>
-<span class="sd">                                       for different realizations where</span>
-<span class="sd">                                       &#39;REAL&#39; is one of the columns.</span>
-<span class="sd">        response(str): name of response in resultfile to plot tornado for</span>
-<span class="sd">        selectors(list of strings): Selectors to choose/filter on</span>
-<span class="sd">        selections(list of lists): Values to filter on for each selector.</span>
-<span class="sd">        reference(str, optional): Specifying what the reference is for</span>
-<span class="sd">                                  the tornado plots. Defaults to &#39;rms_seed&#39;.</span>
-<span class="sd">                                  Valid choices are a sensname or a</span>
-<span class="sd">                                  realisation number.</span>
-<span class="sd">        scale(str, optional): Whether to plot absolute numbers or percentage</span>
-<span class="sd">                              compared to reference mean.</span>
-<span class="sd">                              Defaults to &#39;percentage&#39;.</span>
-<span class="sd">                              Valid choices are &#39;percentage&#39; and &#39;absolute&#39;.</span>
-<span class="sd">        cutbyref (bool, optional): If True sensitivities smaller than ref</span>
-<span class="sd">                                    are excluded. Defaults to False.</span>
-<span class="sd">        sortsens (bool, optional): If True sensitivities are sorted so that</span>
-<span class="sd">                                   largest comes first. Defaults to True.</span>
+<span class="sd">        designsummary (pd.DataFrame): Summary of designmatrix as output</span>
+<span class="sd">            from summarize_design.</span>
+<span class="sd">        resultfile (pd.DataFrame): DataFrame with collected results</span>
+<span class="sd">            for different realizations where</span>
+<span class="sd">            &#39;REAL&#39; is one of the columns.</span>
+<span class="sd">        response (str): name of response in resultfile to plot tornado for</span>
+<span class="sd">        selectors (list): List of strings. Selectors to choose/filter on</span>
+<span class="sd">        selections (list): List of lists. Values to filter on for each selector.</span>
+<span class="sd">        reference (str): Specifying what the reference is for</span>
+<span class="sd">            the tornado plots. Defaults to &#39;rms_seed&#39;.</span>
+<span class="sd">            Valid choices are a sensname or a</span>
+<span class="sd">            realisation number.</span>
+<span class="sd">        scale (str): Whether to plot absolute numbers or percentage</span>
+<span class="sd">            compared to reference mean.  Defaults to &#39;percentage&#39;.</span>
+<span class="sd">            Valid choices are &#39;percentage&#39; and &#39;absolute&#39;.</span>
+<span class="sd">        cutbyref (bool): If True sensitivities smaller than ref</span>
+<span class="sd">            are excluded. Defaults to False.</span>
+<span class="sd">        sortsens (bool): If True sensitivities are sorted so that</span>
+<span class="sd">            largest comes first. Defaults to True.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple:</span>
 
-<span class="sd">            * (pandas.DataFrame): tornadoinput for DataFrame in for</span>
+<span class="sd">            * (pd.DataFrame): tornadoinput for DataFrame in for</span>
 <span class="sd">                                  webviz.TornadoPlot class</span>
 <span class="sd">            * (int): Average response value for realizations in</span>
 <span class="sd">                     reference sensitivity.</span>
 
-<span class="sd">    Example:</span>
+<span class="sd">    Example::</span>
 <span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
 <span class="sd">        &gt;&gt;&gt; from fmu.tools.sensitivities import calc_tornadoplot</span>
 <span class="sd">        &gt;&gt;&gt; designtable = pd.read_csv(&#39;designsummary.csv&#39;)</span>

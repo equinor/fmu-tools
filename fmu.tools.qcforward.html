@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.qcforward package &mdash; fmu_tools 1.2.1.dev8+g7adff42.d20201123 documentation</title>
+  <title>fmu.tools.qcforward package &mdash; fmu-tools 1.2.1.dev13+g73cdb12 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="fmu.tools.rms package" href="fmu.tools.rms.html" />
-    <link rel="prev" title="fmu.tools package" href="fmu.tools.html" /> 
+    <link rel="prev" title="fmu.tools.qcdata package" href="fmu.tools.qcdata.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu_tools
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
           
 
           
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev8+g7adff42.d20201123
+                1.2.1.dev13+g73cdb12
               </div>
             
           
@@ -93,7 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward class (in prep.)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
@@ -124,7 +124,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">fmu_tools</a>
+          <a href="index.html">fmu-tools</a>
         
       </nav>
 
@@ -227,6 +227,18 @@ a path to a YAML file</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="fmu.tools.qcforward.qcforward.grid_quality">
+<code class="sig-prename descclassname">fmu.tools.qcforward.qcforward.</code><code class="sig-name descname">grid_quality</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">project</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#grid_quality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.qcforward.qcforward.grid_quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check grid quality in 3D grid against user input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-fmu.tools.qcforward">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.qcforward" title="Permalink to this headline">¶</a></h2>
@@ -259,7 +271,7 @@ a path to a YAML file</p></li>
 instance. If True, then grid and gridprops will be reused as default.
 Alternatively it can be a list for more fine grained control, e.g.
 [“grid”, “gridprops”, “wells”]</p></li>
-<li><p><strong>project</strong> (<em>obj</em><em> or </em><em>str</em>) – For usage inside RMS</p></li>
+<li><p><strong>project</strong> (<em>Union</em><em>[</em><em>object</em><em>, </em><em>str</em><em>]</em>) – For usage inside RMS</p></li>
 </ul>
 </dd>
 </dl>
@@ -295,10 +307,61 @@ extracting property statistics from 3D grids.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
 a path to a YAML file</p></li>
-<li><p><strong>project</strong> (<em>obj</em><em> or </em><em>str</em>) – For usage inside RMS</p></li>
+<li><p><strong>project</strong> (<em>Union</em><em>[</em><em>object</em><em>, </em><em>str</em><em>]</em>) – For usage inside RMS</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.qcforward.grid_quality">
+<code class="sig-prename descclassname">fmu.tools.qcforward.</code><code class="sig-name descname">grid_quality</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">project</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#grid_quality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.qcforward.grid_quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check grid quality in 3D grid against user input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fmu.tools.qcforward.GridQuality">
+<em class="property">class </em><code class="sig-prename descclassname">fmu.tools.qcforward.</code><code class="sig-name descname">GridQuality</code><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_quality.html#GridQuality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.qcforward.GridQuality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fmu.tools.qcforward._qcforward.QCForward</span></code></p>
+<dl class="py method">
+<dt id="fmu.tools.qcforward.GridQuality.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">reuse</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">project</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_quality.html#GridQuality.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.qcforward.GridQuality.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main routine for evaluating grid quality and stop/warn if too bad</p>
+<p>The routine depends on existing XTGeo functions for this purpose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p></li>
+<li><p><strong>reuse</strong> (<em>bool</em><em> or </em><em>list</em>) – Reusing some “timeconsuming to read” data in the
+instance. If True, then grid and gridprops will be reused as default.
+Alternatively it can be a list for more fine grained control, e.g.
+[“grid”, “gridprops”, “wells”]</p></li>
+<li><p><strong>project</strong> (<em>Union</em><em>[</em><em>object</em><em>, </em><em>str</em><em>]</em>) – For usage inside RMS, None if running files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fmu.tools.qcforward.GridQuality.check_gridquality">
+<code class="sig-name descname">check_gridquality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_quality.html#GridQuality.check_gridquality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.qcforward.GridQuality.check_gridquality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given data, do check of gridquality via XTGeo</p>
+<p>Final result will be a table like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                      <span class="n">WARNRULE</span>       <span class="n">WARN</span><span class="o">%</span>  <span class="n">STOPRULE</span>      <span class="n">STOP</span><span class="o">%</span>  <span class="n">STATUS</span><span class="o">...</span>
+<span class="n">GRIDQUALITY</span>
+<span class="n">minangle_top_base</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="nb">all</span><span class="o">&gt;</span><span class="mi">10</span><span class="o">%</span><span class="n">ifx</span><span class="o">&lt;</span><span class="mi">60</span>  <span class="mf">13.44</span>  <span class="nb">all</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">%</span><span class="n">ifx</span><span class="o">&lt;</span><span class="mi">40</span>  <span class="mf">2.32</span>   <span class="n">WARN</span>
+<span class="n">collapsed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="nb">all</span><span class="o">&gt;</span><span class="mi">15</span><span class="o">%</span>        <span class="mf">12.25</span>  <span class="n">allcells</span><span class="o">&gt;</span><span class="mi">30</span><span class="o">%</span>  <span class="mf">0.0</span>    <span class="n">OK</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -317,7 +380,7 @@ a path to a YAML file</p></li>
         <a href="fmu.tools.rms.html" class="btn btn-neutral float-right" title="fmu.tools.rms package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="fmu.tools.html" class="btn btn-neutral float-left" title="fmu.tools package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="fmu.tools.qcdata.html" class="btn btn-neutral float-left" title="fmu.tools.qcdata package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
