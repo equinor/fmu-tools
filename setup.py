@@ -49,6 +49,7 @@ TEST_REQUIREMENTS = [
 ]
 
 DOCS_REQUIREMENTS = [
+    "recommonmark",
     "rstcheck",
     "sphinx",
     "sphinx-argparse",
