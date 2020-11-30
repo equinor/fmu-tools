@@ -9,6 +9,7 @@ ignore=_version.py, oyaml.py
 
 [BASIC]
 good-names=logger, fmux, xfmu
+min-public-methods=0
 
 [FORMAT]
 max-line-length=88  # black

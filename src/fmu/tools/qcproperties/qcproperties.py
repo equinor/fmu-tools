@@ -4,7 +4,7 @@ import pandas as pd
 import yaml
 
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcdata.qcdata import QCData
+from fmu.tools.qcdata import QCData
 
 from fmu.tools.qcproperties._combine_propstats import combine_property_statistics
 from fmu.tools.qcproperties._propstat_parameter_data import PropStatParameterData
