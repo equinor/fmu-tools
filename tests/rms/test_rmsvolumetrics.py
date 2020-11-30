@@ -18,7 +18,7 @@ def test_volumetrics():
     """Test parsing of many real examples from RMS"""
 
     for filename in TESTDIR.glob("*.txt"):
-        dframe = volumetrics.rmsvolumetrics_txt2df(str(filename))
+        dframe = volumetrics.rmsvolumetrics_txt2df(filename)
 
         # Check that we did get some data:
         assert len(dframe) > 0
@@ -44,7 +44,7 @@ def test_volumetrics():
     # Test columnrenamer:
     columnrenamer = {"Region index": "FAULTSEGMENT"}  # this will override
     dframe = volumetrics.rmsvolumetrics_txt2df(
-        str(TESTDIR / "14_geo_gas_1.txt"),
+        TESTDIR / "14_geo_gas_1.txt",
         columnrenamer=columnrenamer,
     )
     assert "FAULTSEGMENT" in dframe.columns
