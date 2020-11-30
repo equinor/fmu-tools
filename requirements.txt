@@ -5,5 +5,5 @@ scipy>=1.2
 xlrd>=1.2
 fmu-ensemble>=1.2
 libecl>=2.9
-xtgeo>=2.11
+xtgeo>=2.13
 jsonschema>=3.2.0
