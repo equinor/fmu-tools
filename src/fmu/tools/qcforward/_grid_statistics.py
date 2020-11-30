@@ -47,7 +47,7 @@ class GridStatistics(QCForward):
         Args:
             data (dict or str): The input data either as a Python dictionary or
                 a path to a YAML file
-            project (obj or str): For usage inside RMS
+            project (Union[object, str]): For usage inside RMS
 
         """
 

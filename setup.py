@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """The setup script for fmu-tools."""
 import os
 from glob import glob
@@ -12,7 +10,13 @@ import fnmatch
 from distutils.command.clean import clean as _clean
 from setuptools import setup, find_packages
 
-from setuptools_scm import get_version
+try:
+    from sphinx.setup_command import BuildDoc
+
+    CMDCLASS = {"build_sphinx": BuildDoc}
+except ImportError:
+    # sphinx not installed - do not provide build_sphinx cmd
+    CMDCLASS = {}
 
 # ======================================================================================
 # Requirements and README
@@ -42,7 +46,15 @@ TEST_REQUIREMENTS = [
     "pytest",
 ]
 
-EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS}
+DOCS_REQUIREMENTS = [
+    "recommonmark",
+    "rstcheck",
+    "sphinx",
+    "sphinx-argparse",
+    "sphinx_rtd_theme",
+]
+
+EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS, "docs": DOCS_REQUIREMENTS}
 
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
@@ -125,28 +137,17 @@ class CleanUp(_clean):
                 os.unlink(pfil)
 
 
-# ======================================================================================
-# Sphinx
-# ======================================================================================
-
-CMDSPHINX = {
-    "build_sphinx": {
-        "project": ("setup.py", "fmu_tools"),
-        "version": ("setup.py", get_version()),
-        "release": ("setup.py", ""),
-        "source_dir": ("setup.py", "docs"),
-    }
-}
+CMDCLASS.update({"clean": CleanUp})
 
 # ======================================================================================
 # setup
 # ======================================================================================
 
+
 setup(
     name="fmu_tools",
     use_scm_version={"write_to": "src/fmu/tools/version.py"},
-    cmdclass={"clean": CleanUp},
-    command_options=CMDSPHINX,
+    cmdclass=CMDCLASS,
     description="Library for various tools scripts in FMU scope",
     long_description=README + "\n\n" + HISTORY,
     author="Equinor R&T",

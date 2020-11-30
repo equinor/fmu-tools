@@ -17,11 +17,11 @@ class DesignMatrix(object):
     or a full montecarlo design.
 
     Attributes:
-        designvalues (DataFrame): design matrix on standard fmu format
+        designvalues (pd.DataFrame): design matrix on standard fmu format
             contains columns 'REAL' (realization number), and if a onebyone
             design, also columns 'SENSNAME' and 'SENSCASE'
-        defaultvalues (OrderedDictionary): default values for design
-        backgroundvalues (DataFrame): Used when background parameters are
+        defaultvalues (OrderedDict): default values for design
+        backgroundvalues (pd.DataFrame): Used when background parameters are
             not constant. Either a set is sampled from specified distributions
             or they are read from a file.
     """
@@ -167,10 +167,10 @@ class DesignMatrix(object):
         to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW
 
         Args:
-            filename (string): output filename (extension .xlsx)
-            designsheet (string): name of excel sheet containing design matrix
+            filename (str): output filename (extension .xlsx)
+            designsheet (str): name of excel sheet containing design matrix
                 (optional, defaults to 'DesignSheet01')
-            defaultsheet (string): name of excel sheet containing default
+            defaultsheet (str): name of excel sheet containing default
                 values (optional, defaults to 'DefaultValues')
         """
         basename, extension = os.path.splitext(filename)
@@ -253,8 +253,8 @@ class DesignMatrix(object):
         """Writing background values to an Excel spreadsheet
 
         Args:
-            filename (string): output filename (extension .xlsx)
-            backgroundsheet (string): name of excel sheet
+            filename (str): output filename (extension .xlsx)
+            backgroundsheet (str): name of excel sheet
         """
         xlsxwriter = pd.ExcelWriter(filename)
         self.backgroundvalues.to_excel(
@@ -398,7 +398,7 @@ class SeedSensitivity(object):
 
     Attributes:
         sensname (str): name of sensitivity
-        sensvalues (dataframe):  design values for the sensitivity
+        sensvalues (pd.DataFrame):  design values for the sensitivity
 
     """
 
@@ -452,7 +452,7 @@ class SingleRealisationReference(object):
 
     Attributes:
         sensname (str): name of sensitivity
-        sensvalues (dataframe):  design values for the sensitivity
+        sensvalues (pd.DataFrame):  design values for the sensitivity
 
     """
 
@@ -487,7 +487,7 @@ class BackgroundSensitivity(object):
 
     Attributes:
         sensname (str): name of sensitivity
-        sensvalues (dataframe):  design values for the sensitivity
+        sensvalues (pd.DataFrame):  design values for the sensitivity
 
     """
 
@@ -528,7 +528,7 @@ class ScenarioSensitivity(object):
     Attributes:
         case1 (ScenarioSensitivityCase): first case, e.g. 'low case'
         case2 (ScenarioSensitivityCase): second case, e.g. 'high case'
-        sensvalues(DataFrame): design values for the sensitivity, containing
+        sensvalues (pd.DataFrame): design values for the sensitivity, containing
            1-2 cases
     """
 
@@ -587,10 +587,9 @@ class ScenarioSensitivityCase(object):
 
     Attributes:
         casename (str): name of the sensitivity case,
-                        equals SENSCASE in design matrix
-        casevalues (pandas Dataframe): parameters and values
-            for the sensitivity
-            with realisation numbers as index.
+            equals SENSCASE in design matrix.
+        casevalues (pd.DataFrame): parameters and values
+            for the sensitivity with realisation numbers as index.
 
     """
 
@@ -627,9 +626,9 @@ class MonteCarloSensitivity(object):
     design matrix to flag that p10_p90 should be calculated in TornadoPlot.
 
     Attributes:
-        sensname (string):  name for the sensitivity.
+        sensname (str):  name for the sensitivity.
             Equals SENSNAME in design matrix.
-        sensvalues (DataFrame):  parameters and values for the sensitivity
+        sensvalues (pd.DataFrame):  parameters and values for the sensitivity
             with realisation numbers as index.
     """
 
@@ -753,7 +752,7 @@ class ExternSensitivity(object):
     Attributes:
         sensname (str): Name of sensitivity.
             Defines SENSNAME in design matrix
-        sensvalues (dataframe):  design values for the sensitivity
+        sensvalues (pd.DataFrame):  design values for the sensitivity
 
     """
 
@@ -767,7 +766,7 @@ class ExternSensitivity(object):
 
         Args:
             realnums (list): list of intergers with realization numbers
-            filename (string): path where to read values from
+            filename (str): path where to read values from
             parameters (list): list with parameter names
             seeds (str): default or None
         """

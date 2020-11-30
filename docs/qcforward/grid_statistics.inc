@@ -10,13 +10,13 @@ full stop of the workflow is forced.
 
 
 Signature
-~~~~~~~~~~
+^^^^^^^^^
 
 The input to this method is a python dictionary with some defined keys. Note that
 the order of keys does not matter.
 
 
-Required keys 
+Required keys
 ^^^^^^^^^^^^^
 
 grid
@@ -25,23 +25,23 @@ grid
 actions
   This is a list of dictionaries. Each dictionary specifies a condition to check statistics for,
   and what action should be performed if outside a given thresholds (either warn or stop the workflow).
-  
+
   Input keys:
 
   property
     Name of property (either a property icon in RMS, or a file name)
 
   calculation
-    Name of statistical value to check (optional). Default option is "Avg" for continous properties, 
+    Name of statistical value to check (optional). Default option is "Avg" for continous properties,
     while other valid options are "Min, Max and Stddev". Default option for discrete properties is "Percent".
-    
-  
+
+
   selectors
-    A dictionary of conditions to extract statistics from. e.g. a specific zone and/or region (optional). 
+    A dictionary of conditions to extract statistics from. e.g. a specific zone and/or region (optional).
 
     The key is the name of the property (either a property icon in RMS, or a file name), and the
-    value is the code name. 
-  
+    value is the code name.
+
   filters
     A dictionary of filters (optional). The key is the name (or path) to the filter parameter, and the
     value is a dictionary with options "include" or "exclude" where key are the list of values to include/exclude.
@@ -54,10 +54,10 @@ actions
     of the workflow (required).
 
     For example ``[0.05, 0.35]`` will give a warning if the statistic is < than 0.05 and > than 0.35.
-  
+
   warn_outside
     Same as warn_outside key above, but instead defines when to give a warning (optional).
-  
+
   description
     A string to describe each action (optional).
 
@@ -69,7 +69,7 @@ path
   Path to grid property files and grid if run outside RMS (optional)
 
 verbosity
-  Level of output while running None, "info" or "debug" (optional). Default is None. 
+  Level of output while running None, "info" or "debug" (optional). Default is None.
 
 report
   Name of CSV file to write results to (optional)
@@ -80,7 +80,7 @@ dump_yaml
 
 nametag
   A string to identify the data set (optional). Recommended.
-  
+
 
 Examples
 ~~~~~~~~

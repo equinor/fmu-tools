@@ -2,8 +2,6 @@
 Used for pre and processing of ert sensitivities, such as
 setting up design matrix to run single sensitivities with ERT and
 post processing of results to create input for webviz tornado plot.
-Output of this module can either be used in :class:`webviz.Webviz`
-or other custom standalone applications.
 """
 
 from ._designsummary import summarize_design

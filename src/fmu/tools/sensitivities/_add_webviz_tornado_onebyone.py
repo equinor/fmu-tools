@@ -2,7 +2,6 @@
 """ Module for generating a set of TornadoPlots
 for webviz on webviz Pages. """
 
-from __future__ import division, print_function, absolute_import
 import os.path
 import copy
 from collections import OrderedDict
@@ -124,7 +123,7 @@ def add_webviz_tornadoplots(web, configfile):
         configfile(str): yaml configuration file for tornado calculations
 
     Returns:
-        webviz.SubMenu: Set of webviz.Pages with tornado plots
+        object: Set of webviz.Pages with tornado plots
 
     Example:
         >>> from fmu.tools.sensitivities import add_webviz_tornadoplots
