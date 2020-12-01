@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
 """Module for generating design matrices that can be run by DESIGN2PARAMS
 and DESIGN_KW in FMU/ERT.
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 from collections import OrderedDict
-import os
+from pathlib import Path
+
 import pandas as pd
 import numpy
+
 from fmu.tools.sensitivities import design_distributions as design_dist
 
 
@@ -173,7 +171,8 @@ class DesignMatrix(object):
             defaultsheet (str): name of excel sheet containing default
                 values (optional, defaults to 'DefaultValues')
         """
-        basename, extension = os.path.splitext(filename)
+        basename = Path(filename).stem
+        extension = Path(filename).suffix
         if extension != ".xlsx":
             filename = basename + ".xlsx"
             print(
@@ -223,7 +222,7 @@ class DesignMatrix(object):
             print("seeds is set to None in general_input")
         elif seeds.lower() == "default":
             self.seedvalues = [item + 1000 for item in range(max_reals)]
-        elif os.path.isfile(seeds):
+        elif Path(seeds).is_file():
             self.seedvalues = _seeds_from_extern(seeds, max_reals)
         else:
             raise ValueError(

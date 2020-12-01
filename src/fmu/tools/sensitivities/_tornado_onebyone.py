@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-"""Module for calculating values for a tornadoplot
-"""
+"""Module for calculating values for a tornadoplot"""
+
 import pandas as pd
 
 

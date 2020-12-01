@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 """Module for random sampling of parameter values from
 distributions. For use in generation of design matrices
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 from math import exp
 import re
 import numpy
