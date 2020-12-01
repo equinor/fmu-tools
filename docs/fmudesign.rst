@@ -27,8 +27,7 @@ where <design_input.xlsx> is the path to the input for generating the design mat
 and <output_matrix.xlsx> is the path to the output design matrix.
 Study the examples for how to configure the input for the design matrix
 
-\2. Post processing of onebyone sensitivities and plotting in TornadoPlot in
-webviz. This can be run from a python script using fmu.tools.sensitivities.
+2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities. 
 Study the examples to learn how to use it.
 
 
@@ -215,85 +214,6 @@ If parameter A is sampled from a discrete distribution, and one or more addition
 
 .. image:: images/design_depend1.png
 
------------------------------------------
-Adding sets of tornado plots to webportal
------------------------------------------
-
-This example shows how sets of tornado plots from a single
-sensitivitiy run can be added to a webportal using yaml configuration
-files and the 'add_webviz_tornadoplot'.
-
-Snorreberg one-by-one sensitivities run with design matrix is further
-explained on FMU wiki portal.
-
-
-Yaml file for tornado from rms volumes
-""""""""""""""""""""""""""""""""""""""
-
-In this example the volume result files have been exported to csv
-using geogrid_volume.ipl and results from different realisation have
-been aggregated to one file.
-
-.. literalinclude:: ../tests/data/sensitivities/config/config_example_geovolume.yaml
-    :language: yaml
-
-Yaml file for aggregating rms volume files to one before tornado calculations
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-In this example the volume result files have been exported to csv
-using geogrid_volume.ipl, but the result files from different
-realisations must be aggregated to one file before tornado
-calculations are done.
-
-.. literalinclude:: ../tests/data/sensitivities/config/config_example_geovolume_ensemble.yaml
-    :language: yaml
-
-Yaml file for tornado plots from eclipse volumes
-""""""""""""""""""""""""""""""""""""""""""""""""
-
-In this example the result file has already been created using
-CSV_EXPORT1, so there is no need to collect results from different
-realisations. We want to create tornado plots for FOPT (field oil
-production total) and FGPT (field gas production total) at end of
-history (Date = 2013-07-11).
-
-.. literalinclude:: ../tests/data/sensitivities/config/config_example_eclipse.yaml
-    :language: yaml
-
-
-Python example using yaml input
-"""""""""""""""""""""""""""""""
-
-.. code-block:: python
-
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-    from fmu.tools.sensitivities import add_webviz_tornadoplots
-    from webviz import Webviz
-
-    html_foldername = './webviz_example'
-    title = 'Snorreberg'
-
-    web = Webviz(title, theme='equinor')
-    configpath = '../input/config/'
-
-    # add different types of plots to webviz project in SubMenus
-    add_webviz_tornadoplots(web, configpath +
-                            'config_example_geovolume.yaml')
-    add_webviz_tornadoplots(web, configpath +
-                            'config_example_eclipse.yaml')
-
-    # Finally, write html
-    web.write_html(html_foldername, overwrite=True, display=True)
-
-----------------------------
-Use parts in your own set up
-----------------------------
-
-If you want another design and setup than provided with
-'add_webviz_tornadoplot' you can use the functionallity in
-fmu.tools.sensitivity and make your own script.
-
 Example: summary of design matrix
 """""""""""""""""""""""""""""""""
 
@@ -355,6 +275,5 @@ the seed sensitivity P10/P90.
         selection, reference, scale)
 
     # Other options: specify cutbyseed = True and sortsens = False (see documentation).
-    # tornadotable is a pandas DataFrame for visualisation of TornadoPlot in webviz
+    # tornadotable is a pandas DataFrame for visualisation of tornadoplots in other tools.
     # ref_value is the average of the reference,
-    # which can be useful to include in label/title in webviz
