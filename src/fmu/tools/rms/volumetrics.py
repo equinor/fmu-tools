@@ -3,11 +3,11 @@
 import sys
 import logging
 import argparse
+import signal
 from pathlib import Path
 
 import pandas as pd
 
-logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
@@ -19,6 +19,7 @@ def rmsvolumetrics_txt2df(
     regionrenamer=None,
     zonerenamer=None,
 ):
+    # pylint: disable=too-many-arguments
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
     Columns will be renamed according to FMU standard,
@@ -49,8 +50,6 @@ def rmsvolumetrics_txt2df(
             return s.replace('Equilibrium_region_', '')
 
     or the same using a lambda expression.
-
-
     """
     # First find out which row the data starts at:
     headerline = 0  # 0 is the first line
@@ -69,14 +68,7 @@ def rmsvolumetrics_txt2df(
         vol_df.drop("Real", axis=1, inplace=True)
 
     if not phase:
-        if "oil" in str(txtfile).lower():
-            phase = "OIL"
-        elif "gas" in str(txtfile).lower():
-            phase = "GAS"
-        elif "total" in str(txtfile).lower():
-            phase = "TOTAL"
-        else:
-            raise ValueError("You must supply phase for volumetrics-parsing")
+        phase = guess_phase(txtfile)
 
     columns = {
         "Zone": "ZONE",
@@ -114,10 +106,32 @@ def rmsvolumetrics_txt2df(
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
 
     if outfile:
-        Path(outfile).parent.mkdir(exists_ok=True, parents=True)
+        Path(outfile).parent.mkdir(exist_ok=True, parents=True)
         vol_df.to_csv(outfile, index=False)
 
     return vol_df
+
+
+def guess_phase(text):
+    """From a text-file, guess which phase the text file
+    concerns, oil, gas or the "total" phase.
+
+    Args:
+        text (str): Multiline
+
+    Returns:
+        str: "OIL", "GAS" or "TOTAL"
+
+    Raises:
+        ValueError if guessing fails.
+    """
+    if "oil" in str(text).lower():
+        return "OIL"
+    if "gas" in str(text).lower():
+        return "GAS"
+    if "total" in str(text).lower():
+        return "TOTAL"
+    raise ValueError("Not able to guess phase")
 
 
 def get_parser():
@@ -153,6 +167,8 @@ def rmsvolumetrics2csv_main():
     parser = get_parser()
     args = parser.parse_args()
 
+    logging.basicConfig()
+
     if args.verbose:
         logger.setLevel(logging.INFO)
 
@@ -160,9 +176,7 @@ def rmsvolumetrics2csv_main():
 
     if args.output == "-":
         # Ignore pipe errors when writing to stdout.
-        from signal import signal, SIGPIPE, SIG_DFL
-
-        signal(SIGPIPE, SIG_DFL)
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
         vol_df.to_csv(sys.stdout, index=False)
     else:
         Path(args.output).parent.mkdir(exist_ok=True, parents=True)
