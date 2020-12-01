@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities package &mdash; fmu-tools 0.1.dev1+gf9b4522 documentation</title>
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 0.1.dev1+gbde6b3c documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.1.dev1+gf9b4522
+                0.1.dev1+gbde6b3c
               </div>
             
           
@@ -911,7 +911,8 @@ names in keys muvalst also exist in index and vice versa.</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.sensitivities" title="Permalink to this headline">¶</a></h2>
 <p>Used for pre and processing of ert sensitivities, such as
 setting up design matrix to run single sensitivities with ERT and
-post processing of results to create input for webviz tornado plot.</p>
+post processing of results to create input for a tornado plot.
+Output of this module can be used in custom standalone applications.</p>
 <dl class="py function">
 <dt id="fmu.tools.sensitivities.summarize_design">
 <code class="sig-prename descclassname">fmu.tools.sensitivities.</code><code class="sig-name descname">summarize_design</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">sheetname</span><span class="o">=</span><span class="default_value">'DesignSheet01'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_designsummary.html#summarize_design"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.sensitivities.summarize_design" title="Permalink to this definition">¶</a></dt>
@@ -959,7 +960,7 @@ Column names are [‘sensno’, ‘sensname’,
 <dt id="fmu.tools.sensitivities.calc_tornadoinput">
 <code class="sig-prename descclassname">fmu.tools.sensitivities.</code><code class="sig-name descname">calc_tornadoinput</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">designsummary</span></em>, <em class="sig-param"><span class="n">resultfile</span></em>, <em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="n">selectors</span></em>, <em class="sig-param"><span class="n">selection</span></em>, <em class="sig-param"><span class="n">reference</span><span class="o">=</span><span class="default_value">'rms_seed'</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">'percentage'</span></em>, <em class="sig-param"><span class="n">cutbyref</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sortsens</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_tornado_onebyone.html#calc_tornadoinput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.sensitivities.calc_tornadoinput" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div><p>Calculates input values for a webviz TornadoPlot for one response
+<div><p>Calculates input values for a tornadoplot for one response
 and one design set up</p>
 </div></blockquote>
 <dl class="field-list simple">
@@ -989,7 +990,7 @@ largest comes first. Defaults to True.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><dl class="simple">
-<dt>(pd.DataFrame): tornadoinput for DataFrame in for</dt><dd><p>webviz.TornadoPlot class</p>
+<dt>(pd.DataFrame): tornadoinput for DataFrame for</dt><dd><p>a tornado plot</p>
 </dd>
 </dl>
 </li>
@@ -1024,68 +1025,6 @@ largest comes first. Defaults to True.</p></li>
 </div>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fmu.tools.sensitivities.find_combinations">
-<code class="sig-prename descclassname">fmu.tools.sensitivities.</code><code class="sig-name descname">find_combinations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">selections</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_combinations.html#find_combinations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.sensitivities.find_combinations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds combinations of values in OrderedDict</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>selections</strong> – Ordered dictionary where for each key
-the value is a list of lists.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of all possible combinations of the list items</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exampleinput</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;zones&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="s1">&#39;zone_a&#39;</span><span class="p">,</span> <span class="s1">&#39;zone_b&#39;</span><span class="p">],</span> <span class="s1">&#39;zone_c&#39;</span><span class="p">],</span>
-<span class="go">                   &#39;regions&#39;: [&#39;reg_1&#39;, &#39;reg_2&#39;]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">find_combinations</span><span class="p">(</span><span class="n">exampleinput</span><span class="p">)</span>
-<span class="go">[</span>
-<span class="go">[&#39;reg_1&#39;, [&#39;zone_a&#39;, &#39;zone_b&#39;]],</span>
-<span class="go">[&#39;reg_1&#39;, &#39;zone_c&#39;],</span>
-<span class="go">[&#39;reg_2&#39;, [&#39;zone_a&#39;, &#39;zone_b&#39;]],</span>
-<span class="go">[&#39;reg_2&#39;, &#39;zone_c&#39;]</span>
-<span class="go">]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fmu.tools.sensitivities.add_webviz_tornadoplots">
-<code class="sig-prename descclassname">fmu.tools.sensitivities.</code><code class="sig-name descname">add_webviz_tornadoplots</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">web</span></em>, <em class="sig-param"><span class="n">configfile</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_add_webviz_tornado_onebyone.html#add_webviz_tornadoplots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.sensitivities.add_webviz_tornadoplots" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generating a set of TornadoPlots for webviz on webviz Pages</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>web</strong> – webportal where submenu should be added</p></li>
-<li><p><strong>configfile</strong> (<em>str</em>) – yaml configuration file for tornado calculations</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Set of webviz.Pages with tornado plots</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object</p>
-</dd>
-</dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">add_webviz_tornadoplots</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">webviz</span> <span class="kn">import</span> <span class="n">Webviz</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">html_foldername</span> <span class="o">=</span> <span class="s1">&#39;./webportal_example&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Snorreberg&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">web</span> <span class="o">=</span> <span class="n">Webviz</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">configfile</span> <span class="o">=</span><span class="s1">&#39;../input/config/config_filename.yaml&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">add_webviz_tornadoplots</span><span class="p">(</span><span class="n">web</span><span class="p">,</span> <span class="n">configfile</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">web</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">html_foldername</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py class">

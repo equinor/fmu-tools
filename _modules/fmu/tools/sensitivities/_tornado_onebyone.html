@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 0.1.dev1+gf9b4522 documentation</title>
+  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 0.1.dev1+gbde6b3c documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.dev1+gf9b4522
+                0.1.dev1+gbde6b3c
               </div>
             
           
@@ -162,8 +162,7 @@
             
   <h1>Source code for fmu.tools.sensitivities._tornado_onebyone</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Module for calculating values to be plotted in a webviz</span>
-<span class="sd">   TornadoPlot for one response and one design set up</span>
+<span class="sd">&quot;&quot;&quot;Module for calculating values for a tornadoplot</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -241,7 +240,7 @@
     <span class="n">sortsens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">     Calculates input values for a webviz TornadoPlot for one response</span>
+<span class="sd">     Calculates input values for a tornadoplot for one response</span>
 <span class="sd">     and one design set up</span>
 
 <span class="sd">    Args:</span>
@@ -268,8 +267,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple:</span>
 
-<span class="sd">            * (pd.DataFrame): tornadoinput for DataFrame in for</span>
-<span class="sd">                                  webviz.TornadoPlot class</span>
+<span class="sd">            * (pd.DataFrame): tornadoinput for DataFrame for</span>
+<span class="sd">                                  a tornado plot</span>
 <span class="sd">            * (int): Average response value for realizations in</span>
 <span class="sd">                     reference sensitivity.</span>
 
@@ -450,7 +449,7 @@
     <span class="k">if</span> <span class="n">sortsens</span><span class="p">:</span>
         <span class="n">tornadoinput</span> <span class="o">=</span> <span class="n">sort_by_max</span><span class="p">(</span><span class="n">tornadoinput</span><span class="p">)</span>
 
-    <span class="c1"># Return results that can be used for plotted in e.g. webviz</span>
+    <span class="c1"># Return results that can be used for plotting</span>
     <span class="n">tornadoinput</span> <span class="o">=</span> <span class="n">tornadoinput</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;sensno&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;sensname&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">tornadoinput</span><span class="p">,</span> <span class="n">ref_avg</span><span class="p">)</span></div>

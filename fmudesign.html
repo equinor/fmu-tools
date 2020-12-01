@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FMU design matrix &mdash; fmu-tools 0.1.dev1+gf9b4522 documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 0.1.dev1+gbde6b3c documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.1.dev1+gf9b4522
+                0.1.dev1+gbde6b3c
               </div>
             
           
@@ -107,16 +107,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#example-7-sensitivities-with-background-but-without-rms-seed">Example 7: Sensitivities with background but without RMS seed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-8-full-monte-carlo-sensitivity">Example 8: Full monte carlo sensitivity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-9-adding-dependent-discrete-parameters-to-monte-carlo-designs">Example 9: Adding dependent discrete parameters to monte carlo designs</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-sets-of-tornado-plots-to-webportal">Adding sets of tornado plots to webportal</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#yaml-file-for-tornado-from-rms-volumes">Yaml file for tornado from rms volumes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#yaml-file-for-aggregating-rms-volume-files-to-one-before-tornado-calculations">Yaml file for aggregating rms volume files to one before tornado calculations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#yaml-file-for-tornado-plots-from-eclipse-volumes">Yaml file for tornado plots from eclipse volumes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#python-example-using-yaml-input">Python example using yaml input</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#use-parts-in-your-own-set-up">Use parts in your own set up</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#example-summary-of-design-matrix">Example: summary of design matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-calculating-one-tornadotable">Example: calculating one tornadotable</a></li>
 </ul>
@@ -217,8 +207,7 @@ DESIGN_KW in ERT. Generation of a design matrix can be run with a script:</p>
 <p>where &lt;design_input.xlsx&gt; is the path to the input for generating the design matrix
 and &lt;output_matrix.xlsx&gt; is the path to the output design matrix.
 Study the examples for how to configure the input for the design matrix</p>
-<p>2. Post processing of onebyone sensitivities and plotting in TornadoPlot in
-webviz. This can be run from a python script using fmu.tools.sensitivities.
+<p>2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities.
 Study the examples to learn how to use it.</p>
 </div>
 <div class="section" id="examples-to-learn-from">
@@ -357,191 +346,6 @@ The excel workbook contains several sheets. The three sheets <strong>general_inp
 <img alt="_images/design_designinput_dependencies.png" src="_images/design_designinput_dependencies.png" />
 <img alt="_images/design_depend1.png" src="_images/design_depend1.png" />
 </div>
-</div>
-<div class="section" id="adding-sets-of-tornado-plots-to-webportal">
-<h2>Adding sets of tornado plots to webportal<a class="headerlink" href="#adding-sets-of-tornado-plots-to-webportal" title="Permalink to this headline">¶</a></h2>
-<p>This example shows how sets of tornado plots from a single
-sensitivitiy run can be added to a webportal using yaml configuration
-files and the ‘add_webviz_tornadoplot’.</p>
-<p>Snorreberg one-by-one sensitivities run with design matrix is further
-explained on FMU wiki portal.</p>
-<div class="section" id="yaml-file-for-tornado-from-rms-volumes">
-<h3>Yaml file for tornado from rms volumes<a class="headerlink" href="#yaml-file-for-tornado-from-rms-volumes" title="Permalink to this headline">¶</a></h3>
-<p>In this example the volume result files have been exported to csv
-using geogrid_volume.ipl and results from different realisation have
-been aggregated to one file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Design input .xlsx or .csv format</span>
-<span class="nt">design</span><span class="p">:</span>
-  <span class="nt">designpath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">../tests/data/sensitivities/distributions</span>
-  <span class="nt">designname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">design.xlsx</span>
-  <span class="c1"># Only necessary for xlsx files with several sheets</span>
-  <span class="nt">designsheet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DesignSheet01</span>
-
-<span class="c1"># Result input, should be on csv format and Realization column named &#39;REAL&#39;</span>
-<span class="nt">results</span><span class="p">:</span>
-  <span class="nt">resultpath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/scratch/fmu/tral/snorreberg_design_20190222/share/results/volumes</span>
-  <span class="nt">resultname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ensemble_geovolume.csv</span>
-
-<span class="c1"># Which tornado plots to calculate</span>
-<span class="nt">calculations</span><span class="p">:</span>
-  <span class="nt">responses</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BULK_OIL</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">STOIIP_OIL</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BULK_GAS</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GIIP_GAS</span>
-  <span class="c1"># Should be list of lists, each item a string</span>
-  <span class="nt">selections</span><span class="p">:</span>
-    <span class="nt">ZONE</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Nansen&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;Larsson&#39;</span><span class="p p-Indicator">]</span>  <span class="c1"># Nansen and Larsson volumes are summed</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Eiriksson2.13&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Eiriksson2.12&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;all&#39;</span><span class="p p-Indicator">]</span> <span class="c1"># will sum all zones</span>
-    <span class="nt">REGION</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;oil_zone_Nansen_Larsson&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;gas_zone_P1&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;all&#39;</span><span class="p p-Indicator">]</span>
-  <span class="nt">menuprefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GEO</span> <span class="c1"># Prefix displayed in submenu in webviz</span>
- 
-<span class="c1"># Tornado plot options</span>
-<span class="nt">tornadooptions</span><span class="p">:</span>
-  <span class="c1"># Choose reference sensitivity or a single realisation number as reference</span>
-  <span class="nt">reference</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">rms_seed</span>
-  <span class="c1"># Choose absolute or percentage (relative to reference average)</span>
-  <span class="nt">scale</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">percentage</span>
-  <span class="c1"># Choose Yes if sensitivities smaller than reference sensitivity should be excluded from plot</span>
-  <span class="nt">cutbyref</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">No</span>
-  
-</pre></div>
-</div>
-</div>
-<div class="section" id="yaml-file-for-aggregating-rms-volume-files-to-one-before-tornado-calculations">
-<h3>Yaml file for aggregating rms volume files to one before tornado calculations<a class="headerlink" href="#yaml-file-for-aggregating-rms-volume-files-to-one-before-tornado-calculations" title="Permalink to this headline">¶</a></h3>
-<p>In this example the volume result files have been exported to csv
-using geogrid_volume.ipl, but the result files from different
-realisations must be aggregated to one file before tornado
-calculations are done.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Design input .xlsx or .csv format</span>
-<span class="nt">design</span><span class="p">:</span>
-  <span class="nt">designpath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">../tests/data/sensitivities/distributions</span>
-  <span class="nt">designname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">design.xlsx</span>
-  <span class="c1"># Only necessary for xlsx files with several sheets</span>
-  <span class="nt">designsheet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DesignSheet01</span>
-
-<span class="c1"># Result input, example when result .csv files for must be gathered first</span>
-<span class="nt">results</span><span class="p">:</span>
-  <span class="nt">gatherresults</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Yes</span> <span class="c1"># If yes, specify ensemblepaths and csv filename</span>
-  <span class="nt">ensemblepaths</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/scratch/fmu/tral/snorreberg_design_20190222/realization-*/iter-0</span>
-  <span class="nt">singleresultfile</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">share/results/volumes/geogrid_volume.csv</span>
-  <span class="nt">writeresultfile</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Yes</span> <span class="c1"># If yes, specify exportdir and exportfilename (.csv)</span>
-  <span class="nt">exportdir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/scratch/fmu/tral/snorreberg_design_20190222/share/results/volumes</span>
-  <span class="nt">exportfilename</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ensemble_geovolume.csv</span>
-
-<span class="c1"># Which tornado plots to calculate</span>
-<span class="nt">calculations</span><span class="p">:</span>
-  <span class="nt">responses</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BULK_OIL</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">STOIIP_OIL</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">BULK_GAS</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">GIIP_GAS</span>
-  <span class="c1"># Should be list of lists, each item a string</span>
-  <span class="nt">selections</span><span class="p">:</span>
-    <span class="nt">ZONE</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Nansen&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;Larsson&#39;</span><span class="p p-Indicator">]</span>  <span class="c1"># Nansen and Larsson volumes are summed</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Eiriksson2.13&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;Eiriksson2.12&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;all&#39;</span><span class="p p-Indicator">]</span> <span class="c1"># will sum all zones</span>
-    <span class="nt">REGION</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;oil_zone_Nansen_Larsson&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;gas_zone_P1&#39;</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">-</span> <span class="p p-Indicator">[</span><span class="s">&#39;all&#39;</span><span class="p p-Indicator">]</span>
-  <span class="nt">menuprefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GEO</span> <span class="c1"># Prefix displayed in submenu in webviz</span>
- 
-<span class="c1"># Tornado plot options</span>
-<span class="nt">tornadooptions</span><span class="p">:</span>
-  <span class="c1"># Choose reference sensitivity or a single realisation number as reference</span>
-  <span class="nt">reference</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">rms_seed</span>
-  <span class="c1"># Choose absolute or percentage (relative to reference average)</span>
-  <span class="nt">scale</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">percentage</span>
-  <span class="c1"># Choose Yes if sensitivities smaller than reference senitivity should be excluded from plot</span>
-  <span class="nt">cutbyref</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">No</span>
-  
-</pre></div>
-</div>
-</div>
-<div class="section" id="yaml-file-for-tornado-plots-from-eclipse-volumes">
-<h3>Yaml file for tornado plots from eclipse volumes<a class="headerlink" href="#yaml-file-for-tornado-plots-from-eclipse-volumes" title="Permalink to this headline">¶</a></h3>
-<p>In this example the result file has already been created using
-CSV_EXPORT1, so there is no need to collect results from different
-realisations. We want to create tornado plots for FOPT (field oil
-production total) and FGPT (field gas production total) at end of
-history (Date = 2013-07-11).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Design input .xlsx or .csv format</span>
-<span class="nt">design</span><span class="p">:</span>
-  <span class="nt">designpath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">../tests/data/sensitivities/distributions</span>
-  <span class="nt">designname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">design.csv</span>
-
-<span class="c1"># Result input, should be on csv format and Realization column named &#39;REAL&#39;</span>
-<span class="nt">results</span><span class="p">:</span>
-  <span class="nt">resultpath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/scratch/fmu/tral/snorreberg_design_20190222/share/results/eclipse_hist</span>
-  <span class="nt">resultname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">snorreberg_design_20190222_hist.csv</span>
-  <span class="c1"># If renaming of columns is necessary , e.g from CSV_EXPORT1</span>
-  <span class="nt">renamecolumns</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Yes</span>
-  <span class="nt">renaming</span><span class="p">:</span> <span class="c1"># From name : To name</span>
-    <span class="nt">Realization</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">REAL</span>
-    <span class="nt">Iteration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ITER</span>
-
-<span class="c1"># Which tornado plots to calculate</span>
-<span class="nt">calculations</span><span class="p">:</span>
-  <span class="nt">responses</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FOPT</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">FGPT</span>
-  <span class="c1"># Should be list of lists, each item a string</span>
-  <span class="nt">selections</span><span class="p">:</span>
-    <span class="nt">Date</span><span class="p">:</span> <span class="p p-Indicator">[[</span><span class="s">&#39;2013-07-11&#39;</span><span class="p p-Indicator">]]</span>
-  <span class="nt">menuprefix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ECL</span>
-  
-<span class="c1"># Tornado plot options</span>
-<span class="nt">tornadooptions</span><span class="p">:</span>
-  <span class="c1"># Choose reference sensitivity or a single realisation number as reference</span>
-  <span class="nt">reference</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">rms_seed</span>
-  <span class="c1"># Choose absolute or percentage (relative to reference average)</span>
-  <span class="nt">scale</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">absolute</span>
-  <span class="c1"># Choose Yes if sensitivities smaller than reference sensitivity should be excluded from plot</span>
-  <span class="nt">cutbyref</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Yes</span>
-  
-</pre></div>
-</div>
-</div>
-<div class="section" id="python-example-using-yaml-input">
-<h3>Python example using yaml input<a class="headerlink" href="#python-example-using-yaml-input" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">add_webviz_tornadoplots</span>
-<span class="kn">from</span> <span class="nn">webviz</span> <span class="kn">import</span> <span class="n">Webviz</span>
-
-<span class="n">html_foldername</span> <span class="o">=</span> <span class="s1">&#39;./webviz_example&#39;</span>
-<span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Snorreberg&#39;</span>
-
-<span class="n">web</span> <span class="o">=</span> <span class="n">Webviz</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">theme</span><span class="o">=</span><span class="s1">&#39;equinor&#39;</span><span class="p">)</span>
-<span class="n">configpath</span> <span class="o">=</span> <span class="s1">&#39;../input/config/&#39;</span>
-
-<span class="c1"># add different types of plots to webviz project in SubMenus</span>
-<span class="n">add_webviz_tornadoplots</span><span class="p">(</span><span class="n">web</span><span class="p">,</span> <span class="n">configpath</span> <span class="o">+</span>
-                        <span class="s1">&#39;config_example_geovolume.yaml&#39;</span><span class="p">)</span>
-<span class="n">add_webviz_tornadoplots</span><span class="p">(</span><span class="n">web</span><span class="p">,</span> <span class="n">configpath</span> <span class="o">+</span>
-                        <span class="s1">&#39;config_example_eclipse.yaml&#39;</span><span class="p">)</span>
-
-<span class="c1"># Finally, write html</span>
-<span class="n">web</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="n">html_foldername</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="use-parts-in-your-own-set-up">
-<h2>Use parts in your own set up<a class="headerlink" href="#use-parts-in-your-own-set-up" title="Permalink to this headline">¶</a></h2>
-<p>If you want another design and setup than provided with
-‘add_webviz_tornadoplot’ you can use the functionallity in
-fmu.tools.sensitivity and make your own script.</p>
 <div class="section" id="example-summary-of-design-matrix">
 <h3>Example: summary of design matrix<a class="headerlink" href="#example-summary-of-design-matrix" title="Permalink to this headline">¶</a></h3>
 <p>Use summarize_design on a design matrix on standard fmu format for
@@ -597,9 +401,8 @@ the seed sensitivity P10/P90.</p>
     <span class="n">selection</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
 
 <span class="c1"># Other options: specify cutbyseed = True and sortsens = False (see documentation).</span>
-<span class="c1"># tornadotable is a pandas DataFrame for visualisation of TornadoPlot in webviz</span>
+<span class="c1"># tornadotable is a pandas DataFrame for visualisation of tornadoplots in other tools.</span>
 <span class="c1"># ref_value is the average of the reference,</span>
-<span class="c1"># which can be useful to include in label/title in webviz</span>
 </pre></div>
 </div>
 </div>
