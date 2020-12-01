@@ -35,7 +35,6 @@ jobs:
       - name: Install requirements
         run: |
           pip install pip -U
-          pip install git+https://github.com/equinor/libecl
           pip install .[docs,tests]
 
       - name: List all installed packages
