@@ -6,13 +6,11 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-from collections import OrderedDict
 
 import pandas as pd
 
 from fmu.tools.sensitivities import (
     calc_tornadoinput,
-    find_combinations,
     summarize_design,
 )
 
@@ -49,38 +47,8 @@ def test_designsummary():
     assert designcsv["endreal1"].sum() == 333
 
 
-def test_combine_selectors():
-
-    """Test finding all combinations of values in ordered dictionary"""
-
-    # Short test on combination of two lists
-    shortdict = OrderedDict()
-    shortdict["key1"] = [1, 2, 3]
-    shortdict["key2"] = ["a", "b", "c"]
-    shortcomb = find_combinations(shortdict)
-    assert len(shortcomb) == 9
-
-    # Test on combinations of lists of lists, typical tornado usage
-    selections = OrderedDict()
-    selections["ITER"] = [["iter-0"]]
-    selections["ZONE"] = [
-        ["Nansen", "Larsson"],
-        ["Eiriksson2.13"],
-        ["Eiriksson2.12"],
-        ["all"],
-    ]
-
-    selections["REGION"] = [["oil_zone_Nansen_Larsson"], ["gas_zone_P1"], ["all"]]
-
-    comb = find_combinations(selections)
-
-    # Check correct number of combinations 1*4*3 and result of (1,1,1)
-    assert len(comb) == 12
-    assert comb[0] == [["iter-0"], ["Nansen", "Larsson"], ["oil_zone_Nansen_Larsson"]]
-
-
 def test_calc_tornadoinput():
-    """Test calculating values for webviz TornadoPlot"""
+    """Test calculating values for tornadoplot input"""
 
     if "__file__" in globals():
         # Easen up copying test code into interactive sessions
