@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module for calculating values to be plotted in a webviz
-   TornadoPlot for one response and one design set up
+"""Module for calculating values for a tornadoplot
 """
 import pandas as pd
 
@@ -78,7 +77,7 @@ def calc_tornadoinput(
     sortsens=True,
 ):
     """
-     Calculates input values for a webviz TornadoPlot for one response
+     Calculates input values for a tornadoplot for one response
      and one design set up
 
     Args:
@@ -105,8 +104,8 @@ def calc_tornadoinput(
     Returns:
         tuple:
 
-            * (pd.DataFrame): tornadoinput for DataFrame in for
-                                  webviz.TornadoPlot class
+            * (pd.DataFrame): tornadoinput for DataFrame for
+                                  a tornado plot
             * (int): Average response value for realizations in
                      reference sensitivity.
 
@@ -287,7 +286,7 @@ def calc_tornadoinput(
     if sortsens:
         tornadoinput = sort_by_max(tornadoinput)
 
-    # Return results that can be used for plotted in e.g. webviz
+    # Return results that can be used for plotting
     tornadoinput = tornadoinput.drop(["sensno"], axis=1).set_index("sensname")
 
     return (tornadoinput, ref_avg)
