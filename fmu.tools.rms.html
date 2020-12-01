@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 0.1.dev1+g89edfee documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 0.1.dev1+g0b5a289 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.1.dev1+g89edfee
+                0.1.dev1+g0b5a289
               </div>
             
           
@@ -223,6 +223,27 @@ using pandas.Series.apply()</p></li>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.volumetrics.guess_phase">
+<code class="sig-prename descclassname">fmu.tools.rms.volumetrics.</code><code class="sig-name descname">guess_phase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#guess_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.guess_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a text-file, guess which phase the text file
+concerns, oil, gas or the “total” phase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – Multiline</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>“OIL”, “GAS” or “TOTAL”</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError if guessing fails.</strong> – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

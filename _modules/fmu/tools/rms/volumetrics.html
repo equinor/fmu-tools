@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 0.1.dev1+g89edfee documentation</title>
+  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 0.1.dev1+g0b5a289 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.dev1+g89edfee
+                0.1.dev1+g0b5a289
               </div>
             
           
@@ -166,11 +166,11 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
@@ -182,6 +182,7 @@
     <span class="n">regionrenamer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">zonerenamer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
+    <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="sd">&quot;&quot;&quot;Parse the volumetrics txt file from RMS as Pandas dataframe</span>
 
 <span class="sd">    Columns will be renamed according to FMU standard,</span>
@@ -212,8 +213,6 @@
 <span class="sd">            return s.replace(&#39;Equilibrium_region_&#39;, &#39;&#39;)</span>
 
 <span class="sd">    or the same using a lambda expression.</span>
-
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># First find out which row the data starts at:</span>
     <span class="n">headerline</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 0 is the first line</span>
@@ -232,14 +231,7 @@
         <span class="n">vol_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">phase</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;oil&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">phase</span> <span class="o">=</span> <span class="s2">&quot;OIL&quot;</span>
-        <span class="k">elif</span> <span class="s2">&quot;gas&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">phase</span> <span class="o">=</span> <span class="s2">&quot;GAS&quot;</span>
-        <span class="k">elif</span> <span class="s2">&quot;total&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-            <span class="n">phase</span> <span class="o">=</span> <span class="s2">&quot;TOTAL&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must supply phase for volumetrics-parsing&quot;</span><span class="p">)</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">guess_phase</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span>
 
     <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">,</span>
@@ -277,10 +269,32 @@
     <span class="n">vol_df</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="o">~</span><span class="n">totalsrows</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">outfile</span><span class="p">:</span>
-        <span class="n">Path</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exists_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">vol_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">vol_df</span></div>
+
+
+<div class="viewcode-block" id="guess_phase"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.guess_phase">[docs]</a><span class="k">def</span> <span class="nf">guess_phase</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;From a text-file, guess which phase the text file</span>
+<span class="sd">    concerns, oil, gas or the &quot;total&quot; phase.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text (str): Multiline</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: &quot;OIL&quot;, &quot;GAS&quot; or &quot;TOTAL&quot;</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError if guessing fails.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;oil&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;OIL&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;gas&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;GAS&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;total&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;TOTAL&quot;</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not able to guess phase&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="get_parser"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">[docs]</a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">():</span>
@@ -316,6 +330,8 @@
     <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 
@@ -323,9 +339,7 @@
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
         <span class="c1"># Ignore pipe errors when writing to stdout.</span>
-        <span class="kn">from</span> <span class="nn">signal</span> <span class="kn">import</span> <span class="n">signal</span><span class="p">,</span> <span class="n">SIGPIPE</span><span class="p">,</span> <span class="n">SIG_DFL</span>
-
-        <span class="n">signal</span><span class="p">(</span><span class="n">SIGPIPE</span><span class="p">,</span> <span class="n">SIG_DFL</span><span class="p">)</span>
+        <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGPIPE</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_DFL</span><span class="p">)</span>
         <span class="n">vol_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
