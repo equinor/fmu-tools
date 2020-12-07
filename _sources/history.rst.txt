@@ -1,4 +1,4 @@
 HISTORY
 =======
 
-.. include:: ../HISTORY.md
+.. include:: ../HISTORY.rst
