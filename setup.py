@@ -41,13 +41,12 @@ SETUP_REQUIREMENTS = [
 ]
 
 TEST_REQUIREMENTS = [
-    "black==20.8b0; python_version >= '3'",
+    "black==20.8b0",
     "flake8",
     "pytest",
 ]
 
 DOCS_REQUIREMENTS = [
-    "recommonmark",
     "rstcheck",
     "sphinx",
     "sphinx-argparse",
@@ -62,10 +61,10 @@ CONSOLE_SCRIPTS = [
 ]
 
 
-with open("README.md") as readme_file:
+with open("README.rst") as readme_file:
     README = readme_file.read()
 
-with open("HISTORY.md") as history_file:
+with open("HISTORY.rst") as history_file:
     HISTORY = history_file.read()
 
 
@@ -165,10 +164,6 @@ setup(
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Natural Language :: English",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
