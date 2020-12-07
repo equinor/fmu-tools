@@ -1,4 +1,4 @@
 The script library *fmu.tools*
 ==============================
 
-.. include:: ../README.md
+.. include:: ../README.rst
