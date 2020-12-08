@@ -1,5 +1,5 @@
 The qcreset module
-=====================
+==================
 
 The ``qcreset`` module provides methods (functions) to reset the selected data
 before starting a forward modelling workflow.
@@ -15,8 +15,8 @@ Design philosophy
   a modelling process
 
 
-set_data_empty
---------------
+1. set_data_empty
+-----------------
 
 
 This method set all data described as input as empty. The data are not deleted
@@ -24,8 +24,8 @@ so that the geometry of the data (surfaces or 3D grid properties) should be
 preserved and no workflow component (job or other) should be reset.
 
 
-Signature
-~~~~~~~~~
+1.1. Signature
+~~~~~~~~~~~~~~
 
 The input of this method is a Python dictionary with defined keys. The key
 "project" is required while "horizons", "zones" and "grid_models" are optional
@@ -37,34 +37,44 @@ project
 horizons
   A Python dictionary where each key corresponds to the name of the horizons
   category where horizon data need to be made empty. The value associated to
-  this key should be a list of horizon names to modify. If an empty list is
-  assigned, all available horizon names for this category will be used.
+  this key should be a list of horizon names to modify. If a string ``all`` is
+  assigned instead of a list, all available horizon names for this category
+  will be used.
+  Alternatively, if a list of horizons categories is given instead of a
+  dictionary, the method will apply to all horizons within these horizons
+  categories.
 
 zones
   A Python dictionary where each key corresponds to the name of the zones
   category where zone data need to be made empty. The value associated to
-  this key should be a list of zone names to modify. If an empty list is
-  assigned, all available zone names for this category will be used.
+  this key should be a list of zone names to modify. If a string ``all`` is
+  assigned instead of a list, all available zone names for this category will
+  be used.
+  Alternatively, if a list of zones categories is given instead of a dictionary,
+  the method will apply to all zones within these zones categories.
 
 grid_models
   A Python dictionary where each key corresponds to the name of the grid models
   where properties need to be made empty. The value associated to this key
-  should be a list of property names to modify. If an empty list is assigned,
-  all available zone names for this category will be used.
+  should be a list of property names to modify. If a string ``all`` is
+  assigned instead of a list, all available properties for this grid model name
+  will be used.
+  Alternatively, if a list of grid models names is given instead of a
+  dictionary, the method will apply to all properties within these grid models.
 
 
 
-Known issues
-~~~~~~~~~~~~
+1.2. Known issues
+~~~~~~~~~~~~~~~~~
 
 * None for now
 
 
-Examples to run from RMS
-~~~~~~~~~~~~~~~~~~~~~~~~
+1.3. Examples to run from RMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Example 1
-^^^^^^^^^
+1.3.1. Example 1
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -81,14 +91,13 @@ Example 1
                 "horizon_name_3",
                 "horizon_name_4"
             ],
-            "horizon_category_3": []
+            "horizon_category_3": "all"
         },
-        "zones": {
-            "zone_category_1": []
+        "zones": ["zone_category_1"]
         },
         "grid_models": {
             "Geogrid": ["property_1", "property_2"],
-            "Simgrid": []
+            "Simgrid": "all"
         }
     }
 
@@ -96,7 +105,7 @@ Example 1
         qcreset.set_data_empty(SETUP)
 
 
-set_data_constant
+2. set_data_constant
 --------------------
 
 
@@ -107,8 +116,8 @@ component (job or other) is reset.
 This method is more conservative than the ``set_data_empty`` method.
 
 
-Signature
-~~~~~~~~~
+2.1. Signature
+~~~~~~~~~~~~~~
 
 The input of this method is a Python dictionary with defined keys. The keys
 "project" and "value" are required while "horizons", "zones" and "grid_models"
@@ -125,35 +134,45 @@ value
 
 horizons
   A Python dictionary where each key corresponds to the name of the horizons
-  category where horizon data need to be modified. The value associated to
-  this key should be a list of horizon names to modify. If an empty list is
-  assigned, all available horizon names for this category will be used.
+  category where horizon data need to be made empty. The value associated to
+  this key should be a list of horizon names to modify. If a string ``all`` is
+  assigned instead of a list, all available horizon names for this category
+  will be used.
+  Alternatively, if a list of horizons categories is given instead of a
+  dictionary, the method will apply to all horizons within these horizons
+  categories.
 
 zones
   A Python dictionary where each key corresponds to the name of the zones
-  category where zone data need to be modified. The value associated to
-  this key should be a list of zone names to modify. If an empty list is
-  assigned, all available zone names for this category will be used.
+  category where zone data need to be made empty. The value associated to
+  this key should be a list of zone names to modify. If a string ``all`` is
+  assigned instead of a list, all available zone names for this category will
+  be used.
+  Alternatively, if a list of zones categories is given instead of a dictionary,
+  the method will apply to all zones within these zones categories.
 
 grid_models
   A Python dictionary where each key corresponds to the name of the grid models
-  where properties need to be modified. The value associated to this key should
-  be a list of property names to modify. If an empty list is assigned, all
-  available zone names for this category will be used.
+  where properties need to be made empty. The value associated to this key
+  should be a list of property names to modify. If a string ``all`` is
+  assigned instead of a list, all available properties for this grid model name
+  will be used.
+  Alternatively, if a list of grid models names is given instead of a
+  dictionary, the method will apply to all properties within these grid models.
 
 
 
-Known issues
-~~~~~~~~~~~~
+2.2. Known issues
+~~~~~~~~~~~~~~~~~
 
 * None for now
 
 
-Examples to run from RMS
-~~~~~~~~~~~~~~~~~~~~~~~~
+2.3. Examples to run from RMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Example 1
-^^^^^^^^^
+2.3.1. Example 1
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -170,14 +189,12 @@ Example 1
                 "horizon_name_3",
                 "horizon_name_4"
             ],
-            "horizon_category_3": []
+            "horizon_category_3": "all"
         },
-        "zones": {
-            "zone_category_1": []
-        },
+        "zones": ["zone_category_1"],
         "grid_models": {
             "Geogrid": ["property_1", "property_2"],
-            "Simgrid": []
+            "Simgrid": "all"
         },
         "value": 0.0
     }
@@ -186,8 +203,8 @@ Example 1
         qcreset.set_data_constant(SETUP)
 
 
-Example 2
-^^^^^^^^^
+2.3.2. Example 2
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -210,7 +227,7 @@ Example 2
         "grid_models": {
             "Geogrid": ["discrete_property_1", "discrete_property_2"]
         },
-        "value": 999.0
+        "value": 999
     }
 
     if __name__ == "__main__":
