@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """ Module for generating a set of TornadoPlots
 for webviz on webviz Pages. """
 

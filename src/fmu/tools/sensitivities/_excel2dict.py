@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module for reading excel file with input for generation of
 a design matrix and converting to an OrderedDict that can be
 read by fmu.tools.DesignMatrix.generate
@@ -8,7 +7,6 @@ import warnings
 import numpy as np
 import pandas as pd
 import yaml
-import six
 
 SEEDS_DEPRECATION_WARNING = """
 The keyword "seeds" in the "general_input" sheet is changed
@@ -380,7 +378,7 @@ def _read_defaultvalues(filename, sheetname):
     # Strip spaces before and after parameter names, if they are there
     # it is probably invisible user errors in Excel.
     default_df.index = [
-        paramname.strip() if isinstance(paramname, six.string_types) else paramname
+        paramname.strip() if isinstance(paramname, str) else paramname
         for paramname in default_df.index
     ]
     for row in default_df.itertuples():

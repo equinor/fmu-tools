@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-""" Module for summarizing design set up for
-one by one sensitivities """
-from __future__ import print_function, absolute_import
+""" Module for summarizing design set up for one by one sensitivities """
 import pandas as pd
 
 
