@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 0.1.dev1+g33af5ae documentation</title>
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 0.1.dev1+g8f9cdab documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.dev1+g33af5ae
+                0.1.dev1+g8f9cdab
               </div>
             
           
@@ -161,17 +161,15 @@
            <div itemprop="articleBody">
             
   <h1>Source code for fmu.tools.sensitivities.create_design</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Module for generating design matrices that can be run by DESIGN2PARAMS</span>
+<span></span><span class="sd">&quot;&quot;&quot;Module for generating design matrices that can be run by DESIGN2PARAMS</span>
 <span class="sd">and DESIGN_KW in FMU/ERT.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
+
 <span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">design_distributions</span> <span class="k">as</span> <span class="n">design_dist</span>
 
 
@@ -336,7 +334,8 @@
 <span class="sd">            defaultsheet (str): name of excel sheet containing default</span>
 <span class="sd">                values (optional, defaults to &#39;DefaultValues&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">basename</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
         <span class="k">if</span> <span class="n">extension</span> <span class="o">!=</span> <span class="s2">&quot;.xlsx&quot;</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;.xlsx&quot;</span>
             <span class="nb">print</span><span class="p">(</span>
@@ -386,7 +385,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;seeds is set to None in general_input&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">seeds</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seedvalues</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="o">+</span> <span class="mi">1000</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_reals</span><span class="p">)]</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">seeds</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">Path</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seedvalues</span> <span class="o">=</span> <span class="n">_seeds_from_extern</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">max_reals</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>

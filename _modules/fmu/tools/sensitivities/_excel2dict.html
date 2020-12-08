@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 0.1.dev1+g33af5ae documentation</title>
+  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 0.1.dev1+g8f9cdab documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.dev1+g33af5ae
+                0.1.dev1+g8f9cdab
               </div>
             
           
@@ -161,8 +161,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for fmu.tools.sensitivities._excel2dict</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Module for reading excel file with input for generation of</span>
+<span></span><span class="sd">&quot;&quot;&quot;Module for reading excel file with input for generation of</span>
 <span class="sd">a design matrix and converting to an OrderedDict that can be</span>
 <span class="sd">read by fmu.tools.DesignMatrix.generate</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -171,7 +170,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">import</span> <span class="nn">six</span>
 
 <span class="n">SEEDS_DEPRECATION_WARNING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">The keyword &quot;seeds&quot; in the &quot;general_input&quot; sheet is changed</span>
@@ -543,7 +541,7 @@
     <span class="c1"># Strip spaces before and after parameter names, if they are there</span>
     <span class="c1"># it is probably invisible user errors in Excel.</span>
     <span class="n">default_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">paramname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paramname</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span> <span class="k">else</span> <span class="n">paramname</span>
+        <span class="n">paramname</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">paramname</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">paramname</span>
         <span class="k">for</span> <span class="n">paramname</span> <span class="ow">in</span> <span class="n">default_df</span><span class="o">.</span><span class="n">index</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">default_df</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
