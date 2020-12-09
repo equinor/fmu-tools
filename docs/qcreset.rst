@@ -93,8 +93,7 @@ grid_models
             ],
             "horizon_category_3": "all"
         },
-        "zones": ["zone_category_1"]
-        },
+        "zones": ["zone_category_1"],
         "grid_models": {
             "Geogrid": ["property_1", "property_2"],
             "Simgrid": "all"
