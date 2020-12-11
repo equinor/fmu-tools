@@ -11,6 +11,7 @@ Contents:
    fmudesign
    qcforward
    qcproperties
+   create_rft_ertobs
    contributing
    authors
    history

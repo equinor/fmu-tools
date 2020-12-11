@@ -27,6 +27,11 @@ jobs:
       - name: Checkout commit locally
         uses: actions/checkout@v2
 
+      - name: Checkout tags
+        # This seems necessary for setuptools_scm to be able to infer
+        # the correct version.
+        run: git fetch --unshallow --tags
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:

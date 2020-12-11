@@ -10,13 +10,14 @@ import fnmatch
 from distutils.command.clean import clean as _clean
 from setuptools import setup, find_packages
 
+CMDCLASS = {}
 try:
     from sphinx.setup_command import BuildDoc
 
-    CMDCLASS = {"build_sphinx": BuildDoc}
+    CMDCLASS.update({"build_sphinx": BuildDoc})
 except ImportError:
     # sphinx not installed - do not provide build_sphinx cmd
-    CMDCLASS = {}
+    pass
 
 # ======================================================================================
 # Requirements and README
@@ -36,7 +37,7 @@ REQUIREMENTS = parse_requirements("requirements.txt")
 
 SETUP_REQUIREMENTS = [
     "pytest-runner",
-    "setuptools >=28",
+    "setuptools>=28",
     "setuptools_scm",
 ]
 
@@ -137,10 +138,6 @@ class CleanUp(_clean):
 
 
 CMDCLASS.update({"clean": CleanUp})
-
-# ======================================================================================
-# setup
-# ======================================================================================
 
 
 setup(

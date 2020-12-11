@@ -7,5 +7,4 @@ requires = [
          "sphinx",
          "sphinx-rtd-theme",
          "sphinxcontrib-apidoc",
-         "recommonmark",
          ]
