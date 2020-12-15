@@ -11,6 +11,7 @@ Contents:
    fmudesign
    qcforward
    qcproperties
+   qcreset
    contributing
    authors
    history
