@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """Script for generating a design matrix from config input"""
-
-from __future__ import division, print_function, absolute_import
 
 import argparse
 import sys
-import os.path
+from pathlib import Path
 
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
@@ -86,7 +83,7 @@ def main(args=None):
         print(sheetnames)
 
     if isinstance(args.config, str):
-        if not os.path.isfile(args.config):
+        if not Path(args.config).is_file():
             raise IOError("Input file {} does not exist".format(args.config))
         input_dict = excel2dict_design(args.config, sheetnames)
 
@@ -101,10 +98,7 @@ def main(args=None):
 
     design.generate(input_dict)
 
-    folder = os.path.dirname(args.destination)
-
-    if folder and not os.path.exists(folder):
-        os.makedirs(folder)
+    Path(args.destination).parent.mkdir(exist_ok=True, parents=True)
 
     design.to_xlsx(args.destination)
 

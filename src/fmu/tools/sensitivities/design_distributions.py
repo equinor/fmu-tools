@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
 """Module for random sampling of parameter values from
 distributions. For use in generation of design matrices
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 from math import exp
 import re
 import numpy
@@ -486,7 +482,7 @@ def sample_discrete(dist_params, numreals):
         numreals (int): number of realisations to draw
 
     Returns:
-        numpy.ndarray: values drawn from distribution
+        np.ndarray: values drawn from distribution
     """
     status = True
     outcomes = re.split(",", dist_params[0])
@@ -529,7 +525,7 @@ def read_correlations(corr_dict, corrsheet):
         corr_dict (OrderedDict): correlation info
 
     Returns:
-        pandas DataFrame with correlations, parameter names
+        pd.DataFrame: Dataframe with correlations, parameter names
             as column and index
     """
     correlations = None
@@ -565,7 +561,7 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     with a warning). The algorithm is according to Higham (2000)
 
     Args:
-        df_correlations (DataFrame): correlation coefficients where
+        df_correlations (pd.DataFrame): correlation coefficients where
             columns and index are both parameter names. All parameter
             names in keys muvalst also exist in index and vice versa.
 

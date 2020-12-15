@@ -12,9 +12,11 @@ Contents:
    qcforward
    qcproperties
    qcreset
+   create_rft_ertobs
    contributing
    authors
    history
+   modules
 
 Indices and tables
 ==================

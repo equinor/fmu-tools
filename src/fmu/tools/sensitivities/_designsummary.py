@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-""" Module for summarizing design set up for
-one by one sensitivities """
-from __future__ import print_function, absolute_import
+""" Module for summarizing design set up for one by one sensitivities """
 import pandas as pd
 
 
@@ -12,26 +9,23 @@ def summarize_design(filename, sheetname="DesignSheet01"):
 
     Args:
         filename (str): Path to excel or csv file containting designmatrix
-                        for one by one sensitivities on standard FMU format.
-        sheetname (str, optional): Name of sheet in excel workbook which
-                                   contains the designmatrix
-                                   (only for excel input). Defaults to
-                                   'DesignSheet01'.
+            for one by one sensitivities on standard FMU format.
+        sheetname (str): Name of sheet in excel workbook which
+            contains the designmatrix (only for excel input). Defaults to
+            'DesignSheet01'.
 
     Returns:
-        pandas.DataFrame: Summary of sensitivities,
+        pd.DataFrame: Summary of sensitivities,
         corresponding realisation numbers,
         senstype('mc' or 'scalar')
         and senscase (name of high and low cases).
-
         Each row represents one sensitivity
         with 1-2 cases (low/high).
-
         Column names are ['sensno', 'sensname',
         'senstype', 'casename1', 'startreal1', 'endreal1',
         'casename2', 'startreal2', 'endreal2']
 
-    Example:
+    Example::
         >>> from fmu.tools.sensitivities import summarize_design
         >>> designname = 'design_filename.xlsx'
         >>> designsheet = 'DesignSheet01'

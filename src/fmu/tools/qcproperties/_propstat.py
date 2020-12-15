@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcdata.qcdata import QCData
+from fmu.tools.qcdata import QCData
 
 from fmu.tools.qcproperties._propstat_parameter_data import PropStatParameterData
 
@@ -164,6 +164,7 @@ class PropStat:
                 if self._dtype == "wells"
                 else self._xtgdata.bwells.wells
             )
+            self._validate_wells()
         else:
             self._wells = None
 
@@ -229,6 +230,27 @@ class PropStat:
         # replace codes values in dataframe with code names
         return self._codes_to_codenames(dframe)
 
+    def _validate_wells(self):
+        removed_wells = []
+        for xtg_well in self._wells:
+            # skip well if discrete parameters are missing
+            if not all(log in xtg_well.lognames for log in self.pdata.disc_params):
+                QCC.print_info(
+                    f"Skipping {xtg_well.name} some dicrete logs are missing"
+                )
+                removed_wells.append(xtg_well)
+                continue
+            for log in self.pdata.disc_params:
+                if log in xtg_well.lognames:
+                    if not xtg_well.isdiscrete(log):
+                        raise ValueError(
+                            "Selector and Filter logs needs to be discrete: "
+                            f"{log} is not!"
+                        )
+        self._wells = [
+            xtg_well for xtg_well in self._wells if xtg_well not in removed_wells
+        ]
+
     def _create_prop_df_from_wells(self):
         """
         Create a combined property dataframe for the input wells.
@@ -238,25 +260,11 @@ class PropStat:
         # Loop through XTGeo wells and combine into one dataframe
         dfs = []
         for xtg_well in self._wells:
-            # skip well if discrete parameters are missing
-            if not all(log in xtg_well.lognames for log in self.pdata.disc_params):
-                QCC.print_info(
-                    f"Skipping {xtg_well.name} some dicrete logs are missing"
-                )
-                self._wells.remove(xtg_well)
-                continue
-            # check that all selectors and filter logs are discrete in well
-            for log in self.pdata.disc_params:
-                if log in xtg_well.lognames:
-                    if not xtg_well.isdiscrete(log):
-                        raise ValueError(
-                            "Selector and Filter logs needs to be discrete: "
-                            f"{log} is not!"
-                        )
             # extract dataframe for well
             df_well = xtg_well.dataframe.copy()
             df_well["WELL"] = xtg_well.name
             dfs.append(df_well)
+
         dframe = pd.concat(dfs)
 
         # To avoid bias in statistics, drop duplicates to remove

@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-"""Module for calculating values to be plotted in a webviz
-   TornadoPlot for one response and one design set up
-"""
+"""Module for calculating values for a tornadoplot"""
+
 import pandas as pd
 
 
@@ -78,40 +76,39 @@ def calc_tornadoinput(
     sortsens=True,
 ):
     """
-     Calculates input values for a webviz TornadoPlot for one response
+     Calculates input values for a tornadoplot for one response
      and one design set up
 
     Args:
-        designsummary (pandas DataFrame): Summary of designmatrix as output
-                                          from summarize_design.
-        resultfile (pandas.DataFrame): DataFrame with collected results
-                                       for different realizations where
-                                       'REAL' is one of the columns.
-        response(str): name of response in resultfile to plot tornado for
-        selectors(list of strings): Selectors to choose/filter on
-        selections(list of lists): Values to filter on for each selector.
-        reference(str, optional): Specifying what the reference is for
-                                  the tornado plots. Defaults to 'rms_seed'.
-                                  Valid choices are a sensname or a
-                                  realisation number.
-        scale(str, optional): Whether to plot absolute numbers or percentage
-                              compared to reference mean.
-                              Defaults to 'percentage'.
-                              Valid choices are 'percentage' and 'absolute'.
-        cutbyref (bool, optional): If True sensitivities smaller than ref
-                                    are excluded. Defaults to False.
-        sortsens (bool, optional): If True sensitivities are sorted so that
-                                   largest comes first. Defaults to True.
+        designsummary (pd.DataFrame): Summary of designmatrix as output
+            from summarize_design.
+        resultfile (pd.DataFrame): DataFrame with collected results
+            for different realizations where
+            'REAL' is one of the columns.
+        response (str): name of response in resultfile to plot tornado for
+        selectors (list): List of strings. Selectors to choose/filter on
+        selections (list): List of lists. Values to filter on for each selector.
+        reference (str): Specifying what the reference is for
+            the tornado plots. Defaults to 'rms_seed'.
+            Valid choices are a sensname or a
+            realisation number.
+        scale (str): Whether to plot absolute numbers or percentage
+            compared to reference mean.  Defaults to 'percentage'.
+            Valid choices are 'percentage' and 'absolute'.
+        cutbyref (bool): If True sensitivities smaller than ref
+            are excluded. Defaults to False.
+        sortsens (bool): If True sensitivities are sorted so that
+            largest comes first. Defaults to True.
 
     Returns:
         tuple:
 
-            * (pandas.DataFrame): tornadoinput for DataFrame in for
-                                  webviz.TornadoPlot class
+            * (pd.DataFrame): tornadoinput for DataFrame for
+                                  a tornado plot
             * (int): Average response value for realizations in
                      reference sensitivity.
 
-    Example:
+    Example::
         >>> import pandas as pd
         >>> from fmu.tools.sensitivities import calc_tornadoplot
         >>> designtable = pd.read_csv('designsummary.csv')
@@ -288,7 +285,7 @@ def calc_tornadoinput(
     if sortsens:
         tornadoinput = sort_by_max(tornadoinput)
 
-    # Return results that can be used for plotted in e.g. webviz
+    # Return results that can be used for plotting
     tornadoinput = tornadoinput.drop(["sensno"], axis=1).set_index("sensname")
 
     return (tornadoinput, ref_avg)

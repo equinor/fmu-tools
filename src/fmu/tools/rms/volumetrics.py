@@ -1,15 +1,13 @@
-"""Module for handling volumetrics text files from RMS""
-from __future__ import print_function
-"""
+"""Module for handling volumetrics text files from RMS"""
 
-import os
 import sys
 import logging
 import argparse
+import signal
+from pathlib import Path
 
 import pandas as pd
 
-logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
@@ -21,20 +19,22 @@ def rmsvolumetrics_txt2df(
     regionrenamer=None,
     zonerenamer=None,
 ):
+    # pylint: disable=too-many-arguments
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
     Columns will be renamed according to FMU standard,
     https://wiki.equinor.com/wiki/index.php/FMU_standards
 
     Args:
-        txtfile (string): path to file emitted by RMS Volumetrics job
+        txtfile (str): path to file emitted by RMS Volumetrics job.
+            Can also be a Path object.
         columnrenamer (dict): dictionary for renaming column. Will be merged
             with a default renaming dictionary (anything specified here will
             override any defaults)
-        phase (string): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
+        phase (str): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
             what kind of data is in the file. Will be appended to column names,
             and is guessed from filename if not provided.
-        outfile (string): filename to write CSV data to.
+        outfile (str): filename to write CSV data to.
             If directory does not exist, it will be made.
         regionrenamer: a function that when applied on strings, return a
             new string. If used, will be applied to every region value,
@@ -50,16 +50,13 @@ def rmsvolumetrics_txt2df(
             return s.replace('Equilibrium_region_', '')
 
     or the same using a lambda expression.
-
-
     """
     # First find out which row the data starts at:
     headerline = 0  # 0 is the first line
-    with open(txtfile) as volfile:
-        for line in volfile:
-            if "Zone" in line or "Region" in line or "Facies" in line:
-                break
-            headerline = headerline + 1
+    for line in Path(txtfile).read_text().splitlines():
+        if "Zone" in line or "Region" in line or "Facies" in line:
+            break
+        headerline = headerline + 1
     vol_df = pd.read_csv(txtfile, sep=r"\s\s+", skiprows=headerline, engine="python")
 
     # Enforce FMU standard:
@@ -71,14 +68,7 @@ def rmsvolumetrics_txt2df(
         vol_df.drop("Real", axis=1, inplace=True)
 
     if not phase:
-        if "oil" in txtfile.lower():
-            phase = "OIL"
-        elif "gas" in txtfile.lower():
-            phase = "GAS"
-        elif "total" in txtfile.lower():
-            phase = "TOTAL"
-        else:
-            raise ValueError("You must supply phase for volumetrics-parsing")
+        phase = guess_phase(txtfile)
 
     columns = {
         "Zone": "ZONE",
@@ -116,11 +106,32 @@ def rmsvolumetrics_txt2df(
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
 
     if outfile:
-        if os.path.dirname(outfile) and not os.path.exists(os.path.dirname(outfile)):
-            os.makedirs(os.path.dirname(outfile))
+        Path(outfile).parent.mkdir(exist_ok=True, parents=True)
         vol_df.to_csv(outfile, index=False)
 
     return vol_df
+
+
+def guess_phase(text):
+    """From a text-file, guess which phase the text file
+    concerns, oil, gas or the "total" phase.
+
+    Args:
+        text (str): Multiline
+
+    Returns:
+        str: "OIL", "GAS" or "TOTAL"
+
+    Raises:
+        ValueError if guessing fails.
+    """
+    if "oil" in str(text).lower():
+        return "OIL"
+    if "gas" in str(text).lower():
+        return "GAS"
+    if "total" in str(text).lower():
+        return "TOTAL"
+    raise ValueError("Not able to guess phase")
 
 
 def get_parser():
@@ -156,6 +167,8 @@ def rmsvolumetrics2csv_main():
     parser = get_parser()
     args = parser.parse_args()
 
+    logging.basicConfig()
+
     if args.verbose:
         logger.setLevel(logging.INFO)
 
@@ -163,14 +176,9 @@ def rmsvolumetrics2csv_main():
 
     if args.output == "-":
         # Ignore pipe errors when writing to stdout.
-        from signal import signal, SIGPIPE, SIG_DFL
-
-        signal(SIGPIPE, SIG_DFL)
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
         vol_df.to_csv(sys.stdout, index=False)
     else:
-        if os.path.dirname(args.output) and not os.path.exists(
-            os.path.dirname(args.output)
-        ):
-            os.makedirs(os.path.dirname(args.output))
+        Path(args.output).parent.mkdir(exist_ok=True, parents=True)
         vol_df.to_csv(args.output, index=False)
         print("Wrote to " + args.output)

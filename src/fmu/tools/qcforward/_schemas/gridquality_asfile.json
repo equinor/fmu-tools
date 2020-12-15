@@ -1,0 +1,38 @@
+{
+    "title": "gridquality_asfile",
+    "description": "Input configuration for check gridquality method (file mode)",
+    "required": [
+        "grid",
+        "actions"
+    ],
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "verbosity": {
+            "description": "Log detail level",
+            "type": [
+                "string",
+                "null"
+            ],
+            "examples": [
+                "info",
+                "debug"
+            ]
+        },
+        "path": {
+            "description": "Path prefix (usually not needed)",
+            "type": "string",
+            "examples": [
+                "/path/to/some/folder"
+            ]
+        },
+        "grid": {
+            "description": "Name of grid",
+            "type": "string",
+            "examples": [
+                "Simgrid",
+                "Geogrid"
+            ]
+        }
+    }
+}

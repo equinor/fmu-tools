@@ -12,6 +12,10 @@ on:
     types:
       - published
 
+  schedule:
+    # Run CI every night and check that tests are working with latest dependencies
+    - cron:  '0 0 * * *'
+
 jobs:
   fmu-tools:
     runs-on: ubuntu-latest
@@ -23,6 +27,11 @@ jobs:
       - name: Checkout commit locally
         uses: actions/checkout@v2
 
+      - name: Checkout tags
+        # This seems necessary for setuptools_scm to be able to infer
+        # the correct version.
+        run: git fetch --unshallow --tags
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
@@ -31,9 +40,7 @@ jobs:
       - name: Install requirements
         run: |
           pip install pip -U
-          pip install git+https://github.com/equinor/libecl
-          pip install git+https://github.com/equinor/fmu-ensemble
-          pip install .[tests]
+          pip install .[docs,tests]
 
       - name: List all installed packages
         run: pip freeze
@@ -51,3 +58,34 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
           pytest ./tests
+          # Check that repository is untainted by test code:
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+
+      - name: Syntax check on documentation
+        run: rstcheck -r docs
+
+      - name: Build documentation
+        run: |
+          sphinx-apidoc -f -H "API for fmu.tools" -o docs src
+          python setup.py build_sphinx
+
+      - name: Update GitHub pages
+        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/master' && matrix.python-version == '3.6'
+        run: |
+            cp -R ./build/sphinx/html ../html
+            git config --local user.email "fmu-tools-github-action"
+            git config --local user.name "fmu-tools-github-action"
+            git fetch origin gh-pages
+            git checkout --track origin/gh-pages
+            git clean -f -f -d -x  # Double -f is intentional.
+            git rm -r *
+            cp -R ../html/* .
+            touch .nojekyll  # If not, github pages ignores _* directories.
+            git add .
+            if git diff-index --quiet HEAD; then
+              echo "No changes in documentation. Skip documentation deploy."
+            else
+              git commit -m "Update Github Pages"
+              git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+            fi
