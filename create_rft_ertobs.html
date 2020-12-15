@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>create_rft_ertobs &mdash; fmu-tools 1.2.1.dev21+gd4b0d5b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="The qcproperties class" href="qcproperties.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
+          
+
+          
+            
+            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.1.dev21+gd4b0d5b
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">create_rft_ertobs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>create_rft_ertobs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/create_rft_ertobs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="create-rft-ertobs">
+<h1>create_rft_ertobs<a class="headerlink" href="#create-rft-ertobs" title="Permalink to this headline">¶</a></h1>
+<p>This scripts creates <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.obs</span></code> and a “welldatefile” to be used for
+<code class="docutils literal notranslate"><span class="pre">GEN_DATA</span></code> usage in assisted history match for matching of RFT pressure values
+in wells.</p>
+<p>The script must be run from within RMS to be able to interpolate from MD to
+(x,y,z) (or the other way) along wellpaths.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Typical input is a CSV file:</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Example CSV input</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>DATE</p></th>
+<th class="head"><p>ERROR</p></th>
+<th class="head"><p>MD</p></th>
+<th class="head"><p>PRESSURE</p></th>
+<th class="head"><p>WELL_NAME</p></th>
+<th class="head"><p>ZONE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2018-03-01</p></td>
+<td><p>3</p></td>
+<td><p>1697.9</p></td>
+<td><p>299.23</p></td>
+<td><p>RFT_55_33-A-2</p></td>
+<td><p>Valysar</p></td>
+</tr>
+<tr class="row-odd"><td><p>2018-07-03</p></td>
+<td><p>3</p></td>
+<td><p>1673.4</p></td>
+<td><p>298.52</p></td>
+<td><p>RFT_55_33-A-3</p></td>
+<td><p>Therys</p></td>
+</tr>
+<tr class="row-even"><td><p>2018-07-03</p></td>
+<td><p>3</p></td>
+<td><p>1690.7</p></td>
+<td><p>280.43</p></td>
+<td><p>RFT_55_33-A-3</p></td>
+<td><p>Volon</p></td>
+</tr>
+<tr class="row-odd"><td><p>2018-09-12</p></td>
+<td><p>3</p></td>
+<td><p>2578.7</p></td>
+<td><p>288.60</p></td>
+<td><p>RFT_55_33-A-4</p></td>
+<td><p>Valysar</p></td>
+</tr>
+<tr class="row-even"><td><p>2018-09-12</p></td>
+<td><p>3</p></td>
+<td><p>3197.5</p></td>
+<td><p>282.13</p></td>
+<td><p>RFT_55_33-A-4</p></td>
+<td><p>Volon</p></td>
+</tr>
+<tr class="row-odd"><td><p>2018-04-28</p></td>
+<td><p>3</p></td>
+<td><p>1737.8</p></td>
+<td><p>278.70</p></td>
+<td><p>RFT_55_33-A-5</p></td>
+<td><p>Valysar</p></td>
+</tr>
+<tr class="row-even"><td><p>2018-04-28</p></td>
+<td><p>3</p></td>
+<td><p>1769.1</p></td>
+<td><p>286.55</p></td>
+<td><p>RFT_55_33-A-5</p></td>
+<td><p>Volon</p></td>
+</tr>
+<tr class="row-odd"><td><p>2018-11-07</p></td>
+<td><p>3</p></td>
+<td><p>1759.9</p></td>
+<td><p>280.85</p></td>
+<td><p>RFT_55_33-A-6</p></td>
+<td><p>Therys</p></td>
+</tr>
+<tr class="row-even"><td><p>2018-11-07</p></td>
+<td><p>3</p></td>
+<td><p>1777.4</p></td>
+<td><p>286.41</p></td>
+<td><p>RFT_55_33-A-6</p></td>
+<td><p>Volon</p></td>
+</tr>
+</tbody>
+</table>
+<p>For each row, corresponding to a specific RFT observation value, either (x,y,z)
+(in the columns EAST, NORTH and TVD), or the measured depth MD must be specified,
+(and the missing value(s) will be interpolated from the well trajectory).</p>
+<p>The RKB of measured depth (MD) must be the same as for the well in the RMS
+project.</p>
+<p>If ZONE is specified, the provided zone value is compared with the zone name
+valid for the relevant cell in the RMS model. If they do not match, a warning is
+emitted.</p>
+<p>If a well has observations as multiple dates, the REPORT_STEP column in the
+welldatefile will be enumerated from 1 and upwards. The obs-files produced
+will always include the REPORT_STEP in the filename.</p>
+<p>Additional options are specified through a RMS dictionary, and
+<code class="docutils literal notranslate"><span class="pre">create_rft_ertobs</span></code> can be called from a RMS Python job with a script like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools.rms</span> <span class="kn">import</span> <span class="n">create_rft_ertobs</span>
+
+<span class="c1"># Paths are relative to rms/model</span>
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;input_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../input/well_modelling/rft_observations.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;alias_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../../config/rms_eclipse_alias.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;export_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;../../ert/input/observations/rft&quot;</span><span class="p">,</span>  <span class="c1"># Must exist</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span>  <span class="c1"># The Python object representing your RMS project</span>
+<span class="p">}</span>
+
+<span class="n">create_rft_ertobs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The example provides a typical minimum. Available options to set are</p>
+<dl class="simple">
+<dt>input_file</dt><dd><p>CSV file with input data, one row for each RFT observations. The DATE column
+must be in ISO-8601 format (YYYY-MM-DD). Required columns are “DATE”, “MD”,
+“WELL_NAME” and “VALUE”</p>
+</dd>
+<dt>alias_file</dt><dd><p>A CSV file with RMS well names in one column and Eclipse names in a different
+column. The column names for RMS and Eclipse has defaults, that can be changed
+through options. First line in this file is used as a header with column
+names.</p>
+</dd>
+<dt>rft_prefix</dt><dd><p>If specified, this is added as a prefix to all well names. If aliases are
+in use, the prefix will be prepended after alias conversion. Default is
+no prefix</p>
+</dd>
+<dt>export_dir</dt><dd><p>A directory for where to dump the resulting txt, obs and well_date file. The
+directory must exist upfront.</p>
+</dd>
+<dt>welldatefile</dt><dd><p>A filename that will be written to (do not include the path, it is written
+to the directory specified in <code class="docutils literal notranslate"><span class="pre">exportdir</span></code>) that will contain a</p>
+</dd>
+<dt>interpolation</dt><dd><p>Interpolation setting, choose between <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">cubic</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">cubic</span></code>. This affects how points along the wellpath are interpolated.</p>
+</dd>
+<dt>absolute_error</dt><dd><p>Floating point value for absolute error to use on those observations where
+“ERROR” is not specified in the CSV file.</p>
+</dd>
+<dt>relative_error</dt><dd><p>Relative error to be used for those observations where “ERROR” is not
+specified in the CSV file. The error is calculated as this relative
+error times the VALUE column in the CSV.</p>
+</dd>
+<dt>input_dframe</dt><dd><p>Alternative to using <code class="docutils literal notranslate"><span class="pre">input_file</span></code>, you may provide a Pandas dataframe with
+the same columns, directly without going via CSV on disk.</p>
+</dd>
+<dt>rms_name</dt><dd><p>The column name in the CSV alias_file with RMS names. Defaults to the first
+column.</p>
+</dd>
+<dt>ecl_name</dt><dd><p>The column name in the CSV alias_file with Eclipse names. Defaults to the
+second column</p>
+</dd>
+<dt>zonename</dt><dd><p>Name of zone parameter in RMS grid (necessary for verifying if RFT
+observations are in the correct zone in the grid)</p>
+</dd>
+<dt>gridname</dt><dd><p>Name of the RMS gridmodel to be requested for mapping (x,y,z) to gridcells
+and into zone queries.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://fmu-docs.equinor.com/docs/ert/reference/forward_models.html#GENDATA_RFT">GENDATA_RFT forward model in ERT</a></p></li>
+<li><p><a class="reference external" href="https://fmu-docs.equinor.com/docs/ert/reference/configuration/keywords.html#gen-data">GENDATA keyword in ERT</a></p></li>
+<li><p><a class="reference external" href="https://fmu-docs.equinor.com/docs/subscript/scripts/merge_rft_ertobs.html">merge_rft_ertobs in subscript</a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qcproperties.html" class="btn btn-neutral float-left" title="The qcproperties class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Equinor
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

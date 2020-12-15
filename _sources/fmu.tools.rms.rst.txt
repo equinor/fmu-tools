@@ -4,6 +4,14 @@ fmu.tools.rms package
 Submodules
 ----------
 
+fmu.tools.rms.create\_rft\_ertobs module
+----------------------------------------
+
+.. automodule:: fmu.tools.rms.create_rft_ertobs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.volumetrics module
 --------------------------------
 

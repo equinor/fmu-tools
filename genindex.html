@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; fmu-tools 0.1.dev1+g8f9cdab documentation</title>
+  <title>Index &mdash; fmu-tools 1.2.1.dev21+gd4b0d5b documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.1.dev1+g8f9cdab
+                1.2.1.dev21+gd4b0d5b
               </div>
             
           
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
@@ -247,6 +248,8 @@
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues">casevalues (fmu.tools.sensitivities.create_design.ScenarioSensitivityCase attribute)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">check_and_parse_config() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">check_gridquality() (fmu.tools.qcforward.GridQuality method)</a>
 </li>
   </ul></td>
@@ -295,10 +298,12 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.excel2dict_design">excel2dict_design() (in module fmu.tools.sensitivities)</a>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">ertobs_df_to_files() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.excel2dict_design">excel2dict_design() (in module fmu.tools.sensitivities)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity">ExternSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
   </ul></td>
@@ -307,6 +312,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">fill_missing_md_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
       <li>
     fmu
 
@@ -356,6 +363,13 @@
 
       <ul>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmu.tools.rms.create_rft_ertobs
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">module</a>
 </li>
       </ul></li>
       <li>
@@ -419,14 +433,16 @@
       </ul></li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">get_parser() (in module fmu.tools.rms.volumetrics)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords">get_well_coords() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.grid">grid() (fmu.tools.qcdata.QCData property)</a>
 
       <ul>
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.grid">(fmu.tools.qcdata.qcdata.QCData property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.grid_quality">grid_quality() (in module fmu.tools.qcforward)</a>
 
       <ul>
@@ -459,8 +475,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.inputdict_to_yaml">inputdict_to_yaml() (in module fmu.tools.sensitivities)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">interp_from_md() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.is_number">is_number() (in module fmu.tools.sensitivities.design_distributions)</a>
 </li>
   </ul></td>
@@ -469,8 +489,12 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main">main() (in module fmu.tools.sensitivities.fmudesignrunner)</a>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">main() (in module fmu.tools.rms.create_rft_ertobs)</a>
+
+      <ul>
+        <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main">(in module fmu.tools.sensitivities.fmudesignrunner)</a>
 </li>
+      </ul></li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.make_covariance_matrix">make_covariance_matrix() (in module fmu.tools.sensitivities.design_distributions)</a>
 </li>
       <li>
@@ -490,6 +514,8 @@
         <li><a href="fmu.tools.qcforward.html#module-fmu.tools.qcforward.qcforward">fmu.tools.qcforward.qcforward</a>
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms">fmu.tools.rms</a>
+</li>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">fmu.tools.rms.create_rft_ertobs</a>
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.volumetrics">fmu.tools.rms.volumetrics</a>
 </li>
@@ -649,6 +675,8 @@
 </li>
       </ul></li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference">SingleRealisationReference (class in fmu.tools.sensitivities.create_design)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">strictly_downward() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.summarize_design">summarize_design() (in module fmu.tools.sensitivities)</a>
 </li>

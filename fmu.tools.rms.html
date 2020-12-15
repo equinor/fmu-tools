@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 0.1.dev1+g8f9cdab documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.2.1.dev21+gd4b0d5b documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.1.dev1+g8f9cdab
+                1.2.1.dev21+gd4b0d5b
               </div>
             
           
@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
@@ -184,6 +185,203 @@
 <h1>fmu.tools.rms package<a class="headerlink" href="#fmu-tools-rms-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fmu.tools.rms.create_rft_ertobs">
+<span id="fmu-tools-rms-create-rft-ertobs-module"></span><h2>fmu.tools.rms.create_rft_ertobs module<a class="headerlink" href="#module-fmu.tools.rms.create_rft_ertobs" title="Permalink to this headline">¶</a></h2>
+<p>create_rft_ertobs creates txt, obs and welldatefile for usage together
+with GENDATA in ERT assisted history match runs.</p>
+<p>This script should be run from within RMS to be able to interpolate
+along well trajectories:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools.rms</span> <span class="kn">import</span> <span class="n">create_rft_ertobs</span>
+
+<span class="n">SETUP</span> <span class="o">=</span> <span class="p">{</span><span class="o">...</span><span class="n">yourconfiguration</span><span class="o">...</span><span class="p">}</span>  <span class="c1"># A Python dictionary</span>
+
+<span class="n">create_rft_ertobs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">SETUP</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Required keys in the SETUP dictionary:</p>
+<ul class="simple">
+<li><p>input_file or input_dframe: Path to CSV file with columns: WELL_NAME, …(ADDHERE)</p></li>
+</ul>
+<p>Optional keys:</p>
+<ul class="simple">
+<li><p>rft_prefix: Eclipse well names will be prefixed with this string</p></li>
+<li><p>gridname: Name of grid in RMS project (for verification)</p></li>
+<li><p>zonename: Name of zone parameter in RMS grid (if zone names should be
+verified)</p></li>
+<li><p>welldatefile: Name of welldatefile, written to exportdir.
+Defaults to “well_date_rft.txt”</p></li>
+</ul>
+<p>Result:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">txt</span></code> files written to ert/input/observations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obs</span></code> files for each well written to ert/input/observations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">well_date_rft.txt</span></code></p></li>
+</ul>
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.check_and_parse_config">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">check_and_parse_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#check_and_parse_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.check_and_parse_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks config, and returns a validated and defaults-filled config
+dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.get_well_coords">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">get_well_coords</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project</span></em>, <em class="sig-param"><span class="n">wellname</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">trajectory_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'Drilled trajectory'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#get_well_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.get_well_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts  well coordinates as a (wellpoints, 3) numpy array
+from a ROXAPI RMS project reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> – Roxapi project reference.</p></li>
+<li><p><strong>wellname</strong> (<em>str</em>) – Name of well as it exists in the RMS project</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.strictly_downward">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">strictly_downward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coords</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#strictly_downward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.strictly_downward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a well trajectory has absolutely no horizontal sections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coords</strong> (<em>np.ndarray</em>) – n x 4 array of coordinates, only
+z values in 4th column is used.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if there are no horizontals.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.interp_from_md">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">interp_from_md</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">md_value</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">coords</span></em>, <em class="sig-param"><span class="n">interpolation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cubic'</span></em><span class="sig-paren">)</span> &#x2192; tuple<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_md"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_md" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to interpolate East, North, TVD values of a well point
+defined by its name (wname) and its corresponding MD point (md_value).</p>
+<p>The interpolation of the well trajectory will be linear if linear = True,
+using cubic spline otherwise.</p>
+<p>The coords input array should consist of rows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">md</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(x, y, z) along the wellpath at requested measured depth value.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.interp_from_xyz">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">interp_from_xyz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xyz</span><span class="p">:</span> <span class="n">tuple</span></em>, <em class="sig-param"><span class="n">coords</span></em>, <em class="sig-param"><span class="n">interpolation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cubic'</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_xyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate MD value of a well point defined by its name (wellname)
+and its corresponding East, North, TVD values (xyz tuple)</p>
+<p>The coords input array should consist of rows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">md</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+</pre></div>
+</div>
+<p>The interpolation of the TVD well trajectory will be used
+(with linear algorithm if linear = True, using cubic spline otherwise)
+if the well is strictly going downward (TVD series stricly increasing).</p>
+<p>If the well is horizontal or in a hook shape, a projection of the point
+on the well trajectory will be used, using cubic spline interpolation
+of the well trajectory points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coords</strong> (<em>np.narray</em>) – </p></li>
+<li><p><strong>xyz</strong> (<em>tuple</em>) – x, y and z for the coordinate where MD is requested.</p></li>
+<li><p><strong>interpolation</strong> (<em>str</em>) – Use either “cubic” (default) or “linear”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Measured depth value at (x,y,z)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">ertobs_df_to_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dframe</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">exportdir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'.'</span></em>, <em class="sig-param"><span class="n">welldatefile</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'well_date_rft.txt'</span></em>, <em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'rft_ertobs.csv'</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#ertobs_df_to_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports data from a dataframe into ERT observations files.
+The input here is essentially the input dataframe, but where all “holes” in
+MD or XYZ have been filled.</p>
+<p>If ZONE is included, it will be added to the output.</p>
+<p>Gendata will read well_date_rft.txt and then each of the obs and txt files.</p>
+<p>Syntax of the output of the .txt files are determined by semeio:
+<a class="reference external" href="https://github.com/equinor/semeio/blob/master/semeio/jobs/rft/utility.py#L21">https://github.com/equinor/semeio/blob/master/semeio/jobs/rft/utility.py#L21</a></p>
+<p>semeio.jobs.rft.trajectory.load_from_file() will parse the <code class="docutils literal notranslate"><span class="pre">.txt</span></code> files.
+<a class="reference external" href="https://github.com/equinor/semeio/blob/master/semeio/jobs/rft/trajectory.py#L273">https://github.com/equinor/semeio/blob/master/semeio/jobs/rft/trajectory.py#L273</a></p>
+<p>This function produces such files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">WELL_NAME</span><span class="o">&gt;.</span><span class="n">txt</span>  <span class="c1"># (for all wells)</span>
+<span class="o">&lt;</span><span class="n">WELL_NAME</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">REPORT_STEP</span><span class="o">&gt;.</span><span class="n">obs</span>
+<span class="n">well_date_rft</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>&lt;wellname&gt;.txt is a hardcoded filename pattern in GENDATA_RFT (semeio)
+well_date_rft.txt is supplied as configuration to GENDATA_RFT (semeio)</p>
+<p>The obs-files must match the GENERAL_OBSERVATION arguments in the
+sERT config.</p>
+<p>In the welldatefile, a choice is made by this function on how to
+enumerate the REPORTSTEPS parameter, which is to be given to GENDATA in ERT config.
+Here it will be constructed on the enumeration of DATE for each given well,
+meaning the number will be 1 for the first date for each well, and 2 on the
+second DATE pr. well etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dframe</strong> (<em>pd.DataFrame</em>) – Contains data for RFT observations, one
+observations pr. row</p></li>
+<li><p><strong>exportdir</strong> (<em>str</em>) – Path to directory where export is to happen. Must
+exists.</p></li>
+<li><p><strong>welldatefile</strong> (<em>str</em>) – Filename to write the “index” of observations to.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename for raw CSV data, for future use in GENDATA_RFT</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">fill_missing_md_xyz</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dframe</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">coords_pr_well</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">interpolation</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'cubic'</span></em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#fill_missing_md_xyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill missing MD or XYZ values in incoming dataframe, interpolating
+in given well trajectories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dframe</strong> (<em>pd.DataFrame</em>) – Must contain WELL_NAME, EAST, NORTH, MD, TVD</p></li>
+<li><p><strong>coords_pr_well</strong> (<em>dict</em>) – One key for each WELL_NAME, pointing to a n by 3
+numpy matrix with well coordinates (as outputted by roxapi)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None (modifies incoming dataframe inplace)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.create_rft_ertobs.main">
+<code class="sig-prename descclassname">fmu.tools.rms.create_rft_ertobs.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">dict</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main function to be called from a RMS client python script.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – configuration as a dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-fmu.tools.rms.volumetrics">
 <span id="fmu-tools-rms-volumetrics-module"></span><h2>fmu.tools.rms.volumetrics module<a class="headerlink" href="#module-fmu.tools.rms.volumetrics" title="Permalink to this headline">¶</a></h2>
