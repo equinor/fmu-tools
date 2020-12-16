@@ -1,0 +1,29 @@
+{
+  "project name": "project0.1.1",
+  "date": "2018.02.12 12:40:31",
+  "grid model name": "Geogrid",
+  "units": {
+    "input unit (xy)": "metre",
+    "input unit (z)": "metre",
+    "output unit, reservoir": "cubic metre",
+    "output unit, surface oil": "std. cubic metre"
+  },
+  "table": {
+    "columns": [ "Zone", "Region index", "Bulk", "Pore", "Hcpv", "Stoiip" ],
+    "data": [
+       [ "UpperReek", 1, 314373050.52, 44062309.65, 14921030.01, 9384295.44 ],
+       [ "UpperReek", 2, 0, 0, 0, 0 ], 
+       [ "UpperReek", "Totals", 314373050.52, 44062309.65, 14921030.01, 9384295.44 ],
+       [ "MidReek", 1, 235166432.05, 38189049.48, 19719066.92, 12401928.67 ],
+       [ "MidReek", 2, 0, 0, 0, 0 ],
+       [ "MidReek", "Totals", 235166432.05, 38189049.48, 19719066.92, 12401928.67 ],
+       [ "LowerReek", 1, 115634780.68, 21664707.08, 13919330.35, 8754295.67 ],
+       [ "LowerReek", 2, 0, 0, 0, 0 ],
+       [ "LowerReek", "Totals", 115634780.68, 21664707.08, 13919330.35, 8754295.67 ],
+       [ "Totals", 1, 665174263.26, 103916066.2, 48559427.28, 30540519.79 ],
+       [ "Totals", 2, 0, 0, 0, 0 ],
+       [ "Totals", "Totals", 665174263.26, 103916066.2, 48559427.28, 30540519.79 ]
+    ]
+  }
+}
+
