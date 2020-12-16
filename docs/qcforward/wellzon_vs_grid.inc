@@ -119,6 +119,9 @@ Example when ran inside RMS
     GRIDNAME = "SIMGRID"
     ZONEGRIDNAME = "Zone"
     DRANGE = [2100, 3200]
+    ZLOGRANGE = [1,3]
+    ZLOGSHIFT = -1
+    REPORTPATH = "/tmp/well_vs_grid.csv"
 
     ACT = [
       {"warn": "any < 90", "stop": "any < 70"},
@@ -131,16 +134,16 @@ Example when ran inside RMS
 
         usedata = {
             "wells": {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ},
-            "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": -1},
+            "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": ZLOGSHIFT},
             "grid": GRIDNAME,
             "depthrange": DRANGE,
             "gridprops": [ZONEGRIDNAME],
             "actions": ACT,
-            "report": "../output/qc/well_vs_grid.csv",
+            "report": REPORTPATH,
             "nametag": "ZONELOG",
         }
 
-        qcf.run(usedata, project=project)
+        QCJOB.run(usedata, project=project)
 
     if  __name__ == "__main__":
         check()
