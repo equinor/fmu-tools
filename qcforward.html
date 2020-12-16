@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The qcforward functions &mdash; fmu-tools 1.2.1.dev22+ge87e046 documentation</title>
+  <title>The qcforward functions &mdash; fmu-tools 1.2.1.dev23+gdb5faad documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev22+ge87e046
+                1.2.1.dev23+gdb5faad
               </div>
             
           
@@ -327,6 +327,9 @@ one may encounter different results if another tool is applied.</p></li>
 <span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
 <span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span>
 <span class="n">DRANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2100</span><span class="p">,</span> <span class="mi">3200</span><span class="p">]</span>
+<span class="n">ZLOGRANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">ZLOGSHIFT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">REPORTPATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/well_vs_grid.csv&quot;</span>
 
 <span class="n">ACT</span> <span class="o">=</span> <span class="p">[</span>
   <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 90&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 70&quot;</span><span class="p">},</span>
@@ -339,16 +342,16 @@ one may encounter different results if another tool is applied.</p></li>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span> <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
-        <span class="s2">&quot;zonelog&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="n">ZLOGRANGE</span><span class="p">,</span> <span class="s2">&quot;shift&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+        <span class="s2">&quot;zonelog&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="n">ZLOGRANGE</span><span class="p">,</span> <span class="s2">&quot;shift&quot;</span><span class="p">:</span> <span class="n">ZLOGSHIFT</span><span class="p">},</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
         <span class="s2">&quot;depthrange&quot;</span><span class="p">:</span> <span class="n">DRANGE</span><span class="p">,</span>
         <span class="s2">&quot;gridprops&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
         <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACT</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH</span><span class="p">,</span>
         <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONELOG&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">qcf</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+    <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
