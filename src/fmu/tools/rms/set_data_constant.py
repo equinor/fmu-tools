@@ -1,4 +1,3 @@
-
 def set_data_constant(config: dict):
     """
     This method is a utility in order to set surface and 3D grid property data
@@ -61,7 +60,6 @@ def set_data_constant(config: dict):
     assert "value" in config.keys(), "Input dict must contain key 'value'!"
     value = config["value"]
 
-
     def set_safe_value(project, surf_type, name, data_type, value):
         """
         Method to set the horizon or zone surface to the defined value.
@@ -77,55 +75,65 @@ def set_data_constant(config: dict):
             grid2D.set_values(grid2D.get_values() * 0.0 + value)
             surf.set_grid(grid2D)
             success = True
-            print(" >> >> "+name)
+            print(" >> >> " + name)
         except Exception as e:
-            print(" >> >> "+name+" cannot be modified")
+            print(" >> >> " + name + " cannot be modified")
             print(e)
         return success
 
-
     # HORIZON DATA
     if "horizons" in config.keys():
-        print("Set horizons values to "+str(value)+"...")
+        print("Set horizons values to " + str(value) + "...")
         if isinstance(config["horizons"], list):
             # work directly at horizon category level
             for data_type in config["horizons"]:
-                print(" >> "+data_type)
+                print(" >> " + data_type)
                 for horizon in project.horizons:
-                    set_safe_value(project, "horizon", horizon.name, data_type,
-                                   value)
+                    set_safe_value(
+                        project, "horizon", horizon.name, data_type, value
+                    )
 
         elif isinstance(config["horizons"], dict):
             # check setup for each horizon category (list vs. all)
             hor_cat = config["horizons"].keys()
             for data_type in hor_cat:
-                print(" >> "+data_type)
+                print(" >> " + data_type)
                 horizons = config["horizons"][data_type]
                 if isinstance(horizons, str):
                     if horizons == "all":
                         for horizon in project.horizons:
-                            set_safe_value(project, "horizon", horizon.name,
-                                           data_type, value)
+                            set_safe_value(
+                                project,
+                                "horizon",
+                                horizon.name,
+                                data_type,
+                                value,
+                            )
                     else:
-                        assert False, ("keyword '"+horizons+
-                                       "' not recognized, 'all' expected!")
+                        assert False, (
+                            "keyword '"
+                            + horizons
+                            + "' not recognized, 'all' expected!"
+                        )
                 elif isinstance(horizons, list):
                     for horizon in horizons:
-                        set_safe_value(project, "horizon", horizon, data_type,
-                                       value)
+                        set_safe_value(
+                            project, "horizon", horizon, data_type, value
+                        )
 
         else:
-            assert False, ("Value associated with key 'horizons' must be of "
-                           "type list or dict!")
-
+            assert False, (
+                "Value associated with key 'horizons' must be of "
+                "type list or dict!"
+            )
 
     # ZONE DATA
     if "zones" in config.keys():
-        print("Set zones values to "+str(value)+"...")
+        print("Set zones values to " + str(value) + "...")
         if isinstance(config["zones"], list):
             # work directly at zone category level
             for data_type in config["zones"]:
-                print(" >> "+data_type)
+                print(" >> " + data_type)
                 for zone in project.zones:
                     set_safe_value(project, "zone", zone.name, data_type, value)
 
@@ -133,45 +141,50 @@ def set_data_constant(config: dict):
             # check setup for each zone category (list vs. all)
             hor_cat = config["zones"].keys()
             for data_type in hor_cat:
-                print(" >> "+data_type)
+                print(" >> " + data_type)
                 zones = config["zones"][data_type]
                 if isinstance(zones, str):
                     if zones == "all":
                         for zone in project.zones:
-                            set_safe_value(project, "zone", zone.name,
-                                           data_type, value)
+                            set_safe_value(
+                                project, "zone", zone.name, data_type, value
+                            )
                     else:
-                        assert False, ("keyword '"+zones+
-                                       "' not recognized, 'all' expected!")
+                        assert False, (
+                            "keyword '"
+                            + zones
+                            + "' not recognized, 'all' expected!"
+                        )
                 elif isinstance(zones, list):
                     for zone in zones:
                         set_safe_value(project, "zone", zone, data_type, value)
 
         else:
-            assert False, ("Value associated with key 'zones' must be of "
-                           "type list or dict!")
-
+            assert False, (
+                "Value associated with key 'zones' must be of "
+                "type list or dict!"
+            )
 
     # GRID MODEL DATA
     if "grid_models" in config.keys():
-        print("Set 3D grid properties values to "+str(value)+"...")
+        print("Set 3D grid properties values to " + str(value) + "...")
         if isinstance(config["grid_models"], list):
             # work directly at grid models level
             for gridname in config["grid_models"]:
-                print(" >> "+gridname)
+                print(" >> " + gridname)
                 grid = project.grid_models[gridname]
                 for prop in grid.properties:
                     try:
                         prop.set_values(prop.get_values() * 0 + value)
-                        print(" >> >> "+prop.name)
+                        print(" >> >> " + prop.name)
                     except:
-                        print(" >> >> "+prop.name+" is already empty")
+                        print(" >> >> " + prop.name + " is already empty")
 
         elif isinstance(config["grid_models"], dict):
             # check setup for each grid models (list vs. all)
             gridnames = config["grid_models"].keys()
             for gridname in gridnames:
-                print(" >> "+gridname)
+                print(" >> " + gridname)
                 grid = project.grid_models[gridname]
                 propnames = config["grid_models"][gridname]
                 if isinstance(propnames, str):
@@ -179,24 +192,31 @@ def set_data_constant(config: dict):
                         for prop in grid.properties:
                             try:
                                 prop.set_values(prop.get_values() * 0 + value)
-                                print(" >> >> "+prop.name)
+                                print(" >> >> " + prop.name)
                             except:
-                                print(" >> >> "+prop.name+" is already empty")
+                                print(
+                                    " >> >> " + prop.name + " is already empty"
+                                )
                     else:
-                        assert False, ("keyword "+zones+
-                                       "not recognized, 'all' expected!")
+                        assert False, (
+                            "keyword "
+                            + zones
+                            + "not recognized, 'all' expected!"
+                        )
                 elif isinstance(propnames, list):
                     for propname in propnames:
                         try:
                             prop = grid.properties[propname]
                             prop.set_values(prop.get_values() * 0 + value)
-                            print(" >> >> "+prop.name)
+                            print(" >> >> " + prop.name)
                         except Exception as e:
-                            print(" >> >> "+prop.name+" is already empty")
+                            print(" >> >> " + prop.name + " is already empty")
                             print(e)
 
         else:
-            assert False, ("Value associated with key 'zones' must be of "
-                           "type list or dict!")
+            assert False, (
+                "Value associated with key 'zones' must be of "
+                "type list or dict!"
+            )
 
     print("End of function set_data_constant().")
