@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The qcreset module &mdash; fmu-tools 1.2.1.dev22+ge87e046 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="create_rft_ertobs" href="create_rft_ertobs.html" />
+    <link rel="prev" title="The qcproperties class" href="qcproperties.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
+          
+
+          
+            
+            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.1.dev22+ge87e046
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The qcreset module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#design-philosophy">Design philosophy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-data-empty">1. set_data_empty</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#signature">1.1. Signature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#known-issues">1.2. Known issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples-to-run-from-rms">1.3. Examples to run from RMS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-1">1.3.1. Example 1</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#set-data-constant">2. set_data_constant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2.1. Signature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">2.2. Known issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">2.3. Examples to run from RMS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">2.3.1. Example 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-2">2.3.2. Example 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>The qcreset module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/qcreset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-qcreset-module">
+<h1>The qcreset module<a class="headerlink" href="#the-qcreset-module" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">qcreset</span></code> module provides methods (functions) to reset the selected data
+before starting a forward modelling workflow.</p>
+<div class="section" id="design-philosophy">
+<h2>Design philosophy<a class="headerlink" href="#design-philosophy" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The client (user) scripts shall be small and simple and easy to use also
+for modellers with little Python experience.</p></li>
+<li><p>Input will be a python dictionary</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">qcreset</span></code> methods are meant to run inside RMS at the begining of
+a modelling process</p></li>
+</ul>
+</div>
+<div class="section" id="set-data-empty">
+<h2>1. set_data_empty<a class="headerlink" href="#set-data-empty" title="Permalink to this headline">¶</a></h2>
+<p>This method set all data described as input as empty. The data are not deleted
+so that the geometry of the data (surfaces or 3D grid properties) should be
+preserved and no workflow component (job or other) should be reset.</p>
+<div class="section" id="signature">
+<h3>1.1. Signature<a class="headerlink" href="#signature" title="Permalink to this headline">¶</a></h3>
+<p>The input of this method is a Python dictionary with defined keys. The key
+“project” is required while “horizons”, “zones” and “grid_models” are optional
+(at least one of them should be provided for the method to have any effect).</p>
+<dl class="simple">
+<dt>project</dt><dd><p>The roxar magic keyword <code class="docutils literal notranslate"><span class="pre">project</span></code> refering to the current RMS project.</p>
+</dd>
+<dt>horizons</dt><dd><p>A Python dictionary where each key corresponds to the name of the horizons
+category where horizon data need to be made empty. The value associated to
+this key should be a list of horizon names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available horizon names for this category
+will be used.
+Alternatively, if a list of horizons categories is given instead of a
+dictionary, the method will apply to all horizons within these horizons
+categories.</p>
+</dd>
+<dt>zones</dt><dd><p>A Python dictionary where each key corresponds to the name of the zones
+category where zone data need to be made empty. The value associated to
+this key should be a list of zone names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available zone names for this category will
+be used.
+Alternatively, if a list of zones categories is given instead of a dictionary,
+the method will apply to all zones within these zones categories.</p>
+</dd>
+<dt>grid_models</dt><dd><p>A Python dictionary where each key corresponds to the name of the grid models
+where properties need to be made empty. The value associated to this key
+should be a list of property names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available properties for this grid model name
+will be used.
+Alternatively, if a list of grid models names is given instead of a
+dictionary, the method will apply to all properties within these grid models.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="known-issues">
+<h3>1.2. Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>None for now</p></li>
+</ul>
+</div>
+<div class="section" id="examples-to-run-from-rms">
+<h3>1.3. Examples to run from RMS<a class="headerlink" href="#examples-to-run-from-rms" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="example-1">
+<h4>1.3.1. Example 1<a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcreset</span>
+<span class="kn">import</span> <span class="nn">roxar</span>
+
+<span class="n">SETUP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;horizons&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;horizon_category_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span> <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;horizon_category_2&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_4&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;horizon_category_3&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;zones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;zone_category_1&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;property_2&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;Simgrid&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_empty</span><span class="p">(</span><span class="n">SETUP</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="set-data-constant">
+<h2>2. set_data_constant<a class="headerlink" href="#set-data-constant" title="Permalink to this headline">¶</a></h2>
+<p>This method set all values of the data described as input to a constant.
+The data are therefore not made empty or deleted. This ensure that the geometry
+of the data (surfaces or 3D grid properties) is preserved and no workflow
+component (job or other) is reset.
+This method is more conservative than the <code class="docutils literal notranslate"><span class="pre">set_data_empty</span></code> method.</p>
+<div class="section" id="id1">
+<h3>2.1. Signature<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The input of this method is a Python dictionary with defined keys. The keys
+“project” and “value” are required while “horizons”, “zones” and “grid_models”
+are optional (at least one of them should be provided for the method to have
+any effect).</p>
+<dl class="simple">
+<dt>project</dt><dd><p>The roxar magic keyword <code class="docutils literal notranslate"><span class="pre">project</span></code> refering to the current RMS project.</p>
+</dd>
+<dt>value</dt><dd><p>The constant value to assign to the data. It could be 0 or -999 for example.
+If discrete properties from grid models are modified, the value should be
+applicable (integer).</p>
+</dd>
+<dt>horizons</dt><dd><p>A Python dictionary where each key corresponds to the name of the horizons
+category where horizon data need to be made empty. The value associated to
+this key should be a list of horizon names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available horizon names for this category
+will be used.
+Alternatively, if a list of horizons categories is given instead of a
+dictionary, the method will apply to all horizons within these horizons
+categories.</p>
+</dd>
+<dt>zones</dt><dd><p>A Python dictionary where each key corresponds to the name of the zones
+category where zone data need to be made empty. The value associated to
+this key should be a list of zone names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available zone names for this category will
+be used.
+Alternatively, if a list of zones categories is given instead of a dictionary,
+the method will apply to all zones within these zones categories.</p>
+</dd>
+<dt>grid_models</dt><dd><p>A Python dictionary where each key corresponds to the name of the grid models
+where properties need to be made empty. The value associated to this key
+should be a list of property names to modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is
+assigned instead of a list, all available properties for this grid model name
+will be used.
+Alternatively, if a list of grid models names is given instead of a
+dictionary, the method will apply to all properties within these grid models.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="id2">
+<h3>2.2. Known issues<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>None for now</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>2.3. Examples to run from RMS<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h4>2.3.1. Example 1<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcreset</span>
+<span class="kn">import</span> <span class="nn">roxar</span>
+
+<span class="n">SETUP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;horizons&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;horizon_category_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span> <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;horizon_category_2&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;horizon_name_4&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;horizon_category_3&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;zones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;zone_category_1&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;property_2&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;Simgrid&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-2">
+<h4>2.3.2. Example 2<a class="headerlink" href="#example-2" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcreset</span>
+<span class="kn">import</span> <span class="nn">roxar</span>
+
+<span class="c1"># We split the work into 2 different setups here in order to use different</span>
+<span class="c1"># values for different properties (continuous versus discrete)</span>
+
+<span class="n">SETUP1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;continuous_property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;continuous_property_2&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">5.0</span>
+<span class="p">}</span>
+
+<span class="n">SETUP2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;discrete_property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;discrete_property_2&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">999</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP1</span><span class="p">)</span>
+    <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="create_rft_ertobs.html" class="btn btn-neutral float-right" title="create_rft_ertobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qcproperties.html" class="btn btn-neutral float-left" title="The qcproperties class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Equinor
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
