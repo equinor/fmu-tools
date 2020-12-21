@@ -5,6 +5,7 @@ read by fmu.tools.DesignMatrix.generate
 from collections import OrderedDict
 import warnings
 import numpy as np
+import openpyxl
 import pandas as pd
 import yaml
 
@@ -35,8 +36,10 @@ def excel2dict_design(input_filename, sheetnames=None):
         gen_input_sheet = sheetnames["general_input"]
 
     generalinput = pd.read_excel(
-        input_filename, gen_input_sheet, header=None, index_col=0
+        input_filename, gen_input_sheet, header=None, index_col=0, engine="openpyxl"
     )
+    generalinput.dropna(axis=0, how="all", inplace=True)
+    generalinput.dropna(axis=1, how="all", inplace=True)
 
     if str(generalinput[1]["designtype"]) == "onebyone":
         returndict = _excel2dict_onebyone(input_filename, sheetnames)
@@ -64,8 +67,8 @@ def inputdict_to_yaml(inputdict, filename):
 def _find_geninput_sheetname(input_filename):
     """Finding general input sheet, allowing for name
     variations."""
-    xls = pd.ExcelFile(input_filename)
-    sheets = xls.sheet_names
+    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
+    sheets = xlsx.sheetnames
     general_input_sheet = []
     for sheet in sheets:
         if sheet in [
@@ -98,8 +101,8 @@ def _find_onebyone_defaults_sheet(input_filename):
     Returns:
         string, name of a sheet in the excel file
     """
-    xls = pd.ExcelFile(input_filename)
-    sheets = xls.sheet_names
+    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
+    sheets = xlsx.sheetnames
 
     default_values_sheet = []
 
@@ -133,8 +136,8 @@ def _find_onebyone_input_sheet(input_filename):
     Returns:
         string, name of a sheet in the excel file
     """
-    xls = pd.ExcelFile(input_filename)
-    sheets = xls.sheet_names
+    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
+    sheets = xlsx.sheetnames
 
     design_input_sheet = []
 
@@ -224,8 +227,10 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     # Read general input
     generalinput = pd.read_excel(
-        input_filename, gen_input_sheet, header=None, index_col=0
+        input_filename, gen_input_sheet, header=None, index_col=0, engine="openpyxl"
     )
+    generalinput.dropna(axis=0, how="all", inplace=True)
+    generalinput.dropna(axis=1, how="all", inplace=True)
 
     inputdict["designtype"] = generalinput[1]["designtype"]
 
@@ -278,7 +283,9 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     # Read input for sensitivities
     inputdict["sensitivities"] = OrderedDict()
-    designinput = pd.read_excel(input_filename, design_inp_sheet)
+    designinput = pd.read_excel(input_filename, design_inp_sheet, engine="openpyxl")
+    designinput.dropna(axis=0, how="all", inplace=True)
+    designinput = designinput.loc[:, ~designinput.columns.str.contains("^Unnamed")]
 
     # First column with parameter names should have spaces stripped,
     # but we need to preserve NaNs:
@@ -374,7 +381,12 @@ def _read_defaultvalues(filename, sheetname):
         OrderedDict with defaultvalues (parameter, value)
     """
     default_dict = OrderedDict()
-    default_df = pd.read_excel(filename, sheetname, header=0, index_col=0)
+    default_df = pd.read_excel(
+        filename, sheetname, header=0, index_col=0, engine="openpyxl"
+    )
+    default_df.dropna(axis=0, how="all", inplace=True)
+    default_df = default_df.loc[:, ~default_df.columns.str.contains("^Unnamed")]
+
     # Strip spaces before and after parameter names, if they are there
     # it is probably invisible user errors in Excel.
     default_df.index = [
@@ -407,7 +419,12 @@ def _read_dependencies(filename, sheetname, from_parameter):
         and values
     """
     depend_dict = OrderedDict()
-    depend_df = pd.read_excel(filename, sheetname, dtype=str)
+    depend_df = pd.read_excel(
+        filename, sheetname, dtype=str, na_values="", engine="openpyxl"
+    )
+    depend_df.dropna(axis=0, how="all", inplace=True)
+    depend_df = depend_df.loc[:, ~depend_df.columns.str.contains("^Unnamed")]
+
     if from_parameter in depend_df.keys():
         depend_dict["from_values"] = depend_df[from_parameter].tolist()
         depend_dict["to_params"] = OrderedDict()
@@ -435,7 +452,9 @@ def _read_background(inp_filename, bck_sheet):
     """
     backdict = OrderedDict()
     paramdict = OrderedDict()
-    bck_input = pd.read_excel(inp_filename, bck_sheet)
+    bck_input = pd.read_excel(inp_filename, bck_sheet, engine="openpyxl")
+    bck_input.dropna(axis=0, how="all", inplace=True)
+    bck_input = bck_input.loc[:, ~bck_input.columns.str.contains("^Unnamed")]
 
     backdict["correlations"] = None
     if "corr_sheet" in bck_input.keys():

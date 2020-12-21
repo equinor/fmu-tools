@@ -1,9 +1,5 @@
 """Testing excel2dict"""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import pytest
 
@@ -31,7 +27,7 @@ def test_excel2dict_design(tmpdir):
     tmpdir.chdir()
     defaultvalues = pd.DataFrame()
     # pylint: disable=abstract-class-instantiated
-    writer = pd.ExcelWriter("designinput.xlsx")
+    writer = pd.ExcelWriter("designinput.xlsx", engine="openpyxl")
     MOCK_GENERAL_INPUT.to_excel(
         writer, sheet_name="general_input", index=False, header=None
     )
@@ -60,7 +56,7 @@ def test_excel2dict_design(tmpdir):
     assert sens["rms_seed"]["senstype"] == "seed"  # upper-cased
 
     # Check that we can vary some strings
-    writer = pd.ExcelWriter("designinput2.xlsx")
+    writer = pd.ExcelWriter("designinput2.xlsx", engine="openpyxl")
     MOCK_GENERAL_INPUT.to_excel(
         writer, sheet_name="Generalinput", index=False, header=None
     )
@@ -91,7 +87,7 @@ def test_duplicate_sensname_exception(tmpdir):
     tmpdir.chdir()
     defaultvalues = pd.DataFrame()
 
-    writer = pd.ExcelWriter("designinput3.xlsx")
+    writer = pd.ExcelWriter("designinput3.xlsx", engine="openpyxl")
     MOCK_GENERAL_INPUT.to_excel(
         writer, sheet_name="general_input", index=False, header=None
     )
@@ -124,7 +120,7 @@ def test_strip_spaces(tmpdir):
         ]
     )
     tmpdir.chdir()
-    writer = pd.ExcelWriter("designinput_spaces.xlsx")
+    writer = pd.ExcelWriter("designinput_spaces.xlsx", engine="openpyxl")
     MOCK_GENERAL_INPUT.to_excel(
         writer, sheet_name="general_input", index=False, header=None
     )
@@ -155,7 +151,7 @@ def test_mixed_senstype_exception(tmpdir):
     tmpdir.chdir()
     defaultvalues = pd.DataFrame()
 
-    writer = pd.ExcelWriter("designinput4.xlsx")
+    writer = pd.ExcelWriter("designinput4.xlsx", engine="openpyxl")
     MOCK_GENERAL_INPUT.to_excel(
         writer, sheet_name="general_input", index=False, header=None
     )

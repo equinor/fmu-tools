@@ -62,10 +62,13 @@ def test_endpoint(tmpdir):
 
     # The xlsx file contains a relative path, relative to the input design sheet:
     dependency = (
-        pd.read_excel(os.path.join(testdatadir, designfile), header=None)
+        pd.read_excel(
+            os.path.join(testdatadir, designfile), header=None, engine="openpyxl"
+        )
         .set_index([0])[1]
         .to_dict()["background"]
     )
+
     tmpdir.chdir()
     # Copy over input files:
     shutil.copy(os.path.join(testdatadir, designfile), ".")
@@ -73,7 +76,7 @@ def test_endpoint(tmpdir):
     sys.argv = ["fmudesign", designfile]
     fmudesignrunner.main()
     assert os.path.exists("generateddesignmatrix.xlsx")  # Default output file
-    valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx"))
+    valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx", engine="openpyxl"))
 
     sys.argv = ["fmudesign", designfile, "anotheroutput.xlsx"]
     fmudesignrunner.main()

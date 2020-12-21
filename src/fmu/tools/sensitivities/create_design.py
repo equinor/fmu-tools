@@ -255,7 +255,7 @@ class DesignMatrix(object):
             filename (str): output filename (extension .xlsx)
             backgroundsheet (str): name of excel sheet
         """
-        xlsxwriter = pd.ExcelWriter(filename)
+        xlsxwriter = pd.ExcelWriter(filename, engine="openpyxl")
         self.backgroundvalues.to_excel(
             xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
         )
@@ -802,7 +802,9 @@ def _parameters_from_extern(filename):
         filename (str): path to file
     """
     if filename.endswith(".xlsx"):
-        parameters = pd.read_excel(filename)
+        parameters = pd.read_excel(filename, engine="openpyxl")
+        parameters.dropna(axis=0, how="all", inplace=True)
+        parameters = parameters.loc[:, ~parameters.columns.str.contains("^Unnamed")]
     elif filename.endswith(".csv"):
         parameters = pd.read_csv(filename)
     else:
@@ -823,7 +825,9 @@ def _seeds_from_extern(filename, max_reals):
         filename (str): path to file
     """
     if filename.endswith(".xlsx"):
-        df_seeds = pd.read_excel(filename, header=None)
+        df_seeds = pd.read_excel(filename, header=None, engine="openpyxl")
+        df_seeds.dropna(axis=0, how="all", inplace=True)
+        df_seeds.dropna(axis=1, how="all", inplace=True)
         seed_numbers = df_seeds[df_seeds.columns[0]].tolist()
     elif filename.endswith(".csv") or filename.endswith(".txt"):
         df_seeds = pd.read_csv(filename, header=None)
