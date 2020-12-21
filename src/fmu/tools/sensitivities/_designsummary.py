@@ -1,5 +1,6 @@
 """ Module for summarizing design set up for one by one sensitivities """
 import pandas as pd
+import openpyxl
 
 
 def summarize_design(filename, sheetname="DesignSheet01"):
@@ -53,15 +54,17 @@ def summarize_design(filename, sheetname="DesignSheet01"):
 
     # Read design matrix and find realisation numbers for each sensitivity
     if filename.endswith(".xlsx"):
-        dgn = pd.read_excel(filename, sheetname)
+        dgn = pd.read_excel(filename, sheetname,engine='openpyxl')
+        dgn.dropna(axis=0,how='all',inplace=True)
+        dgn=dgn.loc[:,~dgn.columns.str.contains('^Unnamed')]
     elif filename.endswith(".csv"):
         dgn = pd.read_csv(filename)
     else:
         raise ValueError(
-            "Design matrix filename should be on Excel or csv format"
-            " and end with .xlsx or .csv"
+            "Design matrix should be on Excel or csv format"
+            " and filename should end with .xlsx or .csv"
         )
-
+    print(dgn.loc[0]["SENSCASE"])
     sensname = dgn.loc[0]["SENSNAME"]
     casename1 = dgn.loc[0]["SENSCASE"]
     if casename1.lower() == "p10_p90":

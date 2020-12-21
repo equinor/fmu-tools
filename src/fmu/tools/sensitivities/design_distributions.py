@@ -532,7 +532,13 @@ def read_correlations(corr_dict, corrsheet):
     filename = corr_dict["inputfile"]
     if corrsheet in corr_dict["sheetnames"]:
         if filename.endswith(".xlsx"):
-            correlations = pd.read_excel(filename, corrsheet, index_col=0)
+            correlations = pd.read_excel(
+                filename, corrsheet, index_col=0, engine="openpyxl"
+            )
+            correlations.dropna(axis=0, how="all", inplace=True)
+            correlations = correlations.loc[
+                :, ~correlations.columns.str.contains("^Unnamed")
+            ]
         else:
             raise ValueError(
                 "Correlation matrix filename should be on "
