@@ -69,7 +69,6 @@ def summarize_design(filename, sheetname="DesignSheet01"):
             "Design matrix must be on Excel or csv format"
             " and filename must end with .xlsx or .csv"
         )
-
     sensname = dgn.loc[0]["SENSNAME"]
     casename1 = dgn.loc[0]["SENSCASE"]
     if casename1.lower() == "p10_p90":
