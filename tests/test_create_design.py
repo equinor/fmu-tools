@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
 """Testing code for generation of design matrices"""
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import os
 import pandas as pd
@@ -32,13 +27,15 @@ def test_generate_onebyone(tmpdir):
     tmpdir.chdir()
     design.to_xlsx("designmatrix.xlsx")
     assert os.path.exists("designmatrix.xlsx")
-    diskdesign = pd.read_excel("designmatrix.xlsx")
+    diskdesign = pd.read_excel("designmatrix.xlsx", engine="openpyxl")
     assert "REAL" in diskdesign
     assert "SENSNAME" in diskdesign
     assert "SENSCASE" in diskdesign
     assert not diskdesign.empty
 
-    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    diskdefaults = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DefaultValues", engine="openpyxl"
+    )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
 
@@ -69,13 +66,17 @@ def test_generate_full_mc(tmpdir):
     tmpdir.chdir()
     design.to_xlsx("designmatrix.xlsx")
     assert os.path.exists("designmatrix.xlsx")
-    diskdesign = pd.read_excel("designmatrix.xlsx", sheet_name="DesignSheet01")
+    diskdesign = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DesignSheet01", engine="openpyxl"
+    )
     assert "REAL" in diskdesign
     assert "SENSNAME" in diskdesign
     assert "SENSCASE" in diskdesign
     assert not diskdesign.empty
 
-    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    diskdefaults = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DefaultValues", engine="openpyxl"
+    )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
 
