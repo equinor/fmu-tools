@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.2.1.dev23+gdb5faad documentation</title>
+  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.2.1.dev24+g6fdf3fd documentation</title>
   
 
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -48,7 +51,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> fmu-tools
+            <a href="../../../../index.html" class="icon icon-home"> fmu-tools
           
 
           
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev23+gdb5faad
+                1.2.1.dev24+g6fdf3fd
               </div>
             
           
@@ -138,6 +141,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -169,6 +174,7 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openpyxl</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 
@@ -199,8 +205,10 @@
         <span class="n">gen_input_sheet</span> <span class="o">=</span> <span class="n">sheetnames</span><span class="p">[</span><span class="s2">&quot;general_input&quot;</span><span class="p">]</span>
 
     <span class="n">generalinput</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-        <span class="n">input_filename</span><span class="p">,</span> <span class="n">gen_input_sheet</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">input_filename</span><span class="p">,</span> <span class="n">gen_input_sheet</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
     <span class="p">)</span>
+    <span class="n">generalinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">generalinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;designtype&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;onebyone&quot;</span><span class="p">:</span>
         <span class="n">returndict</span> <span class="o">=</span> <span class="n">_excel2dict_onebyone</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">sheetnames</span><span class="p">)</span>
@@ -228,8 +236,8 @@
 <span class="k">def</span> <span class="nf">_find_geninput_sheetname</span><span class="p">(</span><span class="n">input_filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Finding general input sheet, allowing for name</span>
 <span class="sd">    variations.&quot;&quot;&quot;</span>
-    <span class="n">xls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
-    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xls</span><span class="o">.</span><span class="n">sheet_names</span>
+    <span class="n">xlsx</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_links</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xlsx</span><span class="o">.</span><span class="n">sheetnames</span>
     <span class="n">general_input_sheet</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">sheet</span> <span class="ow">in</span> <span class="n">sheets</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">sheet</span> <span class="ow">in</span> <span class="p">[</span>
@@ -262,8 +270,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        string, name of a sheet in the excel file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">xls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
-    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xls</span><span class="o">.</span><span class="n">sheet_names</span>
+    <span class="n">xlsx</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_links</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xlsx</span><span class="o">.</span><span class="n">sheetnames</span>
 
     <span class="n">default_values_sheet</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -297,8 +305,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        string, name of a sheet in the excel file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">xls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
-    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xls</span><span class="o">.</span><span class="n">sheet_names</span>
+    <span class="n">xlsx</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_links</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sheets</span> <span class="o">=</span> <span class="n">xlsx</span><span class="o">.</span><span class="n">sheetnames</span>
 
     <span class="n">design_input_sheet</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -388,8 +396,10 @@
 
     <span class="c1"># Read general input</span>
     <span class="n">generalinput</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-        <span class="n">input_filename</span><span class="p">,</span> <span class="n">gen_input_sheet</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">input_filename</span><span class="p">,</span> <span class="n">gen_input_sheet</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
     <span class="p">)</span>
+    <span class="n">generalinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">generalinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;designtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;designtype&quot;</span><span class="p">]</span>
 
@@ -442,7 +452,9 @@
 
     <span class="c1"># Read input for sensitivities</span>
     <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;sensitivities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-    <span class="n">designinput</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">design_inp_sheet</span><span class="p">)</span>
+    <span class="n">designinput</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">design_inp_sheet</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
+    <span class="n">designinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">designinput</span> <span class="o">=</span> <span class="n">designinput</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">designinput</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
 
     <span class="c1"># First column with parameter names should have spaces stripped,</span>
     <span class="c1"># but we need to preserve NaNs:</span>
@@ -538,7 +550,12 @@
 <span class="sd">        OrderedDict with defaultvalues (parameter, value)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">default_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-    <span class="n">default_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">default_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
+    <span class="p">)</span>
+    <span class="n">default_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">default_df</span> <span class="o">=</span> <span class="n">default_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">default_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+
     <span class="c1"># Strip spaces before and after parameter names, if they are there</span>
     <span class="c1"># it is probably invisible user errors in Excel.</span>
     <span class="n">default_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
@@ -571,7 +588,12 @@
 <span class="sd">        and values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">depend_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-    <span class="n">depend_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">depend_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
+    <span class="p">)</span>
+    <span class="n">depend_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">depend_df</span> <span class="o">=</span> <span class="n">depend_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">depend_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+
     <span class="k">if</span> <span class="n">from_parameter</span> <span class="ow">in</span> <span class="n">depend_df</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">depend_dict</span><span class="p">[</span><span class="s2">&quot;from_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">depend_df</span><span class="p">[</span><span class="n">from_parameter</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="n">depend_dict</span><span class="p">[</span><span class="s2">&quot;to_params&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -599,7 +621,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">backdict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">paramdict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-    <span class="n">bck_input</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">inp_filename</span><span class="p">,</span> <span class="n">bck_sheet</span><span class="p">)</span>
+    <span class="n">bck_input</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">inp_filename</span><span class="p">,</span> <span class="n">bck_sheet</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
+    <span class="n">bck_input</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">bck_input</span> <span class="o">=</span> <span class="n">bck_input</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">bck_input</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
 
     <span class="n">backdict</span><span class="p">[</span><span class="s2">&quot;correlations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">&quot;corr_sheet&quot;</span> <span class="ow">in</span> <span class="n">bck_input</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -865,28 +889,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright Equinor
+        &#169; Copyright Equinor.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
