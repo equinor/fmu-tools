@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.2.1.dev24+g6fdf3fd documentation</title>
+  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.2.1.dev25+ge681118 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev24+g6fdf3fd
+                1.2.1.dev25+ge681118
               </div>
             
           
@@ -700,7 +700,7 @@
     <span class="n">correlations</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">filename</span> <span class="o">=</span> <span class="n">corr_dict</span><span class="p">[</span><span class="s2">&quot;inputfile&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">corrsheet</span> <span class="ow">in</span> <span class="n">corr_dict</span><span class="p">[</span><span class="s2">&quot;sheetnames&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">):</span>
             <span class="n">correlations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
                 <span class="n">filename</span><span class="p">,</span> <span class="n">corrsheet</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
             <span class="p">)</span>
