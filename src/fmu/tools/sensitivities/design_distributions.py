@@ -531,7 +531,7 @@ def read_correlations(corr_dict, corrsheet):
     correlations = None
     filename = corr_dict["inputfile"]
     if corrsheet in corr_dict["sheetnames"]:
-        if filename.endswith(".xlsx"):
+        if str(filename).endswith(".xlsx"):
             correlations = pd.read_excel(
                 filename, corrsheet, index_col=0, engine="openpyxl"
             )

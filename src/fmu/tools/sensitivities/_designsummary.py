@@ -52,7 +52,7 @@ def summarize_design(filename, sheetname="DesignSheet01"):
     endreal1 = 0
 
     # Read design matrix and find realisation numbers for each sensitivity
-    if filename.endswith(".xlsx"):
+    if str(filename).endswith(".xlsx"):
         dgn = pd.read_excel(filename, sheetname, engine="openpyxl")
 
         # Drop empty rows or columns that have been read in
@@ -61,7 +61,7 @@ def summarize_design(filename, sheetname="DesignSheet01"):
         dgn.dropna(axis=0, how="all", inplace=True)
         dgn = dgn.loc[:, ~dgn.columns.str.contains("^Unnamed")]
 
-    elif filename.endswith(".csv"):
+    elif str(filename).endswith(".csv"):
         dgn = pd.read_csv(filename)
 
     else:

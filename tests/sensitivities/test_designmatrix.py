@@ -1,16 +1,14 @@
 """Testing excel2dict"""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys
-import os
 import shutil
+from pathlib import Path
 
 import pandas as pd
 
 from fmu.tools.sensitivities import DesignMatrix, fmudesignrunner
+
+TESTDATA = Path(__file__).parent / "data"
 
 
 def valid_designmatrix(dframe):
@@ -55,29 +53,24 @@ def test_endpoint(tmpdir):
     Will write generated design matrices to the pytest tmpdir directory,
     usually /tmp/pytest-of-<username>/
     """
-    testdatadir = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "data/sensitivities/config/"
-    )
-    designfile = "design_input_onebyone.xlsx"
+    designfile = TESTDATA / "config/design_input_onebyone.xlsx"
 
     # The xlsx file contains a relative path, relative to the input design sheet:
     dependency = (
-        pd.read_excel(
-            os.path.join(testdatadir, designfile), header=None, engine="openpyxl"
-        )
+        pd.read_excel(designfile, header=None, engine="openpyxl")
         .set_index([0])[1]
         .to_dict()["background"]
     )
 
     tmpdir.chdir()
     # Copy over input files:
-    shutil.copy(os.path.join(testdatadir, designfile), ".")
-    shutil.copy(os.path.join(testdatadir, dependency), ".")
-    sys.argv = ["fmudesign", designfile]
+    shutil.copy(str(designfile), ".")
+    shutil.copy(Path(designfile).parent / dependency, ".")
+    sys.argv = ["fmudesign", str(designfile)]
     fmudesignrunner.main()
-    assert os.path.exists("generateddesignmatrix.xlsx")  # Default output file
+    assert Path("generateddesignmatrix.xlsx").exists  # Default output file
     valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx", engine="openpyxl"))
 
-    sys.argv = ["fmudesign", designfile, "anotheroutput.xlsx"]
+    sys.argv = ["fmudesign", str(designfile), "anotheroutput.xlsx"]
     fmudesignrunner.main()
-    assert os.path.exists("anotheroutput.xlsx")
+    assert Path("anotheroutput.xlsx").exists
