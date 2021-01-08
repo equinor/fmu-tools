@@ -2,6 +2,7 @@
 import math
 import datetime
 from pathlib import Path
+import logging
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,8 @@ import pytest
 
 from fmu.tools.rms import create_rft_ertobs
 from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
+
+logging.basicConfig(level=logging.INFO)
 
 # Pylint exceptions for the mocked RMS object:
 # pylint: disable=too-few-public-methods,no-self-use

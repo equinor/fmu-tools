@@ -47,6 +47,7 @@ Additional options are specified through a RMS dictionary, and
       "project": project,  # The Python object representing your RMS project
       "gridname": "Simgrid",
       "zonename": "Zone",
+      "verbose": True,
   }
 
   create_rft_ertobs.main(CONFIG)

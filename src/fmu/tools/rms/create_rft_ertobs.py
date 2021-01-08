@@ -13,7 +13,8 @@ along well trajectories::
 
 Required keys in the SETUP dictionary:
 
-* input_file or input_dframe: Path to CSV file with columns: WELL_NAME, ...(ADDHERE)
+* input_file or input_dframe: Path to CSV file with data for wellnames, dates
+  wellpoint coordinates and pressure values.
 
 Optional keys:
 
@@ -293,7 +294,7 @@ def interp_from_xyz(xyz: tuple, coords, interpolation: str = "cubic") -> float:
     dist_min = dist_min ** (0.5)
     md_value = round(closest_md, 2)
     logger.info(
-        "MD estimated on undulating wellpath:  {} (mismatch = {:.4f} m)".format(
+        "MD estimated on undulating wellpath: {} (mismatch = {:.4f} m)".format(
             md_value, dist_min
         )
     )
@@ -363,7 +364,7 @@ def ertobs_df_to_files(
     well_date_rft.txt is supplied as configuration to GENDATA_RFT (semeio)
 
     The obs-files must match the GENERAL_OBSERVATION arguments in the
-    sERT config.
+    ERT config.
 
     In the welldatefile, a choice is made by this function on how to
     enumerate the REPORTSTEPS parameter, which is to be given to GENDATA in ERT config.
@@ -382,6 +383,7 @@ def ertobs_df_to_files(
 
     # Dump directly to CSV, this is for future use:
     dframe.to_csv(Path(exportdir) / filename, index=False, header=True)
+    logger.info("Written CSV to %s", Path(exportdir) / filename)
 
     dframe = dframe.copy()  # Since we will modify it.
 
@@ -396,17 +398,22 @@ def ertobs_df_to_files(
     )
 
     for wellname, wellframe in dframe.groupby("WELL_NAME"):
+        traj_filename = Path(exportdir) / (wellname + ".txt")
         wellframe[["EAST", "NORTH", "MD", "TVD", "ZONE"]].drop_duplicates().to_csv(
-            Path(exportdir) / (wellname + ".txt"), sep=" ", index=False, header=False
+            traj_filename, sep=" ", index=False, header=False
         )
+        logger.info("Written trajectory data to %s", traj_filename)
     for wname_rep_step, wellframe in dframe.groupby(["WELL_NAME", "REPORT_STEP"]):
+        obs_filename = Path(exportdir) / (
+            wname_rep_step[0] + "_" + str(wname_rep_step[1]) + ".obs"
+        )
         wellframe[["PRESSURE", "ERROR"]].to_csv(
-            Path(exportdir)
-            / (wname_rep_step[0] + "_" + str(wname_rep_step[1]) + ".obs"),
+            obs_filename,
             sep=" ",
             index=False,
             header=False,
         )
+        logger.info("Written obs file to %s", obs_filename)
 
     dframe["DAY"] = dframe["DATE"].dt.strftime("%d")
     dframe["MONTH"] = dframe["DATE"].dt.strftime("%m")
@@ -414,6 +421,7 @@ def ertobs_df_to_files(
     dframe.groupby(["WELL_NAME", "DATE"])[
         ["WELL_NAME", "DAY", "MONTH", "YEAR", "REPORT_STEP"]
     ].first().to_csv(Path(exportdir) / welldatefile, sep=" ", index=False, header=False)
+    logger.info("Written welldata file to %s", Path(exportdir) / welldatefile)
 
 
 def fill_missing_md_xyz(
