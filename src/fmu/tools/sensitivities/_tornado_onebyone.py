@@ -22,12 +22,10 @@ def check_selection(resultfile, selector, selection):
         if sel not in resultfile[selector].values:
             if str(sel).strip("[]").lower() == "total":
                 raise ValueError("Use 'all' to sum all", selector, "not 'total'")
-            else:
-                raise ValueError(
-                    "Selection ", sel, " not found in column", selector, "in resultfile"
-                )
-        else:
-            resultfile[selector].values.astype(str)
+            raise ValueError(
+                "Selection ", sel, " not found in column", selector, "in resultfile"
+            )
+        resultfile[selector].values.astype(str)
 
 
 def check_response(resultfile, response):

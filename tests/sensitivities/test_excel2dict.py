@@ -3,9 +3,11 @@
 import os
 import pytest
 
+import numpy as np
 import pandas as pd
 
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
+from fmu.tools.sensitivities._excel2dict import _has_value
 
 MOCK_GENERAL_INPUT = pd.DataFrame(
     data=[
@@ -77,6 +79,8 @@ def test_excel2dict_design(tmpdir):
 
 
 def test_duplicate_sensname_exception(tmpdir):
+    """Test that exceptions are raised for erroneous sensnames"""
+    # pylint: disable=abstract-class-instantiated
     mock_erroneous_designinput = pd.DataFrame(
         data=[
             ["sensname", "numreal", "type", "param_name"],
@@ -100,12 +104,13 @@ def test_duplicate_sensname_exception(tmpdir):
     with pytest.raises(
         ValueError, match="Two sensitivities can not share the same sensname"
     ):
-        dict_design = excel2dict_design("designinput3.xlsx")  # noqa
+        excel2dict_design("designinput3.xlsx")
 
 
 def test_strip_spaces(tmpdir):
     """Spaces before and after parameter names are probabaly
     invisible user errors in Excel sheets. Remove them."""
+    # pylint: disable=abstract-class-instantiated
     mock_spacious_designinput = pd.DataFrame(
         data=[
             ["sensname", "numreal", "type", "param_name"],
@@ -141,6 +146,8 @@ def test_strip_spaces(tmpdir):
 
 
 def test_mixed_senstype_exception(tmpdir):
+    """Test that exceptions are raised for mixups in user input on types"""
+    # pylint: disable=abstract-class-instantiated
     mock_erroneous_designinput = pd.DataFrame(
         data=[
             ["sensname", "numreal", "type", "param_name"],
@@ -162,4 +169,13 @@ def test_mixed_senstype_exception(tmpdir):
     writer.save()
 
     with pytest.raises(ValueError, match="contains more than one sensitivity type"):
-        dict_design = excel2dict_design("designinput4.xlsx")  # noqa
+        excel2dict_design("designinput4.xlsx")
+
+
+def test_has_value():
+    """Test a function that is used to check if xlsx-cells are empty or not"""
+    assert _has_value(1)
+    assert not _has_value(np.nan)
+
+    # This possibly makes no sense, but is the current implementation:
+    assert _has_value(None)

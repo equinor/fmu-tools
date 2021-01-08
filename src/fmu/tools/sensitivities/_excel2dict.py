@@ -80,12 +80,14 @@ def _find_geninput_sheetname(input_filename):
             "General_input",
         ]:
             general_input_sheet.append(sheet)
+
     if len(general_input_sheet) > 1:
         raise ValueError(
             "More than one sheet with general input"
             "Sheetnames are {} ".format(general_input_sheet)
         )
-    elif not general_input_sheet:
+
+    if not general_input_sheet:
         raise ValueError(
             "No general_input sheet provided in Excel file {} "
             "".format(input_filename)
@@ -121,7 +123,8 @@ def _find_onebyone_defaults_sheet(input_filename):
             "More than one sheet with default values"
             "Sheetnames are {} ".format(default_values_sheet)
         )
-    elif len(default_values_sheet) == []:
+
+    if len(default_values_sheet) == []:
         raise ValueError(
             "No defaultvalues sheet provided in Excel file {} "
             "".format(input_filename)
@@ -156,7 +159,8 @@ def _find_onebyone_input_sheet(input_filename):
             "More than one sheet with design input"
             "Sheetnames are {} ".format(design_input_sheet)
         )
-    elif not design_input_sheet:
+
+    if not design_input_sheet:
         raise ValueError(
             "No designinput sheet provided in Excel file {} " "".format(input_filename)
         )
@@ -176,8 +180,7 @@ def _check_designinput(dsgn_input):
                     "sheet. Two sensitivities can not share the same sensname. "
                     "Please correct this and rerun".format(row.sensname)
                 )
-            else:
-                sensitivity_names.append(row.sensname)
+            sensitivity_names.append(row.sensname)
 
 
 def _check_for_mixed_sensitivities(sens_name, sens_group):
@@ -557,8 +560,8 @@ def _read_scenario_sensitivity(sensgroup):
                 'as type "scenario" but with empty '
                 "value in value1 column ".format(row.param_name)
             )
-        else:
-            casedict1[str(row.param_name)] = row.value1
+        casedict1[str(row.param_name)] = row.value1
+
     if _has_value(sensgroup["senscase2"].iloc[0]):
         for row in sensgroup.itertuples():
             if not _has_value(row.value2):
@@ -570,8 +573,7 @@ def _read_scenario_sensitivity(sensgroup):
                         sensgroup["sensname"].iloc[0], row.param_name
                     )
                 )
-            else:
-                casedict2[str(row.param_name)] = row.value2
+            casedict2[str(row.param_name)] = row.value2
         sdict["cases"][str(sensgroup["senscase1"].iloc[0])] = casedict1
         sdict["cases"][str(sensgroup["senscase2"].iloc[0])] = casedict2
     else:
@@ -700,8 +702,11 @@ def _read_correlations(sensgroup, inputfile):
 
 
 def _has_value(value):
-    """Returns False if NaN"""
-    return bool(value == value)
+    """Returns False only if the argument is np.nan"""
+    try:
+        return not np.isnan(value)
+    except TypeError:
+        return True
 
 
 def _is_int(teststring):

@@ -1,12 +1,12 @@
 """Testing excel2dict"""
 
-import sys
 import shutil
 from pathlib import Path
+import subprocess
 
 import pandas as pd
 
-from fmu.tools.sensitivities import DesignMatrix, fmudesignrunner
+from fmu.tools.sensitivities import DesignMatrix
 
 TESTDATA = Path(__file__).parent / "data"
 
@@ -66,11 +66,11 @@ def test_endpoint(tmpdir):
     # Copy over input files:
     shutil.copy(str(designfile), ".")
     shutil.copy(Path(designfile).parent / dependency, ".")
-    sys.argv = ["fmudesign", str(designfile)]
-    fmudesignrunner.main()
+
+    subprocess.run(["fmudesign", str(designfile)], check=True)
+
     assert Path("generateddesignmatrix.xlsx").exists  # Default output file
     valid_designmatrix(pd.read_excel("generateddesignmatrix.xlsx", engine="openpyxl"))
 
-    sys.argv = ["fmudesign", str(designfile), "anotheroutput.xlsx"]
-    fmudesignrunner.main()
+    subprocess.run(["fmudesign", str(designfile), "anotheroutput.xlsx"], check=True)
     assert Path("anotheroutput.xlsx").exists

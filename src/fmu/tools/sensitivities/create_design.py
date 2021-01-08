@@ -10,7 +10,7 @@ import numpy
 from fmu.tools.sensitivities import design_distributions as design_dist
 
 
-class DesignMatrix(object):
+class DesignMatrix:
     """Class for design matrix in FMU. Can contain a onebyone design
     or a full montecarlo design.
 
@@ -171,6 +171,7 @@ class DesignMatrix(object):
             defaultsheet (str): name of excel sheet containing default
                 values (optional, defaults to 'DefaultValues')
         """
+        # pylint: disable=abstract-class-instantiated
         basename = Path(filename).stem
         extension = Path(filename).suffix
         if extension != ".xlsx":
@@ -255,6 +256,7 @@ class DesignMatrix(object):
             filename (str): output filename (extension .xlsx)
             backgroundsheet (str): name of excel sheet
         """
+        # pylint: disable=abstract-class-instantiated
         xlsxwriter = pd.ExcelWriter(filename, engine="openpyxl")
         self.backgroundvalues.to_excel(
             xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
@@ -326,10 +328,12 @@ class DesignMatrix(object):
                 for param in depend_dict[from_param]["to_params"].keys():
                     self.designvalues[param] = numpy.nan
                     for index in range(len(depend_dict[from_param]["from_values"])):
-                        ip = depend_dict[from_param]["from_values"][index]
-                        op = depend_dict[from_param]["to_params"][param][index]
+                        fill_these = depend_dict[from_param]["from_values"][index]
+                        fill_data = depend_dict[from_param]["to_params"][param][index]
                         self.designvalues[param].mask(
-                            self.designvalues[from_param] == ip, op, inplace=True
+                            self.designvalues[from_param] == fill_these,
+                            fill_data,
+                            inplace=True,
                         )
                     if self.designvalues[param].isnull().any():
                         raise ValueError(
@@ -387,7 +391,7 @@ class DesignMatrix(object):
                     raise ValueError("Cannot round a string parameter {}".format(key))
 
 
-class SeedSensitivity(object):
+class SeedSensitivity:
     """
     A seed sensitivity is normally the reference for one by one sensitivities
     It contains a list of seeds to be repeated for each sensitivity
@@ -401,6 +405,7 @@ class SeedSensitivity(object):
 
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         """Args:
         sensname (str): Name of sensitivity.
@@ -432,15 +437,14 @@ class SeedSensitivity(object):
                         "additional parameters where dist_name is "
                         '"const". Check sensitivity {}"'.format(self.sensname)
                     )
-                else:
-                    self.sensvalues[key] = constant
+                self.sensvalues[key] = constant
 
         self.sensvalues["REAL"] = realnums
         self.sensvalues["SENSNAME"] = self.sensname
         self.sensvalues["SENSCASE"] = "p10_p90"
 
 
-class SingleRealisationReference(object):
+class SingleRealisationReference:
     """
     The class is used in set-ups where one wants a single realisation
     containing only default values as a reference, but the realisation
@@ -455,6 +459,7 @@ class SingleRealisationReference(object):
 
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         """Args:
         sensname (str): Name of sensitivity.
@@ -475,7 +480,7 @@ class SingleRealisationReference(object):
         self.sensvalues["SENSCASE"] = "ref"
 
 
-class BackgroundSensitivity(object):
+class BackgroundSensitivity:
     """
     The class is used in set-ups where one sensitivities
     are run on top of varying background parameters.
@@ -490,6 +495,7 @@ class BackgroundSensitivity(object):
 
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         """Args:
         sensname (str): Name of sensitivity.
@@ -510,7 +516,7 @@ class BackgroundSensitivity(object):
         self.sensvalues["SENSCASE"] = "p10_p90"
 
 
-class ScenarioSensitivity(object):
+class ScenarioSensitivity:
     """Each design can contain one or several single sensitivities of type
     Seed, MonteCarlo or Scenario.
     Each ScenarioSensitivity can contain 1-2 ScenarioSensitivityCases.
@@ -531,6 +537,7 @@ class ScenarioSensitivity(object):
            1-2 cases
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         """
         Args:
@@ -571,7 +578,7 @@ class ScenarioSensitivity(object):
                 self.sensvalues["SENSNAME"] = self.sensname
 
 
-class ScenarioSensitivityCase(object):
+class ScenarioSensitivityCase:
     """Each ScenarioSensitivity can contain one or
     two ScenarioSensitivityCases.
 
@@ -592,6 +599,7 @@ class ScenarioSensitivityCase(object):
 
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, casename):
         self.casename = casename
         self.casevalues = None
@@ -616,7 +624,7 @@ class ScenarioSensitivityCase(object):
             self.casevalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
-class MonteCarloSensitivity(object):
+class MonteCarloSensitivity:
     """
     For a MonteCarloSensitivity one or several parameters
     are drawn from specified distributions with or without correlations.
@@ -631,6 +639,7 @@ class MonteCarloSensitivity(object):
             with realisation numbers as index.
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         self.sensname = sensname
         self.sensvalues = None
@@ -662,7 +671,7 @@ class MonteCarloSensitivity(object):
                         "with sensname {}: {}.".format(
                             key, self.sensname, error.args[0]
                         )
-                    )
+                    ) from error
         else:  # Some or all parameters are correlated
             df_params = pd.DataFrame.from_dict(
                 parameters,
@@ -676,7 +685,7 @@ class MonteCarloSensitivity(object):
 
             for correl, group in param_groups:
                 param_dict = OrderedDict()
-                for index, row in group.iterrows():
+                for _, row in group.iterrows():
                     param_dict[row["param_name"]] = [
                         row["dist_name"],
                         row["dist_params"],
@@ -712,7 +721,7 @@ class MonteCarloSensitivity(object):
                                     "parameter {}: {}.".format(
                                         self.sensname, key, error.args[0]
                                     )
-                                )
+                                ) from error
                         else:
                             raise ValueError(
                                 "Parameter{} specified with correlation "
@@ -732,7 +741,7 @@ class MonteCarloSensitivity(object):
                                 "Problem in sensitivity "
                                 "with sensname {} for parameter "
                                 "{}: {}.".format(self.sensname, key, error.args[0])
-                            )
+                            ) from error
 
         if self.sensname != "background":
             self.sensvalues["REAL"] = realnums
@@ -742,7 +751,7 @@ class MonteCarloSensitivity(object):
                 self.sensvalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
-class ExternSensitivity(object):
+class ExternSensitivity:
     """
     Used when reading parameter values from a file
     Assumed to be used with monte carlo type sensitivities and
@@ -755,6 +764,7 @@ class ExternSensitivity(object):
 
     """
 
+    # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
         self.sensname = sensname
         self.sensvalues = None
