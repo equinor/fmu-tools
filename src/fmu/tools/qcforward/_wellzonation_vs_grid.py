@@ -1,10 +1,8 @@
 """
 This private module in qcforward is used to check wellzonation vs grid zonation
 """
-from __future__ import absolute_import, division, print_function  # PY2
 
 import collections
-from collections import OrderedDict
 from pathlib import Path
 
 import json
@@ -13,14 +11,14 @@ import numpy as np
 
 import fmu.tools
 from fmu.tools._common import _QCCommon
-from ._qcforward import QCForward, ActionsParser
+from fmu.tools.qcforward._qcforward import QCForward, ActionsParser
 
 
 QCC = _QCCommon()
 UNDEF = float("nan")
 
 
-class _LocalData(object):
+class _LocalData:
     def __init__(self):
         """Defining and hold data local for this routine"""
 
@@ -68,9 +66,7 @@ class _LocalData(object):
 
 
 class WellZonationVsGrid(QCForward):
-    def run(
-        self, data, reuse=False, project=None
-    ):  # pylint: disable=too-many-locals, too-many-statements
+    def run(self, data, reuse=False, project=None):
         """Main routine for evaulating well zonation match in 3D grids.
 
         The routine depends on existing XTGeo functions for this purpose
@@ -262,4 +258,4 @@ class WellZonationVsGrid(QCForward):
         wells.append("all")
         matches.append(mmean)
 
-        return OrderedDict(zip(wells, matches))
+        return collections.OrderedDict(zip(wells, matches))
