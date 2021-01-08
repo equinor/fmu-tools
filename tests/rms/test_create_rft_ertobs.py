@@ -214,7 +214,7 @@ def test_ertobs_df_to_files_1(tmpdir):
         [
             {
                 "WELL_NAME": "R-99",
-                "DATE": datetime.date(2020, 1, 1),
+                "DATE": datetime.date(2020, 6, 1),
                 "EAST": 5555,
                 "NORTH": 7777,
                 "TVD": 2300,
@@ -228,7 +228,7 @@ def test_ertobs_df_to_files_1(tmpdir):
     create_rft_ertobs.ertobs_df_to_files(ertobs_df, tmpdir)
     assert Path("R-99.txt").read_text().strip() == "5555 7777 2400 2300 Valyzar"
     assert Path("R-99_1.obs").read_text().strip() == "100 3"
-    assert Path("well_date_rft.txt").read_text().strip() == "R-99 01 01 2020 1"
+    assert Path("well_date_rft.txt").read_text().strip() == "R-99 01 06 2020 1"
 
     # Check that the file rft_ertobs.csv was created, this file
     # is for future use.
@@ -427,6 +427,22 @@ def test_configparsing(tmpdir, caplog):
         check_and_parse_config({**minimal_config, **{"exportdir": "nonexistingdir"}})
 
     assert check_and_parse_config(minimal_config)["welldatefile"] == "well_date_rft.txt"
+
+
+def test_date_parsing(tmpdir):
+    """Check that the ambiguous "DD MM YYYY" date format
+    can be parsed "correctly" in input CSV files."""
+    tmpdir.chdir()
+    pd.DataFrame(
+        columns=["DATE", "MD", "WELL_NAME", "PRESSURE"],
+        data=[["01 03 2009", "100", "A-1", "123"]],
+    ).to_csv("inputframe.csv", header=True, index=False)
+
+    minimal_config = {"input_file": "inputframe.csv"}
+    processed_config = check_and_parse_config(minimal_config)
+    assert processed_config["input_dframe"]["DATE"].values[0] == np.datetime64(
+        datetime.date(2009, 3, 1)
+    )
 
 
 def test_parse_alias_config(tmpdir):

@@ -83,7 +83,9 @@ def check_and_parse_config(config: dict) -> dict:
 
     required_input_dframe_columns = ["DATE", "MD", "WELL_NAME", "PRESSURE"]
     if "input_dframe" not in config and "input_file" in config:
-        config["input_dframe"] = pd.read_csv(config["input_file"], parse_dates=True)
+        input_dframe = pd.read_csv(config["input_file"])
+        input_dframe["DATE"] = pd.to_datetime(input_dframe["DATE"], dayfirst=True)
+        config["input_dframe"] = input_dframe
     missing_columns = set(required_input_dframe_columns) - set(
         config["input_dframe"].columns
     )
@@ -390,7 +392,7 @@ def ertobs_df_to_files(
     if "ZONE" not in dframe:
         dframe["ZONE"] = ""
 
-    dframe["DATE"] = pd.to_datetime(dframe["DATE"])
+    dframe["DATE"] = pd.to_datetime(dframe["DATE"], dayfirst=True)
     dframe["REPORT_STEP"] = (
         dframe.groupby("WELL_NAME")["DATE"]
         .rank(method="dense", ascending=True)
