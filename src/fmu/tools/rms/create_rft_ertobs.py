@@ -479,7 +479,7 @@ def main(config: dict = None) -> None:
 
     logger.setLevel(config["loglevel"])
 
-    welldatefile = Path(config["exportdir"]) / "well_date_rft.txt"
+    welldatefile = "well_date_rft.txt"
 
     dframe = config["input_dframe"].copy()
     dframe["WELL_NAME"] = config["rft_prefix"] + dframe["WELL_NAME"]

@@ -43,8 +43,10 @@ Additional options are specified through a RMS dictionary, and
   CONFIG = {
       "input_file": "../input/well_modelling/rft_observations.csv",
       "alias_file": "../../config/rms_eclipse_alias.csv",
-      "export_dir": "../../ert/input/observations/rft",  # Must exist
-      "project": project  # The Python object representing your RMS project
+      "exportdir": "../../ert/input/observations/rft",  # Must exist
+      "project": project,  # The Python object representing your RMS project
+      "gridname": "Simgrid",
+      "zonename": "Zone",
   }
 
   create_rft_ertobs.main(CONFIG)
@@ -55,7 +57,7 @@ The example provides a typical minimum. Available options to set are
 input_file
   CSV file with input data, one row for each RFT observations. The DATE column
   must be in ISO-8601 format (YYYY-MM-DD). Required columns are "DATE", "MD",
-  "WELL_NAME" and "VALUE"
+  "WELL_NAME" and "VALUE".
 
 alias_file
   A CSV file with RMS well names in one column and Eclipse names in a different
@@ -66,15 +68,16 @@ alias_file
 rft_prefix
   If specified, this is added as a prefix to all well names. If aliases are
   in use, the prefix will be prepended after alias conversion. Default is
-  no prefix
+  no prefix.
 
-export_dir
+exportdir
   A directory for where to dump the resulting txt, obs and well_date file. The
   directory must exist upfront.
 
 welldatefile
   A filename that will be written to (do not include the path, it is written
-  to the directory specified in ``exportdir``) that will contain a
+  to the directory specified in ``exportdir``) that will contain data to
+  be provided to GENDATA_RFT.
 
 interpolation
   Interpolation setting, choose between ``linear`` and ``cubic``. Default is
