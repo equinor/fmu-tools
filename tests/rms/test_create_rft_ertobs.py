@@ -399,11 +399,16 @@ def test_configparsing(tmpdir, caplog):
         check_and_parse_config({"input_dframe": pd.DataFrame()})
 
     minimal_config = {
-        "input_dframe": pd.DataFrame(columns=["DATE", "MD", "WELL_NAME", "PRESSURE"])
+        "input_dframe": pd.DataFrame(
+            columns=["DATE", "MD", "WELL_NAME", "PRESSURE"],
+            data=[[np.datetime64(datetime.date(2020, 3, 12)), 1000, "C-19", 222]],
+        )
     }
 
     processed_df = check_and_parse_config(minimal_config)["input_dframe"]
     tmpdir.chdir()
+
+    # Dump the dataframe to CSV and reload as disk dataframe:
     processed_df.to_csv("tmp.csv", index=False)
     viadisk_df = check_and_parse_config({"input_file": "tmp.csv"})["input_dframe"]
     pd.testing.assert_frame_equal(processed_df, viadisk_df, check_dtype=False)
