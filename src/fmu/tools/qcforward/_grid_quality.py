@@ -13,7 +13,7 @@ import fmu.tools
 
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
-from ._qcforward import QCForward, ActionsParser
+from fmu.tools.qcforward._qcforward import QCForward, ActionsParser
 
 
 QCC = _QCCommon()
@@ -21,7 +21,7 @@ QCC = _QCCommon()
 UNDEF = float("nan")
 
 
-class _LocalData(object):
+class _LocalData:
     def __init__(self):
         """Defining and hold data local for this routine"""
 
