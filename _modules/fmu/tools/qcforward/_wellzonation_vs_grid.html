@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.2.1.dev25+ge681118 documentation</title>
+  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.2.1.dev26+gbc2760d documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev25+ge681118
+                1.2.1.dev26+gbc2760d
               </div>
             
           
@@ -170,10 +170,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This private module in qcforward is used to check wellzonation vs grid zonation</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># PY2</span>
 
 <span class="kn">import</span> <span class="nn">collections</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
@@ -182,14 +180,14 @@
 
 <span class="kn">import</span> <span class="nn">fmu.tools</span>
 <span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
-<span class="kn">from</span> <span class="nn">._qcforward</span> <span class="kn">import</span> <span class="n">QCForward</span><span class="p">,</span> <span class="n">ActionsParser</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._qcforward</span> <span class="kn">import</span> <span class="n">QCForward</span><span class="p">,</span> <span class="n">ActionsParser</span>
 
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 <span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
 
@@ -237,9 +235,7 @@
 
 
 <div class="viewcode-block" id="WellZonationVsGrid"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid">[docs]</a><span class="k">class</span> <span class="nc">WellZonationVsGrid</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
-<div class="viewcode-block" id="WellZonationVsGrid.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>  <span class="c1"># pylint: disable=too-many-locals, too-many-statements</span>
+<div class="viewcode-block" id="WellZonationVsGrid.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Main routine for evaulating well zonation match in 3D grids.</span>
 
 <span class="sd">        The routine depends on existing XTGeo functions for this purpose</span>
@@ -431,7 +427,7 @@
         <span class="n">wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
         <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mmean</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">matches</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">matches</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

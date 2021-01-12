@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.2.1.dev25+ge681118 documentation</title>
+  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.2.1.dev26+gbc2760d documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev25+ge681118
+                1.2.1.dev26+gbc2760d
               </div>
             
           
@@ -181,13 +181,13 @@
 <span class="kn">from</span> <span class="nn">fmu.tools.qcproperties.qcproperties</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
-<span class="kn">from</span> <span class="nn">._qcforward</span> <span class="kn">import</span> <span class="n">QCForward</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._qcforward</span> <span class="kn">import</span> <span class="n">QCForward</span>
 
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
 
-<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="kc">None</span>
