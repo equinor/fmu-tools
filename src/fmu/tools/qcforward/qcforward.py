@@ -21,9 +21,9 @@ I.e::
 
 
 """
-from ._wellzonation_vs_grid import WellZonationVsGrid
-from ._grid_statistics import GridStatistics
-from ._grid_quality import GridQuality
+from fmu.tools.qcforward._wellzonation_vs_grid import WellZonationVsGrid
+from fmu.tools.qcforward._grid_statistics import GridStatistics
+from fmu.tools.qcforward._grid_quality import GridQuality
 
 
 def wellzonation_vs_grid(data, project=None):
