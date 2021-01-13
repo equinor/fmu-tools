@@ -105,10 +105,14 @@ class QCProperties:
                         if "pfile" in values:
                             pfiles[values["name"]] = values["pfile"]
 
-            data["gridprops"] = [
-                [param, pfiles[param]] if param in pfiles else ["unknown", param]
-                for param in pdata.params
-            ]
+            data["gridprops"] = (
+                [
+                    [param, pfiles[param]] if param in pfiles else ["unknown", param]
+                    for param in pdata.params
+                ]
+                if project is None
+                else pdata.params
+            )
 
         if qcdata is not None:
             self._xtgdata = qcdata
