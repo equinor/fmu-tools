@@ -12,7 +12,7 @@ from fmu.tools.qcdata import QCData
 QCC = _QCCommon()
 
 
-class QCForward(object):
+class QCForward:
     """
     The QCforward base class which has a set of QC functions that can be ran from
     either RMS python, or on disk. The input `data` will be
@@ -73,7 +73,7 @@ class QCForward(object):
                 with open(data, "r") as stream:
                     xdata = yaml.safe_load(stream)
             except FileNotFoundError as err:
-                raise RuntimeError(err)
+                raise RuntimeError from err
             data_is_yaml = False
         else:
             xdata = data.copy()
