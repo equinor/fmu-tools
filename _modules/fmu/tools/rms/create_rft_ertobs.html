@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.2.1.dev27+ge3c242c documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.2.1.dev28+g97a8ce5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.2.1.dev27+ge3c242c
+                1.2.1.dev28+g97a8ce5
               </div>
             
           
@@ -182,7 +182,8 @@
 
 <span class="sd">Required keys in the SETUP dictionary:</span>
 
-<span class="sd">* input_file or input_dframe: Path to CSV file with columns: WELL_NAME, ...(ADDHERE)</span>
+<span class="sd">* input_file or input_dframe: Path to CSV file with data for wellnames, dates</span>
+<span class="sd">  wellpoint coordinates and pressure values.</span>
 
 <span class="sd">Optional keys:</span>
 
@@ -251,7 +252,9 @@
 
     <span class="n">required_input_dframe_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="s2">&quot;input_dframe&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;input_file&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_file&quot;</span><span class="p">],</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">input_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_file&quot;</span><span class="p">])</span>
+        <span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_dframe</span>
     <span class="n">missing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_input_dframe_columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span>
         <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
     <span class="p">)</span>
@@ -462,7 +465,7 @@
     <span class="n">dist_min</span> <span class="o">=</span> <span class="n">dist_min</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">md_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">closest_md</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;MD estimated on undulating wellpath:  </span><span class="si">{}</span><span class="s2"> (mismatch = </span><span class="si">{:.4f}</span><span class="s2"> m)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="s2">&quot;MD estimated on undulating wellpath: </span><span class="si">{}</span><span class="s2"> (mismatch = </span><span class="si">{:.4f}</span><span class="s2"> m)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">md_value</span><span class="p">,</span> <span class="n">dist_min</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -532,7 +535,7 @@
 <span class="sd">    well_date_rft.txt is supplied as configuration to GENDATA_RFT (semeio)</span>
 
 <span class="sd">    The obs-files must match the GENERAL_OBSERVATION arguments in the</span>
-<span class="sd">    sERT config.</span>
+<span class="sd">    ERT config.</span>
 
 <span class="sd">    In the welldatefile, a choice is made by this function on how to</span>
 <span class="sd">    enumerate the REPORTSTEPS parameter, which is to be given to GENDATA in ERT config.</span>
@@ -551,13 +554,14 @@
 
     <span class="c1"># Dump directly to CSV, this is for future use:</span>
     <span class="n">dframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written CSV to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Since we will modify it.</span>
 
     <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
         <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">])</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">)[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span>
         <span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;dense&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -565,24 +569,30 @@
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">wellname</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">):</span>
+        <span class="n">traj_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
         <span class="n">wellframe</span><span class="p">[[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">),</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">traj_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written trajectory data to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">traj_filename</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">wname_rep_step</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]):</span>
+        <span class="n">obs_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;.obs&quot;</span>
+        <span class="p">)</span>
         <span class="n">wellframe</span><span class="p">[[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span>
-            <span class="o">/</span> <span class="p">(</span><span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;.obs&quot;</span><span class="p">),</span>
+            <span class="n">obs_filename</span><span class="p">,</span>
             <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
             <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written obs file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
 
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DAY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;MONTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m&quot;</span><span class="p">)</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;YEAR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span>
     <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">])[</span>
         <span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DAY&quot;</span><span class="p">,</span> <span class="s2">&quot;MONTH&quot;</span><span class="p">,</span> <span class="s2">&quot;YEAR&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+    <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written welldata file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="fill_missing_md_xyz"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">[docs]</a><span class="k">def</span> <span class="nf">fill_missing_md_xyz</span><span class="p">(</span>
@@ -648,7 +658,7 @@
 
     <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;loglevel&quot;</span><span class="p">])</span>
 
-    <span class="n">welldatefile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="s2">&quot;well_date_rft.txt&quot;</span>
+    <span class="n">welldatefile</span> <span class="o">=</span> <span class="s2">&quot;well_date_rft.txt&quot;</span>
 
     <span class="n">dframe</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;rft_prefix&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span>

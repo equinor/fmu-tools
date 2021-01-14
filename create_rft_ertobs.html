@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>create_rft_ertobs &mdash; fmu-tools 1.2.1.dev27+ge3c242c documentation</title>
+  <title>create_rft_ertobs &mdash; fmu-tools 1.2.1.dev28+g97a8ce5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1.dev27+ge3c242c
+                1.2.1.dev28+g97a8ce5
               </div>
             
           
@@ -288,8 +288,11 @@ will always include the REPORT_STEP in the filename.</p>
 <span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;input_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../input/well_modelling/rft_observations.csv&quot;</span><span class="p">,</span>
     <span class="s2">&quot;alias_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../../config/rms_eclipse_alias.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;export_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;../../ert/input/observations/rft&quot;</span><span class="p">,</span>  <span class="c1"># Must exist</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span>  <span class="c1"># The Python object representing your RMS project</span>
+    <span class="s2">&quot;exportdir&quot;</span><span class="p">:</span> <span class="s2">&quot;../../ert/input/observations/rft&quot;</span><span class="p">,</span>  <span class="c1"># Must exist</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>  <span class="c1"># The Python object representing your RMS project</span>
+    <span class="s2">&quot;gridname&quot;</span><span class="p">:</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zonename&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">create_rft_ertobs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">)</span>
@@ -299,7 +302,7 @@ will always include the REPORT_STEP in the filename.</p>
 <dl class="simple">
 <dt>input_file</dt><dd><p>CSV file with input data, one row for each RFT observations. The DATE column
 must be in ISO-8601 format (YYYY-MM-DD). Required columns are “DATE”, “MD”,
-“WELL_NAME” and “VALUE”</p>
+“WELL_NAME” and “VALUE”.</p>
 </dd>
 <dt>alias_file</dt><dd><p>A CSV file with RMS well names in one column and Eclipse names in a different
 column. The column names for RMS and Eclipse has defaults, that can be changed
@@ -308,13 +311,14 @@ names.</p>
 </dd>
 <dt>rft_prefix</dt><dd><p>If specified, this is added as a prefix to all well names. If aliases are
 in use, the prefix will be prepended after alias conversion. Default is
-no prefix</p>
+no prefix.</p>
 </dd>
-<dt>export_dir</dt><dd><p>A directory for where to dump the resulting txt, obs and well_date file. The
+<dt>exportdir</dt><dd><p>A directory for where to dump the resulting txt, obs and well_date file. The
 directory must exist upfront.</p>
 </dd>
 <dt>welldatefile</dt><dd><p>A filename that will be written to (do not include the path, it is written
-to the directory specified in <code class="docutils literal notranslate"><span class="pre">exportdir</span></code>) that will contain a</p>
+to the directory specified in <code class="docutils literal notranslate"><span class="pre">exportdir</span></code>) that will contain data to
+be provided to GENDATA_RFT.</p>
 </dd>
 <dt>interpolation</dt><dd><p>Interpolation setting, choose between <code class="docutils literal notranslate"><span class="pre">linear</span></code> and <code class="docutils literal notranslate"><span class="pre">cubic</span></code>. Default is
 <code class="docutils literal notranslate"><span class="pre">cubic</span></code>. This affects how points along the wellpath are interpolated.</p>

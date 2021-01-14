@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.2.1.dev27+ge3c242c documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.2.1.dev28+g97a8ce5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.2.1.dev27+ge3c242c
+                1.2.1.dev28+g97a8ce5
               </div>
             
           
@@ -206,7 +206,8 @@ along well trajectories:</p>
 </div>
 <p>Required keys in the SETUP dictionary:</p>
 <ul class="simple">
-<li><p>input_file or input_dframe: Path to CSV file with columns: WELL_NAME, …(ADDHERE)</p></li>
+<li><p>input_file or input_dframe: Path to CSV file with data for wellnames, dates
+wellpoint coordinates and pressure values.</p></li>
 </ul>
 <p>Optional keys:</p>
 <ul class="simple">
@@ -337,7 +338,7 @@ MD or XYZ have been filled.</p>
 <p>&lt;wellname&gt;.txt is a hardcoded filename pattern in GENDATA_RFT (semeio)
 well_date_rft.txt is supplied as configuration to GENDATA_RFT (semeio)</p>
 <p>The obs-files must match the GENERAL_OBSERVATION arguments in the
-sERT config.</p>
+ERT config.</p>
 <p>In the welldatefile, a choice is made by this function on how to
 enumerate the REPORTSTEPS parameter, which is to be given to GENDATA in ERT config.
 Here it will be constructed on the enumeration of DATE for each given well,
