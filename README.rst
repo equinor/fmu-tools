@@ -5,6 +5,9 @@
 .. image:: https://img.shields.io/lgtm/alerts/g/equinor/fmu-tools.svg?logo=lgtm&logoWidth=18
     :target: https://lgtm.com/projects/g/equinor/fmu-tools/alerts/
 
+.. image:: https://codecov.io/gh/equinor/fmu-tools/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/equinor/fmu-tools
+
 .. image:: https://img.shields.io/lgtm/grade/python/g/equinor/fmu-tools.svg?logo=lgtm&logoWidth=18
     :target: https://lgtm.com/projects/g/equinor/fmu-tools/context:python
 
@@ -22,4 +25,4 @@ Documentation can be found on https://equinor.github.io/fmu-tools/.
 
 This software is released under LGPLv3.
 
-Copyright 2018-2020 Equinor ASA.
+Copyright 2018-2021 Equinor ASA.
