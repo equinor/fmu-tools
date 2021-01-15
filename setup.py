@@ -44,6 +44,7 @@ SETUP_REQUIREMENTS = [
 TEST_REQUIREMENTS = [
     "black==20.8b0",
     "flake8",
+    "pre-commit",
     "pytest",
     "pytest-cov",
 ]
