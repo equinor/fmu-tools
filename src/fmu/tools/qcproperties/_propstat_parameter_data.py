@@ -208,7 +208,6 @@ class PropStatParameterData:
         Useful for properties with code values as code names.
         """
         for prop, values in self._filters.items():
-            if "include" in values:
-                self._filters[prop] = {"include": [str(x) for x in values["include"]]}
-            if "exclude" in values:
-                self._filters[prop] = {"exclude": [str(x) for x in values["exclude"]]}
+            for filtstr in ["include", "exclude"]:
+                if filtstr in values and isinstance(values[filtstr], list):
+                    self._filters[prop] = {filtstr: [str(x) for x in values[filtstr]]}
