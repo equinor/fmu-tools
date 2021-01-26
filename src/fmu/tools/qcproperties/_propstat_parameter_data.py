@@ -69,9 +69,10 @@ class PropStatParameterData:
         self._properties, self._selectors = self._input_conversion(
             properties, selectors
         )
-
         # combine data and set different instance attributes
         self._combine_data(filters)
+
+        self._filter_values_to_string()
 
     @property
     def properties(self):
@@ -200,3 +201,14 @@ class PropStatParameterData:
         QCC.print_debug(f"All Properties: {self.properties}")
         QCC.print_debug(f"All Selectors: {self.selectors}")
         QCC.print_debug(f"All Filters: {self.filters}")
+
+    def _filter_values_to_string(self):
+        """
+        String convertion of filter list values to support using integers as input.
+        Useful for properties with code values as code names.
+        """
+        for prop, values in self._filters.items():
+            if "include" in values:
+                self._filters[prop] = {"include": [str(x) for x in values["include"]]}
+            if "exclude" in values:
+                self._filters[prop] = {"exclude": [str(x) for x in values["exclude"]]}

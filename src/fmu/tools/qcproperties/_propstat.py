@@ -202,6 +202,13 @@ class PropStat:
                         f"{param} parameter is not!"
                     )
                 codes = xtg_prop.codes.copy()
+
+                # if no codenames, use codevalues as codenames
+                if not codes:
+                    codes = {
+                        value: str(value)
+                        for value in np.unique(xtg_prop.get_active_npvalues1d())
+                    }
             else:
                 codes = self._wells[0].get_logrecord(param).copy()
 
