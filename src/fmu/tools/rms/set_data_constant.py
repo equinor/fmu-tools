@@ -1,5 +1,6 @@
 def set_data_constant(config: dict):
-    """
+    """Function to set data from RMS constant.
+
     This method is a utility in order to set surface and 3D grid property data
     to a given value. The value must be of the correct type (if discrete 3D
     property for example). The purpose of it is to make sure that those data
@@ -13,43 +14,40 @@ def set_data_constant(config: dict):
     "grid_models" are optional (at least one of them should be provided for the
     method to have any effect).
 
-    project
-        The roxar magic keyword ``project`` refering to the current RMS project.
+    Args:
+        project: The roxar magic keyword ``project`` refering to the current
+            RMS project.
 
-    value
-        The constant value to assign to the data. It could be 0 or -999 for
-        example. If discrete properties from grid models are modified, the
-        value should be applicable (integer).
+        value: The constant value to assign to the data. It could be 0 or -999
+            for example. If discrete properties from grid models are modified,
+            the value should be applicable (integer).
 
-    horizons
-        A Python dictionary where each key corresponds to the name of the
-        horizons category where horizon data need to be made empty. The value
-        associated to this key should be a list of horizon names to modify. If
-        a string ``all`` is assigned instead of a list, all available horizon
-        names for this category will be used.
-        Alternatively, if a list of horizons categories is given instead of a
-        dictionary, the method will apply to all horizons within these horizons
-        categories.
+        horizons: A Python dictionary where each key corresponds to the name of
+            the horizons category where horizon data need to be made empty. The
+            value associated to this key should be a list of horizon names to
+            modify. If a string ``all`` is assigned instead of a list, all
+            available horizon names for this category will be used.
+            Alternatively, if a list of horizons categories is given instead of
+            a dictionary, the method will apply to all horizons within these
+            horizons categories.
 
-    zones
-        A Python dictionary where each key corresponds to the name of the zones
-        category where zone data need to be made empty. The value associated to
-        this key should be a list of zone names to modify. If a string ``all``
-        is assigned instead of a list, all available zone names for this
-        category will be used.
-        Alternatively, if a list of zones categories is given instead of a
-        dictionary, the method will apply to all zones within these zones
-        categories.
+        zones: A Python dictionary where each key corresponds to the name of
+            the zones category where zone data need to be made empty. The value
+            associated to this key should be a list of zone names to modify. If
+            a string ``all`` is assigned instead of a list, all available zone
+            names for this category will be used.
+            Alternatively, if a list of zones categories is given instead of a
+            dictionary, the method will apply to all zones within these zones
+            categories.
 
-    grid_models
-        A Python dictionary where each key corresponds to the name of the grid
-        models where properties need to be made empty. The value associated to
-        this key should be a list of property names to modify. If a string
-        ``all`` is assigned instead of a list, all available properties for
-        this grid model name will be used.
-        Alternatively, if a list of grid models names is given instead of a
-        dictionary, the method will apply to all properties within these grid
-        models.
+        grid_models: A Python dictionary where each key corresponds to the name
+            of the grid models where properties need to be made empty. The
+            value associated to this key should be a list of property names to
+            modify. If a string ``all`` is assigned instead of a list, all
+            available properties for this grid model name will be used.
+            Alternatively, if a list of grid models names is given instead of a
+            dictionary, the method will apply to all properties within these
+            grid models.
     """
 
     import roxar
@@ -61,109 +59,96 @@ def set_data_constant(config: dict):
     value = config["value"]
 
     def set_safe_value(project, surf_type, name, data_type, value):
+        """ Method to set the horizon or zone surface to the defined value.
+
+        Args:
+            project: the roxar project.
+            surf_type: the type of surface.
+                It should be the string "horizons" or "zones".
+            name: the name the of surface.
+            value: the value (int or float) to be assigned to the surface
         """
-        Method to set the horizon or zone surface to the defined value.
-        Returns True if the operation succeeded, False otherwise.
-        """
-        success = False
         try:
-            if surf_type == "horizon":
+            if surf_type == "horizons":
                 surf = project.horizons[name][data_type]
             else:
                 surf = project.zones[name][data_type]
-            grid2D = surf.get_grid()
-            grid2D.set_values(grid2D.get_values() * 0.0 + value)
-            surf.set_grid(grid2D)
-            success = True
+            grid2d = surf.get_grid()
+            grid2d.set_values(grid2d.get_values() * 0.0 + value)
+            surf.set_grid(grid2d)
             print(" >> >> " + name)
         except Exception as e:
             print(" >> >> " + name + " cannot be modified")
             print(e)
-        return success
 
-    # HORIZON DATA
-    if "horizons" in config.keys():
-        print("Set horizons values to " + str(value) + "...")
-        if isinstance(config["horizons"], list):
-            # work directly at horizon category level
-            for data_type in config["horizons"]:
+
+    def set_surfaces(project, surf_type, dict_val, value):
+        """Method to set a group of surfaces to a given value.
+
+        Args:
+            project: roxar project.
+            surf_type: the type of surface.
+                It should be the string "horizon" or "zone".
+            dict_val: a list of surfaces or a dictionary of surfaces categories
+                (keys) with a list of surfaces names (value).
+            value: the value to assign to the surfaces.
+        """
+        if surf_type == "horizons":
+            surfaces = project.horizons
+        elif surf_type == "zones":
+            surfaces = project.zones
+        else:
+            raise ValueError("surf_type must be 'horizons' or 'zones'")
+
+        if isinstance(dict_val, list):
+            # work directly at horizon/zone category level
+            for data_type in dict_val:
                 print(" >> " + data_type)
-                for horizon in project.horizons:
+                for surface in surfaces:
                     set_safe_value(
-                        project, "horizon", horizon.name, data_type, value
+                        project, surf_type, surface.name, data_type, value
                     )
-
-        elif isinstance(config["horizons"], dict):
-            # check setup for each horizon category (list vs. all)
-            hor_cat = config["horizons"].keys()
-            for data_type in hor_cat:
+        elif isinstance(dict_val, dict):
+            # check setup for each horizon/zone category (list vs. all)
+            surf_cat = dict_val.keys()
+            for data_type in surf_cat:
                 print(" >> " + data_type)
-                horizons = config["horizons"][data_type]
-                if isinstance(horizons, str):
-                    if horizons == "all":
-                        for horizon in project.horizons:
+                surf_names = dict_val[data_type]
+                if isinstance(surf_names, str):
+                    if surf_names == "all":
+                        for surface in surfaces:
                             set_safe_value(
                                 project,
-                                "horizon",
-                                horizon.name,
+                                surf_type,
+                                surface.name,
                                 data_type,
                                 value,
                             )
                     else:
-                        assert False, (
-                            "keyword '"
-                            + horizons
+                        raise Exception(
+                            "keyword '" + surf_names
                             + "' not recognized, 'all' expected!"
                         )
-                elif isinstance(horizons, list):
-                    for horizon in horizons:
+                elif isinstance(surf_names, list):
+                    for surf_name in surf_names:
                         set_safe_value(
-                            project, "horizon", horizon, data_type, value
+                            project, surf_type, surf_name, data_type, value
                         )
-
         else:
-            assert False, (
-                "Value associated with key 'horizons' must be of "
+            raise TypeError(
+                "Value associated with key '"+surf_type+"' must be of "
                 "type list or dict!"
             )
+
+    # HORIZON DATA
+    if "horizons" in config.keys():
+        print("Set horizons values to " + str(value) + "...")
+        set_surfaces(project, "horizons", config["horizons"], value)
 
     # ZONE DATA
     if "zones" in config.keys():
         print("Set zones values to " + str(value) + "...")
-        if isinstance(config["zones"], list):
-            # work directly at zone category level
-            for data_type in config["zones"]:
-                print(" >> " + data_type)
-                for zone in project.zones:
-                    set_safe_value(project, "zone", zone.name, data_type, value)
-
-        elif isinstance(config["zones"], dict):
-            # check setup for each zone category (list vs. all)
-            hor_cat = config["zones"].keys()
-            for data_type in hor_cat:
-                print(" >> " + data_type)
-                zones = config["zones"][data_type]
-                if isinstance(zones, str):
-                    if zones == "all":
-                        for zone in project.zones:
-                            set_safe_value(
-                                project, "zone", zone.name, data_type, value
-                            )
-                    else:
-                        assert False, (
-                            "keyword '"
-                            + zones
-                            + "' not recognized, 'all' expected!"
-                        )
-                elif isinstance(zones, list):
-                    for zone in zones:
-                        set_safe_value(project, "zone", zone, data_type, value)
-
-        else:
-            assert False, (
-                "Value associated with key 'zones' must be of "
-                "type list or dict!"
-            )
+        set_surfaces(project, "zones", config["zones"], value)
 
     # GRID MODEL DATA
     if "grid_models" in config.keys():
@@ -177,9 +162,9 @@ def set_data_constant(config: dict):
                     try:
                         prop.set_values(prop.get_values() * 0 + value)
                         print(" >> >> " + prop.name)
-                    except:
+                    except Exception as e:
                         print(" >> >> " + prop.name + " is already empty")
-
+                        print(e)
         elif isinstance(config["grid_models"], dict):
             # check setup for each grid models (list vs. all)
             gridnames = config["grid_models"].keys()
@@ -193,14 +178,14 @@ def set_data_constant(config: dict):
                             try:
                                 prop.set_values(prop.get_values() * 0 + value)
                                 print(" >> >> " + prop.name)
-                            except:
+                            except Exception as e:
                                 print(
                                     " >> >> " + prop.name + " is already empty"
                                 )
+                                print(e)
                     else:
-                        assert False, (
-                            "keyword "
-                            + zones
+                        raise Exception(
+                            "keyword " + zones
                             + "not recognized, 'all' expected!"
                         )
                 elif isinstance(propnames, list):
@@ -212,9 +197,8 @@ def set_data_constant(config: dict):
                         except Exception as e:
                             print(" >> >> " + prop.name + " is already empty")
                             print(e)
-
         else:
-            assert False, (
+            raise TypeError(
                 "Value associated with key 'zones' must be of "
                 "type list or dict!"
             )
