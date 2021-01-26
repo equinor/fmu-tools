@@ -105,9 +105,7 @@ def set_data_constant(config: dict):
             for data_type in dict_val:
                 print(" >> " + data_type)
                 for surface in surfaces:
-                    set_safe_value(
-                        project, surf_type, surface.name, data_type, value
-                    )
+                    set_safe_value(project, surf_type, surface.name, data_type, value)
         elif isinstance(dict_val, dict):
             # check setup for each horizon/zone category (list vs. all)
             surf_cat = dict_val.keys()
@@ -117,27 +115,17 @@ def set_data_constant(config: dict):
                 if isinstance(surf_names, str):
                     if surf_names == "all":
                         for surface in surfaces:
-                            set_safe_value(
-                                project,
-                                surf_type,
-                                surface.name,
-                                data_type,
-                                value,
-                            )
+                            set_safe_value(project, surf_type, surface.name, data_type, value)
                     else:
                         raise Exception(
-                            "keyword '" + surf_names
-                            + "' not recognized, 'all' expected!"
+                            "keyword '" + surf_names + "' not recognized, 'all' expected!"
                         )
                 elif isinstance(surf_names, list):
                     for surf_name in surf_names:
-                        set_safe_value(
-                            project, surf_type, surf_name, data_type, value
-                        )
+                        set_safe_value(project, surf_type, surf_name, data_type, value)
         else:
             raise TypeError(
-                "Value associated with key '"+surf_type+"' must be of "
-                "type list or dict!"
+                "Value associated with key '" + surf_type + "' must be of type list or dict!"
             )
 
     # HORIZON DATA
