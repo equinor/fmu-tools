@@ -1,26 +1,18 @@
-# -*- coding: utf-8 -*-
 """Testing code for generation of design matrices"""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from pathlib import Path
 
-import os
 import pandas as pd
 
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
+
+TESTDATA = Path(__file__).parent / "data"
 
 
 def test_generate_onebyone(tmpdir):
     """Test generation of onebyone design"""
 
-    if "__file__" in globals():
-        # Easen up copying test code into interactive sessions
-        testdir = os.path.dirname(os.path.abspath(__file__))
-    else:
-        testdir = os.path.abspath(".")
-
-    inputfile = testdir + "/data/sensitivities/config/" + "design_input_example1.xlsx"
+    inputfile = TESTDATA / "config/design_input_example1.xlsx"
     input_dict = excel2dict_design(inputfile)
 
     design = DesignMatrix()
@@ -31,29 +23,23 @@ def test_generate_onebyone(tmpdir):
     # Write to disk and check some validity
     tmpdir.chdir()
     design.to_xlsx("designmatrix.xlsx")
-    assert os.path.exists("designmatrix.xlsx")
-    diskdesign = pd.read_excel("designmatrix.xlsx")
+    assert Path("designmatrix.xlsx").exists
+    diskdesign = pd.read_excel("designmatrix.xlsx", engine="openpyxl")
     assert "REAL" in diskdesign
     assert "SENSNAME" in diskdesign
     assert "SENSCASE" in diskdesign
     assert not diskdesign.empty
 
-    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    diskdefaults = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DefaultValues", engine="openpyxl"
+    )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
 
 
 def test_generate_full_mc(tmpdir):
     """Test generation of full monte carlo"""
-    if "__file__" in globals():
-        # Easen up copying test code into interactive sessions
-        testdir = os.path.dirname(os.path.abspath(__file__))
-    else:
-        testdir = os.path.abspath(".")
-
-    inputfile = (
-        testdir + "/data/sensitivities/config/" + "design_input_mc_with_correls.xlsx"
-    )
+    inputfile = TESTDATA / "config/design_input_mc_with_correls.xlsx"
     input_dict = excel2dict_design(inputfile)
 
     design = DesignMatrix()
@@ -68,14 +54,18 @@ def test_generate_full_mc(tmpdir):
     # Write to disk and check some validity
     tmpdir.chdir()
     design.to_xlsx("designmatrix.xlsx")
-    assert os.path.exists("designmatrix.xlsx")
-    diskdesign = pd.read_excel("designmatrix.xlsx", sheet_name="DesignSheet01")
+    assert Path("designmatrix.xlsx").exists
+    diskdesign = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DesignSheet01", engine="openpyxl"
+    )
     assert "REAL" in diskdesign
     assert "SENSNAME" in diskdesign
     assert "SENSCASE" in diskdesign
     assert not diskdesign.empty
 
-    diskdefaults = pd.read_excel("designmatrix.xlsx", sheet_name="DefaultValues")
+    diskdefaults = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="DefaultValues", engine="openpyxl"
+    )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
 

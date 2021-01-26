@@ -12,13 +12,13 @@ import fmu.tools
 from fmu.tools.qcproperties.qcproperties import QCProperties
 
 from fmu.tools._common import _QCCommon
-from ._qcforward import QCForward
+from fmu.tools.qcforward._qcforward import QCForward
 
 
 QCC = _QCCommon()
 
 
-class _LocalData(object):
+class _LocalData:
     def __init__(self):
         """Defining and hold data local for this routine"""
         self.actions = None

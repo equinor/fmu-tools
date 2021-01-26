@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Example: generation of design matrix
 """
-from __future__ import division, print_function, absolute_import
 
 import os
 
