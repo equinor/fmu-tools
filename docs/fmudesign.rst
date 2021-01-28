@@ -27,7 +27,7 @@ where <design_input.xlsx> is the path to the input for generating the design mat
 and <output_matrix.xlsx> is the path to the output design matrix.
 Study the examples for how to configure the input for the design matrix
 
-2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities. 
+2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities.
 Study the examples to learn how to use it.
 
 
@@ -213,67 +213,3 @@ If parameter A is sampled from a discrete distribution, and one or more addition
 .. image:: images/design_designinput_dependencies.png
 
 .. image:: images/design_depend1.png
-
-Example: summary of design matrix
-"""""""""""""""""""""""""""""""""
-
-Use summarize_design on a design matrix on standard fmu format for
-one-by-one sensitivities to summarize the realisation numbers for each
-SENSNAME and SENSTYPE, and whether they are scalar sensitivities or
-monte carlo sensitivities.
-
-.. code-block:: python
-
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-
-    from fmu.tools.sensitivities import summarize_design
-
-    # Full or relative path to design matrix .xlsx or .csv format
-    designname = '../tests/data/sensitivities/distributions/design.xlsx'
-    # Only include for excel files; name of sheet that contains design matrix
-    designsheet = 'DesignSheet01'
-
-    designtable = summarize_design(designname, designsheet)
-
-    # designtable is a pandas DataFrame with summary of the design in the designmatrix,
-    # i.e. it will contain realisation number, senstype and senscase for each sensitivity
-
-Example: calculating one tornadotable
-""""""""""""""""""""""""""""""""""""""
-
-Using calc_tornadoplot with a 'designsummary' and a resultfile as
-input, and calculating statistics to visualize in a tornado plot for a
-given choice of SELECTOR (e.g. ZONE:'Nansen') and RESPONSE
-(e.g. STOIIP_OIL). The reference is usually the mean of the
-realizations in the "seed sensitivity", but it can also be specified
-as a single realisation number, e.g. if you have a reference case in
-realization 0. Statistics showing the difference to the reference can
-be calculated as absolute values, or as percentages. You could also
-choose to exclude from the plot, sensitivities that are smaller than
-the seed sensitivity P10/P90.
-
-.. code-block:: python
-
-    #!/usr/bin/env python
-    # -*- coding: utf-8 -*-
-
-    import pandas as pd
-    from fmu.tools.sensitivities import calc_tornadoplot
-
-    designtable=pd.read_csv('designsummary.csv')
-    results = pd.read_csv('resultfile.csv')
-    response = 'STOIIP_OIL'
-    selectors = ['ZONE', 'REGION'] # One or several in a list
-    # One or several in a list of lists
-    selection = [['Nansen','Larsson'], ['SegmentA']] # Will sum Nansen and Larsson volumes first
-    reference = 'seed' # Alternatively a single realisation number
-    scale = 'percentage' # Alterntively 'absolute'
-
-    (tornadotable, ref_value) = calc_tornadoinput(
-        designtable, results, response, selectors,
-        selection, reference, scale)
-
-    # Other options: specify cutbyseed = True and sortsens = False (see documentation).
-    # tornadotable is a pandas DataFrame for visualisation of tornadoplots in other tools.
-    # ref_value is the average of the reference,
