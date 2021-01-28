@@ -1,4 +1,4 @@
-"""Testing excel2dict"""
+"""Testing generating design matrices from dictionary input"""
 
 import shutil
 from pathlib import Path

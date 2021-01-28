@@ -94,6 +94,10 @@ class DesignMatrix:
                     counter += numreal
                     self._add_sensitivity(sensitivity)
                 elif sens["senstype"] == "seed":
+                    if self.seedvalues is None:
+                        raise ValueError(
+                            "No seed values available to use for seed sensitivity"
+                        )
                     sensitivity = SeedSensitivity(key)
                     sensitivity.generate(
                         range(counter, counter + numreal),
@@ -354,6 +358,9 @@ class DesignMatrix:
             back_dict (OrderedDict): parameters and distributions
             numreal (int): Number of samples to generate
         """
+        assert isinstance(
+            numreal, int
+        ), f"numreal must be an integer, got {type(numreal)} with value {numreal}"
         mc_background = MonteCarloSensitivity("background")
         mc_background.generate(
             range(numreal), back_dict["parameters"], "None", back_dict["correlations"]
@@ -424,6 +431,10 @@ class SeedSensitivity:
             parameters (OrderedDict): parameter names and
                 distributions or values.
         """
+        assert isinstance(
+            seedvalues, list
+        ), f"seedvalues must be a list, got {seedvalues}"
+
         self.sensvalues = pd.DataFrame(index=realnums)
         self.sensvalues[seedname] = seedvalues[0 : len(realnums)]
 
@@ -649,7 +660,7 @@ class MonteCarloSensitivity:
         defined distributions.
 
         Args:
-            realnums (list): list of intergers with realization numbers
+            realnums (list): list of integers with realization numbers
             parameters (OrderedDict):
                 dictionary of parameters and distributions
             seeds (str): default or None
