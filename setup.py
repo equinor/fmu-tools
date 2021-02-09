@@ -46,6 +46,7 @@ TEST_REQUIREMENTS = [
     "flake8",
     "pre-commit",
     "pytest",
+    "pytest-cov",
 ]
 
 DOCS_REQUIREMENTS = [
