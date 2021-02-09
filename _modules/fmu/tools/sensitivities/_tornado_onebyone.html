@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 1.3.0 documentation</title>
+  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 1.3.1.dev1+gad3d23a documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.3.0
+                1.3.1.dev1+gad3d23a
               </div>
             
           
@@ -191,12 +191,10 @@
         <span class="k">if</span> <span class="n">sel</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resultfile</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">sel</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;[]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Use &#39;all&#39; to sum all&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="s2">&quot;not &#39;total&#39;&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Selection &quot;</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="s2">&quot; not found in column&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="s2">&quot;in resultfile&quot;</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">resultfile</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Selection &quot;</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="s2">&quot; not found in column&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="s2">&quot;in resultfile&quot;</span>
+            <span class="p">)</span>
+        <span class="n">resultfile</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">check_response</span><span class="p">(</span><span class="n">resultfile</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>

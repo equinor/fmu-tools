@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.sensitivities.fmudesignrunner &mdash; fmu-tools 1.3.0 documentation</title>
+  <title>fmu.tools.sensitivities.fmudesignrunner &mdash; fmu-tools 1.3.1.dev1+gad3d23a documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.3.0
+                1.3.1.dev1+gad3d23a
               </div>
             
           
@@ -170,27 +170,20 @@
 <span></span><span class="sd">&quot;&quot;&quot;Script for generating a design matrix from config input&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">DesignMatrix</span><span class="p">,</span> <span class="n">excel2dict_design</span>
 
 
-<span class="k">def</span> <span class="nf">_do_parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-
-    <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+<div class="viewcode-block" id="get_parser"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.get_parser">[docs]</a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">():</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Generate design matrix to be used with ert DESIGN2PARAMS&quot;</span><span class="p">,</span>
         <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># positional:</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Input design config filename &quot;</span> <span class="s2">&quot;in Excel format&quot;</span><span class="p">)</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input design config filename in Excel format&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;destination&quot;</span><span class="p">,</span>
@@ -202,23 +195,32 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--designinput&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Alternative sheetname for the &quot;</span> <span class="s2">&quot;worksheet designinput&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Alternative sheetname for the worksheet designinput&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;designinput&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--defaultvalues&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Alternative sheetname for &quot;</span> <span class="s2">&quot;worksheet defaultvalues&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Alternative sheetname for worksheet defaultvalues&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;defaultvalues&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--general_input&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Alternative sheetname for the&quot;</span> <span class="s2">&quot;worksheet general_input&quot;</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Alternative sheetname for the worksheet general_input&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;general_input&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;fmudesign is a command line utility for generating design matrices</span>
+
+<span class="sd">    Wrapper for the the fmu.tools.sensitivities module&quot;&quot;&quot;</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
     <span class="c1"># Defaulted options should be reset to None, so that the other</span>
     <span class="c1"># defaulting level inside _excel2dict can do its work.</span>
@@ -228,16 +230,6 @@
         <span class="n">args</span><span class="o">.</span><span class="n">defaultvalues</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">general_input</span> <span class="o">==</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_default</span><span class="p">(</span><span class="s2">&quot;general_input&quot;</span><span class="p">):</span>
         <span class="n">args</span><span class="o">.</span><span class="n">general_input</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">return</span> <span class="n">args</span>
-
-
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;fmudesign is a command line utility for generating design matrices</span>
-
-<span class="sd">    Wrapper for the the fmu.tools.sensitivities module&quot;&quot;&quot;</span>
-
-    <span class="n">args</span> <span class="o">=</span> <span class="n">_do_parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
     <span class="n">sheetnames</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">designinput</span><span class="p">:</span>
