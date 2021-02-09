@@ -42,7 +42,7 @@ def _check_dist_params_lognormal(dist_params):
         msg = "Parameters for lognormal distribution must be numbers. "
     elif float(dist_params[1]) < 0:
         status = False
-        msg = "Lognormal distribution must have" " stddev >= 0. "
+        msg = "Lognormal distribution must have stddev >= 0. "
     else:
         status = True
         msg = ""
@@ -62,7 +62,7 @@ def _check_dist_params_uniform(dist_params):
         msg = "Parameters for uniform distribution must be numbers. "
     elif float(dist_params[1]) < float(dist_params[0]):
         status = False
-        msg = "Uniform distribution must have dist_param2" " >= dist_param1"
+        msg = "Uniform distribution must have dist_param2 >= dist_param1"
     else:
         status = True
         msg = ""
@@ -85,7 +85,7 @@ def _check_dist_params_triang(dist_params):
         and (float(dist_params[1]) >= float(dist_params[0]))
     ):
         status = False
-        msg = "Triangular distribution must have: " "low <= mode <= high. "
+        msg = "Triangular distribution must have: low <= mode <= high. "
     else:
         status = True
         msg = ""
@@ -108,7 +108,7 @@ def _check_dist_params_pert(dist_params):
         and (float(dist_params[1]) >= float(dist_params[0]))
     ):
         status = False
-        msg = "Pert distribution must have: " "low <= mode <= high. "
+        msg = "Pert distribution must have: low <= mode <= high. "
     else:
         status = True
         msg = ""
@@ -130,7 +130,7 @@ def _check_dist_params_logunif(dist_params):
         (float(dist_params[0]) > 0) and (float(dist_params[1]) >= float(dist_params[0]))
     ):
         status = False
-        msg = "loguniform distribution must have" " low > 0 and high >=low. "
+        msg = "loguniform distribution must have low > 0 and high >=low. "
     else:
         status = True
         msg = ""
@@ -494,15 +494,14 @@ def sample_discrete(dist_params, numreals):
                 "Number of weights for discrete distribution "
                 "is not the same as number of values."
             )
-        else:
-            weightnmbr = [float(weight) for weight in weights]
-            fractions = [weight / sum(weightnmbr) for weight in weightnmbr]
-            values = numpy.random.choice(outcomes, numreals, p=fractions)
+        weightnmbr = [float(weight) for weight in weights]
+        fractions = [weight / sum(weightnmbr) for weight in weightnmbr]
+        values = numpy.random.choice(outcomes, numreals, p=fractions)
     elif len(dist_params) == 1:  # uniform
         values = numpy.random.choice(outcomes, numreals)
     else:
         status = False
-        values = "Wrong input for discrete " "distribution"
+        values = "Wrong input for discrete distribution"
 
     return status, values
 
