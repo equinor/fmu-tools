@@ -113,10 +113,13 @@ gridname
   Name of the RMS gridmodel to be requested for mapping (x,y,z) to gridcells
   and into zone queries.
 
+trajectory_name
+  The trajectory name for the wellpaths in the RMS project. Defaults
+  to "Drilled trajectory".
+
 See also
 ^^^^^^^^
 
 * `GENDATA_RFT forward model in ERT <https://fmu-docs.equinor.com/docs/ert/reference/forward_models.html#GENDATA_RFT>`__
 * `GENDATA keyword in ERT <https://fmu-docs.equinor.com/docs/ert/reference/configuration/keywords.html#gen-data>`__
 * `merge_rft_ertobs in subscript <https://fmu-docs.equinor.com/docs/subscript/scripts/merge_rft_ertobs.html>`__
-
