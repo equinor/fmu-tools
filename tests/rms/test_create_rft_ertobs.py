@@ -63,7 +63,12 @@ class Wellbore:
 
     def __init__(self, wellname):
         self.wellname = wellname
-        self.trajectories = {"Drilled trajectory": Trajectory(wellname)}
+        self.trajectories = {
+            # Add two trajectory name pointing to the same trajectories,
+            # which trajectory is in use can be changed on a global basis.
+            "Drilled trajectory": Trajectory(wellname),
+            "Imported trajectory": Trajectory(wellname),
+        }
 
 
 class Well:
@@ -156,6 +161,19 @@ def test_get_well_coords():
         create_rft_ertobs.get_well_coords(rms_project_mock, "R-99")
         == np.array([[0, 0, 0, 0], [2000, 0, 0, 2000]])
     ).all()
+
+    # Alternative trajectory name in RMS:
+    assert (
+        create_rft_ertobs.get_well_coords(
+            rms_project_mock, "R-99", trajectory_name="Imported trajectory"
+        )
+        == np.array([[0, 0, 0, 0], [2000, 0, 0, 2000]])
+    ).all()
+
+    with pytest.raises(KeyError):
+        create_rft_ertobs.get_well_coords(
+            rms_project_mock, "R-99", trajectory_name="Bogus traj-name"
+        )
 
 
 @pytest.mark.parametrize(
@@ -282,8 +300,30 @@ def test_main_mock_drogon(tmpdir):
     assert Path("exports/well_date_rft.txt").is_file()
 
 
-def test_main_norms(tmpdir):
-    """Test that if we have a full CSV files with all values we don't need
+def test_alternative_trajectory_name(tmpdir):
+    """Test that we can use a different trajectory in RMS, but it has to be
+    the same for all wells"""
+    tmpdir.chdir()
+    tmpdir.mkdir("exports")
+    config = {
+        "input_file": Path(__file__).parent / "rft_ertobs_data/input_table_drogon.csv",
+        "exportdir": "exports",
+        "project": RMSMockedProject(),
+        "gridname": "Simgrid",
+        "zonename": "Zone",
+        "trajectory_name": "Imported trajectory",
+    }
+    create_rft_ertobs.main(config)
+    assert not pd.read_csv(Path("exports") / "rft_ertobs.csv").empty
+
+    # Check that we fail when the trajectory is wrongly named:
+    config["trajectory_name"] = "fooo"
+    with pytest.raises(KeyError):
+        create_rft_ertobs.main(config)
+
+
+def test_main_no_rms(tmpdir):
+    """Test that if we have a full CSV file with all values we don't need
     the RMS project"""
     tmpdir.chdir()
 
