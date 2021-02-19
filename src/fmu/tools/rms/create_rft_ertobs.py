@@ -41,23 +41,24 @@ from scipy.interpolate import CubicSpline
 logger = logging.getLogger(__name__)
 
 SUPPORTED_OPTIONS = [
-    "input_dframe",
-    "input_file",
-    "project",
+    "absolute_error",
     "alias",
     "alias_file",
-    "rft_prefix",
-    "exportdir",
-    "welldatefile",  # WELL_AND_TIME_FILE in semeio
-    "interpolation",
-    "absolute_error",
-    "relative_error",
-    "rms_name",
     "ecl_name",
-    "zonename",
+    "exportdir",
     "gridname",
-    "verbose",
+    "input_dframe",
+    "input_file",
+    "interpolation",
     "loglevel",
+    "project",
+    "relative_error",
+    "rft_prefix",
+    "rms_name",
+    "trajectory_name",
+    "verbose",
+    "welldatefile",  # WELL_AND_TIME_FILE in semeio
+    "zonename",
 ]
 
 
@@ -131,6 +132,11 @@ def check_and_parse_config(config: dict) -> dict:
 
     config["rft_prefix"] = config.get("rft_prefix", "")
     assert isinstance(config["rft_prefix"], str), "rft_prefix must be a string"
+
+    config["trajectory_name"] = config.get("trajectory_name", "Drilled trajectory")
+    assert isinstance(
+        config["trajectory_name"], str
+    ), "trajectory_name must be a string"
 
     return config
 
@@ -505,7 +511,9 @@ def main(config: dict = None) -> None:
         grid = grid_model.get_grid()
         coords_pr_well = {}
         for well in dframe["WELL_NAME"].unique():
-            coords_pr_well[well] = get_well_coords(config["project"], well)
+            coords_pr_well[well] = get_well_coords(
+                config["project"], well, trajectory_name=config["trajectory_name"]
+            )
         dframe = fill_missing_md_xyz(dframe, coords_pr_well)
 
         dframe["rms_cell_index"] = dframe.apply(

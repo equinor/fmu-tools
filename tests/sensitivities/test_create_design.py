@@ -68,9 +68,3 @@ def test_generate_full_mc(tmpdir):
     )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
-
-
-if __name__ == "__main__":
-    # This is relevant when run in clean Komodo environment where pytest is missing
-    test_generate_onebyone()
-    test_generate_full_mc()

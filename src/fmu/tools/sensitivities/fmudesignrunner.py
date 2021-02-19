@@ -1,27 +1,20 @@
 """Script for generating a design matrix from config input"""
 
 import argparse
-import sys
 from pathlib import Path
 
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 
-def _do_parse_args(args):
-
-    if args is None:
-        args = sys.argv[1:]
-    else:
-        args = args
+def get_parser():
 
     parser = argparse.ArgumentParser(
         description="Generate design matrix to be used with ert DESIGN2PARAMS",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    # positional:
     parser.add_argument(
-        "config", type=str, help=("Input design config filename " "in Excel format")
+        "config", type=str, help="Input design config filename in Excel format"
     )
     parser.add_argument(
         "destination",
@@ -33,23 +26,32 @@ def _do_parse_args(args):
     parser.add_argument(
         "--designinput",
         type=str,
-        help=("Alternative sheetname for the " "worksheet designinput"),
+        help="Alternative sheetname for the worksheet designinput",
         default="designinput",
     )
     parser.add_argument(
         "--defaultvalues",
         type=str,
-        help=("Alternative sheetname for " "worksheet defaultvalues"),
+        help="Alternative sheetname for worksheet defaultvalues",
         default="defaultvalues",
     )
     parser.add_argument(
         "--general_input",
         type=str,
-        help=("Alternative sheetname for the" "worksheet general_input"),
+        help="Alternative sheetname for the worksheet general_input",
         default="general_input",
     )
 
-    args = parser.parse_args(args)
+    return parser
+
+
+def main():
+    """fmudesign is a command line utility for generating design matrices
+
+    Wrapper for the the fmu.tools.sensitivities module"""
+
+    parser = get_parser()
+    args = parser.parse_args()
 
     # Defaulted options should be reset to None, so that the other
     # defaulting level inside _excel2dict can do its work.
@@ -59,16 +61,6 @@ def _do_parse_args(args):
         args.defaultvalues = None
     if args.general_input == parser.get_default("general_input"):
         args.general_input = None
-
-    return args
-
-
-def main(args=None):
-    """fmudesign is a command line utility for generating design matrices
-
-    Wrapper for the the fmu.tools.sensitivities module"""
-
-    args = _do_parse_args(args)
 
     sheetnames = dict()
     if args.designinput:
