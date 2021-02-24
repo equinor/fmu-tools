@@ -177,7 +177,7 @@ def set_data_constant(config: dict):
                                 print(e)
                     else:
                         raise Exception(
-                            "keyword " + zones + "not recognized, 'all' expected!"
+                            "keyword " + propnames + "not recognized, 'all' expected!"
                         )
                 elif isinstance(propnames, list):
                     for propname in propnames:
