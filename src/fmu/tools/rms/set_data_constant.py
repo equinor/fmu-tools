@@ -1,5 +1,5 @@
 def set_data_constant(config: dict):
-    """Function to set data from RMS constant.
+    """Set data from RMS constant.
 
     This method is a utility in order to set surface and 3D grid property data
     to a given value. The value must be of the correct type (if discrete 3D
@@ -21,6 +21,7 @@ def set_data_constant(config: dict):
         value: The constant value to assign to the data. It could be 0 or -999
             for example. If discrete properties from grid models are modified,
             the value should be applicable (integer).
+
 
         horizons: A Python dictionary where each key corresponds to the name of
             the horizons category where horizon data need to be made empty. The
@@ -59,7 +60,7 @@ def set_data_constant(config: dict):
     value = config["value"]
 
     def set_safe_value(project, surf_type, name, data_type, value):
-        """ Method to set the horizon or zone surface to the defined value.
+        """Set the horizon or zone surface to the defined value.
 
         Args:
             project: the roxar project.
@@ -81,9 +82,8 @@ def set_data_constant(config: dict):
             print(" >> >> " + name + " cannot be modified")
             print(e)
 
-
     def set_surfaces(project, surf_type, dict_val, value):
-        """Method to set a group of surfaces to a given value.
+        """Set a group of surfaces to a given value.
 
         Args:
             project: roxar project.
@@ -115,17 +115,23 @@ def set_data_constant(config: dict):
                 if isinstance(surf_names, str):
                     if surf_names == "all":
                         for surface in surfaces:
-                            set_safe_value(project, surf_type, surface.name, data_type, value)
+                            set_safe_value(
+                                project, surf_type, surface.name, data_type, value
+                            )
                     else:
                         raise Exception(
-                            "keyword '" + surf_names + "' not recognized, 'all' expected!"
+                            "keyword '"
+                            + surf_names
+                            + "' not recognized, 'all' expected!"
                         )
                 elif isinstance(surf_names, list):
                     for surf_name in surf_names:
                         set_safe_value(project, surf_type, surf_name, data_type, value)
         else:
             raise TypeError(
-                "Value associated with key '" + surf_type + "' must be of type list or dict!"
+                "Value associated with key '"
+                + surf_type
+                + "' must be of type list or dict!"
             )
 
     # HORIZON DATA
@@ -167,14 +173,11 @@ def set_data_constant(config: dict):
                                 prop.set_values(prop.get_values() * 0 + value)
                                 print(" >> >> " + prop.name)
                             except Exception as e:
-                                print(
-                                    " >> >> " + prop.name + " is already empty"
-                                )
+                                print(" >> >> " + prop.name + " is already empty")
                                 print(e)
                     else:
                         raise Exception(
-                            "keyword " + zones
-                            + "not recognized, 'all' expected!"
+                            "keyword " + zones + "not recognized, 'all' expected!"
                         )
                 elif isinstance(propnames, list):
                     for propname in propnames:
@@ -187,8 +190,7 @@ def set_data_constant(config: dict):
                             print(e)
         else:
             raise TypeError(
-                "Value associated with key 'zones' must be of "
-                "type list or dict!"
+                "Value associated with key 'zones' must be of type list or dict!"
             )
 
     print("End of function set_data_constant().")
