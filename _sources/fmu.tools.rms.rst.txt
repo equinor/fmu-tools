@@ -12,6 +12,14 @@ fmu.tools.rms.create\_rft\_ertobs module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.set\_data\_constant module
+----------------------------------------
+
+.. automodule:: fmu.tools.rms.set_data_constant
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.volumetrics module
 --------------------------------
 
