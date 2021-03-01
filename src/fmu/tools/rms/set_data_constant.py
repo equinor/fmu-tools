@@ -1,4 +1,12 @@
-def set_data_constant(config: dict):
+from typing import List, Dict, Union
+
+try:
+    import _roxar  # type: ignore
+except ModuleNotFoundError:
+    raise ModuleNotFoundError("This script only supports interactive RMS usage")
+
+
+def set_data_constant(config: Dict):
     """Set data from RMS constant.
 
     This method is a utility in order to set surface and 3D grid property data
@@ -51,15 +59,15 @@ def set_data_constant(config: dict):
             grid models.
     """
 
-    import roxar
-
     assert isinstance(config, dict), "Argument must be a Python dictionary!"
     assert "project" in config.keys(), "Input dict must contain key 'project'!"
     project = config["project"]
     assert "value" in config.keys(), "Input dict must contain key 'value'!"
     value = config["value"]
 
-    def set_safe_value(project, surf_type, name, data_type, value):
+    def set_safe_value(
+        project: _roxar.Project, surf_type: str, name: str, data_type: str, value: float
+    ):
         """Set the horizon or zone surface to the defined value.
 
         Args:
@@ -82,7 +90,12 @@ def set_data_constant(config: dict):
             print(" >> >> " + name + " cannot be modified")
             print(e)
 
-    def set_surfaces(project, surf_type, dict_val, value):
+    def set_surfaces(
+        project: _roxar.Project,
+        surf_type: str,
+        dict_val: Union[List, Dict],
+        value: float,
+    ):
         """Set a group of surfaces to a given value.
 
         Args:
