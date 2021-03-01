@@ -1,9 +1,11 @@
 from typing import List, Dict, Union
+import warnings
 
 try:
     import _roxar  # type: ignore
 except ModuleNotFoundError:
-    raise ModuleNotFoundError("This script only supports interactive RMS usage")
+    warnings.warn("This script only supports interactive RMS usage")
+    pass
 
 
 def set_data_constant(config: Dict):
