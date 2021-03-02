@@ -3,8 +3,11 @@
 import shutil
 from pathlib import Path
 import subprocess
+from packaging import version
 
 import pandas as pd
+
+import pytest
 
 from fmu.tools.sensitivities import DesignMatrix
 
@@ -26,6 +29,10 @@ def valid_designmatrix(dframe):
     assert not dframe.isna().sum().sum()
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_designmatrix():
     """Test the DesignMatrix class"""
 
@@ -47,6 +54,10 @@ def test_designmatrix():
     assert isinstance(design.defaultvalues, dict)
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_endpoint(tmpdir):
     """Test the installed endpoint
 

@@ -1,5 +1,5 @@
 openpyxl>=2.6
-pandas>=0.24
+pandas>=0.21
 pyyaml>=5.3
 scipy>=1.2
 xlrd>=1.2

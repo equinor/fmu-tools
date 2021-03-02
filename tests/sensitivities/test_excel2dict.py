@@ -1,6 +1,7 @@
 """Testing excel2dict"""
-
 import os
+from packaging import version
+
 import pytest
 
 import numpy as np
@@ -24,6 +25,10 @@ MOCK_DESIGNINPUT = pd.DataFrame(
 )
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_excel2dict_design(tmpdir):
     """Test that we can convert an Excelfile to a dictionary"""
     tmpdir.chdir()
@@ -78,6 +83,10 @@ def test_excel2dict_design(tmpdir):
     assert "RMS_SEED" in "".join(open("dictdesign.yaml").readlines())
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_duplicate_sensname_exception(tmpdir):
     """Test that exceptions are raised for erroneous sensnames"""
     # pylint: disable=abstract-class-instantiated
@@ -107,6 +116,10 @@ def test_duplicate_sensname_exception(tmpdir):
         excel2dict_design("designinput3.xlsx")
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_strip_spaces(tmpdir):
     """Spaces before and after parameter names are probabaly
     invisible user errors in Excel sheets. Remove them."""
@@ -145,6 +158,10 @@ def test_strip_spaces(tmpdir):
     assert [par.strip() for par in def_params] == def_params
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_mixed_senstype_exception(tmpdir):
     """Test that exceptions are raised for mixups in user input on types"""
     # pylint: disable=abstract-class-instantiated
@@ -181,6 +198,10 @@ def test_has_value():
     assert _has_value(None)
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_background_sheet(tmpdir):
     """Test loading background values from a sheet"""
     tmpdir.chdir()
