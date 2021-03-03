@@ -407,21 +407,32 @@ def ertobs_df_to_files(
 
     for wellname, wellframe in dframe.groupby("WELL_NAME"):
         traj_filename = Path(exportdir) / (wellname + ".txt")
-        wellframe[["EAST", "NORTH", "MD", "TVD", "ZONE"]].drop_duplicates().to_csv(
-            traj_filename, sep=" ", index=False, header=False
-        )
+
+        well_trajectory = wellframe[
+            ["EAST", "NORTH", "MD", "TVD", "ZONE"]
+        ].drop_duplicates()
+
+        well_trajectory.to_csv(traj_filename, sep=" ", index=False, header=False)
         logger.info("Written trajectory data to %s", traj_filename)
-    for wname_rep_step, wellframe in dframe.groupby(["WELL_NAME", "REPORT_STEP"]):
-        obs_filename = Path(exportdir) / (
-            wname_rep_step[0] + "_" + str(wname_rep_step[1]) + ".obs"
-        )
-        wellframe[["PRESSURE", "ERROR"]].to_csv(
-            obs_filename,
-            sep=" ",
-            index=False,
-            header=False,
-        )
-        logger.info("Written obs file to %s", obs_filename)
+
+        for wname_rep_step, well_rep_step_frame in wellframe.groupby("REPORT_STEP"):
+            obs_filename = Path(exportdir) / (
+                wellname + "_" + str(wname_rep_step) + ".obs"
+            )
+
+            # Left join with the well trajectory frame, to ensure we
+            # can output -1 for RFT measurements for points that are only
+            # active on a subset of the report steps (i.e. dates):
+            obs_frame = pd.merge(well_trajectory, well_rep_step_frame, how="left")
+            obs_frame["PRESSURE"] = obs_frame["PRESSURE"].fillna(value=-1)
+            obs_frame["ERROR"] = obs_frame["ERROR"].fillna(value=0)
+            obs_frame[["PRESSURE", "ERROR"]].to_csv(
+                obs_filename,
+                sep=" ",
+                index=False,
+                header=False,
+            )
+            logger.info("Written obs file to %s", obs_filename)
 
     dframe["DAY"] = dframe["DATE"].dt.strftime("%d")
     dframe["MONTH"] = dframe["DATE"].dt.strftime("%m")

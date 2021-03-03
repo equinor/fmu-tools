@@ -615,6 +615,7 @@ def test_report_step_same_xyz(tmpdir):
     )
 
     # But there must be multiple observation files, coupled with REPORT_STEP.
+    print(pd.read_csv(Path("R-99_1.obs"), sep=r"\s+", header=None))
     pd.testing.assert_frame_equal(
         pd.read_csv(Path("R-99_1.obs"), sep=r"\s+", header=None),
         pd.DataFrame([[100, 5]]),
@@ -632,7 +633,13 @@ def test_report_step_same_xyz(tmpdir):
 
 
 def test_report_step_different_xyz(tmpdir):
-    """Multiple dates for a well at different xyz"""
+    """Multiple dates for a well at different xyz.
+
+    This requires a setup compatible with GENDATA_RFT in semeio and GEN_DATA in ERT.
+
+    See also:
+    https://github.com/equinor/semeio/blob/master/tests/jobs/rft/test_gendata_rft.py
+    """
     tmpdir.chdir()
     obs_1 = {
         "DATE": "2000-01-01",
@@ -658,14 +665,15 @@ def test_report_step_different_xyz(tmpdir):
         pd.DataFrame([[0, 0, 1900, 1900], [0, 0, 1920, 1920]]),
     )
 
-    # But there must be multiple observation files, coupled with REPORT_STEP.
+    # But there must be multiple observation files, and points with no data
+    # must be padded with -1, and filename coupled with REPORT_STEP.
     pd.testing.assert_frame_equal(
         pd.read_csv(Path("R-99_1.obs"), sep=r"\s+", header=None),
-        pd.DataFrame([[100, 5]]),
+        pd.DataFrame([[100, 5.0], [-1, 0.0]]),
     )
     pd.testing.assert_frame_equal(
         pd.read_csv(Path("R-99_2.obs"), sep=r"\s+", header=None),
-        pd.DataFrame([[90, 5]]),
+        pd.DataFrame([[-1, 0.0], [90, 5.0]]),
     )
 
     # Check that we get REPORT_STEP 1 for the first date, and 2 for the second:
