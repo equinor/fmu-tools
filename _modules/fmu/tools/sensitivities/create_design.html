@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.3.1.dev3+g67a4724 documentation</title>
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.3.1.dev4+g64cfba2 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.3.1.dev3+g67a4724
+                1.3.1.dev4+g64cfba2
               </div>
             
           
@@ -263,6 +263,10 @@
                     <span class="n">counter</span> <span class="o">+=</span> <span class="n">numreal</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_add_sensitivity</span><span class="p">(</span><span class="n">sensitivity</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">sens</span><span class="p">[</span><span class="s2">&quot;senstype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;seed&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seedvalues</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;No seed values available to use for seed sensitivity&quot;</span>
+                        <span class="p">)</span>
                     <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">SeedSensitivity</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
                     <span class="n">sensitivity</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
                         <span class="nb">range</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">counter</span> <span class="o">+</span> <span class="n">numreal</span><span class="p">),</span>
@@ -523,6 +527,9 @@
 <span class="sd">            back_dict (OrderedDict): parameters and distributions</span>
 <span class="sd">            numreal (int): Number of samples to generate</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">numreal</span><span class="p">,</span> <span class="nb">int</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;numreal must be an integer, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">numreal</span><span class="p">)</span><span class="si">}</span><span class="s2"> with value </span><span class="si">{</span><span class="n">numreal</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">mc_background</span> <span class="o">=</span> <span class="n">MonteCarloSensitivity</span><span class="p">(</span><span class="s2">&quot;background&quot;</span><span class="p">)</span>
         <span class="n">mc_background</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
             <span class="nb">range</span><span class="p">(</span><span class="n">numreal</span><span class="p">),</span> <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;correlations&quot;</span><span class="p">]</span>
@@ -593,6 +600,10 @@
 <span class="sd">            parameters (OrderedDict): parameter names and</span>
 <span class="sd">                distributions or values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">seedvalues</span><span class="p">,</span> <span class="nb">list</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;seedvalues must be a list, got </span><span class="si">{</span><span class="n">seedvalues</span><span class="si">}</span><span class="s2">&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">realnums</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">[</span><span class="n">seedname</span><span class="p">]</span> <span class="o">=</span> <span class="n">seedvalues</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">realnums</span><span class="p">)]</span>
 
@@ -818,7 +829,7 @@
 <span class="sd">        defined distributions.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            realnums (list): list of intergers with realization numbers</span>
+<span class="sd">            realnums (list): list of integers with realization numbers</span>
 <span class="sd">            parameters (OrderedDict):</span>
 <span class="sd">                dictionary of parameters and distributions</span>
 <span class="sd">            seeds (str): default or None</span>
