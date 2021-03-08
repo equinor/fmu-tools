@@ -60,7 +60,8 @@ def set_data_constant(config: Dict):
             grid models.
     """
 
-    assert isinstance(config, dict), "Argument must be a Python dictionary!"
+    if not isinstance(config, dict):
+        raise TypeError("Argument must be a Python dictionary!")
     assert "project" in config.keys(), "Input dict must contain key 'project'!"
     project = config["project"]
     assert "value" in config.keys(), "Input dict must contain key 'value'!"
@@ -133,7 +134,7 @@ def set_data_constant(config: Dict):
                                 project, surf_type, surface.name, data_type, value
                             )
                     else:
-                        raise Exception(
+                        raise ValueError(
                             "keyword '"
                             + surf_names
                             + "' not recognized, 'all' expected!"
@@ -256,7 +257,8 @@ def set_data_empty(config: Dict):
             grid models.
     """
 
-    assert isinstance(config, dict), "Argument must be a Python dictionary!"
+    if not isinstance(config, dict):
+        raise TypeError("Argument must be a Python dictionary!")
     assert "project" in config.keys(), "Input dict must contain key 'project'!"
     project = config["project"]
     assert "value" in config.keys(), "Input dict must contain key 'value'!"
@@ -324,7 +326,7 @@ def set_data_empty(config: Dict):
                                 project, surf_type, surface.name, data_type
                             )
                     else:
-                        raise Exception(
+                        raise ValueError(
                             "keyword '"
                             + surf_names
                             + "' not recognized, 'all' expected!"
@@ -358,12 +360,8 @@ def set_data_empty(config: Dict):
                 print(" >> " + gridname)
                 grid = project.grid_models[gridname]
                 for prop in grid.properties:
-                    try:
-                        prop.set_empty()
-                        print(" >> >> " + prop.name)
-                    except Exception as e:
-                        print(" >> >> " + prop.name + " is already empty")
-                        print(e)
+                    prop.set_empty()
+                    print(" >> >> " + prop.name)
         elif isinstance(config["grid_models"], dict):
             # check setup for each grid models (list vs. all)
             gridnames = config["grid_models"].keys()
@@ -374,25 +372,17 @@ def set_data_empty(config: Dict):
                 if isinstance(propnames, str):
                     if propnames == "all":
                         for prop in grid.properties:
-                            try:
-                                prop.set_empty()
-                                print(" >> >> " + prop.name)
-                            except Exception as e:
-                                print(" >> >> " + prop.name + " is already empty")
-                                print(e)
+                            prop.set_empty()
+                            print(" >> >> " + prop.name)
                     else:
                         raise Exception(
                             "keyword " + propnames + "not recognized, 'all' expected!"
                         )
                 elif isinstance(propnames, list):
                     for propname in propnames:
-                        try:
-                            prop = grid.properties[propname]
-                            prop.set_empty()
-                            print(" >> >> " + prop.name)
-                        except Exception as e:
-                            print(" >> >> " + prop.name + " is already empty")
-                            print(e)
+                        prop = grid.properties[propname]
+                        prop.set_empty()
+                        print(" >> >> " + prop.name)
         else:
             raise TypeError(
                 "Value associated with key 'zones' must be of type list or dict!"
