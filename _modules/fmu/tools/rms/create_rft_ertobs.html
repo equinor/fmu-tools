@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.3.1.dev6+gd24070d documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.3.1.dev7+g8ab2625 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.3.1.dev6+gd24070d
+                1.3.1.dev7+g8ab2625
               </div>
             
           
@@ -576,21 +576,32 @@
 
     <span class="k">for</span> <span class="n">wellname</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">):</span>
         <span class="n">traj_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
-        <span class="n">wellframe</span><span class="p">[[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">traj_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
+
+        <span class="n">well_trajectory</span> <span class="o">=</span> <span class="n">wellframe</span><span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+
+        <span class="n">well_trajectory</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">traj_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written trajectory data to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">traj_filename</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">wname_rep_step</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]):</span>
-        <span class="n">obs_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
-            <span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;.obs&quot;</span>
-        <span class="p">)</span>
-        <span class="n">wellframe</span><span class="p">[[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-            <span class="n">obs_filename</span><span class="p">,</span>
-            <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
-            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written obs file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">wname_rep_step</span><span class="p">,</span> <span class="n">well_rep_step_frame</span> <span class="ow">in</span> <span class="n">wellframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">):</span>
+            <span class="n">obs_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.obs&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Left join with the well trajectory frame, to ensure we</span>
+            <span class="c1"># can output -1 for RFT measurements for points that are only</span>
+            <span class="c1"># active on a subset of the report steps (i.e. dates):</span>
+            <span class="n">obs_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">well_trajectory</span><span class="p">,</span> <span class="n">well_rep_step_frame</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                <span class="n">obs_filename</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written obs file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
 
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DAY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;MONTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m&quot;</span><span class="p">)</span>

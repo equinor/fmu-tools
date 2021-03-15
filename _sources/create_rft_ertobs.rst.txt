@@ -32,6 +32,9 @@ If a well has observations as multiple dates, the REPORT_STEP column in the
 welldatefile will be enumerated from 1 and upwards. The obs-files produced
 will always include the REPORT_STEP in the filename.
 
+Observation files will always cover the measurement points for all dates for a
+well, but padded with -1 at dates (report steps) where there is no data.
+
 Additional options are specified through a RMS dictionary, and
 ``create_rft_ertobs`` can be called from a RMS Python job with a script like
 

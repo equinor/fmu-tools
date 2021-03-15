@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>create_rft_ertobs &mdash; fmu-tools 1.3.1.dev6+gd24070d documentation</title>
+  <title>create_rft_ertobs &mdash; fmu-tools 1.3.1.dev7+g8ab2625 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.3.1.dev6+gd24070d
+                1.3.1.dev7+g8ab2625
               </div>
             
           
@@ -280,6 +280,8 @@ emitted.</p>
 <p>If a well has observations as multiple dates, the REPORT_STEP column in the
 welldatefile will be enumerated from 1 and upwards. The obs-files produced
 will always include the REPORT_STEP in the filename.</p>
+<p>Observation files will always cover the measurement points for all dates for a
+well, but padded with -1 at dates (report steps) where there is no data.</p>
 <p>Additional options are specified through a RMS dictionary, and
 <code class="docutils literal notranslate"><span class="pre">create_rft_ertobs</span></code> can be called from a RMS Python job with a script like</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools.rms</span> <span class="kn">import</span> <span class="n">create_rft_ertobs</span>
