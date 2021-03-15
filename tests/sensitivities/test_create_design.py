@@ -1,14 +1,21 @@
 """Testing code for generation of design matrices"""
 
 from pathlib import Path
+from packaging import version
 
 import pandas as pd
+
+import pytest
 
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 TESTDATA = Path(__file__).parent / "data"
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_generate_onebyone(tmpdir):
     """Test generation of onebyone design"""
 
@@ -37,6 +44,10 @@ def test_generate_onebyone(tmpdir):
     assert len(diskdefaults.columns) == 2
 
 
+@pytest.mark.skipif(
+    version.parse(pd.__version__) < version.parse("0.25.0"),
+    reason="Pandas 0.25.0 is required for fmudesign",
+)
 def test_generate_full_mc(tmpdir):
     """Test generation of full monte carlo"""
     inputfile = TESTDATA / "config/design_input_mc_with_correls.xlsx"
