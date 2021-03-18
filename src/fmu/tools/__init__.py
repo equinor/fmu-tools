@@ -4,6 +4,7 @@
 
 from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
 from fmu.tools.qcproperties.qcproperties import QCProperties  # noqa
+from fmu.tools.extract_grid_zone_tops import extract_grid_zone_tops  # noqa
 
 try:
     import roxar  # noqa
