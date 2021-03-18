@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fmu.tools.extract_grid_zone_tops &mdash; fmu-tools 1.3.1.dev8+g182050f documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> fmu-tools
+          
+
+          
+            
+            <img src="../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3.1.dev8+g182050f
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.extract_grid_zone_tops</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.extract_grid_zone_tops</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xtgeo</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">_roxar</span>  <span class="c1"># type: ignore</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+
+<div class="viewcode-block" id="MockRoxar"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.MockRoxar">[docs]</a>    <span class="k">class</span> <span class="nc">MockRoxar</span><span class="p">:</span>
+        <span class="nd">@property</span>
+        <span class="k">def</span> <span class="nf">Project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+    <span class="n">_roxar</span> <span class="o">=</span> <span class="n">MockRoxar</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="extract_grid_zone_tops"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">[docs]</a><span class="k">def</span> <span class="nf">extract_grid_zone_tops</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">well_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">logrun</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
+    <span class="n">trajectory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
+    <span class="n">gridzonelog</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mdlogname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">zone_param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">alias_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RMS_WELL_NAME&quot;</span><span class="p">,</span>
+    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE_WELL_NAME&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for extracting top and base from gridzones, both in TVD and MD.</span>
+<span class="sd">    A pandas dataframe will be returned.</span>
+
+<span class="sd">    Users can either input a pre-generated gridzonelog or a grid and a zone parameter</span>
+<span class="sd">    for computing the gridzonelog.</span>
+
+<span class="sd">    The function works both inside RMS and outside with file input. If input from files,</span>
+<span class="sd">    and a MD log is not present in the well a quasi md log will be computed and used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">use_gridzonelog</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">gridzonelog</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_gridzonelog</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">zone_param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+                <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">zone_param</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+                <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="n">zone_param</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">mygrid</span><span class="p">)</span>
+            <span class="n">gridzones</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specify either &#39;gridzonelog&#39; or &#39;grid&#39; and &#39;zone_param&quot;</span><span class="p">)</span>
+
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">well_list</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">xtg_well</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_roxar</span><span class="p">(</span>
+                    <span class="n">project</span><span class="p">,</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">well</span><span class="p">),</span>
+                    <span class="n">trajectory</span><span class="o">=</span><span class="n">trajectory</span><span class="p">,</span>
+                    <span class="n">logrun</span><span class="o">=</span><span class="n">logrun</span><span class="p">,</span>
+                    <span class="n">inclmd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xtg_well</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">well</span><span class="p">),</span> <span class="n">mdlogname</span><span class="o">=</span><span class="n">mdlogname</span><span class="p">)</span>
+                <span class="c1"># quasi md log will be computed</span>
+                <span class="n">xtg_well</span><span class="o">.</span><span class="n">geometrics</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># if no gridzonelog create one from the zone parameter</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">use_gridzonelog</span><span class="p">:</span>
+            <span class="n">xtg_well</span><span class="o">.</span><span class="n">get_gridproperties</span><span class="p">(</span><span class="n">gridzones</span><span class="p">,</span> <span class="n">mygrid</span><span class="p">)</span>
+            <span class="n">gridzonelog</span> <span class="o">=</span> <span class="s2">&quot;Zone_model&quot;</span>
+
+        <span class="k">if</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">gridzonelog</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Set gridzonelog as zonelog and extract zonation tops from it</span>
+        <span class="n">xtg_well</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="n">gridzonelog</span>
+        <span class="n">dframe</span> <span class="o">=</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">get_zonation_points</span><span class="p">(</span><span class="n">top_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">use_undef</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">dframe</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">:</span> <span class="s2">&quot;TOP_TVD&quot;</span><span class="p">,</span>
+                <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">:</span> <span class="s2">&quot;TOP_MD&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;WellName&quot;</span><span class="p">:</span> <span class="s2">&quot;WELL&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># find deepest point in well while in grid</span>
+        <span class="n">df_max</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">xtg_well</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[[</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">,</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">,</span> <span class="n">gridzonelog</span><span class="p">]]</span>
+            <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># create base picks also</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;BASE_TVD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TOP_TVD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;BASE_MD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TOP_MD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;BASE_TVD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">]</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;BASE_MD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">]</span>
+        <span class="c1"># adjust zone values to get correct zone information</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shift_zone_values</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">get_logrecord</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;Outside&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TopName&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_INCL&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_AZI&quot;</span><span class="p">]))</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">alias_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">well_dict</span> <span class="o">=</span> <span class="n">make_alias_dict</span><span class="p">(</span><span class="n">alias_file</span><span class="p">,</span> <span class="n">rms_name</span><span class="p">,</span> <span class="n">ecl_name</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;WELL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;WELL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">well_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="shift_zone_values"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.shift_zone_values">[docs]</a><span class="k">def</span> <span class="nf">shift_zone_values</span><span class="p">(</span><span class="n">zvals</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_zval</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">zvals</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">zvals</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">zvals</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">zvals</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="n">zvals</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">zvals</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">zvals</span></div>
+
+
+<div class="viewcode-block" id="make_alias_dict"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.make_alias_dict">[docs]</a><span class="k">def</span> <span class="nf">make_alias_dict</span><span class="p">(</span>
+    <span class="n">alias_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
+    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RMS_WELL_NAME&quot;</span><span class="p">,</span>
+    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE_WELL_NAME&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a correspondance dictionary so that well_dict[ &lt;RMS wellname&gt; ]</span>
+<span class="sd">    = &lt;Eclipse wellname&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">alias_file</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">rms_name</span><span class="p">)</span>
+    <span class="n">well_dict</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="n">well_dict</span> <span class="o">=</span> <span class="n">well_dict</span><span class="p">[</span><span class="n">ecl_name</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">well_dict</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
