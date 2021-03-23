@@ -10,16 +10,17 @@ the decorator "roxapilicense"
 from pathlib import Path
 from os.path import isdir
 import shutil
+import numpy as np
+import pandas as pd
 import pytest
+
 import xtgeo
-
-from fmu.tools import qcforward
-
 
 try:
     import roxar
 except ImportError:
     pass
+
 
 # ======================================================================================
 # settings to create RMS project!
@@ -46,8 +47,10 @@ SURFNAMES1 = ["TopReek", "MidReek", "BaseReek"]
 
 GRIDDATA1 = TPATH / "3dgrids/reek/reek_sim_grid.roff"
 PORODATA1 = TPATH / "3dgrids/reek/reek_sim_poro.roff"
+ZONEDATA1 = TPATH / "3dgrids/reek/reek_sim_zone.roff"
 GRIDNAME1 = "Simgrid"
 PORONAME1 = "PORO"
+ZONENAME1 = "Zone"
 
 WELLSFOLDER1 = TPATH / "wells/reek/1"
 WELLS1 = ["OP1_perf.w", "OP_2.w", "OP_6.w", "XP_with_repeat.w"]
@@ -97,6 +100,9 @@ def fixture_create_project():
     grd.to_roxar(project, GRIDNAME1)
     por = xtgeo.gridproperty_from_file(PORODATA1, name=PORONAME1)
     por.to_roxar(project, GRIDNAME1, PORONAME1)
+    zon = xtgeo.gridproperty_from_file(ZONEDATA1, name=ZONENAME1)
+    zon.values = zon.values.astype(np.uint8)
+    zon.to_roxar(project, GRIDNAME1, ZONENAME1)
 
     # save project (both an initla version and a work version) and exit
     project.save_as(prj1)
@@ -105,38 +111,32 @@ def fixture_create_project():
     yield project
 
     print("\n******* Teardown RMS project!\n")
+
     if isdir(prj1):
         print("Remove existing project! (1)")
         shutil.rmtree(prj1)
 
 
 @pytest.mark.skipunlessroxar
-def test_dummy():
-    print("OK")
-
-
-@pytest.mark.skipunlessroxar
-def test_qcforward_wzonation_vs_grid():
-    """Test wzonation vs grid inside RMS."""
-    if create_project:
-        print("Initialising project")
-
+def test_qcforward_wzonation_vs_grid_stops(tmp_path):
+    """Test wzonation vs grid inside RMS, and here it will STOP."""
     # ==================================================================================
-    # qcforward well vs grid (mimic RMS input!)
+    # qcforward well vs grid (mimic python inside RMS input!)
     # pylint: disable=invalid-name
+    from fmu.tools import qcforward
 
-    WELLS = ["33_10.*", "34_11-.*A.*"]
+    PRJ1 = PRJ
+    WELLS = ["OP.*"]
 
     ZONELOGNAME = "Zonelog"
-    TRAJ = "Drilled trajectory"
+    TRAJ = "My trajectory"
     LOGRUN = "log"
-
-    GRIDNAME = "SIMGRID"
+    GRIDNAME = "Simgrid"
     ZONEGRIDNAME = "Zone"
-    DRANGE = [2100, 3200]
+    DRANGE = [1300, 3200]
     ZLOGRANGE = [1, 3]
-    ZLOGSHIFT = -1
-    REPORTPATH = "/tmp/well_vs_grid.csv"
+    ZLOGSHIFT = 0
+    REPORTPATH = tmp_path / "well_vs_grid.csv"
 
     ACT = [
         {"warn": "any < 90", "stop": "any < 70"},
@@ -158,6 +158,141 @@ def test_qcforward_wzonation_vs_grid():
             "nametag": "ZONELOG",
         }
 
-        qcjob.run(usedata, project=PRJ)
+        qcjob.run(usedata, project=PRJ1)
+
+    with pytest.raises(SystemExit):
+        check()
+
+
+@pytest.mark.skipunlessroxar
+def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path):
+    """Test wzonation vs grid inside RMS, and here it will run OK."""
+    # ==================================================================================
+    # qcforward well vs grid (mimic python inside RMS input!)
+    # pylint: disable=invalid-name
+    from fmu.tools import qcforward
+
+    PRJ1 = PRJ
+    WELLS = ["OP.*"]
+
+    ZONELOGNAME = "Zonelog"
+    TRAJ = "My trajectory"
+    LOGRUN = "log"
+    GRIDNAME = "Simgrid"
+    ZONEGRIDNAME = "Zone"
+    DRANGE = [1300, 3200]
+    ZLOGRANGE = [1, 3]
+    ZLOGSHIFT = 0
+    REPORTPATH = tmp_path / "well_vs_grid.csv"
+
+    ACT = [
+        {"warn": "any < 80", "stop": "any < 50"},
+        {"warn": "all < 85", "stop": "all < 40"},
+    ]
+
+    qcjob = qcforward.WellZonationVsGrid()
+
+    def check():
+
+        usedata = {
+            "wells": {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ},
+            "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": ZLOGSHIFT},
+            "grid": GRIDNAME,
+            "depthrange": DRANGE,
+            "gridprops": [ZONEGRIDNAME],
+            "actions": ACT,
+            "report": REPORTPATH,
+            "nametag": "ZONELOG",
+        }
+
+        qcjob.run(usedata, project=PRJ1)
 
     check()
+
+    result = pd.read_csv(REPORTPATH).set_index("WELL")
+    assert result.loc["OP_1_PERF", "MATCH%"] == pytest.approx(70.588235)
+    assert result.loc["all", "MATCH%"] == pytest.approx(67.207573)
+
+
+@pytest.mark.skipunlessroxar
+def test_qcforward_gridquality_ok(tmp_path):
+    """Test qcforward gridquality parameters that runs ok."""
+    # ==================================================================================
+    # qcforward grid quality (mimic python inside RMS input!)
+    # pylint: disable=invalid-name
+    from fmu.tools import qcforward
+
+    PRJ1 = PRJ
+    GRIDNAME = "Simgrid"
+    REPORT = tmp_path / "gridquality.csv"
+
+    ACT = {
+        "minangle_topbase": [
+            {"warn": "allcells > 1% when < 80", "stop": "allcells > 1% when < 50"},
+            {"warn": "allcells > 50% when < 85", "stop": "all > 10% when < 50"},
+            {"warn": "allcells > 50% when < 85"},
+        ],
+        "collapsed": [{"warn": "all > 20%", "stop": "all > 50%"}],
+        "faulted": [{"warn": "all > 20%", "stop": "all > 50%"}],
+    }
+
+    qcjob = qcforward.GridQuality()
+
+    def check():
+
+        usedata = {
+            "grid": GRIDNAME,
+            "actions": ACT,
+            "report": {"file": REPORT, "mode": "write"},
+            "nametag": "ZONELOG",
+        }
+
+        qcjob.run(usedata, project=PRJ1)
+
+    check()
+
+    result = pd.read_csv(REPORT).set_index("GRIDQUALITY")
+    assert result.loc["minangle_topbase[1]", "WARN%"] == pytest.approx(10.447, abs=0.01)
+    assert result.loc["minangle_topbase[0]", "WARN%"] == pytest.approx(2.715, abs=0.01)
+
+
+@pytest.mark.skipunlessroxar
+def test_qcforward_gridquality_fail(tmp_path):
+    """Test qcforward gridquality parameters that shall fail on faulted."""
+    # ==================================================================================
+    # qcforward grid quality (mimic python inside RMS input!)
+    # pylint: disable=invalid-name
+    from fmu.tools import qcforward
+
+    PRJ1 = PRJ
+    GRIDNAME = "Simgrid"
+    REPORT = tmp_path / "gridquality.csv"
+
+    ACT = {
+        "minangle_topbase": [
+            {"warn": "allcells > 1% when < 80", "stop": "allcells > 1% when < 50"},
+            {"warn": "allcells > 50% when < 85", "stop": "all > 10% when < 50"},
+            {"warn": "allcells > 50% when < 85"},
+        ],
+        "collapsed": [{"warn": "all > 20%", "stop": "all > 50%"}],
+        "faulted": [{"warn": "all > 20%", "stop": "all > 10%"}],
+    }
+
+    qcjob = qcforward.GridQuality()
+
+    def check():
+
+        usedata = {
+            "grid": GRIDNAME,
+            "actions": ACT,
+            "report": {"file": REPORT, "mode": "write"},
+            "nametag": "ZONELOG",
+        }
+
+        qcjob.run(usedata, project=PRJ1)
+
+    with pytest.raises(SystemExit):
+        check()
+
+    result = pd.read_csv(REPORT).set_index("GRIDQUALITY")
+    assert result.loc["faulted[0]", "WARN%"] == pytest.approx(16.368, abs=0.01)
