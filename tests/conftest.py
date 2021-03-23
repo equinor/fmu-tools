@@ -3,7 +3,7 @@ import pytest
 
 
 def pytest_runtest_setup(item):
-    """Called for each test."""
+    """Called for each test, see also pytest section in setup.cfg."""
 
     markers = [value.name for value in item.iter_markers()]
 
