@@ -10,6 +10,6 @@ sphinx_rtd_theme>=0.4.1
 pytest>=3.8
 pytest-runner>=4.2
 setuptools_scm
-xtgeo
+xtgeo>=2.15a2
 black; python_version >= "3.6"
 pylint
