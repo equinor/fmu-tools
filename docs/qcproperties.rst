@@ -4,9 +4,11 @@ The qcproperties class
 The ``qcproperties`` class provides a set of methods for extracting property 
 statistics from 3D Grids, Raw and Blocked wells.
 
+Statistics can be extracted for both continous and discrete properties. Dependent on the 
+property type different statistics are calculated. The property type is auto-detected. 
+
 If several methods of statistics extraction has been run within the instance,
-a merged dataframe is available through the 'dataframe' property or the 'dataframe_disc'
-property for continous properties and discrete properties respectively.
+a merged dataframe is available through the 'dataframe' property.
 
 The methods for statistics extraction can be run individually, or a yaml-configuration
 file can be used to enable an automatic run of the methods.
@@ -30,7 +32,9 @@ Arguments for the methods are similar and described in section below.
 
 * ``from_yaml``: Use a yaml-configuration file to enable an automatic run of the methods above.
 
-All methods returns a PropStat instance (see decription further down).
+All methods returns a Pandas DataFrame for the run in question, if several methods of statistics 
+extraction has been run within the instance a merged dataframe is available through the 
+'dataframe' property
 
 .. seealso:: The `Using yaml input for auto execution` section for description of how to use 
              a yaml-configuration file to run the different methods automatically.
@@ -43,20 +47,11 @@ have been run within the QCProperties instance.
 
 dataframe
     A merged dataframe with statistical data for **continous** properties from all 
-    runs of statistics extractions within the instance .
-  
-dataframe_disc
-    A merged dataframe with statistical data for **discrete** propertiesfrom all 
-    runs of statistics extractions within the instance .
+    runs of statistics extractions within the instance.
 
 to_csv    
-    Used to write the dataframes with statistics to a csv-file. Takes two arguments:
-
+    Used to write the dataframe with statistics to a csv-file. Takes one arguments:
     ``csvfile``: String with desired filename (required).
-    
-    ``disc``: Bool that controls which dataframe to write (optional). If True the
-    dataframe with discrete properties is written else the dataframe with continous 
-    properties is written. Default is False.
 
 
 Arguments
@@ -67,8 +62,6 @@ different for the three methods, and for the two run environments (inside/outsid
 **Input arguments:**
 
 * ``data``: The input data as a Python dictionary (required). See valid keys below.
-* ``reuse``: Bool to define if XTGeo data should be reused in the instance (optional). 
-  Default is True. Turning this off will impact the performance.
 * ``project``: Required for usage inside RMS 
 
 
@@ -76,8 +69,8 @@ different for the three methods, and for the two run environments (inside/outsid
 
 Method specific fields:
     grid
-         Name of grid icon in RMS, or name of grid file if run outside RMS. Required with the 
-         ``get_grid_statistics`` method.
+        Name of grid icon in RMS, or name of grid file if run outside RMS. Required with the 
+        ``get_grid_statistics`` method.
     
     wells
         Required with the ``get_well_statistics`` and the ``get_bwell_statistics`` methods.
@@ -87,7 +80,7 @@ Method specific fields:
         
         **get_well_statistics**: 
 
-        ``names``: List of wellnames (optional). Default is all wells.
+        ``names``: List of wellnames (optional). Default is all wells. 
         ``logrun``: Name of logrun. 
         ``trajectory``: Name of trajectory.
 
@@ -140,24 +133,27 @@ Common fields:
                   values, as it is the name that are used to group the data.
     
     filters
-        Dictionary with additional filter (optional). 
-        
-        Only discrete parameters are supported. A selector can be input as a filter, this will 
-        override any existing filters specified directly on the selector. 
-        The key is the name (or path) to the filter parameter / log, and the
-        value is a dictionary with one of two options:
-        
-        ``include``: List of values to include (optional)
-    
-        ``exclude``: List of values to exclude (optional)
+        Dictionary with additional filters (optional). 
 
-        ``pfile``: Name (or path) to file containing the parameter e.g. INIT file (optional)
+        The key is the name (or path) to the filter parameter / log, and the
+        value is a dictionary with options:
+        
+        ``include``: List of values to include for discrete parameters
+    
+        ``exclude``: List of values to exclude for discrete parameters
+
+        ``range``: List with two entries, defining minimum and maximum values to use for continous parameters
+
+        ``pfile``: Name (or path) to file containing the parameter e.g. INIT file
+
+        .. note:: If a selector or property is input as a filter, this will override any existing filters 
+                  specified directly on the selector/property. 
 
         .. seealso:: Option ``"multiple_filters"`` below which can be used to extract statistics 
                      multiple times with different filters.
 
     multiple_filters
-        Option for extract statistics multiple times with different filters (optional).
+        Option that can be used to extract statistics multiple times with different filters (optional).
 
         The input is a dictionariy where the keys are the "name" (ID string) for the dataset,
         and the value is the dictionary of filters (Same format as ``filters`` above)
@@ -184,50 +180,16 @@ Common fields:
         
         * For **grid statistics** default is the `gridname`
         * For **blocked wells statistics** default is the `name of the blocked wells object` if inside 
-          RMS and `blocked_wells` if outside
+          RMS and `bwells` if outside
         * For **well statistics** default is `wells`
     
     name
         ID string for the dataset (optional). Recommended, if not given it will be set equal 
         to the source string. 
     
-    csvfile
-        Path to output csvfile (optional). A csv-file will only be written, if argument is provided.
-    
     verbosity
       Level of output while running None, "info" or "debug", default is None. (optional)
 
-
-The returned PropStat instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-All methods above returns a PropStat instance, with different properties:
-
-dataframe
-    The dataframe with statistical data for continous properties. 
-  
-dataframe_disc
-    The dataframe with statistical data for discrete properties. 
-
-property_dataframe    
-    The full dataframe for the properties which is used as input to the statistical 
-    aggregations. Note: If filters are used as input, this dataframe will be the filtered. 
-
-get_value
-    Method to retrive a statistical value from either of the two the property statistics
-    dataframes (dependent on the property type, discrete vs continous)
-    
-    Arguments are:
-
-    ``prop``: String whith the property name (Required)
-    
-    ``conditions``: A dictionary with selector conditions to look up value for, 
-    e.g {"REGION": "EAST", "ZONE": "TOP_ZONE"}. If no conditions are given, the 
-    value for the total will be returned.
-
-    ``calculation``: String with name of column to retrieve value from. "Avg" is the
-    default for continous properties, "Percent" for discrete.
-
-    ``codename``: Codename to select for discrete properties (Required if dicrete property)
 
 
 Examples
@@ -236,7 +198,7 @@ Examples
 get_grid_statistics examples
 """"""""""""""""""""""""""""""""
 
-**Example in RMS (basic):**
+**Example in RMS (continous properties - basic):**
 
 Example extracting statistics for porosity and permeability for each zone and facies. 
 Result is written to csv.
@@ -246,35 +208,36 @@ Result is written to csv.
     from fmu.tools import QCProperties
 
     GRID = "GeoGrid"
-    PROPERTIES = ["PORO", "PERM"]
-    SELECTORS = ["ZONE", "FACIES"]
+    PROPERTIES = ["Poro", "Perm"]
+    SELECTORS = ["Zone", "Facies"]
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "grid": GRID,
-        "csvfile": REPORT,
-    }
-
-    def check():
+    def extract_statistics():
 
         qcp = QCProperties()
+
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "grid": GRID,
+            "verbosity": 1,
+        }
         qcp.get_grid_statistics(data=usedata, project=project)
+        qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
+        print("Done")
 
 
-**Example in RMS (more settings):**
+**Example in RMS (continous properties - more settings):**
 
-Example extracting statistics for porosity and facies for each region. Filters 
+Example extracting statistics for porosity per region. Filters 
 are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
-Both properties are weighted on a Total_Bulk parameter.
+Both properties are weighted on a Total_Bulk parameter. 
+Result is written to csv.
 
-The result is written out in two csv-files, one with statistics of percentages for 
-the discrete facies parameter, and one with regular statistics for the continous porosity parameter.
 
 .. code-block:: python
 
@@ -283,7 +246,6 @@ the discrete facies parameter, and one with regular statistics for the continous
     GRID = "GeoGrid"
     PROPERTIES = {
         "PORO": {"name": "PHIT", "weight": "Total_Bulk"},
-        "FACIES": {"name": "Facies", "weight": "Total_Bulk"},
     }
     SELECTORS = {
         "REGION": {
@@ -292,8 +254,7 @@ the discrete facies parameter, and one with regular statistics for the continous
             "codes": {2: "NS", 3: "NS",},
         }
     }
-    REPORT_CONT = "../output/qc/continous_stats.csv"
-    REPORT_DISC = "../output/qc/discrete_stats.csv"
+    REPORT = "../output/qc/continous_stats.csv"
 
     FLUID_FILTERS = {
         "HC_zone": {"Fluid": {"include": ["oil", "gas"]}},
@@ -309,20 +270,56 @@ the discrete facies parameter, and one with regular statistics for the continous
             "selectors": SELECTORS,
             "grid": GRID,
             "multiple_filters": FLUID_FILTERS,
+            "verbosity": 1,
         }
     
         qcp.get_grid_statistics(data=usedata, project=project)
-
-        qcp.to_csv(REPORT_CONT)
-        qcp.to_csv(REPORT_DISC, disc=True)
+        qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
         extract_statistics()
+        print("Done")
 
 .. note:: The code is executed twice, filtering on the HC-zone first then the water-zone 
           in a second run. Alternatively the fluid parameter could have been used as a 
           selector, for extracting statistics in one run.
 
+**Example in RMS (discrete properties):**
+
+Example extracting statistics for a discrete facies parameter for each region. 
+The facies parameter are weighted on a Total_Bulk parameter.
+
+The result is written out to csv.
+
+.. code-block:: python
+
+    from fmu.tools import QCProperties
+
+    GRID = "GeoGrid"
+    PROPERTIES = {
+        "FACIES": {"name": "Facies", "weight": "Total_Bulk"},
+    }
+    SELECTORS = ["Regions"]
+
+    REPORT = "../output/qc/discrete_stats.csv"
+
+    def extract_statistics():
+
+        qcp = QCProperties()
+
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "grid": GRID,
+            "verbosity": 1,
+        }
+    
+        qcp.get_grid_statistics(data=usedata, project=project)
+        qcp.to_csv(REPORT)
+
+    if  __name__ == "__main__":
+        extract_statistics()
+        print("Done")
 
 **Example when executed from files:**
 
@@ -344,21 +341,59 @@ the discrete facies parameter, and one with regular statistics for the continous
     }
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "path": PATH,
-        "grid": GRID,
-        "name": "MYDATA",
-    }
-
-    def check():
+    def extract_statistics():
 
         qcp = QCProperties()
+
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "path": PATH,
+            "grid": GRID,
+            "name": "MYDATA",
+        }
+
         qcp.get_grid_statistics(data=usedata)
+        qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
+
+**Example when executed from file using Eclipse INIT-file as input:**
+
+.. code-block:: python
+
+    from fmu.tools import QCProperties
+
+    PATH = "../input/qc/"
+    GRID = "ECLIPSE.EGRID"
+    PROPERTIES = {"PERMX": {"name": "PERMX", "pfile": "ECLIPSE.INIT"}}
+    SELECTORS = {
+        "FIPNUM": {
+            "name": "FIPNUM",
+            "pfile": "ECLIPSE.INIT"
+        },  
+    }
+    REPORT = "../output/qc/somefile.csv"
+
+    def extract_statistics():
+
+        qcp = QCProperties()
+
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "path": PATH,
+            "grid": GRID,
+            "name": "from_eclipse",
+        }
+
+        qcp.get_grid_statistics(data=usedata)
+        qcp.to_csv(REPORT)
+
+    if  __name__ == "__main__":
+        extract_statistics()
+
 
 
 get_well_statistics examples
@@ -367,7 +402,8 @@ get_well_statistics examples
 **Example in RMS:**
 
 Example extracting statistics for permeability for each zone and facies.
-All wells starting with 34_10-A or 34_10-B will be included in statistics.
+All wells starting with 33_10 and all 34_11 wells containing "A" will be included in statistics.
+Note the use of python regular expressions!
 Result is written to csv.
 
 .. code-block:: python
@@ -375,7 +411,7 @@ Result is written to csv.
     from fmu.tools import QCProperties
 
     WELLS = {
-      "names": ["34_10-A.*$", "34_10-B.*$"],
+      "names": ["33_10.*", "34_11-.*A.*"],
       "logrun": "log",
       "trajectory": "Drilled trajectory",
     }
@@ -383,22 +419,22 @@ Result is written to csv.
     SELECTORS = ["Zonelog", "Facies_log"]
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "wells": WELLS,
-        "csvfile": REPORT,
-    }
-
-    def check():
+    def extract_statistics():
 
         qcp = QCProperties()
-        qcp.get_well_statistics(data=usedata, project=project)
 
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "wells": WELLS,
+        }
+
+        qcp.get_well_statistics(data=usedata, project=project)
         qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
+        print("Done")
 
 
 **Example when executed from files:**
@@ -412,34 +448,36 @@ Result is written to csv.
 
     from fmu.tools import QCProperties
 
-    WELLS = ["34_10-A.*$"]
+    WELLS = ["34_10-A.*"]
     PATH = "../input/qc/"
     PROPERTIES = ["Phit", "Klogh"]
     SELECTORS = ["Zonelog", "Facies_log"]
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "wells": WELLS,
-        "path": PATH,
-        "name": "A-wells",
-    }
-
-    def check():
+    def extract_statistics():
 
         qcp = QCProperties()
+
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "wells": WELLS,
+            "path": PATH,
+            "name": "A-wells",
+        }
+          
         qcp.get_well_statistics(data=usedata)
 
         usedata2 = usedata.copy()
-        usedata2["wells"] = ["34_10-B.*$"]
+        usedata2["wells"] = ["34_10-B.*"]
         usedata2["name"] = "B-wells"
+
         qcp.get_grid_statistics(data=usedata2, project=project)
 
         qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
 
 get_bwell_statistics examples
 """"""""""""""""""""""""""""""""
@@ -462,22 +500,23 @@ Result is written to csv.
     SELECTORS = ["Zonelog", "Facies_log"]
     REPORT = "../output/qc/somefile.csv"
 
-    usedata = {
-        "properties": PROPERTIES,
-        "selectors": SELECTORS,
-        "wells": WELLS,
-        "csvfile": REPORT,
-    }
-
     def extract_statistics():
 
         qcp = QCProperties()
-        qcp.get_bwell_statistics(data=usedata, project=project)
 
+        usedata = {
+            "properties": PROPERTIES,
+            "selectors": SELECTORS,
+            "wells": WELLS,
+            "csvfile": REPORT,
+        }
+
+        qcp.get_bwell_statistics(data=usedata, project=project)
         qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
         extract_statistics()
+        print("Done")
 
 **Example when executed from files:**
 
@@ -523,28 +562,26 @@ Several steps have been to ensure consistency between the sources, making the re
 
     from fmu.tools import QCProperties
 
-    REPORT = "somefile.csv"
+    REPORT = "../output/qc/somefile.csv"
 
     GEOGRIDDATA = {
         "properties": ["Poro", "Perm"],
         "selectors": {"ZONE": {"name":"Zone"}},
-        "grid": "Geogrid",
+        "grid": "GeoGrid",
     }
     SIMGRIDDATA = {
-        "properties": {"Poro":{"name":"PORO"}, "Perm":{"name":"PERMX"}},
+        "properties": {"Poro": {"name":"PORO"}, "Perm": {"name":"PERMX"}},
         "selectors": {"ZONE": {"name":"Zone"}},
-        "grid": "Simgrid",
+        "grid": "SimGrid",
     }
     BWDATA = {
-        "properties": ["Poro", "Perm"],
-        "selectors": {"ZONE": {"name":"Zonelog", "codes":{1:"UpperReek", 2:"MidReek", 3:"LowerReek"}, "exclude":["Above_TopUpperReek", "Below_BaseLowerReek"]}},
+        "properties": {"Poro": {"name": "Phit"}, "Perm": {"name": "Klogh"}},
+        "selectors": {"ZONE": {"name": "Zonelog", "codes": {1:"UpperReek", 2:"MidReek", 3:"LowerReek"}, "exclude": ["Above_TopUpperReek", "Below_BaseLowerReek"]}},
         "wells": {"bwname": "BW", "grid": "Geogrid"},
     }
-    WDATA = {
-        "properties": ["Poro"],
-        "selectors": {"ZONE": {"name":"Zonelog", "codes":{1:"UpperReek", 2:"MidReek", 3:"LowerReek"}, "exclude":["Above_TopUpperReek", "Below_BaseLowerReek"]}},
-        "wells": {"logrun": "log", "trajectory": "Drilled trajectory"},
-    }
+
+    WDATA = BWDATA.copy()
+    WDATA["wells"] = {"logrun": "log", "trajectory": "Drilled trajectory"}
 
     def extract_statistics():
 
@@ -560,6 +597,7 @@ Several steps have been to ensure consistency between the sources, making the re
     if  __name__ == "__main__":
         extract_statistics()
 
+.. seealso:: The section below for example of using the same configuration but with yaml-input. 
 
 
 Using yaml input for auto execution
@@ -578,7 +616,7 @@ element.
 
 * ``wells``: the get_well_statistics method are executed on elements in this level
 
-* ``blocked_wells``: the get_bwell_statistics method are executed on elements in this level
+* ``blockedwells``: the get_bwell_statistics method are executed on elements in this level
 
 
 Example in RMS with setting from a YAML file:
@@ -595,13 +633,13 @@ dataframe are written to csv.
     YAML_PATH = "../input/qc/somefile.yml"
     REPORT = "../output/qc/somefile.csv"
 
-    def check():
+    def extract_statistics():
         qcp = QCProperties()        
         qcp.from_yaml(YAML_PATH, project=project)
         qcp.to_csv(REPORT)
 
     if  __name__ == "__main__":
-        check()
+        extract_statistics()
 
 
 The YAML file may in case look like:
@@ -611,59 +649,62 @@ The YAML file may in case look like:
     grid:
       - grid: GeoGrid
         properties:
-          PORO:
-            name: PHIT
-          PERM:
-            name: KLOGH
+          - Poro
+          - Perm
         selectors:
           ZONE:
             name: Zone
-          FACIES:
-            name: Facies
     
       - grid: SimGrid
         properties:
-          PORO:
+          Poro:
             name: PORO
-          PERM:
+          Perm:
             name: PERMX
         selectors:
           ZONE:
             name: Zone
-          FACIES:
-            name: Facies
-    
+
     wells:
       - wells:  
           logrun: log
-          names: [34_10-A.*$]
           trajectory: Drilled trajectory
         properties:
-          PORO:
+          Poro:
             name: Phit
-          PERM:
+          Perm:
             name: Klogh
         selectors:
           ZONE:
             name: Zonelog
-          FACIES:
-            name: Facies_log
+            codes: 
+              1: UpperReek
+              2: MidReek
+              3: LowerReek
+            exclude:
+              - Above_TopUpperReek
+              - Below_BaseLowerReek
     
     blockedwells:
       - wells:  
           grid: GeoGrid
-          names: [34_10-A.*$]
           bwname: BW
         properties:
-          PORO:
+          Poro:
             name: Phit
-          PERM:
+          Perm:
             name: Klogh
         selectors:
           ZONE:
             name: Zonelog
-          FACIES:
-            name: Facies_log
+            codes: 
+              1: UpperReek
+              2: MidReek
+              3: LowerReek
+            exclude:
+              - Above_TopUpperReek
+              - Below_BaseLowerReek
+
 
 
 Additional Notes
@@ -673,9 +714,6 @@ Advice on performance
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are several settings that has an influence perfomance:
-
-* Keep the option ``reuse = True`` to avoid reloading data to XTGeo if it is previously used, 
-  e.g. extracting statistics from the same grid but with different filters. 
 
 * Filters can be used to remove unnecessary data, this will limit the input data before statistics
   is calculated and will speed up execution.

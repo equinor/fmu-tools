@@ -17,12 +17,12 @@ common_well_data: &common_well_data
       name: Perm
 
 common_bwell_data: &common_bwell_data
-  path: tests/data/propstatistics
+  path: ../xtgeo-testdata/wells/reek/1/
   wells: [OP_1.bw]
   properties:
     PORO:
       name: Poro
-
+  
 grid:
   - <<: *common_grid_data
     selectors:

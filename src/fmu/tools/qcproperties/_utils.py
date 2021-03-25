@@ -4,15 +4,12 @@ from itertools import combinations
 
 
 def filter_df(dframe, filters):
-    """Filter dataframe """
+    """Filter dataframe"""
     dframe = dframe.copy()
     for prop, filt in filters.items():
 
-        if filt.get("include"):
-            if isinstance(filt["include"], str):
-                filt["include"] = [filt["include"]]
+        if "include" in filt:
             if all(x in dframe[prop].unique() for x in filt["include"]):
-
                 dframe = dframe[dframe[prop].isin(filt["include"])]
             else:
                 raise ValueError(
@@ -20,9 +17,7 @@ def filter_df(dframe, filters):
                     f"does not exist in dataframe column {prop} "
                     f"Available values are: {dframe[prop].unique()}"
                 )
-        if filt.get("exclude"):
-            if isinstance(filt["exclude"], str):
-                filt["exclude"] = [filt["exclude"]]
+        if "exclude" in filt:
             if all(x in dframe[prop].unique() for x in filt["exclude"]):
                 dframe = dframe[~dframe[prop].isin(filt["exclude"])]
             else:
@@ -31,6 +26,9 @@ def filter_df(dframe, filters):
                     f"does not exist in dataframe column {prop} "
                     f"Available values are: {dframe[prop].unique()}"
                 )
+        if "range" in filt:
+            low_value, high_value = filt["range"]
+            dframe = dframe[(dframe[prop] >= low_value) & (dframe[prop] <= high_value)]
 
     if dframe.empty:
         raise Exception("Empty dataframe - no data left after filtering")
