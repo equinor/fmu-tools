@@ -185,11 +185,8 @@ class GridQuality(QCForward):
         result[issue.mode.upper() + "%"].append(actualpercent)
         result[issue.mode.upper() + "RULE"].append(issue.expression)
 
-        print("XX", issue.limit, actualpercent)
-
         if issue.compare == ">" and actualpercent > issue.limit:
             status = issue.mode.upper()
-            print("XXX", status)
         elif issue.compare == "<" and actualpercent < issue.limit:
             status = issue.mode.upper()
         else:
