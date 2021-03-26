@@ -129,11 +129,11 @@ Example when ran inside RMS
         usedata = {
             "grid": GRIDNAME,
             "actions": ACTIONS,
-            "report": {"file": "../output/qc/gridquality.csv", mode: "write"},
+            "report": {"file": "../output/qc/gridquality.csv", "mode": "write"},
             "nametag": "ZONELOG",
         }
 
-        qcf.run(usedata, project=project)
+        QCJOB.run(usedata, project=project)
 
     if  __name__ == "__main__":
         check()
@@ -157,7 +157,7 @@ Example when ran from python script in terminal:
         usedata = {
             "grid": GRIDNAME,
             "actions": ACTIONS,
-            "report": {"file": "../output/qc/gridquality.csv", mode: "write"}
+            "report": {"file": "../output/qc/gridquality.csv", "mode": "write"}
         }
 
         QCJOB.run(usedata)
@@ -180,4 +180,3 @@ Example in RMS with setting from a YAML file:
 
     if  __name__ == "__main__":
         check()
-
