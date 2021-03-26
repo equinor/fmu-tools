@@ -275,7 +275,7 @@ than other wells.
             "grid": GRIDNAME,
             "gridzones": [ZONEGRIDNAME],
             "actions": ACT1,
-            "report": {"file": "../output/qc/well_vs_grid.csv", mode: "write"},
+            "report": {"file": "../output/qc/well_vs_grid.csv", "mode": "write"},
             "nametag": "SET1",
         }
 
@@ -283,7 +283,7 @@ than other wells.
         usedata2 = usedata1.copy()
         usedata2["wells"]["names"] = WELLS2
         usedata2["actions"] = ACT2,
-        usedata2["report"] = {"file": "../output/qc/well_vs_grid.csv", mode: "append"}
+        usedata2["report"] = {"file": "../output/qc/well_vs_grid.csv", "mode": "append"}
         usedata2["nametag"] = "SET2"
 
         # note the "reuse" use to avoid duplicate loading of data like the grid
