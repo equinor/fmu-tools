@@ -4,7 +4,8 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
+  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>The qcproperties class &mdash; fmu-tools 1.4.0 documentation</title>
@@ -198,7 +199,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="the-qcproperties-class">
+  <section id="the-qcproperties-class">
 <h1>The qcproperties class<a class="headerlink" href="#the-qcproperties-class" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qcproperties</span></code> class provides a set of methods for extracting property
 statistics from 3D Grids, Raw and Blocked wells.</p>
@@ -210,7 +211,7 @@ file can be used to enable an automatic run of the methods.</p>
 <p>All methods can be run from either RMS python, or from files (e.g. from an ERT job).</p>
 <p>XTGeo is being utilized to get a dataframe from the input parameter data. XTGeo data
 is reused in the instance to increase performance.</p>
-<div class="section" id="methods-for-extracting-property-statistics">
+<section id="methods-for-extracting-property-statistics">
 <h2>Methods for extracting property statistics<a class="headerlink" href="#methods-for-extracting-property-statistics" title="Permalink to this headline">¶</a></h2>
 <p>Three methods exists for extracting property statistics. The method to select
 is dependent on the input data source (3D grid properties, wells or blocked wells).
@@ -227,7 +228,7 @@ Arguments for the methods are similar and described in section below.</p>
 <p>The <cite>Using yaml input for auto execution</cite> section for description of how to use
 a yaml-configuration file to run the different methods automatically.</p>
 </div>
-<div class="section" id="other-methods">
+<section id="other-methods">
 <h3>Other methods<a class="headerlink" href="#other-methods" title="Permalink to this headline">¶</a></h3>
 <p>Note: The methods below are only applicable if at least one method for extracting statistics
 have been run within the QCProperties instance.</p>
@@ -245,8 +246,8 @@ dataframe with discrete properties is written else the dataframe with continous
 properties is written. Default is False.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="arguments">
+</section>
+<section id="arguments">
 <h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
 <p>The input <cite>data</cite> is given in a python dictionary (or a YAML file) and will be somewhat
 different for the three methods, and for the two run environments (inside/outside RMS).</p>
@@ -359,8 +360,8 @@ to the source string.</p>
 </dl>
 </dd>
 </dl>
-</div>
-<div class="section" id="the-returned-propstat-instance">
+</section>
+<section id="the-returned-propstat-instance">
 <h3>The returned PropStat instance<a class="headerlink" href="#the-returned-propstat-instance" title="Permalink to this headline">¶</a></h3>
 <p>All methods above returns a PropStat instance, with different properties:</p>
 <dl>
@@ -383,10 +384,10 @@ default for continous properties, “Percent” for discrete.</p>
 <p><code class="docutils literal notranslate"><span class="pre">codename</span></code>: Codename to select for discrete properties (Required if dicrete property)</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="examples">
+</section>
+<section id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="get-grid-statistics-examples">
+<section id="get-grid-statistics-examples">
 <h4>get_grid_statistics examples<a class="headerlink" href="#get-grid-statistics-examples" title="Permalink to this headline">¶</a></h4>
 <p><strong>Example in RMS (basic):</strong></p>
 <p>Example extracting statistics for porosity and permeability for each zone and facies.
@@ -503,8 +504,8 @@ selector, for extracting statistics in one run.</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="get-well-statistics-examples">
+</section>
+<section id="get-well-statistics-examples">
 <h4>get_well_statistics examples<a class="headerlink" href="#get-well-statistics-examples" title="Permalink to this headline">¶</a></h4>
 <p><strong>Example in RMS:</strong></p>
 <p>Example extracting statistics for permeability for each zone and facies.
@@ -576,8 +577,8 @@ Result is written to csv.</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="get-bwell-statistics-examples">
+</section>
+<section id="get-bwell-statistics-examples">
 <h4>get_bwell_statistics examples<a class="headerlink" href="#get-bwell-statistics-examples" title="Permalink to this headline">¶</a></h4>
 <p><strong>Example in RMS:</strong></p>
 <p>Example extracting statistics for permeability for each zone and facies.
@@ -613,12 +614,12 @@ Result is written to csv.</p>
 </div>
 <p><strong>Example when executed from files:</strong></p>
 <p>To come….</p>
-</div>
-</div>
-</div>
-<div class="section" id="comparison-of-data-from-different-sources">
+</section>
+</section>
+</section>
+<section id="comparison-of-data-from-different-sources">
 <h2>Comparison of data from different sources<a class="headerlink" href="#comparison-of-data-from-different-sources" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="advice-when-comparing-data-from-different-sources">
+<section id="advice-when-comparing-data-from-different-sources">
 <h3>Advice when comparing data from different sources<a class="headerlink" href="#advice-when-comparing-data-from-different-sources" title="Permalink to this headline">¶</a></h3>
 <p>When extracting statistics from different sources there are several tips for enabling easy comparison
 in the post-analysis of the data in e.g. WebViz:</p>
@@ -633,8 +634,8 @@ selectors ZONE and REGION and “selector_combos” where True, the ZONE level s
 if the zone codes are coarser in the grid than in the zonelogs from the wells, this field can be used
 to merge codes in the zonelog together under one name.</p></li>
 </ul>
-</div>
-<div class="section" id="example">
+</section>
+<section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
 <p>Example below collects statistical data from four different sources and writes result to a csv-file.
 Several steps have been to ensure consistency between the sources, making the resulting csv-file easy to compare:</p>
@@ -684,9 +685,9 @@ the codes are updated and redundant codes are excluded.</p></li>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="using-yaml-input-for-auto-execution">
+</section>
+</section>
+<section id="using-yaml-input-for-auto-execution">
 <h2>Using yaml input for auto execution<a class="headerlink" href="#using-yaml-input-for-auto-execution" title="Permalink to this headline">¶</a></h2>
 <p>A yaml-configuration file can be used with the method <code class="docutils literal notranslate"><span class="pre">from_yaml</span></code> to enable an automatic run of the methods.
 This is especially useful if the user wants to run multiple extractions of statistics with minimal
@@ -700,7 +701,7 @@ element.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">wells</span></code>: the get_well_statistics method are executed on elements in this level</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">blocked_wells</span></code>: the get_bwell_statistics method are executed on elements in this level</p></li>
 </ul>
-<div class="section" id="example-in-rms-with-setting-from-a-yaml-file">
+<section id="example-in-rms-with-setting-from-a-yaml-file">
 <h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this headline">¶</a></h3>
 <p>Example using yaml input in RMS for extracting statistics for porosity and permeability from
 four data sources (geogrid, simgrid, wells and blocked wells). The resulting combined
@@ -778,11 +779,11 @@ dataframe are written to csv.</p>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Facies_log</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="additional-notes">
+</section>
+</section>
+<section id="additional-notes">
 <h2>Additional Notes<a class="headerlink" href="#additional-notes" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="advice-on-performance">
+<section id="advice-on-performance">
 <h3>Advice on performance<a class="headerlink" href="#advice-on-performance" title="Permalink to this headline">¶</a></h3>
 <p>There are several settings that has an influence perfomance:</p>
 <ul class="simple">
@@ -792,8 +793,8 @@ e.g. extracting statistics from the same grid but with different filters.</p></l
 is calculated and will speed up execution.</p></li>
 <li><p>If many selectors, the option <code class="docutils literal notranslate"><span class="pre">selector_combos</span></code> can have a high impact on performance</p></li>
 </ul>
-</div>
-<div class="section" id="comparison-with-statistics-in-rms">
+</section>
+<section id="comparison-with-statistics-in-rms">
 <h3>Comparison with statistics in RMS<a class="headerlink" href="#comparison-with-statistics-in-rms" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p>To avoid bias in the calculation, the code removes duplicates from both well and blocked well
@@ -805,9 +806,9 @@ extracted with this code will be identical to RMS. However RMS does not remove d
 calculating statistics for raw wells, and minor differences in statistical values are possible.</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
