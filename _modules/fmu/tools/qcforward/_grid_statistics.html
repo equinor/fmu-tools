@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.4.0 documentation</title>
+  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.4.1.dev1+g0852051 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev1+g0852051
               </div>
             
           
@@ -171,11 +171,11 @@
 <span class="sd">This private module in qcforward is used for grid statistics</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">jsonschema</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">fmu.tools</span>
 <span class="kn">from</span> <span class="nn">fmu.tools.qcproperties.qcproperties</span> <span class="kn">import</span> <span class="n">QCProperties</span>
@@ -206,7 +206,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Main routine for evaulating if statistics from 3D grids is</span>
 <span class="sd">        within user specified thresholds.</span>
 
@@ -232,33 +232,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span> <span class="o">=</span> <span class="n">_LocalData</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
+        <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_gridstatistics</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Results: </span><span class="se">\n</span><span class="si">{</span><span class="n">dfr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">&quot;grid statistics&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GridStatistics.check_gridstatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.check_gridstatistics">[docs]</a>    <span class="k">def</span> <span class="nf">check_gridstatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract statistics per action and check if property value is</span>
+<span class="sd">        within user specified limits.</span>
+
+<span class="sd">        Returns a dataframe with results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Checking status for items in actions...&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
-            <span class="c1"># extract parameters from actions and compute statistics</span>
+            <span class="c1"># extract parameters from actions</span>
             <span class="n">data_upd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
-            <span class="n">stat</span> <span class="o">=</span> <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span>
-                <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_upd</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">qcdata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gdata</span>
-            <span class="p">)</span>
-            <span class="n">selectors</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selectors&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-                <span class="k">if</span> <span class="s2">&quot;selectors&quot;</span> <span class="ow">in</span> <span class="n">action</span>
-                <span class="k">else</span> <span class="kc">None</span>
-            <span class="p">)</span>
-            <span class="c1"># Extract mean value if calculation is not given</span>
-            <span class="k">if</span> <span class="s2">&quot;calculation&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
-                <span class="n">calculation</span> <span class="o">=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">calculation</span> <span class="o">=</span> <span class="s2">&quot;Avg&quot;</span> <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;codename&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;Percent&quot;</span>
+
+            <span class="n">selectors</span><span class="p">,</span> <span class="n">calculation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_selecors_and_calculation</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+            <span class="c1"># Create datframe with statistics</span>
+            <span class="n">dframe</span> <span class="o">=</span> <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_upd</span><span class="p">)</span>
 
             <span class="c1"># Get value from statistics for given property and selectors</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
-                <span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">],</span>
-                <span class="n">conditions</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selectors&quot;</span><span class="p">),</span>
-                <span class="n">calculation</span><span class="o">=</span><span class="n">calculation</span><span class="p">,</span>
-                <span class="n">codename</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;codename&quot;</span><span class="p">),</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_statistical_value</span><span class="p">(</span>
+                <span class="n">dframe</span><span class="p">,</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">],</span> <span class="n">calculation</span><span class="p">,</span> <span class="n">selectors</span>
             <span class="p">)</span>
 
             <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
@@ -270,7 +272,7 @@
 
             <span class="n">result</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;PROPERTY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;SELECTORS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">selectors</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;SELECTORS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">selectors</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;FILTERS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span> <span class="k">if</span> <span class="s2">&quot;filters&quot;</span> <span class="ow">in</span> <span class="n">action</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;CALCULATION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calculation</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;VALUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -287,22 +289,10 @@
             <span class="n">results</span><span class="p">,</span> <span class="n">reportfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">reportfile</span><span class="p">,</span> <span class="n">nametag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">nametag</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfr</span><span class="p">[</span><span class="n">dfr</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WARN&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">dfr</span><span class="p">[</span><span class="n">dfr</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WARN&quot;</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfr</span><span class="p">[</span><span class="n">dfr</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;STOP&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">dfr</span><span class="p">[</span><span class="n">dfr</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;STOP&quot;</span><span class="p">],</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;One or more actions has status = STOP&quot;</span>
-            <span class="n">QCC</span><span class="o">.</span><span class="n">force_stop</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">== QC forward check </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">) finished ==&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">nametag</span>
-            <span class="p">)</span>
-        <span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">dfr</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Validate data against JSON schemas&quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: complete JSON files</span>
@@ -318,9 +308,12 @@
 
         <span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-        <span class="c1"># Function to extract property and selector data from actions</span>
-        <span class="c1"># and convert to desired input format for QCProperties</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract property and selector data from actions</span>
+<span class="sd">        and convert to desired input format for QCProperties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
@@ -343,7 +336,43 @@
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;selectors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selectors</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;filters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filters</span>
 
-        <span class="k">return</span> <span class="n">data</span></div>
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_selecors_and_calculation</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get selectors and selected calculation from the action.</span>
+<span class="sd">        If a discrete property has been input it is added to the selctors.</span>
+<span class="sd">        If calculation is not specified a default is set.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selectors</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selectors&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="s2">&quot;codename&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
+            <span class="n">selectors</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]:</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;codename&quot;</span><span class="p">]})</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="s2">&quot;Avg&quot;</span> <span class="k">if</span> <span class="s2">&quot;calculation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">action</span> <span class="k">else</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">calculation</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_statistical_value</span><span class="p">(</span>
+        <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">prop</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">calculation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">selectors</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrive statistical value from the property statistic dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;PROPERTY&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">prop</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">selectors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">selector</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">selectors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="n">dframe</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">dframe</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ambiguous result, multiple rows meet conditions&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dframe</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">calculation</span><span class="p">]</span></div>
 </pre></div>
 
            </div>

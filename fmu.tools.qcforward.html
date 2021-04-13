@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward package &mdash; fmu-tools 1.4.0 documentation</title>
+  <title>fmu.tools.qcforward package &mdash; fmu-tools 1.4.1.dev1+g0852051 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev1+g0852051
               </div>
             
           
@@ -303,7 +303,7 @@ a path to a YAML file</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fmu.tools.qcforward._qcforward.QCForward</span></code></p>
 <dl class="py method">
 <dt id="fmu.tools.qcforward.GridStatistics.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_statistics.html#GridStatistics.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.GridStatistics.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">object</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_statistics.html#GridStatistics.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.GridStatistics.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main routine for evaulating if statistics from 3D grids is
 within user specified thresholds.</p>
 <p>The routine depends on existing fmu.tools functionality for
@@ -317,6 +317,14 @@ a path to a YAML file</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fmu.tools.qcforward.GridStatistics.check_gridstatistics">
+<code class="sig-name descname"><span class="pre">check_gridstatistics</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_grid_statistics.html#GridStatistics.check_gridstatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.GridStatistics.check_gridstatistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract statistics per action and check if property value is
+within user specified limits.</p>
+<p>Returns a dataframe with results</p>
 </dd></dl>
 
 </dd></dl>

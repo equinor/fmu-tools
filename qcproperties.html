@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>The qcproperties class &mdash; fmu-tools 1.4.0 documentation</title>
+  <title>The qcproperties class &mdash; fmu-tools 1.4.1.dev1+g0852051 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.4.0
+                1.4.1.dev1+g0852051
               </div>
             
           
@@ -100,7 +100,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#methods-for-extracting-property-statistics">Methods for extracting property statistics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#other-methods">Other methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-returned-propstat-instance">The returned PropStat instance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#get-grid-statistics-examples">get_grid_statistics examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#get-well-statistics-examples">get_well_statistics examples</a></li>
@@ -202,9 +201,10 @@
 <h1>The qcproperties class<a class="headerlink" href="#the-qcproperties-class" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qcproperties</span></code> class provides a set of methods for extracting property
 statistics from 3D Grids, Raw and Blocked wells.</p>
+<p>Statistics can be extracted for both continous and discrete properties. Dependent on the
+property type different statistics are calculated. The property type is auto-detected.</p>
 <p>If several methods of statistics extraction has been run within the instance,
-a merged dataframe is available through the ‘dataframe’ property or the ‘dataframe_disc’
-property for continous properties and discrete properties respectively.</p>
+a merged dataframe is available through the ‘dataframe’ property.</p>
 <p>The methods for statistics extraction can be run individually, or a yaml-configuration
 file can be used to enable an automatic run of the methods.</p>
 <p>All methods can be run from either RMS python, or from files (e.g. from an ERT job).</p>
@@ -221,7 +221,9 @@ Arguments for the methods are similar and described in section below.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_bwell_statistics</span></code>: This method extract property statistics from blocked well logs.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">from_yaml</span></code>: Use a yaml-configuration file to enable an automatic run of the methods above.</p></li>
 </ul>
-<p>All methods returns a PropStat instance (see decription further down).</p>
+<p>All methods returns a Pandas DataFrame for the run in question, if several methods of statistics
+extraction has been run within the instance a merged dataframe is available through the
+‘dataframe’ property</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>The <cite>Using yaml input for auto execution</cite> section for description of how to use
@@ -231,18 +233,12 @@ a yaml-configuration file to run the different methods automatically.</p>
 <h3>Other methods<a class="headerlink" href="#other-methods" title="Permalink to this headline">¶</a></h3>
 <p>Note: The methods below are only applicable if at least one method for extracting statistics
 have been run within the QCProperties instance.</p>
-<dl>
+<dl class="simple">
 <dt>dataframe</dt><dd><p>A merged dataframe with statistical data for <strong>continous</strong> properties from all
-runs of statistics extractions within the instance .</p>
+runs of statistics extractions within the instance.</p>
 </dd>
-<dt>dataframe_disc</dt><dd><p>A merged dataframe with statistical data for <strong>discrete</strong> propertiesfrom all
-runs of statistics extractions within the instance .</p>
-</dd>
-<dt>to_csv</dt><dd><p>Used to write the dataframes with statistics to a csv-file. Takes two arguments:</p>
-<p><code class="docutils literal notranslate"><span class="pre">csvfile</span></code>: String with desired filename (required).</p>
-<p><code class="docutils literal notranslate"><span class="pre">disc</span></code>: Bool that controls which dataframe to write (optional). If True the
-dataframe with discrete properties is written else the dataframe with continous
-properties is written. Default is False.</p>
+<dt>to_csv</dt><dd><p>Used to write the dataframe with statistics to a csv-file. Takes one arguments:
+<code class="docutils literal notranslate"><span class="pre">csvfile</span></code>: String with desired filename (required).</p>
 </dd>
 </dl>
 </div>
@@ -253,8 +249,6 @@ different for the three methods, and for the two run environments (inside/outsid
 <p><strong>Input arguments:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: The input data as a Python dictionary (required). See valid keys below.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reuse</span></code>: Bool to define if XTGeo data should be reused in the instance (optional).
-Default is True. Turning this off will impact the performance.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">project</span></code>: Required for usage inside RMS</p></li>
 </ul>
 <p><strong>Valid fields in the ‘data’ argument:</strong></p>
@@ -310,21 +304,25 @@ combined statistics from. This is done by setting the same name on several code
 values, as it is the name that are used to group the data.</p>
 </div>
 </dd>
-<dt>filters</dt><dd><p>Dictionary with additional filter (optional).</p>
-<p>Only discrete parameters are supported. A selector can be input as a filter, this will
-override any existing filters specified directly on the selector.
-The key is the name (or path) to the filter parameter / log, and the
-value is a dictionary with one of two options:</p>
-<p><code class="docutils literal notranslate"><span class="pre">include</span></code>: List of values to include (optional)</p>
-<p><code class="docutils literal notranslate"><span class="pre">exclude</span></code>: List of values to exclude (optional)</p>
-<p><code class="docutils literal notranslate"><span class="pre">pfile</span></code>: Name (or path) to file containing the parameter e.g. INIT file (optional)</p>
+<dt>filters</dt><dd><p>Dictionary with additional filters (optional).</p>
+<p>The key is the name (or path) to the filter parameter / log, and the
+value is a dictionary with options:</p>
+<p><code class="docutils literal notranslate"><span class="pre">include</span></code>: List of values to include for discrete parameters</p>
+<p><code class="docutils literal notranslate"><span class="pre">exclude</span></code>: List of values to exclude for discrete parameters</p>
+<p><code class="docutils literal notranslate"><span class="pre">range</span></code>: List with two entries, defining minimum and maximum values to use for continous parameters</p>
+<p><code class="docutils literal notranslate"><span class="pre">pfile</span></code>: Name (or path) to file containing the parameter e.g. INIT file</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a selector or property is input as a filter, this will override any existing filters
+specified directly on the selector/property.</p>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Option <code class="docutils literal notranslate"><span class="pre">&quot;multiple_filters&quot;</span></code> below which can be used to extract statistics
 multiple times with different filters.</p>
 </div>
 </dd>
-<dt>multiple_filters</dt><dd><p>Option for extract statistics multiple times with different filters (optional).</p>
+<dt>multiple_filters</dt><dd><p>Option that can be used to extract statistics multiple times with different filters (optional).</p>
 <p>The input is a dictionariy where the keys are the “name” (ID string) for the dataset,
 and the value is the dictionary of filters (Same format as <code class="docutils literal notranslate"><span class="pre">filters</span></code> above)</p>
 <p>See examples.</p>
@@ -345,14 +343,12 @@ time consuming.</p>
 <ul class="simple">
 <li><p>For <strong>grid statistics</strong> default is the <cite>gridname</cite></p></li>
 <li><p>For <strong>blocked wells statistics</strong> default is the <cite>name of the blocked wells object</cite> if inside
-RMS and <cite>blocked_wells</cite> if outside</p></li>
+RMS and <cite>bwells</cite> if outside</p></li>
 <li><p>For <strong>well statistics</strong> default is <cite>wells</cite></p></li>
 </ul>
 </dd>
 <dt>name</dt><dd><p>ID string for the dataset (optional). Recommended, if not given it will be set equal
 to the source string.</p>
-</dd>
-<dt>csvfile</dt><dd><p>Path to output csvfile (optional). A csv-file will only be written, if argument is provided.</p>
 </dd>
 <dt>verbosity</dt><dd><p>Level of output while running None, “info” or “debug”, default is None. (optional)</p>
 </dd>
@@ -360,73 +356,49 @@ to the source string.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="the-returned-propstat-instance">
-<h3>The returned PropStat instance<a class="headerlink" href="#the-returned-propstat-instance" title="Permalink to this headline">¶</a></h3>
-<p>All methods above returns a PropStat instance, with different properties:</p>
-<dl>
-<dt>dataframe</dt><dd><p>The dataframe with statistical data for continous properties.</p>
-</dd>
-<dt>dataframe_disc</dt><dd><p>The dataframe with statistical data for discrete properties.</p>
-</dd>
-<dt>property_dataframe</dt><dd><p>The full dataframe for the properties which is used as input to the statistical
-aggregations. Note: If filters are used as input, this dataframe will be the filtered.</p>
-</dd>
-<dt>get_value</dt><dd><p>Method to retrive a statistical value from either of the two the property statistics
-dataframes (dependent on the property type, discrete vs continous)</p>
-<p>Arguments are:</p>
-<p><code class="docutils literal notranslate"><span class="pre">prop</span></code>: String whith the property name (Required)</p>
-<p><code class="docutils literal notranslate"><span class="pre">conditions</span></code>: A dictionary with selector conditions to look up value for,
-e.g {“REGION”: “EAST”, “ZONE”: “TOP_ZONE”}. If no conditions are given, the
-value for the total will be returned.</p>
-<p><code class="docutils literal notranslate"><span class="pre">calculation</span></code>: String with name of column to retrieve value from. “Avg” is the
-default for continous properties, “Percent” for discrete.</p>
-<p><code class="docutils literal notranslate"><span class="pre">codename</span></code>: Codename to select for discrete properties (Required if dicrete property)</p>
-</dd>
-</dl>
-</div>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="get-grid-statistics-examples">
 <h4>get_grid_statistics examples<a class="headerlink" href="#get-grid-statistics-examples" title="Permalink to this headline">¶</a></h4>
-<p><strong>Example in RMS (basic):</strong></p>
+<p><strong>Example in RMS (continous properties - basic):</strong></p>
 <p>Example extracting statistics for porosity and permeability for each zone and facies.
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PORO&quot;</span><span class="p">,</span> <span class="s2">&quot;PERM&quot;</span><span class="p">]</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">]</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">]</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-    <span class="s2">&quot;csvfile&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
+
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">}</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">check</span><span class="p">()</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Example in RMS (more settings):</strong></p>
-<p>Example extracting statistics for porosity and facies for each region. Filters
+<p><strong>Example in RMS (continous properties - more settings):</strong></p>
+<p>Example extracting statistics for porosity per region. Filters
 are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
-Both properties are weighted on a Total_Bulk parameter.</p>
-<p>The result is written out in two csv-files, one with statistics of percentages for
-the discrete facies parameter, and one with regular statistics for the continous porosity parameter.</p>
+Both properties are weighted on a Total_Bulk parameter.
+Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;PORO&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_Bulk&quot;</span><span class="p">},</span>
-    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_Bulk&quot;</span><span class="p">},</span>
 <span class="p">}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;REGION&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -435,8 +407,7 @@ the discrete facies parameter, and one with regular statistics for the continous
         <span class="s2">&quot;codes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;NS&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;NS&quot;</span><span class="p">,},</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="n">REPORT_CONT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/continous_stats.csv&quot;</span>
-<span class="n">REPORT_DISC</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/discrete_stats.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/continous_stats.csv&quot;</span>
 
 <span class="n">FLUID_FILTERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;HC_zone&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Fluid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;oil&quot;</span><span class="p">,</span> <span class="s2">&quot;gas&quot;</span><span class="p">]}},</span>
@@ -452,15 +423,15 @@ the discrete facies parameter, and one with regular statistics for the continous
         <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
         <span class="s2">&quot;multiple_filters&quot;</span><span class="p">:</span> <span class="n">FLUID_FILTERS</span><span class="p">,</span>
+        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
-
-    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT_CONT</span><span class="p">)</span>
-    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT_DISC</span><span class="p">,</span> <span class="n">disc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -468,6 +439,39 @@ the discrete facies parameter, and one with regular statistics for the continous
 <p>The code is executed twice, filtering on the HC-zone first then the water-zone
 in a second run. Alternatively the fluid parameter could have been used as a
 selector, for extracting statistics in one run.</p>
+</div>
+<p><strong>Example in RMS (discrete properties):</strong></p>
+<p>Example extracting statistics for a discrete facies parameter for each region.
+The facies parameter are weighted on a Total_Bulk parameter.</p>
+<p>The result is written out to csv.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_Bulk&quot;</span><span class="p">},</span>
+<span class="p">}</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Regions&quot;</span><span class="p">]</span>
+
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/discrete_stats.csv&quot;</span>
+
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+
+    <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
+
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
+
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
@@ -486,21 +490,56 @@ selector, for extracting statistics in one run.</p>
 <span class="p">}</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MYDATA&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
+
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MYDATA&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
+    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">check</span><span class="p">()</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Example when executed from file using Eclipse INIT-file as input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE.EGRID&quot;</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERMX&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PERMX&quot;</span><span class="p">,</span> <span class="s2">&quot;pfile&quot;</span><span class="p">:</span> <span class="s2">&quot;ECLIPSE.INIT&quot;</span><span class="p">}}</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;FIPNUM&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FIPNUM&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pfile&quot;</span><span class="p">:</span> <span class="s2">&quot;ECLIPSE.INIT&quot;</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+
+    <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
+
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;from_eclipse&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
+    <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
+
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -508,12 +547,13 @@ selector, for extracting statistics in one run.</p>
 <h4>get_well_statistics examples<a class="headerlink" href="#get-well-statistics-examples" title="Permalink to this headline">¶</a></h4>
 <p><strong>Example in RMS:</strong></p>
 <p>Example extracting statistics for permeability for each zone and facies.
-All wells starting with 34_10-A or 34_10-B will be included in statistics.
+All wells starting with 33_10 and all 34_11 wells containing “A” will be included in statistics.
+Note the use of python regular expressions!
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;34_10-A.*$&quot;</span><span class="p">,</span> <span class="s2">&quot;34_10-B.*$&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;33_10.*&quot;</span><span class="p">,</span> <span class="s2">&quot;34_11-.*A.*&quot;</span><span class="p">],</span>
   <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
   <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
 <span class="p">}</span>
@@ -521,22 +561,22 @@ Result is written to csv.</p>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-    <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
-    <span class="s2">&quot;csvfile&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
-    <span class="n">qcp</span><span class="o">.</span><span class="n">get_well_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">qcp</span><span class="o">.</span><span class="n">get_well_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">check</span><span class="p">()</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
@@ -546,34 +586,36 @@ starting with “34_10-B” in a subsequent run.
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-A.*$&quot;</span><span class="p">]</span>
+<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-A.*&quot;</span><span class="p">]</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Phit&quot;</span><span class="p">,</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">]</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-    <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
-    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
-    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;A-wells&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
+
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;A-wells&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_well_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
 
     <span class="n">usedata2</span> <span class="o">=</span> <span class="n">usedata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-B.*$&quot;</span><span class="p">]</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-B.*&quot;</span><span class="p">]</span>
     <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;B-wells&quot;</span>
+
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata2</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">check</span><span class="p">()</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -593,22 +635,23 @@ Result is written to csv.</p>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-    <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
-    <span class="s2">&quot;csvfile&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
-<span class="p">}</span>
-
 <span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
-    <span class="n">qcp</span><span class="o">.</span><span class="n">get_bwell_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
+    <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+        <span class="s2">&quot;csvfile&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">qcp</span><span class="o">.</span><span class="n">get_bwell_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
@@ -646,28 +689,26 @@ the codes are updated and redundant codes are excluded.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;somefile.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
 <span class="n">GEOGRIDDATA</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">],</span>
     <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zone&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;GeoGrid&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">SIMGRIDDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Poro&quot;</span><span class="p">:{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PORO&quot;</span><span class="p">},</span> <span class="s2">&quot;Perm&quot;</span><span class="p">:{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PERMX&quot;</span><span class="p">}},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Poro&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PORO&quot;</span><span class="p">},</span> <span class="s2">&quot;Perm&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PERMX&quot;</span><span class="p">}},</span>
     <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zone&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;SimGrid&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">BWDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;codes&quot;</span><span class="p">:{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;UpperReek&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s2">&quot;MidReek&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s2">&quot;LowerReek&quot;</span><span class="p">},</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:[</span><span class="s2">&quot;Above_TopUpperReek&quot;</span><span class="p">,</span> <span class="s2">&quot;Below_BaseLowerReek&quot;</span><span class="p">]}},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Poro&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Phit&quot;</span><span class="p">},</span> <span class="s2">&quot;Perm&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">}},</span>
+    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;codes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;UpperReek&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s2">&quot;MidReek&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s2">&quot;LowerReek&quot;</span><span class="p">},</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Above_TopUpperReek&quot;</span><span class="p">,</span> <span class="s2">&quot;Below_BaseLowerReek&quot;</span><span class="p">]}},</span>
     <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">},</span>
 <span class="p">}</span>
-<span class="n">WDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;codes&quot;</span><span class="p">:{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;UpperReek&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s2">&quot;MidReek&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s2">&quot;LowerReek&quot;</span><span class="p">},</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:[</span><span class="s2">&quot;Above_TopUpperReek&quot;</span><span class="p">,</span> <span class="s2">&quot;Below_BaseLowerReek&quot;</span><span class="p">]}},</span>
-    <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">},</span>
-<span class="p">}</span>
+
+<span class="n">WDATA</span> <span class="o">=</span> <span class="n">BWDATA</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">WDATA</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
 
@@ -684,6 +725,10 @@ the codes are updated and redundant codes are excluded.</p></li>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The section below for example of using the same configuration but with yaml-input.</p>
+</div>
 </div>
 </div>
 <div class="section" id="using-yaml-input-for-auto-execution">
@@ -698,7 +743,7 @@ element.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">grid</span></code>: the get_grid_statistics method are executed on elements in this level</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">wells</span></code>: the get_well_statistics method are executed on elements in this level</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">blocked_wells</span></code>: the get_bwell_statistics method are executed on elements in this level</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blockedwells</span></code>: the get_bwell_statistics method are executed on elements in this level</p></li>
 </ul>
 <div class="section" id="example-in-rms-with-setting-from-a-yaml-file">
 <h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this headline">¶</a></h3>
@@ -710,72 +755,74 @@ dataframe are written to csv.</p>
 <span class="n">YAML_PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/somefile.yml&quot;</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">YAML_PATH</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">check</span><span class="p">()</span>
+    <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The YAML file may in case look like:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">grid</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GeoGrid</span>
     <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">PORO</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PHIT</span>
-      <span class="nt">PERM</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">KLOGH</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Poro</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Perm</span>
     <span class="nt">selectors</span><span class="p">:</span>
       <span class="nt">ZONE</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zone</span>
-      <span class="nt">FACIES</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Facies</span>
 
   <span class="p p-Indicator">-</span> <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SimGrid</span>
     <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">PORO</span><span class="p">:</span>
+      <span class="nt">Poro</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PORO</span>
-      <span class="nt">PERM</span><span class="p">:</span>
+      <span class="nt">Perm</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PERMX</span>
     <span class="nt">selectors</span><span class="p">:</span>
       <span class="nt">ZONE</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zone</span>
-      <span class="nt">FACIES</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Facies</span>
 
 <span class="nt">wells</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">wells</span><span class="p">:</span>
       <span class="nt">logrun</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">log</span>
-      <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">34_10-A.*$</span><span class="p p-Indicator">]</span>
       <span class="nt">trajectory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Drilled trajectory</span>
     <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">PORO</span><span class="p">:</span>
+      <span class="nt">Poro</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Phit</span>
-      <span class="nt">PERM</span><span class="p">:</span>
+      <span class="nt">Perm</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Klogh</span>
     <span class="nt">selectors</span><span class="p">:</span>
       <span class="nt">ZONE</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zonelog</span>
-      <span class="nt">FACIES</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Facies_log</span>
+        <span class="nt">codes</span><span class="p">:</span>
+          <span class="nt">1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UpperReek</span>
+          <span class="nt">2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MidReek</span>
+          <span class="nt">3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LowerReek</span>
+        <span class="nt">exclude</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span>
 
 <span class="nt">blockedwells</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">wells</span><span class="p">:</span>
       <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GeoGrid</span>
-      <span class="nt">names</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">34_10-A.*$</span><span class="p p-Indicator">]</span>
       <span class="nt">bwname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BW</span>
     <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">PORO</span><span class="p">:</span>
+      <span class="nt">Poro</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Phit</span>
-      <span class="nt">PERM</span><span class="p">:</span>
+      <span class="nt">Perm</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Klogh</span>
     <span class="nt">selectors</span><span class="p">:</span>
       <span class="nt">ZONE</span><span class="p">:</span>
         <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zonelog</span>
-      <span class="nt">FACIES</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Facies_log</span>
+        <span class="nt">codes</span><span class="p">:</span>
+          <span class="nt">1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UpperReek</span>
+          <span class="nt">2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MidReek</span>
+          <span class="nt">3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LowerReek</span>
+        <span class="nt">exclude</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span>
 </pre></div>
 </div>
 </div>
@@ -786,8 +833,6 @@ dataframe are written to csv.</p>
 <h3>Advice on performance<a class="headerlink" href="#advice-on-performance" title="Permalink to this headline">¶</a></h3>
 <p>There are several settings that has an influence perfomance:</p>
 <ul class="simple">
-<li><p>Keep the option <code class="docutils literal notranslate"><span class="pre">reuse</span> <span class="pre">=</span> <span class="pre">True</span></code> to avoid reloading data to XTGeo if it is previously used,
-e.g. extracting statistics from the same grid but with different filters.</p></li>
 <li><p>Filters can be used to remove unnecessary data, this will limit the input data before statistics
 is calculated and will speed up execution.</p></li>
 <li><p>If many selectors, the option <code class="docutils literal notranslate"><span class="pre">selector_combos</span></code> can have a high impact on performance</p></li>
