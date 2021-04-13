@@ -8,6 +8,7 @@ This method checks if property statistics from 3D grids are within user specifie
 thresholds. If worse than a given set of limits, either a warning is given or a
 full stop of the workflow is forced.
 
+Both discrete and continous properties are supported.
 
 Signature
 ^^^^^^^^^
@@ -31,10 +32,13 @@ actions
   property
     Name of property (either a property icon in RMS, or a file name)
 
-  calculation
-    Name of statistical value to check (optional). Default option is "Avg" for continous properties,
-    while other valid options are "Min, Max and Stddev". Default option for discrete properties is "Percent".
+  codename
+    The discrete property code name to check value for (optional).
+    .. note:: A codename is only needed for discrete properties 
 
+  calculation
+    Name of statistical value to check (optional). Default option is "Avg",
+    while other valid options for continous properties are "Min", "Max" and "Stddev".
 
   selectors
     A dictionary of conditions to extract statistics from. e.g. a specific zone and/or region (optional).
@@ -55,11 +59,15 @@ actions
 
     For example ``[0.05, 0.35]`` will give a warning if the statistic is < than 0.05 and > than 0.35.
 
+    .. note:: For discrete properties the statistical value will be reported in fractions. 
+
   warn_outside
     Same as warn_outside key above, but instead defines when to give a warning (optional).
 
   description
     A string to describe each action (optional).
+  
+
 
 
 Optional fields
@@ -85,8 +93,8 @@ nametag
 Examples
 ~~~~~~~~
 
-Example when executed inside RMS (basic):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example when executed inside RMS (continous properties - basic):
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -122,9 +130,47 @@ Example when executed inside RMS (basic):
         check()
 
 
+Example when executed inside RMS (discrete properties - basic):
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Example when executed inside RMS (more settings):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: python
+
+    from fmu.tools import qcforward as qcf
+
+    # Check average grid statistics for porosity and permeability
+
+    GRIDNAME = "SimGrid"
+    REPORT = "somefile.csv"
+    ACTIONS = [
+        {
+            "property": "Facies",
+            "codename": "Sand",
+            "selectors": {"Zone": "Top_Zone"},
+            "stop_outside": [0.4, 0.8],
+        },
+        {
+            "property": "Facies",
+            "codename": "Sand",
+            "selectors": {"Zone": "Mid_Zone"},
+            "stop_outside": [0.2, 0.5],
+        },
+    ]
+
+    def check():
+
+        usedata = {
+            "grid": GRIDNAME,
+            "actions": ACTIONS,
+            "report": REPORT,
+        }
+
+        qcf.grid_statistics(usedata, project=project)
+
+    if  __name__ == "__main__":
+        check()
+
+Example when executed inside RMS (continous properties - more settings):
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -149,7 +195,7 @@ Example when executed inside RMS (more settings):
             actions.append(
                 {
                     "property": "PORO",
-                    "selectors": {"ZONE": zone},
+                    "selectors": {"Zone": zone},
                     "filters": {"FLUID": {"include": ["Gas", "Oil"]}},
                     "stop_outside": limits,
                 },
@@ -157,7 +203,6 @@ Example when executed inside RMS (more settings):
 
         usedata = {
             "nametag": "MYDATA1",
-            "path": PATH,
             "grid": GRIDNAME,
             "report": REPORT,
             "actions": actions,
@@ -233,13 +278,12 @@ The YAML file may in case look like:
       warn_outside: [0.18, 0.25]
     - property: PORO
       selectors:
-        ZONE: Top_Zone
+        Zone: Top_Zone
       filters:
         REGION:
           exclude: ["Surroundings"]
       stop_outside: [0, 1]
       warn_outside: [0.18, 0.25]
-    path: ../input/qc_files/
     report: somefile.csv
     nametag: QC_PORO
     verbosity: info

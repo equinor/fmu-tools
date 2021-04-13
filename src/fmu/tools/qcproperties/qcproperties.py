@@ -1,14 +1,15 @@
 """The qcproperties module"""
-
+from pathlib import Path
+from typing import Optional
 import pandas as pd
 import yaml
 
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
 
-from fmu.tools.qcproperties._combine_propstats import combine_property_statistics
-from fmu.tools.qcproperties._propstat_parameter_data import PropStatParameterData
-from fmu.tools.qcproperties._propstat import PropStat
+from fmu.tools.qcproperties._grid2df import GridProps2df
+from fmu.tools.qcproperties._well2df import WellLogs2df
+from fmu.tools.qcproperties._aggregate_df import PropertyAggregation
 
 QCC = _QCCommon()
 
@@ -17,6 +18,9 @@ class QCProperties:
     """
     The QCProperties class consists of a set of methods for extracting
     property statistics from 3D Grids, Raw and Blocked wells.
+
+    Statistics can be collected from either discrete or continous properties.
+    Dependent on the property different statistics are collected.
 
     The methods for statistics extraction can be run individually, or a
     yaml-configuration file can be used to enable an automatic run of the
@@ -30,176 +34,155 @@ class QCProperties:
     XTGeo is being utilized to get a dataframe from the input parameter data.
     XTGeo data is reused in the instance to increase performance.
 
-
-    Methods for extracting statistics from 3D Grids, Raw and Blocked wells:
-
-        Args:
-            data (dict): The input data as a Python dictionary (see description of
-                valid argument keys in documentation)
-            reuse (bool or list): If True, then grid and gridprops will be reused
-                as default. Alternatively it can be a list for more
-                fine grained control, e.g. ["grid", "gridprops", "wells"]
-            project (obj or str): For usage inside RMS
-
-        Returns:
-            A PropStat() instance
-
     """
 
     def __init__(self):
 
-        self._propstats = []  # list of PropStat() instances
-        self._dataframe = pd.DataFrame()  # merged dataframe with continous stats
-        self._dataframe_disc = pd.DataFrame()  # merged dataframe with discrete stats
         self._xtgdata = QCData()  # QCData instance, general XTGeo data
+        self._dfs = []  # list of dataframes with aggregated statistics
+        self._selectors_all = []
+        self._proptypes_all = []
+        self._ids = []
+        self._dataframe = pd.DataFrame()  # merged dataframe with statistics
 
     # Properties:
     # ==================================================================================
 
     @property
     def dataframe(self):
-        """A merged dataframe from all the PropStat() instances"""
-        self._dataframe = self._create_dataframe(self._dataframe)
+        """Dataframe with statistics"""
+        self._dataframe = self._create_or_return_dataframe()
         return self._dataframe
-
-    @property
-    def dataframe_disc(self):
-        """A merged dataframe from all the PropStat() instances"""
-        self._dataframe_disc = self._create_dataframe(
-            self._dataframe_disc, discrete=True
-        )
-        return self._dataframe_disc
-
-    @property
-    def xtgdata(self):
-        """The QCData instance"""
-        return self._xtgdata
 
     # Hidden methods:
     # ==================================================================================
 
-    def _input_preparations(self, project, data, reuse, dtype, qcdata=None):
-        """
-        Prepare the input parameter data for use with a PropStat() instance.
-        Parameters are loaded to XTGeo and can be reused in the instance.
-        """
-
-        data = data.copy()
-        data["dtype"] = dtype
-        data["project"] = project
-        if dtype == "bwells":
-            data["bwells"] = data.pop("wells")
-
-        pdata = PropStatParameterData(
-            properties=data["properties"],
-            selectors=data.get("selectors", {}),
-            filters=data.get("filters", None),
-            verbosity=data.get("verbosity", 0),
-        )
-
-        if dtype == "grid":
-            pfiles = {}
-            for elem in ["properties", "selectors", "filters"]:
-                if elem in data and isinstance(data[elem], dict):
-                    for values in data[elem].values():
-                        if "pfile" in values:
-                            pfiles[values["name"]] = values["pfile"]
-
-            data["gridprops"] = (
-                [
-                    [param, pfiles[param]] if param in pfiles else ["unknown", param]
-                    for param in pdata.params
-                ]
-                if project is None
-                else pdata.params
-            )
-
-        if qcdata is not None:
-            self._xtgdata = qcdata
-
-        self._xtgdata.parse(
-            project=data["project"],
-            data=data,
-            reuse=reuse,
-            wells_settings=None
-            if dtype == "grid"
-            else {
-                "lognames": pdata.params,
-            },
-        )
-
-        return pdata, data
-
-    def _dataload_and_calculation(self, project, data, reuse, dtype, qcdata=None):
-        """ Load data to XTGeo and xtract statistics. Can be  """
-        # create PropStatParameterData() instance and load parameters to xtgeo
-        pdata, data = self._input_preparations(project, data, reuse, dtype, qcdata)
-
-        QCC.print_info("Extracting property statistics...")
-        # compute statistics
-        propstat = PropStat(parameter_data=pdata, xtgeo_data=self._xtgdata, data=data)
-
-        self._propstats.append(propstat)
-        return propstat
-
-    def _extract_statistics(self, project, data, reuse, dtype, qcdata):
-        """
-        Single statistics extraction, or multiple if multiple filters are defined.
-        All PropStat() instances will be appended to the self._propstats list and
-        are used to create a merged dataframe for the instance.
-
-        Returns: A single PropStat() instance or a list of PropStat() intances if
-                 multiple filters are used.
-        """
-        QCC.verbosity = data.get("verbosity", 0)
-
-        if "multiple_filters" in data:
-            propstats = []
-            for name, filters in data["multiple_filters"].items():
-                QCC.print_info(
-                    f"Starting run with name '{name}', " f"using filters {filters}"
-                )
-                usedata = data.copy()
-                usedata["filters"] = filters
-                usedata["name"] = name
-                pstat = self._dataload_and_calculation(
-                    project, data=usedata, reuse=True, dtype=dtype, qcdata=qcdata
-                )
-                propstats.append(pstat)
-            return propstats
-        else:
-            return self._dataload_and_calculation(project, data, reuse, dtype, qcdata)
-
-    def _initiate_from_config(self, cfg, project=None, reuse=False):
-        """ Run methods for statistics extraction based on entries in yaml-config"""
-
+    def _initiate_from_config(self, cfg: str, project: Optional[object]):
+        """Run methods for statistics extraction based on entries in yaml-config"""
         with open(cfg, "r") as stream:
             data = yaml.safe_load(stream)
 
         if "grid" in data:
             for item in data["grid"]:
-                self.get_grid_statistics(data=item, project=project, reuse=reuse)
+                self.get_grid_statistics(data=item, project=project)
 
         if "wells" in data:
             for item in data["wells"]:
-                self.get_well_statistics(data=item, project=project, reuse=reuse)
+                self.get_well_statistics(data=item, project=project)
 
         if "blockedwells" in data:
             for item in data["blockedwells"]:
-                self.get_bwell_statistics(data=item, project=project, reuse=reuse)
+                self.get_bwell_statistics(data=item, project=project)
 
-    def _create_dataframe(self, dframe, discrete=False):
+    def _create_or_return_dataframe(self):
         """
-        Combine dataframe from all PropStat() instances. Update dataframe if
-        out of sync with self._propstats
+        Combine dataframes from all runs within the instance.
+        Only update dataframe if more data have been run within the
+        instance, else return previous dataframe.
         """
-        if (self._propstats and dframe.empty) or (
-            len(self._propstats) != len(dframe["ID"].unique())
-        ):
-            dframe = combine_property_statistics(
-                self._propstats, discrete=discrete, verbosity=QCC.verbosity
-            )
+        dframe = self._dataframe
+        dframes = self._dfs
+
+        if dframe.empty or len(dframes) > len(dframe["ID"].unique()):
+            QCC.print_debug("Updating combined dataframe")
+            self._warn_if_different_property_types()
+            dframe = pd.concat(dframes)
+
+            # fill NaN with "Total" for dataframes with missing selectors
+            dframe[self._selectors_all] = dframe[self._selectors_all].fillna("Total")
+
+            # Specify column order in statistics dataframe
+            cols_first = ["PROPERTY"] + self._selectors_all
+            dframe = dframe[
+                cols_first + [x for x in dframe.columns if x not in cols_first]
+            ]
         return dframe
+
+    def _warn_if_different_property_types(self):
+        """Give warning if dataframes have different property types"""
+        if not all(ptype == self._proptypes_all[0] for ptype in self._proptypes_all):
+            QCC.give_warn(
+                "Merging statistics dataframes from different property types "
+                "(continous/discrete). Is this intentional?"
+            )
+
+    def _adjust_id_if_duplicate(self, run_id: str) -> str:
+        """
+        Check for equal run ids, modify ids
+        by adding a number to get them unique.
+        """
+        check_id = run_id
+        count = 0
+        while check_id in self._ids:
+            check_id = f"{run_id}({count+1})"
+            count += 1
+        return check_id
+
+    def _set_dataframe_id_and_class_attributes(
+        self, statistics: PropertyAggregation, source: str, run_id: str
+    ):
+        """
+        Set source and id column of statistics datframe, and different
+        class attributes.
+        """
+        run_id = self._adjust_id_if_duplicate(run_id)
+        # set id and source columns in statistics dataframe
+        statistics.dataframe["ID"] = run_id
+        statistics.dataframe["SOURCE"] = source
+
+        self._ids.append(run_id)
+        self._dfs.append(statistics.dataframe)
+
+        for selector in statistics.controls["selectors"]:
+            if selector not in self._selectors_all:
+                self._selectors_all.append(selector)
+
+        self._proptypes_all.append(statistics.controls["property_type"])
+
+    # pylint: disable = no-self-argument, not-callable
+    def _check_multiple_filters(method):
+        """Decorator function for extracting statistics with different filters"""
+
+        def wrapper(self, **kwargs):
+            if "multiple_filters" in kwargs["data"]:
+                for name, filters in kwargs["data"]["multiple_filters"].items():
+                    kwargs["data"].update(filters=filters, name=name)
+                    method(self, **kwargs)
+                return self.dataframe
+            return method(self, **kwargs)
+
+        return wrapper
+
+    @_check_multiple_filters
+    def _extract_statistics(
+        self, dtype: str, data: dict, project: Optional[object], source: str
+    ):
+        """Create dataframe from properties and extract statistics"""
+        QCC.verbosity = data.get("verbosity", 0)
+        QCC.print_info("Starting run...")
+
+        # Create Property dataframe from input (using XTGeo)
+        property_data = (
+            GridProps2df(project=project, data=data, xtgdata=self._xtgdata)
+            if dtype == "grid"
+            else WellLogs2df(
+                project=project,
+                data=data,
+                xtgdata=self._xtgdata,
+                blockedwells=dtype == "bwells",
+            )
+        )
+
+        # Compute statistics
+        stats = PropertyAggregation(property_data)
+
+        self._set_dataframe_id_and_class_attributes(
+            stats,
+            source=source,
+            run_id=data.get("name", source),
+        )
+
+        return stats.dataframe
 
     # QC methods:
     # ==================================================================================
@@ -207,47 +190,50 @@ class QCProperties:
     def get_grid_statistics(
         self,
         data: dict,
-        project: object = None,
-        reuse: bool = False,
-        qcdata: QCData = None,
-    ) -> PropStat:
+        project: Optional[object] = None,
+    ) -> pd.DataFrame:
         """Extract property statistics from 3D Grid"""
         return self._extract_statistics(
-            project, data, reuse, dtype="grid", qcdata=qcdata
+            dtype="grid",
+            data=data,
+            project=project,
+            source=data.get("source", Path(data["grid"]).stem),
         )
 
     def get_well_statistics(
         self,
         data: dict,
-        project: object = None,
-        reuse: bool = False,
-        qcdata: QCData = None,
-    ) -> PropStat:
-        """Extract property statistics from wells """
+        project: Optional[object] = None,
+    ) -> pd.DataFrame:
+        """Extract property statistics from wells"""
         return self._extract_statistics(
-            project, data, reuse, dtype="wells", qcdata=qcdata
+            dtype="wells",
+            data=data,
+            project=project,
+            source=data.get("source", "wells"),
         )
 
     def get_bwell_statistics(
         self,
         data: dict,
-        project: object = None,
-        reuse: bool = False,
-        qcdata: QCData = None,
-    ) -> PropStat:
-        """Extract property statistics from blocked wells """
+        project: Optional[object] = None,
+    ) -> pd.DataFrame:
+        """Extract property statistics from blocked wells"""
         return self._extract_statistics(
-            project, data, reuse, dtype="bwells", qcdata=qcdata
+            dtype="bwells",
+            data=data,
+            project=project,
+            source=data.get(
+                "source",
+                "bwells" if project is None else data["wells"].get("bwname", "BW"),
+            ),
         )
 
-    def from_yaml(self, cfg: str, project: object = None, reuse: bool = False):
-        """ Use yaml-configuration file to run the statistics extractions methods."""
-        self._initiate_from_config(cfg, project, reuse)
+    def from_yaml(self, cfg: str, project: Optional[object] = None):
+        """Use yaml-configuration file to run the statistics extractions methods"""
+        self._initiate_from_config(cfg, project)
 
-    def to_csv(self, csvfile: str, disc: bool = False):
-        """ Write combined dataframe to csv """
-        dframe = self.dataframe if not disc else self.dataframe_disc
-        dframe.to_csv(csvfile, index=False)
-
-        QCC.print_info(f"Dataframe with {'discrete' if disc else 'continous'} ")
-        QCC.print_info(f"property statistics written to {csvfile}")
+    def to_csv(self, csvfile: str):
+        """Write combined dataframe to csv"""
+        self.dataframe.to_csv(csvfile, index=False)
+        QCC.print_info(f"Dataframe with statistics written to {csvfile}")

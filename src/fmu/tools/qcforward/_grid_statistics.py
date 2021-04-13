@@ -2,11 +2,11 @@
 This private module in qcforward is used for grid statistics
 """
 from typing import Union
-import sys
 import collections
 from pathlib import Path
 import json
 from jsonschema import validate
+import pandas as pd
 
 import fmu.tools
 from fmu.tools.qcproperties.qcproperties import QCProperties
@@ -37,7 +37,7 @@ class GridStatistics(QCForward):
         self,
         data: dict,
         project: Union[object, str] = None,
-    ):
+    ) -> tuple:
         """Main routine for evaulating if statistics from 3D grids is
         within user specified thresholds.
 
@@ -63,33 +63,35 @@ class GridStatistics(QCForward):
         self.ldata = _LocalData()
         self.ldata.parse_data(data)
 
+        dfr = self.check_gridstatistics(project, data)
+        QCC.print_debug(f"Results: \n{dfr}")
+
+        self.evaluate_qcreport(dfr, "grid statistics")
+
+    def check_gridstatistics(self, project, data):
+        """
+        Extract statistics per action and check if property value is
+        within user specified limits.
+
+        Returns a dataframe with results
+        """
+
         qcp = QCProperties()
 
         results = []
         QCC.print_info("Checking status for items in actions...")
         for action in self.ldata.actions:
-            # extract parameters from actions and compute statistics
+            # extract parameters from actions
             data_upd = self._extract_parameters_from_action(data, action)
-            stat = qcp.get_grid_statistics(
-                project=project, data=data_upd, reuse=True, qcdata=self.gdata
-            )
-            selectors = (
-                list(action.get("selectors").values())
-                if "selectors" in action
-                else None
-            )
-            # Extract mean value if calculation is not given
-            if "calculation" in action:
-                calculation = action["calculation"]
-            else:
-                calculation = "Avg" if action.get("codename") is None else "Percent"
+
+            selectors, calculation = self._get_selecors_and_calculation(action)
+
+            # Create datframe with statistics
+            dframe = qcp.get_grid_statistics(project=project, data=data_upd)
 
             # Get value from statistics for given property and selectors
-            value = stat.get_value(
-                action["property"],
-                conditions=action.get("selectors"),
-                calculation=calculation,
-                codename=action.get("codename"),
+            value = self._get_statistical_value(
+                dframe, action["property"], calculation, selectors
             )
 
             status = "OK"
@@ -101,7 +103,7 @@ class GridStatistics(QCForward):
 
             result = collections.OrderedDict()
             result["PROPERTY"] = action["property"]
-            result["SELECTORS"] = f"{selectors}"
+            result["SELECTORS"] = f"{list(selectors.values())}"
             result["FILTERS"] = "yes" if "filters" in action else "no"
             result["CALCULATION"] = calculation
             result["VALUE"] = value
@@ -118,22 +120,10 @@ class GridStatistics(QCForward):
             results, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
         )
 
-        if len(dfr[dfr["STATUS"] == "WARN"]) > 0:
-            print(dfr[dfr["STATUS"] == "WARN"])
-
-        if len(dfr[dfr["STATUS"] == "STOP"]) > 0:
-            print(dfr[dfr["STATUS"] == "STOP"], file=sys.stderr)
-            msg = "One or more actions has status = STOP"
-            QCC.force_stop(msg)
-
-        print(
-            "\n== QC forward check {} ({}) finished ==".format(
-                self.__class__.__name__, self.ldata.nametag
-            )
-        )
+        return dfr
 
     @staticmethod
-    def _validate_input(data):
+    def _validate_input(data: dict):
         """Validate data against JSON schemas"""
 
         # TODO: complete JSON files
@@ -149,9 +139,12 @@ class GridStatistics(QCForward):
 
         validate(instance=data, schema=schema)
 
-    def _extract_parameters_from_action(self, data, action):
-        # Function to extract property and selector data from actions
-        # and convert to desired input format for QCProperties
+    @staticmethod
+    def _extract_parameters_from_action(data: dict, action: dict) -> dict:
+        """
+        Extract property and selector data from actions
+        and convert to desired input format for QCProperties
+        """
         data = data.copy()
 
         properties = {}
@@ -175,3 +168,39 @@ class GridStatistics(QCForward):
         data["filters"] = filters
 
         return data
+
+    @staticmethod
+    def _get_selecors_and_calculation(action: dict) -> tuple:
+        """
+        Get selectors and selected calculation from the action.
+        If a discrete property has been input it is added to the selctors.
+        If calculation is not specified a default is set.
+        """
+        selectors = action.get("selectors", {})
+        if "codename" in action:
+            selectors.update({action["property"]: action["codename"]})
+        calculation = "Avg" if "calculation" not in action else action["calculation"]
+        return selectors, calculation
+
+    @staticmethod
+    def _get_statistical_value(
+        dframe: pd.DataFrame,
+        prop: str,
+        calculation: str,
+        selectors: dict = None,
+    ) -> float:
+        """
+        Retrive statistical value from the property statistic dataframe
+        """
+
+        dframe = dframe[dframe["PROPERTY"] == prop].copy()
+
+        if selectors is not None:
+            for selector, value in selectors.items():
+                dframe = dframe[dframe[selector] == value]
+
+        if len(dframe.index) > 1:
+            print(dframe)
+            raise Exception("Ambiguous result, multiple rows meet conditions")
+
+        return dframe.iloc[0][calculation]
