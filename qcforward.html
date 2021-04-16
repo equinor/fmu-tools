@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>The qcforward functions &mdash; fmu-tools 1.4.1.dev1+g0852051 documentation</title>
+  <title>The qcforward functions &mdash; fmu-tools 1.4.1.dev3+g7023298 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.4.1.dev1+g0852051
+                1.4.1.dev3+g7023298
               </div>
             
           
@@ -480,7 +480,7 @@ than other wells.</p>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
         <span class="s2">&quot;gridzones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
         <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACT1</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
         <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;SET1&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
@@ -488,7 +488,7 @@ than other wells.</p>
     <span class="n">usedata2</span> <span class="o">=</span> <span class="n">usedata1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">][</span><span class="s2">&quot;names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">WELLS2</span>
     <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;actions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ACT2</span><span class="p">,</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s2">&quot;append&quot;</span><span class="p">}</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;append&quot;</span><span class="p">}</span>
     <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;nametag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SET2&quot;</span>
 
     <span class="c1"># note the &quot;reuse&quot; use to avoid duplicate loading of data like the grid</span>
@@ -616,11 +616,11 @@ is that a single word is present</p></li>
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
         <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
         <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONELOG&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="n">qcf</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+    <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
@@ -642,7 +642,7 @@ is that a single word is present</p></li>
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
         <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">)</span>
