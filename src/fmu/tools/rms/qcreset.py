@@ -1,11 +1,162 @@
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Any
 import warnings
 
 try:
     import _roxar  # type: ignore
 except ModuleNotFoundError:
-    warnings.warn("This script only supports interactive RMS usage")
-    pass
+    warnings.warn("This script only supports interactive RMS usage", UserWarning)
+
+
+def _set_safe_value(
+    project: Any, surf_type: str, name: str, data_type: str, value: float
+):
+    """Set the horizon or zone surface to the defined value.
+
+    Args:
+        project: the roxar project.
+        surf_type: the type of surface.
+            It should be the string "horizons" or "zones".
+        name: the name the of surface.
+        value: the value (int or float) to be assigned to the surface
+    """
+
+    try:
+        if surf_type == "horizons":
+            surf = project.horizons[name][data_type]
+        else:
+            surf = project.zones[name][data_type]
+        grid2d = surf.get_grid()
+        grid2d.set_values(grid2d.get_values() * 0.0 + value)
+        surf.set_grid(grid2d)
+        print(" >> >> " + name)
+    except Exception as e:
+        print(" >> >> " + name + " cannot be modified")
+        print(e)
+
+
+def _set_safe_empty(project: Any, surf_type: str, name: str, data_type: str):
+    """Set empty the horizon or zone surface.
+
+    Args:
+        project: the roxar project.
+        surf_type: the type of surface.
+            It should be the string "horizons" or "zones".
+        name: the name the of surface.
+    """
+    try:
+        if surf_type == "horizons":
+            surf = project.horizons[name][data_type]
+        else:
+            surf = project.zones[name][data_type]
+        surf.set_empty()
+        print(" >> >> " + name)
+    except Exception as e:
+        print(" >> >> " + name + " cannot be modified")
+        print(e)
+
+
+def _set_surfaces_value(
+    project: Any,
+    surf_type: str,
+    dict_val: Union[List, Dict],
+    value: float,
+):
+    """Set a group of surfaces to a given value.
+
+    Args:
+        project: roxar project.
+        surf_type: the type of surface.
+            It should be the string "horizon" or "zone".
+        dict_val: a list of surfaces or a dictionary of surfaces categories
+            (keys) with a list of surfaces names (value).
+        value: the value to assign to the surfaces.
+    """
+    if surf_type == "horizons":
+        surfaces = project.horizons
+    elif surf_type == "zones":
+        surfaces = project.zones
+    else:
+        raise ValueError("surf_type must be 'horizons' or 'zones'")
+
+    if isinstance(dict_val, list):
+        # work directly at horizon/zone category level
+        for data_type in dict_val:
+            print(" >> " + data_type)
+            for surface in surfaces:
+                _set_safe_value(project, surf_type, surface.name, data_type, value)
+    elif isinstance(dict_val, dict):
+        # check setup for each horizon/zone category (list vs. all)
+        surf_cat = dict_val.keys()
+        for data_type in surf_cat:
+            print(" >> " + data_type)
+            surf_names = dict_val[data_type]
+            if isinstance(surf_names, str):
+                if surf_names == "all":
+                    for surface in surfaces:
+                        _set_safe_value(
+                            project, surf_type, surface.name, data_type, value
+                        )
+                else:
+                    raise ValueError(
+                        "keyword '" + surf_names + "' not recognized, 'all' expected!"
+                    )
+            elif isinstance(surf_names, list):
+                for surf_name in surf_names:
+                    _set_safe_value(project, surf_type, surf_name, data_type, value)
+    else:
+        raise TypeError(
+            "Value associated with key '"
+            + surf_type
+            + "' must be of type list or dict!"
+        )
+
+
+def _set_surfaces_empty(project: Any, surf_type: str, dict_val: Union[List, Dict]):
+    """Set empty a group of surfaces.
+
+    Args:
+        project: roxar project.
+        surf_type: the type of surface.
+            It should be the string "horizon" or "zone".
+        dict_val: a list of surfaces or a dictionary of surfaces categories
+            (keys) with a list of surfaces names (value).
+    """
+    if surf_type == "horizons":
+        surfaces = project.horizons
+    elif surf_type == "zones":
+        surfaces = project.zones
+    else:
+        raise ValueError("surf_type must be 'horizons' or 'zones'")
+
+    if isinstance(dict_val, list):
+        # work directly at horizon/zone category level
+        for data_type in dict_val:
+            print(" >> " + data_type)
+            for surface in surfaces:
+                _set_safe_empty(project, surf_type, surface.name, data_type)
+    elif isinstance(dict_val, dict):
+        # check setup for each horizon/zone category (list vs. all)
+        surf_cat = dict_val.keys()
+        for data_type in surf_cat:
+            print(" >> " + data_type)
+            surf_names = dict_val[data_type]
+            if isinstance(surf_names, str):
+                if surf_names == "all":
+                    for surface in surfaces:
+                        _set_safe_empty(project, surf_type, surface.name, data_type)
+                else:
+                    raise ValueError(
+                        "keyword '" + surf_names + "' not recognized, 'all' expected!"
+                    )
+            elif isinstance(surf_names, list):
+                for surf_name in surf_names:
+                    _set_safe_empty(project, surf_type, surf_name, data_type)
+    else:
+        raise TypeError(
+            "Value associated with key '"
+            + surf_type
+            + "' must be of type list or dict!"
+        )
 
 
 def set_data_constant(config: Dict):
@@ -59,105 +210,25 @@ def set_data_constant(config: Dict):
             dictionary, the method will apply to all properties within these
             grid models.
     """
-
     if not isinstance(config, dict):
         raise TypeError("Argument must be a Python dictionary!")
     assert "project" in config.keys(), "Input dict must contain key 'project'!"
     project = config["project"]
+    if not isinstance(project, _roxar.Project):
+        raise RuntimeError("This run must be ran in an RoxAPI environment!")
+
     assert "value" in config.keys(), "Input dict must contain key 'value'!"
     value = config["value"]
-
-    def set_safe_value(
-        project: _roxar.Project, surf_type: str, name: str, data_type: str, value: float
-    ):
-        """Set the horizon or zone surface to the defined value.
-
-        Args:
-            project: the roxar project.
-            surf_type: the type of surface.
-                It should be the string "horizons" or "zones".
-            name: the name the of surface.
-            value: the value (int or float) to be assigned to the surface
-        """
-        try:
-            if surf_type == "horizons":
-                surf = project.horizons[name][data_type]
-            else:
-                surf = project.zones[name][data_type]
-            grid2d = surf.get_grid()
-            grid2d.set_values(grid2d.get_values() * 0.0 + value)
-            surf.set_grid(grid2d)
-            print(" >> >> " + name)
-        except Exception as e:
-            print(" >> >> " + name + " cannot be modified")
-            print(e)
-
-    def set_surfaces(
-        project: _roxar.Project,
-        surf_type: str,
-        dict_val: Union[List, Dict],
-        value: float,
-    ):
-        """Set a group of surfaces to a given value.
-
-        Args:
-            project: roxar project.
-            surf_type: the type of surface.
-                It should be the string "horizon" or "zone".
-            dict_val: a list of surfaces or a dictionary of surfaces categories
-                (keys) with a list of surfaces names (value).
-            value: the value to assign to the surfaces.
-        """
-        if surf_type == "horizons":
-            surfaces = project.horizons
-        elif surf_type == "zones":
-            surfaces = project.zones
-        else:
-            raise ValueError("surf_type must be 'horizons' or 'zones'")
-
-        if isinstance(dict_val, list):
-            # work directly at horizon/zone category level
-            for data_type in dict_val:
-                print(" >> " + data_type)
-                for surface in surfaces:
-                    set_safe_value(project, surf_type, surface.name, data_type, value)
-        elif isinstance(dict_val, dict):
-            # check setup for each horizon/zone category (list vs. all)
-            surf_cat = dict_val.keys()
-            for data_type in surf_cat:
-                print(" >> " + data_type)
-                surf_names = dict_val[data_type]
-                if isinstance(surf_names, str):
-                    if surf_names == "all":
-                        for surface in surfaces:
-                            set_safe_value(
-                                project, surf_type, surface.name, data_type, value
-                            )
-                    else:
-                        raise ValueError(
-                            "keyword '"
-                            + surf_names
-                            + "' not recognized, 'all' expected!"
-                        )
-                elif isinstance(surf_names, list):
-                    for surf_name in surf_names:
-                        set_safe_value(project, surf_type, surf_name, data_type, value)
-        else:
-            raise TypeError(
-                "Value associated with key '"
-                + surf_type
-                + "' must be of type list or dict!"
-            )
 
     # HORIZON DATA
     if "horizons" in config.keys():
         print("Set horizons values to " + str(value) + "...")
-        set_surfaces(project, "horizons", config["horizons"], value)
+        _set_surfaces_value(project, "horizons", config["horizons"], value)
 
     # ZONE DATA
     if "zones" in config.keys():
         print("Set zones values to " + str(value) + "...")
-        set_surfaces(project, "zones", config["zones"], value)
+        _set_surfaces_value(project, "zones", config["zones"], value)
 
     # GRID MODEL DATA
     if "grid_models" in config.keys():
@@ -225,131 +296,62 @@ def set_data_empty(config: Dict):
     "grid_models" are optional (at least one of them should be provided for the
     method to have any effect).
 
+    Input configrations:
+
+    project: The roxar magic keyword ``project`` refering to the current
+        RMS project.
+
+    horizons: A Python dictionary where each key corresponds to the name of
+        the horizons category where horizon data need to be made empty. The
+        value associated to this key should be a list of horizon names to
+        modify. If a string ``all`` is assigned instead of a list, all
+        available horizon names for this category will be used.
+        Alternatively, if a list of horizons categories is given instead of
+        a dictionary, the method will apply to all horizons within these
+        horizons categories.
+
+    zones: A Python dictionary where each key corresponds to the name of
+        the zones category where zone data need to be made empty. The value
+        associated to this key should be a list of zone names to modify. If
+        a string ``all`` is assigned instead of a list, all available zone
+        names for this category will be used.
+        Alternatively, if a list of zones categories is given instead of a
+        dictionary, the method will apply to all zones within these zones
+        categories.
+
+    grid_models: A Python dictionary where each key corresponds to the name
+        of the grid models where properties need to be made empty. The
+        value associated to this key should be a list of property names to
+        modify. If a string ``all`` is assigned instead of a list, all
+        available properties for this grid model name will be used.
+        Alternatively, if a list of grid models names is given instead of a
+        dictionary, the method will apply to all properties within these
+        grid models.
+
+
+
     Args:
-        project: The roxar magic keyword ``project`` refering to the current
-            RMS project.
 
-        horizons: A Python dictionary where each key corresponds to the name of
-            the horizons category where horizon data need to be made empty. The
-            value associated to this key should be a list of horizon names to
-            modify. If a string ``all`` is assigned instead of a list, all
-            available horizon names for this category will be used.
-            Alternatively, if a list of horizons categories is given instead of
-            a dictionary, the method will apply to all horizons within these
-            horizons categories.
+        config: Configration as a dictionary. See examples in documentation
 
-        zones: A Python dictionary where each key corresponds to the name of
-            the zones category where zone data need to be made empty. The value
-            associated to this key should be a list of zone names to modify. If
-            a string ``all`` is assigned instead of a list, all available zone
-            names for this category will be used.
-            Alternatively, if a list of zones categories is given instead of a
-            dictionary, the method will apply to all zones within these zones
-            categories.
-
-        grid_models: A Python dictionary where each key corresponds to the name
-            of the grid models where properties need to be made empty. The
-            value associated to this key should be a list of property names to
-            modify. If a string ``all`` is assigned instead of a list, all
-            available properties for this grid model name will be used.
-            Alternatively, if a list of grid models names is given instead of a
-            dictionary, the method will apply to all properties within these
-            grid models.
     """
 
     if not isinstance(config, dict):
         raise TypeError("Argument must be a Python dictionary!")
     assert "project" in config.keys(), "Input dict must contain key 'project'!"
     project = config["project"]
-    assert "value" in config.keys(), "Input dict must contain key 'value'!"
-    value = config["value"]
-
-    def set_safe_empty(
-        project: _roxar.Project, surf_type: str, name: str, data_type: str
-    ):
-        """Set empty the horizon or zone surface.
-
-        Args:
-            project: the roxar project.
-            surf_type: the type of surface.
-                It should be the string "horizons" or "zones".
-            name: the name the of surface.
-        """
-        try:
-            if surf_type == "horizons":
-                surf = project.horizons[name][data_type]
-            else:
-                surf = project.zones[name][data_type]
-            surf.set_empty()
-            print(" >> >> " + name)
-        except Exception as e:
-            print(" >> >> " + name + " cannot be modified")
-            print(e)
-
-    def set_surfaces(
-        project: _roxar.Project,
-        surf_type: str,
-        dict_val: Union[List, Dict]
-    ):
-        """Set empty a group of surfaces.
-
-        Args:
-            project: roxar project.
-            surf_type: the type of surface.
-                It should be the string "horizon" or "zone".
-            dict_val: a list of surfaces or a dictionary of surfaces categories
-                (keys) with a list of surfaces names (value).
-        """
-        if surf_type == "horizons":
-            surfaces = project.horizons
-        elif surf_type == "zones":
-            surfaces = project.zones
-        else:
-            raise ValueError("surf_type must be 'horizons' or 'zones'")
-
-        if isinstance(dict_val, list):
-            # work directly at horizon/zone category level
-            for data_type in dict_val:
-                print(" >> " + data_type)
-                for surface in surfaces:
-                    set_safe_empty(project, surf_type, surface.name, data_type)
-        elif isinstance(dict_val, dict):
-            # check setup for each horizon/zone category (list vs. all)
-            surf_cat = dict_val.keys()
-            for data_type in surf_cat:
-                print(" >> " + data_type)
-                surf_names = dict_val[data_type]
-                if isinstance(surf_names, str):
-                    if surf_names == "all":
-                        for surface in surfaces:
-                            set_safe_empty(
-                                project, surf_type, surface.name, data_type
-                            )
-                    else:
-                        raise ValueError(
-                            "keyword '"
-                            + surf_names
-                            + "' not recognized, 'all' expected!"
-                        )
-                elif isinstance(surf_names, list):
-                    for surf_name in surf_names:
-                        set_safe_empty(project, surf_type, surf_name, data_type)
-        else:
-            raise TypeError(
-                "Value associated with key '"
-                + surf_type
-                + "' must be of type list or dict!"
-            )
+    if not isinstance(project, _roxar.Project):
+        raise RuntimeError("This run must be ran in an RoxAPI environment!")
 
     # HORIZON DATA
     if "horizons" in config.keys():
         print("Set empty horizons...")
-        set_surfaces(project, "horizons", config["horizons"])
+        _set_surfaces_empty(project, "horizons", config["horizons"])
 
     # ZONE DATA
     if "zones" in config.keys():
         print("Set empty zones...")
-        set_surfaces(project, "zones", config["zones"])
+        _set_surfaces_empty(project, "zones", config["zones"])
 
     # GRID MODEL DATA
     if "grid_models" in config.keys():
