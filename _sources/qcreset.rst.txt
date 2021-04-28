@@ -14,9 +14,8 @@ Design philosophy
 * The ``qcreset`` methods are meant to run inside RMS at the begining of
   a modelling process
 
-
-1. set_data_empty
------------------
+Method set_data_empty
+---------------------
 
 
 This method set all data described as input as empty. The data are not deleted
@@ -24,8 +23,8 @@ so that the geometry of the data (surfaces or 3D grid properties) should be
 preserved and no workflow component (job or other) should be reset.
 
 
-1.1. Signature
-~~~~~~~~~~~~~~
+Signature
+~~~~~~~~~
 
 The input of this method is a Python dictionary with defined keys. The key
 "project" is required while "horizons", "zones" and "grid_models" are optional
@@ -64,21 +63,21 @@ grid_models
 
 
 
-1.2. Known issues
-~~~~~~~~~~~~~~~~~
+Known issues
+~~~~~~~~~~~~
 
 * None for now
 
 
-1.3. Examples to run from RMS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Examples to run from RMS
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.3.1. Example 1
-^^^^^^^^^^^^^^^^
+Example 1
+^^^^^^^^^
 
 .. code-block:: python
 
-    from fmu.tools import qcreset
+    from fmu.tools.rms import qcreset
     import roxar
 
     SETUP = {
@@ -104,8 +103,8 @@ grid_models
         qcreset.set_data_empty(SETUP)
 
 
-2. set_data_constant
---------------------
+Method set_data_constant
+------------------------
 
 
 This method set all values of the data described as input to a constant.
@@ -115,8 +114,8 @@ component (job or other) is reset.
 This method is more conservative than the ``set_data_empty`` method.
 
 
-2.1. Signature
-~~~~~~~~~~~~~~
+Signature
+~~~~~~~~~
 
 The input of this method is a Python dictionary with defined keys. The keys
 "project" and "value" are required while "horizons", "zones" and "grid_models"
@@ -161,21 +160,21 @@ grid_models
 
 
 
-2.2. Known issues
-~~~~~~~~~~~~~~~~~
+Known issues
+~~~~~~~~~~~~
 
 * None for now
 
 
-2.3. Examples to run from RMS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Examples to run from RMS
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-2.3.1. Example 1
-^^^^^^^^^^^^^^^^
+Example 1
+^^^^^^^^^
 
 .. code-block:: python
 
-    from fmu.tools import qcreset
+    from fmu.tools.rms import qcreset
     import roxar
 
     SETUP = {
@@ -202,12 +201,12 @@ grid_models
         qcreset.set_data_constant(SETUP)
 
 
-2.3.2. Example 2
-^^^^^^^^^^^^^^^^
+Example 2
+^^^^^^^^^
 
 .. code-block:: python
 
-    from fmu.tools import qcreset
+    from fmu.tools.rms import qcreset
     import roxar
 
     # We split the work into 2 different setups here in order to use different

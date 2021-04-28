@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fmu.tools.rms.qcreset &mdash; fmu-tools 1.5.1.dev1+ga7fd80b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> fmu-tools
+          
+
+          
+            
+            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.5.1.dev1+ga7fd80b
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.rms.qcreset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.rms.qcreset</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">_roxar</span>  <span class="c1"># type: ignore</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This script only supports interactive RMS usage&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_set_safe_value</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set the horizon or zone surface to the defined value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: the roxar project.</span>
+<span class="sd">        surf_type: the type of surface.</span>
+<span class="sd">            It should be the string &quot;horizons&quot; or &quot;zones&quot;.</span>
+<span class="sd">        name: the name the of surface.</span>
+<span class="sd">        value: the value (int or float) to be assigned to the surface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;horizons&quot;</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">horizons</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">data_type</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">zones</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">data_type</span><span class="p">]</span>
+        <span class="n">grid2d</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">get_grid</span><span class="p">()</span>
+        <span class="n">grid2d</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">grid2d</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.0</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">surf</span><span class="o">.</span><span class="n">set_grid</span><span class="p">(</span><span class="n">grid2d</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; cannot be modified&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_set_safe_empty</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set empty the horizon or zone surface.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: the roxar project.</span>
+<span class="sd">        surf_type: the type of surface.</span>
+<span class="sd">            It should be the string &quot;horizons&quot; or &quot;zones&quot;.</span>
+<span class="sd">        name: the name the of surface.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;horizons&quot;</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">horizons</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">data_type</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">zones</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">data_type</span><span class="p">]</span>
+        <span class="n">surf</span><span class="o">.</span><span class="n">set_empty</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; cannot be modified&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_set_surfaces_value</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">surf_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">dict_val</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set a group of surfaces to a given value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: roxar project.</span>
+<span class="sd">        surf_type: the type of surface.</span>
+<span class="sd">            It should be the string &quot;horizon&quot; or &quot;zone&quot;.</span>
+<span class="sd">        dict_val: a list of surfaces or a dictionary of surfaces categories</span>
+<span class="sd">            (keys) with a list of surfaces names (value).</span>
+<span class="sd">        value: the value to assign to the surfaces.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;horizons&quot;</span><span class="p">:</span>
+        <span class="n">surfaces</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">horizons</span>
+    <span class="k">elif</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;zones&quot;</span><span class="p">:</span>
+        <span class="n">surfaces</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">zones</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surf_type must be &#39;horizons&#39; or &#39;zones&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># work directly at horizon/zone category level</span>
+        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">dict_val</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">data_type</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">surfaces</span><span class="p">:</span>
+                <span class="n">_set_safe_value</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surface</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># check setup for each horizon/zone category (list vs. all)</span>
+        <span class="n">surf_cat</span> <span class="o">=</span> <span class="n">dict_val</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">surf_cat</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">data_type</span><span class="p">)</span>
+            <span class="n">surf_names</span> <span class="o">=</span> <span class="n">dict_val</span><span class="p">[</span><span class="n">data_type</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">surf_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">surf_names</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">surfaces</span><span class="p">:</span>
+                        <span class="n">_set_safe_value</span><span class="p">(</span>
+                            <span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surface</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">value</span>
+                        <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;keyword &#39;&quot;</span> <span class="o">+</span> <span class="n">surf_names</span> <span class="o">+</span> <span class="s2">&quot;&#39; not recognized, &#39;all&#39; expected!&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">surf_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">surf_name</span> <span class="ow">in</span> <span class="n">surf_names</span><span class="p">:</span>
+                    <span class="n">_set_safe_value</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surf_name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Value associated with key &#39;&quot;</span>
+            <span class="o">+</span> <span class="n">surf_type</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39; must be of type list or dict!&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_set_surfaces_empty</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dict_val</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Set empty a group of surfaces.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: roxar project.</span>
+<span class="sd">        surf_type: the type of surface.</span>
+<span class="sd">            It should be the string &quot;horizon&quot; or &quot;zone&quot;.</span>
+<span class="sd">        dict_val: a list of surfaces or a dictionary of surfaces categories</span>
+<span class="sd">            (keys) with a list of surfaces names (value).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;horizons&quot;</span><span class="p">:</span>
+        <span class="n">surfaces</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">horizons</span>
+    <span class="k">elif</span> <span class="n">surf_type</span> <span class="o">==</span> <span class="s2">&quot;zones&quot;</span><span class="p">:</span>
+        <span class="n">surfaces</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">zones</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;surf_type must be &#39;horizons&#39; or &#39;zones&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># work directly at horizon/zone category level</span>
+        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">dict_val</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">data_type</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">surfaces</span><span class="p">:</span>
+                <span class="n">_set_safe_empty</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surface</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># check setup for each horizon/zone category (list vs. all)</span>
+        <span class="n">surf_cat</span> <span class="o">=</span> <span class="n">dict_val</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">surf_cat</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">data_type</span><span class="p">)</span>
+            <span class="n">surf_names</span> <span class="o">=</span> <span class="n">dict_val</span><span class="p">[</span><span class="n">data_type</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">surf_names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">surf_names</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">surfaces</span><span class="p">:</span>
+                        <span class="n">_set_safe_empty</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surface</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;keyword &#39;&quot;</span> <span class="o">+</span> <span class="n">surf_names</span> <span class="o">+</span> <span class="s2">&quot;&#39; not recognized, &#39;all&#39; expected!&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">surf_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">surf_name</span> <span class="ow">in</span> <span class="n">surf_names</span><span class="p">:</span>
+                    <span class="n">_set_safe_empty</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">surf_type</span><span class="p">,</span> <span class="n">surf_name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Value associated with key &#39;&quot;</span>
+            <span class="o">+</span> <span class="n">surf_type</span>
+            <span class="o">+</span> <span class="s2">&quot;&#39; must be of type list or dict!&quot;</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="set_data_constant"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.qcreset.set_data_constant">[docs]</a><span class="k">def</span> <span class="nf">set_data_constant</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set data from RMS constant.</span>
+
+<span class="sd">    This method is a utility in order to set surface and 3D grid property data</span>
+<span class="sd">    to a given value. The value must be of the correct type (if discrete 3D</span>
+<span class="sd">    property for example). The purpose of it is to make sure that those data</span>
+<span class="sd">    are properly generated by the modelling workflow and not inherited from a</span>
+<span class="sd">    previous run with the corresponding jobs deactivated. The data are set to a</span>
+<span class="sd">    value triggering attention and not deleted in order not to reset some jobs</span>
+<span class="sd">    in RMS.</span>
+
+<span class="sd">    The input of this method is a Python dictionary with defined keys. The keys</span>
+<span class="sd">    &quot;project&quot; and &quot;value&quot; are required while &quot;horizons&quot;, &quot;zones&quot; and</span>
+<span class="sd">    &quot;grid_models&quot; are optional (at least one of them should be provided for the</span>
+<span class="sd">    method to have any effect).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: The roxar magic keyword ``project`` refering to the current</span>
+<span class="sd">            RMS project.</span>
+
+<span class="sd">        value: The constant value to assign to the data. It could be 0 or -999</span>
+<span class="sd">            for example. If discrete properties from grid models are modified,</span>
+<span class="sd">            the value should be applicable (integer).</span>
+
+<span class="sd">        horizons: A Python dictionary where each key corresponds to the name of</span>
+<span class="sd">            the horizons category where horizon data need to be modified. The</span>
+<span class="sd">            value associated to this key should be a list of horizon names to</span>
+<span class="sd">            modify. If a string ``all`` is assigned instead of a list, all</span>
+<span class="sd">            available horizon names for this category will be used.</span>
+<span class="sd">            Alternatively, if a list of horizons categories is given instead of</span>
+<span class="sd">            a dictionary, the method will apply to all horizons within these</span>
+<span class="sd">            horizons categories.</span>
+
+<span class="sd">        zones: A Python dictionary where each key corresponds to the name of</span>
+<span class="sd">            the zones category where zone data need to be modified. The value</span>
+<span class="sd">            associated to this key should be a list of zone names to modify. If</span>
+<span class="sd">            a string ``all`` is assigned instead of a list, all available zone</span>
+<span class="sd">            names for this category will be used.</span>
+<span class="sd">            Alternatively, if a list of zones categories is given instead of a</span>
+<span class="sd">            dictionary, the method will apply to all zones within these zones</span>
+<span class="sd">            categories.</span>
+
+<span class="sd">        grid_models: A Python dictionary where each key corresponds to the name</span>
+<span class="sd">            of the grid models where properties need to be modified. The</span>
+<span class="sd">            value associated to this key should be a list of property names to</span>
+<span class="sd">            modify. If a string ``all`` is assigned instead of a list, all</span>
+<span class="sd">            available properties for this grid model name will be used.</span>
+<span class="sd">            Alternatively, if a list of grid models names is given instead of a</span>
+<span class="sd">            dictionary, the method will apply to all properties within these</span>
+<span class="sd">            grid models.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Argument must be a Python dictionary!&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;Input dict must contain key &#39;project&#39;!&quot;</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;This run must be ran in an RoxAPI environment!&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="s2">&quot;value&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;Input dict must contain key &#39;value&#39;!&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+    <span class="c1"># HORIZON DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;horizons&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set horizons values to &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="n">_set_surfaces_value</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;horizons&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;horizons&quot;</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># ZONE DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;zones&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set zones values to &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="n">_set_surfaces_value</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;zones&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;zones&quot;</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># GRID MODEL DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;grid_models&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set 3D grid properties values to &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># work directly at grid models level</span>
+            <span class="k">for</span> <span class="n">gridname</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">gridname</span><span class="p">)</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">prop</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span> <span class="o">*</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is already empty&quot;</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="c1"># check setup for each grid models (list vs. all)</span>
+            <span class="n">gridnames</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">gridname</span> <span class="ow">in</span> <span class="n">gridnames</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">gridname</span><span class="p">)</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="n">propnames</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propnames</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">propnames</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">prop</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span> <span class="o">*</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is already empty&quot;</span><span class="p">)</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                            <span class="s2">&quot;keyword &quot;</span> <span class="o">+</span> <span class="n">propnames</span> <span class="o">+</span> <span class="s2">&quot;not recognized, &#39;all&#39; expected!&quot;</span>
+                        <span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propnames</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">propname</span> <span class="ow">in</span> <span class="n">propnames</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">prop</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">propname</span><span class="p">]</span>
+                            <span class="n">prop</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span> <span class="o">*</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is already empty&quot;</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Value associated with key &#39;zones&#39; must be of type list or dict!&quot;</span>
+            <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;End of function set_data_constant().&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_data_empty"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.qcreset.set_data_empty">[docs]</a><span class="k">def</span> <span class="nf">set_data_empty</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Set data from RMS empty.</span>
+
+<span class="sd">    This method is a utility in order to set empty surface and 3D grid property</span>
+<span class="sd">    data. The value must be of the correct type (if discrete 3D property for</span>
+<span class="sd">    example). The purpose of it is to make sure that those data are properly</span>
+<span class="sd">    generated by the modelling workflow and not inherited from a previous run</span>
+<span class="sd">    with the corresponding jobs deactivated.</span>
+
+<span class="sd">    The input of this method is a Python dictionary with defined keys. The keys</span>
+<span class="sd">    &quot;project&quot; and &quot;value&quot; are required while &quot;horizons&quot;, &quot;zones&quot; and</span>
+<span class="sd">    &quot;grid_models&quot; are optional (at least one of them should be provided for the</span>
+<span class="sd">    method to have any effect).</span>
+
+<span class="sd">    Input configrations:</span>
+
+<span class="sd">    project: The roxar magic keyword ``project`` refering to the current</span>
+<span class="sd">        RMS project.</span>
+
+<span class="sd">    horizons: A Python dictionary where each key corresponds to the name of</span>
+<span class="sd">        the horizons category where horizon data need to be made empty. The</span>
+<span class="sd">        value associated to this key should be a list of horizon names to</span>
+<span class="sd">        modify. If a string ``all`` is assigned instead of a list, all</span>
+<span class="sd">        available horizon names for this category will be used.</span>
+<span class="sd">        Alternatively, if a list of horizons categories is given instead of</span>
+<span class="sd">        a dictionary, the method will apply to all horizons within these</span>
+<span class="sd">        horizons categories.</span>
+
+<span class="sd">    zones: A Python dictionary where each key corresponds to the name of</span>
+<span class="sd">        the zones category where zone data need to be made empty. The value</span>
+<span class="sd">        associated to this key should be a list of zone names to modify. If</span>
+<span class="sd">        a string ``all`` is assigned instead of a list, all available zone</span>
+<span class="sd">        names for this category will be used.</span>
+<span class="sd">        Alternatively, if a list of zones categories is given instead of a</span>
+<span class="sd">        dictionary, the method will apply to all zones within these zones</span>
+<span class="sd">        categories.</span>
+
+<span class="sd">    grid_models: A Python dictionary where each key corresponds to the name</span>
+<span class="sd">        of the grid models where properties need to be made empty. The</span>
+<span class="sd">        value associated to this key should be a list of property names to</span>
+<span class="sd">        modify. If a string ``all`` is assigned instead of a list, all</span>
+<span class="sd">        available properties for this grid model name will be used.</span>
+<span class="sd">        Alternatively, if a list of grid models names is given instead of a</span>
+<span class="sd">        dictionary, the method will apply to all properties within these</span>
+<span class="sd">        grid models.</span>
+
+
+
+<span class="sd">    Args:</span>
+
+<span class="sd">        config: Configration as a dictionary. See examples in documentation</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Argument must be a Python dictionary!&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;Input dict must contain key &#39;project&#39;!&quot;</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;This run must be ran in an RoxAPI environment!&quot;</span><span class="p">)</span>
+
+    <span class="c1"># HORIZON DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;horizons&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set empty horizons...&quot;</span><span class="p">)</span>
+        <span class="n">_set_surfaces_empty</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;horizons&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;horizons&quot;</span><span class="p">])</span>
+
+    <span class="c1"># ZONE DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;zones&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set empty zones...&quot;</span><span class="p">)</span>
+        <span class="n">_set_surfaces_empty</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;zones&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;zones&quot;</span><span class="p">])</span>
+
+    <span class="c1"># GRID MODEL DATA</span>
+    <span class="k">if</span> <span class="s2">&quot;grid_models&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set empty 3D grid properties...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># work directly at grid models level</span>
+            <span class="k">for</span> <span class="n">gridname</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">gridname</span><span class="p">)</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                    <span class="n">prop</span><span class="o">.</span><span class="n">set_empty</span><span class="p">()</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="c1"># check setup for each grid models (list vs. all)</span>
+            <span class="n">gridnames</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">gridname</span> <span class="ow">in</span> <span class="n">gridnames</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">gridname</span><span class="p">)</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="n">propnames</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;grid_models&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propnames</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">propnames</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                            <span class="n">prop</span><span class="o">.</span><span class="n">set_empty</span><span class="p">()</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                            <span class="s2">&quot;keyword &quot;</span> <span class="o">+</span> <span class="n">propnames</span> <span class="o">+</span> <span class="s2">&quot;not recognized, &#39;all&#39; expected!&quot;</span>
+                        <span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propnames</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">propname</span> <span class="ow">in</span> <span class="n">propnames</span><span class="p">:</span>
+                        <span class="n">prop</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">propname</span><span class="p">]</span>
+                        <span class="n">prop</span><span class="o">.</span><span class="n">set_empty</span><span class="p">()</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &gt;&gt; &gt;&gt; &quot;</span> <span class="o">+</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Value associated with key &#39;zones&#39; must be of type list or dict!&quot;</span>
+            <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;End of function set_data_empty().&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

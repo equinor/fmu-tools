@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.4.1.dev3+g7023298 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.5.1.dev1+ga7fd80b documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.4.1.dev3+g7023298
+                1.5.1.dev1+ga7fd80b
               </div>
             
           
@@ -389,11 +389,11 @@ numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 </dd></dl>
 
 </div>
-<div class="section" id="module-fmu.tools.rms.set_data_constant">
-<span id="fmu-tools-rms-set-data-constant-module"></span><h2>fmu.tools.rms.set_data_constant module<a class="headerlink" href="#module-fmu.tools.rms.set_data_constant" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-fmu.tools.rms.qcreset">
+<span id="fmu-tools-rms-qcreset-module"></span><h2>fmu.tools.rms.qcreset module<a class="headerlink" href="#module-fmu.tools.rms.qcreset" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="fmu.tools.rms.set_data_constant.set_data_constant">
-<code class="sig-prename descclassname"><span class="pre">fmu.tools.rms.set_data_constant.</span></code><code class="sig-name descname"><span class="pre">set_data_constant</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/set_data_constant.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.set_data_constant.set_data_constant" title="Permalink to this definition">¶</a></dt>
+<dt id="fmu.tools.rms.qcreset.set_data_constant">
+<code class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></code><code class="sig-name descname"><span class="pre">set_data_constant</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data from RMS constant.</p>
 <p>This method is a utility in order to set surface and 3D grid property data
 to a given value. The value must be of the correct type (if discrete 3D
@@ -415,7 +415,7 @@ RMS project.</p></li>
 for example. If discrete properties from grid models are modified,
 the value should be applicable (integer).</p></li>
 <li><p><strong>horizons</strong> – A Python dictionary where each key corresponds to the name of
-the horizons category where horizon data need to be made empty. The
+the horizons category where horizon data need to be modified. The
 value associated to this key should be a list of horizon names to
 modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all
 available horizon names for this category will be used.
@@ -423,7 +423,7 @@ Alternatively, if a list of horizons categories is given instead of
 a dictionary, the method will apply to all horizons within these
 horizons categories.</p></li>
 <li><p><strong>zones</strong> – A Python dictionary where each key corresponds to the name of
-the zones category where zone data need to be made empty. The value
+the zones category where zone data need to be modified. The value
 associated to this key should be a list of zone names to modify. If
 a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all available zone
 names for this category will be used.
@@ -431,7 +431,7 @@ Alternatively, if a list of zones categories is given instead of a
 dictionary, the method will apply to all zones within these zones
 categories.</p></li>
 <li><p><strong>grid_models</strong> – A Python dictionary where each key corresponds to the name
-of the grid models where properties need to be made empty. The
+of the grid models where properties need to be modified. The
 value associated to this key should be a list of property names to
 modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all
 available properties for this grid model name will be used.
@@ -439,6 +439,55 @@ Alternatively, if a list of grid models names is given instead of a
 dictionary, the method will apply to all properties within these
 grid models.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fmu.tools.rms.qcreset.set_data_empty">
+<code class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></code><code class="sig-name descname"><span class="pre">set_data_empty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set data from RMS empty.</p>
+<p>This method is a utility in order to set empty surface and 3D grid property
+data. The value must be of the correct type (if discrete 3D property for
+example). The purpose of it is to make sure that those data are properly
+generated by the modelling workflow and not inherited from a previous run
+with the corresponding jobs deactivated.</p>
+<p>The input of this method is a Python dictionary with defined keys. The keys
+“project” and “value” are required while “horizons”, “zones” and
+“grid_models” are optional (at least one of them should be provided for the
+method to have any effect).</p>
+<p>Input configrations:</p>
+<dl class="simple">
+<dt>project: The roxar magic keyword <code class="docutils literal notranslate"><span class="pre">project</span></code> refering to the current</dt><dd><p>RMS project.</p>
+</dd>
+<dt>horizons: A Python dictionary where each key corresponds to the name of</dt><dd><p>the horizons category where horizon data need to be made empty. The
+value associated to this key should be a list of horizon names to
+modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all
+available horizon names for this category will be used.
+Alternatively, if a list of horizons categories is given instead of
+a dictionary, the method will apply to all horizons within these
+horizons categories.</p>
+</dd>
+<dt>zones: A Python dictionary where each key corresponds to the name of</dt><dd><p>the zones category where zone data need to be made empty. The value
+associated to this key should be a list of zone names to modify. If
+a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all available zone
+names for this category will be used.
+Alternatively, if a list of zones categories is given instead of a
+dictionary, the method will apply to all zones within these zones
+categories.</p>
+</dd>
+<dt>grid_models: A Python dictionary where each key corresponds to the name</dt><dd><p>of the grid models where properties need to be made empty. The
+value associated to this key should be a list of property names to
+modify. If a string <code class="docutils literal notranslate"><span class="pre">all</span></code> is assigned instead of a list, all
+available properties for this grid model name will be used.
+Alternatively, if a list of grid models names is given instead of a
+dictionary, the method will apply to all properties within these
+grid models.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> – Configration as a dictionary. See examples in documentation</p>
 </dd>
 </dl>
 </dd></dl>
