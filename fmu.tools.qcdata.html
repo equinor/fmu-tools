@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -29,6 +31,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
@@ -196,8 +199,8 @@
 <p>This private module in qcforward is used to parse data on a general level.</p>
 <p>The resulting data will be stored as class instance attributes, e.g. self._grid</p>
 <dl class="py class">
-<dt id="fmu.tools.qcdata.qcdata.QCData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fmu.tools.qcdata.qcdata.</span></code><code class="sig-name descname"><span class="pre">QCData</span></code><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmu.tools.qcdata.qcdata.</span></span><span class="sig-name descname"><span class="pre">QCData</span></span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is a class which parse/reads and stores some common data
 like 3D grids, maps etc.</p>
@@ -206,45 +209,45 @@ and RMS input.</p>
 <p>By having it as a class one can store different datasets and compare them later
 if needed. E.g. if one need to compare two grid models, they will be members
 of two different instances of the QCData()</p>
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.project">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">project</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.project" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.project">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">project</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project attribute as Roxar project instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.grid">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">grid</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.grid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.grid">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grid attribute as XTGeo Grid() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.gridprops">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">gridprops</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.gridprops" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.gridprops">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">gridprops</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.gridprops" title="Permalink to this definition">¶</a></dt>
 <dd><p>GridProperties attribute as XTGeo GridProperties() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.wells">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">wells</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.wells" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.wells">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wells</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.wells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wells attribute as XTGeo Wells() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.bwells">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">bwells</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.bwells" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.bwells">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bwells</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.bwells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wells attribute as XTGeo BlockedWells() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.xtgdata">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">xtgdata</span></code><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.xtgdata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.xtgdata">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">xtgdata</span></span><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.xtgdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>All xtgeo based data as a dictionay</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.parse">
-<code class="sig-name descname"><span class="pre">parse</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wells_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.parse" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wells_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the actual data, such as grids, gridprops etc.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -263,32 +266,32 @@ up reading and/or execution. If set, this is a dictionary with keys
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.set_path">
-<code class="sig-name descname"><span class="pre">set_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.set_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.set_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.set_path">
+<span class="sig-name descname"><span class="pre">set_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.set_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.set_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>General path prefix settings</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.parse_project">
-<code class="sig-name descname"><span class="pre">parse_project</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.parse_project" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.parse_project">
+<span class="sig-name descname"><span class="pre">parse_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.parse_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the RoxarAPI project magics</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.read_grid">
-<code class="sig-name descname"><span class="pre">read_grid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_grid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.read_grid">
+<span class="sig-name descname"><span class="pre">read_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read 3D grid (which is required), from file or RMS</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.read_gridprops">
-<code class="sig-name descname"><span class="pre">read_gridprops</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_gridprops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_gridprops" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.read_gridprops">
+<span class="sig-name descname"><span class="pre">read_gridprops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_gridprops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_gridprops" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read 3D grid props, from file or RMS.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.qcdata.QCData.read_wells">
-<code class="sig-name descname"><span class="pre">read_wells</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wells'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_wells" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.qcdata.QCData.read_wells">
+<span class="sig-name descname"><span class="pre">read_wells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wells'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.qcdata.QCData.read_wells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading wells</p>
 </dd></dl>
 
@@ -298,8 +301,8 @@ up reading and/or execution. If set, this is a dictionary with keys
 <div class="section" id="module-fmu.tools.qcdata">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.qcdata" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="fmu.tools.qcdata.QCData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fmu.tools.qcdata.</span></code><code class="sig-name descname"><span class="pre">QCData</span></code><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmu.tools.qcdata.</span></span><span class="sig-name descname"><span class="pre">QCData</span></span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is a class which parse/reads and stores some common data
 like 3D grids, maps etc.</p>
@@ -308,45 +311,45 @@ and RMS input.</p>
 <p>By having it as a class one can store different datasets and compare them later
 if needed. E.g. if one need to compare two grid models, they will be members
 of two different instances of the QCData()</p>
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.project">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">project</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.project" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.project">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">project</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project attribute as Roxar project instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.grid">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">grid</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.grid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.grid">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grid attribute as XTGeo Grid() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.gridprops">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">gridprops</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.gridprops" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.gridprops">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">gridprops</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.gridprops" title="Permalink to this definition">¶</a></dt>
 <dd><p>GridProperties attribute as XTGeo GridProperties() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.wells">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">wells</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.wells" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.wells">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wells</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.wells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wells attribute as XTGeo Wells() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.bwells">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">bwells</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.bwells" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.bwells">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">bwells</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.bwells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wells attribute as XTGeo BlockedWells() instance</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.xtgdata">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">xtgdata</span></code><a class="headerlink" href="#fmu.tools.qcdata.QCData.xtgdata" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.xtgdata">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">xtgdata</span></span><a class="headerlink" href="#fmu.tools.qcdata.QCData.xtgdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>All xtgeo based data as a dictionay</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.parse">
-<code class="sig-name descname"><span class="pre">parse</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wells_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.parse" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wells_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the actual data, such as grids, gridprops etc.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -365,32 +368,32 @@ up reading and/or execution. If set, this is a dictionary with keys
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.set_path">
-<code class="sig-name descname"><span class="pre">set_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.set_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.set_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.set_path">
+<span class="sig-name descname"><span class="pre">set_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.set_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.set_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>General path prefix settings</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.parse_project">
-<code class="sig-name descname"><span class="pre">parse_project</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.parse_project" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.parse_project">
+<span class="sig-name descname"><span class="pre">parse_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.parse_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.parse_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the RoxarAPI project magics</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.read_grid">
-<code class="sig-name descname"><span class="pre">read_grid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_grid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.read_grid">
+<span class="sig-name descname"><span class="pre">read_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read 3D grid (which is required), from file or RMS</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.read_gridprops">
-<code class="sig-name descname"><span class="pre">read_gridprops</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_gridprops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_gridprops" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.read_gridprops">
+<span class="sig-name descname"><span class="pre">read_gridprops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridprops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_gridprops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_gridprops" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read 3D grid props, from file or RMS.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fmu.tools.qcdata.QCData.read_wells">
-<code class="sig-name descname"><span class="pre">read_wells</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wells'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_wells" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fmu.tools.qcdata.QCData.read_wells">
+<span class="sig-name descname"><span class="pre">read_wells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wells'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcdata/qcdata.html#QCData.read_wells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcdata.QCData.read_wells" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading wells</p>
 </dd></dl>
 
