@@ -1,6 +1,6 @@
 import pytest
 
-from subscript.prtvol2csv import fipmapper
+from fmu.tools.fipmapper import fipmapper
 
 
 @pytest.mark.parametrize(

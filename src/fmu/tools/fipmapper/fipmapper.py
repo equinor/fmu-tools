@@ -1,24 +1,12 @@
-"""The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse.
+"""The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse."""
 
-This API should be considered private to prtvol2csv until it has moved somewhere
-else.
-
-Assumptions:
-
- * A FIPNUM always maps to an arbitrary-length list of regions
- * A FIPNUM always maps to an arbitrary-length list of zones
- * A region is assumed to present for all zones, but not relevant in this class
- * A zone is assumed to be present for all regions, but not relevant in this class
-
-"""
 from pathlib import Path
+import logging
 from typing import Union, Dict, List, Any, Optional
 
 import yaml
 
-from subscript import getLogger
-
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class FipMapper:
@@ -28,18 +16,31 @@ class FipMapper:
         mapdata: Dict[str, str] = None,
         skipstring: Union[List[str], str] = None,
     ):
-        """FipMapper is a utility class for being able to map between
-        regions/zones in the geomodel (RMS) and to different region divisions in the
-        dynamic model (Eclipse).
+        """Represent mappings between region/zones to FIPxxx.
+
+        FipMapper is a class to represent a to map between
+        regions/zones in the geomodel (RMS) and to different region partitions
+        in the dynamic model (Eclipse).
 
         Primary usage is to determine which RMS regions corresponds to
-        which FIPNUMs, similarly for zones, and in both directions
+        which FIPNUMs, similarly for zones, and in both directions.
 
-        Configuration is via a yaml-file or directly with a dictionary.
+        Configuration is via a yaml-file or directly with a dictionary. The
+        map can be configured in any direction.
 
         Several data structures in the dictionary can be used, such that
         the needed information can be extracted from the global configurations
         file.
+
+        Assumptions:
+            * A FIPNUM always maps to an arbitrary-length list of regions
+            * A FIPNUM always maps to an arbitrary-length list of zones
+            * A region always maps to an arbitrary-length list of FIPNUMs
+            * A zone always maps to an arbitrary-length list of FIPNUMs
+            * A region is assumed to be present for all zones, but not
+              relevant in this class
+            * A zone is assumed to be present for all regions, but not
+              relevant in this class
 
         Args:
             yamlfile: Filename
@@ -89,7 +90,7 @@ class FipMapper:
         self.has_zone2fip = "zone2fipnum" in self._mapdata
 
     def _get_explicit_mapdata(self, yamldata: Dict[str, Any]):
-        """Fetch explicit mapping configuration from a dictionary,
+        """Fetch explicit mapping configuration from a dictionary.
 
         Set internal flags when maps are found
 
