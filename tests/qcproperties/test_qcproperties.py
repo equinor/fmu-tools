@@ -7,7 +7,7 @@ from fmu.tools.qcproperties._well2df import WellLogs2df
 
 
 class TestProperties2df:
-    """Tests related to generation of dataframe from properties """
+    """Tests related to generation of dataframe from properties"""
 
     def test_wells(self, data_wells):
         """Test creating property dataframe from wells"""
@@ -33,7 +33,7 @@ class TestProperties2df:
         assert set(pdf.dataframe.columns) == set(["PORO", "PERM", "ZONE", "FACIES"])
 
     def test_props_and_selectors_as_list(self, data_grid):
-        """Test """
+        """Test"""
         data_grid["properties"] = ["reek_sim_poro.roff", "reek_sim_permx.roff"]
         data_grid["selectors"] = ["reek_sim_zone.roff", "reek_sim_facies2.roff"]
 
@@ -165,7 +165,7 @@ class TestProperties2df:
 
 
 class TestStatistics:
-    """Tests for extracting statistics with QCProperties """
+    """Tests for extracting statistics with QCProperties"""
 
     def test_gridprops(self, data_grid):
         """Test extracting statsitics from grid properties"""
@@ -357,10 +357,10 @@ class TestStatistics:
 
 
 class TestStatisticsMultipleSources:
-    """Tests for extracting statistics from different sources """
+    """Tests for extracting statistics from different sources"""
 
     def test_auto_combination(self, data_grid, data_wells, data_bwells):
-        """Tests combining statistic """
+        """Tests combining statistic"""
         qcp = QCProperties()
 
         qcp.get_grid_statistics(data_grid)
@@ -373,7 +373,7 @@ class TestStatisticsMultipleSources:
         assert len(qcp.dataframe["ID"].unique()) == 3
 
     def test_from_yaml(self):
-        """Tests extracting statistics from yaml-file """
+        """Tests extracting statistics from yaml-file"""
         qcp = QCProperties()
         yaml_input = Path(__file__).parent / "data/propstat.yml"
         qcp.from_yaml(yaml_input)

@@ -81,7 +81,7 @@ def yconfig_set_defaults(config):
 
 
 def make_xlabel(ref_value, scale="percentage", reference="seed"):
-    """ Makes xlabel for tornadoplot from input """
+    """Makes xlabel for tornadoplot from input"""
     label = scale.capitalize() + " change compared to ref value "
     label += "{:.2e}".format(ref_value) + ".   "
     if reference.isdigit():
@@ -92,7 +92,7 @@ def make_xlabel(ref_value, scale="percentage", reference="seed"):
 
 
 def gatherresults(config):
-    """ Gathers .csv files from different realisations into one"""
+    """Gathers .csv files from different realisations into one"""
     ensemblepaths = config["results"]["ensemblepaths"]
     print("Gathering csv files from:")
     print(ensemblepaths)

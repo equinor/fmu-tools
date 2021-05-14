@@ -710,7 +710,7 @@ def _has_value(value):
 
 
 def _is_int(teststring):
-    """ Test if a string can be parsed as a float"""
+    """Test if a string can be parsed as a float"""
     try:
         if not np.isnan(int(teststring)):
             if (float(teststring) % 1) == 0:
