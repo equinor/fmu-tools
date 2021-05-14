@@ -4,13 +4,13 @@ import pandas as pd
 
 
 def real_mask(dfr, start, end):
-    """ Creates mask for which realisations to calc from """
+    """Creates mask for which realisations to calc from"""
     mask = (dfr.REAL >= start) & (dfr.REAL <= end)
     return mask
 
 
 def check_selector(resultfile, selector):
-    """ Checks whether selector is in resultfile headers """
+    """Checks whether selector is in resultfile headers"""
     if selector not in resultfile.columns:
         raise ValueError("Did not find ", selector, " as column in", "resultfile")
 
@@ -29,13 +29,13 @@ def check_selection(resultfile, selector, selection):
 
 
 def check_response(resultfile, response):
-    """ Checks whether respones in in resultfile """
+    """Checks whether respones in in resultfile"""
     if response not in resultfile.columns:
         raise ValueError("Did not find ", response, " as column in", "resultfile")
 
 
 def cut_by_ref(tornadotable, refname):
-    """ Removes sensitivities smaller than reference sensitivity from table """
+    """Removes sensitivities smaller than reference sensitivity from table"""
     maskref = tornadotable.sensname == refname
     reflow = tornadotable[maskref].low.abs()
     refhigh = tornadotable[maskref].high.abs()
@@ -51,7 +51,7 @@ def cut_by_ref(tornadotable, refname):
 
 
 def sort_by_max(tornadotable):
-    """ Sorts table based on max(abs('low', 'high')) """
+    """Sorts table based on max(abs('low', 'high'))"""
     tornadotable["max"] = (
         tornadotable[["low", "high"]]
         .apply(lambda x: max(x.min(), x.max(), key=abs), axis=1)
