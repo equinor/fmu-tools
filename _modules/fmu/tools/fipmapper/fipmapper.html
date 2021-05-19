@@ -1,0 +1,558 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fmu.tools.fipmapper.fipmapper &mdash; fmu-tools 1.6.1.dev3+g35e3b28 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> fmu-tools
+          
+
+          
+            
+            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.6.1.dev3+g35e3b28
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.fipmapper.fipmapper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.fipmapper.fipmapper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FipMapper"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper">[docs]</a><span class="k">class</span> <span class="nc">FipMapper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">yamlfile</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">mapdata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">skipstring</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Represent mappings between region/zones to FIPxxx.</span>
+
+<span class="sd">        FipMapper is a class to represent a to map between</span>
+<span class="sd">        regions/zones in the geomodel (RMS) and to different region partitions</span>
+<span class="sd">        in the dynamic model (Eclipse).</span>
+
+<span class="sd">        Primary usage is to determine which RMS regions corresponds to</span>
+<span class="sd">        which FIPNUMs, similarly for zones, and in both directions.</span>
+
+<span class="sd">        Configuration is via a yaml-file or directly with a dictionary. The</span>
+<span class="sd">        map can be configured in any direction.</span>
+
+<span class="sd">        Several data structures in the dictionary can be used, such that</span>
+<span class="sd">        the needed information can be extracted from the global configurations</span>
+<span class="sd">        file.</span>
+
+<span class="sd">        Assumptions:</span>
+<span class="sd">            * A FIPNUM always maps to an arbitrary-length list of regions</span>
+<span class="sd">            * A FIPNUM always maps to an arbitrary-length list of zones</span>
+<span class="sd">            * A region always maps to an arbitrary-length list of FIPNUMs</span>
+<span class="sd">            * A zone always maps to an arbitrary-length list of FIPNUMs</span>
+<span class="sd">            * A region is assumed to be present for all zones, but not</span>
+<span class="sd">              relevant in this class</span>
+<span class="sd">            * A zone is assumed to be present for all regions, but not</span>
+<span class="sd">              relevant in this class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            yamlfile: Filename</span>
+<span class="sd">            mapdata: direct dictionary input. Provide only one of the</span>
+<span class="sd">                arguments, not both.</span>
+<span class="sd">            skipstring: List of strings which will be ignored (e.g. [&quot;Totals&quot;]).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># To be filled with data we need.</span>
+
+        <span class="k">if</span> <span class="n">skipstring</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skipstring</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span> <span class="o">=</span> <span class="p">[</span><span class="n">skipstring</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">yamlfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mapdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Initialize with either yamlfile or explicit data, not both&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">yamlfile</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mapdata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;FipMapper initialized with no data&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">yamlfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading data from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">yamlfile</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yamlfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+                <span class="n">yamldata</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">yamldata</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">yamldata</span> <span class="o">=</span> <span class="n">mapdata</span>
+
+        <span class="k">if</span> <span class="n">yamldata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_explicit_mapdata</span><span class="p">(</span><span class="n">yamldata</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">yamldata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;global&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="c1"># This is a fmu-config file.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fipdata_from_fmuconfigyaml</span><span class="p">(</span><span class="n">yamldata</span><span class="p">)</span>
+
+        <span class="c1"># Webviz YML format:</span>
+        <span class="k">if</span> <span class="n">yamldata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;FIPNUM&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fipdata_from_webvizyaml</span><span class="p">(</span><span class="n">yamldata</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;FipMapper needs a dictionary&quot;</span>
+
+        <span class="c1"># Determine our capabilities:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2region</span> <span class="o">=</span> <span class="s2">&quot;fipnum2region&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2zone</span> <span class="o">=</span> <span class="s2">&quot;fipnum2zone&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_region2fip</span> <span class="o">=</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_zone2fip</span> <span class="o">=</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span>
+
+    <span class="k">def</span> <span class="nf">_get_explicit_mapdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamldata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch explicit mapping configuration from a dictionary.</span>
+
+<span class="sd">        Set internal flags when maps are found</span>
+
+<span class="sd">        Invert maps when possible/needed</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            yamldata (dict): Configuration object with predefined items</span>
+<span class="sd">                at the first level.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s2">&quot;fipnum2region&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yamldata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">invert_map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">],</span> <span class="n">skipstring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2region</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_region2fip</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yamldata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;fipnum2region&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">invert_map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">],</span> <span class="n">skipstring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2region</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_region2fip</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="s2">&quot;fipnum2zone&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2zone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yamldata</span><span class="p">[</span><span class="s2">&quot;fipnum2zone&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">invert_map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2zone&quot;</span><span class="p">],</span> <span class="n">skipstring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2zone</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_zone2fip</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yamldata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;fip2zone&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yamldata</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2zone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">invert_map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">],</span> <span class="n">skipstring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skipstring</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_fip2zone</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_zone2fip</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_fipdata_from_fmuconfigyaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamldict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function should be able to build mapping from region/zones to</span>
+<span class="sd">        FIPNUM based on data it finds in a fmu-config global_master_config.yml</span>
+<span class="sd">        file.</span>
+
+<span class="sd">        How that map should be deduced is not yet defined, and we only support</span>
+<span class="sd">        having the explicit maps &quot;region2fipnum&quot; etc under the global section</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            yamldict (dict):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_explicit_mapdata</span><span class="p">(</span><span class="n">yamldict</span><span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_fipdata_from_webvizyaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yamldict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function loads the Webviz yaml syntax for</span>
+<span class="sd">        REGION/ZONE to FIPNUM mapping,</span>
+
+<span class="sd">        The syntax is defined in</span>
+<span class="sd">        https://github.com/equinor/webviz-subsurface/blob/master/webviz_subsurface/plugins/_reservoir_simulation_timeseries_regional.py#L1422</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            yamldict (dict):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_explicit_mapdata</span><span class="p">(</span><span class="n">webviz_to_prtvol2csv</span><span class="p">(</span><span class="n">yamldict</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_fips2regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fips</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fip2region</span><span class="p">(</span><span class="n">fip_int</span><span class="p">)</span> <span class="k">for</span> <span class="n">fip_int</span> <span class="ow">in</span> <span class="n">fips</span><span class="p">]</span>
+
+<div class="viewcode-block" id="FipMapper.fip2region"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2region">[docs]</a>    <span class="k">def</span> <span class="nf">fip2region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Maps one FIP(NUM) integer to list of Region strings. Each FIPNUM</span>
+<span class="sd">        can map to multiple regions, therefore a list is always returned for</span>
+<span class="sd">        each FIPNUM.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            array: List/array of FIPNUMS, or integer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of strings or list of lists of strings, depending on input.</span>
+<span class="sd">            Region names that are &quot;integers&quot; will be returned as strings.</span>
+<span class="sd">            Empty list if no region is known for a specific FIPNUM.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;fipnum2region&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for fip2region&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">regions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">][</span><span class="n">fip</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># Single region in input</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">regions</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">regions</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown fip </span><span class="si">%s</span><span class="s2">, known map is </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">fip</span><span class="p">),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+    <span class="k">def</span> <span class="nf">_regions2fips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">region2fip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">]</span>
+
+<div class="viewcode-block" id="FipMapper.region2fip"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.region2fip">[docs]</a>    <span class="k">def</span> <span class="nf">region2fip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Maps a Region string to FIPNUM(s).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            array (list): List/array of FIPNUMS, or integer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FIPNUM values. None if the region is unknown, many if many FIPNUMs</span>
+<span class="sd">            are present in the region.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for region2fip&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">][</span><span class="n">region</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fips</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># Single FIPNUM in input</span>
+                <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">fips</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">fip</span><span class="p">)</span> <span class="k">for</span> <span class="n">fip</span> <span class="ow">in</span> <span class="n">fips</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown region </span><span class="si">%s</span><span class="s2">, known map is </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">region</span><span class="p">),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="FipMapper.zone2fip"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.zone2fip">[docs]</a>    <span class="k">def</span> <span class="nf">zone2fip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Maps a zone to FIPNUMs&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for zone2fip&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">][</span><span class="n">zone</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fips</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># Single FIPNUM in input</span>
+                <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">fips</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">fip</span><span class="p">)</span> <span class="k">for</span> <span class="n">fip</span> <span class="ow">in</span> <span class="n">fips</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown zone </span><span class="si">%s</span><span class="s2">, known map is ¤s&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">zone</span><span class="p">),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+    <span class="k">def</span> <span class="nf">_fips2zones</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fips</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fip2zone</span><span class="p">(</span><span class="n">fip</span><span class="p">)</span> <span class="k">for</span> <span class="n">fip</span> <span class="ow">in</span> <span class="n">fips</span><span class="p">]</span>
+
+<div class="viewcode-block" id="FipMapper.fip2zone"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2zone">[docs]</a>    <span class="k">def</span> <span class="nf">fip2zone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fip</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Maps a FIPNUM integer to an list of Zone strings</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            array (list): List/array of FIPNUMS, or integer.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Region strings. Always returned as list, and always as</span>
+<span class="sd">            strings, even if zone &quot;names&quot; are integers. Empty list if no</span>
+<span class="sd">            zone is assigned to the FIPNUM.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;fipnum2zone&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for fip2zone&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">zones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2zone&quot;</span><span class="p">][</span><span class="n">fip</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zones</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="c1"># Single zone for this FIPNUM</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">zones</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">zones</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;The zone belonging to FIPNUM </span><span class="si">%s</span><span class="s2"> is unknown&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fip</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># type: ignore</span></div>
+
+<div class="viewcode-block" id="FipMapper.regzone2fip"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.regzone2fip">[docs]</a>    <span class="k">def</span> <span class="nf">regzone2fip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">fipreg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region2fip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+        <span class="n">fipzon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone2fip</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipreg</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipzon</span><span class="p">))))</span></div></div>
+
+
+<div class="viewcode-block" id="webviz_to_prtvol2csv"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.webviz_to_prtvol2csv">[docs]</a><span class="k">def</span> <span class="nf">webviz_to_prtvol2csv</span><span class="p">(</span><span class="n">webvizdict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a dict representation of a region/zone map in the Webviz format</span>
+<span class="sd">    to the prtvol2csv format&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;FIPNUM&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">prtvoldict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;groups&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;REGION&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">]:</span>
+                <span class="n">prtvoldict</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">][</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">]:</span>
+                <span class="n">prtvoldict</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">][</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The &quot;groups&quot; level might go away:</span>
+            <span class="k">if</span> <span class="s2">&quot;REGION&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]:</span>
+                <span class="n">prtvoldict</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]:</span>
+                <span class="n">prtvoldict</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">prtvoldict</span>
+    <span class="k">return</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="invert_map"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.invert_map">[docs]</a><span class="k">def</span> <span class="nf">invert_map</span><span class="p">(</span>
+    <span class="n">dictmap</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">skipstring</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Invert a dictionary, supporting many-to-many maps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dictmap</span>
+<span class="sd">        skipstring: List of strings which will be ignored (e.g. &quot;Totals&quot;).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">skipstring</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">skipstring</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skipstring</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">skipstring</span> <span class="o">=</span> <span class="p">[</span><span class="n">skipstring</span><span class="p">]</span>
+
+    <span class="n">inv_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dictmap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">skipstring</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">skipstring</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">inv_map</span><span class="p">[</span><span class="n">_value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="nb">set</span><span class="p">(</span><span class="n">inv_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_value</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">key</span><span class="p">]))</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">inv_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span>
+            <span class="c1"># mypy workaround: https://github.com/python/mypy/issues/2013</span>
+            <span class="n">inv_map</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">key</span><span class="p">])))</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">inv_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">inv_map</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
