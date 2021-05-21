@@ -1,3 +1,4 @@
+disjoint-set
 openpyxl>=2.6
 pandas>=0.21
 pyyaml>=5.3

@@ -2,9 +2,12 @@
 
 from pathlib import Path
 import logging
+import itertools
 from typing import Union, Dict, List, Any, Optional
 
 import yaml
+import pandas as pd
+from disjoint_set import DisjointSet
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +15,7 @@ logger = logging.getLogger(__name__)
 class FipMapper:
     def __init__(
         self,
+        *,
         yamlfile: Union[str, Path] = None,
         mapdata: Dict[str, str] = None,
         skipstring: Union[List[str], str] = None,
@@ -167,6 +171,21 @@ class FipMapper:
     def _fips2regions(self, fips: List[int]) -> List[List[str]]:
         return [self.fip2region(fip_int) for fip_int in fips]
 
+    def get_regions(self) -> List[str]:
+        """Obtain a sorted list of the regions that exist in the map"""
+        assert "fipnum2region" in self._mapdata, "No data provided for regions"
+        return sorted(self._mapdata["region2fipnum"].keys())
+
+    def get_zones(self) -> List[str]:
+        """Obtain a sorted list of the zones that exist in the map"""
+        assert "fipnum2region" in self._mapdata, "No data provided for regions"
+        return sorted(self._mapdata["zone2fipnum"].keys())
+
+    def get_fipnums(self) -> List[str]:
+        """Obtain a sorted list of the fip numbers that exist in the map"""
+        assert "fipnum2region" in self._mapdata, "No data provided for regions"
+        return sorted(self._mapdata["fipnum2region"].keys())
+
     def fip2region(self, fip: Optional[int]) -> List[str]:
         """Maps one FIP(NUM) integer to list of Region strings. Each FIPNUM
         can map to multiple regions, therefore a list is always returned for
@@ -270,6 +289,112 @@ class FipMapper:
         fipzon = self.zone2fip(zone)
         return sorted(list(set(fipreg).intersection(set(fipzon))))
 
+    def disjoint_sets(self) -> pd.DataFrame:
+        """Determine the minimal disjoint sets of a reservoir
+
+        The disjoint sets returned consist of sets that can be split into
+        both a set of FIPxxxx list and a region/zone list. Thus, the sum of
+        any additive property is comparable on these disjoint sets.
+
+        The returned object is a dataframe that is to be used to group together
+        fipnums or regions/zones so they are summable.
+
+        Each row represents a cell in the partition where both region, zone and
+        fipnum boundaries apply, this the finest possible partition the
+        fipmapper data allows. Each row is then assigned to a group signified
+        by the name of one of the cells in the group, the "root" cell. This
+        signifies the minimal grouping of data that must be applied in order
+        for volumes in the region/zone partition or fipnum partition to be
+        comparable.
+        """
+
+        # Generate all possible combinations of the regions and
+        # zones we know of:
+        regzone_df = pd.DataFrame(
+            columns=["REGION", "ZONE"],
+            data=itertools.product(self.get_regions(), self.get_zones()),
+        )
+
+        # Map all of the region-zone combinations into the accompanying FIPNUMs:
+        regzone_df["FIPNUMS"] = regzone_df.apply(
+            lambda x: self.regzone2fip(x["REGION"], x["ZONE"]), axis=1
+        )
+
+        # The dataframe has lists in the FIPNUMS column when a reg/zone maps
+        # to multiple FIPNUMs. Unroll these into one row pr linked FIPNUM:
+        dframe = _expand_regzone_df(regzone_df)
+
+        # The `dframe` now has one row pr. smallest "cell" that is interesting
+        # in the current context. In some sense, the "intersection" of all
+        # possible partitions.
+
+        # Create a dataframe of all possible combinations of these smallest cells:
+        edges = pd.merge(
+            dframe.assign(dummy=1), dframe.assign(dummy=1), on="dummy"
+        ).drop("dummy", axis=1)
+        # When Pandas 1.2 is ubiqutous, replace the above statement with:
+        # edges = dframe.merge(dframe, how="cross")
+
+        # A partition is equivalent to an equivalence relation.
+
+        # Apply an equivalence relation to the cell combinations:
+        edges["NEIGHBOURS"] = edges.apply(
+            lambda x: _equivalent_cells(
+                x["REGION_x"],
+                x["ZONE_x"],
+                x["FIPNUM_x"],
+                x["REGION_y"],
+                x["ZONE_y"],
+                x["FIPNUM_y"],
+            ),
+            axis=1,
+        )
+        # Filter to only edges that determine which cell linkages
+        # that should be grouped:
+        neighbourlist = edges[edges["NEIGHBOURS"]]
+        print(neighbourlist)
+
+        # Construct a disjoint set object of all the smallest cells that are
+        # to be grouped/unionized:
+        ds: DisjointSet = DisjointSet()
+        for _, row in dframe.iterrows():
+            ds.find((row["REGION"], row["ZONE"], row["FIPNUM"]))
+
+        # Apply the union-find algorithm to determine the partition
+        # where all equivalene relations are obeyed:
+        for _, pair in neighbourlist.iterrows():
+            ds.union(
+                (pair["REGION_x"], pair["ZONE_x"], pair["FIPNUM_x"]),
+                (pair["REGION_y"], pair["ZONE_y"], pair["FIPNUM_y"]),
+            )
+
+        # The union-find algorithm has now "named" each of the components
+        # in the disjoint set by a somewhat random mother/root node. Map this
+        # back to the dataframe and return:
+        dframe["ROOT"] = dframe.apply(
+            lambda x: ds.find((x["REGION"], x["ZONE"], x["FIPNUM"])), axis=1
+        )
+        return dframe
+
+
+def _equivalent_cells(
+    reg1: Any, zon1: Any, fip1: Any, reg2: Any, zon2: Any, fip2: Any
+) -> bool:
+    """Define the equivalence relation for the reg-zone-fip reservoir partition
+
+    A pair of reg-zone-fip is in the same group if they must be treated together
+    when (and have properties summed). Say if you have a value for
+    a specific region, but this region contains two FIPNUMs. Then we can never
+    treat these two FIPNUMs separately, they must be summed in order to be
+    comparable to the value for the region
+    """
+    if (reg1 == reg2) and (zon1 == zon2) and (fip1 == fip2):
+        # The mapping to itself is to be ignored.
+        return False
+    if ((reg1 == reg2) and (zon1 == zon2)) or (fip1 == fip2):
+        return True
+    return False
+
 
 def webviz_to_prtvol2csv(webvizdict: dict):
     """Convert a dict representation of a region/zone map in the Webviz format
@@ -323,3 +448,19 @@ def invert_map(
         inv_map[key] = sorted(list(inv_map[key]))
 
     return inv_map
+
+
+def _expand_regzone_df(dframe: pd.DataFrame, fipname: str = "FIPNUM") -> pd.DataFrame:
+    """Unroll dataframe rows with a FIPNUM list in the "FIPNUMS" column"""
+    new_rows = []
+    for _, row in dframe.iterrows():
+        for fipnumber in row[fipname + "S"]:
+            new_rows.append(
+                {
+                    "REGION": row["REGION"],
+                    "ZONE": row["ZONE"],
+                    fipname: fipnumber,
+                    "REGZONE": row["REGION"] + "-" + row["ZONE"],
+                }
+            )
+    return pd.DataFrame(new_rows)
