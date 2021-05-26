@@ -78,7 +78,7 @@ def rmsvolumetrics_txt2df(
         "Bulk": "BULK_" + phase,
         "Net": "NET_" + phase,
         "Hcpv": "HCPV_" + phase,
-        "Pore": "PORE_" + phase,
+        "Pore": "PORV_" + phase,
         "Stoiip": "STOIIP_" + phase,
         "Giip": "GIIP_" + phase,
         "Assoc.Liquid": "ASSOCIATEDOIL_" + phase,
