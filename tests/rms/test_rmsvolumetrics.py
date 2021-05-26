@@ -14,6 +14,114 @@ from fmu.tools.rms import volumetrics
 TESTDIR = Path(__file__).parent / "volumetricsdata"
 
 
+@pytest.mark.parametrize(
+    "multiline_str, filename, expected_df",
+    [
+        pytest.param(
+            "",
+            "foo.txt",
+            None,
+            marks=pytest.mark.xfail(raises=pd.errors.EmptyDataError),
+        ),
+        pytest.param(
+            "foo bar",
+            "foo.txt",
+            None,
+            marks=pytest.mark.xfail(raises=pd.errors.EmptyDataError),
+        ),
+        pytest.param(
+            "Zone Bulk\nUpper 1",
+            "foo.txt",
+            pd.DataFrame([{"BULK": 1}]),
+            marks=pytest.mark.xfail(
+                raises=ValueError, reason="Not able to guess phase"
+            ),
+        ),
+        pytest.param(
+            "Zone Bulk\nUpper 1",
+            "oil.txt",
+            # This "fails" as there was not a double space between Zone and Bulk
+            pd.DataFrame([{"Zone Bulk": "Upper 1"}]),
+        ),
+        (
+            # Two spaces:
+            "Zone  Bulk\nUpper  1.0",
+            "oil.txt",
+            pd.DataFrame([{"ZONE": "Upper", "BULK_OIL": 1.0}]),
+        ),
+        (
+            # Three spaces:
+            "Zone   Bulk\nUpper  1.0",
+            "oil.txt",
+            pd.DataFrame([{"ZONE": "Upper", "BULK_OIL": 1.0}]),
+        ),
+        (
+            # Tabs don't work:
+            "Zone\tBulk\nUpper\t1.0",
+            "oil.txt",
+            pd.DataFrame([{"Zone\tBulk": "Upper\t1.0"}]),
+        ),
+        (
+            "Zone  Bulk\nUpper  1.0",
+            "gas.txt",
+            pd.DataFrame([{"ZONE": "Upper", "BULK_GAS": 1.0}]),
+        ),
+        (
+            # All supported columns:
+            "Zone  Region index  Facies  License boundaries  "
+            "Bulk  Net  Hcpv  Pore  Stoiip  Assoc.Gas\n"
+            "Upper  West  GoodSand  NO  2  1  1  1  1  0.1",
+            "oil.txt",
+            pd.DataFrame(
+                [
+                    {
+                        "ZONE": "Upper",
+                        "REGION": "West",
+                        "FACIES": "GoodSand",
+                        "LICENSE": "NO",
+                        "BULK_OIL": 2,
+                        "NET_OIL": 1,
+                        "HCPV_OIL": 1,
+                        "PORV_OIL": 1,
+                        "STOIIP_OIL": 1,
+                        "ASSOCIATEDGAS_OIL": 0.1,
+                    }
+                ]
+            ),
+        ),
+        (
+            # All supported columns:
+            "Zone  Region index  Facies  License boundaries  "
+            "Bulk  Net  Hcpv  Pore  Giip  Assoc.Liquid\n"
+            "Upper  West  GoodSand  NO  2  1  1  1  1  0.1",
+            "gas.txt",
+            pd.DataFrame(
+                [
+                    {
+                        "ZONE": "Upper",
+                        "REGION": "West",
+                        "FACIES": "GoodSand",
+                        "LICENSE": "NO",
+                        "BULK_GAS": 2,
+                        "NET_GAS": 1,
+                        "HCPV_GAS": 1,
+                        "PORV_GAS": 1,
+                        "GIIP_GAS": 1,
+                        "ASSOCIATEDOIL_GAS": 0.1,
+                    }
+                ]
+            ),
+        ),
+    ],
+)
+def test_rms_to_volumetrics(multiline_str, filename, expected_df, tmpdir):
+    tmpdir.chdir()
+    Path(filename).write_text(multiline_str)
+    pd.testing.assert_frame_equal(
+        volumetrics.rmsvolumetrics_txt2df(filename), expected_df, check_like=True
+    )
+
+
 def test_volumetrics():
     """Test parsing of many real examples from RMS"""
 
