@@ -1,7 +1,7 @@
 """
 This private module in qcforward is used for grid statistics
 """
-from typing import Union
+from typing import Union, Dict
 import collections
 from pathlib import Path
 import json
@@ -35,9 +35,9 @@ class _LocalData:
 class GridStatistics(QCForward):
     def run(
         self,
-        data: dict,
+        data: Union[dict, str],
         project: Union[object, str] = None,
-    ) -> tuple:
+    ) -> None:
         """Main routine for evaulating if statistics from 3D grids is
         within user specified thresholds.
 
@@ -51,7 +51,7 @@ class GridStatistics(QCForward):
 
         """
 
-        self._data = self.handle_data(data, project)
+        self._data: dict = self.handle_data(data, project)
         # TO-DO:
         # self._validate_input(self._data)
 
@@ -140,22 +140,22 @@ class GridStatistics(QCForward):
         validate(instance=data, schema=schema)
 
     @staticmethod
-    def _extract_parameters_from_action(data: dict, action: dict) -> dict:
+    def _extract_parameters_from_action(data: dict, action: Dict[str, dict]) -> dict:
         """
         Extract property and selector data from actions
         and convert to desired input format for QCProperties
         """
         data = data.copy()
 
-        properties = {}
-        selectors = []
-        filters = {}
+        properties: dict = {}
+        selectors: list = []
+        filters: dict = {}
 
         if action["property"] not in properties:
             properties[action["property"]] = {"name": action["property"]}
 
         if "filters" in action:
-            filters = action.get("filters")
+            filters = action["filters"]
 
         if "selectors" in action:
             for prop, filt in action["selectors"].items():

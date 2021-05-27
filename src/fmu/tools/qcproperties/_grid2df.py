@@ -20,7 +20,7 @@ class GridProps2df:
         QCC.verbosity = data.get("verbosity", 0)
 
         self._xtgdata = xtgdata  # A QCData instance used for dataloading to XTGeo
-        self._property_type = None
+        self._property_type: Optional[str] = None
         self._dataframe = pd.DataFrame()  # dataframe with property data
 
         self._data_input_preparations(project, data)
@@ -33,12 +33,12 @@ class GridProps2df:
     # ==================================================================================
 
     @property
-    def dataframe(self) -> pd.DataFrame():
+    def dataframe(self) -> pd.DataFrame:
         """Dataframe with property statistics."""
         return self._dataframe
 
     @property
-    def property_type(self) -> str:
+    def property_type(self) -> Optional[str]:
         """Property type (continous/discrete)"""
         return self._property_type
 

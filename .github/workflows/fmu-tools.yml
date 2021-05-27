@@ -57,6 +57,11 @@ jobs:
           black --check .
           flake8 .
 
+      - name: Enforce static typing
+        run: |
+          pip install mypy
+          mypy src/fmu/tools
+
       - name: Where am i?
         run: |
           pwd

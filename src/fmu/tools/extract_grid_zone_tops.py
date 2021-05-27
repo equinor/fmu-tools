@@ -19,7 +19,7 @@ except ModuleNotFoundError:
 
 def extract_grid_zone_tops(
     project: Optional[_roxar.Project] = None,
-    well_list: list = None,
+    well_list: Optional[list] = None,
     logrun: str = "log",
     trajectory: str = "Drilled trajectory",
     gridzonelog: str = None,
@@ -55,6 +55,10 @@ def extract_grid_zone_tops(
             raise ValueError("Specify either 'gridzonelog' or 'grid' and 'zone_param")
 
     dfs = []
+
+    if well_list is None:
+        well_list = []
+
     for well in well_list:
         try:
             if project is not None:

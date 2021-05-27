@@ -99,7 +99,7 @@ class QCForward:
 
     def make_report(
         self, results: dict, reportfile: str = None, nametag: str = None
-    ) -> pd.DataFrame():
+    ) -> pd.DataFrame:
         """Make a report which e.g. can be used in webviz plotting"""
 
         dfr = pd.DataFrame(results).assign(NAMETAG=nametag)
