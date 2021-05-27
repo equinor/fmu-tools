@@ -50,7 +50,8 @@ TEST_REQUIREMENTS = [
 ]
 
 DOCS_REQUIREMENTS = [
-    "autoapi" "rstcheck",
+    "autoapi",
+    "rstcheck",
     "sphinx",
     "sphinx-argparse",
     "sphinx-autodoc-typehints",
