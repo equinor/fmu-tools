@@ -1,6 +1,6 @@
 """The qcproperties module"""
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 import pandas as pd
 import yaml
 
@@ -140,7 +140,7 @@ class QCProperties:
         self._proptypes_all.append(statistics.controls["property_type"])
 
     # pylint: disable = no-self-argument, not-callable
-    def _check_multiple_filters(method):
+    def _check_multiple_filters(method: Any):
         """Decorator function for extracting statistics with different filters"""
 
         def wrapper(self, **kwargs):

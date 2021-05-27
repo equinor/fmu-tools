@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Any
 import pandas as pd
 
 from fmu.tools.qcdata import QCData
@@ -27,8 +27,8 @@ class WellLogs2df:
         QCC.verbosity = data.get("verbosity", 0)
 
         self._xtgdata = xtgdata  # A QCData instance used for dataloading to XTGeo
-        self._wells = []
-        self._property_type = None
+        self._wells: List[Any] = []
+        self._property_type: Optional[str] = None
         self._dataframe = pd.DataFrame()  # dataframe with property log data
 
         self._data_input_preparations(project, data, blockedwells)
@@ -41,12 +41,12 @@ class WellLogs2df:
     # ==================================================================================
 
     @property
-    def dataframe(self) -> pd.DataFrame():
+    def dataframe(self) -> pd.DataFrame:
         """Dataframe with property statistics."""
         return self._dataframe
 
     @property
-    def property_type(self) -> str:
+    def property_type(self) -> Optional[str]:
         """Property type (continous/discrete)"""
         return self._property_type
 

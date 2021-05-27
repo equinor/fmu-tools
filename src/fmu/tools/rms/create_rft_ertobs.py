@@ -33,6 +33,7 @@ Result:
 """
 import logging
 from pathlib import Path
+from typing import Dict, Any, Tuple, Optional
 
 import pandas as pd
 import numpy as np
@@ -62,7 +63,7 @@ SUPPORTED_OPTIONS = [
 ]
 
 
-def check_and_parse_config(config: dict) -> dict:
+def check_and_parse_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """Checks config, and returns a validated and defaults-filled config
     dictionary"""
     config = config.copy()
@@ -149,10 +150,7 @@ def get_well_coords(
 
     Args:
         project: Roxapi project reference.
-        wellname (str): Name of well as it exists in the RMS project
-
-    Returns:
-        np.array
+        wellname: Name of well as it exists in the RMS project
     """
     return (
         project.wells[wellname]
@@ -161,20 +159,22 @@ def get_well_coords(
     )
 
 
-def strictly_downward(coords) -> bool:
+def strictly_downward(coords: np.ndarray) -> bool:
     """Check if a well trajectory has absolutely no horizontal sections
 
     Args:
-        coords (np.ndarray): n x 4 array of coordinates, only
+        coords: n x 4 array of coordinates, only
             z values in 4th column is used.
 
     Returns:
         True if there are no horizontals.
     """
-    return np.all(coords[:-1, 3] < coords[1:, 3])
+    return bool(np.all(coords[:-1, 3] < coords[1:, 3]))
 
 
-def interp_from_md(md_value: float, coords, interpolation: str = "cubic") -> tuple:
+def interp_from_md(
+    md_value: float, coords, interpolation: str = "cubic"
+) -> Tuple[float, float, float]:
     """
     Function to interpolate East, North, TVD values of a well point
     defined by its name (wname) and its corresponding MD point (md_value).
@@ -187,7 +187,7 @@ def interp_from_md(md_value: float, coords, interpolation: str = "cubic") -> tup
         md, x, y, z
 
     Returns:
-        tuple: (x, y, z) along the wellpath at requested measured depth value.
+        x, y and z along the wellpath at requested measured depth value.
     """
     if coords is None:
         raise ValueError("Can't interpolate with no well coordinates")
@@ -204,11 +204,14 @@ def interp_from_md(md_value: float, coords, interpolation: str = "cubic") -> tup
         cs_y = CubicSpline(coords[:, 0], coords[:, 2])  # North
         cs_z = CubicSpline(coords[:, 0], coords[:, 3])  # TVD
         return (float(cs_x(md_value)), float(cs_y(md_value)), float(cs_z(md_value)))
-    logger.error("Non-supported interpolation method: %s", interpolation)
-    return None
+    raise ValueError(f"Non-supported interpolation method: {interpolation}")
 
 
-def interp_from_xyz(xyz: tuple, coords, interpolation: str = "cubic") -> float:
+def interp_from_xyz(
+    xyz: Tuple[float, float, float],
+    coords: np.ndarray,
+    interpolation: str = "cubic",
+) -> float:
     """Interpolate MD value of a well point defined by its name (wellname)
     and its corresponding East, North, TVD values (xyz tuple)
 
@@ -225,12 +228,12 @@ def interp_from_xyz(xyz: tuple, coords, interpolation: str = "cubic") -> float:
     of the well trajectory points.
 
     Args:
-        coords (np.narray)
-        xyz (tuple): x, y and z for the coordinate where MD is requested.
-        interpolation (str): Use either "cubic" (default) or "linear"
+        coords
+        xyz: x, y and z for the coordinate where MD is requested.
+        interpolation: Use either "cubic" (default) or "linear"
 
     Returns:
-        float: Measured depth value at (x,y,z)
+        Measured depth value at (x,y,z)
     """
 
     # Interpolate to get corresponding MD
@@ -300,7 +303,8 @@ def interp_from_xyz(xyz: tuple, coords, interpolation: str = "cubic") -> float:
             closest_md = my_md
             dist_min = dist
     dist_min = dist_min ** (0.5)
-    md_value = round(closest_md, 2)
+    if closest_md is not None:
+        md_value = round(closest_md, 2)
     logger.info(
         "MD estimated on undulating wellpath: {} (mismatch = {:.4f} m)".format(
             md_value, dist_min
@@ -381,12 +385,12 @@ def ertobs_df_to_files(
     second DATE pr. well etc.
 
     Args:
-        dframe (pd.DataFrame): Contains data for RFT observations, one
+        dframe: Contains data for RFT observations, one
             observations pr. row
-        exportdir (str): Path to directory where export is to happen. Must
+        exportdir: Path to directory where export is to happen. Must
             exists.
-        welldatefile (str): Filename to write the "index" of observations to.
-        filename (str): Filename for raw CSV data, for future use in GENDATA_RFT
+        welldatefile: Filename to write the "index" of observations to.
+        filename: Filename for raw CSV data, for future use in GENDATA_RFT
     """
 
     # Dump directly to CSV, this is for future use:
@@ -444,19 +448,18 @@ def ertobs_df_to_files(
 
 
 def fill_missing_md_xyz(
-    dframe: pd.DataFrame, coords_pr_well: dict, interpolation: str = "cubic"
+    dframe: pd.DataFrame,
+    coords_pr_well: Dict[str, np.ndarray],
+    interpolation: str = "cubic",
 ) -> pd.DataFrame:
     """
     Fill missing MD or XYZ values in incoming dataframe, interpolating
     in given well trajectories.
 
     Args:
-        dframe (pd.DataFrame): Must contain WELL_NAME, EAST, NORTH, MD, TVD
-        coords_pr_well (dict): One key for each WELL_NAME, pointing to a n by 3
+        dframe: Must contain WELL_NAME, EAST, NORTH, MD, TVD
+        coords_pr_well: One key for each WELL_NAME, pointing to a n by 3
             numpy matrix with well coordinates (as outputted by roxapi)
-
-    Returns:
-        None (modifies incoming dataframe inplace)
     """
     for row_idx, row in dframe.iterrows():
         if pd.isnull(row["TVD"]):
@@ -491,7 +494,7 @@ def fill_missing_md_xyz(
     return dframe
 
 
-def main(config: dict = None) -> None:
+def main(config: Optional[Dict[str, Any]] = None) -> None:
     """The main function to be called from a RMS client python script.
 
     Args:

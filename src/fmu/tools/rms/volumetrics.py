@@ -5,20 +5,20 @@ import logging
 import argparse
 import signal
 from pathlib import Path
-
+from typing import Dict, Optional, Callable
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
 def rmsvolumetrics_txt2df(
-    txtfile,
-    columnrenamer=None,
-    phase=None,
-    outfile=None,
-    regionrenamer=None,
-    zonerenamer=None,
-):
+    txtfile: str,
+    columnrenamer: Optional[Dict[str, str]] = None,
+    phase: Optional[str] = None,
+    outfile: Optional[str] = None,
+    regionrenamer: Optional[Callable[[str], str]] = None,
+    zonerenamer: Optional[Callable[[str], str]] = None,
+) -> pd.DataFrame:
     # pylint: disable=too-many-arguments
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
@@ -26,23 +26,20 @@ def rmsvolumetrics_txt2df(
     https://wiki.equinor.com/wiki/index.php/FMU_standards
 
     Args:
-        txtfile (str): path to file emitted by RMS Volumetrics job.
+        txtfile: path to file emitted by RMS Volumetrics job.
             Can also be a Path object.
-        columnrenamer (dict): dictionary for renaming column. Will be merged
+        columnrenamer: dictionary for renaming column. Will be merged
             with a default renaming dictionary (anything specified here will
             override any defaults)
-        phase (str): stating typically 'GAS', 'OIL' or 'TOTAL', signifying
+        phase: stating typically 'GAS', 'OIL' or 'TOTAL', signifying
             what kind of data is in the file. Will be appended to column names,
             and is guessed from filename if not provided.
-        outfile (str): filename to write CSV data to.
+        outfile: filename to write CSV data to.
             If directory does not exist, it will be made.
         regionrenamer: a function that when applied on strings, return a
             new string. If used, will be applied to every region value,
             using pandas.Series.apply()
         zonerenamer: ditto for the zone column
-
-    Return:
-        pandas.DataFrame
 
     The renamer functions could be defined like this::
 
@@ -67,7 +64,7 @@ def rmsvolumetrics_txt2df(
     if "Real" in vol_df.columns:
         vol_df.drop("Real", axis=1, inplace=True)
 
-    if not phase:
+    if phase is None:
         phase = guess_phase(txtfile)
 
     columns = {
@@ -112,7 +109,7 @@ def rmsvolumetrics_txt2df(
     return vol_df
 
 
-def guess_phase(text):
+def guess_phase(text: str) -> str:
     """From a text-file, guess which phase the text file
     concerns, oil, gas or the "total" phase.
 
@@ -134,7 +131,7 @@ def guess_phase(text):
     raise ValueError("Not able to guess phase")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Set up parser for command line utility"""
     parser = argparse.ArgumentParser(
         description="Convert single RMS volumetrics files to CSV"
@@ -162,7 +159,7 @@ def get_parser():
     return parser
 
 
-def rmsvolumetrics2csv_main():
+def rmsvolumetrics2csv_main() -> None:
     """Endpoint for command line utility for converting one file at a time"""
     parser = get_parser()
     args = parser.parse_args()

@@ -26,13 +26,13 @@ class ConfigParser:
                 "the QCProperties() instance instead!"
             )
 
-        self._aggregation_controls = dict(
+        self._aggregation_controls: dict = dict(
             properties=[],
             selectors=[],
             weights={},
         )
 
-        self._prop2df_controls = dict(
+        self._prop2df_controls: dict = dict(
             unique_parameters=[],
             properties_input_names=[],
             selectors_input_names=[],
@@ -41,7 +41,7 @@ class ConfigParser:
             usercodes={},
         )
 
-        self._data_loading_input = dict(pfiles={}, pdates={})
+        self._data_loading_input: dict = dict(pfiles={}, pdates={})
 
         # set data loading input
         for item in ["grid", "wells", "bwells", "path", "verbosity"]:
