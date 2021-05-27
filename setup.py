@@ -7,7 +7,7 @@ from os.path import basename, exists
 from shutil import rmtree
 import fnmatch
 
-from distutils.command.clean import clean as _clean
+from distutils.command.clean import clean as _clean  # type: ignore
 from setuptools import setup, find_packages
 
 CMDCLASS = {}
@@ -50,9 +50,10 @@ TEST_REQUIREMENTS = [
 ]
 
 DOCS_REQUIREMENTS = [
-    "rstcheck",
+    "autoapi" "rstcheck",
     "sphinx",
     "sphinx-argparse",
+    "sphinx-autodoc-typehints",
     "sphinx_rtd_theme",
 ]
 
