@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.7.0 documentation</title>
+  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.7.1.dev4+g0733f7d documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.7.1.dev4+g0733f7d
               </div>
             
           
@@ -177,20 +177,20 @@
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="rmsvolumetrics_txt2df"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df">[docs]</a><span class="k">def</span> <span class="nf">rmsvolumetrics_txt2df</span><span class="p">(</span>
-    <span class="n">txtfile</span><span class="p">,</span>
-    <span class="n">columnrenamer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">phase</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">outfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">regionrenamer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">zonerenamer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+    <span class="n">txtfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">columnrenamer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outfile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">regionrenamer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">zonerenamer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="sd">&quot;&quot;&quot;Parse the volumetrics txt file from RMS as Pandas dataframe</span>
 
@@ -198,23 +198,20 @@
 <span class="sd">    https://wiki.equinor.com/wiki/index.php/FMU_standards</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        txtfile (str): path to file emitted by RMS Volumetrics job.</span>
+<span class="sd">        txtfile: path to file emitted by RMS Volumetrics job.</span>
 <span class="sd">            Can also be a Path object.</span>
-<span class="sd">        columnrenamer (dict): dictionary for renaming column. Will be merged</span>
+<span class="sd">        columnrenamer: dictionary for renaming column. Will be merged</span>
 <span class="sd">            with a default renaming dictionary (anything specified here will</span>
 <span class="sd">            override any defaults)</span>
-<span class="sd">        phase (str): stating typically &#39;GAS&#39;, &#39;OIL&#39; or &#39;TOTAL&#39;, signifying</span>
+<span class="sd">        phase: stating typically &#39;GAS&#39;, &#39;OIL&#39; or &#39;TOTAL&#39;, signifying</span>
 <span class="sd">            what kind of data is in the file. Will be appended to column names,</span>
 <span class="sd">            and is guessed from filename if not provided.</span>
-<span class="sd">        outfile (str): filename to write CSV data to.</span>
+<span class="sd">        outfile: filename to write CSV data to.</span>
 <span class="sd">            If directory does not exist, it will be made.</span>
 <span class="sd">        regionrenamer: a function that when applied on strings, return a</span>
 <span class="sd">            new string. If used, will be applied to every region value,</span>
 <span class="sd">            using pandas.Series.apply()</span>
 <span class="sd">        zonerenamer: ditto for the zone column</span>
-
-<span class="sd">    Return:</span>
-<span class="sd">        pandas.DataFrame</span>
 
 <span class="sd">    The renamer functions could be defined like this::</span>
 
@@ -239,7 +236,7 @@
     <span class="k">if</span> <span class="s2">&quot;Real&quot;</span> <span class="ow">in</span> <span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">vol_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">phase</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">guess_phase</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span>
 
     <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span>
@@ -284,7 +281,7 @@
     <span class="k">return</span> <span class="n">vol_df</span></div>
 
 
-<div class="viewcode-block" id="guess_phase"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.guess_phase">[docs]</a><span class="k">def</span> <span class="nf">guess_phase</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="guess_phase"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.guess_phase">[docs]</a><span class="k">def</span> <span class="nf">guess_phase</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;From a text-file, guess which phase the text file</span>
 <span class="sd">    concerns, oil, gas or the &quot;total&quot; phase.</span>
 
@@ -306,7 +303,7 @@
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not able to guess phase&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_parser"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">[docs]</a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">():</span>
+<div class="viewcode-block" id="get_parser"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">[docs]</a><span class="k">def</span> <span class="nf">get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Set up parser for command line utility&quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Convert single RMS volumetrics files to CSV&quot;</span>
@@ -334,7 +331,7 @@
     <span class="k">return</span> <span class="n">parser</span></div>
 
 
-<div class="viewcode-block" id="rmsvolumetrics2csv_main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">[docs]</a><span class="k">def</span> <span class="nf">rmsvolumetrics2csv_main</span><span class="p">():</span>
+<div class="viewcode-block" id="rmsvolumetrics2csv_main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">[docs]</a><span class="k">def</span> <span class="nf">rmsvolumetrics2csv_main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Endpoint for command line utility for converting one file at a time&quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>

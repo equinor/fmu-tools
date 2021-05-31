@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.7.0 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.7.1.dev4+g0733f7d documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.7.1.dev4+g0733f7d
               </div>
             
           
@@ -229,47 +229,52 @@ Defaults to “well_date_rft.txt”</p></li>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.check_and_parse_config">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">check_and_parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#check_and_parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.check_and_parse_config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">check_and_parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#check_and_parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.check_and_parse_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks config, and returns a validated and defaults-filled config
 dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.get_well_coords">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">get_well_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellname</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#get_well_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.get_well_coords" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">get_well_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#get_well_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.get_well_coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts  well coordinates as a (wellpoints, 3) numpy array
 from a ROXAPI RMS project reference.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project</strong> – Roxapi project reference.</p></li>
-<li><p><strong>wellname</strong> (<em>str</em>) – Name of well as it exists in the RMS project</p></li>
+<li><p><strong>wellname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of well as it exists in the RMS project</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.strictly_downward">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">strictly_downward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#strictly_downward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.strictly_downward" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">strictly_downward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#strictly_downward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.strictly_downward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a well trajectory has absolutely no horizontal sections</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>coords</strong> (<em>np.ndarray</em>) – n x 4 array of coordinates, only
+<dd class="field-odd"><p><strong>coords</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – n x 4 array of coordinates, only
 z values in 4th column is used.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if there are no horizontals.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if there are no horizontals.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.interp_from_md">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_md" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_md" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to interpolate East, North, TVD values of a well point
 defined by its name (wname) and its corresponding MD point (md_value).</p>
 <p>The interpolation of the well trajectory will be linear if linear = True,
@@ -279,18 +284,18 @@ using cubic spline otherwise.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(x, y, z) along the wellpath at requested measured depth value.</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x, y and z along the wellpath at requested measured depth value.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.interp_from_xyz">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_xyz" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolate MD value of a well point defined by its name (wellname)
 and its corresponding East, North, TVD values (xyz tuple)</p>
 <p>The coords input array should consist of rows:</p>
@@ -306,23 +311,23 @@ of the well trajectory points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coords</strong> (<em>np.narray</em>) – </p></li>
-<li><p><strong>xyz</strong> (<em>tuple</em>) – x, y and z for the coordinate where MD is requested.</p></li>
-<li><p><strong>interpolation</strong> (<em>str</em>) – Use either “cubic” (default) or “linear”</p></li>
+<li><p><strong>coords</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – </p></li>
+<li><p><strong>xyz</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – x, y and z for the coordinate where MD is requested.</p></li>
+<li><p><strong>interpolation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Use either “cubic” (default) or “linear”</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Measured depth value at (x,y,z)</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Measured depth value at (x,y,z)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">ertobs_df_to_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportdir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldatefile</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'well_date_rft.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'rft_ertobs.csv'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#ertobs_df_to_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">ertobs_df_to_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldatefile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'well_date_rft.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rft_ertobs.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#ertobs_df_to_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exports data from a dataframe into ERT observations files.
 The input here is essentially the input dataframe, but where all “holes” in
 MD or XYZ have been filled.</p>
@@ -350,43 +355,49 @@ second DATE pr. well etc.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dframe</strong> (<em>pd.DataFrame</em>) – Contains data for RFT observations, one
+<li><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Contains data for RFT observations, one
 observations pr. row</p></li>
-<li><p><strong>exportdir</strong> (<em>str</em>) – Path to directory where export is to happen. Must
+<li><p><strong>exportdir</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Path to directory where export is to happen. Must
 exists.</p></li>
-<li><p><strong>welldatefile</strong> (<em>str</em>) – Filename to write the “index” of observations to.</p></li>
-<li><p><strong>filename</strong> (<em>str</em>) – Filename for raw CSV data, for future use in GENDATA_RFT</p></li>
+<li><p><strong>welldatefile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Filename to write the “index” of observations to.</p></li>
+<li><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Filename for raw CSV data, for future use in GENDATA_RFT</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">fill_missing_md_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords_pr_well</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#fill_missing_md_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">fill_missing_md_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords_pr_well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#fill_missing_md_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill missing MD or XYZ values in incoming dataframe, interpolating
 in given well trajectories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dframe</strong> (<em>pd.DataFrame</em>) – Must contain WELL_NAME, EAST, NORTH, MD, TVD</p></li>
-<li><p><strong>coords_pr_well</strong> (<em>dict</em>) – One key for each WELL_NAME, pointing to a n by 3
+<li><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Must contain WELL_NAME, EAST, NORTH, MD, TVD</p></li>
+<li><p><strong>coords_pr_well</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – One key for each WELL_NAME, pointing to a n by 3
 numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None (modifies incoming dataframe inplace)</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.main">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.main" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main function to be called from a RMS client python script.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – configuration as a dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -396,7 +407,7 @@ numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 <span id="fmu-tools-rms-qcreset-module"></span><h2>fmu.tools.rms.qcreset module<a class="headerlink" href="#module-fmu.tools.rms.qcreset" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.qcreset.set_data_constant">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_constant" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data from RMS constant.</p>
 <p>This method is a utility in order to set surface and 3D grid property data
 to a given value. The value must be of the correct type (if discrete 3D
@@ -448,7 +459,7 @@ grid models.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.qcreset.set_data_empty">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_empty" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data from RMS empty.</p>
 <p>This method is a utility in order to set empty surface and 3D grid property
 data. The value must be of the correct type (if discrete 3D property for
@@ -490,7 +501,7 @@ grid models.</p>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>config</strong> – Configration as a dictionary. See examples in documentation</p>
+<dd class="field-odd"><p><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) – Configration as a dictionary. See examples in documentation</p>
 </dd>
 </dl>
 </dd></dl>
@@ -508,24 +519,21 @@ grid models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>txtfile</strong> (<em>str</em>) – path to file emitted by RMS Volumetrics job.
+<li><p><strong>txtfile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – path to file emitted by RMS Volumetrics job.
 Can also be a Path object.</p></li>
-<li><p><strong>columnrenamer</strong> (<em>dict</em>) – dictionary for renaming column. Will be merged
+<li><p><strong>columnrenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – dictionary for renaming column. Will be merged
 with a default renaming dictionary (anything specified here will
 override any defaults)</p></li>
-<li><p><strong>phase</strong> (<em>str</em>) – stating typically ‘GAS’, ‘OIL’ or ‘TOTAL’, signifying
+<li><p><strong>phase</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – stating typically ‘GAS’, ‘OIL’ or ‘TOTAL’, signifying
 what kind of data is in the file. Will be appended to column names,
 and is guessed from filename if not provided.</p></li>
-<li><p><strong>outfile</strong> (<em>str</em>) – filename to write CSV data to.
+<li><p><strong>outfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – filename to write CSV data to.
 If directory does not exist, it will be made.</p></li>
-<li><p><strong>regionrenamer</strong> – a function that when applied on strings, return a
+<li><p><strong>regionrenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – a function that when applied on strings, return a
 new string. If used, will be applied to every region value,
 using pandas.Series.apply()</p></li>
-<li><p><strong>zonerenamer</strong> – ditto for the zone column</p></li>
+<li><p><strong>zonerenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – ditto for the zone column</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 <p>The renamer functions could be defined like this:</p>
@@ -534,6 +542,11 @@ using pandas.Series.apply()</p></li>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -561,12 +574,22 @@ concerns, oil, gas or the “total” phase.</p>
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.get_parser">
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.get_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up parser for command line utility</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentParser</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics2csv_main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics2csv_main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Endpoint for command line utility for converting one file at a time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -582,24 +605,21 @@ concerns, oil, gas or the “total” phase.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>txtfile</strong> (<em>str</em>) – path to file emitted by RMS Volumetrics job.
+<li><p><strong>txtfile</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – path to file emitted by RMS Volumetrics job.
 Can also be a Path object.</p></li>
-<li><p><strong>columnrenamer</strong> (<em>dict</em>) – dictionary for renaming column. Will be merged
+<li><p><strong>columnrenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – dictionary for renaming column. Will be merged
 with a default renaming dictionary (anything specified here will
 override any defaults)</p></li>
-<li><p><strong>phase</strong> (<em>str</em>) – stating typically ‘GAS’, ‘OIL’ or ‘TOTAL’, signifying
+<li><p><strong>phase</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – stating typically ‘GAS’, ‘OIL’ or ‘TOTAL’, signifying
 what kind of data is in the file. Will be appended to column names,
 and is guessed from filename if not provided.</p></li>
-<li><p><strong>outfile</strong> (<em>str</em>) – filename to write CSV data to.
+<li><p><strong>outfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – filename to write CSV data to.
 If directory does not exist, it will be made.</p></li>
-<li><p><strong>regionrenamer</strong> – a function that when applied on strings, return a
+<li><p><strong>regionrenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – a function that when applied on strings, return a
 new string. If used, will be applied to every region value,
 using pandas.Series.apply()</p></li>
-<li><p><strong>zonerenamer</strong> – ditto for the zone column</p></li>
+<li><p><strong>zonerenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – ditto for the zone column</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 <p>The renamer functions could be defined like this:</p>
@@ -608,6 +628,11 @@ using pandas.Series.apply()</p></li>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

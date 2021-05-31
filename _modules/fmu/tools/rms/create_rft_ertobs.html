@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.7.0 documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.7.1.dev4+g0733f7d documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.7.1.dev4+g0733f7d
               </div>
             
           
@@ -205,6 +205,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -234,7 +235,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="check_and_parse_config"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">[docs]</a><span class="k">def</span> <span class="nf">check_and_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="check_and_parse_config"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">[docs]</a><span class="k">def</span> <span class="nf">check_and_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Checks config, and returns a validated and defaults-filled config</span>
 <span class="sd">    dictionary&quot;&quot;&quot;</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -321,10 +322,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        project: Roxapi project reference.</span>
-<span class="sd">        wellname (str): Name of well as it exists in the RMS project</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        np.array</span>
+<span class="sd">        wellname: Name of well as it exists in the RMS project</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">project</span><span class="o">.</span><span class="n">wells</span><span class="p">[</span><span class="n">wellname</span><span class="p">]</span>
@@ -333,20 +331,22 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="strictly_downward"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">[docs]</a><span class="k">def</span> <span class="nf">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="strictly_downward"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">[docs]</a><span class="k">def</span> <span class="nf">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Check if a well trajectory has absolutely no horizontal sections</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        coords (np.ndarray): n x 4 array of coordinates, only</span>
+<span class="sd">        coords: n x 4 array of coordinates, only</span>
 <span class="sd">            z values in 4th column is used.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        True if there are no horizontals.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">coords</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">3</span><span class="p">])</span></div>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">coords</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">3</span><span class="p">]))</span></div>
 
 
-<div class="viewcode-block" id="interp_from_md"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">[docs]</a><span class="k">def</span> <span class="nf">interp_from_md</span><span class="p">(</span><span class="n">md_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<div class="viewcode-block" id="interp_from_md"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">[docs]</a><span class="k">def</span> <span class="nf">interp_from_md</span><span class="p">(</span>
+    <span class="n">md_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to interpolate East, North, TVD values of a well point</span>
 <span class="sd">    defined by its name (wname) and its corresponding MD point (md_value).</span>
@@ -359,7 +359,7 @@
 <span class="sd">        md, x, y, z</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple: (x, y, z) along the wellpath at requested measured depth value.</span>
+<span class="sd">        x, y and z along the wellpath at requested measured depth value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t interpolate with no well coordinates&quot;</span><span class="p">)</span>
@@ -376,11 +376,14 @@
         <span class="n">cs_y</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># North</span>
         <span class="n">cs_z</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])</span>  <span class="c1"># TVD</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cs_x</span><span class="p">(</span><span class="n">md_value</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cs_y</span><span class="p">(</span><span class="n">md_value</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cs_z</span><span class="p">(</span><span class="n">md_value</span><span class="p">)))</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Non-supported interpolation method: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">)</span>
-    <span class="k">return</span> <span class="kc">None</span></div>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-supported interpolation method: </span><span class="si">{</span><span class="n">interpolation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="interp_from_xyz"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">[docs]</a><span class="k">def</span> <span class="nf">interp_from_xyz</span><span class="p">(</span><span class="n">xyz</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="interp_from_xyz"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">[docs]</a><span class="k">def</span> <span class="nf">interp_from_xyz</span><span class="p">(</span>
+    <span class="n">xyz</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Interpolate MD value of a well point defined by its name (wellname)</span>
 <span class="sd">    and its corresponding East, North, TVD values (xyz tuple)</span>
 
@@ -397,12 +400,12 @@
 <span class="sd">    of the well trajectory points.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        coords (np.narray)</span>
-<span class="sd">        xyz (tuple): x, y and z for the coordinate where MD is requested.</span>
-<span class="sd">        interpolation (str): Use either &quot;cubic&quot; (default) or &quot;linear&quot;</span>
+<span class="sd">        coords</span>
+<span class="sd">        xyz: x, y and z for the coordinate where MD is requested.</span>
+<span class="sd">        interpolation: Use either &quot;cubic&quot; (default) or &quot;linear&quot;</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Measured depth value at (x,y,z)</span>
+<span class="sd">        Measured depth value at (x,y,z)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Interpolate to get corresponding MD</span>
@@ -472,7 +475,8 @@
             <span class="n">closest_md</span> <span class="o">=</span> <span class="n">my_md</span>
             <span class="n">dist_min</span> <span class="o">=</span> <span class="n">dist</span>
     <span class="n">dist_min</span> <span class="o">=</span> <span class="n">dist_min</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="n">md_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">closest_md</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">closest_md</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">md_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">closest_md</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;MD estimated on undulating wellpath: </span><span class="si">{}</span><span class="s2"> (mismatch = </span><span class="si">{:.4f}</span><span class="s2"> m)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">md_value</span><span class="p">,</span> <span class="n">dist_min</span>
@@ -553,12 +557,12 @@
 <span class="sd">    second DATE pr. well etc.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dframe (pd.DataFrame): Contains data for RFT observations, one</span>
+<span class="sd">        dframe: Contains data for RFT observations, one</span>
 <span class="sd">            observations pr. row</span>
-<span class="sd">        exportdir (str): Path to directory where export is to happen. Must</span>
+<span class="sd">        exportdir: Path to directory where export is to happen. Must</span>
 <span class="sd">            exists.</span>
-<span class="sd">        welldatefile (str): Filename to write the &quot;index&quot; of observations to.</span>
-<span class="sd">        filename (str): Filename for raw CSV data, for future use in GENDATA_RFT</span>
+<span class="sd">        welldatefile: Filename to write the &quot;index&quot; of observations to.</span>
+<span class="sd">        filename: Filename for raw CSV data, for future use in GENDATA_RFT</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Dump directly to CSV, this is for future use:</span>
@@ -616,19 +620,18 @@
 
 
 <div class="viewcode-block" id="fill_missing_md_xyz"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">[docs]</a><span class="k">def</span> <span class="nf">fill_missing_md_xyz</span><span class="p">(</span>
-    <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">coords_pr_well</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+    <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">coords_pr_well</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fill missing MD or XYZ values in incoming dataframe, interpolating</span>
 <span class="sd">    in given well trajectories.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        dframe (pd.DataFrame): Must contain WELL_NAME, EAST, NORTH, MD, TVD</span>
-<span class="sd">        coords_pr_well (dict): One key for each WELL_NAME, pointing to a n by 3</span>
+<span class="sd">        dframe: Must contain WELL_NAME, EAST, NORTH, MD, TVD</span>
+<span class="sd">        coords_pr_well: One key for each WELL_NAME, pointing to a n by 3</span>
 <span class="sd">            numpy matrix with well coordinates (as outputted by roxapi)</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        None (modifies incoming dataframe inplace)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]):</span>
@@ -663,7 +666,7 @@
     <span class="k">return</span> <span class="n">dframe</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The main function to be called from a RMS client python script.</span>
 
 <span class="sd">    Args:</span>

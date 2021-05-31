@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.7.0 documentation</title>
+  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.7.1.dev4+g0733f7d documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.7.1.dev4+g0733f7d
               </div>
             
           
@@ -173,7 +173,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This private module in qcforward is used for grid statistics</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -207,9 +207,9 @@
 <div class="viewcode-block" id="GridStatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics">[docs]</a><span class="k">class</span> <span class="nc">GridStatistics</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
 <div class="viewcode-block" id="GridStatistics.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Main routine for evaulating if statistics from 3D grids is</span>
 <span class="sd">        within user specified thresholds.</span>
 
@@ -223,7 +223,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
         <span class="c1"># TO-DO:</span>
         <span class="c1"># self._validate_input(self._data)</span>
 
@@ -312,22 +312,22 @@
         <span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract property and selector data from actions</span>
 <span class="sd">        and convert to desired input format for QCProperties</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">selectors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">filters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">selectors</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
             <span class="n">properties</span><span class="p">[</span><span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]}</span>
 
         <span class="k">if</span> <span class="s2">&quot;filters&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
-            <span class="n">filters</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filters&quot;</span><span class="p">)</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;filters&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s2">&quot;selectors&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">filt</span> <span class="ow">in</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;selectors&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

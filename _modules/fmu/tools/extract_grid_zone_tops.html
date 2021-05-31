@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.extract_grid_zone_tops &mdash; fmu-tools 1.7.0 documentation</title>
+  <title>fmu.tools.extract_grid_zone_tops &mdash; fmu-tools 1.7.1.dev4+g0733f7d documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.7.1.dev4+g0733f7d
               </div>
             
           
@@ -191,7 +191,7 @@
 
 <div class="viewcode-block" id="extract_grid_zone_tops"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">[docs]</a><span class="k">def</span> <span class="nf">extract_grid_zone_tops</span><span class="p">(</span>
     <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">well_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">well_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">logrun</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
     <span class="n">trajectory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
     <span class="n">gridzonelog</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -227,6 +227,10 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specify either &#39;gridzonelog&#39; or &#39;grid&#39; and &#39;zone_param&quot;</span><span class="p">)</span>
 
     <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">well_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">well_list</span> <span class="o">=</span> <span class="p">[]</span>
+
     <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">well_list</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
