@@ -92,6 +92,61 @@ def test_fipmapper_regzone2fip():
 
 
 @pytest.mark.parametrize(
+    "map_data, expected_regions, expected_zones, expected_fipnums",
+    [
+        ({"region2fipnum": {"A": 1}, "zone2fipnum": {"U": 1}}, ["A"], ["U"], [1]),
+        (
+            {"region2fipnum": {"A": [1, 2]}, "zone2fipnum": {"U": 1}},
+            ["A"],
+            ["U"],
+            [1, 2],
+        ),
+        (
+            # Test sorting
+            {"region2fipnum": {"A": [2, 1]}, "zone2fipnum": {"U": [2, 1]}},
+            ["A"],
+            ["U"],
+            [1, 2],
+        ),
+        (
+            {
+                "region2fipnum": {"A": [2, 1], "B": 3},
+                "zone2fipnum": {"U": [1], "L": [3, 2]},
+            },
+            ["A", "B"],
+            ["L", "U"],
+            [1, 2, 3],
+        ),
+        pytest.param({}, [], [], [], marks=pytest.mark.xfail(raises=AssertionError)),
+        pytest.param(
+            {"region2fipnum": {"A": 1}},
+            ["A"],
+            [],
+            [1],
+            # get_zones fails here.
+            marks=pytest.mark.xfail(raises=AssertionError),
+        ),
+        pytest.param(
+            {"zone2fipnum": {"U": 1}},
+            [],
+            ["U"],
+            [1],
+            # get_regions fails here.
+            marks=pytest.mark.xfail(raises=AssertionError),
+        ),
+    ],
+)
+def test_get_regions_zones_fipnums(
+    map_data, expected_regions, expected_zones, expected_fipnums
+):
+    """Test the three functions get_regions, get_zones and get_fipnums"""
+    mapper = fipmapper.FipMapper(mapdata=map_data)
+    assert mapper.get_regions() == expected_regions
+    assert mapper.get_zones() == expected_zones
+    assert mapper.get_fipnums() == expected_fipnums
+
+
+@pytest.mark.parametrize(
     "input_dict, expected_dict",
     [
         ({}, {}),

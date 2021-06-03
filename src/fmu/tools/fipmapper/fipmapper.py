@@ -173,12 +173,12 @@ class FipMapper:
 
     def get_regions(self) -> List[str]:
         """Obtain a sorted list of the regions that exist in the map"""
-        assert "fipnum2region" in self._mapdata, "No data provided for regions"
+        assert "region2fipnum" in self._mapdata, "No data provided for regions"
         return sorted(self._mapdata["region2fipnum"].keys())
 
     def get_zones(self) -> List[str]:
         """Obtain a sorted list of the zones that exist in the map"""
-        assert "fipnum2region" in self._mapdata, "No data provided for regions"
+        assert "zone2fipnum" in self._mapdata, "No data provided for regions"
         return sorted(self._mapdata["zone2fipnum"].keys())
 
     def get_fipnums(self) -> List[str]:

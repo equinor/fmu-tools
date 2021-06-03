@@ -14,6 +14,86 @@ import pandas as pd
 @pytest.mark.parametrize(
     "mapdata, expected_disjointsets",
     [
+        (
+            # The first test proves the code on a three-by-three reservoir model
+            # which includes the major "cruxes" to be solved. This serves
+            # as both the motivation for the code and as demonstration of
+            # the solution.
+            #
+            # In the geomodel, the reservoir is three-by-three
+            # with region-zone pairs as follows:
+            #
+            #    +--------+--------+--------+
+            #    | (A, U) | (B, U) | (C, U) |
+            #    +--------+--------+--------+
+            #    | (A, M) | (B, M) | (C, M) |
+            #    +--------+--------+--------+
+            #    | (A, L) | (B, L) | (C, L) |
+            #    +--------+--------+--------+
+            #
+            # while in the dynamical (Eclipse) model the reservoir has
+            # a FIPNUM split like this:
+            #
+            #  regs: A    |   B     |    C       zones:
+            #     +-----------------+----+----+
+            #     |                 |  2 |  3 |    U
+            #     |       1         +----+----+
+            #     |                 |         |    M
+            #     +-----------------+    4    |
+            #     |       5         |         |    L
+            #     +-----------------+---------+
+            #
+            # The problem the code solves is to determine which of these cells
+            # that must be joined in order to have comparable numbers (when say
+            # volume is available for each cell in the geomodel and dynamical
+            # model separately.
+            #
+            # In this case, the joined structure must be a 4-cell partition:
+            #
+            #     +-----------------+----+----+
+            #     |                 |    c    |
+            #     |       a         +----+----+
+            #     |                 |         |
+            #     +-----------------+    d    |
+            #     |       b         |         |
+            #     +-----------------+---------+
+            #
+            # where the code identifies the joined cell by its "root", which
+            # is a triplet (assume arbitrary choice) identifying one of
+            # the components.
+            {
+                # The input is just mappings from the (region, zone)
+                # "tuple" in the geomodel into FIPNUM in the dynamical
+                # model. The spatial layout of regions, zones and FIPNUM
+                # as displayed above does not matter.
+                "region2fipnum": {
+                    "A": [1, 5],
+                    "B": [1, 5],
+                    "C": [2, 3, 4],
+                },
+                "zone2fipnum": {
+                    "U": [1, 2, 3],
+                    "M": [1, 4],
+                    "L": [5, 4],
+                },
+            },
+            pd.DataFrame(
+                columns=["REGION", "ZONE", "FIPNUM", "ROOT"],
+                data=[
+                    ["A", "L", 5, ("B", "L", 5)],  # b
+                    ["A", "M", 1, ("B", "U", 1)],  # a
+                    ["A", "U", 1, ("B", "U", 1)],  # a
+                    ["B", "L", 5, ("B", "L", 5)],  # b
+                    ["B", "M", 1, ("B", "U", 1)],  # a
+                    ["B", "U", 1, ("B", "U", 1)],  # a
+                    ["C", "L", 4, ("C", "M", 4)],  # d
+                    ["C", "M", 4, ("C", "M", 4)],  # d
+                    ["C", "U", 2, ("C", "U", 3)],  # c
+                    ["C", "U", 3, ("C", "U", 3)],  # c
+                    # (4 unique ROOTs)
+                ],
+            ),
+        ),
         pytest.param({}, [], marks=pytest.mark.xfail(raises=AssertionError)),
         (
             # Only one cell in both regzone partition and fipnum partition:
@@ -97,36 +177,17 @@ import pandas as pd
             ],
         ),
         (
-            # Almost three-by-three reservoir, used in demonstration
-            # of the problem solved, involving all "cruxes":
+            # Two regions, one zone, 2 horizontal FIPNUMs which don't align
+            # with the region boundary -> 1 group:
             {
-                "region2fipnum": {
-                    "A": [1, 5],
-                    "B": [1, 5],
-                    "C": [2, 3, 4],
-                },
-                "zone2fipnum": {
-                    "U": [1, 2, 3],
-                    "M": [1, 4],
-                    "L": [5, 4],
-                },
+                "region2fipnum": {"A": [1], "B": [1, 2]},
+                "zone2fipnum": {"U": [1, 2]},
             },
-            pd.DataFrame(
-                columns=["REGION", "ZONE", "FIPNUM", "ROOT"],
-                data=[
-                    ["A", "L", 5, ("B", "L", 5)],
-                    ["A", "M", 1, ("B", "U", 1)],
-                    ["A", "U", 1, ("B", "U", 1)],
-                    ["B", "L", 5, ("B", "L", 5)],
-                    ["B", "M", 1, ("B", "U", 1)],
-                    ["B", "U", 1, ("B", "U", 1)],
-                    ["C", "L", 4, ("C", "M", 4)],
-                    ["C", "M", 4, ("C", "M", 4)],
-                    ["C", "U", 2, ("C", "U", 3)],
-                    ["C", "U", 3, ("C", "U", 3)],
-                    # (4 unique ROOTs)
-                ],
-            ),
+            [
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 2)},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 2)},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "ROOT": ("B", "U", 2)},
+            ],
         ),
     ],
 )
