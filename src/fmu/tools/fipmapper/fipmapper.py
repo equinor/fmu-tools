@@ -4,7 +4,7 @@ from pathlib import Path
 import logging
 import itertools
 import collections
-from typing import Union, Dict, List, Any, Optional
+from typing import Union, Dict, List, Any, Optional, Tuple
 
 import yaml
 import pandas as pd
@@ -397,6 +397,70 @@ def _equivalent_cells(
     comparable to the value for the region
     """
     return ((reg1 == reg2) and (zon1 == zon2)) or (fip1 == fip2)
+
+
+def regions_in_set(dframe: pd.DataFrame) -> Dict[int, List[str]]:
+    """From the dataframe returned by disjoint_sets(), compute
+    a dictionary to map from a set index to a list of regions
+    that are members of that set index
+
+    Args:
+        dframe: The dataframe emitted by disjoint_sets()
+    """
+    if dframe.empty:
+        return {}
+    return (
+        dframe.groupby("SET")["REGION"].apply(set).apply(list).apply(sorted).to_dict()
+    )
+
+
+def zones_in_set(dframe: pd.DataFrame) -> Dict[int, List[str]]:
+    """From the dataframe returned by disjoint_sets(), compute
+    a dictionary to map from a set index to a list of zones
+    that are members of that set index
+
+    Args:
+        dframe: The dataframe emitted by disjoint_sets()
+    """
+    if dframe.empty:
+        return {}
+    return dframe.groupby("SET")["ZONE"].apply(set).apply(list).apply(sorted).to_dict()
+
+
+def fipnums_in_set(dframe: pd.DataFrame) -> Dict[int, List[int]]:
+    """From the dataframe returned by disjoint_sets(), compute
+    a dictionary to map from a set index to a list of FIPNUM values
+    that are members of that set index
+
+    Args:
+        dframe: The dataframe emitted by disjoint_sets()
+    """
+    if dframe.empty:
+        return {}
+    return (
+        dframe.groupby("SET")["FIPNUM"].apply(set).apply(list).apply(sorted).to_dict()
+    )
+
+
+def regzonefips_in_set(dframe: pd.DataFrame) -> Dict[int, List[Tuple[str, str, int]]]:
+    """From the dataframe returned by disjoint_sets(), compute
+    a dictionary to map from a set index to a list of tuples
+    of the region, zones and fipnums in the set.
+
+    Args:
+        dframe: The dataframe emitted by disjoint_sets()
+    """
+    if dframe.empty:
+        return {}
+    dframe = dframe.copy()
+    dframe["reg-zone-fip"] = dframe[["REGION", "ZONE", "FIPNUM"]].apply(tuple, axis=1)
+    return (
+        dframe.groupby("SET")["reg-zone-fip"]
+        .apply(set)
+        .apply(list)
+        .apply(sorted)
+        .to_dict()
+    )
 
 
 def webviz_to_prtvol2csv(webvizdict: dict):

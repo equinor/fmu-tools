@@ -199,3 +199,89 @@ def test_disjointsets(mapdata, expected_disjointsets):
         mapper.disjoint_sets()[cols].sort_values(by=cols, axis=0),
         expected_dframe.sort_values(by=cols, axis=0),
     )
+
+
+@pytest.mark.parametrize(
+    "dframe_records, expected_regions, expected_zones, "
+    "expected_fipnums, expected_regzonefips",
+    [
+        ([{}], {}, {}, {}, {}),
+        (
+            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
+            {0: ["A"]},
+            {0: ["U"]},
+            {0: [1]},
+            {0: [("A", "U", 1)]},
+        ),
+        (
+            [
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+            ],
+            {0: ["A", "B"]},
+            {0: ["U"]},
+            {0: [1]},
+            {0: [("A", "U", 1), ("B", "U", 1)]},
+        ),
+        (
+            [
+                # Switched order of rows compared to above:
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+            ],
+            {0: ["A", "B"]},
+            {0: ["U"]},
+            {0: [1]},
+            {0: [("A", "U", 1), ("B", "U", 1)]},
+        ),
+        (
+            [
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 1},
+            ],
+            {0: ["A"], 1: ["B"]},
+            {0: ["U"], 1: ["U"]},
+            {0: [1], 1: [2]},
+            {0: [("A", "U", 1)], 1: [("B", "U", 2)]},
+        ),
+        (
+            # The full example from the top of this file:
+            pd.DataFrame(
+                columns=["REGION", "ZONE", "FIPNUM", "SET"],
+                data=[
+                    ["A", "L", 5, 0],
+                    ["A", "M", 1, 1],
+                    ["A", "U", 1, 1],
+                    ["B", "L", 5, 0],
+                    ["B", "M", 1, 1],
+                    ["B", "U", 1, 1],
+                    ["C", "L", 4, 2],
+                    ["C", "M", 4, 2],
+                    ["C", "U", 2, 3],
+                    ["C", "U", 3, 3],
+                ],
+            ).to_dict(orient="records"),
+            {0: ["A", "B"], 1: ["A", "B"], 2: ["C"], 3: ["C"]},
+            {0: ["L"], 1: ["M", "U"], 2: ["L", "M"], 3: ["U"]},
+            {0: [5], 1: [1], 2: [4], 3: [2, 3]},
+            {
+                0: [("A", "L", 5), ("B", "L", 5)],
+                1: [("A", "M", 1), ("A", "U", 1), ("B", "M", 1), ("B", "U", 1)],
+                2: [("C", "L", 4), ("C", "M", 4)],
+                3: [("C", "U", 2), ("C", "U", 3)],
+            },
+        ),
+    ],
+)
+def test_set_lookups(
+    dframe_records,
+    expected_regions,
+    expected_zones,
+    expected_fipnums,
+    expected_regzonefips,
+):
+    dframe = pd.DataFrame(dframe_records)
+    assert fipmapper.regions_in_set(dframe) == expected_regions
+    assert fipmapper.zones_in_set(dframe) == expected_zones
+    assert fipmapper.fipnums_in_set(dframe) == expected_fipnums
+    assert fipmapper.regzonefips_in_set(dframe) == expected_regzonefips
