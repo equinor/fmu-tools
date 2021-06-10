@@ -47,6 +47,7 @@ TEST_REQUIREMENTS = [
     "pre-commit",
     "pytest",
     "pytest-cov",
+    "types-PyYAML",
 ]
 
 DOCS_REQUIREMENTS = [
