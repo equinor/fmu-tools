@@ -158,6 +158,20 @@ def test_volumetrics():
     assert "FAULTSEGMENT" in dframe.columns
 
 
+def test_merge_rms_volumetrics_explicit(tmpdir):
+    tmpdir.chdir()
+    Path("test_oil_1.txt").write_text("Zone  Bulk\nUpper  1.0")
+    Path("test_gas_1.txt").write_text("Zone  Bulk\nUpper  1.0")
+    Path("test_total_1.txt").write_text("Zone  Bulk\nUpper  1.0")
+    pd.testing.assert_frame_equal(
+        volumetrics.merge_rms_volumetrics("test"),
+        pd.DataFrame(
+            [{"ZONE": "Upper", "BULK_OIL": 1.0, "BULK_GAS": 1.0, "BULK_TOTAL": 1.0}]
+        ),
+        check_like=True,
+    )
+
+
 @pytest.mark.integration
 def test_commandlineclient_installed():
     """Test endpoint is installed"""

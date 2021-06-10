@@ -5,14 +5,58 @@ import logging
 import argparse
 import signal
 from pathlib import Path
-from typing import Dict, Optional, Callable
+from typing import Dict, Optional, Callable, List, Union
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
+def merge_rms_volumetrics(filebase: str, rmsrealsuffix: str = "_1") -> pd.DataFrame:
+    """Locate, parse and merge multiple volumetrics output files from RMS
+
+    Columns in parsed files will be renamed according to the hydrocarbon phase,
+    which will be deduced from the filenames. Columns will be merged
+    horizontally on common column names (typically Region, Zone, Facies,
+    Licence boundary etc.)
+
+    Args:
+        filebase: Filename base, with absolute or relative path included,
+            "<filebase>_oil_1.txt", "<filebase>_gas_1.txt", etc will be looked for.
+        rmsrealsuffix: String that will be used when searching for files. In a
+            normal FMU context, this should always be kept as the default "_1".
+    """
+    volframes = [
+        rmsvolumetrics_txt2df(volfile)
+        for volfile in _find_volumetrics_files(filebase, rmsrealsuffix)
+    ]
+
+    common_columns = list(
+        set.intersection(*[set(frame.columns) for frame in volframes])
+    )
+
+    # Merge all frames on the commmon columns:
+    merged_dframe = pd.DataFrame(columns=common_columns)
+    for frame in volframes:
+        merged_dframe = pd.merge(merged_dframe, frame, on=common_columns, how="outer")
+    return merged_dframe
+
+
+def _find_volumetrics_files(filebase: str, rmsrealsuffix: str) -> List[Path]:
+    """Find files on disk that potentially are volumetrics files given a filebase."""
+
+    phases_to_look_for = ["oil", "gas", "total"]
+
+    filesfound = []
+
+    for phase in phases_to_look_for:
+        filecandidate = Path(filebase + "_" + phase + rmsrealsuffix + ".txt")
+        if filecandidate.exists():
+            filesfound.append(filecandidate)
+    return filesfound
+
+
 def rmsvolumetrics_txt2df(
-    txtfile: str,
+    txtfile: Union[Path, str],
     columnrenamer: Optional[Dict[str, str]] = None,
     phase: Optional[str] = None,
     outfile: Optional[str] = None,
@@ -65,7 +109,7 @@ def rmsvolumetrics_txt2df(
         vol_df.drop("Real", axis=1, inplace=True)
 
     if phase is None:
-        phase = guess_phase(txtfile)
+        phase = guess_phase(str(txtfile))
 
     columns = {
         "Zone": "ZONE",
