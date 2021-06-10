@@ -50,17 +50,18 @@ import pandas as pd
             #
             # In this case, the joined structure must be a 4-cell partition:
             #
-            #     +-----------------+----+----+
-            #     |                 |    c    |
-            #     |       a         +----+----+
+            #     +-----------------+---------+
+            #     |                 |    3    |
+            #     |       1         +---------+
             #     |                 |         |
-            #     +-----------------+    d    |
-            #     |       b         |         |
+            #     +-----------------+    2    |
+            #     |       0         |         |
             #     +-----------------+---------+
             #
-            # where the code identifies the joined cell by its "root", which
-            # is a triplet (assume arbitrary choice) identifying one of
-            # the components.
+            # where the code identifies each set of joined cells by a
+            # unique integer from a consecutive list starting at zero.
+            # The enumeration of sets are predictable, based on lexiographical
+            # sorts of REGION, ZONE and FIPNUM.
             {
                 # The input is just mappings from the (region, zone)
                 # "tuple" in the geomodel into FIPNUM in the dynamical
@@ -78,19 +79,18 @@ import pandas as pd
                 },
             },
             pd.DataFrame(
-                columns=["REGION", "ZONE", "FIPNUM", "ROOT"],
+                columns=["REGION", "ZONE", "FIPNUM", "SET"],
                 data=[
-                    ["A", "L", 5, ("B", "L", 5)],  # b
-                    ["A", "M", 1, ("B", "U", 1)],  # a
-                    ["A", "U", 1, ("B", "U", 1)],  # a
-                    ["B", "L", 5, ("B", "L", 5)],  # b
-                    ["B", "M", 1, ("B", "U", 1)],  # a
-                    ["B", "U", 1, ("B", "U", 1)],  # a
-                    ["C", "L", 4, ("C", "M", 4)],  # d
-                    ["C", "M", 4, ("C", "M", 4)],  # d
-                    ["C", "U", 2, ("C", "U", 3)],  # c
-                    ["C", "U", 3, ("C", "U", 3)],  # c
-                    # (4 unique ROOTs)
+                    ["A", "L", 5, 0],
+                    ["A", "M", 1, 1],
+                    ["A", "U", 1, 1],
+                    ["B", "L", 5, 0],
+                    ["B", "M", 1, 1],
+                    ["B", "U", 1, 1],
+                    ["C", "L", 4, 2],
+                    ["C", "M", 4, 2],
+                    ["C", "U", 2, 3],
+                    ["C", "U", 3, 3],
                 ],
             ),
         ),
@@ -98,43 +98,43 @@ import pandas as pd
         (
             # Only one cell in both regzone partition and fipnum partition:
             {"region2fipnum": {"A": 1}, "zone2fipnum": {"U": 1}},
-            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)}],
+            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
         ),
         (
             # Same as above, but test that we can provide it as list input:
             {"region2fipnum": {"A": [1]}, "zone2fipnum": {"U": [1]}},
-            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)}],
+            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
         ),
         (
             # FIPNUM split in two, gives only one group in return:
             {"region2fipnum": {"A": [1, 2]}, "zone2fipnum": {"U": [1, 2]}},
             [
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 2)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 2, "ROOT": ("A", "U", 2)},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 2, "SET": 0},
             ],
         ),
         (
             # FIPNUM split in two, and two zones, gives two groups in return:
             {"region2fipnum": {"A": [1, 2]}, "zone2fipnum": {"U": [1], "L": [2]}},
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "ROOT": ("A", "L", 2)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
         (
             # Two zones, one FIPNUM, gives one group in return:
             {"region2fipnum": {"A": 1}, "zone2fipnum": {"U": [1], "L": [1]}},
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
             ],
         ),
         (
             # Two regions, one FIPNUM, gives one group in return:
             {"region2fipnum": {"A": 1, "B": 1}, "zone2fipnum": {"U": 1}},
             [
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 1)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 1)},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
             ],
         ),
         (
@@ -144,10 +144,10 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 3], "L": [2, 4]},
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "ROOT": ("A", "L", 2)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 4, "ROOT": ("B", "L", 4)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 3, "ROOT": ("B", "U", 3)},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 4, "SET": 2},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 3, "SET": 3},
             ],
         ),
         (
@@ -157,10 +157,10 @@ import pandas as pd
                 "zone2fipnum": {"U": 1, "L": [2, 2]},  # Double for L is ignored.
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "ROOT": ("B", "L", 2)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 1)},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "ROOT": ("B", "L", 2)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 1)},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
         (
@@ -170,10 +170,10 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 2], "L": [1, 2]},
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("A", "U", 1)},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "ROOT": ("B", "U", 2)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "ROOT": ("B", "U", 2)},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 1},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 1},
             ],
         ),
         (
@@ -184,9 +184,9 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 2]},
             },
             [
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 2)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "ROOT": ("B", "U", 2)},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "ROOT": ("B", "U", 2)},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 0},
             ],
         ),
     ],

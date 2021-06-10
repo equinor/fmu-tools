@@ -3,6 +3,7 @@
 from pathlib import Path
 import logging
 import itertools
+import collections
 from typing import Union, Dict, List, Any, Optional
 
 import yaml
@@ -301,11 +302,14 @@ class FipMapper:
 
         Each row represents a cell in the partition where both region, zone and
         fipnum boundaries apply, this the finest possible partition the
-        fipmapper data allows. Each row is then assigned to a group signified
-        by the name of one of the cells in the group, the "root" cell. This
-        signifies the minimal grouping of data that must be applied in order
-        for volumes in the region/zone partition or fipnum partition to be
-        comparable.
+        fipmapper data allows. Each row is then assigned to a integer
+        identifier in the ``SET`` column. The chosen integers values for each
+        set is based on lexiographical sorting of regions, zones and fipnum
+        values.
+
+        These sets signifies the minimal grouping of data that must be applied
+        in order for volumes in the region/zone partition or fipnum partition
+        to be comparable.
         """
 
         # Generate all possible combinations of the regions and
@@ -352,7 +356,6 @@ class FipMapper:
         # Filter to only edges that determine which cell linkages
         # that should be grouped:
         neighbourlist = edges[edges["NEIGHBOURS"]]
-        print(neighbourlist)
 
         # Construct a disjoint set object of all the smallest cells that are
         # to be grouped/unionized:
@@ -369,11 +372,16 @@ class FipMapper:
             )
 
         # The union-find algorithm has now "named" each of the components
-        # in the disjoint set by a somewhat random mother/root node. Map this
-        # back to the dataframe and return:
-        dframe["ROOT"] = dframe.apply(
-            lambda x: ds.find((x["REGION"], x["ZONE"], x["FIPNUM"])), axis=1
-        )
+        # in the disjoint set by a somewhat random mother/root node. This root
+        # not is not any more a root compared to the other cells in the set,
+        # so each set is instead mapped to consecutive integers.
+        id_dict: dict = collections.defaultdict(lambda: len(id_dict))
+        dframe["SET"] = [
+            id_dict[root]
+            for root in dframe.sort_values(["REGION", "ZONE", "FIPNUM"]).apply(
+                lambda x: ds.find((x["REGION"], x["ZONE"], x["FIPNUM"])), axis=1
+            )
+        ]
         return dframe
 
 
@@ -388,12 +396,7 @@ def _equivalent_cells(
     treat these two FIPNUMs separately, they must be summed in order to be
     comparable to the value for the region
     """
-    if (reg1 == reg2) and (zon1 == zon2) and (fip1 == fip2):
-        # The mapping to itself is to be ignored.
-        return False
-    if ((reg1 == reg2) and (zon1 == zon2)) or (fip1 == fip2):
-        return True
-    return False
+    return ((reg1 == reg2) and (zon1 == zon2)) or (fip1 == fip2)
 
 
 def webviz_to_prtvol2csv(webvizdict: dict):
