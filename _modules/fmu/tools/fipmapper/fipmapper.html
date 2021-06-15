@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.fipmapper.fipmapper &mdash; fmu-tools 1.7.1.dev5+g1f5fa02 documentation</title>
+  <title>fmu.tools.fipmapper.fipmapper &mdash; fmu-tools 1.7.1.dev6+g8b1c199 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.1.dev5+g1f5fa02
+                1.7.1.dev6+g8b1c199
               </div>
             
           
@@ -174,9 +174,13 @@
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">disjoint_set</span> <span class="kn">import</span> <span class="n">DisjointSet</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -184,6 +188,7 @@
 <div class="viewcode-block" id="FipMapper"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper">[docs]</a><span class="k">class</span> <span class="nc">FipMapper</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">yamlfile</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mapdata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">skipstring</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -339,6 +344,21 @@
     <span class="k">def</span> <span class="nf">_fips2regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fips</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fip2region</span><span class="p">(</span><span class="n">fip_int</span><span class="p">)</span> <span class="k">for</span> <span class="n">fip_int</span> <span class="ow">in</span> <span class="n">fips</span><span class="p">]</span>
 
+<div class="viewcode-block" id="FipMapper.get_regions"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_regions">[docs]</a>    <span class="k">def</span> <span class="nf">get_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Obtain a sorted list of the regions that exist in the map&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for regions&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="FipMapper.get_zones"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_zones">[docs]</a>    <span class="k">def</span> <span class="nf">get_zones</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Obtain a sorted list of the zones that exist in the map&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for regions&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="FipMapper.get_fipnums"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_fipnums">[docs]</a>    <span class="k">def</span> <span class="nf">get_fipnums</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Obtain a sorted list of the fip numbers that exist in the map&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="s2">&quot;fipnum2region&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for regions&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;fipnum2region&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
 <div class="viewcode-block" id="FipMapper.fip2region"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2region">[docs]</a>    <span class="k">def</span> <span class="nf">fip2region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fip</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Maps one FIP(NUM) integer to list of Region strings. Each FIPNUM</span>
 <span class="sd">        can map to multiple regions, therefore a list is always returned for</span>
@@ -440,7 +460,179 @@
 <div class="viewcode-block" id="FipMapper.regzone2fip"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.regzone2fip">[docs]</a>    <span class="k">def</span> <span class="nf">regzone2fip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="n">fipreg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region2fip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
         <span class="n">fipzon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone2fip</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipreg</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipzon</span><span class="p">))))</span></div></div>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipreg</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipzon</span><span class="p">))))</span></div>
+
+<div class="viewcode-block" id="FipMapper.disjoint_sets"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets">[docs]</a>    <span class="k">def</span> <span class="nf">disjoint_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Determine the minimal disjoint sets of a reservoir</span>
+
+<span class="sd">        The disjoint sets returned consist of sets that can be split into</span>
+<span class="sd">        both a set of FIPxxxx list and a region/zone list. Thus, the sum of</span>
+<span class="sd">        any additive property is comparable on these disjoint sets.</span>
+
+<span class="sd">        The returned object is a dataframe that is to be used to group together</span>
+<span class="sd">        fipnums or regions/zones so they are summable.</span>
+
+<span class="sd">        Each row represents a cell in the partition where both region, zone and</span>
+<span class="sd">        fipnum boundaries apply, this the finest possible partition the</span>
+<span class="sd">        fipmapper data allows. Each row is then assigned to a integer</span>
+<span class="sd">        identifier in the ``SET`` column. The chosen integers values for each</span>
+<span class="sd">        set is based on lexiographical sorting of regions, zones and fipnum</span>
+<span class="sd">        values.</span>
+
+<span class="sd">        These sets signifies the minimal grouping of data that must be applied</span>
+<span class="sd">        in order for volumes in the region/zone partition or fipnum partition</span>
+<span class="sd">        to be comparable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate all possible combinations of the regions and</span>
+        <span class="c1"># zones we know of:</span>
+        <span class="n">regzone_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_regions</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zones</span><span class="p">()),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Map all of the region-zone combinations into the accompanying FIPNUMs:</span>
+        <span class="n">regzone_df</span><span class="p">[</span><span class="s2">&quot;FIPNUMS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regzone_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">regzone2fip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="c1"># The dataframe has lists in the FIPNUMS column when a reg/zone maps</span>
+        <span class="c1"># to multiple FIPNUMs. Unroll these into one row pr linked FIPNUM:</span>
+        <span class="n">dframe</span> <span class="o">=</span> <span class="n">_expand_regzone_df</span><span class="p">(</span><span class="n">regzone_df</span><span class="p">)</span>
+
+        <span class="c1"># The `dframe` now has one row pr. smallest &quot;cell&quot; that is interesting</span>
+        <span class="c1"># in the current context. In some sense, the &quot;intersection&quot; of all</span>
+        <span class="c1"># possible partitions.</span>
+
+        <span class="c1"># Create a dataframe of all possible combinations of these smallest cells:</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">dframe</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dummy</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">dframe</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dummy</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;dummy&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># When Pandas 1.2 is ubiqutous, replace the above statement with:</span>
+        <span class="c1"># edges = dframe.merge(dframe, how=&quot;cross&quot;)</span>
+
+        <span class="c1"># A partition is equivalent to an equivalence relation.</span>
+
+        <span class="c1"># Apply an equivalence relation to the cell combinations:</span>
+        <span class="n">edges</span><span class="p">[</span><span class="s2">&quot;NEIGHBOURS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">_equivalent_cells</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;REGION_x&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;ZONE_x&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;FIPNUM_x&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;REGION_y&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;ZONE_y&quot;</span><span class="p">],</span>
+                <span class="n">x</span><span class="p">[</span><span class="s2">&quot;FIPNUM_y&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Filter to only edges that determine which cell linkages</span>
+        <span class="c1"># that should be grouped:</span>
+        <span class="n">neighbourlist</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">edges</span><span class="p">[</span><span class="s2">&quot;NEIGHBOURS&quot;</span><span class="p">]]</span>
+
+        <span class="c1"># Construct a disjoint set object of all the smallest cells that are</span>
+        <span class="c1"># to be grouped/unionized:</span>
+        <span class="n">ds</span><span class="p">:</span> <span class="n">DisjointSet</span> <span class="o">=</span> <span class="n">DisjointSet</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">find</span><span class="p">((</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]))</span>
+
+        <span class="c1"># Apply the union-find algorithm to determine the partition</span>
+        <span class="c1"># where all equivalene relations are obeyed:</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">neighbourlist</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="s2">&quot;REGION_x&quot;</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;ZONE_x&quot;</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;FIPNUM_x&quot;</span><span class="p">]),</span>
+                <span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="s2">&quot;REGION_y&quot;</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;ZONE_y&quot;</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;FIPNUM_y&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># The union-find algorithm has now &quot;named&quot; each of the components</span>
+        <span class="c1"># in the disjoint set by a somewhat random mother/root node. This root</span>
+        <span class="c1"># not is not any more a root compared to the other cells in the set,</span>
+        <span class="c1"># so each set is instead mapped to consecutive integers.</span>
+        <span class="n">id_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">id_dict</span><span class="p">))</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;SET&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">id_dict</span><span class="p">[</span><span class="n">root</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;FIPNUM&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">find</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">])),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">dframe</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_equivalent_cells</span><span class="p">(</span>
+    <span class="n">reg1</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">zon1</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">fip1</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">reg2</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">zon2</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">fip2</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Define the equivalence relation for the reg-zone-fip reservoir partition</span>
+
+<span class="sd">    A pair of reg-zone-fip is in the same group if they must be treated together</span>
+<span class="sd">    when (and have properties summed). Say if you have a value for</span>
+<span class="sd">    a specific region, but this region contains two FIPNUMs. Then we can never</span>
+<span class="sd">    treat these two FIPNUMs separately, they must be summed in order to be</span>
+<span class="sd">    comparable to the value for the region</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">reg1</span> <span class="o">==</span> <span class="n">reg2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">zon1</span> <span class="o">==</span> <span class="n">zon2</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fip1</span> <span class="o">==</span> <span class="n">fip2</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="regions_in_set"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regions_in_set">[docs]</a><span class="k">def</span> <span class="nf">regions_in_set</span><span class="p">(</span><span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;From the dataframe returned by disjoint_sets(), compute</span>
+<span class="sd">    a dictionary to map from a set index to a list of regions</span>
+<span class="sd">    that are members of that set index</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dframe: The dataframe emitted by disjoint_sets()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dframe</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;SET&quot;</span><span class="p">)[</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sorted</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="zones_in_set"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.zones_in_set">[docs]</a><span class="k">def</span> <span class="nf">zones_in_set</span><span class="p">(</span><span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;From the dataframe returned by disjoint_sets(), compute</span>
+<span class="sd">    a dictionary to map from a set index to a list of zones</span>
+<span class="sd">    that are members of that set index</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dframe: The dataframe emitted by disjoint_sets()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dframe</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;SET&quot;</span><span class="p">)[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sorted</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="fipnums_in_set"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.fipnums_in_set">[docs]</a><span class="k">def</span> <span class="nf">fipnums_in_set</span><span class="p">(</span><span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;From the dataframe returned by disjoint_sets(), compute</span>
+<span class="sd">    a dictionary to map from a set index to a list of FIPNUM values</span>
+<span class="sd">    that are members of that set index</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dframe: The dataframe emitted by disjoint_sets()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dframe</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;SET&quot;</span><span class="p">)[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sorted</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="regzonefips_in_set"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regzonefips_in_set">[docs]</a><span class="k">def</span> <span class="nf">regzonefips_in_set</span><span class="p">(</span><span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
+    <span class="sd">&quot;&quot;&quot;From the dataframe returned by disjoint_sets(), compute</span>
+<span class="sd">    a dictionary to map from a set index to a list of tuples</span>
+<span class="sd">    of the region, zones and fipnums in the set.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dframe: The dataframe emitted by disjoint_sets()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dframe</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;reg-zone-fip&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[[</span><span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;FIPNUM&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;SET&quot;</span><span class="p">)[</span><span class="s2">&quot;reg-zone-fip&quot;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">sorted</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="webviz_to_prtvol2csv"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.webviz_to_prtvol2csv">[docs]</a><span class="k">def</span> <span class="nf">webviz_to_prtvol2csv</span><span class="p">(</span><span class="n">webvizdict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
@@ -495,6 +687,22 @@
         <span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">inv_map</span></div>
+
+
+<span class="k">def</span> <span class="nf">_expand_regzone_df</span><span class="p">(</span><span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">fipname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;FIPNUM&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Unroll dataframe rows with a FIPNUM list in the &quot;FIPNUMS&quot; column&quot;&quot;&quot;</span>
+    <span class="n">new_rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">fipnumber</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="n">fipname</span> <span class="o">+</span> <span class="s2">&quot;S&quot;</span><span class="p">]:</span>
+            <span class="n">new_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;REGION&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">],</span>
+                    <span class="n">fipname</span><span class="p">:</span> <span class="n">fipnumber</span><span class="p">,</span>
+                    <span class="s2">&quot;REGZONE&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">new_rows</span><span class="p">)</span>
 </pre></div>
 
            </div>

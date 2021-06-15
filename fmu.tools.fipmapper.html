@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.fipmapper package &mdash; fmu-tools 1.7.1.dev5+g1f5fa02 documentation</title>
+  <title>fmu.tools.fipmapper package &mdash; fmu-tools 1.7.1.dev6+g8b1c199 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.7.1.dev5+g1f5fa02
+                1.7.1.dev6+g8b1c199
               </div>
             
           
@@ -199,8 +199,41 @@
 <p>The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">FipMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yamlfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipstring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">FipMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yamlfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipstring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.get_regions">
+<span class="sig-name descname"><span class="pre">get_regions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.get_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.get_regions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain a sorted list of the regions that exist in the map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.get_zones">
+<span class="sig-name descname"><span class="pre">get_zones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.get_zones"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.get_zones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain a sorted list of the zones that exist in the map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.get_fipnums">
+<span class="sig-name descname"><span class="pre">get_fipnums</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.get_fipnums"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.get_fipnums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain a sorted list of the fip numbers that exist in the map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.fip2region">
 <span class="sig-name descname"><span class="pre">fip2region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fip</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.fip2region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.fip2region" title="Permalink to this definition">¶</a></dt>
@@ -280,6 +313,95 @@ zone is assigned to the FIPNUM.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets">
+<span class="sig-name descname"><span class="pre">disjoint_sets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.disjoint_sets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the minimal disjoint sets of a reservoir</p>
+<p>The disjoint sets returned consist of sets that can be split into
+both a set of FIPxxxx list and a region/zone list. Thus, the sum of
+any additive property is comparable on these disjoint sets.</p>
+<p>The returned object is a dataframe that is to be used to group together
+fipnums or regions/zones so they are summable.</p>
+<p>Each row represents a cell in the partition where both region, zone and
+fipnum boundaries apply, this the finest possible partition the
+fipmapper data allows. Each row is then assigned to a integer
+identifier in the <code class="docutils literal notranslate"><span class="pre">SET</span></code> column. The chosen integers values for each
+set is based on lexiographical sorting of regions, zones and fipnum
+values.</p>
+<p>These sets signifies the minimal grouping of data that must be applied
+in order for volumes in the region/zone partition or fipnum partition
+to be comparable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.regions_in_set">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">regions_in_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#regions_in_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.regions_in_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the dataframe returned by disjoint_sets(), compute
+a dictionary to map from a set index to a list of regions
+that are members of that set index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – The dataframe emitted by disjoint_sets()</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.zones_in_set">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">zones_in_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#zones_in_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.zones_in_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the dataframe returned by disjoint_sets(), compute
+a dictionary to map from a set index to a list of zones
+that are members of that set index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – The dataframe emitted by disjoint_sets()</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.fipnums_in_set">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">fipnums_in_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#fipnums_in_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.fipnums_in_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the dataframe returned by disjoint_sets(), compute
+a dictionary to map from a set index to a list of FIPNUM values
+that are members of that set index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – The dataframe emitted by disjoint_sets()</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.regzonefips_in_set">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.fipmapper.fipmapper.</span></span><span class="sig-name descname"><span class="pre">regzonefips_in_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#regzonefips_in_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.regzonefips_in_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the dataframe returned by disjoint_sets(), compute
+a dictionary to map from a set index to a list of tuples
+of the region, zones and fipnums in the set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – The dataframe emitted by disjoint_sets()</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
