@@ -52,6 +52,10 @@ def _find_volumetrics_files(filebase: str, rmsrealsuffix: str) -> List[Path]:
         filecandidate = Path(filebase + "_" + phase + rmsrealsuffix + ".txt")
         if filecandidate.exists():
             filesfound.append(filecandidate)
+
+    if not filesfound:
+        raise OSError(f"No volumetrics files found for filebase {filebase}")
+
     return filesfound
 
 
