@@ -42,7 +42,7 @@ SETUP_REQUIREMENTS = [
 ]
 
 TEST_REQUIREMENTS = [
-    "black==20.8b0",
+    "black",
     "flake8",
     "pre-commit",
     "pytest",
