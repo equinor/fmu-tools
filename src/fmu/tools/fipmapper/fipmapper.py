@@ -175,17 +175,26 @@ class FipMapper:
     def get_regions(self) -> List[str]:
         """Obtain a sorted list of the regions that exist in the map"""
         assert "region2fipnum" in self._mapdata, "No data provided for regions"
-        return sorted(self._mapdata["region2fipnum"].keys())
+        try:
+            return sorted(self._mapdata["region2fipnum"].keys())
+        except TypeError:
+            return sorted(map(str, self._mapdata["region2fipnum"].keys()))
 
     def get_zones(self) -> List[str]:
         """Obtain a sorted list of the zones that exist in the map"""
         assert "zone2fipnum" in self._mapdata, "No data provided for regions"
-        return sorted(self._mapdata["zone2fipnum"].keys())
+        try:
+            return sorted(self._mapdata["zone2fipnum"].keys())
+        except TypeError:
+            return sorted(map(str, self._mapdata["zone2fipnum"].keys()))
 
     def get_fipnums(self) -> List[str]:
         """Obtain a sorted list of the fip numbers that exist in the map"""
         assert "fipnum2region" in self._mapdata, "No data provided for regions"
-        return sorted(self._mapdata["fipnum2region"].keys())
+        try:
+            return sorted(self._mapdata["fipnum2region"].keys())
+        except TypeError:
+            return sorted(map(str, self._mapdata["fipnum2region"].keys()))
 
     def fip2region(self, fip: Optional[int]) -> List[str]:
         """Maps one FIP(NUM) integer to list of Region strings. Each FIPNUM
@@ -218,17 +227,24 @@ class FipMapper:
     def _regions2fips(self, regions: List[str]) -> List[List[int]]:
         return [self.region2fip(region) for region in regions]
 
-    def region2fip(self, region: Optional[str]) -> List[int]:
-        """Maps a Region string to FIPNUM(s).
+    def region2fip(self, region: Union[int, str]) -> List[int]:
+        """Maps a Region string/int to FIPNUM(s).
 
         Args:
-            array (list): List/array of FIPNUMS, or integer.
+            region: Region
 
         Returns:
             FIPNUM values. None if the region is unknown, many if many FIPNUMs
             are present in the region.
         """
         assert "region2fipnum" in self._mapdata, "No data provided for region2fip"
+        if region not in self._mapdata["region2fipnum"]:
+            try:
+                # If regions have mixed types in yaml, we are sometimes
+                # asked for a region as a stringified integer
+                region = int(region)
+            except ValueError:
+                pass
         try:
             fips = self._mapdata["region2fipnum"][region]
             if not isinstance(fips, list):
@@ -236,6 +252,9 @@ class FipMapper:
                 return [int(fips)]
             return [int(fip) for fip in fips]
         except KeyError:
+            import pdb
+
+            pdb.set_trace()
             logger.warning(
                 "Unknown region %s, known map is %s",
                 str(region),
@@ -243,9 +262,16 @@ class FipMapper:
             )
             return []
 
-    def zone2fip(self, zone: str) -> List[int]:
+    def zone2fip(self, zone: Union[str, int]) -> List[int]:
         """Maps a zone to FIPNUMs"""
         assert "zone2fipnum" in self._mapdata, "No data provided for zone2fip"
+        if zone not in self._mapdata["zone2fipnum"]:
+            try:
+                # If zones have mixed types in yaml, we are sometimes
+                # asked for a zone as a stringified integer
+                zone = int(zone)
+            except ValueError:
+                pass
         try:
             fips = self._mapdata["zone2fipnum"][zone]
             if not isinstance(fips, list):
@@ -254,7 +280,7 @@ class FipMapper:
             return [int(fip) for fip in fips]
         except KeyError:
             logger.warning(
-                "Unknown zone %s, known map is ¤s",
+                "Unknown zone %s, known map is %s",
                 str(zone),
                 str(self._mapdata["zone2fipnum"]),
             )
@@ -299,6 +325,9 @@ class FipMapper:
 
         The returned object is a dataframe that is to be used to group together
         fipnums or regions/zones so they are summable.
+
+        Note that the REGION and ZONE columns always contain strings only, while
+        FIPNUM is always an integer.
 
         Each row represents a cell in the partition where both region, zone and
         fipnum boundaries apply, this the finest possible partition the
@@ -382,6 +411,9 @@ class FipMapper:
                 lambda x: ds.find((x["REGION"], x["ZONE"], x["FIPNUM"])), axis=1
             )
         ]
+        dframe["REGION"] = dframe["REGION"].astype(str)
+        dframe["ZONE"] = dframe["ZONE"].astype(str)
+        dframe["FIPNUM"] = dframe["FIPNUM"].astype(int)
         return dframe
 
 
@@ -512,7 +544,11 @@ def invert_map(
             inv_map[value] = list(base.union(set([key])))
 
     for key, value in inv_map.items():
-        inv_map[key] = sorted(list(inv_map[key]))
+        try:
+            inv_map[key] = sorted(list(inv_map[key]))
+        except TypeError:
+            # Datatype of keys are mixed, typically int and str.
+            inv_map[key] = sorted(map(str, list(inv_map[key])))
 
     return inv_map
 
@@ -527,7 +563,7 @@ def _expand_regzone_df(dframe: pd.DataFrame, fipname: str = "FIPNUM") -> pd.Data
                     "REGION": row["REGION"],
                     "ZONE": row["ZONE"],
                     fipname: fipnumber,
-                    "REGZONE": row["REGION"] + "-" + row["ZONE"],
+                    "REGZONE": str(row["REGION"]) + "-" + str(row["ZONE"]),
                 }
             )
     return pd.DataFrame(new_rows)
