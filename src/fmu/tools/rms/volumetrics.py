@@ -50,7 +50,6 @@ def _find_volumetrics_files(filebase: str, rmsrealsuffix: str) -> List[Path]:
 
     for phase in phases_to_look_for:
         filecandidate = Path(filebase + "_" + phase + rmsrealsuffix + ".txt")
-        print(filecandidate)
         if filecandidate.exists():
             filesfound.append(filecandidate)
 
