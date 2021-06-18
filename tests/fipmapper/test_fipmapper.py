@@ -177,6 +177,13 @@ def test_fipmapper_regzone2fip():
             # get_regions fails here.
             marks=pytest.mark.xfail(raises=AssertionError),
         ),
+        pytest.param(
+            {"zone2fipnum": {"U": "fip1"}, "region2fipnum": {"W": "fip1"}},
+            ["W"],
+            ["U"],
+            ["fip1"],
+            marks=pytest.mark.xfail(raises=TypeError),
+        ),
     ],
 )
 def test_get_regions_zones_fipnums(

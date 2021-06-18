@@ -47,6 +47,15 @@ class FipMapper:
             * A zone is assumed to be present for all regions, but not
               relevant in this class
 
+        For FIPNUM, the datatype must be integers, but can be initialized
+        from strings as long as they can be parsed as strings.
+
+        For Region and Zone, a string datatype is assumed, but the yaml
+        input is allowed to be integers or integers and strings mixed. Some
+        functions will return these as integers if they were inputted as such,
+        but at least the disjoint_sets() function will always return
+        these as strings.
+
         Args:
             yamlfile: Filename
             mapdata: direct dictionary input. Provide only one of the
@@ -178,6 +187,7 @@ class FipMapper:
         try:
             return sorted(self._mapdata["region2fipnum"].keys())
         except TypeError:
+            # We get here if some regions are ints and others are strings
             return sorted(map(str, self._mapdata["region2fipnum"].keys()))
 
     def get_zones(self) -> List[str]:
@@ -186,17 +196,15 @@ class FipMapper:
         try:
             return sorted(self._mapdata["zone2fipnum"].keys())
         except TypeError:
+            # We get here if some zones are ints and others are strings
             return sorted(map(str, self._mapdata["zone2fipnum"].keys()))
 
     def get_fipnums(self) -> List[str]:
         """Obtain a sorted list of the fip numbers that exist in the map"""
         assert "fipnum2region" in self._mapdata, "No data provided for regions"
-        try:
-            return sorted(self._mapdata["fipnum2region"].keys())
-        except TypeError:
-            return sorted(map(str, self._mapdata["fipnum2region"].keys()))
+        return sorted(self._mapdata["fipnum2region"].keys())
 
-    def fip2region(self, fip: Optional[int]) -> List[str]:
+    def fip2region(self, fip: int) -> List[str]:
         """Maps one FIP(NUM) integer to list of Region strings. Each FIPNUM
         can map to multiple regions, therefore a list is always returned for
         each FIPNUM.
@@ -252,9 +260,6 @@ class FipMapper:
                 return [int(fips)]
             return [int(fip) for fip in fips]
         except KeyError:
-            import pdb
-
-            pdb.set_trace()
             logger.warning(
                 "Unknown region %s, known map is %s",
                 str(region),
