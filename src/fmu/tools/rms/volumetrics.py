@@ -147,8 +147,13 @@ def rmsvolumetrics_txt2df(
     totalsrows = pd.Series([False] * len(vol_df))
     for col in checkfortotals:
         if col in vol_df.columns:
-            totalsrows = totalsrows | (vol_df[col] == "Totals")
+            totalsrows = totalsrows | (vol_df[col].astype(str) == "Totals")
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
+
+    # Ensure the same checkfortotals columns are always of string datatype:
+    for col in checkfortotals:
+        if col in vol_df.columns:
+            vol_df[col] = vol_df[col].astype(str)
 
     if outfile:
         Path(outfile).parent.mkdir(exist_ok=True, parents=True)

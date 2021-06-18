@@ -44,6 +44,12 @@ TESTDIR = Path(__file__).parent / "volumetricsdata"
             pd.DataFrame([{"Zone Bulk": "Upper 1"}]),
         ),
         (
+            # Integer zone, returned as string datatype
+            "Zone  Bulk\n1  1.0",
+            "oil.txt",
+            pd.DataFrame([{"ZONE": "1", "BULK_OIL": 1.0}]),
+        ),
+        (
             # Two spaces:
             "Zone  Bulk\nUpper  1.0",
             "oil.txt",
