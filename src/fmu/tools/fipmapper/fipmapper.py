@@ -103,6 +103,15 @@ class FipMapper:
         self.has_region2fip = "region2fipnum" in self._mapdata
         self.has_zone2fip = "zone2fipnum" in self._mapdata
 
+        # Validate that all FIPNUMs are integers:
+        try:
+            [int(fip) for fip in self.get_fipnums()]
+        except AssertionError:
+            # This is for partially empty fipmappers.
+            pass
+        except ValueError:
+            raise TypeError(f"All FIPNUMs must be integers, got {self.get_fipnums}")
+
     def _get_explicit_mapdata(self, yamldata: Dict[str, Any]):
         """Fetch explicit mapping configuration from a dictionary.
 
