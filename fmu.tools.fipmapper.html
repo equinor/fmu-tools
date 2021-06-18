@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.fipmapper package &mdash; fmu-tools 1.7.1.dev8+ga11b098 documentation</title>
+  <title>fmu.tools.fipmapper package &mdash; fmu-tools 1.7.1.dev9+gd151e7e documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.7.1.dev8+ga11b098
+                1.7.1.dev9+gd151e7e
               </div>
             
           
@@ -258,10 +258,10 @@ Empty list if no region is known for a specific FIPNUM.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.fipmapper.fipmapper.FipMapper.region2fip">
 <span class="sig-name descname"><span class="pre">region2fip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/fipmapper/fipmapper.html#FipMapper.region2fip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.fipmapper.fipmapper.FipMapper.region2fip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maps a Region string to FIPNUM(s).</p>
+<dd><p>Maps a Region string/int to FIPNUM(s).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>array</strong> (<em>list</em>) – List/array of FIPNUMS, or integer.</p>
+<dd class="field-odd"><p><strong>region</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Region</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
@@ -322,6 +322,8 @@ both a set of FIPxxxx list and a region/zone list. Thus, the sum of
 any additive property is comparable on these disjoint sets.</p>
 <p>The returned object is a dataframe that is to be used to group together
 fipnums or regions/zones so they are summable.</p>
+<p>Note that the REGION and ZONE columns always contain strings only, while
+FIPNUM is always an integer.</p>
 <p>Each row represents a cell in the partition where both region, zone and
 fipnum boundaries apply, this the finest possible partition the
 fipmapper data allows. Each row is then assigned to a integer
