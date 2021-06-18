@@ -73,6 +73,42 @@ def test_fipmapper_zones():
     assert mapper.zone2fip("Middle") == [2, 3]
 
 
+def test_integer_regions():
+    """Regions are sometimes integer, and then they will
+    typically be returned as integers from the yaml parsing"""
+    mapper = fipmapper.FipMapper(mapdata={"fipnum2region": {1: 1, 2: 2}})
+    assert mapper.fip2region(1) == [1]
+    assert mapper.fip2region(2) == [2]
+    assert mapper.region2fip(1) == [1]
+    assert mapper.region2fip(2) == [2]
+
+
+def test_integer_zones():
+    """Should also allow using integers for zones. Maybe
+    the integer is actually the k index"""
+    mapper = fipmapper.FipMapper(mapdata={"fipnum2zone": {1: 1, 2: 2}})
+    assert mapper.fip2zone(1) == [1]
+    assert mapper.fip2zone(2) == [2]
+    assert mapper.zone2fip(1) == [1]
+    assert mapper.zone2fip(2) == [2]
+
+
+def test_mixed_datatypes():
+    """Mixed ints/strs in regions and zones"""
+    mapper = fipmapper.FipMapper(
+        mapdata={"fipnum2region": {1: 1, 2: "B"}, "fipnum2zone": {1: 1, 2: "L"}}
+    )
+    assert mapper.fip2region(1) == [1]
+    assert mapper.fip2region(2) == ["B"]
+    assert mapper.region2fip(1) == [1]
+    assert mapper.region2fip("B") == [2]
+
+    assert mapper.fip2zone(1) == [1]
+    assert mapper.fip2zone(2) == ["L"]
+    assert mapper.zone2fip(1) == [1]
+    assert mapper.zone2fip("L") == [2]
+
+
 def test_fipmapper_regzone2fip():
     mapper = fipmapper.FipMapper(
         mapdata={
@@ -109,6 +145,13 @@ def test_fipmapper_regzone2fip():
             [1, 2],
         ),
         (
+            # Test sorting with integer regions
+            {"region2fipnum": {10: [3], 1: [2, 1]}, "zone2fipnum": {"U": [2, 1, 3]}},
+            [1, 10],
+            ["U"],
+            [1, 2, 3],
+        ),
+        (
             {
                 "region2fipnum": {"A": [2, 1], "B": 3},
                 "zone2fipnum": {"U": [1], "L": [3, 2]},
@@ -133,6 +176,13 @@ def test_fipmapper_regzone2fip():
             [1],
             # get_regions fails here.
             marks=pytest.mark.xfail(raises=AssertionError),
+        ),
+        pytest.param(
+            {"zone2fipnum": {"U": "fip1"}, "region2fipnum": {"W": "fip1"}},
+            ["W"],
+            ["U"],
+            ["fip1"],
+            marks=pytest.mark.xfail(raises=TypeError),
         ),
     ],
 )

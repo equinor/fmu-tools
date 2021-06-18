@@ -106,6 +106,11 @@ import pandas as pd
             [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
         ),
         (
+            # Same as above, but with integer regions and zone:
+            {"region2fipnum": {1: 1}, "zone2fipnum": {1: 1}},
+            [{"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 0}],
+        ),
+        (
             # FIPNUM split in two, gives only one group in return:
             {"region2fipnum": {"A": [1, 2]}, "zone2fipnum": {"U": [1, 2]}},
             [
@@ -187,6 +192,34 @@ import pandas as pd
                 {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
                 {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
                 {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 0},
+            ],
+        ),
+        (
+            # Integer datatypes for regions and zones, always
+            # strings in returned dataframe, even though
+            # FipMapper handles the integers as ints internally
+            {
+                "region2fipnum": {1: 1, 2: 2},
+                "zone2fipnum": {1: [1, 2], 2: [1, 2]},
+            },
+            [
+                {"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 0},
+                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 0},
+                {"REGION": "2", "ZONE": "1", "FIPNUM": 2, "SET": 1},
+                {"REGION": "2", "ZONE": "2", "FIPNUM": 2, "SET": 1},
+            ],
+        ),
+        (
+            # Mixed datatype int/str for regions and zones
+            {
+                "region2fipnum": {1: 1, "B": 2},
+                "zone2fipnum": {"U": [1, 2], 2: [1, 2]},
+            },
+            [
+                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 0},
+                {"REGION": "1", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "B", "ZONE": "2", "FIPNUM": 2, "SET": 1},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 1},
             ],
         ),
     ],
