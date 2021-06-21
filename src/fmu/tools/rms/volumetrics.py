@@ -140,20 +140,18 @@ def rmsvolumetrics_txt2df(
     if zonerenamer:
         vol_df["ZONE"] = vol_df["ZONE"].apply(zonerenamer)
 
-    # Remove the Totals rows in case they are present.
-    #  (todo: do this for all columns that are not not of numeric type)
-    checkfortotals = ["ZONE", "REGION", "LICENSE", "FACIES"]
+    index_columns = ["ZONE", "REGION", "LICENSE", "FACIES"]
+    present_index_columns = list(set(index_columns).intersection(vol_df.columns))
 
+    # Index columns should always be of string datatype:
+    vol_df[present_index_columns] = vol_df[present_index_columns].astype(str)
+
+    # Remove the Totals rows in case they are present, signified by the
+    # magic value "Totals" in any of the index columns:
     totalsrows = pd.Series([False] * len(vol_df))
-    for col in checkfortotals:
-        if col in vol_df.columns:
-            totalsrows = totalsrows | (vol_df[col].astype(str) == "Totals")
+    for col in present_index_columns:
+        totalsrows = totalsrows | (vol_df[col] == "Totals")
     vol_df = vol_df[~totalsrows].reset_index(drop=True)
-
-    # Ensure the same checkfortotals columns are always of string datatype:
-    for col in checkfortotals:
-        if col in vol_df.columns:
-            vol_df[col] = vol_df[col].astype(str)
 
     if outfile:
         Path(outfile).parent.mkdir(exist_ok=True, parents=True)

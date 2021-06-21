@@ -50,6 +50,19 @@ TESTDIR = Path(__file__).parent / "volumetricsdata"
             pd.DataFrame([{"ZONE": "1", "BULK_OIL": 1.0}]),
         ),
         (
+            # Integer Region, returned as string datatype
+            "Region index  Bulk\n1  1.0",
+            "oil.txt",
+            pd.DataFrame([{"REGION": "1", "BULK_OIL": 1.0}]),
+        ),
+        (
+            # Floating point Region, returned as string datatype.
+            # User is probably up for trouble if this is used.
+            "Region index  Bulk\n1.0  1.0",
+            "oil.txt",
+            pd.DataFrame([{"REGION": "1.0", "BULK_OIL": 1.0}]),
+        ),
+        (
             # Two spaces:
             "Zone  Bulk\nUpper  1.0",
             "oil.txt",
