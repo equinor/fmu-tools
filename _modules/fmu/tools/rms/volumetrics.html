@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.7.1.dev9+gd151e7e documentation</title>
+  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.7.1.dev10+g6cba81b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.7.1.dev9+gd151e7e
+                1.7.1.dev10+g6cba81b
               </div>
             
           
@@ -312,14 +312,17 @@
     <span class="k">if</span> <span class="n">zonerenamer</span><span class="p">:</span>
         <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zonerenamer</span><span class="p">)</span>
 
-    <span class="c1"># Remove the Totals rows in case they are present.</span>
-    <span class="c1">#  (todo: do this for all columns that are not not of numeric type)</span>
-    <span class="n">checkfortotals</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">,</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">]</span>
+    <span class="n">index_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">,</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">]</span>
+    <span class="n">present_index_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">index_columns</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
 
+    <span class="c1"># Index columns should always be of string datatype:</span>
+    <span class="n">vol_df</span><span class="p">[</span><span class="n">present_index_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="n">present_index_columns</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="c1"># Remove the Totals rows in case they are present, signified by the</span>
+    <span class="c1"># magic value &quot;Totals&quot; in any of the index columns:</span>
     <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">vol_df</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">checkfortotals</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">totalsrows</span> <span class="o">|</span> <span class="p">(</span><span class="n">vol_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Totals&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">present_index_columns</span><span class="p">:</span>
+        <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">totalsrows</span> <span class="o">|</span> <span class="p">(</span><span class="n">vol_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Totals&quot;</span><span class="p">)</span>
     <span class="n">vol_df</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="o">~</span><span class="n">totalsrows</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">outfile</span><span class="p">:</span>
