@@ -20,6 +20,17 @@ fmu_logo_with_text.svg, logo w text in Inkscape SVG (due to text)
 fmu_logo_with_text_plain.svg, logo w text in plain SVG
 fmu_logo_coviz.svg, logo for coviz, plain SVG
 
+## Conversion to plain SVG
+
+The SVG files will have some inkscape or sodipodi tags. For plain SVG to include elsewhere:
+
+```inkscape --export-plain-svg=output.svg input.svg```
+
+e.g.
+```inkscape --export-plain-svg=FMU_logo_with_text.svg fmu_logo_with_text.svg```
+
+Then upload FMU_logo_with_text.svg to internal wiki.
+
 
 ## Contact
 
