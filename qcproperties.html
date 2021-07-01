@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>The qcproperties class &mdash; fmu-tools 1.8.0rc1.dev3+g862fd81 documentation</title>
+  <title>The qcproperties class &mdash; fmu-tools 1.8.0rc1.dev4+ga6328f1 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.8.0rc1.dev3+g862fd81
+                1.8.0rc1.dev4+ga6328f1
               </div>
             
           
@@ -395,13 +395,13 @@ Result is written to csv.</p>
 <p>Example extracting statistics for porosity per region. Filters
 are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
-Both properties are weighted on a Total_Bulk parameter.
+Both properties are weighted on a Total_bulk parameter.
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;PORO&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_Bulk&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;PORO&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_bulk&quot;</span><span class="p">},</span>
 <span class="p">}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;REGION&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -445,13 +445,13 @@ selector, for extracting statistics in one run.</p>
 </div>
 <p><strong>Example in RMS (discrete properties):</strong></p>
 <p>Example extracting statistics for a discrete facies parameter for each region.
-The facies parameter are weighted on a Total_Bulk parameter.</p>
+The facies parameter are weighted on a Total_bulk parameter.</p>
 <p>The result is written out to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_Bulk&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_bulk&quot;</span><span class="p">},</span>
 <span class="p">}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Regions&quot;</span><span class="p">]</span>
 
@@ -646,7 +646,6 @@ Result is written to csv.</p>
         <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
         <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
         <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
-        <span class="s2">&quot;csvfile&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_bwell_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
