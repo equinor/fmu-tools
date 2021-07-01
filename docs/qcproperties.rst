@@ -235,7 +235,7 @@ Result is written to csv.
 Example extracting statistics for porosity per region. Filters 
 are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
-Both properties are weighted on a Total_Bulk parameter. 
+Both properties are weighted on a Total_bulk parameter. 
 Result is written to csv.
 
 
@@ -245,7 +245,7 @@ Result is written to csv.
 
     GRID = "GeoGrid"
     PROPERTIES = {
-        "PORO": {"name": "PHIT", "weight": "Total_Bulk"},
+        "PORO": {"name": "PHIT", "weight": "Total_bulk"},
     }
     SELECTORS = {
         "REGION": {
@@ -287,7 +287,7 @@ Result is written to csv.
 **Example in RMS (discrete properties):**
 
 Example extracting statistics for a discrete facies parameter for each region. 
-The facies parameter are weighted on a Total_Bulk parameter.
+The facies parameter are weighted on a Total_bulk parameter.
 
 The result is written out to csv.
 
@@ -297,7 +297,7 @@ The result is written out to csv.
 
     GRID = "GeoGrid"
     PROPERTIES = {
-        "FACIES": {"name": "Facies", "weight": "Total_Bulk"},
+        "FACIES": {"name": "Facies", "weight": "Total_bulk"},
     }
     SELECTORS = ["Regions"]
 
@@ -508,7 +508,6 @@ Result is written to csv.
             "properties": PROPERTIES,
             "selectors": SELECTORS,
             "wells": WELLS,
-            "csvfile": REPORT,
         }
 
         qcp.get_bwell_statistics(data=usedata, project=project)
