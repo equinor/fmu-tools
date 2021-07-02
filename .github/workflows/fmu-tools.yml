@@ -21,9 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8"]
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
         pandas-version: ["0.21.0", "1.*"]
         exclude:
+          - python-version: "3.9"
+            pandas-version: "0.21.0"
           - python-version: "3.8"
             pandas-version: "0.21.0"
           - python-version: "3.7"
