@@ -14,6 +14,9 @@
 .. image:: https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9-blue.svg
     :target: https://www.python.org
 
+.. image:: https://img.shields.io/pypi/v/fmu-tools.svg
+    :target: https://pypi.python.org/pypi/fmu-tools/
+
 
 FMU tools is a Python library containing tools for pre and post processing
 for FMU (Fast Model Update).
