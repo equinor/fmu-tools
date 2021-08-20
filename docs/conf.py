@@ -45,6 +45,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
+    "sphinxarg.ext",
 ]
 
 autosectionlabel_prefix_document = False
@@ -60,6 +61,7 @@ nitpick_ignore = [
     ("py:class", "fmu.tools.qcforward._qcforward.QCForward"),
     ("py:class", "pd.DataFrame"),
     ("py:class", "np.ndarray"),
+    ("py:class", "argparse.ArgumentParser"),
 ]
 
 # The suffix of source filenames.

@@ -13,6 +13,7 @@ Contents:
    qcproperties
    qcreset
    create_rft_ertobs
+   rmsvolumetrics2csv
    contributing
    authors
    history
