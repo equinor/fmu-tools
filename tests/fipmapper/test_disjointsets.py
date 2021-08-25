@@ -98,17 +98,17 @@ import pandas as pd
         (
             # Only one cell in both regzone partition and fipnum partition:
             {"region2fipnum": {"A": 1}, "zone2fipnum": {"U": 1}},
-            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
+            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1}],
         ),
         (
             # Same as above, but test that we can provide it as list input:
             {"region2fipnum": {"A": [1]}, "zone2fipnum": {"U": [1]}},
-            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0}],
+            [{"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1}],
         ),
         (
             # Same as above, but with integer regions and zone:
             {"region2fipnum": {1: 1}, "zone2fipnum": {1: 1}},
-            [{"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 0}],
+            [{"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 1}],
         ),
         (
             # FIPNUM split in two, gives only one group in return:
@@ -122,7 +122,7 @@ import pandas as pd
             # FIPNUM split in two, and two zones, gives two groups in return:
             {"region2fipnum": {"A": [1, 2]}, "zone2fipnum": {"U": [1], "L": [2]}},
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 2},
                 {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
@@ -130,16 +130,16 @@ import pandas as pd
             # Two zones, one FIPNUM, gives one group in return:
             {"region2fipnum": {"A": 1}, "zone2fipnum": {"U": [1], "L": [1]}},
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 0},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 1},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
         (
             # Two regions, one FIPNUM, gives one group in return:
             {"region2fipnum": {"A": 1, "B": 1}, "zone2fipnum": {"U": 1}},
             [
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 0},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
         (
@@ -149,9 +149,9 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 3], "L": [2, 4]},
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 2},
                 {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 4, "SET": 2},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 4, "SET": 4},
                 {"REGION": "B", "ZONE": "U", "FIPNUM": 3, "SET": 3},
             ],
         ),
@@ -162,9 +162,9 @@ import pandas as pd
                 "zone2fipnum": {"U": 1, "L": [2, 2]},  # Double for L is ignored.
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 2, "SET": 2},
                 {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 0},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 2},
                 {"REGION": "B", "ZONE": "U", "FIPNUM": 1, "SET": 1},
             ],
         ),
@@ -175,10 +175,10 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 2], "L": [1, 2]},
             },
             [
-                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 0},
-                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 0},
-                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 1},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 1},
+                {"REGION": "A", "ZONE": "L", "FIPNUM": 1, "SET": 1},
+                {"REGION": "A", "ZONE": "U", "FIPNUM": 1, "SET": 1},
+                {"REGION": "B", "ZONE": "L", "FIPNUM": 2, "SET": 2},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 2},
             ],
         ),
         (
@@ -203,10 +203,10 @@ import pandas as pd
                 "zone2fipnum": {1: [1, 2], 2: [1, 2]},
             },
             [
-                {"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 0},
-                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 0},
-                {"REGION": "2", "ZONE": "1", "FIPNUM": 2, "SET": 1},
-                {"REGION": "2", "ZONE": "2", "FIPNUM": 2, "SET": 1},
+                {"REGION": "1", "ZONE": "1", "FIPNUM": 1, "SET": 1},
+                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 1},
+                {"REGION": "2", "ZONE": "1", "FIPNUM": 2, "SET": 2},
+                {"REGION": "2", "ZONE": "2", "FIPNUM": 2, "SET": 2},
             ],
         ),
         (
@@ -216,10 +216,10 @@ import pandas as pd
                 "zone2fipnum": {"U": [1, 2], 2: [1, 2]},
             },
             [
-                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 0},
-                {"REGION": "1", "ZONE": "U", "FIPNUM": 1, "SET": 0},
-                {"REGION": "B", "ZONE": "2", "FIPNUM": 2, "SET": 1},
-                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 1},
+                {"REGION": "1", "ZONE": "2", "FIPNUM": 1, "SET": 1},
+                {"REGION": "1", "ZONE": "U", "FIPNUM": 1, "SET": 1},
+                {"REGION": "B", "ZONE": "2", "FIPNUM": 2, "SET": 2},
+                {"REGION": "B", "ZONE": "U", "FIPNUM": 2, "SET": 2},
             ],
         ),
     ],

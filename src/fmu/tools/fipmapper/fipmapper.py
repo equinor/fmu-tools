@@ -334,7 +334,7 @@ class FipMapper:
         """Determine the minimal disjoint sets of a reservoir
 
         The disjoint sets returned consist of sets that can be split into
-        both a set of FIPxxxx list and a region/zone list. Thus, the sum of
+        both a FIPxxxx list and a region/zone list. Thus, the sum of
         any additive property is comparable on these disjoint sets.
 
         The returned object is a dataframe that is to be used to group together
@@ -346,9 +346,10 @@ class FipMapper:
         Each row represents a cell in the partition where both region, zone and
         fipnum boundaries apply, this the finest possible partition the
         fipmapper data allows. Each row is then assigned to a integer
-        identifier in the ``SET`` column. The chosen integers values for each
-        set is based on lexiographical sorting of regions, zones and fipnum
-        values.
+        identifier in the ``SET`` column. If the sets are one to one with
+        FIPNUM, the FIPNUMs are used as set identifiers. IF not, the chosen
+        integers values for each set is based on lexiographical sorting of regions,
+        zones and fipnum values.
 
         These sets signifies the minimal grouping of data that must be applied
         in order for volumes in the region/zone partition or fipnum partition
@@ -407,7 +408,7 @@ class FipMapper:
             ds.find((row["REGION"], row["ZONE"], row["FIPNUM"]))
 
         # Apply the union-find algorithm to determine the partition
-        # where all equivalene relations are obeyed:
+        # where all equivalence relations are obeyed:
         for _, pair in neighbourlist.iterrows():
             ds.union(
                 (pair["REGION_x"], pair["ZONE_x"], pair["FIPNUM_x"]),
@@ -416,7 +417,7 @@ class FipMapper:
 
         # The union-find algorithm has now "named" each of the components
         # in the disjoint set by a somewhat random mother/root node. This root
-        # not is not any more a root compared to the other cells in the set,
+        # is not any more a root compared to the other cells in the set,
         # so each set is instead mapped to consecutive integers.
         id_dict: dict = collections.defaultdict(lambda: len(id_dict))
         dframe["SET"] = [
@@ -425,10 +426,29 @@ class FipMapper:
                 lambda x: ds.find((x["REGION"], x["ZONE"], x["FIPNUM"])), axis=1
             )
         ]
+
         dframe["REGION"] = dframe["REGION"].astype(str)
         dframe["ZONE"] = dframe["ZONE"].astype(str)
         dframe["FIPNUM"] = dframe["FIPNUM"].astype(int)
+
+        # In a fair amount of use-cases, the SETs will be one-to-one
+        # to FIPNUMs. In those cases, it makes sense to match the
+        # SET id's to FIPNUM:
+        dframe["SET"] = _reenumerate_sets(dframe)
+
         return dframe
+
+
+def _reenumerate_sets(dframe: pd.DataFrame) -> pd.Series:
+    """If SETs and FIPNUMs are one-to-one, reenumerate SETs to match."""
+    unique_fipnums = dframe.groupby("SET")["FIPNUM"].unique()
+    if max(map(len, unique_fipnums)) > 1:
+        return dframe["SET"]
+    assert min(map(len, unique_fipnums)) == 1
+
+    # SETs and FIPNUMs are one-to-one, return the FIPNUM series in
+    # order to use it directly as SETs:
+    return dframe["FIPNUM"]
 
 
 def _equivalent_cells(
