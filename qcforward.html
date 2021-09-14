@@ -1,80 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>The qcforward functions &mdash; fmu-tools 1.8.1.dev2+g3108440 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The qcproperties class" href="qcproperties.html" />
     <link rel="prev" title="FMU design matrix" href="fmudesign.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> fmu-tools
-          
-
-          
-            
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 1.8.1.dev2+g3108440
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -82,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -154,73 +101,32 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>The qcforward functions</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/qcforward.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="the-qcforward-functions">
-<h1>The qcforward functions<a class="headerlink" href="#the-qcforward-functions" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="the-qcforward-functions">
+<h1>The qcforward functions<a class="headerlink" href="#the-qcforward-functions" title="Permalink to this headline"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qcforward</span></code> class provides functionality (methods) to check the result
 of various issues during an ensemble run.</p>
 <p>All methods share a <em>design philosopy</em></p>
@@ -241,16 +147,16 @@ is logical.</p></li>
 <li><p><a class="reference internal" href="#qcforward-gridqualindicators"><span class="std std-ref">Grid quality indicators</span></a></p></li>
 <li><p><a class="reference internal" href="#qcforward-gridstatistics"><span class="std std-ref">Run grid statistics</span></a></p></li>
 </ul>
-<div class="section" id="compare-well-zonation-and-grid">
-<span id="qcforward-welzonvsgrid"></span><h2>Compare well zonation and grid<a class="headerlink" href="#compare-well-zonation-and-grid" title="Permalink to this headline">¶</a></h2>
+<section id="compare-well-zonation-and-grid">
+<span id="qcforward-welzonvsgrid"></span><h2>Compare well zonation and grid<a class="headerlink" href="#compare-well-zonation-and-grid" title="Permalink to this headline"></a></h2>
 <p>This method check how the zonelog and/or a perforation log matches with zonation in
 the 3D grid. If worse than a given set of limits, either are warning is given or a
 full stop of the workflow is forced.</p>
 <p>&lt;<a class="reference external" href="https://xtgeo.readthedocs.io/en/latest/_images/zone-well-mismatch-plain.svg">https://xtgeo.readthedocs.io/en/latest/_images/zone-well-mismatch-plain.svg</a>&gt;</p>
 <p>The input to this method is a python dictionary with some defined keys. Note that
 the order of keys does not matter.</p>
-<div class="section" id="common-fields-same-input-inside-or-outside-rms">
-<h3>Common fields (same input inside or outside RMS)<a class="headerlink" href="#common-fields-same-input-inside-or-outside-rms" title="Permalink to this headline">¶</a></h3>
+<section id="common-fields-same-input-inside-or-outside-rms">
+<h3>Common fields (same input inside or outside RMS)<a class="headerlink" href="#common-fields-same-input-inside-or-outside-rms" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>verbosity</dt><dd><p>Level of output while running None, “info” or “debug”, default is None. (optional)</p>
 </dd>
@@ -283,9 +189,9 @@ format. Later this YAML file can be edited and applied for a single line input</
 <dt>nametag</dt><dd><p>A string to identify the data set. Recommended.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="keys-if-ran-inside-rms">
-<h3>Keys if ran inside RMS<a class="headerlink" href="#keys-if-ran-inside-rms" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="keys-if-ran-inside-rms">
+<h3>Keys if ran inside RMS<a class="headerlink" href="#keys-if-ran-inside-rms" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>wells</dt><dd><p>In RMS this is a dictionary with 3 fields: <code class="docutils literal notranslate"><span class="pre">names</span></code>, <code class="docutils literal notranslate"><span class="pre">logrun</span></code> and <code class="docutils literal notranslate"><span class="pre">trajectory</span></code>.
 The names is a list of wellnames which in turn can have python valid regular
@@ -296,9 +202,9 @@ expressions. See examples. (required)</p>
 <dt>gridprops</dt><dd><p>A list of grid properties, in this case the name of zone icon in RMS (required)</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="if-ran-in-normal-python-terminal-or-ert-job">
-<h3>If ran in normal python (terminal or ERT job)<a class="headerlink" href="#if-ran-in-normal-python-terminal-or-ert-job" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="if-ran-in-normal-python-terminal-or-ert-job">
+<h3>If ran in normal python (terminal or ERT job)<a class="headerlink" href="#if-ran-in-normal-python-terminal-or-ert-job" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>wells</dt><dd><p>Outside RMS, wells is a list of files on RMS ascii well format. File wildcards are
 allowed, se example. (required)</p>
@@ -309,20 +215,20 @@ allowed, se example. (required)</p>
 filename, for example <code class="docutils literal notranslate"><span class="pre">[[&quot;Zone&quot;,</span> <span class="pre">&quot;zone.roff&quot;]]</span></code></p>
 </dd>
 </dl>
-<div class="section" id="known-issues">
-<span id="welzon-vs-grid-known-issues"></span><h4>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h4>
+<section id="known-issues">
+<span id="welzon-vs-grid-known-issues"></span><h4>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this headline"></a></h4>
 <ul class="simple">
 <li><p>The code evaluates of a well sample is inside a grid cell. However, such evaluation
 is non-unique as corner point cells are not necessarly well defined in 3D. Hence
 one may encounter different results if another tool is applied.</p></li>
 </ul>
-</div>
-<div class="section" id="examples">
-<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
-</div>
-</div>
-<div class="section" id="example-when-ran-inside-rms">
-<h3>Example when ran inside RMS<a class="headerlink" href="#example-when-ran-inside-rms" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h4>
+</section>
+</section>
+<section id="example-when-ran-inside-rms">
+<h3>Example when ran inside RMS<a class="headerlink" href="#example-when-ran-inside-rms" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing &quot;A&quot;</span>
@@ -366,9 +272,9 @@ one may encounter different results if another tool is applied.</p></li>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-when-ran-from-python-script-in-terminal">
-<h3>Example when ran from python script in terminal:<a class="headerlink" href="#example-when-ran-from-python-script-in-terminal" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-when-ran-from-python-script-in-terminal">
+<h3>Example when ran from python script in terminal:<a class="headerlink" href="#example-when-ran-from-python-script-in-terminal" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="n">WPATH</span> <span class="o">=</span> <span class="s2">&quot;../output/wells/&quot;</span>
@@ -399,9 +305,9 @@ one may encounter different results if another tool is applied.</p></li>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-in-rms-with-setting-from-a-yaml-file">
-<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-in-rms-with-setting-from-a-yaml-file">
+<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 
@@ -440,9 +346,9 @@ one may encounter different results if another tool is applied.</p></li>
   <span class="nt">shift</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-1</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-when-ran-inside-rms-with-different-settings-for-wells">
-<h3>Example when ran inside RMS with different settings for wells<a class="headerlink" href="#example-when-ran-inside-rms-with-different-settings-for-wells" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-when-ran-inside-rms-with-different-settings-for-wells">
+<h3>Example when ran inside RMS with different settings for wells<a class="headerlink" href="#example-when-ran-inside-rms-with-different-settings-for-wells" title="Permalink to this headline"></a></h3>
 <p>It may be the case where some wells are less important to match strict
 than other wells.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools.qcforward</span> <span class="k">as</span> <span class="nn">qcf</span>
@@ -503,17 +409,17 @@ than other wells.</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="grid-quality-indicators">
-<span id="qcforward-gridqualindicators"></span><h2>Grid quality indicators<a class="headerlink" href="#grid-quality-indicators" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="grid-quality-indicators">
+<span id="qcforward-gridqualindicators"></span><h2>Grid quality indicators<a class="headerlink" href="#grid-quality-indicators" title="Permalink to this headline"></a></h2>
 <p>This methods checks the grid quality in various ways, similar to the methods
 RMS use (with some exceptions). If worse than a given set of limits, either are
 warning is given or a full stop of the workflow is forced.</p>
 <p>The input to this method is a python dictionary with some defined keys. Note that
 the order of keys does not matter.</p>
-<div class="section" id="grid-quality-indicators-keys">
-<h3>Grid quality indicators keys<a class="headerlink" href="#grid-quality-indicators-keys" title="Permalink to this headline">¶</a></h3>
+<section id="grid-quality-indicators-keys">
+<h3>Grid quality indicators keys<a class="headerlink" href="#grid-quality-indicators-keys" title="Permalink to this headline"></a></h3>
 <p>The following qridquality measures are currently supported:</p>
 <dl class="simple">
 <dt>minangle_topbase</dt><dd><p>Minimum angle per cell for top and base, in degrees.</p>
@@ -537,9 +443,9 @@ the order of keys does not matter.</p>
 <dt>concave_proj</dt><dd><p>Assign value 1 if a cell is concave in projected XY (bird) view, 0 else.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id1">
-<h3>Common fields (same input inside or outside RMS)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id1">
+<h3>Common fields (same input inside or outside RMS)<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>verbosity</dt><dd><p>Level of output while running None, “info” or “debug”, default is None. (optional)</p>
 </dd>
@@ -555,9 +461,9 @@ format. Later this YAML file can be edited and applied for a single line input</
 <dt>nametag</dt><dd><p>A string to identify the data set. Recommended.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="the-actions-field-explained">
-<h3>The actions field explained<a class="headerlink" href="#the-actions-field-explained" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="the-actions-field-explained">
+<h3>The actions field explained<a class="headerlink" href="#the-actions-field-explained" title="Permalink to this headline"></a></h3>
 <p>The action field in the examples below can be explained likes this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;minangle_topbase&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 1% when &lt; 80&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 1% when &lt; 50&quot;</span><span class="p">}]</span>
 </pre></div>
@@ -571,34 +477,34 @@ less than than 80 degrees, is greater than 1%. Note that:</p>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> word can be replaces with e.g. <code class="docutils literal notranslate"><span class="pre">if</span></code> or <code class="docutils literal notranslate"><span class="pre">given</span></code>; the important issue
 is that a single word is present</p></li>
 </ul>
-</div>
-<div class="section" id="id2">
-<h3>Keys if ran inside RMS<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id2">
+<h3>Keys if ran inside RMS<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>grid</dt><dd><p>Name of grid icon in RMS (required)</p>
 </dd>
 <dt>writeicon:</dt><dd><p>If inside RMS will write an icon under the given grid if True.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="id3">
-<h3>If ran in normal python (terminal or ERT job)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id3">
+<h3>If ran in normal python (terminal or ERT job)<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>grid</dt><dd><p>Name of file with grid (on ROFF or EGRID or GRDECL format) (required)</p>
 </dd>
 </dl>
-<div class="section" id="id4">
-<h4>Known issues<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<section id="id4">
+<h4>Known issues<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h4>
 <ul class="simple">
 <li><p>Not all RMS grid quality indicators are currently present.</p></li>
 </ul>
-</div>
-<div class="section" id="id5">
-<h4>Examples<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
-</div>
-</div>
-<div class="section" id="id6">
-<h3>Example when ran inside RMS<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id5">
+<h4>Examples<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h4>
+</section>
+</section>
+<section id="id6">
+<h3>Example when ran inside RMS<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
@@ -630,9 +536,9 @@ is that a single word is present</p></li>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id7">
-<h3>Example when ran from python script in terminal:<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id7">
+<h3>Example when ran from python script in terminal:<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
 
 
@@ -655,9 +561,9 @@ is that a single word is present</p></li>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id8">
-<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id8">
+<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id8" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 
@@ -670,21 +576,21 @@ is that a single word is present</p></li>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="running-grid-statistics">
-<span id="qcforward-gridstatistics"></span><h2>Running grid_statistics<a class="headerlink" href="#running-grid-statistics" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="running-grid-statistics">
+<span id="qcforward-gridstatistics"></span><h2>Running grid_statistics<a class="headerlink" href="#running-grid-statistics" title="Permalink to this headline"></a></h2>
 <p>This method checks if property statistics from 3D grids are within user specified
 thresholds. If worse than a given set of limits, either a warning is given or a
 full stop of the workflow is forced.</p>
 <p>Both discrete and continous properties are supported.</p>
-<div class="section" id="signature">
-<h3>Signature<a class="headerlink" href="#signature" title="Permalink to this headline">¶</a></h3>
+<section id="signature">
+<h3>Signature<a class="headerlink" href="#signature" title="Permalink to this headline"></a></h3>
 <p>The input to this method is a python dictionary with some defined keys. Note that
 the order of keys does not matter.</p>
-</div>
-<div class="section" id="required-keys">
-<h3>Required keys<a class="headerlink" href="#required-keys" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="required-keys">
+<h3>Required keys<a class="headerlink" href="#required-keys" title="Permalink to this headline"></a></h3>
 <dl>
 <dt>grid</dt><dd><p>Name of grid icon if run inside RMS, or name of file with grid (on ROFF or EGRID or GRDECL format)</p>
 </dd>
@@ -724,9 +630,9 @@ of the workflow (required).</p>
 </dl>
 </dd>
 </dl>
-</div>
-<div class="section" id="optional-fields">
-<h3>Optional fields<a class="headerlink" href="#optional-fields" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="optional-fields">
+<h3>Optional fields<a class="headerlink" href="#optional-fields" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>path</dt><dd><p>Path to grid property files and grid if run outside RMS (optional)</p>
 </dd>
@@ -740,12 +646,12 @@ Later this YAML file can be edited and applied for a single line input</p>
 <dt>nametag</dt><dd><p>A string to identify the data set (optional). Recommended.</p>
 </dd>
 </dl>
-<div class="section" id="id9">
-<h4>Examples<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
-</div>
-</div>
-<div class="section" id="example-when-executed-inside-rms-continous-properties-basic">
-<h3>Example when executed inside RMS (continous properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-basic" title="Permalink to this headline">¶</a></h3>
+<section id="id9">
+<h4>Examples<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h4>
+</section>
+</section>
+<section id="example-when-executed-inside-rms-continous-properties-basic">
+<h3>Example when executed inside RMS (continous properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-basic" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
@@ -778,9 +684,9 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-when-executed-inside-rms-discrete-properties-basic">
-<h3>Example when executed inside RMS (discrete properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-discrete-properties-basic" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-when-executed-inside-rms-discrete-properties-basic">
+<h3>Example when executed inside RMS (discrete properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-discrete-properties-basic" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
@@ -816,9 +722,9 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-when-executed-inside-rms-continous-properties-more-settings">
-<h3>Example when executed inside RMS (continous properties - more settings):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-more-settings" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-when-executed-inside-rms-continous-properties-more-settings">
+<h3>Example when executed inside RMS (continous properties - more settings):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-more-settings" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for the porosity in HC-zone</span>
@@ -859,9 +765,9 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="example-when-executed-from-python-script-in-terminal">
-<h3>Example when executed from python script in terminal:<a class="headerlink" href="#example-when-executed-from-python-script-in-terminal" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="example-when-executed-from-python-script-in-terminal">
+<h3>Example when executed from python script in terminal:<a class="headerlink" href="#example-when-executed-from-python-script-in-terminal" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for a porosity</span>
@@ -894,9 +800,9 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id10">
-<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id10">
+<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 
@@ -928,56 +834,39 @@ Later this YAML file can be edited and applied for a single line input</p>
 <span class="nt">verbosity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">info</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="qcproperties.html" class="btn btn-neutral float-right" title="The qcproperties class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="fmudesign.html" class="btn btn-neutral float-left" title="FMU design matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qcproperties.html" class="btn btn-neutral float-right" title="The qcproperties class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright Equinor.
-
-    </p>
+    <p>&#169; Copyright Equinor.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-    
+  </script>  
 
   <style>
     /* Sidebar header (and topbar for mobile) */
