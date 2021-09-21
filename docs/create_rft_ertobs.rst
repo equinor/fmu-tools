@@ -61,7 +61,7 @@ The example provides a typical minimum. Available options to set are
 input_file
   CSV file with input data, one row for each RFT observations. The DATE column
   must be in ISO-8601 format (YYYY-MM-DD). Required columns are "DATE", "MD",
-  "WELL_NAME" and "VALUE".
+  "WELL_NAME" and "PRESSURE".
 
 alias_file
   A CSV file with RMS well names in one column and Eclipse names in a different
