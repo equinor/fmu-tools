@@ -101,12 +101,12 @@ input_dframe
   the same columns, directly without going via CSV on disk.
 
 rms_name
-  The column name in the CSV alias_file with RMS names. Defaults to the first
-  column.
+  The column name in the CSV alias_file with RMS names. Defaults to
+  ``RMS_WELL_NAME``.
 
 ecl_name
-  The column name in the CSV alias_file with Eclipse names. Defaults to the
-  second column
+  The column name in the CSV alias_file with Eclipse names. Defaults to
+  ``ECLIPSE_WELL_NAME``.
 
 zonename
   Name of zone parameter in RMS grid (necessary for verifying if RFT
