@@ -21,10 +21,13 @@ Methods:
 
 * :ref:`Compare well zonation and grid <qcforward-welzonvsgrid>`
 * :ref:`Grid quality indicators <qcforward-gridqualindicators>`
+* :ref:`Blocked wells vs grid properties <qcforward-bwvsprops>`
 * :ref:`Run grid statistics <qcforward-gridstatistics>`
 
 .. include:: qcforward/wellzon_vs_grid.inc
 
 .. include:: qcforward/gridquality.inc
+
+.. include:: qcforward/bw_vs_gridprops.inc
 
 .. include:: qcforward/grid_statistics.inc

@@ -1,11 +1,11 @@
 """The _qcforward module contains the base class"""
 
 import sys
+from copy import deepcopy
 from os.path import join
 
-import yaml
 import pandas as pd
-
+import yaml
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
 
@@ -113,18 +113,28 @@ class QCForward:
 
         return dfr
 
-    def evaluate_qcreport(self, dfr, name):
+    def evaluate_qcreport(self, dfr, name, stopaction=True) -> str:
         """Evalute and do actions on dataframe which contains the gridquality report.
 
+        Action is done here if keyword action is True; otherwise the caller must decide
+        upon action dependent on return status.
+
         Args:
-            dfr (DataFrame): Pandas dataframe which needs a STATUS column with
-                "OK", "WARN" or "STOP"
-            name (str): Name of feature is under evaluation, e.g. "grid quality"
+            dfr (DataFrame): Pandas dataframe which needs a STATUS column with "OK",
+                "WARN" or "STOP"
+            name (str): Name of feature is under evaluation, e.g. "grid
+                quality"
+            stopaction(bool): If True and a STOP status is found, then a force_stop
+                is done here, otherwise the status is returned and the caller need
+                to to care of any actions.
 
+        Returns:
+            The string "STOP" or "CONTINUE" unless action is True and STOP is found
+            and the result dataframe
         """
-
         statuslist = ("OK", "WARN", "STOP")
 
+        dfr_status = None
         for status in statuslist:
             dfr_status = dfr[dfr["STATUS"] == status]
             if len(dfr_status) > 0:
@@ -135,13 +145,15 @@ class QCForward:
                 dfr_status_print = dfr_status.to_string()
                 print(f"{dfr_status_print}\n", file=stream)
                 if status == "STOP":
-                    QCC.force_stop("STOP criteria is found!")
-
+                    if stopaction:
+                        QCC.force_stop("STOP criteria is found!")
+                    return status
         print(
-            "\n== QC forward check {} ({}) finished ==".format(
-                self.__class__.__name__, self.ldata.nametag
-            )
+            f"\n== QC forward check {self.__class__.__name__} "
+            f"{self.ldata.nametag}) finished =="
         )
+
+        return "CONTINUE"
 
 
 class ActionsParser:
@@ -197,3 +209,58 @@ class ActionsParser:
         self.expression = key + self.compare + str(self.limit) + "%"
         if self.given:
             self.expression += "ifx" + self.given + str(self.criteria)
+
+
+def actions_validator(actionsin: dict) -> dict:
+    """General function to validate that the 'actions' input is on the correct form.
+
+    The typical form is::
+
+        "actions": [
+            {"warn": "anywell < 80%", "stop": "anywell < 75%"},
+            {"warn": "allwells < 90%", "stop": "allwells < 85%"},
+        ],
+
+    Several checks can be implemented; currently many is in a to-do state.
+
+    Args:
+        actionsin: Input actions record
+
+    Returns:
+        An actions python dictionary (potentially processed)
+    """
+
+    actions = deepcopy(actionsin)
+
+    if not isinstance(actions, list):
+        raise ValueError("The actions input must be a list")
+
+    if len(actions) != 2:
+        raise ValueError("The actions input must be a list with two element")
+
+    # check each line to see if the rules seems logical
+    anyhit = False
+    allhit = False
+    for elem in actions:
+        if not set(elem.keys()).issubset(["warn", "stop"]):
+            raise ValueError(
+                "Both criteria 'warn' and 'stop' are required in actions! "
+                f"You have keys: {list(elem.keys())}"
+            )
+        vals = list(elem.values())
+        if "any" in str(vals) and "all" in str(vals):
+            # avoid that one entry mixes all and any
+            raise ValueError(
+                "Seems wrong to mix 'all' and 'any' in one line which is not allowed"
+            )
+        if "any" in str(vals):
+            anyhit = True
+        if "all" in str(vals):
+            allhit = True
+
+    if not (anyhit and allhit):
+        raise ValueError(
+            f"One of 'any' or 'all' is missing in the actions input: {actions}"
+        )
+
+    return actions

@@ -1,0 +1,44 @@
+{
+    "title": "bw_vs_gridprops_asfile",
+    "description": "Input config for blocked wells vs gridprop method (file mode)",
+    "required": [
+        "grid",
+        "gridprops",
+        "bwells",
+        "compare",
+        "actions"
+    ],
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "type": "object",
+    "properties": {
+        "verbosity": {
+            "description": "Log detail level",
+            "type": [
+                "string",
+                "null"
+            ],
+            "examples": [
+                "info",
+                "debug"
+            ]
+        },
+        "grid": {
+            "description": "Name of grid file",
+            "type": "string",
+            "examples": [
+                "mygrid.roff",
+                "MYSIM.EGRID"
+            ]
+        },
+        "gridprops": {
+            "description": "Name and Path of zone as list in list",
+            "type": "array",
+            "items": {
+                "type": "array"
+            },
+            "examples": [
+                "[[\"Zone\", \"zonefile.roff\"]]"
+            ]
+        }
+    }
+}

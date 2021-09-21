@@ -4,9 +4,9 @@ This private module in qcforward is used to parse data on a general level.
 The resulting data will be stored as class instance attributes, e.g. self._grid
 
 """
-from os.path import join
-from glob import glob
 import re
+from glob import glob
+from os.path import join
 
 import xtgeo
 from fmu.tools._common import _QCCommon
@@ -260,7 +260,6 @@ class QCData(object):
                     )
                 xtg_wells.append(mywell)
                 self._xtgdata[welltype][well] = mywell
-                CMN.print_debug(well)
 
             except ValueError as verr:
                 print(f"Could not read well {well}: {verr}")

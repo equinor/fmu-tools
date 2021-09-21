@@ -2,10 +2,10 @@
 
 import pathlib
 from os.path import abspath
-import pytest
-import pandas as pd
 
 import fmu.tools.qcforward as qcf
+import pandas as pd
+import pytest
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
