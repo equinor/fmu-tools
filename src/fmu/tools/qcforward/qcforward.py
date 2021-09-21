@@ -21,9 +21,10 @@ I.e::
 
 
 """
-from fmu.tools.qcforward._wellzonation_vs_grid import WellZonationVsGrid
-from fmu.tools.qcforward._grid_statistics import GridStatistics
+from fmu.tools.qcforward._blockedwells_vs_gridprops import BlockedWellsVsGridProperties
 from fmu.tools.qcforward._grid_quality import GridQuality
+from fmu.tools.qcforward._grid_statistics import GridStatistics
+from fmu.tools.qcforward._wellzonation_vs_grid import WellZonationVsGrid
 
 
 def wellzonation_vs_grid(data, project=None):
@@ -48,6 +49,18 @@ def grid_statistics(data, project=None):
 
     gps = GridStatistics()
     gps.run(data, project=project)
+
+
+def blockedwells_vs_gridproperties(data, project=None):
+    """Check blocked wells vs vs grid props.
+
+    Args:
+        data (dict or str): The input data either as a Python dictionary or
+            a path to a YAML file
+    """
+
+    bwgp = BlockedWellsVsGridProperties()
+    bwgp.run(data, project=project)
 
 
 def grid_quality(data, project=None):

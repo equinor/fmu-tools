@@ -1,13 +1,10 @@
 """Testing qcdata loading of XTGeo data"""
 
-from __future__ import absolute_import, division, print_function  # PY2
-
 from os.path import abspath
+
 import pytest
-
-from fmu.tools.qcdata import QCData
-
 import xtgeo
+from fmu.tools.qcdata import QCData
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir

@@ -3,16 +3,14 @@ This private module in qcforward is used to check wellzonation vs grid zonation
 """
 
 import collections
+import json
 from pathlib import Path
 
-import json
-from jsonschema import validate
-import numpy as np
-
 import fmu.tools
+import numpy as np
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcforward._qcforward import QCForward, ActionsParser
-
+from fmu.tools.qcforward._qcforward import ActionsParser, QCForward
+from jsonschema import validate
 
 QCC = _QCCommon()
 UNDEF = float("nan")

@@ -1,0 +1,36 @@
+{
+    "title": "bw_vs_gridprops_asroxapi",
+    "description": "Input config for blocked wells vs gridprop method (Roxar API mode)",
+    "required": [
+        "grid",
+        "bwells",
+        "compare",
+        "actions"
+    ],
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "type": "object",
+    "properties": {
+        "verbosity": {
+            "description": "Log detail level",
+            "type": [
+                "string",
+                "null"
+            ],
+            "examples": [
+                "info",
+                "debug"
+            ]
+        },
+        "grid": {
+            "description": "Name of grid",
+            "type": "string",
+            "examples": [
+                "Simgrid",
+                "Geogrid"
+            ]
+        },
+        "bwells": {
+            "description": "Blocked wells input"
+        }
+    }
+}
