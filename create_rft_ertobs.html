@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>create_rft_ertobs &mdash; fmu-tools 1.8.1.dev2+g3108440 documentation</title>
+  <title>create_rft_ertobs &mdash; fmu-tools 1.8.1.dev3+g8bcc491 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.8.1.dev2+g3108440
+                1.8.1.dev3+g8bcc491
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -214,16 +214,16 @@ well, but padded with -1 at dates (report steps) where there is no data.</p>
 <dl class="simple">
 <dt>input_file</dt><dd><p>CSV file with input data, one row for each RFT observations. The DATE column
 must be in ISO-8601 format (YYYY-MM-DD). Required columns are “DATE”, “MD”,
-“WELL_NAME” and “VALUE”.</p>
+“WELL_NAME” and “PRESSURE”.</p>
 </dd>
 <dt>alias_file</dt><dd><p>A CSV file with RMS well names in one column and Eclipse names in a different
 column. The column names for RMS and Eclipse has defaults, that can be changed
 through options. First line in this file is used as a header with column
 names.</p>
 </dd>
-<dt>rft_prefix</dt><dd><p>If specified, this is added as a prefix to all well names. If aliases are
-in use, the prefix will be prepended after alias conversion. Default is
-no prefix.</p>
+<dt>rft_prefix</dt><dd><p>If specified, this is added as a prefix to all well names in the input file.
+If aliases are in use, the RMS names of wells in the alias file must include
+the prefix.</p>
 </dd>
 <dt>exportdir</dt><dd><p>A directory for where to dump the resulting txt, obs and well_date file. The
 directory must exist upfront.</p>
@@ -245,11 +245,11 @@ error times the VALUE column in the CSV.</p>
 <dt>input_dframe</dt><dd><p>Alternative to using <code class="docutils literal notranslate"><span class="pre">input_file</span></code>, you may provide a Pandas dataframe with
 the same columns, directly without going via CSV on disk.</p>
 </dd>
-<dt>rms_name</dt><dd><p>The column name in the CSV alias_file with RMS names. Defaults to the first
-column.</p>
+<dt>rms_name</dt><dd><p>The column name in the CSV alias_file with RMS names. Defaults to
+<code class="docutils literal notranslate"><span class="pre">RMS_WELL_NAME</span></code>.</p>
 </dd>
-<dt>ecl_name</dt><dd><p>The column name in the CSV alias_file with Eclipse names. Defaults to the
-second column</p>
+<dt>ecl_name</dt><dd><p>The column name in the CSV alias_file with Eclipse names. Defaults to
+<code class="docutils literal notranslate"><span class="pre">ECLIPSE_WELL_NAME</span></code>.</p>
 </dd>
 <dt>zonename</dt><dd><p>Name of zone parameter in RMS grid (necessary for verifying if RFT
 observations are in the correct zone in the grid)</p>
