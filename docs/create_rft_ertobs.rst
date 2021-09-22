@@ -61,7 +61,7 @@ The example provides a typical minimum. Available options to set are
 input_file
   CSV file with input data, one row for each RFT observations. The DATE column
   must be in ISO-8601 format (YYYY-MM-DD). Required columns are "DATE", "MD",
-  "WELL_NAME" and "VALUE".
+  "WELL_NAME" and "PRESSURE".
 
 alias_file
   A CSV file with RMS well names in one column and Eclipse names in a different
@@ -70,9 +70,9 @@ alias_file
   names.
 
 rft_prefix
-  If specified, this is added as a prefix to all well names. If aliases are
-  in use, the prefix will be prepended after alias conversion. Default is
-  no prefix.
+  If specified, this is added as a prefix to all well names in the input file. 
+  If aliases are in use, the RMS names of wells in the alias file must include
+  the prefix.
 
 exportdir
   A directory for where to dump the resulting txt, obs and well_date file. The
@@ -101,12 +101,12 @@ input_dframe
   the same columns, directly without going via CSV on disk.
 
 rms_name
-  The column name in the CSV alias_file with RMS names. Defaults to the first
-  column.
+  The column name in the CSV alias_file with RMS names. Defaults to
+  ``RMS_WELL_NAME``.
 
 ecl_name
-  The column name in the CSV alias_file with Eclipse names. Defaults to the
-  second column
+  The column name in the CSV alias_file with Eclipse names. Defaults to
+  ``ECLIPSE_WELL_NAME``.
 
 zonename
   Name of zone parameter in RMS grid (necessary for verifying if RFT
