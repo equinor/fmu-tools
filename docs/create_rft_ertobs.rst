@@ -70,9 +70,9 @@ alias_file
   names.
 
 rft_prefix
-  If specified, this is added as a prefix to all well names. If aliases are
-  in use, the prefix will be prepended after alias conversion. Default is
-  no prefix.
+  If specified, this is added as a prefix to all well names in the input file. 
+  If aliases are in use, the RMS names of wells in the alias file must include
+  the prefix.
 
 exportdir
   A directory for where to dump the resulting txt, obs and well_date file. The
