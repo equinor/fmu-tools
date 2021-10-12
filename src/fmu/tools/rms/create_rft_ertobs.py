@@ -33,10 +33,10 @@ Result:
 """
 import logging
 from pathlib import Path
-from typing import Dict, Any, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from scipy.interpolate import CubicSpline
 
 logger = logging.getLogger(__name__)
@@ -560,20 +560,27 @@ def main(config: Optional[Dict[str, Any]] = None) -> None:
 
     if "ZONE" in dframe and "project" in config:
         cells_outside_grid = dframe["rms_cell_index"].isnull()
+        # WARNING: If there are nan's in the dataframe, the dtype of
+        # these index columns changes to float
+
         if cells_outside_grid.any():
             logger.warning("RFT points outside the grid:")
             logger.warning("\n %s", str(dframe[cells_outside_grid]))
 
-        dframe["rms_cell_zone_val"] = dframe["rms_cell_index"].apply(
+        dframe.loc[~cells_outside_grid, "rms_cell_zone_val"] = dframe.loc[
+            ~cells_outside_grid, "rms_cell_index"
+        ].apply(
             lambda cell_index: grid_model.properties[config["zonename"]].get_values()[
-                cell_index
+                int(cell_index)
             ]
         )
         # What happens when there is no code_names in the RMS project? Which
         # exception will RMS raise?
-        dframe["rms_cell_zone_str"] = dframe["rms_cell_zone_val"].apply(
+        dframe.loc[~cells_outside_grid, "rms_cell_zone_str"] = dframe.loc[
+            ~cells_outside_grid, "rms_cell_zone_val"
+        ].apply(
             lambda zone_value: grid_model.properties[config["zonename"]].code_names[
-                zone_value
+                int(zone_value)
             ]
         )
 
