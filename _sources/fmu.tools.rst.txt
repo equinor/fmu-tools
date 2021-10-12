@@ -24,6 +24,14 @@ fmu.tools.extract\_grid\_zone\_tops module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.version module
+------------------------
+
+.. automodule:: fmu.tools.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
