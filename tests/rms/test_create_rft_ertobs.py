@@ -1,14 +1,13 @@
 """Testing the script create_rft_ertobs, both unit tests and integration tests"""
-import math
 import datetime
-from pathlib import Path
 import logging
+import math
+import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
 import pytest
-
 from fmu.tools.rms import create_rft_ertobs
 from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
 
@@ -92,13 +91,18 @@ class Grid:
             xyz: List with three elements.
 
         Returns:
-            integer being the cell index. None if outside the grid.
+            integer being the cell index. nan if outside the grid.
         """
         # Simple mocked gridmodel, "three" cells, but with large indices.
+        if xyz[0] > 1e8:
+            return np.nan  # Outside grid
         if xyz[2] >= 1700:
             return 3000  # Volon
         if xyz[2] >= 1650:
-            return 2000  # Therys
+            # Return as float, as this can be a later side effect
+            # in pandas frames when other cells are np.nan
+            return 2000.0  # Therys
+
         return 1000  # Valysar
 
 
@@ -582,6 +586,69 @@ def test_zones(rftzone, tmpdir, caplog):
         assert "Some points are in a different zone in the RMS grid" not in caplog.text
     else:
         assert "Some points are in a different zone in the RMS grid" in caplog.text
+
+
+def test_rft_outside_grid(tmp_path, caplog):
+    """Test behaviour when points are outside the grid."""
+    os.chdir(tmp_path)
+    dframe_dict = {
+        "DATE": "2099-01-01",
+        "WELL_NAME": "R-99",
+        "MD": 4,
+        "EAST": 1e10,
+        "NORTH": 2,
+        "TVD": 3,
+        "PRESSURE": "100",
+        "ERROR": 5,
+        "ZONE": "Volon",  # Presence of this give a warning when grid is not supplied
+    }
+    create_rft_ertobs.main({"input_dframe": pd.DataFrame(data=[dframe_dict])})
+
+    assert "Cannot verify zones when no RMS project is provided" in caplog.text
+
+    # No problems in this script.
+    # These data points will be ignored later with GENDATA_RFT.
+    assert (
+        pd.read_csv("R-99.txt", sep=r"\s+", index_col=None, header=None).iloc[0].values
+        == np.array([1e10, 2, 4, 3, "Volon"], dtype="object")
+    ).all()
+
+
+def test_rft_outside_grid_with_zone(tmp_path, caplog):
+    """Test behaviour when points are outside the grid and we try
+    to match with a zone (which can't be done when the point is outside the grid).
+    """
+    os.chdir(tmp_path)
+    dframe_dict = {
+        "DATE": "2099-01-01",
+        "WELL_NAME": "R-99",
+        "MD": 4,
+        "EAST": 1e10,
+        "NORTH": 2,
+        "TVD": 3,
+        "PRESSURE": "100",
+        "ERROR": 5,
+        "ZONE": "Volon",
+    }
+
+    create_rft_ertobs.main(
+        {
+            "input_dframe": pd.DataFrame(data=[dframe_dict]),
+            "project": RMSMockedProject(),
+            "gridname": "Simgrid",
+            "zonename": "Zone",
+        }
+    )
+    # The script only warns about the situation.
+    assert "RFT points outside the grid" in caplog.text
+
+    # Output files are still written with the data. GENDATA_RFT is responsible
+    # for ignoring the observation as it will not be able to find the cell index for
+    # it.
+    assert (
+        pd.read_csv("R-99.txt", sep=r"\s+", index_col=None, header=None).iloc[0].values
+        == np.array([1e10, 2, 4, 3, "Volon"], dtype="object")
+    ).all()
 
 
 def test_report_step_same_xyz(tmpdir):
