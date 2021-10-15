@@ -55,6 +55,13 @@ class QCForward:
         """A QCData() instance"""
         return self._gdata
 
+    @gdata.setter
+    def gdata(self, obj):
+        """A QCData() instance"""
+        if not isinstance(obj, QCData):
+            raise TypeError("Wrong type of object, shall be QCData")
+        self._gdata = obj
+
     @property
     def ldata(self):
         return self._ldata
