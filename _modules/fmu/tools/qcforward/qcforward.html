@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcforward.qcforward &mdash; fmu-tools 1.8.1 documentation</title>
+  <title>fmu.tools.qcforward.qcforward &mdash; fmu-tools 1.8.2.dev4+gce1da35 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.8.1
+                1.8.2.dev4+gce1da35
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,9 +101,10 @@
 
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._wellzonation_vs_grid</span> <span class="kn">import</span> <span class="n">WellZonationVsGrid</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._grid_statistics</span> <span class="kn">import</span> <span class="n">GridStatistics</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._blockedwells_vs_gridprops</span> <span class="kn">import</span> <span class="n">BlockedWellsVsGridProperties</span>
 <span class="kn">from</span> <span class="nn">fmu.tools.qcforward._grid_quality</span> <span class="kn">import</span> <span class="n">GridQuality</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._grid_statistics</span> <span class="kn">import</span> <span class="n">GridStatistics</span>
+<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._wellzonation_vs_grid</span> <span class="kn">import</span> <span class="n">WellZonationVsGrid</span>
 
 
 <div class="viewcode-block" id="wellzonation_vs_grid"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.wellzonation_vs_grid">[docs]</a><span class="k">def</span> <span class="nf">wellzonation_vs_grid</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -128,6 +129,18 @@
 
     <span class="n">gps</span> <span class="o">=</span> <span class="n">GridStatistics</span><span class="p">()</span>
     <span class="n">gps</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="blockedwells_vs_gridproperties"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.blockedwells_vs_gridproperties">[docs]</a><span class="k">def</span> <span class="nf">blockedwells_vs_gridproperties</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check blocked wells vs vs grid props.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (dict or str): The input data either as a Python dictionary or</span>
+<span class="sd">            a path to a YAML file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bwgp</span> <span class="o">=</span> <span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
+    <span class="n">bwgp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="grid_quality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_quality">[docs]</a><span class="k">def</span> <span class="nf">grid_quality</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcforward functions &mdash; fmu-tools 1.8.1 documentation</title>
+  <title>The qcforward functions &mdash; fmu-tools 1.8.2.dev4+gce1da35 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.8.1
+                1.8.2.dev4+gce1da35
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -75,18 +75,26 @@
 <li class="toctree-l3"><a class="reference internal" href="#id8">Example in RMS with setting from a YAML file:</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#compare-blocked-wells-with-corresponding-grid-properties">Compare blocked wells with corresponding grid properties</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Common fields (same input inside or outside RMS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keys-if-run-inside-rms">Keys if run inside RMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#if-run-in-normal-python-terminal-or-ert-job">If run in normal python (terminal or ERT job)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-when-run-inside-rms">Example when run inside RMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-when-run-from-python-script-in-terminal">Example when run from python script in terminal</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#running-grid-statistics">Running grid_statistics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#signature">Signature</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#required-keys">Required keys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#optional-fields">Optional fields</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id9">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#example-when-executed-inside-rms-continous-properties-basic">Example when executed inside RMS (continous properties - basic):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-when-executed-inside-rms-discrete-properties-basic">Example when executed inside RMS (discrete properties - basic):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-when-executed-inside-rms-continous-properties-more-settings">Example when executed inside RMS (continous properties - more settings):</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-when-executed-from-python-script-in-terminal">Example when executed from python script in terminal:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Example in RMS with setting from a YAML file:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Example in RMS with setting from a YAML file:</a></li>
 </ul>
 </li>
 </ul>
@@ -145,6 +153,7 @@ is logical.</p></li>
 <ul class="simple">
 <li><p><a class="reference internal" href="#qcforward-welzonvsgrid"><span class="std std-ref">Compare well zonation and grid</span></a></p></li>
 <li><p><a class="reference internal" href="#qcforward-gridqualindicators"><span class="std std-ref">Grid quality indicators</span></a></p></li>
+<li><p><a class="reference internal" href="#qcforward-bwvsprops"><span class="std std-ref">Blocked wells vs grid properties</span></a></p></li>
 <li><p><a class="reference internal" href="#qcforward-gridstatistics"><span class="std std-ref">Run grid statistics</span></a></p></li>
 </ul>
 <section id="compare-well-zonation-and-grid">
@@ -578,6 +587,204 @@ is that a single word is present</p></li>
 </div>
 </section>
 </section>
+<section id="compare-blocked-wells-with-corresponding-grid-properties">
+<span id="qcforward-bwvsprops"></span><h2>Compare blocked wells with corresponding grid properties<a class="headerlink" href="#compare-blocked-wells-with-corresponding-grid-properties" title="Permalink to this headline"></a></h2>
+<p>This method checks how the blocked well cell properties match with corresponding grid
+properties in the 3D grid. If worse than a given set of limits, either a warning is
+given or a full stop of the workflow is forced.</p>
+<p>The input to this method is a python dictionary with some defined keys. Note that
+the order of keys does not matter. It is advised to study the examples further below.</p>
+<section id="id9">
+<h3>Common fields (same input inside or outside RMS)<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h3>
+<dl>
+<dt>verbosity</dt><dd><p>Level of output while running None, “info” or “debug”, default is None (optional).</p>
+</dd>
+<dt>compare:</dt><dd><p>A dictionary on the form <code class="docutils literal notranslate"><span class="pre">{&quot;Facies&quot;:</span> <span class="pre">&quot;FACIES&quot;,</span> <span class="pre">&quot;PHIT&quot;:</span> <span class="pre">&quot;POROSITY&quot;}</span></code> where the first
+elements are the property name in blocked wells (here <code class="docutils literal notranslate"><span class="pre">&quot;Facies,</span> <span class="pre">&quot;PHIT&quot;</span></code>) and the
+second elements (after the colon) are the corresponding name in the grid properties
+(here <code class="docutils literal notranslate"><span class="pre">&quot;FACIES&quot;,</span> <span class="pre">&quot;POROSITY&quot;</span></code>). Note that names can of course be equal.</p>
+</dd>
+<dt>actions</dt><dd><p>This is a list of dictionaries that shows what actions which shall be performed per
+well (any) or for the average (all), for example <code class="docutils literal notranslate"><span class="pre">{&quot;warn&quot;:</span> <span class="pre">&quot;all</span> <span class="pre">&lt;</span> <span class="pre">50&quot;,</span> <span class="pre">&quot;stop&quot;:</span> <span class="pre">&quot;all</span> <span class="pre">&lt;</span>
+<span class="pre">30&quot;}</span></code> which means that match &lt; than 50% will trigger a warning, while a match &lt; 30%
+will trigger a stop in work flow. Note that <code class="docutils literal notranslate"><span class="pre">any</span></code> and <code class="docutils literal notranslate"><span class="pre">all</span></code> shall not be mixed in
+the same record (required). Also both lines are (currently) required.
+Finaly note that these are all equivalent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt;30&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allwells &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;allwells &lt;30&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allfoo &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;allfoo &lt;30&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Hence it is the substrings <code class="docutils literal notranslate"><span class="pre">all</span></code> or <code class="docutils literal notranslate"><span class="pre">any</span></code> that matters.</p>
+</dd>
+<dt>report</dt><dd><p>Result will be written in a CSV file (which e.g. can be used in plotting) on disk.
+(optional).</p>
+</dd>
+<dt>dump_yaml</dt><dd><p>If present, should be a file name where the current data structure is dumped to YAML
+format. Later this YAML file can be edited and applied for a single line input
+(optional).</p>
+</dd>
+<dt>nametag</dt><dd><p>A string to identify the data set. Recommended.</p>
+</dd>
+<dt>tolerance</dt><dd><p>Provide the tolerance for the match between a blocked well cell and the corresponding
+grid property cell. This tolerance can be given either as an absolute tolerance or a
+relative tolerance. An asolute tolerance can be given on the form <code class="docutils literal notranslate"><span class="pre">0.01</span></code> or as a
+dictionary: <code class="docutils literal notranslate"><span class="pre">{&quot;abs&quot;:</span> <span class="pre">0.01}</span></code> while a relative tolerance shall be given as <code class="docutils literal notranslate"><span class="pre">{&quot;rel&quot;:</span>
+<span class="pre">0.01}</span></code>. An absolute tolerance just looks at the absolute value of the difference,
+while a relative tolerance will do a weighting on the mean value from the blocked
+logs, and is thus more sensible to use for input logs with varying average values
+(e.g. porosity and permeability).</p>
+</dd>
+<dt>show_data</dt><dd><p>A string or a dict (or None) if the processed dataset shall be shown to screen as a
+dataframe (table). This can be useful when investigating what wells that trigger e.g.
+a stop. Possible values are None (default, means no output), “yes” just to show all.
+However for a more fine-grained control, using a dict is recommended:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># show FAIL lines for wells that have status STOP:</span>
+<span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;stop&quot;</span><span class="p">}</span>
+
+<span class="c1"># show FAIL lines for wells that have status WARN:</span>
+<span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;warn&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>tvd_range</dt><dd><p>A list of two numbers can be applied to limit the vertical range of the comparison.
+The numbers shall represent minimum and maximum depth, and the range is inclusive,
+e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;tvd_range&quot;</span> <span class="p">[</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">2300</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that this setting can exclude whole wells from being evaluated.</p>
+</dd>
+</dl>
+</section>
+<section id="keys-if-run-inside-rms">
+<h3>Keys if run inside RMS<a class="headerlink" href="#keys-if-run-inside-rms" title="Permalink to this headline"></a></h3>
+<dl class="simple">
+<dt>bwells</dt><dd><p>In RMS this is a dictionary with 3 fields: <code class="docutils literal notranslate"><span class="pre">names</span></code>, <code class="docutils literal notranslate"><span class="pre">grid</span></code> and <code class="docutils literal notranslate"><span class="pre">bwname</span></code>.
+The names is a list of wellnames which in turn can have python valid regular
+expressions. See examples. (required).</p>
+</dd>
+<dt>grid</dt><dd><p>Name of grid icon in RMS (required).</p>
+</dd>
+</dl>
+</section>
+<section id="if-run-in-normal-python-terminal-or-ert-job">
+<h3>If run in normal python (terminal or ERT job)<a class="headerlink" href="#if-run-in-normal-python-terminal-or-ert-job" title="Permalink to this headline"></a></h3>
+<dl class="simple">
+<dt>bwells</dt><dd><p>Outside RMS, wells is a list of files on RMS ascii well format. File wildcards are
+allowed, se example. (required).</p>
+</dd>
+<dt>grid</dt><dd><p>Name of file with grid (in ROFF, EGRID or GRDECL format) (required).</p>
+</dd>
+<dt>gridprops</dt><dd><p>A list of list where the inner list is a pair with name of Zone and assosiated
+filename, for example <code class="docutils literal notranslate"><span class="pre">[[&quot;Zone&quot;,</span> <span class="pre">&quot;zone.roff&quot;]]</span></code>. This is required when running
+outside RMS but not needed when run inside RMS.</p>
+</dd>
+</dl>
+</section>
+<section id="example-when-run-inside-rms">
+<h3>Example when run inside RMS<a class="headerlink" href="#example-when-run-inside-rms" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">fmu.tools</span>
+
+<span class="n">GNAME</span> <span class="o">=</span> <span class="s2">&quot;Geogrid_Valysar&quot;</span>
+
+<span class="c1"># dict showing &quot;mappings&quot;, blocked well version first</span>
+<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Facies&quot;</span><span class="p">:</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">}</span>
+
+<span class="n">BWDATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;55.*&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
+    <span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/bw_vs_prop.csv&quot;</span>
+
+<span class="n">ACTIONS1</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 80%&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 90%&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+
+    <span class="c1"># make report folder if not present</span>
+    <span class="n">reportpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">REPORTPATH1</span><span class="p">)</span>
+    <span class="n">reportpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">usezonedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;bwells&quot;</span><span class="p">:</span> <span class="n">BWDATA</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
+        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
+        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
+        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tolerance&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;BWCHECK&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;stop&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;tvd_range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2700</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usezonedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">check</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="example-when-run-from-python-script-in-terminal">
+<h3>Example when run from python script in terminal<a class="headerlink" href="#example-when-run-from-python-script-in-terminal" title="Permalink to this headline"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">fmu.tools</span>
+
+<span class="n">GFILE</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/grid/geogrid_valysar.roff&quot;</span>  <span class="c1"># has both grid and props</span>
+<span class="n">BWELLFILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;../qc/output/wells/bw/valysar*.bw&quot;</span><span class="p">]</span>
+
+<span class="c1"># dict showing &quot;mappings&quot;, blocked well version first</span>
+<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Facies&quot;</span><span class="p">:</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">}</span>
+
+<span class="n">GPROPS</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">]]</span>
+
+<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/bw_vs_prop.csv&quot;</span>
+
+<span class="n">ACTIONS1</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 80%&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 90%&quot;</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+
+    <span class="c1"># make report folder if not present</span>
+    <span class="n">reportpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">REPORTPATH1</span><span class="p">)</span>
+    <span class="n">reportpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">usezonedata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;bwells&quot;</span><span class="p">:</span> <span class="n">BWELLFILES</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GFILE</span><span class="p">,</span>
+        <span class="s2">&quot;gridprops&quot;</span><span class="p">:</span> <span class="n">GPROPS</span><span class="p">,</span>
+        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
+        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
+        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
+        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tolerance&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;BWCHECK&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usezonedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">check</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="running-grid-statistics">
 <span id="qcforward-gridstatistics"></span><h2>Running grid_statistics<a class="headerlink" href="#running-grid-statistics" title="Permalink to this headline"></a></h2>
 <p>This method checks if property statistics from 3D grids are within user specified
@@ -646,8 +853,8 @@ Later this YAML file can be edited and applied for a single line input</p>
 <dt>nametag</dt><dd><p>A string to identify the data set (optional). Recommended.</p>
 </dd>
 </dl>
-<section id="id9">
-<h4>Examples<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h4>
+<section id="id10">
+<h4>Examples<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h4>
 </section>
 </section>
 <section id="example-when-executed-inside-rms-continous-properties-basic">
@@ -801,8 +1008,8 @@ Later this YAML file can be edited and applied for a single line input</p>
 </pre></div>
 </div>
 </section>
-<section id="id10">
-<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id10" title="Permalink to this headline"></a></h3>
+<section id="id11">
+<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id11" title="Permalink to this headline"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 

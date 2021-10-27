@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcdata.qcdata &mdash; fmu-tools 1.8.1 documentation</title>
+  <title>fmu.tools.qcdata.qcdata &mdash; fmu-tools 1.8.2.dev4+gce1da35 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.8.1
+                1.8.2.dev4+gce1da35
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -84,9 +84,9 @@
 <span class="sd">The resulting data will be stored as class instance attributes, e.g. self._grid</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
 
 <span class="kn">import</span> <span class="nn">xtgeo</span>
 <span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
@@ -340,7 +340,6 @@
                     <span class="p">)</span>
                 <span class="n">xtg_wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mywell</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="n">welltype</span><span class="p">][</span><span class="n">well</span><span class="p">]</span> <span class="o">=</span> <span class="n">mywell</span>
-                <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="n">well</span><span class="p">)</span>
 
             <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">verr</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not read well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">verr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

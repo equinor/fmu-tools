@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcforward package &mdash; fmu-tools 1.8.1 documentation</title>
+  <title>fmu.tools.qcforward package &mdash; fmu-tools 1.8.2.dev4+gce1da35 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.8.1
+                1.8.2.dev4+gce1da35
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -132,6 +132,18 @@ the job is about to be read numerous times with the <code class="docutils litera
 <dt class="sig sig-object py" id="fmu.tools.qcforward.qcforward.grid_statistics">
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.qcforward.qcforward.</span></span><span class="sig-name descname"><span class="pre">grid_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#grid_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.qcforward.grid_statistics" title="Permalink to this definition"></a></dt>
 <dd><p>Check statistics in 3D grid against user input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.qcforward.qcforward.blockedwells_vs_gridproperties">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.qcforward.qcforward.</span></span><span class="sig-name descname"><span class="pre">blockedwells_vs_gridproperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#blockedwells_vs_gridproperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.qcforward.blockedwells_vs_gridproperties" title="Permalink to this definition"></a></dt>
+<dd><p>Check blocked wells vs vs grid props.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
@@ -288,6 +300,55 @@ Alternatively it can be a list for more fine grained control, e.g.
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.qcforward.BlockedWellsVsGridProperties">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fmu.tools.qcforward.</span></span><span class="sig-name descname"><span class="pre">BlockedWellsVsGridProperties</span></span><a class="reference internal" href="_modules/fmu/tools/qcforward/_blockedwells_vs_gridprops.html#BlockedWellsVsGridProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.BlockedWellsVsGridProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fmu.tools.qcforward._qcforward.QCForward</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.qcforward.BlockedWellsVsGridProperties.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_blockedwells_vs_gridprops.html#BlockedWellsVsGridProperties.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.BlockedWellsVsGridProperties.run" title="Permalink to this definition"></a></dt>
+<dd><p>Main routine for evaluating blockedwells vs gridproperties</p>
+<p>The routine depends on existing XTGeo functions for this purpose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p></li>
+<li><p><strong>reuse</strong> (<em>bool</em><em> or </em><em>list</em>) – Reusing some “timeconsuming to read” data in the
+instance. If True, then grid and gridprops will be reused as default.
+Alternatively it can be a list for more fine grained control, e.g.
+[“grid”, “gridprops”, “bwells”]</p></li>
+<li><p><strong>project</strong> (<em>Union</em><em>[</em><em>object</em><em>, </em><em>str</em><em>]</em>) – For usage inside RMS, None if running files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props">
+<span class="sig-name descname"><span class="pre">compare_bw_props</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/_blockedwells_vs_gridprops.html#BlockedWellsVsGridProperties.compare_bw_props"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props" title="Permalink to this definition"></a></dt>
+<dd><p>Given data, do a comparison of blcked wells cells vs props, via XTGeo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.qcforward.blockedwells_vs_gridproperties">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.qcforward.</span></span><span class="sig-name descname"><span class="pre">blockedwells_vs_gridproperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#blockedwells_vs_gridproperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.qcforward.blockedwells_vs_gridproperties" title="Permalink to this definition"></a></dt>
+<dd><p>Check blocked wells vs vs grid props.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The input data either as a Python dictionary or
+a path to a YAML file</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
