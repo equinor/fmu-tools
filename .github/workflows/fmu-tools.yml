@@ -85,7 +85,7 @@ jobs:
           python setup.py build_sphinx
 
       - name: Update GitHub pages
-        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/master' && matrix.python-version == '3.6'
+        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/master' && matrix.python-version == '3.6' && matrix.pandas-version != '0.21'
         run: |
             cp -R ./build/sphinx/html ../html
             git config --local user.email "fmu-tools-github-action"
@@ -105,7 +105,8 @@ jobs:
             fi
 
       - name: Build python package and publish to pypi
-        if: github.event_name == 'release' && matrix.python-version == '3.6'
+        if: github.event_name == 'release' && matrix.python-version == '3.6' && matrix.pandas-version != '0.21'
+
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.fmu_tools_pypi_token }}
