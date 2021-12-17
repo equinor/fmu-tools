@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 """The setup script for fmu-tools."""
-import os
-from glob import glob
-from os.path import splitext
-from os.path import basename, exists
-from shutil import rmtree
 import fnmatch
-
+import os
 from distutils.command.clean import clean as _clean  # type: ignore
-from setuptools import setup, find_packages
+from glob import glob
+from os.path import basename, exists, splitext
+from shutil import rmtree
+
+from setuptools import find_packages, setup
 
 CMDCLASS = {}
 try:
@@ -64,6 +63,7 @@ EXTRAS_REQUIRE = {"tests": TEST_REQUIREMENTS, "docs": DOCS_REQUIREMENTS}
 CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
     "rmsvolumetrics2csv=fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main",
+    "ensemble_well_props=fmu.tools.ensembles.ensemble_well_props:main",
 ]
 
 
