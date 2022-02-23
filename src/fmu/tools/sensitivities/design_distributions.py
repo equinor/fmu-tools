@@ -630,7 +630,7 @@ def _nearest_positive_definite(a_mat):
     kiter = 1
     while not _is_positive_definite(a3_mat):
         mineig = numpy.min(numpy.real(la.eigvals(a3_mat)))
-        a3_mat += identity * (-mineig * kiter ** 2 + spacing)
+        a3_mat += identity * (-mineig * kiter**2 + spacing)
         kiter += 1
 
     return a3_mat
