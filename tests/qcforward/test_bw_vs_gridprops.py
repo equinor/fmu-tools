@@ -5,6 +5,7 @@ from os.path import abspath
 
 import pandas as pd
 import pytest
+
 from fmu.tools import qcforward as qcf
 
 # filedata
@@ -92,6 +93,7 @@ def test_bw_vs_gridprops_asfiles_change_tolerance(tmp_path, datainput):
         job.run(data)
     assert "STOP criteria is found" in str(err)
     rep = pd.read_csv(data["report"])
+    print("REPORT\n", rep)
     # pylint: disable=no-member, unsubscriptable-object
     assert rep.iloc[1].at["MATCH%"] == 85.0
     assert rep.iloc[1].at["STATUS"] == "STOP"
