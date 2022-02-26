@@ -7,12 +7,10 @@ Output will be RMS well file and/or CSV files, in addition to screen info.
 
 import argparse
 import sys
-import typing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
-import numpy as np
 import pandas as pd
 import xtgeo
 import yaml
@@ -85,13 +83,15 @@ def dump_example_config():
       iteration: iter-0
 
     well:
-      # full path to well (which must be in RMS ascii well format)
+      # path (full or relative) to well (which must be in RMS ascii well format)
       file: /some/path/to/mywell.w
       # lognames to import (optional, to speed up, default is "all" which can be slow)
+      # a recommendation is to ONLY include the required MD log
       lognames: ["PHIT", "MD"]
       # name of MDepth log in file (a measured depth log is required)
       mdlog: MD
       # delta = sampling rate, default is 2 (if metric units: means 2 meters)
+      # A large delta will speed up run but decrease accuracy
       delta: 1
       # which MD ranges to evaluate, list in list where inner is [min, max]
       mdranges: [[1690, 1710], [1730, 1830]]
@@ -105,6 +105,7 @@ def dump_example_config():
 
       # list of properties to analyse with codes (discrete, e.g. facies) or
       # range interval; the final report will combine all these criteria!
+      # The filestub is a relative path the the ensemble run
       properties:
         - name: Facies
           filestub: share/results/grids/geogrid--facies.roff
@@ -208,12 +209,12 @@ class ConfigData:
         self.wellfile = self.config["well"]["file"]
         self.lognames = self.config["well"].get("lognames", "all")
         self.mdlog = self.config["well"].get("mdlog", "MDepth")
-        self.mdranges = self.config["well"]["mdranges"]
+        self.mdranges = self._validate_mdranges(self.config["well"]["mdranges"])
         self.welldelta = self.config["well"].get("delta", 2)
 
         cfgprop = self.config["gridproperties"]
         self.gridfilestub = Path(cfgprop["grid"]["filestub"])
-        self.gridreuse = cfgprop["grid"].get("reuse_grid", False)
+        self.gridreuse = cfgprop["grid"].get("reuse", False)
 
         self.proplist = []
         props = cfgprop["properties"]
@@ -258,7 +259,30 @@ class ConfigData:
         self.report_keep_intermediate = rpt.get("keep_intermediate_logs", False)
         self.report_show_in_terminal = rpt.get("show_in_terminal", True)
 
-        self.config = None
+    @staticmethod
+    def _validate_mdranges(mdranges: List[Sequence[float]]) -> List[Sequence[float]]:
+        """Check that mdranges are on proper form and that intervals do not overlap"""
+        if not mdranges:
+            raise ValueError("Mandatory input 'mdranges' is not set!")
+
+        previous_stop = -999999.0
+        for mdsubset in mdranges:
+            start, stop = mdsubset
+            if not isinstance(start, (int, float)) or not isinstance(
+                stop, (int, float)
+            ):
+                raise ValueError("Values in mdranges must be numbers")
+
+            if stop <= start:
+                raise ValueError(
+                    f"Stop value in mdranges ranges is less than start: {mdsubset}"
+                )
+            if start < previous_stop:
+                raise ValueError(f"Ranges cannot be overlapping: {mdranges}")
+
+            previous_stop = stop
+
+        return mdranges
 
     @staticmethod
     def _validate_codes(codes):
@@ -388,8 +412,8 @@ class EnsembleWellProps:
         nsegments = len(self.cfg.mdranges)
         for intv in self.cfg.mdranges:
             lmin, lmax = intv
-            if lmax > self.well.dataframe[self.cfg.mdlog].values[-1]:
-                lmax = self.well.dataframe[self.cfg.mdlog].values[-1]
+            if lmax > mdend:
+                lmax = mdend
             totlensegments += lmax - lmin
 
         myreport = []
@@ -416,16 +440,8 @@ class EnsembleWellProps:
                     added_flag_logs.append(pidx)
                     dfr.loc[dfr[pidx] != 1, cname] = 0
 
-            unique, counts = np.unique(
-                self.well.dataframe[cname].dropna().values, return_counts=True
-            )
-            try:
-                cindex = np.argwhere(unique == 1.0)[0][0]
-            except IndexError:
-                cfrac = 0.0
-            else:
-                cfrac = counts[cindex] / np.sum(counts)
-                cfrac = counts[1] / np.sum(counts)
+            fractions = self.well.dataframe[cname].dropna().value_counts(normalize=True)
+            cfrac = fractions[1] if 1 in fractions else 0.0
 
             clen = totlensegments * cfrac
 
