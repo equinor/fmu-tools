@@ -44,10 +44,10 @@ def test_bw_vs_gridprops_asfiles(datainput):
     job.run(datainput)
 
     rep = pd.read_csv(datainput["report"])
-
+    rep.sort_values(by=["WELL", "COMPARE(BW:MODEL)"], inplace=True, ignore_index=True)
     # pylint: disable=no-member, unsubscriptable-object
-    assert rep.iloc[1].at["MATCH%"] == 85.0
-    assert rep.iloc[1].at["STATUS"] == "OK"
+    assert rep.iloc[3].at["MATCH%"] == 85.0
+    assert rep.iloc[3].at["STATUS"] == "OK"
 
     wel = "WELL"
     cmp = "COMPARE(BW:MODEL)"
