@@ -37,6 +37,9 @@ def fixture_datainput(tmp_path):
     return data
 
 
+@pytest.mark.skipif(
+    pd.__version__.startswith("0"), reason="Skip testing when pandas 0.*"
+)
 def test_bw_vs_gridprops_asfiles(datainput):
     """Testing the zonelog vs grid functionality using files"""
 
@@ -57,6 +60,9 @@ def test_bw_vs_gridprops_asfiles(datainput):
     assert ser[0] == 100.0
 
 
+@pytest.mark.skipif(
+    pd.__version__.startswith("0"), reason="Skip testing when pandas 0.*"
+)
 def test_bw_vs_gridprops_asfiles_shall_stop(tmp_path, datainput):
     """Testing the zonelog vs grid functionality using files, shall stop."""
 
@@ -78,6 +84,9 @@ def test_bw_vs_gridprops_asfiles_shall_stop(tmp_path, datainput):
     assert rep.iloc[3].at["STATUS"] == "STOP"
 
 
+@pytest.mark.skipif(
+    pd.__version__.startswith("0"), reason="Skip testing when pandas 0.*"
+)
 def test_bw_vs_gridprops_asfiles_change_tolerance(tmp_path, datainput):
     """Testing the zonelog vs grid functionality using files, iterate tolerance."""
 
