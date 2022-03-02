@@ -194,9 +194,9 @@ def interp_from_md(
     if interpolation.lower() == "linear":
         logger.info("Interpolating (linear) East, North, TVD from MD")
         return (
-            np.interp(md_value, coords[:, 0], coords[:, 1]),
-            np.interp(md_value, coords[:, 0], coords[:, 2]),
-            np.interp(md_value, coords[:, 0], coords[:, 3]),
+            float(np.interp(md_value, coords[:, 0], coords[:, 1])),
+            float(np.interp(md_value, coords[:, 0], coords[:, 2])),
+            float(np.interp(md_value, coords[:, 0], coords[:, 3])),
         )
     if interpolation.lower() == "cubic":
         logger.info("Interpolating (cubic spline) East, North, TVD from MD")
@@ -242,7 +242,7 @@ def interp_from_xyz(
     if strictly_downward(coords):
         # Interpolation from TVD survey can be used
         if interpolation.lower() == "linear":
-            md_value = np.interp(xyz[2], coords[:, 3], coords[:, 0])
+            md_value = float(np.interp(xyz[2], coords[:, 3], coords[:, 0]))
         else:
             md_value = float(CubicSpline(coords[:, 3], coords[:, 0])(xyz[2]))
         logger.info("MD estimated on strictly downward wellpath: %s", str(md_value))
