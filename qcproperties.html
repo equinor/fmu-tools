@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcproperties class &mdash; fmu-tools 1.9.1.dev1+gf1eb592 documentation</title>
+  <title>The qcproperties class &mdash; fmu-tools 1.9.1.dev3+g8c755ed documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.9.1.dev1+gf1eb592
+                1.9.1.dev3+g8c755ed
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -674,64 +674,64 @@ dataframe are written to csv.</p>
 </pre></div>
 </div>
 <p>The YAML file may in case look like:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">grid</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GeoGrid</span>
-    <span class="nt">properties</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Poro</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Perm</span>
-    <span class="nt">selectors</span><span class="p">:</span>
-      <span class="nt">ZONE</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zone</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">grid</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">grid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GeoGrid</span><span class="w"></span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Poro</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Perm</span><span class="w"></span>
+<span class="w">    </span><span class="nt">selectors</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ZONE</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Zone</span><span class="w"></span>
 
-  <span class="p p-Indicator">-</span> <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">SimGrid</span>
-    <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">Poro</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PORO</span>
-      <span class="nt">Perm</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PERMX</span>
-    <span class="nt">selectors</span><span class="p">:</span>
-      <span class="nt">ZONE</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zone</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">grid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimGrid</span><span class="w"></span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Poro</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PORO</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Perm</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PERMX</span><span class="w"></span>
+<span class="w">    </span><span class="nt">selectors</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ZONE</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Zone</span><span class="w"></span>
 
-<span class="nt">wells</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">wells</span><span class="p">:</span>
-      <span class="nt">logrun</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">log</span>
-      <span class="nt">trajectory</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Drilled trajectory</span>
-    <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">Poro</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Phit</span>
-      <span class="nt">Perm</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Klogh</span>
-    <span class="nt">selectors</span><span class="p">:</span>
-      <span class="nt">ZONE</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zonelog</span>
-        <span class="nt">codes</span><span class="p">:</span>
-          <span class="nt">1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UpperReek</span>
-          <span class="nt">2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MidReek</span>
-          <span class="nt">3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LowerReek</span>
-        <span class="nt">exclude</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span>
+<span class="nt">wells</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wells</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">logrun</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">log</span><span class="w"></span>
+<span class="w">      </span><span class="nt">trajectory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Drilled trajectory</span><span class="w"></span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Poro</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Phit</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Perm</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Klogh</span><span class="w"></span>
+<span class="w">    </span><span class="nt">selectors</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ZONE</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Zonelog</span><span class="w"></span>
+<span class="w">        </span><span class="nt">codes</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UpperReek</span><span class="w"></span>
+<span class="w">          </span><span class="nt">2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MidReek</span><span class="w"></span>
+<span class="w">          </span><span class="nt">3</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LowerReek</span><span class="w"></span>
+<span class="w">        </span><span class="nt">exclude</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span><span class="w"></span>
 
-<span class="nt">blockedwells</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">wells</span><span class="p">:</span>
-      <span class="nt">grid</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GeoGrid</span>
-      <span class="nt">bwname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BW</span>
-    <span class="nt">properties</span><span class="p">:</span>
-      <span class="nt">Poro</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Phit</span>
-      <span class="nt">Perm</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Klogh</span>
-    <span class="nt">selectors</span><span class="p">:</span>
-      <span class="nt">ZONE</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Zonelog</span>
-        <span class="nt">codes</span><span class="p">:</span>
-          <span class="nt">1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UpperReek</span>
-          <span class="nt">2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MidReek</span>
-          <span class="nt">3</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LowerReek</span>
-        <span class="nt">exclude</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span>
+<span class="nt">blockedwells</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">wells</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">grid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GeoGrid</span><span class="w"></span>
+<span class="w">      </span><span class="nt">bwname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BW</span><span class="w"></span>
+<span class="w">    </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Poro</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Phit</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Perm</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Klogh</span><span class="w"></span>
+<span class="w">    </span><span class="nt">selectors</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ZONE</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Zonelog</span><span class="w"></span>
+<span class="w">        </span><span class="nt">codes</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UpperReek</span><span class="w"></span>
+<span class="w">          </span><span class="nt">2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MidReek</span><span class="w"></span>
+<span class="w">          </span><span class="nt">3</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LowerReek</span><span class="w"></span>
+<span class="w">        </span><span class="nt">exclude</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Above_TopUpperReek</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Below_BaseLowerReek</span><span class="w"></span>
 </pre></div>
 </div>
 </section>

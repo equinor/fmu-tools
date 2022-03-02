@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.9.1.dev1+gf1eb592 documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.9.1.dev3+g8c755ed documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.9.1.dev1+gf1eb592
+                1.9.1.dev3+g8c755ed
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -274,9 +274,9 @@
     <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Interpolating (linear) East, North, TVD from MD&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])),</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cubic&quot;</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Interpolating (cubic spline) East, North, TVD from MD&quot;</span><span class="p">)</span>
@@ -322,7 +322,7 @@
     <span class="k">if</span> <span class="n">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
         <span class="c1"># Interpolation from TVD survey can be used</span>
         <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
-            <span class="n">md_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="n">md_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">md_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;MD estimated on strictly downward wellpath: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">md_value</span><span class="p">))</span>

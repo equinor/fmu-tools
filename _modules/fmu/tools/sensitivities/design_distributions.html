@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.9.1.dev1+gf1eb592 documentation</title>
+  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.9.1.dev3+g8c755ed documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.9.1.dev1+gf1eb592
+                1.9.1.dev3+g8c755ed
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -710,7 +710,7 @@
     <span class="n">kiter</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">_is_positive_definite</span><span class="p">(</span><span class="n">a3_mat</span><span class="p">):</span>
         <span class="n">mineig</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">a3_mat</span><span class="p">)))</span>
-        <span class="n">a3_mat</span> <span class="o">+=</span> <span class="n">identity</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">mineig</span> <span class="o">*</span> <span class="n">kiter</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">)</span>
+        <span class="n">a3_mat</span> <span class="o">+=</span> <span class="n">identity</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">mineig</span> <span class="o">*</span> <span class="n">kiter</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">)</span>
         <span class="n">kiter</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">a3_mat</span>
