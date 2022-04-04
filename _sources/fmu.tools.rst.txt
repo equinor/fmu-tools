@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   fmu.tools.ensembles
    fmu.tools.fipmapper
    fmu.tools.qcdata
    fmu.tools.qcforward

@@ -14,6 +14,7 @@ Contents:
    qcreset
    create_rft_ertobs
    rmsvolumetrics2csv
+   ensembles
    contributing
    authors
    history

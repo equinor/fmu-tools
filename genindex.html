@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmu-tools 1.9.1.dev3+g8c755ed documentation</title>
+  <title>Index &mdash; fmu-tools 1.9.1.dev9+gf8699ed documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
             <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.9.1.dev3+g8c755ed
+                1.9.1.dev9+gf8699ed
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
@@ -88,7 +89,10 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -108,16 +112,20 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.add_background">(fmu.tools.sensitivities.DesignMatrix method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case">add_case() (fmu.tools.sensitivities.create_design.ScenarioSensitivity method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds">add_seeds() (fmu.tools.sensitivities.create_design.DesignMatrix method)</a>
 
       <ul>
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.add_seeds">(fmu.tools.sensitivities.DesignMatrix method)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_flag_logs">added_flag_logs (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_logs">added_logs (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -168,17 +176,31 @@
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename">casename (fmu.tools.sensitivities.create_design.ScenarioSensitivityCase attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues">casevalues (fmu.tools.sensitivities.create_design.ScenarioSensitivityCase attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cfg">cfg (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">check_and_parse_config() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">check_gridquality() (fmu.tools.qcforward.GridQuality method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.check_gridstatistics">check_gridstatistics() (fmu.tools.qcforward.GridStatistics method)</a>
 </li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.codes">codes (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+</li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props">compare_bw_props() (fmu.tools.qcforward.BlockedWellsVsGridProperties method)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.config">config (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData">ConfigData (class in fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint">cprint() (fmu.tools.ensembles.ensemble_well_props.ScreenInfo method)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport">cumlenreport (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport_summary">cumlenreport_summary (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -192,6 +214,8 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.defaultvalues">(fmu.tools.sensitivities.DesignMatrix attribute)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.delta">delta (fmu.tools.ensembles.ensemble_well_props.WellCase attribute)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix">DesignMatrix (class in fmu.tools.sensitivities)</a>
 
       <ul>
@@ -204,10 +228,12 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.designvalues">(fmu.tools.sensitivities.DesignMatrix attribute)</a>
 </li>
       </ul></li>
-      <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets">disjoint_sets() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.discrete">discrete (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets">disjoint_sets() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values">draw_values() (in module fmu.tools.sensitivities.design_distributions)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_lognormal">draw_values_lognormal() (in module fmu.tools.sensitivities.design_distributions)</a>
@@ -222,18 +248,22 @@
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_uniform">draw_values_uniform() (in module fmu.tools.sensitivities.design_distributions)</a>
 </li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.dump_example_config">dump_example_config() (in module fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">ertobs_df_to_files() (in module fmu.tools.rms.create_rft_ertobs)</a>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps">EnsembleWellProps (class in fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
-      <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.excel2dict_design">excel2dict_design() (in module fmu.tools.sensitivities)</a>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">ertobs_df_to_files() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.excel2dict_design">excel2dict_design() (in module fmu.tools.sensitivities)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity">ExternSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
       <li><a href="fmu.tools.html#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">extract_grid_zone_tops() (in module fmu.tools.extract_grid_zone_tops)</a>
@@ -244,6 +274,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.filestub">filestub (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+</li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">fill_missing_md_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2region">fip2region() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
@@ -266,6 +298,20 @@
 
       <ul>
         <li><a href="fmu.tools.html#module-fmu.tools">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmu.tools.ensembles
+
+      <ul>
+        <li><a href="fmu.tools.ensembles.html#module-fmu.tools.ensembles">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmu.tools.ensembles.ensemble_well_props
+
+      <ul>
+        <li><a href="fmu.tools.ensembles.html#module-fmu.tools.ensembles.ensemble_well_props">module</a>
 </li>
       </ul></li>
       <li>
@@ -303,6 +349,8 @@
         <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcforward
 
@@ -310,8 +358,6 @@
         <li><a href="fmu.tools.qcforward.html#module-fmu.tools.qcforward">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcforward.qcforward
 
@@ -414,12 +460,14 @@
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.get_parser">(in module fmu.tools.sensitivities.fmudesignrunner)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args">get_parser_args() (in module fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_regions">get_regions() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords">get_well_coords() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords">get_well_coords() (in module fmu.tools.rms.create_rft_ertobs)</a>
-</li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_zones">get_zones() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
 </li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.grid">grid (fmu.tools.qcdata.QCData property)</a>
@@ -440,6 +488,8 @@
         <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_statistics">(in module fmu.tools.qcforward.qcforward)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridfile">gridfile (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.gridprops">gridprops (fmu.tools.qcdata.QCData property)</a>
 
       <ul>
@@ -447,6 +497,8 @@
 </li>
       </ul></li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality">GridQuality (class in fmu.tools.qcforward)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridreuse">gridreuse (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
 </li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics">GridStatistics (class in fmu.tools.qcforward)</a>
 </li>
@@ -462,13 +514,25 @@
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">interp_from_md() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.interval">interval (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.invert_map">invert_map() (in module fmu.tools.fipmapper.fipmapper)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.is_number">is_number() (in module fmu.tools.sensitivities.design_distributions)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.itera">itera (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.loop_for_compute">loop_for_compute() (in module fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -476,15 +540,21 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">main() (in module fmu.tools.rms.create_rft_ertobs)</a>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.main">main() (in module fmu.tools.ensembles.ensemble_well_props)</a>
 
       <ul>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">(in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
         <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main">(in module fmu.tools.sensitivities.fmudesignrunner)</a>
 </li>
       </ul></li>
       <li><a href="fmu.tools.html#fmu.tools.extract_grid_zone_tops.make_alias_dict">make_alias_dict() (in module fmu.tools.extract_grid_zone_tops)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.make_covariance_matrix">make_covariance_matrix() (in module fmu.tools.sensitivities.design_distributions)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.mdlog">mdlog (fmu.tools.ensembles.ensemble_well_props.WellCase attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.mdranges">mdranges (fmu.tools.ensembles.ensemble_well_props.WellCase attribute)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.merge_rms_volumetrics">merge_rms_volumetrics() (in module fmu.tools.rms.volumetrics)</a>
 </li>
@@ -497,6 +567,10 @@
         <li><a href="fmu.html#module-fmu">fmu</a>
 </li>
         <li><a href="fmu.tools.html#module-fmu.tools">fmu.tools</a>
+</li>
+        <li><a href="fmu.tools.ensembles.html#module-fmu.tools.ensembles">fmu.tools.ensembles</a>
+</li>
+        <li><a href="fmu.tools.ensembles.html#module-fmu.tools.ensembles.ensemble_well_props">fmu.tools.ensembles.ensemble_well_props</a>
 </li>
         <li><a href="fmu.tools.html#module-fmu.tools.extract_grid_zone_tops">fmu.tools.extract_grid_zone_tops</a>
 </li>
@@ -535,6 +609,30 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity">MonteCarloSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.moreverbose">moreverbose (fmu.tools.ensembles.ensemble_well_props.ScreenInfo attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.name">name (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint">oprint() (fmu.tools.ensembles.ensemble_well_props.ScreenInfo method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs">optionally_delete_flag_logs() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs">optionally_delete_logs() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -547,14 +645,22 @@
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse">(fmu.tools.qcdata.qcdata.QCData method)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.parse_config">parse_config() (in module fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.parse_project">parse_project() (fmu.tools.qcdata.QCData method)</a>
 
       <ul>
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project">(fmu.tools.qcdata.qcdata.QCData method)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.process_ensemble">process_ensemble() (in module fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs">process_ensemble_avglogs() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen">process_ensemble_cumlen() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
+</li>
       <li><a href="fmu.tools.html#fmu.tools.extract_grid_zone_tops.MockRoxar.Project">Project (fmu.tools.extract_grid_zone_tops.MockRoxar property)</a>
 </li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.project">project (fmu.tools.qcdata.QCData property)</a>
@@ -563,6 +669,10 @@
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.project">(fmu.tools.qcdata.qcdata.QCData property)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist">proplist (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData">PropsData (class in fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -575,6 +685,10 @@
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData">(class in fmu.tools.qcdata.qcdata)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.quiet">quiet (fmu.tools.ensembles.ensemble_well_props.ScreenInfo attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -601,15 +715,27 @@
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells">(fmu.tools.qcdata.qcdata.QCData method)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.realizations">realizations (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.reals">reals (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.region2fip">region2fip() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regions_in_set">regions_in_set() (in module fmu.tools.fipmapper.fipmapper)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.regzone2fip">regzone2fip() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
 </li>
+      <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regzonefips_in_set">regzonefips_in_set() (in module fmu.tools.fipmapper.fipmapper)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_avg_file">report_avg_file (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regzonefips_in_set">regzonefips_in_set() (in module fmu.tools.fipmapper.fipmapper)</a>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_cum_file">report_cum_file (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_keep_intermediate">report_keep_intermediate (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_show_in_terminal">report_show_in_terminal (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.reset">reset() (fmu.tools.sensitivities.create_design.DesignMatrix method)</a>
 
@@ -625,6 +751,8 @@
         <li><a href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df">(in module fmu.tools.rms.volumetrics)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.root">root (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.run">run() (fmu.tools.qcforward.BlockedWellsVsGridProperties method)</a>
 
       <ul>
@@ -635,6 +763,8 @@
         <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run">(fmu.tools.qcforward.WellZonationVsGrid method)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.run_compute">run_compute() (in module fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -646,6 +776,8 @@
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity">ScenarioSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase">ScenarioSensitivityCase (class in fmu.tools.sensitivities.create_design)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo">ScreenInfo (class in fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity">SeedSensitivity (class in fmu.tools.sensitivities.create_design)</a>
 </li>
@@ -695,6 +827,8 @@
       </ul></li>
       <li><a href="fmu.tools.html#fmu.tools.extract_grid_zone_tops.shift_zone_values">shift_zone_values() (in module fmu.tools.extract_grid_zone_tops)</a>
 </li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.sinfo">sinfo (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+</li>
       <li><a href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference">SingleRealisationReference (class in fmu.tools.sensitivities.create_design)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">strictly_downward() (in module fmu.tools.rms.create_rft_ertobs)</a>
@@ -721,14 +855,26 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.webviz_to_prtvol2csv">webviz_to_prtvol2csv() (in module fmu.tools.fipmapper.fipmapper)</a>
 </li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.well">well (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
+
+      <ul>
+        <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.well">(fmu.tools.ensembles.ensemble_well_props.WellCase attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase">WellCase (class in fmu.tools.ensembles.ensemble_well_props)</a>
+</li>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.welldelta">welldelta (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.wellfile">wellfile (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.wells">wells (fmu.tools.qcdata.QCData property)</a>
 
       <ul>
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.wells">(fmu.tools.qcdata.qcdata.QCData property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.wellzonation_vs_grid">wellzonation_vs_grid() (in module fmu.tools.qcforward)</a>
 
       <ul>
@@ -742,6 +888,10 @@
 
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint">xprint() (fmu.tools.ensembles.ensemble_well_props.ScreenInfo method)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.xtgdata">xtgdata (fmu.tools.qcdata.QCData property)</a>
 
