@@ -9,7 +9,7 @@ import argparse
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Sequence
+from typing import List, Optional, Sequence, no_type_check
 
 import pandas as pd
 import xtgeo
@@ -374,7 +374,7 @@ class EnsembleWellProps:
             allprops[prop.name] = plist
         self.added_logs = allprops
 
-    @typing.no_type_check
+    @no_type_check
     def process_ensemble_avglogs(self) -> bool:
         """Make ensemble mean or mode (most-of) logs."""
         if not self.cfg.report_avg_file:
@@ -398,7 +398,7 @@ class EnsembleWellProps:
                 dfr[f"{prop.name}_mode"] = dfr[pplist].mode(axis=1)[0]  # most of
         return True
 
-    @typing.no_type_check
+    @no_type_check
     def process_ensemble_cumlen(self) -> bool:
         """Provide cumulative length statistics."""
 
@@ -493,7 +493,7 @@ class EnsembleWellProps:
             wll.delete_logs(self.added_flag_logs)
 
 
-@typing.no_type_check
+@no_type_check
 def loop_for_compute(
     config: dict, sinfo: ScreenInfo, _dryrun: bool = False
 ) -> EnsembleWellProps:
@@ -567,7 +567,7 @@ def run_compute(real, well, prop, theprop):
     well.get_gridproperties(theprop, grid=tuple(GCELLNAMES), prop_id=idn)
 
 
-@typing.no_type_check
+@no_type_check
 def process_ensemble(ens: EnsembleWellProps):
     """Process the ensemble (seen in well) according to client 'report' requirements.
 
