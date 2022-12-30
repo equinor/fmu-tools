@@ -250,7 +250,7 @@ def test_ertobs_df_to_files_1(tmpdir):
     create_rft_ertobs.ertobs_df_to_files(ertobs_df, tmpdir)
     assert Path("R-99.txt").read_text().strip() == "5555 7777 2400 2300 Valyzar"
     assert Path("R-99_1.obs").read_text().strip() == "100 3"
-    assert Path("well_date_rft.txt").read_text().strip() == "R-99 01 06 2020 1"
+    assert Path("well_date_rft.txt").read_text().strip() == "R-99 2020-06-01 1"
 
     # Check that the file rft_ertobs.csv was created, this file
     # is for future use.
@@ -356,7 +356,7 @@ def test_main_no_rms(tmpdir):
         pd.read_csv("A-1_1.obs", sep=r"\s+", index_col=None, header=None).iloc[0].values
         == [100, 5]
     ).all()
-    assert Path("well_date_rft.txt").read_text().strip() == "A-1 01 01 2099 1"
+    assert Path("well_date_rft.txt").read_text().strip() == "A-1 2099-01-01 1"
 
 
 @pytest.mark.parametrize(
@@ -695,7 +695,7 @@ def test_report_step_same_xyz(tmpdir):
     # Check that we get REPORT_STEP 1 for the first date, and 2 for the second:
     pd.testing.assert_frame_equal(
         pd.read_csv(Path("well_date_rft.txt"), sep=r"\s+", header=None),
-        pd.DataFrame([["R-99", 1, 1, 2000, 1], ["R-99", 1, 1, 2010, 2]]),
+        pd.DataFrame([["R-99", "2000-01-01", 1], ["R-99", "2010-01-01", 2]]),
     )
 
 
@@ -746,5 +746,5 @@ def test_report_step_different_xyz(tmpdir):
     # Check that we get REPORT_STEP 1 for the first date, and 2 for the second:
     pd.testing.assert_frame_equal(
         pd.read_csv(Path("well_date_rft.txt"), sep=r"\s+", header=None),
-        pd.DataFrame([["R-99", 1, 1, 2000, 1], ["R-99", 1, 1, 2010, 2]]),
+        pd.DataFrame([["R-99", "2000-01-01", 1], ["R-99", "2010-01-01", 2]]),
     )

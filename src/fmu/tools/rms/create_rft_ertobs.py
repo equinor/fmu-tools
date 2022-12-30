@@ -438,11 +438,8 @@ def ertobs_df_to_files(
             )
             logger.info("Written obs file to %s", obs_filename)
 
-    dframe["DAY"] = dframe["DATE"].dt.strftime("%d")
-    dframe["MONTH"] = dframe["DATE"].dt.strftime("%m")
-    dframe["YEAR"] = dframe["DATE"].dt.strftime("%Y")
     dframe.groupby(["WELL_NAME", "DATE"])[
-        ["WELL_NAME", "DAY", "MONTH", "YEAR", "REPORT_STEP"]
+        ["WELL_NAME", "DATE", "REPORT_STEP"]
     ].first().to_csv(Path(exportdir) / welldatefile, sep=" ", index=False, header=False)
     logger.info("Written welldata file to %s", Path(exportdir) / welldatefile)
 
