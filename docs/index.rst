@@ -13,6 +13,7 @@ Contents:
    qcproperties
    qcreset
    create_rft_ertobs
+   rms_import_localmodule
    rmsvolumetrics2csv
    ensembles
    contributing
