@@ -20,11 +20,12 @@ profile = "black"
 
 [build-system]
 requires = [
-    "pip>=19.1.1",
-    "setuptools>=30.3.0",
-    "setuptools_scm>=3.2.0",
-    "wheel",
-    "sphinx",
-    "sphinx-rtd-theme",
-    "sphinxcontrib-apidoc",
+  "pip>=19.1.1",
+  "setuptools>=30.3.0",
+  "setuptools_scm>=3.2.0",
+  "wheel",
+  "sphinx==5.3",
+  "docutils==0.16",
+  "sphinx-rtd-theme",
+  "sphinxcontrib-apidoc",
 ]
