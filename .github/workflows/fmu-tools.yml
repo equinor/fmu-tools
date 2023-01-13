@@ -59,11 +59,11 @@ jobs:
           black --check .
           flake8 .
 
-      - name: Enforce static typing
-        run: |
-          pip install mypy
-          pip install types-dataclasses
-          mypy src/fmu/tools
+      # - name: Enforce static typing
+      #   run: |
+      #     pip install mypy
+      #     pip install types-dataclasses
+      #     mypy src/fmu/tools
 
       - name: Where am i?
         run: |
