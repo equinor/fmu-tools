@@ -32,7 +32,7 @@ def _detect_pyfile(path, module_root_name):
         logger.info("Look for %s", proposal)
         if proposal.is_file():
             logger.info("-> Found %s", proposal)
-            if not ".py" in proposal.name:
+            if ".py" not in proposal.name:
                 warnings.warn(
                     "Warning: Please avoid modules without a .py ending!", UserWarning
                 )
