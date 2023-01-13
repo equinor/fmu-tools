@@ -18,10 +18,10 @@ on:
 
 jobs:
   fmu-tools:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        python-version: ["3.7", "3.8", "3.9"]
         pandas-version: ["0.21.0", "1.*"]
         exclude:
           - python-version: "3.9"
@@ -104,14 +104,3 @@ jobs:
             git commit -m "Update Github Pages"
             git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
           fi
-
-      # - name: Build python package and publish to pypi
-      #   if: github.event_name == 'release' && matrix.python-version == '3.6' && matrix.pandas-version != '0.21'
-
-      #   env:
-      #     TWINE_USERNAME: __token__
-      #     TWINE_PASSWORD: ${{ secrets.fmu_tools_pypi_token }}
-      #   run: |
-      #     python -m pip install --upgrade setuptools wheel twine
-      #     python setup.py sdist bdist_wheel
-      #     twine upload dist/*
