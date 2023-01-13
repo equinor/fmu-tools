@@ -21,5 +21,5 @@ jobs:
       - name: Upload deploy
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_SECRET }}
+          TWINE_PASSWORD: ${{ secrets.fmu_tools_pypi_token }}
         run: python -m twine upload dist/*
