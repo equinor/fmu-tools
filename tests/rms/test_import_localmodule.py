@@ -1,7 +1,9 @@
 """Test code for rms local module function."""
 import os
-import fmu.tools
+
 import pytest
+
+import fmu.tools
 
 SNIPPET1 = """
 def add(a, b):
@@ -64,4 +66,4 @@ def test_rms_import_invalid_name(tmp_path):
 
     fake_project = object()
     with pytest.raises(Exception, match=r"The project object is invalid"):
-        mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+        _ = fmu.tools.rms.import_localmodule(fake_project, "mymod")
