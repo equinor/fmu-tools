@@ -64,6 +64,7 @@ CONSOLE_SCRIPTS = [
     "fmudesign=fmu.tools.sensitivities.fmudesignrunner:main",
     "rmsvolumetrics2csv=fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main",
     "ensemble_well_props=fmu.tools.ensembles.ensemble_well_props:main",
+    "rename_rms_scripts=fmu.tools.rms.rename_rms_scripts:main",
 ]
 
 

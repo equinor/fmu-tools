@@ -1,0 +1,200 @@
+Begin GEOMATIC file header
+type                                    = RmsProjectComp
+color                                   = 0.0000000e+00 0.0000000e+00 1.0000000e-03
+name                                    = 
+projectvisible                          = FALSE
+description                             = 
+category                                = 
+keyname                                 = 
+stamp                                   = 1468244857
+sourcedatakey                           = 
+date(1)                                 = 2023.01.01
+time(1)                                 = 23:59:59
+user(1)                                 = snakeoil
+release(1)                              = 13.0.3
+operation(1)                            = Save
+description(1)                          = 
+branch(1)                               = 13_0
+build(1)                                = 1
+variant(1)                              = linux-amd64-gcc_4_8-release
+zdomaintag                              = UNKNOWN
+company                                 = 
+site                                    = 
+country                                 = 
+checkinstamp                            = 1671012912
+component_obj_id                        = 00000000e786618f00006bb9000000005ef4f077000003e1
+hasparameters                           = TRUE
+kid(1)                                  = horizons
+kid(1).type                             = HorizonsComp
+kid(2)                                  = zones
+kid(2).type                             = IsochoresComp
+kid(3)                                  = general2ddata
+kid(3).type                             = MapsComp
+kid(4)                                  = seismic
+kid(4).type                             = volviz::SeismicComp
+kid(5)                                  = faults
+kid(5).type                             = FaultsComp
+kid(6)                                  = structuralmodels
+kid(6).type                             = sm::MultiModelComp
+kid(7)                                  = wells
+kid(7).type                             = WellsComp
+kid(8)                                  = wellpickmanager
+kid(8).type                             = WellPicksComp
+kid(9)                                  = productiondata
+kid(9).type                             = ProductionComp
+kid(10)                                 = velocities
+kid(10).type                            = VelocitiesComp
+kid(11)                                 = gridmodels
+kid(11).type                            = ZonesComp
+kid(12)                                 = reventsetscomp
+kid(12).type                            = REventSetsComp
+kid(13)                                 = regionscomp
+kid(13).type                            = RegionsComp
+kid(14)                                 = nametranslatorscomp
+kid(14).type                            = NameTranslatorsComp
+kid(15)                                 = trends
+kid(15).type                            = TrendsComp
+kid(16)                                 = shapes
+kid(16).type                            = ShapesContainerComp
+kid(17)                                 = cultural
+kid(17).type                            = CulturalComp
+kid(18)                                 = analysis
+kid(18).type                            = AnalysisComp
+kid(19)                                 = tables
+kid(19).type                            = TablesComp
+kid(20)                                 = tablesdata
+kid(20).type                            = TablesDataComp
+kid(21)                                 = colourtables
+kid(21).type                            = ColorMapsComp
+kid(22)                                 = imageparentcomp
+kid(22).type                            = ImageParentComp
+kid(23)                                 = intersections
+kid(23).type                            = IntersectionsComp
+kid(24)                                 = simulationdata
+kid(24).type                            = SimulationDataComp
+kid(25)                                 = clipboard
+kid(25).type                            = ClipboardComp
+kid(26)                                 = commandscomp
+kid(26).type                            = CommandsComp
+kid(27)                                 = pythoncomp
+kid(27).type                            = PythonComp
+kid(28)                                 = companystandard
+kid(28).type                            = CompanyStdFolderComp
+kid(29)                                 = explorercomp
+kid(29).type                            = ExplorerComp
+elements                                = 29
+filetype                                = BINARY
+fileversion                             = 2021.0000
+End GEOMATIC file header
+Begin parameter
+id                                      = ParentParams
+instance_name                           = 
+Begin parameter
+id                                      = ProjectRealisationParams
+instance_name                           = 
+current_realisation                     = 1
+number_of_realisations                  = 1
+global_seed                             = 1000
+seeds.size                              = 1
+seeds(1)                                = 1001
+End parameter
+Begin parameter
+id                                      = WorkflowMgrParams
+instance_name                           = 
+currentworkflow                         = 1
+inputheaderwidth                        = 0
+jobheaderwidth                          = 362
+outputheaderwidth                       = 0
+Begin parameter
+id                                      = WorkflowParams
+instance_name                           = MAIN
+workflowname                            = MAIN
+Begin parameter
+id                                      = WorkflowListParams
+instance_name                           = 
+jobstartindex                           = 0
+jobendindex                             = 8
+loopstartindex                          = 0
+loopendindex                            = 8
+loopstart                               = 0
+loopend                                 = 0
+realizations                            = 1
+multitableobjid                         = 000000000000000000000000000000000000000000000000
+elapsedrealtime                         = 3.4078100651502609e+02 
+elapsedcputime                          = 0.0000000000000000e+00 
+Begin parameter
+id                                      = NoteJobParams
+instance_name                           = noname
+active                                  = TRUE
+changeuser                              = snakeoil
+changetime                              = 2023-01-21 01:30:00:000
+text.size                               = 1
+text(1)                                 = Dummy case
+End parameter
+Begin parameter
+id                                      = SystemJobParams
+instance_name                           = noname
+active                                  = TRUE
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:30:00:000
+commandname                             = echo snakeoil 
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea80000022a
+paramsid                                = PSJParams
+paramsname                              = a.py
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00006bb9000000005ef4f077000003e1
+paramsid                                = WorkflowJobParent
+paramsname                              = import_welldata
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea80000022b
+paramsid                                = PSJParams
+paramsname                              = b.py
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea80000022d
+paramsid                                = PSJParams
+paramsname                              = d.py
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea80000022e
+paramsid                                = PSJParams
+paramsname                              = e.py
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea80000022f
+paramsid                                = PSJParams
+paramsname                              = f
+End parameter
+Begin parameter
+id                                      = ModellingJobParams
+instance_name                           = noname
+active                                  = TRUE
+compobjid                               = 00000000e786618f00000867000000005efdbea800000230
+paramsid                                = PSJParams
+paramsname                              = PEP8.py
+End parameter
+End parameter
+End parameter
+End parameter
