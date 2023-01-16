@@ -1,0 +1,112 @@
+Begin GEOMATIC file header
+type                                    = PythonComp
+color                                   = 0.0000000e+00 0.0000000e+00 1.0000000e-03
+name                                    = 
+projectvisible                          = FALSE
+description                             = 
+category                                = 
+keyname                                 = 
+stamp                                   = 1510128894
+sourcedatakey                           = 
+zdomaintag                              = UNKNOWN
+component_obj_id                        = 00000000e786618f00006bb9000000005ef4f0770000043d
+hasparameters                           = TRUE
+elements                                = 0
+filetype                                = BINARY
+fileversion                             = 2021.0000
+End GEOMATIC file header
+Begin parameter
+id                                      = ParentParams
+instance_name                           = 
+Begin parameter
+id                                      = PSJParams
+instance_name                           = a.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022a
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = a.py
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = b.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022b
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = b.py_1
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = c.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022c
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = c.py_2
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = d.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022d
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = e.py_1
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = e.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022e
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = d.py
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = f
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea80000022f
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = f.py_1
+End parameter
+Begin parameter
+id                                      = PSJParams
+instance_name                           = PEP8.py
+elapsedrealtime                         = 2.5200000405311584e-01 
+elapsedcputime                          = 0.0000000000000000e+00 
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-31 12:12:12:123
+identifier                              = 00000000e786618f00000867000000005efdbea800000230
+changeuser                              = snakeoil
+changetime                              = 2023-01-01 01:23:45:678
+standalonefilename                      = PEP8.py
+End parameter
+End parameter
