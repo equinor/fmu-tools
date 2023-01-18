@@ -8,10 +8,12 @@ import tempfile
 import warnings
 from os.path import join
 from pathlib import Path
+from typing import no_type_check
 
 logger = logging.getLogger(__name__)
 
 
+@no_type_check
 def _detect_pyfile(path, module_root_name):
     """A module shall be named *.py, but may have different 'actual' name in RMS.
 
@@ -41,6 +43,7 @@ def _detect_pyfile(path, module_root_name):
     return None, None
 
 
+@no_type_check
 def import_localmodule(project, module_root_name):
     """Import a library module in RMS which exists inside the RMS project.
 
@@ -78,7 +81,9 @@ def import_localmodule(project, module_root_name):
         try:
             prj = project.filename
         except AttributeError as err:
-            raise RuntimeError(f"The project object is invalid: {err}")
+            raise RuntimeError(
+                "The project object is invalid, perhaps not inside RMS?"
+            ) from err
 
     mypath = prj + "/pythoncomp"
 
