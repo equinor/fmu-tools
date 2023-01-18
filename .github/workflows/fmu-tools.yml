@@ -6,7 +6,7 @@ on:
   pull_request:
     branches:
       - master
-    types: [created, synchronize]
+    types: [opened, synchronize]
 
   release:
     types:
