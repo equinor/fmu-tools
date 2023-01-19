@@ -1,19 +1,18 @@
 """
 This private module in qcforward is used for grid statistics
 """
-from typing import Union, Dict
 import collections
-from pathlib import Path
 import json
-from jsonschema import validate
+from pathlib import Path
+from typing import Dict, Optional, Union
+
 import pandas as pd
+from jsonschema import validate
 
 import fmu.tools
-from fmu.tools.qcproperties.qcproperties import QCProperties
-
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcforward._qcforward import QCForward
-
+from fmu.tools.qcproperties.qcproperties import QCProperties
 
 QCC = _QCCommon()
 
@@ -36,7 +35,7 @@ class GridStatistics(QCForward):
     def run(
         self,
         data: Union[dict, str],
-        project: Union[object, str] = None,
+        project: Optional[Union[object, str]] = None,
     ) -> None:
         """Main routine for evaulating if statistics from 3D grids is
         within user specified thresholds.
@@ -187,7 +186,7 @@ class GridStatistics(QCForward):
         dframe: pd.DataFrame,
         prop: str,
         calculation: str,
-        selectors: dict = None,
+        selectors: Optional[dict] = None,
     ) -> float:
         """
         Retrive statistical value from the property statistic dataframe

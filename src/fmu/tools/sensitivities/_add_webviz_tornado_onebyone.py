@@ -2,18 +2,22 @@
 """ Module for generating a set of TornadoPlots
 for webviz on webviz Pages. """
 
-import os.path
 import copy
+import os.path
 from collections import OrderedDict
+
 import pandas as pd
 import yaml
 
-from fmu.tools.sensitivities import summarize_design
-from fmu.tools.sensitivities import calc_tornadoinput, find_combinations
 from fmu import ensemble
+from fmu.tools.sensitivities import (
+    calc_tornadoinput,
+    find_combinations,
+    summarize_design,
+)
 
 try:
-    from webviz import SubMenu, Page
+    from webviz import Page, SubMenu
     from webviz.page_elements import TornadoPlot
 
     HAS_WEBVIZ_STATIC = True

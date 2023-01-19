@@ -1,15 +1,15 @@
 """The qcproperties module"""
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any, Optional
+
 import pandas as pd
 import yaml
 
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
-
+from fmu.tools.qcproperties._aggregate_df import PropertyAggregation
 from fmu.tools.qcproperties._grid2df import GridProps2df
 from fmu.tools.qcproperties._well2df import WellLogs2df
-from fmu.tools.qcproperties._aggregate_df import PropertyAggregation
 
 QCC = _QCCommon()
 

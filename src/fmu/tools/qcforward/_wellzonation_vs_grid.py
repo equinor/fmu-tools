@@ -6,11 +6,12 @@ import collections
 import json
 from pathlib import Path
 
-import fmu.tools
 import numpy as np
+from jsonschema import validate
+
+import fmu.tools
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcforward._qcforward import ActionsParser, QCForward
-from jsonschema import validate
 
 QCC = _QCCommon()
 UNDEF = float("nan")

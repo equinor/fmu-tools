@@ -1,9 +1,8 @@
 """Module containing ....  """
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from fmu.tools._common import _QCCommon
-
 from fmu.tools.qcproperties._utils import list_combinations
 
 QCC = _QCCommon()

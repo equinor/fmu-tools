@@ -1,11 +1,12 @@
 """Module for handling volumetrics text files from RMS"""
 
-import sys
-import logging
 import argparse
+import logging
 import signal
+import sys
 from pathlib import Path
-from typing import Dict, Optional, Callable, List, Union
+from typing import Callable, Dict, List, Optional, Union
+
 import pandas as pd
 
 logger = logging.getLogger(__name__)

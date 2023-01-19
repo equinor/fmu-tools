@@ -4,8 +4,8 @@ and DESIGN_KW in FMU/ERT.
 from collections import OrderedDict
 from pathlib import Path
 
-import pandas as pd
 import numpy
+import pandas as pd
 
 from fmu.tools.sensitivities import design_distributions as design_dist
 

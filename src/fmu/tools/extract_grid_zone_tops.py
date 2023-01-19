@@ -1,5 +1,5 @@
-from typing import Dict, Optional, Union
 import pathlib
+from typing import Dict, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -22,11 +22,11 @@ def extract_grid_zone_tops(
     well_list: Optional[list] = None,
     logrun: str = "log",
     trajectory: str = "Drilled trajectory",
-    gridzonelog: str = None,
-    mdlogname: str = None,
-    grid: str = None,
-    zone_param: str = None,
-    alias_file: str = None,
+    gridzonelog: Optional[str] = None,
+    mdlogname: Optional[str] = None,
+    grid: Optional[str] = None,
+    zone_param: Optional[str] = None,
+    alias_file: Optional[str] = None,
     rms_name: str = "RMS_WELL_NAME",
     ecl_name: str = "ECLIPSE_WELL_NAME",
 ) -> pd.DataFrame:

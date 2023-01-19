@@ -2,8 +2,9 @@
 a design matrix and converting to an OrderedDict that can be
 read by fmu.tools.DesignMatrix.generate
 """
-from collections import OrderedDict
 import warnings
+from collections import OrderedDict
+
 import numpy as np
 import openpyxl
 import pandas as pd

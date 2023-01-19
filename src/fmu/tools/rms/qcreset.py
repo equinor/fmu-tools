@@ -1,5 +1,5 @@
-from typing import List, Dict, Union, Any
 import warnings
+from typing import Any, Dict, List, Union
 
 try:
     import _roxar  # type: ignore
