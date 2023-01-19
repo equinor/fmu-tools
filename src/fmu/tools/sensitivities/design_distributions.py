@@ -466,7 +466,7 @@ def draw_values(distname, dist_parameters, numreals, normalscoresamples=None):
         else:
             raise ValueError(result)
     else:
-        raise ValueError("distribution name {} is not implemented".format(distname))
+        raise ValueError(f"distribution name {distname} is not implemented")
 
     return values
 

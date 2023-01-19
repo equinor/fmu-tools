@@ -199,11 +199,9 @@ class DesignMatrix:
         )
         xlsxwriter.save()
         print(
-            "A total of {} realizations were generated".format(
-                len(self.designvalues["REAL"])
-            )
+            f"A total of {len(self.designvalues['REAL'])} realizations were generated"
         )
-        print("Designmatrix written to {}".format(filename))
+        print(f"Designmatrix written to {filename}")
 
     def set_defaultvalues(self, defaults):
         """Add default values
@@ -266,7 +264,7 @@ class DesignMatrix:
             xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
         )
         xlsxwriter.save()
-        print("Backgroundvalues written to {}".format(filename))
+        print(f"Backgroundvalues written to {filename}")
 
     def _add_sensitivity(self, sensitivity):
         """Adding a sensitivity to the design
@@ -322,9 +320,7 @@ class DesignMatrix:
             if key in self.defaultvalues.keys():
                 self.designvalues[key].fillna(self.defaultvalues[key], inplace=True)
             elif key not in ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]:
-                raise LookupError(
-                    "No defaultvalues given for parameter {} " "".format(key)
-                )
+                raise LookupError(f"No defaultvalues given for parameter {key} ")
 
     def _fill_derived_params(self, depend_dict):
         for from_param in depend_dict.keys():
@@ -395,7 +391,7 @@ class DesignMatrix:
                         .round(int(dict_decimals[key]))
                     )
                 else:
-                    raise ValueError("Cannot round a string parameter {}".format(key))
+                    raise ValueError(f"Cannot round a string parameter {key}")
 
 
 class SeedSensitivity:
@@ -802,7 +798,7 @@ class ExternSensitivity:
             if param in extern_values.keys():
                 self.sensvalues[param] = list(extern_values[param][: len(realnums)])
             else:
-                raise ValueError("Parameter {} not in external file".format(param))
+                raise ValueError(f"Parameter {param} not in external file")
         self.sensvalues["REAL"] = realnums
         self.sensvalues["SENSNAME"] = self.sensname
         self.sensvalues["SENSCASE"] = "p10_p90"

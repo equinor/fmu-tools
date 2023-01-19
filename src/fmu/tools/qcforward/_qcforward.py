@@ -97,12 +97,12 @@ class QCForward:
                     stream,
                     default_flow_style=None,
                 )
-            QCC.print_info("Dumped YAML to {}".format(data["dump_yaml"]))
+            QCC.print_info(f"Dumped YAML to {data['dump_yaml']}")
 
         xdata["project"] = None
         if project:
             xdata["project"] = project
-            QCC.print_info("Project type is {}".format(type(project)))
+            QCC.print_info(f"Project type is {type(project)}")
 
         return xdata
 

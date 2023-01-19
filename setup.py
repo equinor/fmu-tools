@@ -128,18 +128,18 @@ class CleanUp(_clean):
 
         for dir_ in CleanUp.CLEANFOLDERS:
             if exists(dir_):
-                print("Removing: {}".format(dir_))
+                print(f"Removing: {dir_}")
             if not self.dry_run and exists(dir_):
                 rmtree(dir_)
 
         for dir_ in CleanUp.CLEANFOLDERSRECURSIVE:
             for pdir in self.dfind(dir_, "."):
-                print("Remove folder {}".format(pdir))
+                print(f"Remove folder {pdir}")
                 rmtree(pdir)
 
         for fil_ in CleanUp.CLEANFILESRECURSIVE:
             for pfil in self.ffind(fil_, "."):
-                print("Remove file {}".format(pfil))
+                print(f"Remove file {pfil}")
                 os.unlink(pfil)
 
 

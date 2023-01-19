@@ -33,7 +33,7 @@ config = [
 
 for input in range(len(config)):
     filename = path + prefix + config[input] + postfix
-    print("Reading {}".format(filename))
+    print(f"Reading {filename}")
     input_dict = excel2dict_design(filename)
     # input_dict.to_yaml(input_dict, 'examples/output/'+config[input]+'.yaml')
     design = DesignMatrix()

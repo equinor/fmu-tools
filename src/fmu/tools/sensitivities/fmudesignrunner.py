@@ -76,7 +76,7 @@ def main():
 
     if isinstance(args.config, str):
         if not Path(args.config).is_file():
-            raise IOError("Input file {} does not exist".format(args.config))
+            raise IOError(f"Input file {args.config} does not exist")
         input_dict = excel2dict_design(args.config, sheetnames)
 
     if args.config == args.destination:

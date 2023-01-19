@@ -38,7 +38,7 @@ def yconfig(inputfile):
     """Read from YAML file."""
     with open(inputfile, "r") as stream:
         config = yaml.load(stream)
-    print("Input config YAML file <{}> is read...".format(inputfile))
+    print(f"Input config YAML file <{inputfile}> is read...")
     return config
 
 
@@ -88,7 +88,7 @@ def yconfig_set_defaults(config):
 def make_xlabel(ref_value, scale="percentage", reference="seed"):
     """Makes xlabel for tornadoplot from input"""
     label = scale.capitalize() + " change compared to ref value "
-    label += "{:.2e}".format(ref_value) + ".   "
+    label += f"{ref_value:.2e}" + ".   "
     if reference.isdigit():
         label += "   Reference is realisation " + str(reference)
     else:
