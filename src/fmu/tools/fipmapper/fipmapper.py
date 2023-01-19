@@ -78,7 +78,7 @@ class FipMapper:
 
         if yamlfile is not None:
             logger.info("Loading data from %s", yamlfile)
-            with open(yamlfile) as stream:
+            with open(yamlfile, encoding="utf-8") as stream:
                 yamldata = yaml.safe_load(stream)
             logger.debug(str(yamldata))
         else:

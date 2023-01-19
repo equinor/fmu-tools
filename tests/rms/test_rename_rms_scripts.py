@@ -210,7 +210,7 @@ def test_fix_standalone_filenames(tmp_path):
             continue
         e = project.get_entry(entry)
         assert e["instance_name"] == e["standalonefilename"]
-        with open(e["path"], "r") as f:
+        with open(e["path"], "r", encoding="utf-8") as f:
             code = f.read().strip()
         assert code == f"print(\"{entry.split('.')[0]}\")"
 

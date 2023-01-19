@@ -133,7 +133,7 @@ class GridStatistics(QCForward):
         if "project" in data.keys():
             schemafile = "grid_statistics_asroxapi.json"
 
-        with open((spath / schemafile), "r") as thisschema:
+        with open((spath / schemafile), "r", encoding="utf-8") as thisschema:
             schema = json.load(thisschema)
 
         validate(instance=data, schema=schema)

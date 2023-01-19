@@ -345,7 +345,7 @@ class BlockedWellsVsGridProperties(QCForward):
         if project:
             schemafile = "bw_vs_gridprops_asroxapi.json"
 
-        with open((spath / schemafile), "r", encoding="utf8") as thisschema:
+        with open((spath / schemafile), "r", encoding="utf-8") as thisschema:
             schema = json.load(thisschema)
 
         validate(instance=data, schema=schema)

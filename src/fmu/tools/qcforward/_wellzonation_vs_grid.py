@@ -195,7 +195,7 @@ class WellZonationVsGrid(QCForward):
         if project:
             schemafile = "wellzonation_vs_grid_asroxapi.json"
 
-        with open((spath / schemafile), "r") as thisschema:
+        with open((spath / schemafile), "r", encoding="utf-8") as thisschema:
             schema = json.load(thisschema)
 
         validate(instance=data, schema=schema)

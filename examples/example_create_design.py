@@ -10,7 +10,7 @@ from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 os.chdir("../")
 
 # design_configfile = './tests/data/sensitivities/config/config_design_input.yaml'
-# with open(design_configfile) as input_file:
+# with open(design_configfile, encoding="utf-8") as input_file:
 #    input_dict=yaml.load(input_file)
 
 path = "./tests/data/sensitivities/config/"
