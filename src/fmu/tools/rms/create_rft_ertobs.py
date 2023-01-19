@@ -306,9 +306,7 @@ def interp_from_xyz(
     if closest_md is not None:
         md_value = round(closest_md, 2)
     logger.info(
-        "MD estimated on undulating wellpath: {} (mismatch = {:.4f} m)".format(
-            md_value, dist_min
-        )
+        f"MD estimated on undulating wellpath: {md_value} (mismatch = {dist_min:.4f} m)"
     )
 
     # Alternative using polynoms

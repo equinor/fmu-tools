@@ -199,8 +199,7 @@ def calc_tornadoinput(
                 p90 = 0
                 p10 = 0
                 print(
-                    "Warning: Number of ok realizations is 0 in"
-                    "sensitivity {}".format(sensname)
+                    f"Warning: Number of ok realizations is 0 insensitivity {sensname}"
                 )
             subset1name = "p90"
             subset2name = "p10"

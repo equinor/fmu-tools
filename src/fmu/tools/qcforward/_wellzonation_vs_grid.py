@@ -207,7 +207,7 @@ class WellZonationVsGrid(QCForward):
         matches = []
 
         for wll in self.gdata.wells.wells:
-            QCC.print_debug("Working with well {}".format(wll.name))
+            QCC.print_debug(f"Working with well {wll.name}")
 
             dfr = wll.dataframe
 
@@ -229,7 +229,7 @@ class WellZonationVsGrid(QCForward):
                 )
                 continue
 
-            QCC.print_debug("XTGeo work for {}...".format(wll.name))
+            QCC.print_debug(f"XTGeo work for {wll.name}...")
             res = self.gdata.grid.report_zone_mismatch(
                 well=wll,
                 zonelogname=self.ldata.zonelogname,
@@ -241,7 +241,7 @@ class WellZonationVsGrid(QCForward):
                 perflogrange=self.ldata.perflogrange,
                 resultformat=2,
             )
-            QCC.print_debug("XTGeo work for {}... done".format(wll.name))
+            QCC.print_debug(f"XTGeo work for {wll.name}... done")
 
             wells.append(wll.name)
 

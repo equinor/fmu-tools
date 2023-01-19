@@ -90,8 +90,7 @@ def _find_geninput_sheetname(input_filename):
 
     if not general_input_sheet:
         raise ValueError(
-            "No general_input sheet provided in Excel file {} "
-            "".format(input_filename)
+            f"No general_input sheet provided in Excel file {input_filename} "
         )
 
     return general_input_sheet[0]
@@ -127,8 +126,7 @@ def _find_onebyone_defaults_sheet(input_filename):
 
     if len(default_values_sheet) == []:
         raise ValueError(
-            "No defaultvalues sheet provided in Excel file {} "
-            "".format(input_filename)
+            f"No defaultvalues sheet provided in Excel file {input_filename} "
         )
 
     return default_values_sheet[0]
@@ -157,13 +155,12 @@ def _find_onebyone_input_sheet(input_filename):
             design_input_sheet.append(sheet)
     if len(design_input_sheet) > 1:
         raise ValueError(
-            "More than one sheet with design input"
-            "Sheetnames are {} ".format(design_input_sheet)
+            f"More than one sheet with design inputSheetnames are {design_input_sheet} "
         )
 
     if not design_input_sheet:
         raise ValueError(
-            "No designinput sheet provided in Excel file {} " "".format(input_filename)
+            f"No designinput sheet provided in Excel file {input_filename} "
         )
     return design_input_sheet[0]
 
@@ -359,7 +356,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
         else:
             raise ValueError(
-                "Sensitivity {} does not have a valid sensitivity type".format(sensname)
+                f"Sensitivity {sensname} does not have a valid sensitivity type"
             )
 
         if "numreal" in group.keys():
