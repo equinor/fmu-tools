@@ -9,6 +9,7 @@ from glob import glob
 from os.path import join
 
 import xtgeo
+
 from fmu.tools._common import _QCCommon
 
 CMN = _QCCommon()

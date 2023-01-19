@@ -3,9 +3,11 @@
 import sys
 from copy import deepcopy
 from os.path import join
+from typing import Optional
 
 import pandas as pd
 import yaml
+
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
 
@@ -105,7 +107,10 @@ class QCForward:
         return xdata
 
     def make_report(
-        self, results: dict, reportfile: str = None, nametag: str = None
+        self,
+        results: dict,
+        reportfile: Optional[str] = None,
+        nametag: Optional[str] = None,
     ) -> pd.DataFrame:
         """Make a report which e.g. can be used in webviz plotting"""
 

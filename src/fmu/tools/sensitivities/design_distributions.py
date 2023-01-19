@@ -1,12 +1,13 @@
 """Module for random sampling of parameter values from
 distributions. For use in generation of design matrices
 """
-from math import exp
 import re
+from math import exp
+
 import numpy
 import numpy.linalg as la
-import scipy.stats
 import pandas as pd
+import scipy.stats
 
 
 def _check_dist_params_normal(dist_params):

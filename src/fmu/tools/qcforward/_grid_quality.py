@@ -2,19 +2,17 @@
 This private module in qcforward is used to check grid quality
 """
 
-from pathlib import Path
 import json
-from copy import deepcopy
 from collections import OrderedDict
+from copy import deepcopy
+from pathlib import Path
 
 from jsonschema import validate
+
 import fmu.tools
-
-
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
-from fmu.tools.qcforward._qcforward import QCForward, ActionsParser
-
+from fmu.tools.qcforward._qcforward import ActionsParser, QCForward
 
 QCC = _QCCommon()
 

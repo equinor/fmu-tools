@@ -1,13 +1,13 @@
 """The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse."""
 
-from pathlib import Path
-import logging
-import itertools
 import collections
-from typing import Union, Dict, List, Any, Optional, Tuple
+import itertools
+import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-import yaml
 import pandas as pd
+import yaml
 from disjoint_set import DisjointSet
 
 logger = logging.getLogger(__name__)
@@ -17,9 +17,9 @@ class FipMapper:
     def __init__(
         self,
         *,
-        yamlfile: Union[str, Path] = None,
-        mapdata: Dict[str, str] = None,
-        skipstring: Union[List[str], str] = None,
+        yamlfile: Optional[Union[str, Path]] = None,
+        mapdata: Optional[Dict[str, str]] = None,
+        skipstring: Optional[Union[List[str], str]] = None,
     ):
         """Represent mappings between region/zones to FIPxxx.
 
