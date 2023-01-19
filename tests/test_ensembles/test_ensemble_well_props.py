@@ -132,7 +132,7 @@ def test_dump_example(tmp_path):
     examplefile = tmp_path / "example.yml"
     assert examplefile.is_file()
 
-    with open(examplefile, "r", encoding="utf8") as stream:
+    with open(examplefile, "r", encoding="utf-8") as stream:
         cfg = yaml.safe_load(stream)
 
         assert "mywell.w" in str(cfg)
@@ -254,7 +254,7 @@ def test_script(tmp_path, configdata):
     newcfg["report"]["average_logs"]["fileroot"] = "avgfile"
     newcfg["report"]["cumulative_lengths"]["fileroot"] = "cumfile"
 
-    with open(tmp_path / "myconfig.yml", "w", encoding="utf8") as stream:
+    with open(tmp_path / "myconfig.yml", "w", encoding="utf-8") as stream:
         yaml.dump(newcfg, stream)
 
     print(tmp_path)
@@ -289,7 +289,7 @@ def test_script_config2(tmp_path, configdata2, faciescodes, poro_interval, expec
     newcfg["report"]["average_logs"]["fileroot"] = "avgfile2"
     newcfg["report"]["cumulative_lengths"]["fileroot"] = "cumfile2"
 
-    with open(tmp_path / "myconfig2.yml", "w", encoding="utf8") as stream:
+    with open(tmp_path / "myconfig2.yml", "w", encoding="utf-8") as stream:
         yaml.dump(newcfg, stream)
 
     print(tmp_path)
@@ -297,7 +297,7 @@ def test_script_config2(tmp_path, configdata2, faciescodes, poro_interval, expec
     os.chdir(tmp_path)
 
     ensemble_well_props.main(["--config", "myconfig2.yml"])
-    with open(tmp_path / "cumfile2_summary.csv", "r", encoding="utf8") as result:
+    with open(tmp_path / "cumfile2_summary.csv", "r", encoding="utf-8") as result:
         for line in result.readlines():
             name, frac, _ = line.split(",")
             if name == "mean":

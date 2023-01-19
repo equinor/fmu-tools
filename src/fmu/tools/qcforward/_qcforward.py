@@ -79,7 +79,7 @@ class QCForward:
         # data may be a yaml file
         if isinstance(data, str):
             try:
-                with open(data, "r") as stream:
+                with open(data, "r", encoding="utf-8") as stream:
                     xdata = yaml.safe_load(stream)
             except FileNotFoundError as err:
                 raise RuntimeError from err
@@ -91,7 +91,9 @@ class QCForward:
 
         if data_is_yaml and "dump_yaml" in xdata and xdata["dump_yaml"]:
             xdata.pop("dump_yaml", None)
-            with open(join(self._path, data["dump_yaml"]), "w") as stream:
+            with open(
+                join(self._path, data["dump_yaml"]), "w", encoding="utf-8"
+            ) as stream:
                 yaml.safe_dump(
                     xdata,
                     stream,

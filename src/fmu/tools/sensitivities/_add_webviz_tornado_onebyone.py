@@ -36,7 +36,7 @@ visualization using the new framework.
 
 def yconfig(inputfile):
     """Read from YAML file."""
-    with open(inputfile, "r") as stream:
+    with open(inputfile, "r", encoding="utf-8") as stream:
         config = yaml.load(stream)
     print(f"Input config YAML file <{inputfile}> is read...")
     return config

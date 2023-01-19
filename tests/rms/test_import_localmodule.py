@@ -31,7 +31,7 @@ def test_rms_import_localmodule(tmp_path, modulename, shall_fail):
     pycomp.mkdir(parents=True)
 
     os.chdir(pycomp)
-    with open(modulename, "w") as stream:
+    with open(modulename, "w", encoding="utf-8") as stream:
         stream.write(SNIPPET1)
     os.chdir(pycomp.parent)
 
@@ -60,7 +60,7 @@ def test_rms_import_invalid_name(tmp_path):
     pycomp.mkdir(parents=True)
 
     os.chdir(pycomp)
-    with open("mymod.py", "w") as stream:
+    with open("mymod.py", "w", encoding="utf-8") as stream:
         stream.write(SNIPPET1)
     os.chdir(pycomp.parent)
 

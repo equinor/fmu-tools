@@ -139,7 +139,7 @@ def dump_example_config():
 
     example = example.split("\n")[1:]
 
-    with open("example.yml", "w") as stream:
+    with open("example.yml", "w", encoding="utf-8") as stream:
         for line in example:
             line = line.replace(" " * 4, "", 1)
             stream.write(f"{line}\n")
@@ -149,7 +149,7 @@ def dump_example_config():
 def parse_config(configfile):
     """Parse YAML file."""
     try:
-        with open(configfile, "r", encoding="utf8") as stream:
+        with open(configfile, "r", encoding="utf-8") as stream:
             config = yaml.safe_load(stream)
     except IOError:
         print(f"Could not read file: {configfile}")

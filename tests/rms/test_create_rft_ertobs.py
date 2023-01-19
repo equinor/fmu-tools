@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+
 from fmu.tools.rms import create_rft_ertobs
 from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
 

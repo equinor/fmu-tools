@@ -59,7 +59,7 @@ class QCProperties:
 
     def _initiate_from_config(self, cfg: str, project: Optional[object]):
         """Run methods for statistics extraction based on entries in yaml-config"""
-        with open(cfg, "r") as stream:
+        with open(cfg, "r", encoding="utf-8") as stream:
             data = yaml.safe_load(stream)
 
         if "grid" in data:
