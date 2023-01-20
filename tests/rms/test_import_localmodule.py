@@ -15,15 +15,15 @@ def say_hello(name):
 
 
 @pytest.mark.parametrize(
-    "modulename, shall_fail",
+    "modulename, shall_warn, shall_fail",
     [
-        ("mymod.py", False),
-        ("mymod.py_1", False),
-        ("mymod", False),
-        ("invalid_name", True),
+        ("mymod.py", False, False),
+        ("mymod.py_1", False, False),
+        ("mymod", True, False),
+        ("invalid_name", False, True),
     ],
 )
-def test_rms_import_localmodule(tmp_path, modulename, shall_fail):
+def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
     """Test import of a module via rms.import_localmodule."""
 
     pycomp = tmp_path / "myproject" / "pythoncomp"
@@ -38,15 +38,19 @@ def test_rms_import_localmodule(tmp_path, modulename, shall_fail):
     fake_project = os.getcwd()
 
     if not shall_fail:
-        mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
-        id1 = id(mylib)
+        if shall_warn:
+            with pytest.warns(UserWarning, match="Please avoid modules without"):
+                mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+        else:
+            mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+            id1 = id(mylib)
 
-        assert mylib.add(3, 4) == 7
-        assert mylib.say_hello("world") == "Hello world"
+            assert mylib.add(3, 4) == 7
+            assert mylib.say_hello("world") == "Hello world"
 
-        id1 = id(mylib)
-        id2 = id(fmu.tools.rms.import_localmodule(fake_project, "mymod"))
-        assert id1 != id2
+            id1 = id(mylib)
+            id2 = id(fmu.tools.rms.import_localmodule(fake_project, "mymod"))
+            assert id1 != id2
     else:
         with pytest.raises(ValueError, match="Cannot detect module"):
             mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
