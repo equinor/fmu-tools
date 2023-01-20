@@ -144,7 +144,7 @@ class QCData(object):
         CMN.print_info("Reading grid geometry...")
         if ("grid" not in reuse) or (gridname not in self._xtgdata["grid"]):
             self._grid = (
-                xtgeo.Grid(gridname)
+                xtgeo.grid_from_file(gridname)
                 if self._project is None
                 else xtgeo.grid_from_roxar(self._project, gridname)
             )
@@ -171,14 +171,14 @@ class QCData(object):
                     pname, pfile = gprop
                 else:
                     pfile = gprop
-                    pname = "unknown"
+                    pname = None
 
                 gridproppath = join(self._path, pfile)
 
                 xtg_gprop = xtgeo.gridproperty_from_file(
                     gridproppath, name=pname, grid=self.grid
                 )
-                xtg_gprop.name = pname if pname != "unknown" else pfile
+                xtg_gprop.name = pname if pname is not None else pfile
                 gprops.append(xtg_gprop)
                 if isinstance(gprop, list):
                     self._xtgdata["gridprops"][gridname][tuple(gprop)] = xtg_gprop
