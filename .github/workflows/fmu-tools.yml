@@ -77,8 +77,8 @@ jobs:
           git status --porcelain
           test -z "$(git status --porcelain)"
 
-      # - name: Syntax check on documentation
-      #   run: rstcheck -r docs
+      - name: Syntax check on documentation
+        run: rstcheck -r docs
 
       # - name: Build documentation
       #   run: |
