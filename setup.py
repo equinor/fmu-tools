@@ -51,7 +51,7 @@ TEST_REQUIREMENTS = [
 
 DOCS_REQUIREMENTS = [
     "autoapi",
-    "rstcheck",
+    "rstcheck<6",
     "sphinx",
     "sphinx-argparse",
     "sphinx-autodoc-typehints",
