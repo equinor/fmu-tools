@@ -59,7 +59,7 @@ def _get_parser() -> argparse.ArgumentParser:
 class PythonCompMaster:
     """The PythonCompMaster class parses a .master specific to those
     found in an RMS pythoncomp/ directory. These .master files are
-    structured as so:
+    structured as so::
 
         Begin GEOMATIC header
         End GEOMATIC header
@@ -88,6 +88,7 @@ class PythonCompMaster:
     End parameter
 
     where the
+
     - `instance_name` is the filename displayed in RMS,
     - `standalonefilename` is the filename as stored on disk,
     - `identifier` is a 384-bit string that looks like a hash, but
@@ -321,7 +322,7 @@ class PythonCompMaster:
 
     def get_invalid_extensions(self) -> List[str]:
         """Inspects all Python entries for Python scripts that have a
-        non-standard file extension (not `.py`) _on disk_. Frequently this
+        non-standard file extension (not `.py`) on disk. Frequently this
         means they are `.py_1` but other variations exist (or occasionally
         there is no file extension at all).
         """
@@ -332,7 +333,7 @@ class PythonCompMaster:
 
     def get_invalid_instance_names(self) -> List[str]:
         """Inspects all Python entries for Python scripts that have a
-        non-standard file extension (not `.py`) _in RMS_.
+        non-standard file extension (not `.py`) in RMS.
         """
         f = lambda k: self._entries[k]["instance_name"].endswith(".py") is False  # noqa
         return list(filter(f, self._entries.keys()))
@@ -377,12 +378,12 @@ class PythonCompMaster:
         return self._entries[iname]
 
     def fix_standalone_filenames(self) -> List[str]:
-        """Attempts to fix the Python files _on disk_ that are inconsistent
-        with the files _in RMS_. This fix is rather simple and just copies
+        """Attempts to fix the Python files on disk that are inconsistent
+        with the files in RMS. This fix is rather simple and just copies
         the `instance_name` to be the `standalonefilename` under the
         presumption that RMS will have prevented someone from making
         duplicate instance names. This might be an unreasonable assumption
-        given the necessity of _this_ script in the first place.
+        given the necessity of this script in the first place.
 
         If the names in RMS do not have a Python extension we skip them
         rather than try to figure it out.
