@@ -44,36 +44,26 @@ def _detect_pyfile(path, module_root_name):
 
 
 @no_type_check
-def import_localmodule(project, module_root_name):
-    """Import a library module in RMS which exists inside the RMS project.
+def _detect_module_or_package(path, module_root_name):
+    """Detect a module of package external of rms."""
 
-    Inside a RMS project it can be beneficial to have a module that serves as a library,
-    not only a front end script. Several problems exist in current RMS:
+    usepath = Path(path)
 
-        - RMS has no awareness of this 'PYTHONPATH', i.e. <project>/pythoncomp
-        - RMS will, once loaded, not refresh any changes made in the module
-        - Python requires extension .py, but RMS often adds .py_1 for technical reasons,
-          which makes it impossible for the end-user to understand why it will not work,
-          as the 'instance-name' (script name inside RMS) and the actual file name will
-          differ.
+    if (usepath / (module_root_name + ".py")).is_file():
+        # module is a single file
+        return True
 
-    This function solves all these issues, and makes it possible to import a RMS project
-    library in a much easier way::
+    if (usepath / module_root_name / "__init__.py").is_file():
+        # module is a package
+        return True
 
-        import fmu.tools as tools
-
-        # mylib.py is inside the RMS project
-        plib = tools.rms.import_localmodule(project, "mylib")
-
-        plib.somefunction(some_arg)
-
-    Args:
-        project: RMS 'magic' project variable
-        module_root_name: A string that is the root name of your module. E.g. if
-            the module is named 'blah.py', the use 'blah'.
+    return False
 
 
-    """
+@no_type_check
+def _localmodule_inside_rms(project, module_root_name):
+    """Import a library module in RMS which exists inside the RMS project."""
+
     if isinstance(project, str):
         # allow project to be a string; mostly for unit testing
         prj = project
@@ -109,3 +99,69 @@ def import_localmodule(project, module_root_name):
         xmod = importlib.import_module(module_root_name)
         sys.path.pop(0)  # avoid accumulation in sys.path by removing tmppath from stack
         return xmod
+
+
+@no_type_check
+def _localmodule_outside_rms(module_root_name, path):
+    """Import a library module in RMS which exists outside the RMS project."""
+
+    if not _detect_module_or_package(path, module_root_name):
+        raise ValueError(f"Cannot detect module {module_root_name}. Check spelling etc")
+
+    # Now empty sys.path for this module, allowing a refresh when library is modified:
+    sysm = sys.modules.copy()
+    for key, val in sysm.items():
+        if module_root_name in key:
+            logger.info("Delete from modules: %s", key)
+            del sys.modules[key]
+
+    sys.path.insert(0, path)
+
+    xmod = importlib.import_module(module_root_name)
+
+    sys.path.pop(0)  # avoid accumulation in sys.path
+    return xmod
+
+
+@no_type_check
+def import_localmodule(project, module_root_name, path=None):
+    """Import a library module in RMS which exists either inside or outside RMS.
+
+    Inside a RMS project it can be beneficial to have a module that serves as a library,
+    not only a front end script. Several problems exist in current RMS:
+
+        - RMS has no awareness of this 'PYTHONPATH', i.e. <project>/pythoncomp
+        - RMS will, once loaded, not refresh any changes made in the module
+        - Python requires extension .py, but RMS often adds .py_1 for technical reasons,
+          which makes it impossible for the end-user to understand why it will not work,
+          as the 'instance-name' (script name inside RMS) and the actual file name will
+          differ.
+
+    This function solves all these issues, and makes it possible to import a RMS project
+    library in a much easier way::
+
+        import fmu.tools as tools
+
+        # mylib.py is inside the RMS project
+        plib = tools.rms.import_localmodule(project, "mylib")
+
+        plib.somefunction(some_arg)
+
+        # exlib.py is outside the RMS project e,g, at ../lib/exlib.py
+        elib = tools.rms.import_localmodule(project, "exlib", path="../lib")
+
+        elib.someotherfunction(some_other_arg)
+
+    Args:
+        project: RMS 'magic' project variable
+        module_root_name: A string that is the root name of your module. E.g. if
+            the module is named 'blah.py', the use 'blah'.
+        path: If None then it will use a module seen from RMS, being technically stored
+            in pythoncomp folder. If set, then it should be a string for the file path
+            and load a module stored outside RMS.
+
+    """
+    if not path:
+        return _localmodule_inside_rms(project, module_root_name)
+    else:
+        return _localmodule_outside_rms(module_root_name, path)
