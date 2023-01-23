@@ -27,7 +27,6 @@ def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
     """Test import of a module via rms.import_localmodule."""
 
     pycomp = tmp_path / "myproject" / "pythoncomp"
-    print(pycomp)
     pycomp.mkdir(parents=True)
 
     os.chdir(pycomp)
@@ -60,7 +59,6 @@ def test_rms_import_invalid_name(tmp_path):
     """Test import of a module that is invalid."""
 
     pycomp = tmp_path / "myproject" / "pythoncomp"
-    print(pycomp)
     pycomp.mkdir(parents=True)
 
     os.chdir(pycomp)
@@ -71,3 +69,57 @@ def test_rms_import_invalid_name(tmp_path):
     fake_project = object()
     with pytest.raises(Exception, match=r"The project object is invalid"):
         _ = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+
+
+def test_rms_import_ex1_localmodule_external_single(tmp_path):
+    """Test import of a external (file) module via rms.import_localmodule."""
+
+    myproj = tmp_path / "ex1" / "myproject1"
+    myproj.mkdir(parents=True)
+    extlib = myproj / ".." / "otherlib"
+    extlib.mkdir(parents=True)
+
+    os.chdir(extlib)
+    with open("some.py", "w", encoding="utf-8") as stream:
+        stream.write(SNIPPET1)
+
+    os.chdir(myproj)
+
+    fake_project = "dummy"
+
+    mylib = fmu.tools.rms.import_localmodule(fake_project, "some", path="../otherlib")
+
+    assert mylib.add(3, 4) == 7
+    assert mylib.say_hello("world") == "Hello world"
+
+
+def test_rms_import_ex2_localmodule_external_package(tmp_path):
+    """Test import of a external (package) module via rms.import_localmodule."""
+
+    myproj = tmp_path / "ex2" / "myproject2"
+    myproj.mkdir(parents=True)
+    extlib = myproj / ".." / "lib" / "mypackage"
+    extlib.mkdir(parents=True)
+
+    os.chdir(extlib)
+    with open("mymod.py", "w", encoding="utf-8") as stream:
+        stream.write(SNIPPET1)
+
+    with open("__init__.py", "w", encoding="utf-8") as stream:
+        stream.write("from . import mymod")
+
+    os.chdir(myproj)
+
+    fake_project = "dummy"
+
+    mylib = fmu.tools.rms.import_localmodule(fake_project, "mypackage", path="../lib")
+
+    assert mylib.mymod.add(3, 4) == 7
+    assert mylib.mymod.say_hello("world") == "Hello world"
+
+    mylib = fmu.tools.rms.import_localmodule(
+        fake_project, "mymod", path="../lib/mypackage"
+    )
+
+    assert mylib.add(3, 4) == 7
+    assert mylib.say_hello("world") == "Hello world"
