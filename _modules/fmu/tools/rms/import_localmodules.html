@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fmu.tools.rms.import_localmodules &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> fmu-tools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.11.3.dev13+g7490996
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">HISTORY</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>fmu.tools.rms.import_localmodules</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmu.tools.rms.import_localmodules</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Import a local module made inside RMS, and refresh the content.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">no_type_check</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">_detect_pyfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A module shall be named *.py, but may have different &#39;actual&#39; name in RMS.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        actual_file: e.g. mymodule_name_ondisk.py_1</span>
+<span class="sd">        module: e.g. name_seen_in_rms.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">usepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">proposed</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">usepath</span> <span class="o">/</span> <span class="p">(</span><span class="n">module_root_name</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span><span class="p">),</span>
+        <span class="n">usepath</span> <span class="o">/</span> <span class="p">(</span><span class="n">module_root_name</span> <span class="o">+</span> <span class="s2">&quot;.py_1&quot;</span><span class="p">),</span>
+        <span class="n">usepath</span> <span class="o">/</span> <span class="p">(</span><span class="n">module_root_name</span> <span class="o">+</span> <span class="s2">&quot;.py_2&quot;</span><span class="p">),</span>
+        <span class="n">usepath</span> <span class="o">/</span> <span class="p">(</span><span class="n">module_root_name</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">proposal</span> <span class="ow">in</span> <span class="n">proposed</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Look for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">proposal</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">proposal</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;-&gt; Found </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">proposal</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;.py&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">proposal</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Warning: Please avoid modules without a .py ending!&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">proposal</span><span class="p">,</span> <span class="n">module_root_name</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span>
+
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="import_localmodule"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule">[docs]</a><span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists inside the RMS project.</span>
+
+<span class="sd">    Inside a RMS project it can be beneficial to have a module that serves as a library,</span>
+<span class="sd">    not only a front end script. Several problems exist in current RMS:</span>
+
+<span class="sd">        - RMS has no awareness of this &#39;PYTHONPATH&#39;, i.e. &lt;project&gt;/pythoncomp</span>
+<span class="sd">        - RMS will, once loaded, not refresh any changes made in the module</span>
+<span class="sd">        - Python requires extension .py, but RMS often adds .py_1 for technical reasons,</span>
+<span class="sd">          which makes it impossible for the end-user to understand why it will not work,</span>
+<span class="sd">          as the &#39;instance-name&#39; (script name inside RMS) and the actual file name will</span>
+<span class="sd">          differ.</span>
+
+<span class="sd">    This function solves all these issues, and makes it possible to import a RMS project</span>
+<span class="sd">    library in a much easier way::</span>
+
+<span class="sd">        import fmu.tools as tools</span>
+
+<span class="sd">        # mylib.py is inside the RMS project</span>
+<span class="sd">        plib = tools.rms.import_localmodule(project, &quot;mylib&quot;)</span>
+
+<span class="sd">        plib.somefunction(some_arg)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: RMS &#39;magic&#39; project variable</span>
+<span class="sd">        module_root_name: A string that is the root name of your module. E.g. if</span>
+<span class="sd">            the module is named &#39;blah.py&#39;, the use &#39;blah&#39;.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># allow project to be a string; mostly for unit testing</span>
+        <span class="n">prj</span> <span class="o">=</span> <span class="n">project</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">prj</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The project object is invalid, perhaps not inside RMS?&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+
+    <span class="n">mypath</span> <span class="o">=</span> <span class="n">prj</span> <span class="o">+</span> <span class="s2">&quot;/pythoncomp&quot;</span>
+
+    <span class="n">actualfile</span><span class="p">,</span> <span class="n">module</span> <span class="o">=</span> <span class="n">_detect_pyfile</span><span class="p">(</span><span class="n">mypath</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">actualfile</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot detect module </span><span class="si">{</span><span class="n">module_root_name</span><span class="si">}</span><span class="s2">. Check spelling etc&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Now empty sys.path for this module, allowing a refresh when library is modified:</span>
+    <span class="n">sysm</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sysm</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Delete from modules: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="c1"># since modules in RMS may have invalid endings; copy to a tempfile instead</span>
+    <span class="c1"># with correct name, and let that part be in sys.path temporarily</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tmpdirname</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">actualfile</span><span class="p">,</span> <span class="n">join</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">,</span> <span class="n">module</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using tmp file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+
+        <span class="n">xmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># avoid accumulation in sys.path by removing tmppath from stack</span>
+        <span class="k">return</span> <span class="n">xmod</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Equinor.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

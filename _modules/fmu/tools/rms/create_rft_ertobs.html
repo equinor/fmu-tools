@@ -1,35 +1,74 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/js/theme.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../../index.html" class="icon icon-home"> fmu-tools
-            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +76,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
@@ -46,6 +96,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
@@ -54,30 +106,69 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
       <li>fmu.tools.rms.create_rft_ertobs</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <h1>Source code for fmu.tools.rms.create_rft_ertobs</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">create_rft_ertobs creates txt, obs and welldatefile for usage together</span>
@@ -145,7 +236,7 @@
 
 
 <div class="viewcode-block" id="check_and_parse_config"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">[docs]</a><span class="k">def</span> <span class="nf">check_and_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Checks config, and returns a validated and defaults-filled config</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks config, and returns a validated and defaults-filled config</span>
 <span class="sd">    dictionary&quot;&quot;&quot;</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">unknown_options</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">SUPPORTED_OPTIONS</span><span class="p">)</span>
@@ -226,7 +317,7 @@
 <div class="viewcode-block" id="get_well_coords"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords">[docs]</a><span class="k">def</span> <span class="nf">get_well_coords</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span> <span class="n">wellname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">trajectory_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Extracts  well coordinates as a (wellpoints, 3) numpy array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts  well coordinates as a (wellpoints, 3) numpy array</span>
 <span class="sd">    from a ROXAPI RMS project reference.</span>
 
 <span class="sd">    Args:</span>
@@ -241,7 +332,7 @@
 
 
 <div class="viewcode-block" id="strictly_downward"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">[docs]</a><span class="k">def</span> <span class="nf">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Check if a well trajectory has absolutely no horizontal sections</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a well trajectory has absolutely no horizontal sections</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        coords: n x 4 array of coordinates, only</span>
@@ -256,7 +347,7 @@
 <div class="viewcode-block" id="interp_from_md"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">[docs]</a><span class="k">def</span> <span class="nf">interp_from_md</span><span class="p">(</span>
     <span class="n">md_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to interpolate East, North, TVD values of a well point</span>
 <span class="sd">    defined by its name (wname) and its corresponding MD point (md_value).</span>
 
@@ -293,7 +384,7 @@
     <span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Interpolate MD value of a well point defined by its name (wellname)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate MD value of a well point defined by its name (wellname)</span>
 <span class="sd">    and its corresponding East, North, TVD values (xyz tuple)</span>
 
 <span class="sd">    The coords input array should consist of rows::</span>
@@ -387,9 +478,7 @@
     <span class="k">if</span> <span class="n">closest_md</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">md_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">closest_md</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;MD estimated on undulating wellpath: </span><span class="si">{}</span><span class="s2"> (mismatch = </span><span class="si">{:.4f}</span><span class="s2"> m)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">md_value</span><span class="p">,</span> <span class="n">dist_min</span>
-        <span class="p">)</span>
+        <span class="sa">f</span><span class="s2">&quot;MD estimated on undulating wellpath: </span><span class="si">{</span><span class="n">md_value</span><span class="si">}</span><span class="s2"> (mismatch = </span><span class="si">{</span><span class="n">dist_min</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> m)&quot;</span>
     <span class="p">)</span>
 
     <span class="c1"># Alternative using polynoms</span>
@@ -432,7 +521,7 @@
     <span class="n">welldatefile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;well_date_rft.txt&quot;</span><span class="p">,</span>
     <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rft_ertobs.csv&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Exports data from a dataframe into ERT observations files.</span>
 <span class="sd">    The input here is essentially the input dataframe, but where all &quot;holes&quot; in</span>
 <span class="sd">    MD or XYZ have been filled.</span>
@@ -519,11 +608,8 @@
             <span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written obs file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
 
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DAY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;MONTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m&quot;</span><span class="p">)</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;YEAR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span>
     <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">])[</span>
-        <span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DAY&quot;</span><span class="p">,</span> <span class="s2">&quot;MONTH&quot;</span><span class="p">,</span> <span class="s2">&quot;YEAR&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span>
+        <span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span>
     <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written welldata file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span></div>
 
@@ -533,7 +619,7 @@
     <span class="n">coords_pr_well</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fill missing MD or XYZ values in incoming dataframe, interpolating</span>
 <span class="sd">    in given well trajectories.</span>
 
@@ -576,7 +662,7 @@
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The main function to be called from a RMS client python script.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function to be called from a RMS client python script.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config (dict): configuration as a dictionary.</span>
@@ -684,30 +770,46 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

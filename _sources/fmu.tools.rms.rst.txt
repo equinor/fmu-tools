@@ -12,10 +12,26 @@ fmu.tools.rms.create\_rft\_ertobs module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.import\_localmodules module
+-----------------------------------------
+
+.. automodule:: fmu.tools.rms.import_localmodules
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.qcreset module
 ----------------------------
 
 .. automodule:: fmu.tools.rms.qcreset
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmu.tools.rms.rename\_rms\_scripts module
+-----------------------------------------
+
+.. automodule:: fmu.tools.rms.rename_rms_scripts
    :members:
    :undoc-members:
    :show-inheritance:

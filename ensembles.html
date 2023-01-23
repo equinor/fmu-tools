@@ -1,38 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ensembles &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+  <title>Ensembles &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
     <link rel="prev" title="rmsvolumetrics2csv" href="rmsvolumetrics2csv.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> fmu-tools
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -49,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Ensembles</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-ensemble-well-props-script">The ensemble_well_props script</a><ul>
@@ -65,38 +117,79 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
       <li>Ensembles</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/ensembles.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="ensembles">
-<h1>Ensembles<a class="headerlink" href="#ensembles" title="Permalink to this headline"></a></h1>
+<h1>Ensembles<a class="headerlink" href="#ensembles" title="Permalink to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">ensembles</span></code> provides functionality (methods, scripts) to compute various results from
 a full ensemble.</p>
 <section id="the-ensemble-well-props-script">
-<h2>The ensemble_well_props script<a class="headerlink" href="#the-ensemble-well-props-script" title="Permalink to this headline"></a></h2>
+<h2>The ensemble_well_props script<a class="headerlink" href="#the-ensemble-well-props-script" title="Permalink to this heading">¶</a></h2>
 <section id="introduction-to-ensemble-well-props">
-<h3>Introduction to <code class="docutils literal notranslate"><span class="pre">ensemble_well_props</span></code><a class="headerlink" href="#introduction-to-ensemble-well-props" title="Permalink to this headline"></a></h3>
+<h3>Introduction to <code class="docutils literal notranslate"><span class="pre">ensemble_well_props</span></code><a class="headerlink" href="#introduction-to-ensemble-well-props" title="Permalink to this heading">¶</a></h3>
 <p>The use case for this script it to ‘drill a well’, typically a planned well, in the full ensemble
 and get the following products:</p>
 <ul class="simple">
@@ -114,49 +207,49 @@ number is 1 and porosity is above 0.24.</p></li>
 </div>
 </section>
 <section id="example-input-yaml-file">
-<h3>Example input YAML file<a class="headerlink" href="#example-input-yaml-file" title="Permalink to this headline"></a></h3>
+<h3>Example input YAML file<a class="headerlink" href="#example-input-yaml-file" title="Permalink to this heading">¶</a></h3>
 <p>In addition to the option of generating an example in the script itself, a simple example is
 provided here for reference.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ensemble</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">iteration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iter-3</span><span class="w"></span>
-<span class="w">  </span><span class="nt">realizations</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0-30</span><span class="w"></span>
-<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/scratch/some/case/</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ensemble</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">iteration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iter-3</span>
+<span class="w">  </span><span class="nt">realizations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0-30</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/scratch/some/case/</span>
 
-<span class="nt">gridproperties</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">grid</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid.roff</span><span class="w"></span>
-<span class="w">  </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">discrete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid--facies.roff</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Facies</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid--phit.roff</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PHIT</span><span class="w"></span>
+<span class="nt">gridproperties</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">grid</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid.roff</span>
+<span class="w">  </span><span class="nt">properties</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">discrete</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid--facies.roff</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Facies</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">filestub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">share/results/grids/geogrid--phit.roff</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PHIT</span>
 
-<span class="nt">well</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">delta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
-<span class="w">  </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">somefolder/OP5_Y1.rmswell</span><span class="w"></span>
-<span class="w">  </span><span class="nt">lognames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">MD</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">mdlog</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MD</span><span class="w"></span>
-<span class="w">  </span><span class="nt">mdranges</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1653</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1670</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1680</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1698</span><span class="p p-Indicator">]]</span><span class="w"></span>
+<span class="nt">well</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">delta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">somefolder/OP5_Y1.rmswell</span>
+<span class="w">  </span><span class="nt">lognames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">MD</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">mdlog</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MD</span>
+<span class="w">  </span><span class="nt">mdranges</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[[</span><span class="nv">1653</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1670</span><span class="p p-Indicator">],</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1680</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1698</span><span class="p p-Indicator">]]</span>
 
-<span class="nt">report</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">average_logs</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fileroot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avgfile</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cumulative_lengths</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># look at criteria where facies is 1 and porosity is above 0.24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">criteria</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">Facies</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">codes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">      </span><span class="nt">PHIT</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.24</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.40</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fileroot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cumfile</span><span class="w"></span>
-<span class="w">  </span><span class="nt">keep_intermediate_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">report</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">average_logs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fileroot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avgfile</span>
+<span class="w">  </span><span class="nt">cumulative_lengths</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># look at criteria where facies is 1 and porosity is above 0.24</span>
+<span class="w">    </span><span class="nt">criteria</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">Facies</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">codes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">PHIT</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.24</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.40</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">fileroot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cumfile</span>
+<span class="w">  </span><span class="nt">keep_intermediate_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </pre></div>
 </div>
 </section>
 <section id="result-files">
-<h3>Result files<a class="headerlink" href="#result-files" title="Permalink to this headline"></a></h3>
+<h3>Result files<a class="headerlink" href="#result-files" title="Permalink to this heading">¶</a></h3>
 <p>The script will generate on or more result on CSV and/or RMS well format. The RMS well file
 can be imported in RMS for visual inspection, while the CSV files can be imported to spreadsheet
 or similar for further usage.</p>
@@ -166,33 +259,50 @@ or similar for further usage.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="rmsvolumetrics2csv.html" class="btn btn-neutral float-left" title="rmsvolumetrics2csv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rmsvolumetrics2csv.html" class="btn btn-neutral float-left" title="rmsvolumetrics2csv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

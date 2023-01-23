@@ -1,38 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="fmu.tools.sensitivities package" href="fmu.tools.sensitivities.html" />
     <link rel="prev" title="fmu.tools.qcforward package" href="fmu.tools.qcforward.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> fmu-tools
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -49,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -67,40 +119,84 @@
 </li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="modules.html">API for fmu.tools</a> &raquo;</li>
+        
           <li><a href="fmu.html">fmu package</a> &raquo;</li>
+        
           <li><a href="fmu.tools.html">fmu.tools package</a> &raquo;</li>
+        
       <li>fmu.tools.rms package</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/fmu.tools.rms.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="fmu-tools-rms-package">
-<h1>fmu.tools.rms package<a class="headerlink" href="#fmu-tools-rms-package" title="Permalink to this headline"></a></h1>
+<h1>fmu.tools.rms package<a class="headerlink" href="#fmu-tools-rms-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-fmu.tools.rms.create_rft_ertobs">
-<span id="fmu-tools-rms-create-rft-ertobs-module"></span><h2>fmu.tools.rms.create_rft_ertobs module<a class="headerlink" href="#module-fmu.tools.rms.create_rft_ertobs" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-rms-create-rft-ertobs-module"></span><h2>fmu.tools.rms.create_rft_ertobs module<a class="headerlink" href="#module-fmu.tools.rms.create_rft_ertobs" title="Permalink to this heading">¶</a></h2>
 <p>create_rft_ertobs creates txt, obs and welldatefile for usage together
 with GENDATA in ERT assisted history match runs.</p>
 <p>This script should be run from within RMS to be able to interpolate
@@ -134,11 +230,11 @@ Defaults to “well_date_rft.txt”</p></li>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.check_and_parse_config">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">check_and_parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#check_and_parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.check_and_parse_config" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">check_and_parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#check_and_parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.check_and_parse_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks config, and returns a validated and defaults-filled config
 dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
 </dd>
 </dl>
@@ -146,11 +242,11 @@ dictionary</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.get_well_coords">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">get_well_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#get_well_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.get_well_coords" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">get_well_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#get_well_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.get_well_coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts  well coordinates as a (wellpoints, 3) numpy array
 from a ROXAPI RMS project reference.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project</strong> – Roxapi project reference.</p></li>
 <li><p><strong>wellname</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of well as it exists in the RMS project</p></li>
@@ -161,17 +257,17 @@ from a ROXAPI RMS project reference.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.strictly_downward">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">strictly_downward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#strictly_downward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.strictly_downward" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">strictly_downward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#strictly_downward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.strictly_downward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a well trajectory has absolutely no horizontal sections</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>coords</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – n x 4 array of coordinates, only
 z values in 4th column is used.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>True if there are no horizontals.</p>
 </dd>
 </dl>
@@ -179,7 +275,7 @@ z values in 4th column is used.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.interp_from_md">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_md" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_md" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to interpolate East, North, TVD values of a well point
 defined by its name (wname) and its corresponding MD point (md_value).</p>
 <p>The interpolation of the well trajectory will be linear if linear = True,
@@ -189,10 +285,10 @@ using cubic spline otherwise.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>x, y and z along the wellpath at requested measured depth value.</p>
 </dd>
 </dl>
@@ -200,7 +296,7 @@ using cubic spline otherwise.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.interp_from_xyz">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_xyz" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">interp_from_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#interp_from_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.interp_from_xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolate MD value of a well point defined by its name (wellname)
 and its corresponding East, North, TVD values (xyz tuple)</p>
 <p>The coords input array should consist of rows:</p>
@@ -214,17 +310,17 @@ if the well is strictly going downward (TVD series stricly increasing).</p>
 on the well trajectory will be used, using cubic spline interpolation
 of the well trajectory points.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coords</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – </p></li>
 <li><p><strong>xyz</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – x, y and z for the coordinate where MD is requested.</p></li>
 <li><p><strong>interpolation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Use either “cubic” (default) or “linear”</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Measured depth value at (x,y,z)</p>
 </dd>
 </dl>
@@ -232,7 +328,7 @@ of the well trajectory points.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">ertobs_df_to_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldatefile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'well_date_rft.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rft_ertobs.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#ertobs_df_to_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">ertobs_df_to_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldatefile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'well_date_rft.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rft_ertobs.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#ertobs_df_to_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exports data from a dataframe into ERT observations files.
 The input here is essentially the input dataframe, but where all “holes” in
 MD or XYZ have been filled.</p>
@@ -258,7 +354,7 @@ Here it will be constructed on the enumeration of DATE for each given well,
 meaning the number will be 1 for the first date for each well, and 2 on the
 second DATE pr. well etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Contains data for RFT observations, one
 observations pr. row</p></li>
@@ -268,7 +364,7 @@ exists.</p></li>
 <li><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Filename for raw CSV data, for future use in GENDATA_RFT</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
@@ -276,18 +372,18 @@ exists.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">fill_missing_md_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords_pr_well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#fill_missing_md_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">fill_missing_md_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords_pr_well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#fill_missing_md_xyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fill missing MD or XYZ values in incoming dataframe, interpolating
 in given well trajectories.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dframe</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – Must contain WELL_NAME, EAST, NORTH, MD, TVD</p></li>
 <li><p><strong>coords_pr_well</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – One key for each WELL_NAME, pointing to a n by 3
 numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
 </dd>
 </dl>
@@ -295,24 +391,65 @@ numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.create_rft_ertobs.main">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.create_rft_ertobs.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/create_rft_ertobs.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_rft_ertobs.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main function to be called from a RMS client python script.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – configuration as a dictionary.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
+<section id="module-fmu.tools.rms.import_localmodules">
+<span id="fmu-tools-rms-import-localmodules-module"></span><h2>fmu.tools.rms.import_localmodules module<a class="headerlink" href="#module-fmu.tools.rms.import_localmodules" title="Permalink to this heading">¶</a></h2>
+<p>Import a local module made inside RMS, and refresh the content.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.import_localmodules.import_localmodule">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.import_localmodules.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodules.import_localmodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a library module in RMS which exists inside the RMS project.</p>
+<p>Inside a RMS project it can be beneficial to have a module that serves as a library,
+not only a front end script. Several problems exist in current RMS:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>RMS has no awareness of this ‘PYTHONPATH’, i.e. &lt;project&gt;/pythoncomp</p></li>
+<li><p>RMS will, once loaded, not refresh any changes made in the module</p></li>
+<li><p>Python requires extension .py, but RMS often adds .py_1 for technical reasons,
+which makes it impossible for the end-user to understand why it will not work,
+as the ‘instance-name’ (script name inside RMS) and the actual file name will
+differ.</p></li>
+</ul>
+</div></blockquote>
+<p>This function solves all these issues, and makes it possible to import a RMS project
+library in a much easier way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+<span class="c1"># mylib.py is inside the RMS project</span>
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
+
+<span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> – RMS ‘magic’ project variable</p></li>
+<li><p><strong>module_root_name</strong> – A string that is the root name of your module. E.g. if
+the module is named ‘blah.py’, the use ‘blah’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-fmu.tools.rms.qcreset">
-<span id="fmu-tools-rms-qcreset-module"></span><h2>fmu.tools.rms.qcreset module<a class="headerlink" href="#module-fmu.tools.rms.qcreset" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-rms-qcreset-module"></span><h2>fmu.tools.rms.qcreset module<a class="headerlink" href="#module-fmu.tools.rms.qcreset" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.qcreset.set_data_constant">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_constant" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_constant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data from RMS constant.</p>
 <p>This method is a utility in order to set surface and 3D grid property data
 to a given value. The value must be of the correct type (if discrete 3D
@@ -326,7 +463,7 @@ in RMS.</p>
 “grid_models” are optional (at least one of them should be provided for the
 method to have any effect).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project</strong> – The roxar magic keyword <code class="docutils literal notranslate"><span class="pre">project</span></code> refering to the current
 RMS project.</p></li>
@@ -364,7 +501,7 @@ grid models.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.qcreset.set_data_empty">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_empty" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.qcreset.</span></span><span class="sig-name descname"><span class="pre">set_data_empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/qcreset.html#set_data_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.qcreset.set_data_empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set data from RMS empty.</p>
 <p>This method is a utility in order to set empty surface and 3D grid property
 data. The value must be of the correct type (if discrete 3D property for
@@ -405,26 +542,237 @@ grid models.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>) – Configration as a dictionary. See examples in documentation</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
+<section id="module-fmu.tools.rms.rename_rms_scripts">
+<span id="fmu-tools-rms-rename-rms-scripts-module"></span><h2>fmu.tools.rms.rename_rms_scripts module<a class="headerlink" href="#module-fmu.tools.rms.rename_rms_scripts" title="Permalink to this heading">¶</a></h2>
+<p>Fix RMS Python script file extensions and gather useful information</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.rename_rms_scripts.</span></span><span class="sig-name descname"><span class="pre">PythonCompMaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The PythonCompMaster class parses a .master specific to those
+found in an RMS pythoncomp/ directory. These .master files are
+structured as so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Begin</span> <span class="n">GEOMATIC</span> <span class="n">header</span>
+<span class="n">End</span> <span class="n">GEOMATIC</span> <span class="n">header</span>
+<span class="n">Begin</span> <span class="n">ParentParams</span> <span class="nb">object</span>
+    <span class="n">PSJParams</span> <span class="nb">object</span>
+    <span class="n">PSJParams</span> <span class="nb">object</span>
+    <span class="o">...</span>
+<span class="n">End</span> <span class="n">ParentParams</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>Each PSJParams object points to a Python script, and these objects
+are referenced in the root .master file if and when they are
+included in a workflow. PSJParams objects are stored like so:</p>
+<p>Begin parameter
+id                                      = PSJParams
+instance_name                           = script_name_in_rms.py
+elapsedrealtime                         = 2.5200000405311584e-01
+elapsedcputime                          = 0.0000000000000000e+00
+tableoffset                             = 0
+description.size                        = 0
+opentime                                = 2022-12-20 07:18:38:766
+identifier                              = 000000…fdbea80000022f
+changeuser                              = msfe
+changetime                              = 2022-12-20 07:19:32:244
+standalonefilename                      = script_name_in_rms.py_1
+End parameter</p>
+<p>where the</p>
+<ul class="simple">
+<li><p><cite>instance_name</cite> is the filename displayed in RMS,</p></li>
+<li><p><cite>standalonefilename</cite> is the filename as stored on disk,</p></li>
+<li><dl class="simple">
+<dt><cite>identifier</cite> is a 384-bit string that looks like a hash, but</dt><dd><p>frequently increments by one bit sequentially</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <cite>instance_name</cite> and <cite>standalonefilename</cite> can become out of
+sync, and the <cite>standalonefilename</cite> in particular can frequently be
+given a <cite>.py_1</cite> extension rather than a <cite>.py</cite> extension.</p>
+<p>This class offers methods to collect and correct these degenerate
+filenames.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a pythoncomp/.master file. Results are stored internally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the pythoncomp/ directory</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the pythoncomp/.master file</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.header">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">header</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dict representing the GEOMATIC header of the .master file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.entries">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of Python file entries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_inconsistent_entries">
+<span class="sig-name descname"><span class="pre">get_inconsistent_entries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_inconsistent_entries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_inconsistent_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspects all Python entries for Python scripts that have an
+<cite>instance_name</cite> that differs from its <cite>standalonefilename</cite>, i.e.
+the RMS name does not match the name of the file on disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_extensions">
+<span class="sig-name descname"><span class="pre">get_invalid_extensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_invalid_extensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_extensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspects all Python entries for Python scripts that have a
+non-standard file extension (not <cite>.py</cite>) on disk. Frequently this
+means they are <cite>.py_1</cite> but other variations exist (or occasionally
+there is no file extension at all).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_instance_names">
+<span class="sig-name descname"><span class="pre">get_invalid_instance_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_invalid_instance_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_instance_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspects all Python entries for Python scripts that have a
+non-standard file extension (not <cite>.py</cite>) in RMS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant">
+<span class="sig-name descname"><span class="pre">get_pep8_noncompliant</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_pep8_noncompliant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of instance names that are not PEP8 compliant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_nonexistent_standalonefilenames">
+<span class="sig-name descname"><span class="pre">get_nonexistent_standalonefilenames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_nonexistent_standalonefilenames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_nonexistent_standalonefilenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspects all Python entries for Python scripts that have a
+non-existent file. Assumes the path is up-to-date and correct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_unused_scripts">
+<span class="sig-name descname"><span class="pre">get_unused_scripts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_unused_scripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_unused_scripts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of Python scripts that aren’t used in any workflow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_entry">
+<span class="sig-name descname"><span class="pre">get_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.get_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an entry reference by its iname</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames">
+<span class="sig-name descname"><span class="pre">fix_standalone_filenames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.fix_standalone_filenames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to fix the Python files on disk that are inconsistent
+with the files in RMS. This fix is rather simple and just copies
+the <cite>instance_name</cite> to be the <cite>standalonefilename</cite> under the
+presumption that RMS will have prevented someone from making
+duplicate instance names. This might be an unreasonable assumption
+given the necessity of this script in the first place.</p>
+<p>If the names in RMS do not have a Python extension we skip them
+rather than try to figure it out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.PythonCompMaster.write_master_file">
+<span class="sig-name descname"><span class="pre">write_master_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#PythonCompMaster.write_master_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.write_master_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the fixed .master file out, with a non-option backup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.rename_rms_scripts.main">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.rename_rms_scripts.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/rename_rms_scripts.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-fmu.tools.rms.volumetrics">
-<span id="fmu-tools-rms-volumetrics-module"></span><h2>fmu.tools.rms.volumetrics module<a class="headerlink" href="#module-fmu.tools.rms.volumetrics" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-rms-volumetrics-module"></span><h2>fmu.tools.rms.volumetrics module<a class="headerlink" href="#module-fmu.tools.rms.volumetrics" title="Permalink to this heading">¶</a></h2>
 <p>Module for handling volumetrics text files from RMS</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.merge_rms_volumetrics">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">merge_rms_volumetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filebase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmsrealsuffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#merge_rms_volumetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.merge_rms_volumetrics" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">merge_rms_volumetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filebase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmsrealsuffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#merge_rms_volumetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.merge_rms_volumetrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Locate, parse and merge multiple volumetrics output files from RMS</p>
 <p>Columns in parsed files will be renamed according to the hydrocarbon phase,
 which will be deduced from the filenames. Columns will be merged
 horizontally on common column names (typically Region, Zone, Facies,
 Licence boundary etc.)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filebase</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Filename base, with absolute or relative path included,
 “&lt;filebase&gt;_oil_1.txt”, “&lt;filebase&gt;_gas_1.txt”, etc will be looked for.</p></li>
@@ -432,7 +780,7 @@ Licence boundary etc.)</p>
 normal FMU context, this should always be kept as the default “_1”.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
 </dd>
 </dl>
@@ -440,12 +788,12 @@ normal FMU context, this should always be kept as the default “_1”.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics_txt2df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txtfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zonerenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics_txt2df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics_txt2df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txtfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zonerenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics_txt2df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the volumetrics txt file from RMS as Pandas dataframe</p>
 <p>Columns will be renamed according to FMU standard,
 <a class="reference external" href="https://wiki.equinor.com/wiki/index.php/FMU_standards">https://wiki.equinor.com/wiki/index.php/FMU_standards</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>txtfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – path to file emitted by RMS Volumetrics job.
 Can also be a Path object.</p></li>
@@ -463,6 +811,9 @@ using pandas.Series.apply()</p></li>
 <li><p><strong>zonerenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – ditto for the zone column</p></li>
 </ul>
 </dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
 </dl>
 <p>The renamer functions could be defined like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myregionrenamer</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -470,29 +821,24 @@ using pandas.Series.apply()</p></li>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.guess_phase">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">guess_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#guess_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.guess_phase" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">guess_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#guess_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.guess_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a text-file, guess which phase the text file
 concerns, oil, gas or the “total” phase.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – Multiline</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>“OIL”, “GAS” or “TOTAL”</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError if guessing fails.</strong> – </p>
 </dd>
 </dl>
@@ -500,10 +846,10 @@ concerns, oil, gas or the “total” phase.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.get_parser">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.get_parser" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.get_parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up parser for command line utility</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ArgumentParser</span></code></p>
 </dd>
 </dl>
@@ -511,10 +857,10 @@ concerns, oil, gas or the “total” phase.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics2csv_main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics2csv_main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.volumetrics.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics2csv_main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics2csv_main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Endpoint for command line utility for converting one file at a time</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
@@ -522,16 +868,16 @@ concerns, oil, gas or the “total” phase.</p>
 
 </section>
 <section id="module-fmu.tools.rms">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.rms" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.rms" title="Permalink to this heading">¶</a></h2>
 <p>Processing of volumetrics from RMS</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.rmsvolumetrics_txt2df">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics_txt2df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txtfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zonerenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics_txt2df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rmsvolumetrics_txt2df" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics_txt2df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txtfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zonerenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics_txt2df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rmsvolumetrics_txt2df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the volumetrics txt file from RMS as Pandas dataframe</p>
 <p>Columns will be renamed according to FMU standard,
 <a class="reference external" href="https://wiki.equinor.com/wiki/index.php/FMU_standards">https://wiki.equinor.com/wiki/index.php/FMU_standards</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>txtfile</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – path to file emitted by RMS Volumetrics job.
 Can also be a Path object.</p></li>
@@ -549,6 +895,9 @@ using pandas.Series.apply()</p></li>
 <li><p><strong>zonerenamer</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – ditto for the zone column</p></li>
 </ul>
 </dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</dd>
 </dl>
 <p>The renamer functions could be defined like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myregionrenamer</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -556,9 +905,41 @@ using pandas.Series.apply()</p></li>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.import_localmodule">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a library module in RMS which exists inside the RMS project.</p>
+<p>Inside a RMS project it can be beneficial to have a module that serves as a library,
+not only a front end script. Several problems exist in current RMS:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>RMS has no awareness of this ‘PYTHONPATH’, i.e. &lt;project&gt;/pythoncomp</p></li>
+<li><p>RMS will, once loaded, not refresh any changes made in the module</p></li>
+<li><p>Python requires extension .py, but RMS often adds .py_1 for technical reasons,
+which makes it impossible for the end-user to understand why it will not work,
+as the ‘instance-name’ (script name inside RMS) and the actual file name will
+differ.</p></li>
+</ul>
+</div></blockquote>
+<p>This function solves all these issues, and makes it possible to import a RMS project
+library in a much easier way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+<span class="c1"># mylib.py is inside the RMS project</span>
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
+
+<span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> – RMS ‘magic’ project variable</p></li>
+<li><p><strong>module_root_name</strong> – A string that is the root name of your module. E.g. if
+the module is named ‘blah.py’, the use ‘blah’.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -568,33 +949,50 @@ using pandas.Series.apply()</p></li>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fmu.tools.qcforward.html" class="btn btn-neutral float-left" title="fmu.tools.qcforward package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="fmu.tools.sensitivities.html" class="btn btn-neutral float-right" title="fmu.tools.sensitivities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmu.tools.qcforward.html" class="btn btn-neutral float-left" title="fmu.tools.qcforward package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

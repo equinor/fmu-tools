@@ -1,37 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="fmu.tools.rms package" href="fmu.tools.rms.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> fmu-tools
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -48,6 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -66,56 +118,100 @@
 </li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="modules.html">API for fmu.tools</a> &raquo;</li>
+        
           <li><a href="fmu.html">fmu package</a> &raquo;</li>
+        
           <li><a href="fmu.tools.html">fmu.tools package</a> &raquo;</li>
+        
       <li>fmu.tools.sensitivities package</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/fmu.tools.sensitivities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="fmu-tools-sensitivities-package">
-<h1>fmu.tools.sensitivities package<a class="headerlink" href="#fmu-tools-sensitivities-package" title="Permalink to this headline"></a></h1>
+<h1>fmu.tools.sensitivities package<a class="headerlink" href="#fmu-tools-sensitivities-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-fmu.tools.sensitivities.create_design">
-<span id="fmu-tools-sensitivities-create-design-module"></span><h2>fmu.tools.sensitivities.create_design module<a class="headerlink" href="#module-fmu.tools.sensitivities.create_design" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-sensitivities-create-design-module"></span><h2>fmu.tools.sensitivities.create_design module<a class="headerlink" href="#module-fmu.tools.sensitivities.create_design" title="Permalink to this heading">¶</a></h2>
 <p>Module for generating design matrices that can be run by DESIGN2PARAMS
 and DESIGN_KW in FMU/ERT.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">DesignMatrix</span></span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">DesignMatrix</span></span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for design matrix in FMU. Can contain a onebyone design
 or a full montecarlo design.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.designvalues">
-<span class="sig-name descname"><span class="pre">designvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.designvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">designvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.designvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design matrix on standard fmu format
 contains columns ‘REAL’ (realization number), and if a onebyone
 design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -123,10 +219,10 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.defaultvalues">
-<span class="sig-name descname"><span class="pre">defaultvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.defaultvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">defaultvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.defaultvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>default values for design</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>OrderedDict</p>
 </dd>
 </dl>
@@ -134,12 +230,12 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.backgroundvalues">
-<span class="sig-name descname"><span class="pre">backgroundvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.backgroundvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">backgroundvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.backgroundvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used when background parameters are
 not constant. Either a set is sampled from specified distributions
 or they are read from a file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -147,19 +243,19 @@ or they are read from a file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.reset" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets DesignMatrix to empty. Necessary iin case method generate
 is used several times for same instance of DesignMatrix</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generating design matrix from input dictionary in specific
 format. Adding default values and background values if existing.
 Looping through sensitivities and adding them to designvalues.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>inputdict</strong> (<em>OrderedDict</em>) – input parameters for design</p>
 </dd>
 </dl>
@@ -167,11 +263,11 @@ Looping through sensitivities and adding them to designvalues.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.to_xlsx">
-<span class="sig-name descname"><span class="pre">to_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">designsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DefaultValues'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.to_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.to_xlsx" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">designsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DefaultValues'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.to_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.to_xlsx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writing design matrix to excel workfbook on standard fmu format
 to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
 <li><p><strong>designsheet</strong> (<em>str</em>) – name of excel sheet containing design matrix
@@ -185,10 +281,10 @@ values (optional, defaults to ‘DefaultValues’)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues">
-<span class="sig-name descname"><span class="pre">set_defaultvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.set_defaultvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_defaultvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.set_defaultvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add default values</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>defaults</strong> (<em>OrderedDict</em>) – (key, value) is (parameter_name, value)</p>
 </dd>
 </dl>
@@ -196,12 +292,12 @@ values (optional, defaults to ‘DefaultValues’)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds">
-<span class="sig-name descname"><span class="pre">add_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
@@ -212,12 +308,12 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.add_background">
-<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_background" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
@@ -228,10 +324,10 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.background_to_excel">
-<span class="sig-name descname"><span class="pre">background_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Background'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.background_to_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.background_to_excel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">background_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Background'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.background_to_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.background_to_excel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writing background values to an Excel spreadsheet</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
 <li><p><strong>backgroundsheet</strong> (<em>str</em>) – name of excel sheet</p></li>
@@ -244,7 +340,7 @@ dictionary</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SeedSensitivity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">SeedSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SeedSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">SeedSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SeedSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A seed sensitivity is normally the reference for one by one sensitivities
 It contains a list of seeds to be repeated for each sensitivity
@@ -253,10 +349,10 @@ It will be assigned the sensname ‘p10_p90’ which will be written to
 the SENSCASE column in the output.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SeedSensitivity.sensname">
-<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.sensname" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.sensname" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -264,10 +360,10 @@ the SENSCASE column in the output.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SeedSensitivity.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -275,10 +371,10 @@ the SENSCASE column in the output.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SeedSensitivity.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SeedSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SeedSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SeedSensitivity.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates parameter values for a seed sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>realnums</strong> (<em>list</em>) – list of integers with realization numbers</p></li>
 <li><p><strong>seedname</strong> (<em>str</em>) – name of seed parameter to add</p></li>
@@ -294,7 +390,7 @@ distributions or values.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SingleRealisationReference">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">SingleRealisationReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SingleRealisationReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">SingleRealisationReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SingleRealisationReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The class is used in set-ups where one wants a single realisation
 containing only default values as a reference, but the realisation
@@ -304,10 +400,10 @@ SENSCASE will be set to ‘ref’ in design matrix, to flag that it should be
 excluded as a sensitivity in the plot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SingleRealisationReference.sensname">
-<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensname" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensname" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -315,10 +411,10 @@ excluded as a sensitivity in the plot.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SingleRealisationReference.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -326,10 +422,10 @@ excluded as a sensitivity in the plot.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.SingleRealisationReference.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SingleRealisationReference.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#SingleRealisationReference.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.SingleRealisationReference.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates realisation number only</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>realnums</strong> (<em>list</em>) – list of intergers with realization numbers</p>
 </dd>
 </dl>
@@ -339,7 +435,7 @@ excluded as a sensitivity in the plot.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.BackgroundSensitivity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">BackgroundSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#BackgroundSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">BackgroundSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#BackgroundSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The class is used in set-ups where one sensitivities
 are run on top of varying background parameters.
@@ -349,10 +445,10 @@ at their default values except the background parameters.
 SENSCASE will be set to ‘p10_p90’ in design matrix.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensname">
-<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensname" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensname" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -360,10 +456,10 @@ SENSCASE will be set to ‘p10_p90’ in design matrix.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -371,10 +467,10 @@ SENSCASE will be set to ‘p10_p90’ in design matrix.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.BackgroundSensitivity.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#BackgroundSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#BackgroundSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.BackgroundSensitivity.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates realisation number only</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>realnums</strong> (<em>list</em>) – list of intergers with realization numbers</p>
 </dd>
 </dl>
@@ -384,7 +480,7 @@ SENSCASE will be set to ‘p10_p90’ in design matrix.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ScenarioSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ScenarioSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Each design can contain one or several single sensitivities of type
 Seed, MonteCarlo or Scenario.
@@ -398,10 +494,10 @@ varying background parameters are specified. Then these are varying
 within the case.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivity.case1">
-<span class="sig-name descname"><span class="pre">case1</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case1" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">case1</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case1" title="Permalink to this definition">¶</a></dt>
 <dd><p>first case, e.g. ‘low case’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase" title="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase">ScenarioSensitivityCase</a></p>
 </dd>
 </dl>
@@ -409,10 +505,10 @@ within the case.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivity.case2">
-<span class="sig-name descname"><span class="pre">case2</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">case2</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case2" title="Permalink to this definition">¶</a></dt>
 <dd><p>second case, e.g. ‘high case’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase" title="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase">ScenarioSensitivityCase</a></p>
 </dd>
 </dl>
@@ -420,11 +516,11 @@ within the case.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivity.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design values for the sensitivity, containing
 1-2 cases</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -432,11 +528,11 @@ within the case.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case">
-<span class="sig-name descname"><span class="pre">add_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">senscase</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivity.add_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">senscase</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivity.add_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a ScenarioSensitivityCase instance
 to a ScenarioSensitivity object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>senscase</strong> (<a class="reference internal" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase" title="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase"><em>ScenarioSensitivityCase</em></a>) – Equals SENSCASE in design matrix.</p>
 </dd>
 </dl>
@@ -446,7 +542,7 @@ to a ScenarioSensitivity object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ScenarioSensitivityCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">casename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivityCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ScenarioSensitivityCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">casename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivityCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Each ScenarioSensitivity can contain one or
 two ScenarioSensitivityCases.</p>
@@ -459,11 +555,11 @@ vary within the case.</p>
 ScenarioSensitivity object.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename">
-<span class="sig-name descname"><span class="pre">casename</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">casename</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of the sensitivity case,
 equals SENSCASE in design matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -471,11 +567,11 @@ equals SENSCASE in design matrix.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues">
-<span class="sig-name descname"><span class="pre">casevalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">casevalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>parameters and values
 for the sensitivity with realisation numbers as index.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -483,10 +579,10 @@ for the sensitivity with realisation numbers as index.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivityCase.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ScenarioSensitivityCase.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate casevalues for the ScenarioSensitivityCase</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>realnums</strong> (<em>list</em>) – list of realizaton numbers for the case</p></li>
 <li><p><strong>parameters</strong> (<em>OrderedDict</em>) – dictionary with parameter names and values</p></li>
@@ -500,7 +596,7 @@ for the sensitivity with realisation numbers as index.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.MonteCarloSensitivity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">MonteCarloSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">MonteCarloSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>For a MonteCarloSensitivity one or several parameters
 are drawn from specified distributions with or without correlations.
@@ -509,11 +605,11 @@ one case, where the name SENSCASE is automatically set to ‘p10_p90’ in the
 design matrix to flag that p10_p90 should be calculated in TornadoPlot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensname">
-<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensname" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensname" title="Permalink to this definition">¶</a></dt>
 <dd><p>name for the sensitivity.
 Equals SENSNAME in design matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -521,11 +617,11 @@ Equals SENSNAME in design matrix.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>parameters and values for the sensitivity
 with realisation numbers as index.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -533,11 +629,11 @@ with realisation numbers as index.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates parameter values by drawing from
 defined distributions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>realnums</strong> (<em>list</em>) – list of integers with realization numbers</p></li>
 <li><p><strong>parameters</strong> (<em>OrderedDict</em>) – dictionary of parameters and distributions</p></li>
@@ -552,18 +648,18 @@ defined distributions.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ExternSensitivity">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ExternSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ExternSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.create_design.</span></span><span class="sig-name descname"><span class="pre">ExternSensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ExternSensitivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Used when reading parameter values from a file
 Assumed to be used with monte carlo type sensitivities and
 will hence write ‘p10_p90’ as SENSCASE in output designmatrix</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ExternSensitivity.sensname">
-<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.sensname" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensname</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.sensname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of sensitivity.
 Defines SENSNAME in design matrix</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -571,10 +667,10 @@ Defines SENSNAME in design matrix</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ExternSensitivity.sensvalues">
-<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.sensvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sensvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.sensvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design values for the sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -582,11 +678,11 @@ Defines SENSNAME in design matrix</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.ExternSensitivity.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ExternSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#ExternSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.ExternSensitivity.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads parameter values for a monte carlo sensitivity
 from file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>realnums</strong> (<em>list</em>) – list of intergers with realization numbers</p></li>
 <li><p><strong>filename</strong> (<em>str</em>) – path where to read values from</p></li>
@@ -601,15 +697,15 @@ from file</p>
 
 </section>
 <section id="module-fmu.tools.sensitivities.design_distributions">
-<span id="fmu-tools-sensitivities-design-distributions-module"></span><h2>fmu.tools.sensitivities.design_distributions module<a class="headerlink" href="#module-fmu.tools.sensitivities.design_distributions" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-sensitivities-design-distributions-module"></span><h2>fmu.tools.sensitivities.design_distributions module<a class="headerlink" href="#module-fmu.tools.sensitivities.design_distributions" title="Permalink to this heading">¶</a></h2>
 <p>Module for random sampling of parameter values from
 distributions. For use in generation of design matrices</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_normal">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_normal" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from normal distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [mean, std dev, min, max],
 min/max defining truncated normal</p></li>
@@ -617,7 +713,7 @@ min/max defining truncated normal</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -625,17 +721,17 @@ min/max defining truncated normal</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_lognormal">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_lognormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_lognormal" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_lognormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_lognormal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from lognormal distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [mu, sigma] for the logarithm of the variable</p></li>
 <li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -643,17 +739,17 @@ min/max defining truncated normal</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_uniform">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_uniform" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from uniform distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [minimum, maximum]</p></li>
 <li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -661,17 +757,17 @@ min/max defining truncated normal</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_triangular">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_triangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_triangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_triangular" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_triangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_triangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_triangular" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from triangular distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [min, mode,  max]</p></li>
 <li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -679,10 +775,10 @@ min/max defining truncated normal</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_pert">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_pert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_pert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_pert" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_pert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_pert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_pert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from pert distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [min, mode,  max, scale]
 where scale is only specified
@@ -691,7 +787,7 @@ for a 4 parameter pert distribution</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -699,17 +795,17 @@ for a 4 parameter pert distribution</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_loguniform">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_loguniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_loguniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_loguniform" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_loguniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_loguniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_loguniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draws values from loguniform distribution.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – [minimum, maximum]</p></li>
 <li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
 <li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of values</p>
 </dd>
 </dl>
@@ -717,17 +813,17 @@ for a 4 parameter pert distribution</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepare scipy distributions with parameters</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>distname</strong> (<em>str</em>) – distribution name ‘normal’, ‘lognormal’, ‘triang’,
 ‘uniform’, ‘logunif’, ‘discrete’, ‘pert’</p></li>
 <li><p><strong>dist_parameters</strong> (<em>list</em>) – list with parameters for distribution</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>scipy.stats distribution with parameters</p>
 </dd>
 </dl>
@@ -735,10 +831,10 @@ for a 4 parameter pert distribution</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.sample_discrete">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">sample_discrete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#sample_discrete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.sample_discrete" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">sample_discrete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#sample_discrete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.sample_discrete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample from discrete distribution</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dist_params</strong> (<em>list</em>) – parameters for distribution
 dist_params[0] is possible outcomes separated
@@ -748,10 +844,10 @@ separated by comma</p></li>
 <li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>values drawn from distribution</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -759,27 +855,27 @@ separated by comma</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.is_number">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">is_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">teststring</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#is_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.is_number" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">is_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">teststring</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#is_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.is_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test if a string can be parsed as a float</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.read_correlations">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">read_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corr_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrsheet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#read_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.read_correlations" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">read_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corr_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrsheet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#read_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.read_correlations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading correlation info for a
 monte carlo sensitivity</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>corr_dict</strong> (<em>OrderedDict</em>) – correlation info</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><dl class="simple">
 <dt>Dataframe with correlations, parameter names</dt><dd><p>as column and index</p>
 </dd>
 </dl>
 </p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -787,7 +883,7 @@ monte carlo sensitivity</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.make_covariance_matrix">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">make_covariance_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_correlations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stddevs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#make_covariance_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.make_covariance_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">make_covariance_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_correlations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stddevs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#make_covariance_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.make_covariance_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a Pandas DataFrame defining correlation coefficients for
 a set of multivariate normally distributed parameters, and build
 covariance matrix.</p>
@@ -798,12 +894,12 @@ compute the covariance matrix.</p>
 the matrix is projected onto the SDP manifold and returned (together
 with a warning). The algorithm is according to Higham (2000)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>df_correlations</strong> (<em>pd.DataFrame</em>) – correlation coefficients where
 columns and index are both parameter names. All parameter
 names in keys muvalst also exist in index and vice versa.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>covariance matrix</p>
 </dd>
 </dl>
@@ -811,36 +907,36 @@ names in keys muvalst also exist in index and vice versa.</p>
 
 </section>
 <section id="module-fmu.tools.sensitivities.fmudesignrunner">
-<span id="fmu-tools-sensitivities-fmudesignrunner-module"></span><h2>fmu.tools.sensitivities.fmudesignrunner module<a class="headerlink" href="#module-fmu.tools.sensitivities.fmudesignrunner" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-sensitivities-fmudesignrunner-module"></span><h2>fmu.tools.sensitivities.fmudesignrunner module<a class="headerlink" href="#module-fmu.tools.sensitivities.fmudesignrunner" title="Permalink to this heading">¶</a></h2>
 <p>Script for generating a design matrix from config input</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.fmudesignrunner.get_parser">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.fmudesignrunner.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/fmudesignrunner.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.fmudesignrunner.get_parser" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.fmudesignrunner.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/fmudesignrunner.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.fmudesignrunner.get_parser" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.fmudesignrunner.main">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.fmudesignrunner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/fmudesignrunner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.fmudesignrunner.main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.fmudesignrunner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/fmudesignrunner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.fmudesignrunner.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>fmudesign is a command line utility for generating design matrices</p>
 <p>Wrapper for the the fmu.tools.sensitivities module</p>
 </dd></dl>
 
 </section>
 <section id="module-fmu.tools.sensitivities">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.sensitivities" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.sensitivities" title="Permalink to this heading">¶</a></h2>
 <p>Used for pre and processing of ert sensitivities, such as
 setting up design matrix to run single sensitivities with ERT and
 post processing of results to create input for a tornado plot.
 Output of this module can be used in custom standalone applications.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.summarize_design">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">summarize_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_designsummary.html#summarize_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.summarize_design" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">summarize_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_designsummary.html#summarize_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.summarize_design" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Summarizes the design set up for one by one sensitivities
 specified in a design matrix on standard fmu format.</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Path to excel or csv file containting designmatrix
 for one by one sensitivities on standard FMU format.</p></li>
@@ -849,7 +945,7 @@ contains the designmatrix (only for excel input). Defaults to
 ‘DesignSheet01’.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Summary of sensitivities,
 corresponding realisation numbers,
 senstype(‘mc’ or ‘scalar’)
@@ -860,7 +956,7 @@ Column names are [‘sensno’, ‘sensname’,
 ‘senstype’, ‘casename1’, ‘startreal1’, ‘endreal1’,
 ‘casename2’, ‘startreal2’, ‘endreal2’]</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -877,13 +973,13 @@ Column names are [‘sensno’, ‘sensname’,
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.calc_tornadoinput">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">calc_tornadoinput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">designsummary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rms_seed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'percentage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutbyref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortsens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_tornado_onebyone.html#calc_tornadoinput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.calc_tornadoinput" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">calc_tornadoinput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">designsummary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rms_seed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'percentage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutbyref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortsens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_tornado_onebyone.html#calc_tornadoinput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.calc_tornadoinput" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Calculates input values for a tornadoplot for one response
 and one design set up</p>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>designsummary</strong> (<em>pd.DataFrame</em>) – Summary of designmatrix as output
 from summarize_design.</p></li>
@@ -906,7 +1002,7 @@ are excluded. Defaults to False.</p></li>
 largest comes first. Defaults to True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><dl class="simple">
 <dt>(pd.DataFrame): tornadoinput for DataFrame for</dt><dd><p>a tornado plot</p>
@@ -921,7 +1017,7 @@ largest comes first. Defaults to True.</p></li>
 </ul>
 </p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
@@ -948,18 +1044,18 @@ largest comes first. Defaults to True.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">DesignMatrix</span></span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">DesignMatrix</span></span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for design matrix in FMU. Can contain a onebyone design
 or a full montecarlo design.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.designvalues">
-<span class="sig-name descname"><span class="pre">designvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.designvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">designvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.designvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>design matrix on standard fmu format
 contains columns ‘REAL’ (realization number), and if a onebyone
 design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -967,10 +1063,10 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.defaultvalues">
-<span class="sig-name descname"><span class="pre">defaultvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.defaultvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">defaultvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.defaultvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>default values for design</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>OrderedDict</p>
 </dd>
 </dl>
@@ -978,12 +1074,12 @@ design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.backgroundvalues">
-<span class="sig-name descname"><span class="pre">backgroundvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.backgroundvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">backgroundvalues</span></span><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.backgroundvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used when background parameters are
 not constant. Either a set is sampled from specified distributions
 or they are read from a file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -991,19 +1087,19 @@ or they are read from a file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.reset" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets DesignMatrix to empty. Necessary iin case method generate
 is used several times for same instance of DesignMatrix</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generating design matrix from input dictionary in specific
 format. Adding default values and background values if existing.
 Looping through sensitivities and adding them to designvalues.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>inputdict</strong> (<em>OrderedDict</em>) – input parameters for design</p>
 </dd>
 </dl>
@@ -1011,11 +1107,11 @@ Looping through sensitivities and adding them to designvalues.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.to_xlsx">
-<span class="sig-name descname"><span class="pre">to_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">designsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DefaultValues'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.to_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.to_xlsx" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">designsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DefaultValues'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.to_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.to_xlsx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writing design matrix to excel workfbook on standard fmu format
 to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
 <li><p><strong>designsheet</strong> (<em>str</em>) – name of excel sheet containing design matrix
@@ -1029,10 +1125,10 @@ values (optional, defaults to ‘DefaultValues’)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.set_defaultvalues">
-<span class="sig-name descname"><span class="pre">set_defaultvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.set_defaultvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.set_defaultvalues" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_defaultvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.set_defaultvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.set_defaultvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add default values</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>defaults</strong> (<em>OrderedDict</em>) – (key, value) is (parameter_name, value)</p>
 </dd>
 </dl>
@@ -1040,12 +1136,12 @@ values (optional, defaults to ‘DefaultValues’)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.add_seeds">
-<span class="sig-name descname"><span class="pre">add_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_seeds" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_seeds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
@@ -1056,12 +1152,12 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.add_background">
-<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_background" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
@@ -1072,10 +1168,10 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.background_to_excel">
-<span class="sig-name descname"><span class="pre">background_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Background'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.background_to_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.background_to_excel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">background_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Background'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.background_to_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.background_to_excel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writing background values to an Excel spreadsheet</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
 <li><p><strong>backgroundsheet</strong> (<em>str</em>) – name of excel sheet</p></li>
@@ -1088,12 +1184,12 @@ dictionary</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.excel2dict_design">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">excel2dict_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_excel2dict.html#excel2dict_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.excel2dict_design" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">excel2dict_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_excel2dict.html#excel2dict_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.excel2dict_design" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read excel file with input to design setup
 Currently only specification of
 onebyone design is implemented</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_filename</strong> (<em>str</em>) – Name of excel input file</p></li>
 <li><p><strong>sheetnames</strong> (<em>dict</em>) – Dictionary of worksheet names to load
@@ -1101,7 +1197,7 @@ information from. Supported keys: general_input, defaultvalues,
 and designinput.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>OrderedDict on format for DesignMatrix.generate</p>
 </dd>
 </dl>
@@ -1109,10 +1205,10 @@ and designinput.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.inputdict_to_yaml">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">inputdict_to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_excel2dict.html#inputdict_to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.inputdict_to_yaml" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.</span></span><span class="sig-name descname"><span class="pre">inputdict_to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_excel2dict.html#inputdict_to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.inputdict_to_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write inputdict to yaml format</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inputdict</strong> (<em>OrderedDict</em>) – </p></li>
 <li><p><strong>filename</strong> (<em>str</em>) – path for where to write file</p></li>
@@ -1126,32 +1222,49 @@ and designinput.</p></li>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="fmu.tools.rms.html" class="btn btn-neutral float-left" title="fmu.tools.rms package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

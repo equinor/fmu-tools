@@ -1,35 +1,74 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/js/theme.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../../index.html" class="icon icon-home"> fmu-tools
-            <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +76,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
@@ -46,6 +96,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
@@ -54,30 +106,69 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
       <li>fmu.tools.sensitivities.create_design</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <h1>Source code for fmu.tools.sensitivities.create_design</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Module for generating design matrices that can be run by DESIGN2PARAMS</span>
 <span class="sd">and DESIGN_KW in FMU/ERT.</span>
@@ -85,14 +176,14 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">design_distributions</span> <span class="k">as</span> <span class="n">design_dist</span>
 
 
 <div class="viewcode-block" id="DesignMatrix"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix">[docs]</a><span class="k">class</span> <span class="nc">DesignMatrix</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class for design matrix in FMU. Can contain a onebyone design</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for design matrix in FMU. Can contain a onebyone design</span>
 <span class="sd">    or a full montecarlo design.</span>
 
 <span class="sd">    Attributes:</span>
@@ -106,7 +197,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Placeholders for:</span>
 <span class="sd">        designvalues: dataframe with parameters that varies</span>
 <span class="sd">        defaultvalues: dictionary of default/base case values</span>
@@ -119,7 +210,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">seedvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="DesignMatrix.reset"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resets DesignMatrix to empty. Necessary iin case method generate</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets DesignMatrix to empty. Necessary iin case method generate</span>
 <span class="sd">        is used several times for same instance of DesignMatrix&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultvalues</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -127,7 +218,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">seedvalues</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputdict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generating design matrix from input dictionary in specific</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generating design matrix from input dictionary in specific</span>
 <span class="sd">        format. Adding default values and background values if existing.</span>
 <span class="sd">        Looping through sensitivities and adding them to designvalues.</span>
 
@@ -246,7 +337,7 @@
 <div class="viewcode-block" id="DesignMatrix.to_xlsx"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.to_xlsx">[docs]</a>    <span class="k">def</span> <span class="nf">to_xlsx</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">designsheet</span><span class="o">=</span><span class="s2">&quot;DesignSheet01&quot;</span><span class="p">,</span> <span class="n">defaultsheet</span><span class="o">=</span><span class="s2">&quot;DefaultValues&quot;</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Writing design matrix to excel workfbook on standard fmu format</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writing design matrix to excel workfbook on standard fmu format</span>
 <span class="sd">        to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</span>
 
 <span class="sd">        Args:</span>
@@ -280,14 +371,12 @@
         <span class="p">)</span>
         <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;A total of </span><span class="si">{}</span><span class="s2"> realizations were generated&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">])</span>
-            <span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;A total of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="p">[</span><span class="s1">&#39;REAL&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> realizations were generated&quot;</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Designmatrix written to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Designmatrix written to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.set_defaultvalues"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues">[docs]</a>    <span class="k">def</span> <span class="nf">set_defaultvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add default values</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add default values</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            defaults (OrderedDict): (key, value) is (parameter_name, value)</span>
@@ -295,7 +384,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">defaultvalues</span> <span class="o">=</span> <span class="n">defaults</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.add_seeds"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds">[docs]</a>    <span class="k">def</span> <span class="nf">add_seeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">max_reals</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adding background as specified in dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adding background as specified in dictionary.</span>
 <span class="sd">        Either from external file or from distributions in background</span>
 <span class="sd">        dictionary</span>
 
@@ -319,7 +408,7 @@
             <span class="p">)</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.add_background"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.add_background">[docs]</a>    <span class="k">def</span> <span class="nf">add_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adding background as specified in dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adding background as specified in dictionary.</span>
 <span class="sd">        Either from external file or from distributions in background</span>
 <span class="sd">        dictionary</span>
 
@@ -335,7 +424,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_add_dist_background</span><span class="p">(</span><span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.background_to_excel"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.background_to_excel">[docs]</a>    <span class="k">def</span> <span class="nf">background_to_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">backgroundsheet</span><span class="o">=</span><span class="s2">&quot;Background&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Writing background values to an Excel spreadsheet</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writing background values to an Excel spreadsheet</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            filename (str): output filename (extension .xlsx)</span>
@@ -347,10 +436,10 @@
             <span class="n">xlsxwriter</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">backgroundsheet</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Backgroundvalues written to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backgroundvalues written to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_add_sensitivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adding a sensitivity to the design</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adding a sensitivity to the design</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            sensitivity of class Scenario, MonteCarlo or Extern</span>
@@ -359,7 +448,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">existing_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensitivity</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fill_with_background_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Substituting NaNs with background values if existing.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Substituting NaNs with background values if existing.</span>
 <span class="sd">        background values not in design are added as separate colums</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -398,14 +487,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">result_values</span>
 
     <span class="k">def</span> <span class="nf">_fill_with_defaultvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Filling NaNs with default values&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filling NaNs with default values&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultvalues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaultvalues</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">,</span> <span class="s2">&quot;SENSNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;SENSCASE&quot;</span><span class="p">,</span> <span class="s2">&quot;RMS_SEED&quot;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span>
-                    <span class="s2">&quot;No defaultvalues given for parameter </span><span class="si">{}</span><span class="s2"> &quot;</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No defaultvalues given for parameter </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fill_derived_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depend_dict</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">from_param</span> <span class="ow">in</span> <span class="n">depend_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -432,7 +519,7 @@
                         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_add_dist_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">numreal</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Drawing background values from distributions</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Drawing background values from distributions</span>
 <span class="sd">        specified in dictionary</span>
 
 <span class="sd">        Args:</span>
@@ -462,7 +549,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span> <span class="o">=</span> <span class="n">mc_backgroundvalues</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_set_decimals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_decimals</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Rounding to specified number of decimals</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rounding to specified number of decimals</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            dict_decimals (dictionary): (key, value)s are (param, decimals)</span>
@@ -476,11 +563,11 @@
                         <span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dict_decimals</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot round a string parameter </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot round a string parameter </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SeedSensitivity"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity">[docs]</a><span class="k">class</span> <span class="nc">SeedSensitivity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A seed sensitivity is normally the reference for one by one sensitivities</span>
 <span class="sd">    It contains a list of seeds to be repeated for each sensitivity</span>
 <span class="sd">    The parameter name is hardcoded to RMS_SEED</span>
@@ -495,7 +582,7 @@
 
     <span class="c1"># pylint: disable=too-few-public-methods</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Args:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Args:</span>
 <span class="sd">        sensname (str): Name of sensitivity.</span>
 <span class="sd">            Defines SENSNAME in design matrix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -503,7 +590,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="SeedSensitivity.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">,</span> <span class="n">seedname</span><span class="p">,</span> <span class="n">seedvalues</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates parameter values for a seed sensitivity</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates parameter values for a seed sensitivity</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            realnums (list): list of integers with realization numbers</span>
@@ -537,7 +624,7 @@
 
 
 <div class="viewcode-block" id="SingleRealisationReference"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference">[docs]</a><span class="k">class</span> <span class="nc">SingleRealisationReference</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The class is used in set-ups where one wants a single realisation</span>
 <span class="sd">    containing only default values as a reference, but the realisation</span>
 <span class="sd">    itself is not included in a sensitivity.</span>
@@ -553,7 +640,7 @@
 
     <span class="c1"># pylint: disable=too-few-public-methods</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Args:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Args:</span>
 <span class="sd">        sensname (str): Name of sensitivity.</span>
 <span class="sd">            Defines SENSNAME in design matrix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -561,7 +648,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="SingleRealisationReference.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates realisation number only</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates realisation number only</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            realnums (list): list of intergers with realization numbers</span>
@@ -573,7 +660,7 @@
 
 
 <div class="viewcode-block" id="BackgroundSensitivity"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity">[docs]</a><span class="k">class</span> <span class="nc">BackgroundSensitivity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The class is used in set-ups where one sensitivities</span>
 <span class="sd">    are run on top of varying background parameters.</span>
 <span class="sd">    Typically used when RMS_SEED is not a parameter, so the reference</span>
@@ -589,7 +676,7 @@
 
     <span class="c1"># pylint: disable=too-few-public-methods</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Args:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Args:</span>
 <span class="sd">        sensname (str): Name of sensitivity.</span>
 <span class="sd">            Defines SENSNAME in design matrix</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -597,7 +684,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="BackgroundSensitivity.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates realisation number only</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates realisation number only</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            realnums (list): list of intergers with realization numbers</span>
@@ -609,7 +696,7 @@
 
 
 <div class="viewcode-block" id="ScenarioSensitivity"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity">[docs]</a><span class="k">class</span> <span class="nc">ScenarioSensitivity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Each design can contain one or several single sensitivities of type</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Each design can contain one or several single sensitivities of type</span>
 <span class="sd">    Seed, MonteCarlo or Scenario.</span>
 <span class="sd">    Each ScenarioSensitivity can contain 1-2 ScenarioSensitivityCases.</span>
 
@@ -631,7 +718,7 @@
 
     <span class="c1"># pylint: disable=too-few-public-methods</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensname</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
 <span class="sd">            sensname (str): Name of sensitivity.</span>
 <span class="sd">                Equals SENSNAME in design matrix</span>
@@ -642,7 +729,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ScenarioSensitivity.add_case"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case">[docs]</a>    <span class="k">def</span> <span class="nf">add_case</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">senscase</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a ScenarioSensitivityCase instance</span>
 <span class="sd">        to a ScenarioSensitivity object.</span>
 
@@ -671,7 +758,7 @@
 
 
 <div class="viewcode-block" id="ScenarioSensitivityCase"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase">[docs]</a><span class="k">class</span> <span class="nc">ScenarioSensitivityCase</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Each ScenarioSensitivity can contain one or</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Each ScenarioSensitivity can contain one or</span>
 <span class="sd">    two ScenarioSensitivityCases.</span>
 
 <span class="sd">    The 1-2 cases are typically &#39;low&#39; and &#39;high&#39; cases for one or</span>
@@ -697,7 +784,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">casevalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ScenarioSensitivityCase.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">seedvalues</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate casevalues for the ScenarioSensitivityCase</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate casevalues for the ScenarioSensitivityCase</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            realnums (list): list of realizaton numbers for the case</span>
@@ -717,7 +804,7 @@
 
 
 <div class="viewcode-block" id="MonteCarloSensitivity"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity">[docs]</a><span class="k">class</span> <span class="nc">MonteCarloSensitivity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    For a MonteCarloSensitivity one or several parameters</span>
 <span class="sd">    are drawn from specified distributions with or without correlations.</span>
 <span class="sd">    A MonteCarloSensitivity can only contain</span>
@@ -737,7 +824,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MonteCarloSensitivity.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">seedvalues</span><span class="p">,</span> <span class="n">corrdict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generates parameter values by drawing from</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates parameter values by drawing from</span>
 <span class="sd">        defined distributions.</span>
 
 <span class="sd">        Args:</span>
@@ -844,7 +931,7 @@
 
 
 <div class="viewcode-block" id="ExternSensitivity"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity">[docs]</a><span class="k">class</span> <span class="nc">ExternSensitivity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Used when reading parameter values from a file</span>
 <span class="sd">    Assumed to be used with monte carlo type sensitivities and</span>
 <span class="sd">    will hence write &#39;p10_p90&#39; as SENSCASE in output designmatrix</span>
@@ -862,7 +949,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ExternSensitivity.generate"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity.generate">[docs]</a>    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">realnums</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">seedvalues</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Reads parameter values for a monte carlo sensitivity</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads parameter values for a monte carlo sensitivity</span>
 <span class="sd">        from file</span>
 
 <span class="sd">        Args:</span>
@@ -883,7 +970,7 @@
             <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">extern_values</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">extern_values</span><span class="p">[</span><span class="n">param</span><span class="p">][:</span> <span class="nb">len</span><span class="p">(</span><span class="n">realnums</span><span class="p">)])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter </span><span class="si">{}</span><span class="s2"> not in external file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> not in external file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">realnums</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">[</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensname</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">[</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;p10_p90&quot;</span>
@@ -896,7 +983,7 @@
 
 
 <span class="k">def</span> <span class="nf">_parameters_from_extern</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read parameter values or background values</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read parameter values or background values</span>
 <span class="sd">    from specified file. Format either Excel (&#39;xlsx&#39;)</span>
 <span class="sd">    or csv.</span>
 
@@ -919,7 +1006,7 @@
 
 
 <span class="k">def</span> <span class="nf">_seeds_from_extern</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">max_reals</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read parameter values or background values</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read parameter values or background values</span>
 <span class="sd">    from specified file. Format either Excel (&#39;xlsx&#39;)</span>
 <span class="sd">    or csv.</span>
 
@@ -955,7 +1042,7 @@
 
 
 <span class="k">def</span> <span class="nf">_find_max_realisations</span><span class="p">(</span><span class="n">inputdict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Finds the maximum number of realisations</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finds the maximum number of realisations</span>
 <span class="sd">    in a sensitivity case&quot;&quot;&quot;</span>
     <span class="n">max_reals</span> <span class="o">=</span> <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;repeats&quot;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;sensitivities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -992,30 +1079,46 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

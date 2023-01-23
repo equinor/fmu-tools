@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>rmsvolumetrics2csv &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  <title>rms.rename_rms_scripts &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Ensembles" href="ensembles.html" />
-    <link rel="prev" title="rms.import_localmodule" href="rms_import_localmodule.html" /> 
+    <link rel="next" title="rms.import_localmodule" href="rms_import_localmodule.html" />
+    <link rel="prev" title="create_rft_ertobs" href="create_rft_ertobs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -99,17 +99,16 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">rmsvolumetrics2csv</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.rename_rms_scripts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#positional-arguments">Positional Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#named-arguments">Named Arguments</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#usage-from-rms">Usage from RMS</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
@@ -163,13 +162,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>rmsvolumetrics2csv</li>
+      <li>rms.rename_rms_scripts</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/rmsvolumetrics2csv.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/rename_rms_scripts.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -182,51 +181,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="rmsvolumetrics2csv">
-<h1>rmsvolumetrics2csv<a class="headerlink" href="#rmsvolumetrics2csv" title="Permalink to this heading">¶</a></h1>
-<p>This script parses volumetrics text output from RMS and writes CSV files.
-Column names will be according to the FMU standard,
-<a class="reference external" href="https://wiki.equinor.com/wiki/index.php/FMU_standards">https://wiki.equinor.com/wiki/index.php/FMU_standards</a></p>
-<p>It is installed and available both in Komodo and in the RMS Python environment,
-and the associated API can also be used in Python scripts (this gives more
-options than the command line interface).</p>
+  <section id="rms-rename-rms-scripts">
+<h1>rms.rename_rms_scripts<a class="headerlink" href="#rms-rename-rms-scripts" title="Permalink to this heading">¶</a></h1>
+<p>A common annoyance in RMS projects is that RMS saves its Python scripts
+on-disk with non-Python file extensions such as <code class="docutils literal notranslate"><span class="pre">.py_1</span></code>, <code class="docutils literal notranslate"><span class="pre">.py_2</span></code>, etc.
+RMS also does not offer a way for users to see which Python scripts are
+currently being used in a workflow, meaning that old or unused scripts can
+unnecessarily add clutter to a project. This script, which must be invoked
+outside of RMS without RMS runnings, allows you to find and fix these things.</p>
+<p><em>This script will modify your RMS Python script filenames and pythoncomp
+.master file!</em> Use with some caution, but some safeguards it are built in.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
-<p><p>Convert single RMS volumetrics files to CSV</p>
-</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rmsvolumetrics2csv</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">phase</span> <span class="n">PHASE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">OUTPUT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
-                          <span class="n">rmsvolumetricsfile</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rename_rms_scripts</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span><span class="p">]</span> <span class="n">path</span>
 </pre></div>
 </div>
 <section id="positional-arguments">
 <h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this heading">¶</a></h3>
 <dl class="option-list">
-<dt><kbd>rmsvolumetricsfile</kbd></dt>
-<dd></dd>
+<dt><kbd>path</kbd></dt>
+<dd><p>Path to the RMS project</p>
+</dd>
 </dl>
 </section>
 <section id="named-arguments">
 <h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this heading">¶</a></h3>
 <dl class="option-list">
-<dt><kbd>--phase</kbd></dt>
-<dd><p>Set typically to ‘GAS’, ‘OIL’ or ‘TOTAL’. Will be appended to column headers. If not given, it will be guessed from the filename</p>
-</dd>
-<dt><kbd>-o, --output</kbd></dt>
-<dd><p>Name of output CSV file. Use ‘-’ for stdout (default)</p>
-<p>Default: “-”</p>
-</dd>
 <dt><kbd>-v, --verbose</kbd></dt>
 <dd><p>Be verbose</p>
 <p>Default: False</p>
 </dd>
+<dt><kbd>-b, --backup</kbd></dt>
+<dd><p>Make a backup of the pythoncomp/ directory before doing anything</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-u, --unused</kbd></dt>
+<dd><p>Print out a list of Python scripts that are tracked by RMS but do not appear to be used in any workflow</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-p, --pep8</kbd></dt>
+<dd><p>Print out a list of Python scripts with PEP8 non-compliant instance names</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-t, --test</kbd></dt>
+<dd><p>Do a test run without making any file changes. Prints verbose information about the changes that will be made without making them. If this option is not used, files will be changed irrespective of other flags used.</p>
+<p>Default: False</p>
+</dd>
 </dl>
 </section>
-</section>
-<section id="usage-from-rms">
-<h2>Usage from RMS<a class="headerlink" href="#usage-from-rms" title="Permalink to this heading">¶</a></h2>
-<p>Use a “System command” RMS job to run the command with appropriate arguments. Ensure
-that any output directory exists upfront. Since fmu-tools is inside both in Komodo and in
-the RMS Python environment, using <code class="docutils literal notranslate"><span class="pre">run_external</span></code> is not necessary, but will also work.</p>
 </section>
 </section>
 
@@ -236,8 +238,8 @@ the RMS Python environment, using <code class="docutils literal notranslate"><sp
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ensembles.html" class="btn btn-neutral float-right" title="Ensembles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="rms_import_localmodule.html" class="btn btn-neutral float-left" title="rms.import_localmodule" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rms_import_localmodule.html" class="btn btn-neutral float-right" title="rms.import_localmodule" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="create_rft_ertobs.html" class="btn btn-neutral float-left" title="create_rft_ertobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

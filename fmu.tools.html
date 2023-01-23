@@ -1,38 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools package &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="fmu.tools.ensembles package" href="fmu.tools.ensembles.html" />
     <link rel="prev" title="fmu package" href="fmu.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> fmu-tools
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -49,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -67,89 +119,424 @@
 </li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="modules.html">API for fmu.tools</a> &raquo;</li>
+        
           <li><a href="fmu.html">fmu package</a> &raquo;</li>
+        
       <li>fmu.tools package</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/fmu.tools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="fmu-tools-package">
-<h1>fmu.tools package<a class="headerlink" href="#fmu-tools-package" title="Permalink to this headline"></a></h1>
+<h1>fmu.tools package<a class="headerlink" href="#fmu-tools-package" title="Permalink to this heading">¶</a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.ensembles.html">fmu.tools.ensembles package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#module-fmu.tools.ensembles.ensemble_well_props">fmu.tools.ensembles.ensemble_well_props module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#module-fmu.tools.ensembles.ensemble_well_props">fmu.tools.ensembles.ensemble_well_props module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo"><code class="docutils literal notranslate"><span class="pre">ScreenInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.quiet"><code class="docutils literal notranslate"><span class="pre">ScreenInfo.quiet</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.moreverbose"><code class="docutils literal notranslate"><span class="pre">ScreenInfo.moreverbose</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint"><code class="docutils literal notranslate"><span class="pre">ScreenInfo.oprint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint"><code class="docutils literal notranslate"><span class="pre">ScreenInfo.cprint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint"><code class="docutils literal notranslate"><span class="pre">ScreenInfo.xprint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args"><code class="docutils literal notranslate"><span class="pre">get_parser_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.dump_example_config"><code class="docutils literal notranslate"><span class="pre">dump_example_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.parse_config"><code class="docutils literal notranslate"><span class="pre">parse_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData"><code class="docutils literal notranslate"><span class="pre">PropsData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.name"><code class="docutils literal notranslate"><span class="pre">PropsData.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.filestub"><code class="docutils literal notranslate"><span class="pre">PropsData.filestub</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.discrete"><code class="docutils literal notranslate"><span class="pre">PropsData.discrete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.codes"><code class="docutils literal notranslate"><span class="pre">PropsData.codes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.interval"><code class="docutils literal notranslate"><span class="pre">PropsData.interval</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData"><code class="docutils literal notranslate"><span class="pre">ConfigData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.config"><code class="docutils literal notranslate"><span class="pre">ConfigData.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.root"><code class="docutils literal notranslate"><span class="pre">ConfigData.root</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.reals"><code class="docutils literal notranslate"><span class="pre">ConfigData.reals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.itera"><code class="docutils literal notranslate"><span class="pre">ConfigData.itera</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.wellfile"><code class="docutils literal notranslate"><span class="pre">ConfigData.wellfile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.welldelta"><code class="docutils literal notranslate"><span class="pre">ConfigData.welldelta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridfile"><code class="docutils literal notranslate"><span class="pre">ConfigData.gridfile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridreuse"><code class="docutils literal notranslate"><span class="pre">ConfigData.gridreuse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist"><code class="docutils literal notranslate"><span class="pre">ConfigData.proplist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_avg_file"><code class="docutils literal notranslate"><span class="pre">ConfigData.report_avg_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_cum_file"><code class="docutils literal notranslate"><span class="pre">ConfigData.report_cum_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_keep_intermediate"><code class="docutils literal notranslate"><span class="pre">ConfigData.report_keep_intermediate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_show_in_terminal"><code class="docutils literal notranslate"><span class="pre">ConfigData.report_show_in_terminal</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase"><code class="docutils literal notranslate"><span class="pre">WellCase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.well"><code class="docutils literal notranslate"><span class="pre">WellCase.well</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.mdlog"><code class="docutils literal notranslate"><span class="pre">WellCase.mdlog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.mdranges"><code class="docutils literal notranslate"><span class="pre">WellCase.mdranges</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase.delta"><code class="docutils literal notranslate"><span class="pre">WellCase.delta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.well"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.well</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.realizations"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.realizations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cfg"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.cfg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.sinfo"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.sinfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_logs"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.added_logs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_flag_logs"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.added_flag_logs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.cumlenreport</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport_summary"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.cumlenreport_summary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.process_ensemble_avglogs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.process_ensemble_cumlen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.optionally_delete_logs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs"><code class="docutils literal notranslate"><span class="pre">EnsembleWellProps.optionally_delete_flag_logs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.loop_for_compute"><code class="docutils literal notranslate"><span class="pre">loop_for_compute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.run_compute"><code class="docutils literal notranslate"><span class="pre">run_compute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.process_ensemble"><code class="docutils literal notranslate"><span class="pre">process_ensemble()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#module-fmu.tools.ensembles">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.fipmapper.html">fmu.tools.fipmapper package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.fipmapper.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.fipmapper.html#module-fmu.tools.fipmapper.fipmapper">fmu.tools.fipmapper.fipmapper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.fipmapper.html#module-fmu.tools.fipmapper.fipmapper">fmu.tools.fipmapper.fipmapper module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper"><code class="docutils literal notranslate"><span class="pre">FipMapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_regions"><code class="docutils literal notranslate"><span class="pre">FipMapper.get_regions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_zones"><code class="docutils literal notranslate"><span class="pre">FipMapper.get_zones()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_fipnums"><code class="docutils literal notranslate"><span class="pre">FipMapper.get_fipnums()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2region"><code class="docutils literal notranslate"><span class="pre">FipMapper.fip2region()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.region2fip"><code class="docutils literal notranslate"><span class="pre">FipMapper.region2fip()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.zone2fip"><code class="docutils literal notranslate"><span class="pre">FipMapper.zone2fip()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.fip2zone"><code class="docutils literal notranslate"><span class="pre">FipMapper.fip2zone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.regzone2fip"><code class="docutils literal notranslate"><span class="pre">FipMapper.regzone2fip()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets"><code class="docutils literal notranslate"><span class="pre">FipMapper.disjoint_sets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regions_in_set"><code class="docutils literal notranslate"><span class="pre">regions_in_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.zones_in_set"><code class="docutils literal notranslate"><span class="pre">zones_in_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.fipnums_in_set"><code class="docutils literal notranslate"><span class="pre">fipnums_in_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.regzonefips_in_set"><code class="docutils literal notranslate"><span class="pre">regzonefips_in_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.webviz_to_prtvol2csv"><code class="docutils literal notranslate"><span class="pre">webviz_to_prtvol2csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.invert_map"><code class="docutils literal notranslate"><span class="pre">invert_map()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.fipmapper.html#module-fmu.tools.fipmapper">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.qcdata.html">fmu.tools.qcdata package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcdata.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">fmu.tools.qcdata.qcdata module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">fmu.tools.qcdata.qcdata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData"><code class="docutils literal notranslate"><span class="pre">QCData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.project"><code class="docutils literal notranslate"><span class="pre">QCData.project</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.grid"><code class="docutils literal notranslate"><span class="pre">QCData.grid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.gridprops"><code class="docutils literal notranslate"><span class="pre">QCData.gridprops</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.wells"><code class="docutils literal notranslate"><span class="pre">QCData.wells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.bwells"><code class="docutils literal notranslate"><span class="pre">QCData.bwells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.xtgdata"><code class="docutils literal notranslate"><span class="pre">QCData.xtgdata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse"><code class="docutils literal notranslate"><span class="pre">QCData.parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.set_path"><code class="docutils literal notranslate"><span class="pre">QCData.set_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project"><code class="docutils literal notranslate"><span class="pre">QCData.parse_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_grid"><code class="docutils literal notranslate"><span class="pre">QCData.read_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_gridprops"><code class="docutils literal notranslate"><span class="pre">QCData.read_gridprops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells"><code class="docutils literal notranslate"><span class="pre">QCData.read_wells()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData"><code class="docutils literal notranslate"><span class="pre">QCData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.project"><code class="docutils literal notranslate"><span class="pre">QCData.project</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.grid"><code class="docutils literal notranslate"><span class="pre">QCData.grid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.gridprops"><code class="docutils literal notranslate"><span class="pre">QCData.gridprops</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.wells"><code class="docutils literal notranslate"><span class="pre">QCData.wells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.bwells"><code class="docutils literal notranslate"><span class="pre">QCData.bwells</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.xtgdata"><code class="docutils literal notranslate"><span class="pre">QCData.xtgdata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.parse"><code class="docutils literal notranslate"><span class="pre">QCData.parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.set_path"><code class="docutils literal notranslate"><span class="pre">QCData.set_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.parse_project"><code class="docutils literal notranslate"><span class="pre">QCData.parse_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_grid"><code class="docutils literal notranslate"><span class="pre">QCData.read_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_gridprops"><code class="docutils literal notranslate"><span class="pre">QCData.read_gridprops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.read_wells"><code class="docutils literal notranslate"><span class="pre">QCData.read_wells()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.qcforward.html">fmu.tools.qcforward package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcforward.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcforward.html#module-fmu.tools.qcforward.qcforward">fmu.tools.qcforward.qcforward module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcforward.html#module-fmu.tools.qcforward">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcforward.html#module-fmu.tools.qcforward.qcforward">fmu.tools.qcforward.qcforward module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.wellzonation_vs_grid"><code class="docutils literal notranslate"><span class="pre">wellzonation_vs_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_statistics"><code class="docutils literal notranslate"><span class="pre">grid_statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.blockedwells_vs_gridproperties"><code class="docutils literal notranslate"><span class="pre">blockedwells_vs_gridproperties()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.qcforward.grid_quality"><code class="docutils literal notranslate"><span class="pre">grid_quality()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.qcforward.html#module-fmu.tools.qcforward">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.wellzonation_vs_grid"><code class="docutils literal notranslate"><span class="pre">wellzonation_vs_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid"><code class="docutils literal notranslate"><span class="pre">WellZonationVsGrid</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run"><code class="docutils literal notranslate"><span class="pre">WellZonationVsGrid.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.grid_statistics"><code class="docutils literal notranslate"><span class="pre">grid_statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics"><code class="docutils literal notranslate"><span class="pre">GridStatistics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run"><code class="docutils literal notranslate"><span class="pre">GridStatistics.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.check_gridstatistics"><code class="docutils literal notranslate"><span class="pre">GridStatistics.check_gridstatistics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.grid_quality"><code class="docutils literal notranslate"><span class="pre">grid_quality()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality"><code class="docutils literal notranslate"><span class="pre">GridQuality</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.run"><code class="docutils literal notranslate"><span class="pre">GridQuality.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality"><code class="docutils literal notranslate"><span class="pre">GridQuality.check_gridquality()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties"><code class="docutils literal notranslate"><span class="pre">BlockedWellsVsGridProperties</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.run"><code class="docutils literal notranslate"><span class="pre">BlockedWellsVsGridProperties.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props"><code class="docutils literal notranslate"><span class="pre">BlockedWellsVsGridProperties.compare_bw_props()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.qcforward.html#fmu.tools.qcforward.blockedwells_vs_gridproperties"><code class="docutils literal notranslate"><span class="pre">blockedwells_vs_gridproperties()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.rms.html">fmu.tools.rms package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">fmu.tools.rms.create_rft_ertobs module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.qcreset">fmu.tools.rms.qcreset module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.volumetrics">fmu.tools.rms.volumetrics module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">fmu.tools.rms.create_rft_ertobs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config"><code class="docutils literal notranslate"><span class="pre">check_and_parse_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords"><code class="docutils literal notranslate"><span class="pre">get_well_coords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward"><code class="docutils literal notranslate"><span class="pre">strictly_downward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md"><code class="docutils literal notranslate"><span class="pre">interp_from_md()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz"><code class="docutils literal notranslate"><span class="pre">interp_from_xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files"><code class="docutils literal notranslate"><span class="pre">ertobs_df_to_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz"><code class="docutils literal notranslate"><span class="pre">fill_missing_md_xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.import_localmodules">fmu.tools.rms.import_localmodules module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule"><code class="docutils literal notranslate"><span class="pre">import_localmodule()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.qcreset">fmu.tools.rms.qcreset module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.qcreset.set_data_constant"><code class="docutils literal notranslate"><span class="pre">set_data_constant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.qcreset.set_data_empty"><code class="docutils literal notranslate"><span class="pre">set_data_empty()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.rename_rms_scripts">fmu.tools.rms.rename_rms_scripts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parse"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.parent"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.parent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.path"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.header"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.header</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.entries"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.entries</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_inconsistent_entries"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_inconsistent_entries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_extensions"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_invalid_extensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_instance_names"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_invalid_instance_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_pep8_noncompliant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_nonexistent_standalonefilenames"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_nonexistent_standalonefilenames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_unused_scripts"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_unused_scripts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_entry"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.get_entry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.fix_standalone_filenames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.write_master_file"><code class="docutils literal notranslate"><span class="pre">PythonCompMaster.write_master_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.volumetrics">fmu.tools.rms.volumetrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.merge_rms_volumetrics"><code class="docutils literal notranslate"><span class="pre">merge_rms_volumetrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df"><code class="docutils literal notranslate"><span class="pre">rmsvolumetrics_txt2df()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.guess_phase"><code class="docutils literal notranslate"><span class="pre">guess_phase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser"><code class="docutils literal notranslate"><span class="pre">get_parser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main"><code class="docutils literal notranslate"><span class="pre">rmsvolumetrics2csv_main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rmsvolumetrics_txt2df"><code class="docutils literal notranslate"><span class="pre">rmsvolumetrics_txt2df()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_localmodule"><code class="docutils literal notranslate"><span class="pre">import_localmodule()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.sensitivities.html">fmu.tools.sensitivities package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.create_design">fmu.tools.sensitivities.create_design module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.design_distributions">fmu.tools.sensitivities.design_distributions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.fmudesignrunner">fmu.tools.sensitivities.fmudesignrunner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.create_design">fmu.tools.sensitivities.create_design module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix"><code class="docutils literal notranslate"><span class="pre">DesignMatrix</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.designvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.designvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.defaultvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.defaultvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.backgroundvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.backgroundvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.reset"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.generate"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.generate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.to_xlsx"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.to_xlsx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.set_defaultvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.set_defaultvalues()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.add_seeds"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.add_seeds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.add_background"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.add_background()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.DesignMatrix.background_to_excel"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.background_to_excel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity"><code class="docutils literal notranslate"><span class="pre">SeedSensitivity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity.sensname"><code class="docutils literal notranslate"><span class="pre">SeedSensitivity.sensname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity.sensvalues"><code class="docutils literal notranslate"><span class="pre">SeedSensitivity.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SeedSensitivity.generate"><code class="docutils literal notranslate"><span class="pre">SeedSensitivity.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference"><code class="docutils literal notranslate"><span class="pre">SingleRealisationReference</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensname"><code class="docutils literal notranslate"><span class="pre">SingleRealisationReference.sensname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.sensvalues"><code class="docutils literal notranslate"><span class="pre">SingleRealisationReference.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.SingleRealisationReference.generate"><code class="docutils literal notranslate"><span class="pre">SingleRealisationReference.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity"><code class="docutils literal notranslate"><span class="pre">BackgroundSensitivity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensname"><code class="docutils literal notranslate"><span class="pre">BackgroundSensitivity.sensname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity.sensvalues"><code class="docutils literal notranslate"><span class="pre">BackgroundSensitivity.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.BackgroundSensitivity.generate"><code class="docutils literal notranslate"><span class="pre">BackgroundSensitivity.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case1"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivity.case1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.case2"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivity.case2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.sensvalues"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivity.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivity.add_case"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivity.add_case()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivityCase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casename"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivityCase.casename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.casevalues"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivityCase.casevalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ScenarioSensitivityCase.generate"><code class="docutils literal notranslate"><span class="pre">ScenarioSensitivityCase.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity"><code class="docutils literal notranslate"><span class="pre">MonteCarloSensitivity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensname"><code class="docutils literal notranslate"><span class="pre">MonteCarloSensitivity.sensname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.sensvalues"><code class="docutils literal notranslate"><span class="pre">MonteCarloSensitivity.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate"><code class="docutils literal notranslate"><span class="pre">MonteCarloSensitivity.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity"><code class="docutils literal notranslate"><span class="pre">ExternSensitivity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity.sensname"><code class="docutils literal notranslate"><span class="pre">ExternSensitivity.sensname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity.sensvalues"><code class="docutils literal notranslate"><span class="pre">ExternSensitivity.sensvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.create_design.ExternSensitivity.generate"><code class="docutils literal notranslate"><span class="pre">ExternSensitivity.generate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.design_distributions">fmu.tools.sensitivities.design_distributions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_normal"><code class="docutils literal notranslate"><span class="pre">draw_values_normal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_lognormal"><code class="docutils literal notranslate"><span class="pre">draw_values_lognormal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_uniform"><code class="docutils literal notranslate"><span class="pre">draw_values_uniform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_triangular"><code class="docutils literal notranslate"><span class="pre">draw_values_triangular()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_pert"><code class="docutils literal notranslate"><span class="pre">draw_values_pert()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_loguniform"><code class="docutils literal notranslate"><span class="pre">draw_values_loguniform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values"><code class="docutils literal notranslate"><span class="pre">draw_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.sample_discrete"><code class="docutils literal notranslate"><span class="pre">sample_discrete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.is_number"><code class="docutils literal notranslate"><span class="pre">is_number()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.read_correlations"><code class="docutils literal notranslate"><span class="pre">read_correlations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.make_covariance_matrix"><code class="docutils literal notranslate"><span class="pre">make_covariance_matrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities.fmudesignrunner">fmu.tools.sensitivities.fmudesignrunner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.get_parser"><code class="docutils literal notranslate"><span class="pre">get_parser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.fmudesignrunner.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.sensitivities.html#module-fmu.tools.sensitivities">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.summarize_design"><code class="docutils literal notranslate"><span class="pre">summarize_design()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.calc_tornadoinput"><code class="docutils literal notranslate"><span class="pre">calc_tornadoinput()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix"><code class="docutils literal notranslate"><span class="pre">DesignMatrix</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.designvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.designvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.defaultvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.defaultvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.backgroundvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.backgroundvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.reset"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.generate"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.generate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.to_xlsx"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.to_xlsx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.set_defaultvalues"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.set_defaultvalues()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.add_seeds"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.add_seeds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.add_background"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.add_background()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.DesignMatrix.background_to_excel"><code class="docutils literal notranslate"><span class="pre">DesignMatrix.background_to_excel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.excel2dict_design"><code class="docutils literal notranslate"><span class="pre">excel2dict_design()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.sensitivities.html#fmu.tools.sensitivities.inputdict_to_yaml"><code class="docutils literal notranslate"><span class="pre">inputdict_to_yaml()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-fmu.tools.extract_grid_zone_tops">
-<span id="fmu-tools-extract-grid-zone-tops-module"></span><h2>fmu.tools.extract_grid_zone_tops module<a class="headerlink" href="#module-fmu.tools.extract_grid_zone_tops" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-extract-grid-zone-tops-module"></span><h2>fmu.tools.extract_grid_zone_tops module<a class="headerlink" href="#module-fmu.tools.extract_grid_zone_tops" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">extract_grid_zone_tops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridzonelog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlogname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#extract_grid_zone_tops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">extract_grid_zone_tops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridzonelog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlogname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#extract_grid_zone_tops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function for extracting top and base from gridzones, both in TVD and MD.
 A pandas dataframe will be returned.</p>
 <p>Users can either input a pre-generated gridzonelog or a grid and a zone parameter
@@ -157,7 +544,7 @@ for computing the gridzonelog.</p>
 <p>The function works both inside RMS and outside with file input. If input from files,
 and a MD log is not present in the well a quasi md log will be computed and used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
 </dd>
 </dl>
@@ -165,9 +552,9 @@ and a MD log is not present in the well a quasi md log will be computed and used
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.shift_zone_values">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">shift_zone_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#shift_zone_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.shift_zone_values" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">shift_zone_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#shift_zone_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.shift_zone_values" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
 </dd>
 </dl>
@@ -175,11 +562,11 @@ and a MD log is not present in the well a quasi md log will be computed and used
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.make_alias_dict">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">make_alias_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#make_alias_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.make_alias_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">make_alias_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#make_alias_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.make_alias_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a correspondance dictionary so that well_dict[ &lt;RMS wellname&gt; ]
 = &lt;Eclipse wellname&gt;</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
 </dd>
 </dl>
@@ -187,54 +574,71 @@ and a MD log is not present in the well a quasi md log will be computed and used
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.MockRoxar">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">MockRoxar</span></span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#MockRoxar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.MockRoxar" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">MockRoxar</span></span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#MockRoxar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.MockRoxar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.MockRoxar.Project">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Project</span></span><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.MockRoxar.Project" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Project</span></span><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.MockRoxar.Project" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-fmu.tools.version">
-<span id="fmu-tools-version-module"></span><h2>fmu.tools.version module<a class="headerlink" href="#module-fmu.tools.version" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-version-module"></span><h2>fmu.tools.version module<a class="headerlink" href="#module-fmu.tools.version" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-fmu.tools">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools" title="Permalink to this heading">¶</a></h2>
 <p>Top-level package for fmu-tools</p>
 </section>
 </section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fmu.html" class="btn btn-neutral float-left" title="fmu package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="fmu.tools.ensembles.html" class="btn btn-neutral float-right" title="fmu.tools.ensembles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmu.html" class="btn btn-neutral float-left" title="fmu package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */

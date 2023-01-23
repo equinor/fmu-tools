@@ -1,38 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.ensembles package &mdash; fmu-tools 1.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+  <title>fmu.tools.ensembles package &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="fmu.tools.fipmapper package" href="fmu.tools.fipmapper.html" />
     <link rel="prev" title="fmu.tools package" href="fmu.tools.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> fmu-tools
-            <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.10.0
+                1.11.3.dev13+g7490996
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -40,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -49,6 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -67,72 +119,116 @@
 </li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="modules.html">API for fmu.tools</a> &raquo;</li>
+        
           <li><a href="fmu.html">fmu package</a> &raquo;</li>
+        
           <li><a href="fmu.tools.html">fmu.tools package</a> &raquo;</li>
+        
       <li>fmu.tools.ensembles package</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/fmu.tools.ensembles.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="fmu-tools-ensembles-package">
-<h1>fmu.tools.ensembles package<a class="headerlink" href="#fmu-tools-ensembles-package" title="Permalink to this headline"></a></h1>
+<h1>fmu.tools.ensembles package<a class="headerlink" href="#fmu-tools-ensembles-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-fmu.tools.ensembles.ensemble_well_props">
-<span id="fmu-tools-ensembles-ensemble-well-props-module"></span><h2>fmu.tools.ensembles.ensemble_well_props module<a class="headerlink" href="#module-fmu.tools.ensembles.ensemble_well_props" title="Permalink to this headline"></a></h2>
+<span id="fmu-tools-ensembles-ensemble-well-props-module"></span><h2>fmu.tools.ensembles.ensemble_well_props module<a class="headerlink" href="#module-fmu.tools.ensembles.ensemble_well_props" title="Permalink to this heading">¶</a></h2>
 <p>Compute well properties/stats along a (planned) well path based on ensemble data.</p>
 <p>The implementation is through a console script, which reads a YAML config file.</p>
 <p>Output will be RMS well file and/or CSV files, in addition to screen info.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">ScreenInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moreverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">ScreenInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moreverbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo.quiet">
-<span class="sig-name descname"><span class="pre">quiet</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.quiet" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">quiet</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.quiet" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo.moreverbose">
-<span class="sig-name descname"><span class="pre">moreverbose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.moreverbose" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">moreverbose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.moreverbose" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint">
-<span class="sig-name descname"><span class="pre">oprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.oprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">oprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.oprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ordinary print info for users.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint">
-<span class="sig-name descname"><span class="pre">cprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.cprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.cprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ordinary but clean print withou leading &gt;&gt;, useful for e.g. dataframes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint">
-<span class="sig-name descname"><span class="pre">xprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.xprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">xprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ScreenInfo.xprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extra print if more verbose output is asked for.</p>
 </dd></dl>
 
@@ -140,227 +236,227 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.get_parser_args">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">get_parser_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#get_parser_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.get_parser_args" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">get_parser_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#get_parser_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.get_parser_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up parser for command line end point.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.dump_example_config">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">dump_example_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#dump_example_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.dump_example_config" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">dump_example_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#dump_example_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.dump_example_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dump an example config file as example.yml.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.parse_config">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.parse_config" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.parse_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse YAML file.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">PropsData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filestub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#PropsData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">PropsData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filestub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#PropsData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Holding property data and criteria</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData.filestub">
-<span class="sig-name descname"><span class="pre">filestub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.filestub" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">filestub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.filestub" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData.discrete">
-<span class="sig-name descname"><span class="pre">discrete</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.discrete" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">discrete</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.discrete" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData.codes">
-<span class="sig-name descname"><span class="pre">codes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.codes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">codes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.codes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.PropsData.interval">
-<span class="sig-name descname"><span class="pre">interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.interval" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.PropsData.interval" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">ConfigData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itera</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldelta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridreuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_avg_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_cum_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_keep_intermediate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_show_in_terminal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ConfigData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">ConfigData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itera</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">welldelta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridreuse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_avg_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_cum_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_keep_intermediate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_show_in_terminal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#ConfigData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Other class data than config are evaluated from config in post_init.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.config">
-<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.config" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.config" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.root">
-<span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.root" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.root" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.reals">
-<span class="sig-name descname"><span class="pre">reals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.reals" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.reals" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.itera">
-<span class="sig-name descname"><span class="pre">itera</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.itera" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">itera</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.itera" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.wellfile">
-<span class="sig-name descname"><span class="pre">wellfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.wellfile" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wellfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.wellfile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.welldelta">
-<span class="sig-name descname"><span class="pre">welldelta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.welldelta" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">welldelta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.welldelta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.gridfile">
-<span class="sig-name descname"><span class="pre">gridfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridfile" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gridfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridfile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.gridreuse">
-<span class="sig-name descname"><span class="pre">gridreuse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridreuse" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gridreuse</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.gridreuse" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist">
-<span class="sig-name descname"><span class="pre">proplist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.PropsData" title="fmu.tools.ensembles.ensemble_well_props.PropsData"><span class="pre">fmu.tools.ensembles.ensemble_well_props.PropsData</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">proplist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code><span class="pre">[</span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.PropsData" title="fmu.tools.ensembles.ensemble_well_props.PropsData"><code class="xref py py-class docutils literal notranslate"><span class="pre">PropsData</span></code></a><span class="pre">]]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.report_avg_file">
-<span class="sig-name descname"><span class="pre">report_avg_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_avg_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report_avg_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_avg_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.report_cum_file">
-<span class="sig-name descname"><span class="pre">report_cum_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_cum_file" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report_cum_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_cum_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.report_keep_intermediate">
-<span class="sig-name descname"><span class="pre">report_keep_intermediate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_keep_intermediate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report_keep_intermediate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_keep_intermediate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.ConfigData.report_show_in_terminal">
-<span class="sig-name descname"><span class="pre">report_show_in_terminal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_show_in_terminal" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report_show_in_terminal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData.report_show_in_terminal" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.WellCase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">WellCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#WellCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">WellCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#WellCase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.WellCase.well">
-<span class="sig-name descname"><span class="pre">well</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.well.well1.Well</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.well" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">well</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Well</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.well" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.WellCase.mdlog">
-<span class="sig-name descname"><span class="pre">mdlog</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.mdlog" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mdlog</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.mdlog" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.WellCase.mdranges">
-<span class="sig-name descname"><span class="pre">mdranges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.mdranges" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mdranges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.mdranges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.WellCase.delta">
-<span class="sig-name descname"><span class="pre">delta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.delta" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">delta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.WellCase.delta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">EnsembleWellProps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">realizations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_flag_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumlenreport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumlenreport_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">EnsembleWellProps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">realizations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_flag_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumlenreport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumlenreport_summary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The ensemble well props is use for post loop analysis.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.well">
-<span class="sig-name descname"><span class="pre">well</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.well.well1.Well</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.well" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">well</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Well</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.well" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.realizations">
-<span class="sig-name descname"><span class="pre">realizations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.realizations" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">realizations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.realizations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cfg">
-<span class="sig-name descname"><span class="pre">cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData" title="fmu.tools.ensembles.ensemble_well_props.ConfigData"><span class="pre">fmu.tools.ensembles.ensemble_well_props.ConfigData</span></a></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cfg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.ConfigData" title="fmu.tools.ensembles.ensemble_well_props.ConfigData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigData</span></code></a></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cfg" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.sinfo">
-<span class="sig-name descname"><span class="pre">sinfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo" title="fmu.tools.ensembles.ensemble_well_props.ScreenInfo"><span class="pre">fmu.tools.ensembles.ensemble_well_props.ScreenInfo</span></a></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.sinfo" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sinfo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.ensembles.ensemble_well_props.ScreenInfo" title="fmu.tools.ensembles.ensemble_well_props.ScreenInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScreenInfo</span></code></a></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.sinfo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_logs">
-<span class="sig-name descname"><span class="pre">added_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_logs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">added_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_logs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_flag_logs">
-<span class="sig-name descname"><span class="pre">added_flag_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_flag_logs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">added_flag_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.added_flag_logs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport">
-<span class="sig-name descname"><span class="pre">cumlenreport</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cumlenreport</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport_summary">
-<span class="sig-name descname"><span class="pre">cumlenreport_summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport_summary" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cumlenreport_summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport_summary" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs">
-<span class="sig-name descname"><span class="pre">process_ensemble_avglogs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.process_ensemble_avglogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_ensemble_avglogs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.process_ensemble_avglogs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make ensemble mean or mode (most-of) logs.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen">
-<span class="sig-name descname"><span class="pre">process_ensemble_cumlen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.process_ensemble_cumlen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process_ensemble_cumlen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.process_ensemble_cumlen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide cumulative length statistics.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs">
-<span class="sig-name descname"><span class="pre">optionally_delete_logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.optionally_delete_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">optionally_delete_logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.optionally_delete_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs">
-<span class="sig-name descname"><span class="pre">optionally_delete_flag_logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.optionally_delete_flag_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">optionally_delete_flag_logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#EnsembleWellProps.optionally_delete_flag_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.loop_for_compute">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">loop_for_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_dryrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#loop_for_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.loop_for_compute" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">loop_for_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_dryrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#loop_for_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.loop_for_compute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect for computing the ensemble statistics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>config</strong> – The input configuration dictonary</p></li>
 <li><p><strong>sinfo</strong> – Messages to screen instance</p></li>
@@ -372,17 +468,17 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.run_compute">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">run_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theprop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#run_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.run_compute" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">run_compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theprop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#run_compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.run_compute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute well props sampled from gridproperties for one propert and realization.</p>
 <p>The well.dataframe is updated in-place with new column(s)</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.process_ensemble">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">process_ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#process_ensemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.process_ensemble" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">process_ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ens</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#process_ensemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.process_ensemble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the ensemble (seen in well) according to client ‘report’ requirements.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ens</strong> – Instance of EnsembleWellProps which holds all relevant data</p>
 </dd>
 </dl>
@@ -390,10 +486,10 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.ensembles.ensemble_well_props.main">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.main" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.ensembles.ensemble_well_props.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/ensembles/ensemble_well_props.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.ensembles.ensemble_well_props.main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main routine for ensemble_well_props.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> – Input config; if missing the command line is parsed for YAML file.</p>
 </dd>
 </dl>
@@ -401,40 +497,57 @@
 
 </section>
 <section id="module-fmu.tools.ensembles">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.ensembles" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.ensembles" title="Permalink to this heading">¶</a></h2>
 <p>For analysis/checks across ensembles.</p>
 </section>
 </section>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fmu.tools.html" class="btn btn-neutral float-left" title="fmu.tools package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="fmu.tools.fipmapper.html" class="btn btn-neutral float-right" title="fmu.tools.fipmapper package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmu.tools.html" class="btn btn-neutral float-left" title="fmu.tools package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright Equinor.</p>
-  </div>
+    <p>
+        &#169; Copyright Equinor.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>  
+  </script>
+
+  
+  
+    
+    
 
   <style>
     /* Sidebar header (and topbar for mobile) */
