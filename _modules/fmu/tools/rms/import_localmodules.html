@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms.import_localmodules &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  <title>fmu.tools.rms.import_localmodules &mdash; fmu-tools 1.11.3.dev15+gae4ed84 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.11.3.dev13+g7490996
+                1.11.3.dev15+gae4ed84
               </div>
             
           
@@ -215,37 +215,27 @@
     <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="import_localmodule"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule">[docs]</a><span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists inside the RMS project.</span>
+<span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">_detect_module_or_package</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect a module of package external of rms.&quot;&quot;&quot;</span>
 
-<span class="sd">    Inside a RMS project it can be beneficial to have a module that serves as a library,</span>
-<span class="sd">    not only a front end script. Several problems exist in current RMS:</span>
+    <span class="n">usepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-<span class="sd">        - RMS has no awareness of this &#39;PYTHONPATH&#39;, i.e. &lt;project&gt;/pythoncomp</span>
-<span class="sd">        - RMS will, once loaded, not refresh any changes made in the module</span>
-<span class="sd">        - Python requires extension .py, but RMS often adds .py_1 for technical reasons,</span>
-<span class="sd">          which makes it impossible for the end-user to understand why it will not work,</span>
-<span class="sd">          as the &#39;instance-name&#39; (script name inside RMS) and the actual file name will</span>
-<span class="sd">          differ.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">usepath</span> <span class="o">/</span> <span class="p">(</span><span class="n">module_root_name</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="c1"># module is a single file</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<span class="sd">    This function solves all these issues, and makes it possible to import a RMS project</span>
-<span class="sd">    library in a much easier way::</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">usepath</span> <span class="o">/</span> <span class="n">module_root_name</span> <span class="o">/</span> <span class="s2">&quot;__init__.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="c1"># module is a package</span>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<span class="sd">        import fmu.tools as tools</span>
-
-<span class="sd">        # mylib.py is inside the RMS project</span>
-<span class="sd">        plib = tools.rms.import_localmodule(project, &quot;mylib&quot;)</span>
-
-<span class="sd">        plib.somefunction(some_arg)</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        project: RMS &#39;magic&#39; project variable</span>
-<span class="sd">        module_root_name: A string that is the root name of your module. E.g. if</span>
-<span class="sd">            the module is named &#39;blah.py&#39;, the use &#39;blah&#39;.</span>
+    <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">_localmodule_inside_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists inside the RMS project.&quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="c1"># allow project to be a string; mostly for unit testing</span>
         <span class="n">prj</span> <span class="o">=</span> <span class="n">project</span>
@@ -280,7 +270,73 @@
 
         <span class="n">xmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># avoid accumulation in sys.path by removing tmppath from stack</span>
-        <span class="k">return</span> <span class="n">xmod</span></div>
+        <span class="k">return</span> <span class="n">xmod</span>
+
+
+<span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">_localmodule_outside_rms</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists outside the RMS project.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_detect_module_or_package</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot detect module </span><span class="si">{</span><span class="n">module_root_name</span><span class="si">}</span><span class="s2">. Check spelling etc&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Now empty sys.path for this module, allowing a refresh when library is modified:</span>
+    <span class="n">sysm</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">sysm</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">module_root_name</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Delete from modules: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="n">xmod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># avoid accumulation in sys.path</span>
+    <span class="k">return</span> <span class="n">xmod</span>
+
+
+<div class="viewcode-block" id="import_localmodule"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule">[docs]</a><span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists either inside or outside RMS.</span>
+
+<span class="sd">    Inside a RMS project it can be beneficial to have a module that serves as a library,</span>
+<span class="sd">    not only a front end script. Several problems exist in current RMS:</span>
+
+<span class="sd">        - RMS has no awareness of this &#39;PYTHONPATH&#39;, i.e. &lt;project&gt;/pythoncomp</span>
+<span class="sd">        - RMS will, once loaded, not refresh any changes made in the module</span>
+<span class="sd">        - Python requires extension .py, but RMS often adds .py_1 for technical reasons,</span>
+<span class="sd">          which makes it impossible for the end-user to understand why it will not work,</span>
+<span class="sd">          as the &#39;instance-name&#39; (script name inside RMS) and the actual file name will</span>
+<span class="sd">          differ.</span>
+
+<span class="sd">    This function solves all these issues, and makes it possible to import a RMS project</span>
+<span class="sd">    library in a much easier way::</span>
+
+<span class="sd">        import fmu.tools as tools</span>
+
+<span class="sd">        # mylib.py is inside the RMS project</span>
+<span class="sd">        plib = tools.rms.import_localmodule(project, &quot;mylib&quot;)</span>
+
+<span class="sd">        plib.somefunction(some_arg)</span>
+
+<span class="sd">        # exlib.py is outside the RMS project e,g, at ../lib/exlib.py</span>
+<span class="sd">        elib = tools.rms.import_localmodule(project, &quot;exlib&quot;, path=&quot;../lib&quot;)</span>
+
+<span class="sd">        elib.someotherfunction(some_other_arg)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        project: RMS &#39;magic&#39; project variable</span>
+<span class="sd">        module_root_name: A string that is the root name of your module. E.g. if</span>
+<span class="sd">            the module is named &#39;blah.py&#39;, the use &#39;blah&#39;.</span>
+<span class="sd">        path: If None then it will use a module seen from RMS, being technically stored</span>
+<span class="sd">            in pythoncomp folder. If set, then it should be a string for the file path</span>
+<span class="sd">            and load a module stored outside RMS.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_localmodule_inside_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_localmodule_outside_rms</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

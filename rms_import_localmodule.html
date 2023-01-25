@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>rms.import_localmodule &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  <title>rms.import_localmodule &mdash; fmu-tools 1.11.3.dev15+gae4ed84 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.11.3.dev13+g7490996
+                1.11.3.dev15+gae4ed84
               </div>
             
           
@@ -100,7 +100,11 @@
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.import_localmodule</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.import_localmodule</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-library-is-inside-rms">The library is inside rms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-library-is-outside-rms">The library is outside RMS</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -187,7 +191,10 @@ as the ‘instance-name’ (script name inside RMS) and the actual file name wil
 differ.</p></li>
 </ul>
 <p>This function solves all these issues, and makes it possible to import a RMS project
-library in a much easier way:</p>
+library in a much easier way.</p>
+<section id="the-library-is-inside-rms">
+<h2>The library is inside rms<a class="headerlink" href="#the-library-is-inside-rms" title="Permalink to this heading">¶</a></h2>
+<p>Given that the library module is made inside the RMS GUI, here is an example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
 
 <span class="c1"># mylib.py is inside the RMS project</span>
@@ -196,6 +203,29 @@ library in a much easier way:</p>
 <span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="the-library-is-outside-rms">
+<h2>The library is outside RMS<a class="headerlink" href="#the-library-is-outside-rms" title="Permalink to this heading">¶</a></h2>
+<p>Sometimes it is convinient that the library is made outside RMS, and the same function can
+then be applied with a <cite>path</cite> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+<span class="c1"># extlib.py is outside the RMS project, relative path ../lib/extlib.py</span>
+
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;extlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+<span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+
+<span class="c1"># or as a package:</span>
+<span class="c1"># extlib is here a folder (package) is outside the RMS project, relative path ../lib/extlib</span>
+<span class="c1"># extlib/</span>
+<span class="c1">#        __init__.py</span>
+<span class="c1">#        calc.py</span>
+
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;extlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+<span class="n">plib</span><span class="o">.</span><span class="n">calc</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 

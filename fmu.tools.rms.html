@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.11.3.dev13+g7490996 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.11.3.dev15+gae4ed84 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.11.3.dev13+g7490996
+                1.11.3.dev15+gae4ed84
               </div>
             
           
@@ -409,8 +409,8 @@ numpy matrix with well coordinates (as outputted by roxapi)</p></li>
 <p>Import a local module made inside RMS, and refresh the content.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.import_localmodules.import_localmodule">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.import_localmodules.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodules.import_localmodule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import a library module in RMS which exists inside the RMS project.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.import_localmodules.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodules.import_localmodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a library module in RMS which exists either inside or outside RMS.</p>
 <p>Inside a RMS project it can be beneficial to have a module that serves as a library,
 not only a front end script. Several problems exist in current RMS:</p>
 <blockquote>
@@ -431,6 +431,11 @@ library in a much easier way:</p>
 <span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
 
 <span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+
+<span class="c1"># exlib.py is outside the RMS project e,g, at ../lib/exlib.py</span>
+<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;exlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+
+<span class="n">elib</span><span class="o">.</span><span class="n">someotherfunction</span><span class="p">(</span><span class="n">some_other_arg</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -439,6 +444,9 @@ library in a much easier way:</p>
 <li><p><strong>project</strong> – RMS ‘magic’ project variable</p></li>
 <li><p><strong>module_root_name</strong> – A string that is the root name of your module. E.g. if
 the module is named ‘blah.py’, the use ‘blah’.</p></li>
+<li><p><strong>path</strong> – If None then it will use a module seen from RMS, being technically stored
+in pythoncomp folder. If set, then it should be a string for the file path
+and load a module stored outside RMS.</p></li>
 </ul>
 </dd>
 </dl>
@@ -909,8 +917,8 @@ using pandas.Series.apply()</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.import_localmodule">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Import a library module in RMS which exists inside the RMS project.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">import_localmodule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_root_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/import_localmodules.html#import_localmodule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_localmodule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a library module in RMS which exists either inside or outside RMS.</p>
 <p>Inside a RMS project it can be beneficial to have a module that serves as a library,
 not only a front end script. Several problems exist in current RMS:</p>
 <blockquote>
@@ -931,6 +939,11 @@ library in a much easier way:</p>
 <span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
 
 <span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
+
+<span class="c1"># exlib.py is outside the RMS project e,g, at ../lib/exlib.py</span>
+<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;exlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+
+<span class="n">elib</span><span class="o">.</span><span class="n">someotherfunction</span><span class="p">(</span><span class="n">some_other_arg</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -939,6 +952,9 @@ library in a much easier way:</p>
 <li><p><strong>project</strong> – RMS ‘magic’ project variable</p></li>
 <li><p><strong>module_root_name</strong> – A string that is the root name of your module. E.g. if
 the module is named ‘blah.py’, the use ‘blah’.</p></li>
+<li><p><strong>path</strong> – If None then it will use a module seen from RMS, being technically stored
+in pythoncomp folder. If set, then it should be a string for the file path
+and load a module stored outside RMS.</p></li>
 </ul>
 </dd>
 </dl>
