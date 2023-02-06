@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.12.0 documentation</title>
+  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.12.1.dev1+g812cea1 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.12.0
+                1.12.1.dev1+g812cea1
               </div>
             
           
@@ -306,7 +306,6 @@
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">therule</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
-
             <span class="n">warnrule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
                 <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
             <span class="p">)</span>
@@ -318,7 +317,6 @@
             <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;STOP RULE </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">well</span><span class="p">,</span> <span class="n">actualmatch</span> <span class="ow">in</span> <span class="n">wellmatches</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
                 <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loop well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2"> which has match </span><span class="si">{</span><span class="n">actualmatch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 

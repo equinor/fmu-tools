@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>fmu.tools.qcforward._blockedwells_vs_gridprops &mdash; fmu-tools 1.12.0 documentation</title>
+  <title>fmu.tools.qcforward._blockedwells_vs_gridprops &mdash; fmu-tools 1.12.1.dev1+g812cea1 documentation</title>
   
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.12.0
+                1.12.1.dev1+g812cea1
               </div>
             
           
@@ -364,7 +364,6 @@
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No lines are matching </span><span class="si">{</span><span class="n">lines</span><span class="si">}</span><span class="s2">. Wrong input?:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Show all well cells for all wells:&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">comb</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">comb</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
@@ -446,7 +445,6 @@
         <span class="k">return</span> <span class="n">comb</span>
 
     <span class="k">def</span> <span class="nf">_evaluate_diffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comb</span><span class="p">,</span> <span class="n">diffs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-
         <span class="n">result</span><span class="p">:</span> <span class="n">OrderedDict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="p">(</span><span class="s2">&quot;WELL&quot;</span><span class="p">,</span> <span class="p">[]),</span>
@@ -476,7 +474,6 @@
                 <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
 
                 <span class="k">for</span> <span class="n">therule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
-
                     <span class="n">warnrule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
                         <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
                     <span class="p">)</span>
@@ -485,7 +482,6 @@
                     <span class="p">)</span>
 
                     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">issue</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">warnrule</span><span class="p">,</span> <span class="n">stoprule</span><span class="p">]):</span>
-
                         <span class="k">if</span> <span class="n">wname</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">issue</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
                             <span class="n">rulename</span> <span class="o">=</span> <span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;RULE&quot;</span>
                             <span class="n">result</span><span class="p">[</span><span class="n">rulename</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
