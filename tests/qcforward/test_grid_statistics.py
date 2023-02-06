@@ -20,7 +20,6 @@ def fixture_data():
 
 
 def test_simple_action(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -44,7 +43,6 @@ def test_simple_action(data):
 
 
 def test_action_with_disc_and_cont_props(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -86,7 +84,6 @@ def test_action_with_disc_and_cont_props(data):
 
 
 def test_multiple_actions(data):
-
     zones_stop = [
         ["Below_Top_reek", [0.1, 0.3]],
         ["Below_Mid_reek", [0.1, 0.25]],
@@ -113,7 +110,6 @@ def test_multiple_actions(data):
 
 
 def test_action_with_selectors(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -137,7 +133,6 @@ def test_action_with_selectors(data):
 
 
 def test_action_with_filters(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -166,7 +161,6 @@ def test_action_with_filters(data):
 
 
 def test_action_with_filters_and_selectors(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -195,7 +189,6 @@ def test_action_with_filters_and_selectors(data):
 
 
 def test_actions_shall_stop(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -210,7 +203,6 @@ def test_actions_shall_stop(data):
 
 
 def test_actions_shall_stop_no_warnlimits(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -224,7 +216,6 @@ def test_actions_shall_stop_no_warnlimits(data):
 
 
 def test_actions_with_selectors(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -252,7 +243,6 @@ def test_actions_with_selectors(data):
 
 
 def test_yaml_dump(data):
-
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",

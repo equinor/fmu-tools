@@ -126,7 +126,6 @@ class GridQuality(QCForward):
                 continue
 
             for numrule, therule in enumerate(therules):
-
                 warnrule = ActionsParser(
                     therule.get("warn", None), mode="warn", verbosity=QCC.verbosity
                 )

@@ -16,7 +16,6 @@ class ConfigParser:
         self,
         data: dict,
     ):
-
         QCC.verbosity = data.get("verbosity", 0)
 
         if "csvfile" in data:

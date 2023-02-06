@@ -319,7 +319,6 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     # Read each sensitivity
     for sensname, group in grouped:
-
         _check_for_mixed_sensitivities(sensname, group)
 
         sensdict = OrderedDict()
@@ -681,7 +680,6 @@ def _read_dist_sensitivity(sensgroup):
 
 
 def _read_correlations(sensgroup, inputfile):
-
     if "corr_sheet" in sensgroup.keys():
         if not sensgroup["corr_sheet"].dropna().empty:
             correlations = OrderedDict()

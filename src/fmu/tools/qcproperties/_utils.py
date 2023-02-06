@@ -7,7 +7,6 @@ def filter_df(dframe, filters):
     """Filter dataframe"""
     dframe = dframe.copy()
     for prop, filt in filters.items():
-
         if "include" in filt:
             if all(x in dframe[prop].unique() for x in filt["include"]):
                 dframe = dframe[dframe[prop].isin(filt["include"])]

@@ -23,7 +23,6 @@ class WellLogs2df:
         xtgdata: QCData,
         blockedwells: bool = False,
     ):
-
         """Initiate instance"""
         QCC.verbosity = data.get("verbosity", 0)
 
@@ -146,7 +145,6 @@ class WellLogs2df:
     def _codes_to_codenames(self):
         """Replace codes in dicrete parameters with codenames"""
         for param in self._controls["unique_parameters"]:
-
             if self._wells[0].isdiscrete(param):
                 codes = self._wells[0].get_logrecord(param).copy()
                 usercodes = self._controls["usercodes"].copy()

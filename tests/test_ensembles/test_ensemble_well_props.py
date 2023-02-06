@@ -27,7 +27,6 @@ FACIESFILE1 = RPATH0 / "grids" / "geogrid--facies.roff"
 
 @pytest.fixture(name="configdata")
 def fixture_configdata():
-
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
     myconfig = {
         "ensemble": {
@@ -75,7 +74,6 @@ def fixture_configdata():
 
 @pytest.fixture(name="configdata2")
 def fixture_configdata2():
-
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
     myconfig = {
         "ensemble": {
@@ -203,7 +201,6 @@ def test_compute_some_props(configdata):
 
     myprops = [FACIESFILE1, POROFILE1]
     for ncount, pcase in enumerate(myprops):
-
         prop = xtgeo.gridproperty_from_file(pcase)
         prop.geometry = grd
 
@@ -230,7 +227,6 @@ def test_loop_for_compute(configdata):
 
 
 def test_main(configdata):
-
     newcfg = deepcopy(configdata)
     newcfg["well"]["file"] = WELLNAME3
     newcfg["well"]["lognames"] = "all"

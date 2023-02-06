@@ -330,7 +330,6 @@ class ConfigData:
 
 @dataclass
 class WellCase:
-
     well: xtgeo.Well
     mdlog: str
     mdranges: list

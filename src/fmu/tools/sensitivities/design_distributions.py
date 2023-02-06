@@ -355,7 +355,6 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                     scipy.stats.norm.cdf(normalscoresamples), alpha1, alpha2
                 )
         else:
-
             if high == low:  # collapsed distribution
                 print(
                     "Low and high parameters for pert distribution"

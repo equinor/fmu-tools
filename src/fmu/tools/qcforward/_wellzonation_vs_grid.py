@@ -134,7 +134,6 @@ class WellZonationVsGrid(QCForward):
         )
 
         for therule in actions:
-
             warnrule = ActionsParser(
                 therule.get("warn", None), mode="warn", verbosity=QCC.verbosity
             )
@@ -146,7 +145,6 @@ class WellZonationVsGrid(QCForward):
             QCC.print_debug(f"STOP RULE {stoprule.status}  {stoprule.expression}")
 
             for well, actualmatch in wellmatches.items():
-
                 status = None
                 QCC.print_debug(f"Loop well {well} which has match {actualmatch}")
 

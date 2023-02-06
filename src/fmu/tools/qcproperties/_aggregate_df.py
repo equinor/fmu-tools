@@ -20,7 +20,6 @@ class PropertyAggregation:
         self,
         props2df,
     ):
-
         """Initiate instance"""
         self._property_dataframe = props2df.dataframe  # dataframe with properties
         self._controls = props2df.aggregation_controls

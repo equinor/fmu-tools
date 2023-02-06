@@ -146,7 +146,6 @@ def test_qcforward_wzonation_vs_grid_stops(tmp_path):
     qcjob = qcforward.WellZonationVsGrid()
 
     def check():
-
         usedata = {
             "wells": {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ},
             "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": ZLOGSHIFT},
@@ -193,7 +192,6 @@ def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path):
     qcjob = qcforward.WellZonationVsGrid()
 
     def check():
-
         usedata = {
             "wells": {"names": WELLS, "logrun": LOGRUN, "trajectory": TRAJ},
             "zonelog": {"name": ZONELOGNAME, "range": ZLOGRANGE, "shift": ZLOGSHIFT},
@@ -239,7 +237,6 @@ def test_qcforward_gridquality_ok(tmp_path):
     qcjob = qcforward.GridQuality()
 
     def check():
-
         usedata = {
             "grid": GRIDNAME,
             "actions": ACT,
@@ -281,7 +278,6 @@ def test_qcforward_gridquality_fail(tmp_path):
     qcjob = qcforward.GridQuality()
 
     def check():
-
         usedata = {
             "grid": GRIDNAME,
             "actions": ACT,
