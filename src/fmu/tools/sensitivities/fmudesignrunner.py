@@ -7,7 +7,6 @@ from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 
 def get_parser():
-
     parser = argparse.ArgumentParser(
         description="Generate design matrix to be used with ert DESIGN2PARAMS",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,

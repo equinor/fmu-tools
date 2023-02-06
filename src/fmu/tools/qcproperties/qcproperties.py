@@ -37,7 +37,6 @@ class QCProperties:
     """
 
     def __init__(self):
-
         self._xtgdata = QCData()  # QCData instance, general XTGeo data
         self._dfs = []  # list of dataframes with aggregated statistics
         self._selectors_all = []

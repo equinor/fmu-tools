@@ -192,7 +192,6 @@ class BlockedWellsVsGridProperties(QCForward):
                 print(f"No lines are matching {lines}. Wrong input?:\n")
 
         else:
-
             print("Show all well cells for all wells:")
             if len(comb) > 0:
                 print(comb.to_string())
@@ -274,7 +273,6 @@ class BlockedWellsVsGridProperties(QCForward):
         return comb
 
     def _evaluate_diffs(self, comb, diffs) -> pd.DataFrame:
-
         result: OrderedDict = OrderedDict(
             [
                 ("WELL", []),
@@ -304,7 +302,6 @@ class BlockedWellsVsGridProperties(QCForward):
                 status = "OK"
 
                 for therule in self.ldata.actions:
-
                     warnrule = ActionsParser(
                         therule.get("warn", None), mode="warn", verbosity=QCC.verbosity
                     )
@@ -313,7 +310,6 @@ class BlockedWellsVsGridProperties(QCForward):
                     )
 
                     for _, issue in enumerate([warnrule, stoprule]):
-
                         if wname != "all" and not issue.all:
                             rulename = issue.mode.upper() + "RULE"
                             result[rulename].append(issue.expression)

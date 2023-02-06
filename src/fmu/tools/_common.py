@@ -10,7 +10,6 @@ class _QCCommon(object):
     """
 
     def __init__(self):
-
         self._verbosity = 0  # verbosity level
 
     @property

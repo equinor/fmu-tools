@@ -71,7 +71,6 @@ class QCForward:
         self._ldata = data
 
     def handle_data(self, data, project):
-
         data_is_yaml = True
 
         # data may be a yaml file
@@ -165,7 +164,6 @@ class QCForward:
 
 class ActionsParser:
     def __init__(self, rule, mode="warn", verbosity="info"):
-
         QCC.verbosity = verbosity
         self.status = None  # in case no rule is set
         self.all = True

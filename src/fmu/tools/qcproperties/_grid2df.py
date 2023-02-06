@@ -15,7 +15,6 @@ class GridProps2df:
     """
 
     def __init__(self, project: Optional[object], data: dict, xtgdata: QCData):
-
         """Initiate instance"""
         QCC.verbosity = data.get("verbosity", 0)
 

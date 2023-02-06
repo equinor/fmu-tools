@@ -14,7 +14,6 @@ except ImportError:
     ROXAR = False
 
 if not ROXAR:
-
     from .rms import volumetrics  # noqa
 
     from .sensitivities import DesignMatrix  # noqa
