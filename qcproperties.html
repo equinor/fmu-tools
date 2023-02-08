@@ -1,96 +1,50 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>The qcproperties class &mdash; fmu-tools 1.12.1.dev1+g812cea1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The qcreset module" href="qcreset.html" />
     <link rel="prev" title="The qcforward functions" href="qcforward.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> fmu-tools
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
               <div class="version">
                 1.12.1.dev1+g812cea1
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -136,73 +90,32 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">fmu-tools</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>The qcproperties class</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The qcproperties class</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/qcproperties.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="the-qcproperties-class">
-<h1>The qcproperties class<a class="headerlink" href="#the-qcproperties-class" title="Permalink to this heading">¶</a></h1>
+<h1>The qcproperties class<a class="headerlink" href="#the-qcproperties-class" title="Permalink to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qcproperties</span></code> class provides a set of methods for extracting property
 statistics from 3D Grids, Raw and Blocked wells.</p>
 <p>Statistics can be extracted for both continous and discrete properties. Dependent on the
@@ -215,7 +128,7 @@ file can be used to enable an automatic run of the methods.</p>
 <p>XTGeo is being utilized to get a dataframe from the input parameter data. XTGeo data
 is reused in the instance to increase performance.</p>
 <section id="methods-for-extracting-property-statistics">
-<h2>Methods for extracting property statistics<a class="headerlink" href="#methods-for-extracting-property-statistics" title="Permalink to this heading">¶</a></h2>
+<h2>Methods for extracting property statistics<a class="headerlink" href="#methods-for-extracting-property-statistics" title="Permalink to this heading"></a></h2>
 <p>Three methods exists for extracting property statistics. The method to select
 is dependent on the input data source (3D grid properties, wells or blocked wells).
 Arguments for the methods are similar and described in section below.</p>
@@ -234,7 +147,7 @@ extraction has been run within the instance a merged dataframe is available thro
 a yaml-configuration file to run the different methods automatically.</p>
 </div>
 <section id="other-methods">
-<h3>Other methods<a class="headerlink" href="#other-methods" title="Permalink to this heading">¶</a></h3>
+<h3>Other methods<a class="headerlink" href="#other-methods" title="Permalink to this heading"></a></h3>
 <p>Note: The methods below are only applicable if at least one method for extracting statistics
 have been run within the QCProperties instance.</p>
 <dl class="simple">
@@ -247,7 +160,7 @@ runs of statistics extractions within the instance.</p>
 </dl>
 </section>
 <section id="arguments">
-<h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">¶</a></h3>
+<h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading"></a></h3>
 <p>The input <cite>data</cite> is given in a python dictionary (or a YAML file) and will be somewhat
 different for the three methods, and for the two run environments (inside/outside RMS).</p>
 <p><strong>Input arguments:</strong></p>
@@ -361,9 +274,9 @@ to the source string.</p>
 </dl>
 </section>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h3>
 <section id="get-grid-statistics-examples">
-<h4>get_grid_statistics examples<a class="headerlink" href="#get-grid-statistics-examples" title="Permalink to this heading">¶</a></h4>
+<h4>get_grid_statistics examples<a class="headerlink" href="#get-grid-statistics-examples" title="Permalink to this heading"></a></h4>
 <p><strong>Example in RMS (continous properties - basic):</strong></p>
 <p>Example extracting statistics for porosity and permeability for each zone and facies.
 Result is written to csv.</p>
@@ -548,7 +461,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 </div>
 </section>
 <section id="get-well-statistics-examples">
-<h4>get_well_statistics examples<a class="headerlink" href="#get-well-statistics-examples" title="Permalink to this heading">¶</a></h4>
+<h4>get_well_statistics examples<a class="headerlink" href="#get-well-statistics-examples" title="Permalink to this heading"></a></h4>
 <p><strong>Example in RMS:</strong></p>
 <p>Example extracting statistics for permeability for each zone and facies.
 All wells starting with 33_10 and all 34_11 wells containing “A” will be included in statistics.
@@ -624,7 +537,7 @@ Result is written to csv.</p>
 </div>
 </section>
 <section id="get-bwell-statistics-examples">
-<h4>get_bwell_statistics examples<a class="headerlink" href="#get-bwell-statistics-examples" title="Permalink to this heading">¶</a></h4>
+<h4>get_bwell_statistics examples<a class="headerlink" href="#get-bwell-statistics-examples" title="Permalink to this heading"></a></h4>
 <p><strong>Example in RMS:</strong></p>
 <p>Example extracting statistics for permeability for each zone and facies.
 All blocked wells will be included in statistics.
@@ -663,9 +576,9 @@ Result is written to csv.</p>
 </section>
 </section>
 <section id="comparison-of-data-from-different-sources">
-<h2>Comparison of data from different sources<a class="headerlink" href="#comparison-of-data-from-different-sources" title="Permalink to this heading">¶</a></h2>
+<h2>Comparison of data from different sources<a class="headerlink" href="#comparison-of-data-from-different-sources" title="Permalink to this heading"></a></h2>
 <section id="advice-when-comparing-data-from-different-sources">
-<h3>Advice when comparing data from different sources<a class="headerlink" href="#advice-when-comparing-data-from-different-sources" title="Permalink to this heading">¶</a></h3>
+<h3>Advice when comparing data from different sources<a class="headerlink" href="#advice-when-comparing-data-from-different-sources" title="Permalink to this heading"></a></h3>
 <p>When extracting statistics from different sources there are several tips for enabling easy comparison
 in the post-analysis of the data in e.g. WebViz:</p>
 <ul class="simple">
@@ -681,7 +594,7 @@ to merge codes in the zonelog together under one name.</p></li>
 </ul>
 </section>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
 <p>Example below collects statistical data from four different sources and writes result to a csv-file.
 Several steps have been to ensure consistency between the sources, making the resulting csv-file easy to compare:</p>
 <ul class="simple">
@@ -735,7 +648,7 @@ the codes are updated and redundant codes are excluded.</p></li>
 </section>
 </section>
 <section id="using-yaml-input-for-auto-execution">
-<h2>Using yaml input for auto execution<a class="headerlink" href="#using-yaml-input-for-auto-execution" title="Permalink to this heading">¶</a></h2>
+<h2>Using yaml input for auto execution<a class="headerlink" href="#using-yaml-input-for-auto-execution" title="Permalink to this heading"></a></h2>
 <p>A yaml-configuration file can be used with the method <code class="docutils literal notranslate"><span class="pre">from_yaml</span></code> to enable an automatic run of the methods.
 This is especially useful if the user wants to run multiple extractions of statistics with minimal
 code input.</p>
@@ -749,7 +662,7 @@ element.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">blockedwells</span></code>: the get_bwell_statistics method are executed on elements in this level</p></li>
 </ul>
 <section id="example-in-rms-with-setting-from-a-yaml-file">
-<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this heading">¶</a></h3>
+<h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this heading"></a></h3>
 <p>Example using yaml input in RMS for extracting statistics for porosity and permeability from
 four data sources (geogrid, simgrid, wells and blocked wells). The resulting combined
 dataframe are written to csv.</p>
@@ -831,9 +744,9 @@ dataframe are written to csv.</p>
 </section>
 </section>
 <section id="additional-notes">
-<h2>Additional Notes<a class="headerlink" href="#additional-notes" title="Permalink to this heading">¶</a></h2>
+<h2>Additional Notes<a class="headerlink" href="#additional-notes" title="Permalink to this heading"></a></h2>
 <section id="advice-on-performance">
-<h3>Advice on performance<a class="headerlink" href="#advice-on-performance" title="Permalink to this heading">¶</a></h3>
+<h3>Advice on performance<a class="headerlink" href="#advice-on-performance" title="Permalink to this heading"></a></h3>
 <p>There are several settings that has an influence perfomance:</p>
 <ul class="simple">
 <li><p>Filters can be used to remove unnecessary data, this will limit the input data before statistics
@@ -842,7 +755,7 @@ is calculated and will speed up execution.</p></li>
 </ul>
 </section>
 <section id="comparison-with-statistics-in-rms">
-<h3>Comparison with statistics in RMS<a class="headerlink" href="#comparison-with-statistics-in-rms" title="Permalink to this heading">¶</a></h3>
+<h3>Comparison with statistics in RMS<a class="headerlink" href="#comparison-with-statistics-in-rms" title="Permalink to this heading"></a></h3>
 <ul>
 <li><p>To avoid bias in the calculation, the code removes duplicates from both well and blocked well
 data before calculating statistics. Duplicates are data points that have the same coordinates
@@ -859,50 +772,33 @@ calculating statistics for raw wells, and minor differences in statistical value
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="qcreset.html" class="btn btn-neutral float-right" title="The qcreset module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="qcforward.html" class="btn btn-neutral float-left" title="The qcforward functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qcreset.html" class="btn btn-neutral float-right" title="The qcreset module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright Equinor.
-
-    </p>
+    <p>&#169; Copyright Equinor.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-    
+  </script>  
 
   <style>
     /* Sidebar header (and topbar for mobile) */
