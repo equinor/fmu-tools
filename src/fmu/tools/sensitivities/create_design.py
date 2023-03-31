@@ -897,8 +897,8 @@ def _printwarning(corrgroup):
         "This also means non-correlated parameters do not "
         "have to be included in correlation matrix. \n "
         "See documentation: \n"
-        "https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/"
-        "html/examples.html#create-design-matrix-for-"
+        "https://equinor.github.io/fmu-tools/
+        "fmudesign.html#create-design-matrix-for-"
         "one-by-one-sensitivities\n"
         "\n"
         "####################################################\n"
