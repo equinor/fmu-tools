@@ -197,7 +197,7 @@ class DesignMatrix:
         defaults.to_excel(
             xlsxwriter, sheet_name=defaultsheet, index=False, header=False
         )
-        xlsxwriter.save()
+        xlsxwriter.close()
         print(
             f"A total of {len(self.designvalues['REAL'])} realizations were generated"
         )
@@ -263,7 +263,7 @@ class DesignMatrix:
         self.backgroundvalues.to_excel(
             xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
         )
-        xlsxwriter.save()
+        xlsxwriter.close()
         print(f"Backgroundvalues written to {filename}")
 
     def _add_sensitivity(self, sensitivity):
