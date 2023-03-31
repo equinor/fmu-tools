@@ -273,7 +273,7 @@ class DesignMatrix:
             sensitivity of class Scenario, MonteCarlo or Extern
         """
         existing_values = self.designvalues.copy()
-        self.designvalues = existing_values.append(sensitivity.sensvalues, sort=False)
+        self.designvalues = pd.concat([existing_values,sensitivity.sensvalues])
 
     def _fill_with_background_values(self):
         """Substituting NaNs with background values if existing.
@@ -309,7 +309,7 @@ class DesignMatrix:
                                 )
                             )
                 existing_values = result_values.copy()
-                result_values = existing_values.append(temp_df, sort=False)
+                result_values = pd.concat([existing_values, temp_df])
 
             result_values = result_values.drop(["index"], axis=1)
             self.designvalues = result_values
