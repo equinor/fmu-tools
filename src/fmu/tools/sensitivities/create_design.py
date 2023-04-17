@@ -197,7 +197,7 @@ class DesignMatrix:
         defaults.to_excel(
             xlsxwriter, sheet_name=defaultsheet, index=False, header=False
         )
-        xlsxwriter.save()
+        xlsxwriter.close()
         print(
             f"A total of {len(self.designvalues['REAL'])} realizations were generated"
         )
@@ -263,7 +263,7 @@ class DesignMatrix:
         self.backgroundvalues.to_excel(
             xlsxwriter, sheet_name=backgroundsheet, index=False, header=True
         )
-        xlsxwriter.save()
+        xlsxwriter.close()
         print(f"Backgroundvalues written to {filename}")
 
     def _add_sensitivity(self, sensitivity):
@@ -273,7 +273,7 @@ class DesignMatrix:
             sensitivity of class Scenario, MonteCarlo or Extern
         """
         existing_values = self.designvalues.copy()
-        self.designvalues = existing_values.append(sensitivity.sensvalues, sort=False)
+        self.designvalues = pd.concat([existing_values, sensitivity.sensvalues])
 
     def _fill_with_background_values(self):
         """Substituting NaNs with background values if existing.
@@ -309,7 +309,7 @@ class DesignMatrix:
                                 )
                             )
                 existing_values = result_values.copy()
-                result_values = existing_values.append(temp_df, sort=False)
+                result_values = pd.concat([existing_values, temp_df])
 
             result_values = result_values.drop(["index"], axis=1)
             self.designvalues = result_values
@@ -688,7 +688,7 @@ class MonteCarloSensitivity:
             df_params["corr_sheet"].fillna("nocorr", inplace=True)
             df_params.reset_index(inplace=True)
             df_params.rename(columns={"index": "param_name"}, inplace=True)
-            param_groups = df_params.groupby(["corr_sheet"])
+            param_groups = df_params.groupby("corr_sheet")
 
             for correl, group in param_groups:
                 param_dict = OrderedDict()
@@ -897,8 +897,8 @@ def _printwarning(corrgroup):
         "This also means non-correlated parameters do not "
         "have to be included in correlation matrix. \n "
         "See documentation: \n"
-        "https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/"
-        "html/examples.html#create-design-matrix-for-"
+        "https://equinor.github.io/fmu-tools/"
+        "fmudesign.html#create-design-matrix-for-"
         "one-by-one-sensitivities\n"
         "\n"
         "####################################################\n"

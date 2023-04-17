@@ -73,7 +73,7 @@ def test_prediction_rejection_sampled_ensemble(tmpdir):
         ],
     ).to_excel(writer, sheet_name="design_input", index=False)
     defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False)
-    writer.save()
+    writer.close()
 
     dict_design = excel2dict_design("designinput.xlsx")
     design = DesignMatrix()

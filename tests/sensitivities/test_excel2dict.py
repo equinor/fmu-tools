@@ -42,7 +42,7 @@ def test_excel2dict_design(tmpdir):
         writer, sheet_name="designinput", index=False, header=None
     )
     defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False, header=None)
-    writer.save()
+    writer.close()
 
     dict_design = excel2dict_design("designinput.xlsx")
     assert isinstance(dict_design, dict)
@@ -71,7 +71,7 @@ def test_excel2dict_design(tmpdir):
         writer, sheet_name="Design_input", index=False, header=None
     )
     defaultvalues.to_excel(writer, sheet_name="DefaultValues", index=False, header=None)
-    writer.save()
+    writer.close()
 
     dict_design = excel2dict_design("designinput2.xlsx")
     assert isinstance(dict_design, dict)
@@ -108,7 +108,7 @@ def test_duplicate_sensname_exception(tmpdir):
         writer, sheet_name="designinput", index=False, header=None
     )
     defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False, header=None)
-    writer.save()
+    writer.close()
 
     with pytest.raises(
         ValueError, match="Two sensitivities can not share the same sensname"
@@ -148,7 +148,7 @@ def test_strip_spaces(tmpdir):
     defaultvalues_spacious.to_excel(
         writer, sheet_name="defaultvalues", index=False, header=None
     )
-    writer.save()
+    writer.close()
 
     dict_design = excel2dict_design("designinput_spaces.xlsx")
     assert list(dict_design["sensitivities"].keys())[0] == "rms_seed"
@@ -183,7 +183,7 @@ def test_mixed_senstype_exception(tmpdir):
         writer, sheet_name="designinput", index=False, header=None
     )
     defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False, header=None)
-    writer.save()
+    writer.close()
 
     with pytest.raises(ValueError, match="contains more than one sensitivity type"):
         excel2dict_design("designinput4.xlsx")
@@ -231,7 +231,7 @@ def test_background_sheet(tmpdir):
     )
     defaultvalues.to_excel(writer, sheet_name="defaultvalues", index=False)
     background.to_excel(writer, sheet_name="backgroundsheet", index=False, header=None)
-    writer.save()
+    writer.close()
 
     dict_design = excel2dict_design("designinput.xlsx")
 
