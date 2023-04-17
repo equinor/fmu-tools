@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.12.1.dev2+g2dcdaec documentation</title>
+  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.12.1.dev3+g5db57b6 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.1.dev2+g2dcdaec
+                1.12.1.dev3+g5db57b6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -372,7 +372,9 @@
     <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;sensitivities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">designinput</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">design_inp_sheet</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
     <span class="n">designinput</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">designinput</span> <span class="o">=</span> <span class="n">designinput</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">designinput</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+    <span class="n">designinput</span> <span class="o">=</span> <span class="n">designinput</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">:,</span> <span class="o">~</span><span class="n">designinput</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="c1"># First column with parameter names should have spaces stripped,</span>
     <span class="c1"># but we need to preserve NaNs:</span>
@@ -471,7 +473,9 @@
         <span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
     <span class="p">)</span>
     <span class="n">default_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">default_df</span> <span class="o">=</span> <span class="n">default_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">default_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+    <span class="n">default_df</span> <span class="o">=</span> <span class="n">default_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">:,</span> <span class="o">~</span><span class="n">default_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="c1"># Strip spaces before and after parameter names, if they are there</span>
     <span class="c1"># it is probably invisible user errors in Excel.</span>
@@ -509,7 +513,9 @@
         <span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">na_values</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span>
     <span class="p">)</span>
     <span class="n">depend_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">depend_df</span> <span class="o">=</span> <span class="n">depend_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">depend_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+    <span class="n">depend_df</span> <span class="o">=</span> <span class="n">depend_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">:,</span> <span class="o">~</span><span class="n">depend_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">from_parameter</span> <span class="ow">in</span> <span class="n">depend_df</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">depend_dict</span><span class="p">[</span><span class="s2">&quot;from_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">depend_df</span><span class="p">[</span><span class="n">from_parameter</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -540,7 +546,9 @@
     <span class="n">paramdict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="n">bck_input</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">inp_filename</span><span class="p">,</span> <span class="n">bck_sheet</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
     <span class="n">bck_input</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">bck_input</span> <span class="o">=</span> <span class="n">bck_input</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">bck_input</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+    <span class="n">bck_input</span> <span class="o">=</span> <span class="n">bck_input</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="p">:,</span> <span class="o">~</span><span class="n">bck_input</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="n">backdict</span><span class="p">[</span><span class="s2">&quot;correlations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">&quot;corr_sheet&quot;</span> <span class="ow">in</span> <span class="n">bck_input</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

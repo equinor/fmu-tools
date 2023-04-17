@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.12.1.dev2+g2dcdaec documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.12.1.dev3+g5db57b6 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.1.dev2+g2dcdaec
+                1.12.1.dev3+g5db57b6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -172,7 +172,7 @@
     <span class="n">required_input_dframe_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="s2">&quot;input_dframe&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;input_file&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
         <span class="n">input_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_file&quot;</span><span class="p">])</span>
-        <span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">])</span>
         <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_dframe</span>
     <span class="n">missing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_input_dframe_columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span>
         <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
@@ -486,7 +486,7 @@
     <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
         <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">])</span>
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">)[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span>
         <span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;dense&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

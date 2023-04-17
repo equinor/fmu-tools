@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.12.1.dev2+g2dcdaec documentation</title>
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.12.1.dev3+g5db57b6 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.1.dev2+g2dcdaec
+                1.12.1.dev3+g5db57b6
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -283,7 +283,7 @@
         <span class="n">defaults</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span>
             <span class="n">xlsxwriter</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">defaultsheet</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
-        <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;A total of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="p">[</span><span class="s1">&#39;REAL&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> realizations were generated&quot;</span>
         <span class="p">)</span>
@@ -349,7 +349,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span>
             <span class="n">xlsxwriter</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">backgroundsheet</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
-        <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">xlsxwriter</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backgroundvalues written to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_add_sensitivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">):</span>
@@ -359,7 +359,7 @@
 <span class="sd">            sensitivity of class Scenario, MonteCarlo or Extern</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">existing_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">existing_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensitivity</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">existing_values</span><span class="p">,</span> <span class="n">sensitivity</span><span class="o">.</span><span class="n">sensvalues</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_fill_with_background_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Substituting NaNs with background values if existing.</span>
@@ -395,7 +395,7 @@
                                 <span class="p">)</span>
                             <span class="p">)</span>
                 <span class="n">existing_values</span> <span class="o">=</span> <span class="n">result_values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="n">result_values</span> <span class="o">=</span> <span class="n">existing_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_df</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">result_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">existing_values</span><span class="p">,</span> <span class="n">temp_df</span><span class="p">])</span>
 
             <span class="n">result_values</span> <span class="o">=</span> <span class="n">result_values</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;index&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span> <span class="o">=</span> <span class="n">result_values</span>
@@ -774,7 +774,7 @@
             <span class="n">df_params</span><span class="p">[</span><span class="s2">&quot;corr_sheet&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;nocorr&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">df_params</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">df_params</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="s2">&quot;param_name&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">param_groups</span> <span class="o">=</span> <span class="n">df_params</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;corr_sheet&quot;</span><span class="p">])</span>
+            <span class="n">param_groups</span> <span class="o">=</span> <span class="n">df_params</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;corr_sheet&quot;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">correl</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">param_groups</span><span class="p">:</span>
                 <span class="n">param_dict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -983,8 +983,8 @@
         <span class="s2">&quot;This also means non-correlated parameters do not &quot;</span>
         <span class="s2">&quot;have to be included in correlation matrix. </span><span class="se">\n</span><span class="s2"> &quot;</span>
         <span class="s2">&quot;See documentation: </span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="s2">&quot;https://sdp.equinor.com/wikidocs/FMU/lib/fmu/tools/&quot;</span>
-        <span class="s2">&quot;html/examples.html#create-design-matrix-for-&quot;</span>
+        <span class="s2">&quot;https://equinor.github.io/fmu-tools/&quot;</span>
+        <span class="s2">&quot;fmudesign.html#create-design-matrix-for-&quot;</span>
         <span class="s2">&quot;one-by-one-sensitivities</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="s2">&quot;####################################################</span><span class="se">\n</span><span class="s2">&quot;</span>
