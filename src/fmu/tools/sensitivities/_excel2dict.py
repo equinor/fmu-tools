@@ -286,7 +286,9 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
     inputdict["sensitivities"] = OrderedDict()
     designinput = pd.read_excel(input_filename, design_inp_sheet, engine="openpyxl")
     designinput.dropna(axis=0, how="all", inplace=True)
-    designinput = designinput.loc[:, ~designinput.columns.str.contains("^Unnamed")]
+    designinput = designinput.loc[
+        :, ~designinput.columns.astype(str).str.contains("^Unnamed")
+    ]
 
     # First column with parameter names should have spaces stripped,
     # but we need to preserve NaNs:
@@ -385,7 +387,9 @@ def _read_defaultvalues(filename, sheetname):
         filename, sheetname, header=0, index_col=0, engine="openpyxl"
     )
     default_df.dropna(axis=0, how="all", inplace=True)
-    default_df = default_df.loc[:, ~default_df.columns.str.contains("^Unnamed")]
+    default_df = default_df.loc[
+        :, ~default_df.columns.astype(str).str.contains("^Unnamed")
+    ]
 
     # Strip spaces before and after parameter names, if they are there
     # it is probably invisible user errors in Excel.
@@ -423,7 +427,9 @@ def _read_dependencies(filename, sheetname, from_parameter):
         filename, sheetname, dtype=str, na_values="", engine="openpyxl"
     )
     depend_df.dropna(axis=0, how="all", inplace=True)
-    depend_df = depend_df.loc[:, ~depend_df.columns.str.contains("^Unnamed")]
+    depend_df = depend_df.loc[
+        :, ~depend_df.columns.astype(str).str.contains("^Unnamed")
+    ]
 
     if from_parameter in depend_df.keys():
         depend_dict["from_values"] = depend_df[from_parameter].tolist()
@@ -454,7 +460,9 @@ def _read_background(inp_filename, bck_sheet):
     paramdict = OrderedDict()
     bck_input = pd.read_excel(inp_filename, bck_sheet, engine="openpyxl")
     bck_input.dropna(axis=0, how="all", inplace=True)
-    bck_input = bck_input.loc[:, ~bck_input.columns.str.contains("^Unnamed")]
+    bck_input = bck_input.loc[
+        :, ~bck_input.columns.astype(str).str.contains("^Unnamed")
+    ]
 
     backdict["correlations"] = None
     if "corr_sheet" in bck_input.keys():

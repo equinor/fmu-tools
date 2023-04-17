@@ -688,7 +688,7 @@ class MonteCarloSensitivity:
             df_params["corr_sheet"].fillna("nocorr", inplace=True)
             df_params.reset_index(inplace=True)
             df_params.rename(columns={"index": "param_name"}, inplace=True)
-            param_groups = df_params.groupby(["corr_sheet"])
+            param_groups = df_params.groupby("corr_sheet")
 
             for correl, group in param_groups:
                 param_dict = OrderedDict()

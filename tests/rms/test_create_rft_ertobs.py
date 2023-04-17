@@ -485,7 +485,7 @@ def test_date_parsing(tmpdir):
     tmpdir.chdir()
     pd.DataFrame(
         columns=["DATE", "MD", "WELL_NAME", "PRESSURE"],
-        data=[["01 03 2009", "100", "A-1", "123"]],
+        data=[["2009-03-01", "100", "A-1", "123"]],
     ).to_csv("inputframe.csv", header=True, index=False)
 
     minimal_config = {"input_file": "inputframe.csv"}
