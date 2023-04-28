@@ -143,7 +143,7 @@ Running, testing etc
   $ source <your virtual env>
   $ cd <your-fmu-tools-project-dir>
   $ git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../.
-  $ git pull upstream master
+  $ git pull upstream main
   $ git checkout -b <your-branch-name>
   $ python setup.py clean
   $ python setup.py develop or pip install -e .

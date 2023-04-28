@@ -5,7 +5,7 @@ on:
 
   pull_request:
     branches:
-      - master
+      - main
     types: [opened, synchronize]
 
   release:
@@ -86,7 +86,7 @@ jobs:
           python setup.py build_sphinx
 
       - name: Update GitHub pages
-        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/master' && matrix.python-version == '3.8'
+        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && matrix.python-version == '3.8'
         run: |
           cp -R ./build/sphinx/html ../html
           git config --local user.email "fmu-tools-github-action"

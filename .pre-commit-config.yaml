@@ -3,7 +3,7 @@ repos:
   rev: v3.4.0
   hooks:
   - id:  no-commit-to-branch
-    args: ['--branch', 'master']
+    args: ['--branch', 'main']
   - id: check-yaml
   - id: end-of-file-fixer
   - id: debug-statements

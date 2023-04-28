@@ -2,7 +2,7 @@
 .. image:: https://img.shields.io/github/workflow/status/equinor/fmu-tools/fmu-tools
     :target: https://github.com/equinor/fmu-tools/actions?query=workflow%3Afmu-tools
 
-.. image:: https://codecov.io/gh/equinor/fmu-tools/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/equinor/fmu-tools/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/equinor/fmu-tools
 
 .. image:: https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9-blue.svg
