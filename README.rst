@@ -5,7 +5,7 @@
 .. image:: https://codecov.io/gh/equinor/fmu-tools/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/equinor/fmu-tools
 
-.. image:: https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9-blue.svg
+.. image:: https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue.svg
     :target: https://www.python.org
 
 .. image:: https://img.shields.io/pypi/v/fmu-tools.svg
