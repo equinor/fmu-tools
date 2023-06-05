@@ -106,7 +106,7 @@ In addition:
 
 * Use pytest as testing engine
 
-* Code shall be python 3.6 + compliant
+* Code shall be python 3.8 + compliant
 
 
 Use flake8 and/or pylint to check

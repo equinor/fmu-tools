@@ -14,14 +14,18 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: "Install codecov"
         run: pip install pytest-cov
+
       - name: "Build"
         run: pip install .[tests]
+
       - name: Generate coverage report
         run: |
           git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-          pytest tests --disable-warnings --cov-report=xml:fmu-tools.xml;
+          pytest -n auto tests --disable-warnings --cov-report=xml:fmu-tools.xml;
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
