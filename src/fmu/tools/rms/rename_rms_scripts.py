@@ -23,7 +23,14 @@ def _get_parser() -> argparse.ArgumentParser:
         type=str,
         help=("Path to the RMS project"),
     )
-    parser.add_argument("-v", "--verbose", action="store_true", help="Be verbose")
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Print logging information, a list of Python scripts that are "
+        "are not used in any RMS workflow, and a list of Python scripts that"
+        " do not have PEP8 compliant filenames.",
+    )
     parser.add_argument(
         "-b",
         "--backup",
@@ -31,27 +38,11 @@ def _get_parser() -> argparse.ArgumentParser:
         help="Make a backup of the pythoncomp/ directory before doing anything",
     )
     parser.add_argument(
-        "-u",
-        "--unused",
-        action="store_true",
-        help="Print out a list of Python scripts that are tracked by RMS but do not"
-        " appear to be used in any workflow",
-    )
-    parser.add_argument(
-        "-p",
-        "--pep8",
-        action="store_true",
-        help="Print out a list of Python scripts with PEP8 non-compliant"
-        " instance names",
-    )
-    parser.add_argument(
         "-t",
-        "--test",
+        "--test-run",
         action="store_true",
         help="Do a test run without making any file changes. Prints verbose "
-        "information about the changes that will be made without making them."
-        " If this option is not used, files will be changed irrespective of "
-        "other flags used.",
+        "information about the changes that will be made without making them.",
     )
     return parser
 
@@ -102,7 +93,7 @@ class PythonCompMaster:
     filenames.
     """
 
-    def __init__(self, path: Union[str, Path], write: Optional[bool] = True):
+    def __init__(self, path: Union[str, Path], write: Optional[bool] = True) -> None:
         self._write = write
         _logger.info(f"File writing set to {self._write}")
         _path = Path(path)
@@ -121,11 +112,11 @@ class PythonCompMaster:
             raise RuntimeError("project_lock_file exists, make sure RMS is closed")
 
         self._parent = self._path.parent
-        self.parse(self._path)
+        self._parse(self._path)
 
-    def parse(self, path: Union[str, Path]) -> None:
+    def _parse(self, path: Union[str, Path]) -> None:
         """Parses a pythoncomp/.master file. Results are stored internally."""
-        with open(path, "r", encoding="utf-8") as fin:
+        with open(path, encoding="utf-8") as fin:
             lines = [line.strip() for line in fin.readlines()]
 
         try:
@@ -425,7 +416,7 @@ class PythonCompMaster:
         return skip
 
     def write_master_file(self) -> None:
-        """Writes the fixed .master file out, with a non-option backup."""
+        """Writes the fixed .master file out, with a non-optional backup."""
         if not self._write:
             _logger.info("Skipped writing .master")
             return
@@ -476,7 +467,8 @@ def _print_skipped(skipped: List[str], master: PythonCompMaster) -> None:
             f"""
 - instance_name:      {entry["instance_name"]}
 - standalonefilename: {entry["standalonefilename"]}
-- reason:             {entry["skipped"]}"""
+- reason:             {entry["skipped"]}
+"""
         )
 
 
@@ -490,7 +482,8 @@ def _print_unused(unused: List[str], master: PythonCompMaster) -> None:
         print(
             f"""
 - instance_name:      {entry["instance_name"]}
-- standalonefilename: {entry["standalonefilename"]}"""
+- standalonefilename: {entry["standalonefilename"]}
+"""
         )
     print(
         "They must be manually deleted from within RMS. Be sure to double-check them."
@@ -504,7 +497,8 @@ def _print_pep8(noncompliant: List[str], master: PythonCompMaster) -> None:
         print(
             f"""
 - instance_name:      {entry["instance_name"]}
-- standalonefilename: {entry["standalonefilename"]}"""
+- standalonefilename: {entry["standalonefilename"]}
+"""
         )
     print("They must be changed in RMS to all lowercase, no hyphen, no number names.")
 
@@ -525,14 +519,13 @@ def main() -> None:
         _make_backup(master.parent)
 
     skipped = master.fix_standalone_filenames()
-    _print_skipped(skipped, master)
     master.write_master_file()
+    _print_skipped(skipped, master)
 
-    if args.unused:
+    if args.verbose or args.test:
         unused = master.get_unused_scripts()
         _print_unused(unused, master)
 
-    if args.pep8:
         noncompliant = master.get_pep8_noncompliant()
         _print_pep8(noncompliant, master)
 
