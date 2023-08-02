@@ -343,7 +343,7 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                 )
             else:
                 muval = (low + high + scale * mode) / (scale + 2)
-                if muval == mode:
+                if numpy.isclose(muval, mode):
                     alpha1 = (scale / 2) + 1
                 else:
                     alpha1 = ((muval - low) * (2 * mode - low - high)) / (
