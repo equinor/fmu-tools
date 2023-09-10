@@ -46,6 +46,7 @@ TEST_REQUIREMENTS = [
     "pre-commit",
     "pytest",
     "pytest-cov",
+    "types-dataclasses",
     "types-PyYAML",
 ]
 
