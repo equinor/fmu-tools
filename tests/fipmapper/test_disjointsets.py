@@ -1,10 +1,8 @@
+import pandas as pd
+import pytest
 from packaging import version
 
-import pytest
-
 from fmu.tools.fipmapper import fipmapper
-
-import pandas as pd
 
 
 @pytest.mark.skipif(

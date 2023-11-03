@@ -43,6 +43,7 @@ SETUP_REQUIREMENTS = [
 TEST_REQUIREMENTS = [
     "black>=23.1.0",
     "flake8",
+    "isort",
     "pre-commit",
     "pytest",
     "pytest-cov",

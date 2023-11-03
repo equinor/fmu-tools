@@ -1,11 +1,10 @@
 """Testing excel2dict"""
 import os
-from packaging import version
-
-import pytest
 
 import numpy as np
 import pandas as pd
+import pytest
+from packaging import version
 
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
 from fmu.tools.sensitivities._excel2dict import _has_value

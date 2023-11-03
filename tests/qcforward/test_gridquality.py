@@ -1,8 +1,9 @@
 """Testing qcforward method gridquality"""
 
 import pathlib
-import pytest
+
 import pandas as pd
+import pytest
 
 import fmu.tools.qcforward as qcf
 

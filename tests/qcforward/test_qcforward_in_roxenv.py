@@ -7,13 +7,13 @@ This requires a ROXAPI license, and to be ran in a "roxenvbash" environment; hen
 the decorator "roxapilicense"
 
 """
-from pathlib import Path
-from os.path import isdir
 import shutil
+from os.path import isdir
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
-
 import xtgeo
 
 try:

@@ -1,7 +1,8 @@
 import pathlib
 from os.path import abspath
-import pytest
+
 import pandas as pd
+import pytest
 
 from fmu.tools import qcforward as qcf
 
