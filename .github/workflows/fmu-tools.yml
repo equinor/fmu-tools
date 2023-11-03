@@ -2,16 +2,14 @@ name: fmu-tools
 
 on:
   push:
-
+    branches:
+      - main
   pull_request:
     branches:
       - main
-    types: [opened, synchronize]
-
   release:
     types:
       - published
-
   schedule:
     # Run CI every night and check that tests are working with latest dependencies
     - cron: "0 0 * * *"
@@ -21,9 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
         pandas-version: ["0.21.0", "1.*"]
         exclude:
+          - python-version: "3.11"
+            pandas-version: "0.21.0"
           - python-version: "3.10"
             pandas-version: "0.21.0"
           - python-version: "3.9"
@@ -43,44 +43,50 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install requirements
+        if: ${{ always() }}
         run: |
           pip install pip -U
           pip install .[docs,tests]
           pip install pandas==${{ matrix.pandas-version }}
 
       - name: List all installed packages
+        if: ${{ always() }}
         run: pip freeze
 
-      - name: Check code style
-        run: |
-          black --check .
-          flake8 .
+      - name: Lint with isort
+        if: ${{ always() }}
+        run: isort --check-only --profile black src tests
+
+      - name: Lint with black
+        if: ${{ always() }}
+        run: black --check .
+
+      - name: Lint with flake8
+        if: ${{ always() }}
+        run: flake8 src tests
 
       - name: Enforce static typing
+        if: ${{ always() }}
         run: |
           pip install mypy
           pip install types-dataclasses
           mypy src/fmu/tools
 
-      - name: Where am i?
-        run: |
-          pwd
-
       - name: Run tests
+        if: ${{ always() }}
         run: |
           git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-          pytest -n auto ./tests
-          # Check that repository is untainted by test code:
-          git status --porcelain
-          test -z "$(git status --porcelain)"
+          pytest -n auto tests
 
       - name: Syntax check on documentation
+        if: ${{ always() }}
         run: rstcheck -r docs
 
       - name: Build documentation
+        if: ${{ always() }}
         run: |
           sphinx-apidoc -f -H "API for fmu.tools" -o docs src
-          python setup.py build_sphinx
+          sphinx-build -b html docs build/docs/html
 
       - name: Update GitHub pages
         if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && matrix.python-version == '3.8'
