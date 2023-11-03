@@ -1,15 +1,13 @@
 """Test code for RMS volumetrics parsing"""
 
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
-import pandas as pd
-
 from fmu.tools.rms import volumetrics
-
 
 TESTDIR = Path(__file__).parent / "volumetricsdata"
 

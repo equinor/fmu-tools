@@ -1,9 +1,11 @@
 from pathlib import Path
+
 import pytest
+
 from fmu.tools.qcdata import QCData
-from fmu.tools.qcproperties.qcproperties import QCProperties
 from fmu.tools.qcproperties._grid2df import GridProps2df
 from fmu.tools.qcproperties._well2df import WellLogs2df
+from fmu.tools.qcproperties.qcproperties import QCProperties
 
 
 class TestProperties2df:

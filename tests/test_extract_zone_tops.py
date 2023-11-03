@@ -1,8 +1,8 @@
 from os.path import abspath
+
 import pytest
 
 from fmu.tools import extract_grid_zone_tops
-
 
 GRID = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff")
 GRIDPROP = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff")
