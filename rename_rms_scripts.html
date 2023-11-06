@@ -4,18 +4,18 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.rename_rms_scripts &mdash; fmu-tools 1.12.2.dev1+g6135936 documentation</title>
+  <title>rms.rename_rms_scripts &mdash; fmu-tools 1.12.2.dev10+g28cb8c1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=d1d4bbf5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +36,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.2.dev1+g6135936
+                1.12.2.dev10+g28cb8c1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -102,12 +102,13 @@ on-disk with non-Python file extensions such as <code class="docutils literal no
 RMS also does not offer a way for users to see which Python scripts are
 currently being used in a workflow, meaning that old or unused scripts can
 unnecessarily add clutter to a project. This script, which must be invoked
-outside of RMS without RMS runnings, allows you to find and fix these things.</p>
-<p><em>This script will modify your RMS Python script filenames and pythoncomp
-.master file!</em> Use with some caution, but some safeguards it are built in.</p>
+outside of RMS without RMS running, allows you to find and fix these things.</p>
+<p><em>This script will modify your RMS Python script file names and pythoncomp
+.master file!</em> Use with some caution, take a backup, but some safeguards
+are built in.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rename_rms_scripts</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span><span class="p">]</span> <span class="n">path</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rename_rms_scripts</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span><span class="p">]</span> <span class="n">path</span>
 </pre></div>
 </div>
 <section id="positional-arguments">
@@ -122,23 +123,15 @@ outside of RMS without RMS runnings, allows you to find and fix these things.</p
 <h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this heading"></a></h3>
 <dl class="option-list">
 <dt><kbd>-v, --verbose</kbd></dt>
-<dd><p>Be verbose</p>
+<dd><p>Print logging information, a list of Python scripts that are are not used in any RMS workflow, and a list of Python scripts that do not have PEP8 compliant filenames.</p>
 <p>Default: False</p>
 </dd>
 <dt><kbd>-b, --backup</kbd></dt>
 <dd><p>Make a backup of the pythoncomp/ directory before doing anything</p>
 <p>Default: False</p>
 </dd>
-<dt><kbd>-u, --unused</kbd></dt>
-<dd><p>Print out a list of Python scripts that are tracked by RMS but do not appear to be used in any workflow</p>
-<p>Default: False</p>
-</dd>
-<dt><kbd>-p, --pep8</kbd></dt>
-<dd><p>Print out a list of Python scripts with PEP8 non-compliant instance names</p>
-<p>Default: False</p>
-</dd>
-<dt><kbd>-t, --test</kbd></dt>
-<dd><p>Do a test run without making any file changes. Prints verbose information about the changes that will be made without making them. If this option is not used, files will be changed irrespective of other flags used.</p>
+<dt><kbd>-t, --test-run</kbd></dt>
+<dd><p>Do a test run without making any file changes. Prints verbose information about the changes that will be made without making them.</p>
 <p>Default: False</p>
 </dd>
 </dl>
