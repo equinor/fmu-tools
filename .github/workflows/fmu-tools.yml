@@ -91,7 +91,7 @@ jobs:
       - name: Update GitHub pages
         if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && matrix.python-version == '3.8'
         run: |
-          cp -R ./build/sphinx/html ../html
+          cp -R ./build/docs/html ../html
           git config --local user.email "fmu-tools-github-action"
           git config --local user.name "fmu-tools-github-action"
           git fetch origin gh-pages
