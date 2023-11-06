@@ -14,7 +14,6 @@ def test_extract_no_md_log():
     assert set(dframe["ZONE"].unique()) == set(
         ["Below_Top_reek", "Below_Mid_reek", "Below_Low_reek"]
     )
-    print(dframe)
     assert dframe["TOP_TVD"].min() == pytest.approx(1595.02, abs=0.1)
     assert dframe["BASE_TVD"].max() == pytest.approx(1644.67, abs=0.1)
     assert dframe["TOP_MD"].min() == pytest.approx(2378.33, abs=0.1)
@@ -36,7 +35,6 @@ def test_extract_with_dummy_md_log():
 
 def test_extract_grid_zone_log():
     dframe = extract_grid_zone_tops(well_list=WELLS, gridzonelog="grid_zones")
-    print(dframe)
     assert set(dframe["ZONE"].unique()) == set(
         ["Below_Top_reek", "Below_Mid_reek", "Below_Low_reek"]
     )

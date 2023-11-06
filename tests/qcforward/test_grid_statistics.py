@@ -1,4 +1,3 @@
-import pathlib
 from os.path import abspath
 
 import pandas as pd
@@ -6,21 +5,22 @@ import pytest
 
 from fmu.tools import qcforward as qcf
 
-SOMEYAML = abspath("/tmp/somefile.yml")
-REPORT = abspath("/tmp/somefile.csv")
 
-
-@pytest.fixture(name="data")
-def fixture_data():
-    return {
+@pytest.fixture
+def make_data(tmp_path):
+    report_path = str(tmp_path / "somefile.csv")
+    yaml_path = str(tmp_path / "somefile.yml")
+    data = {
         "path": abspath("../xtgeo-testdata/3dgrids/reek/"),
         "grid": "reek_sim_grid.roff",
-        "report": REPORT,
+        "report": report_path,
         "verbosity": 1,
     }
+    return data, report_path, yaml_path
 
 
-def test_simple_action(data):
+def test_simple_action(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -33,17 +33,16 @@ def test_simple_action(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.1677, 0.001
     )
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_action_with_disc_and_cont_props(data):
+def test_action_with_disc_and_cont_props(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -71,7 +70,7 @@ def test_action_with_disc_and_cont_props(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["PROPERTY"] == "reek_sim_poro.roff"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["PROPERTY"] == "reek_sim_poro.roff"].iloc[0][
@@ -81,10 +80,8 @@ def test_action_with_disc_and_cont_props(data):
         (dfr["PROPERTY"] == "reek_sim_facies2.roff") & (dfr["DESCRIPTION"] == "test2")
     ].iloc[0]["VALUE"] == pytest.approx(0.585, abs=0.001)
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_multiple_actions(data):
+def test_multiple_actions(make_data):
     zones_stop = [
         ["Below_Top_reek", [0.1, 0.3]],
         ["Below_Mid_reek", [0.1, 0.25]],
@@ -101,16 +98,16 @@ def test_multiple_actions(data):
             }
         )
 
+    data, report_path, _ = make_data
     data["actions"] = actions
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
-    print(dfr)
-    pathlib.Path(REPORT).unlink()
+    _ = pd.read_csv(report_path)
 
 
-def test_action_with_selectors(data):
+def test_action_with_selectors(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -123,17 +120,16 @@ def test_action_with_selectors(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.1606, 0.001
     )
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_action_with_filters(data):
+def test_action_with_filters(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -151,17 +147,16 @@ def test_action_with_filters(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "OK"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.2384, 0.001
     )
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_action_with_filters_and_selectors(data):
+def test_action_with_filters_and_selectors(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -179,17 +174,16 @@ def test_action_with_filters_and_selectors(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "OK"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.2384, 0.001
     )
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_actions_shall_stop(data):
+def test_actions_shall_stop(make_data):
+    data, *_ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -203,7 +197,8 @@ def test_actions_shall_stop(data):
         qcjob.run(data)
 
 
-def test_actions_shall_stop_no_warnlimits(data):
+def test_actions_shall_stop_no_warnlimits(make_data):
+    data, *_ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -216,7 +211,8 @@ def test_actions_shall_stop_no_warnlimits(data):
         qcjob.run(data)
 
 
-def test_actions_with_selectors(data):
+def test_actions_with_selectors(make_data):
+    data, report_path, _ = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -233,17 +229,16 @@ def test_actions_with_selectors(data):
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.3117, 0.001
     )
 
-    pathlib.Path(REPORT).unlink()
 
-
-def test_yaml_dump(data):
+def test_yaml_dump(make_data):
+    data, report_path, yaml_path = make_data
     data["actions"] = [
         {
             "property": "reek_sim_poro.roff",
@@ -252,19 +247,16 @@ def test_yaml_dump(data):
         },
     ]
 
-    data["dump_yaml"] = SOMEYAML
+    data["dump_yaml"] = yaml_path
     qcjob = qcf.GridStatistics()
     qcjob.run(data)
 
     # now read the dump file:
-    qcjob.run(data=SOMEYAML)
+    qcjob.run(data=yaml_path)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(report_path)
 
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["STATUS"] == "WARN"
     assert dfr.loc[dfr["CALCULATION"] == "Avg"].iloc[0]["VALUE"] == pytest.approx(
         0.1677, 0.001
     )
-
-    pathlib.Path(REPORT).unlink()
-    pathlib.Path(SOMEYAML).unlink()
