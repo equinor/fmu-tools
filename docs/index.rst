@@ -7,7 +7,6 @@ Contents:
    :maxdepth: 2
 
    readme
-   installation
    fmudesign
    qcforward
    qcproperties
@@ -18,8 +17,6 @@ Contents:
    rmsvolumetrics2csv
    ensembles
    contributing
-   authors
-   history
    modules
 
 Indices and tables
