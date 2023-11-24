@@ -1,31 +1,119 @@
+[build-system]
+requires = [
+    "setuptools>=45.0",
+    "setuptools_scm[toml]>=6.2",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/fmu/tools/version.py"
+
+[project]
+name = "fmu-tools"
+description = "Library for various tools and scripts within Fast Model Update"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Equinor", email = "fg_fmu-atlas@equinor.com" },
+]
+keywords = ["energy", "subsurface", "reservoir", "scientific", "engineering"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Natural Language :: English",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+]
+dynamic = ["version"]
+dependencies = [
+    "disjoint-set",
+    "jsonschema>=3.2.0",
+    "openpyxl>=2.6",
+    "pandas>=2",
+    "pyyaml>=5.3",
+    "scipy>=1.2",
+    "xlrd>=1.2",
+    "xtgeo>=2.15",
+]
+
+[project.optional-dependencies]
+tests = [
+    "black",
+    "flake8",
+    "isort",
+    "mypy",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "pytest-runner",
+    "pytest-xdist",
+    "rstcheck",
+    "types-PyYAML",
+]
+docs = [
+    "autoapi",
+    "myst-parser",
+    "sphinx",
+    "sphinx-argparse",
+    "sphinx-autodoc-typehints",
+    "sphinx-rtd-theme",
+]
+
+[project.urls]
+Homepage = "https://github.com/equinor/fmu-tools"
+Repository = "https://github.com/equinor/fmu-tools"
+Issues = "https://github.com/equinor/fmu-tools/issues"
+Documentation = "https://equinor.github.io/fmu-tools/"
+
+[project.scripts]
+ensemble_well_props = "fmu.tools.ensembles.ensemble_well_props:main"
+fmudesign = "fmu.tools.sensitivities.fmudesignrunner:main"
+rename_rms_scripts = "fmu.tools.rms.rename_rms_scripts:main"
+rmsvolumetrics2csv = "fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main"
+
 [tool.black]
-extend-exclude = '''
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+force-exclude = '''
 /(
-    \.git
+    \.eggs
+  | \.git
+  | \.hg
   | \.mypy_cache
   | \.tox
-  | venv
   | \.venv
   | _build
   | buck-out
   | build
   | dist
-  | src/fmu/tools/version\.py
+  | version.py
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+  | profiling
 )/
 '''
 
 [tool.isort]
-# make it compatible with black
 profile = "black"
 
-[build-system]
-requires = [
-  "pip>=19.1.1",
-  "setuptools>=30.3.0",
-  "setuptools_scm>=3.2.0",
-  "wheel",
-  "sphinx==5.3",
-  "docutils==0.16",
-  "sphinx-rtd-theme",
-  "sphinxcontrib-apidoc",
+[tool.rstcheck]
+ignore_directives = ["argparse", "automodule"]
+ignore_messages = "(Duplicate implicit target name)"
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: marks a test as an integration test",
+    "skipunlessroxar: skip this test unless Roxar license",
 ]

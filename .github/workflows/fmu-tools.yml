@@ -32,8 +32,8 @@ jobs:
             pandas-version: "0.21.0"
 
     steps:
-      - name: Checkout commit locally
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -45,7 +45,7 @@ jobs:
       - name: Install requirements
         if: ${{ always() }}
         run: |
-          pip install pip -U
+          pip install -U pip
           pip install .[docs,tests]
           pip install pandas==${{ matrix.pandas-version }}
 
@@ -55,7 +55,7 @@ jobs:
 
       - name: Lint with isort
         if: ${{ always() }}
-        run: isort --check-only --profile black src tests
+        run: isort --check-only src tests
 
       - name: Lint with black
         if: ${{ always() }}
@@ -67,16 +67,13 @@ jobs:
 
       - name: Enforce static typing
         if: ${{ always() }}
-        run: |
-          pip install mypy
-          pip install types-dataclasses
-          mypy src/fmu/tools
+        run: mypy src/fmu/tools
 
       - name: Run tests
         if: ${{ always() }}
         run: |
           git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
-          pytest -n auto tests
+          pytest -n auto tests --disable-warnings
 
       - name: Syntax check on documentation
         if: ${{ always() }}
@@ -86,7 +83,7 @@ jobs:
         if: ${{ always() }}
         run: |
           sphinx-apidoc -f -H "API for fmu.tools" -o docs src
-          sphinx-build -b html docs build/docs/html
+          sphinx-build -W -b html docs build/docs/html
 
       - name: Update GitHub pages
         if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && matrix.python-version == '3.8'

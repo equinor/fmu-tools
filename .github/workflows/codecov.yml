@@ -8,18 +8,20 @@ on:
 jobs:
   codecov:
     runs-on: ubuntu-latest
-    env:
-      PYTHON: '3.9'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: "Install codecov"
-        run: pip install pytest-cov
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
       - name: "Build"
-        run: pip install .[tests]
+        run: |
+          pip install -U pip
+          pip install ".[tests]"
 
       - name: Generate coverage report
         run: |
