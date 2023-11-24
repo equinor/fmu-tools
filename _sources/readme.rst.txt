@@ -1,4 +1,2 @@
-The script library *fmu.tools*
-==============================
-
-.. include:: ../README.rst
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_

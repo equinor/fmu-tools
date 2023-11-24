@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributing &mdash; fmu-tools 1.12.2.dev11+g676fb2d documentation</title>
+  <title>Contributing &mdash; fmu-tools 1.12.2.dev12+g4c93817 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,13 +13,13 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=31bf05e9"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=a1b1de4c"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Credits" href="authors.html" />
+    <link rel="next" title="API for fmu.tools" href="modules.html" />
     <link rel="prev" title="Ensembles" href="ensembles.html" /> 
 </head>
 
@@ -36,7 +36,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.2.dev11+g676fb2d
+                1.12.2.dev12+g4c93817
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,8 +47,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="readme.html">The script library <em>fmu.tools</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
@@ -68,20 +67,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#code-standards">Code standards</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pep8-and-pep20">PEP8 and PEP20</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#in-addition">In addition:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#formatted-with-black">Formatted with black</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#use-flake8-and-or-pylint-to-check">Use flake8 and/or pylint to check</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#get-started">Get Started!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#contribute">Contribute</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#running-testing-etc">Running, testing etc</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generating-docs-for-preliminary-view">Generating docs for preliminary view</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
 </ul>
 
@@ -118,7 +114,8 @@ little bit helps, and credit will always be given.</p>
 <h2>Types of Contributions<a class="headerlink" href="#types-of-contributions" title="Permalink to this heading"></a></h2>
 <section id="report-bugs">
 <h3>Report Bugs<a class="headerlink" href="#report-bugs" title="Permalink to this heading"></a></h3>
-<p>Report issues and bugs at <a class="reference external" href="https://github.com/equinor/fmu-tools/issues">https://github.com/equinor/fmu-tools/issues</a>.</p>
+<p>Report issues and bugs at
+<a class="reference external" href="https://github.com/equinor/fmu-tools/issues">https://github.com/equinor/fmu-tools/issues</a>.</p>
 <p>If you are reporting a bug, please include:</p>
 <ul class="simple">
 <li><p>Your operating system name and version, if this is expected to be relevant.</p></li>
@@ -145,8 +142,8 @@ articles, and such.</p>
 <section id="submit-feedback">
 <h3>Submit Feedback<a class="headerlink" href="#submit-feedback" title="Permalink to this heading"></a></h3>
 <p>The best way to send feedback is to file an issue
-at <a class="reference external" href="https://github.com/equinor/fmu-tools/issues">https://github.com/equinor/fmu-tools/issues</a>.</p>
-<p>Your can also use our Equinor Slack channel (todo).</p>
+at
+<a class="reference external" href="https://github.com/equinor/fmu-tools/issues">https://github.com/equinor/fmu-tools/issues</a>.</p>
 <p>If you are proposing a feature:</p>
 <ul class="simple">
 <li><p>Explain in detail how it would work.</p></li>
@@ -159,91 +156,64 @@ are welcome :)</p></li>
 <section id="code-standards">
 <h2>Code standards<a class="headerlink" href="#code-standards" title="Permalink to this heading"></a></h2>
 <p>It is required to be complient to code standards. A summary:</p>
-<section id="pep8-and-pep20">
-<h3>PEP8 and PEP20<a class="headerlink" href="#pep8-and-pep20" title="Permalink to this heading"></a></h3>
-<ul>
-<li><p>We use PEP8 standard (<a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>) with <cite>black’s</cite> line
-length exception and PEP20 philosophy.</p>
-<p>This implies:</p>
-<ul class="simple">
-<li><p>Line width max 88</p></li>
-<li><p>All coding will be formatted using <code class="docutils literal notranslate"><span class="pre">black</span></code> (yes forced, no mercy)</p></li>
-<li><p>Naming: files_as_this, ClassesAsThis, ExceptionsAsThis, CONSTANTS,
-function_as_this, method_as_this</p></li>
-<li><p>Use a single underscore to protect instance variables, other private
-variables and and private classes. Private methods can also be stored in
-private files, starting with an underscore.</p></li>
-<li><p>4 space indents (spaces, no tabs)</p></li>
-<li><p>Double quotes to delimit strings (black default), triple double quotes
-in docstrings.</p></li>
-<li><p>One space before and after =, =, +, * etc</p></li>
-<li><p>No space around  = in keword lists, e.g. my_function(value=27, default=None)</p></li>
-<li><p>Avoid one or two letter variables, even for counters. And meaningful names, but don’t
-overdo it.</p></li>
-<li><p>See also: <a class="reference external" href="https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/python-style.md">https://git.equinor.com/fmu-utilities/fmu-coding-practice/blob/master/python-style.md</a></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="in-addition">
-<h3>In addition:<a class="headerlink" href="#in-addition" title="Permalink to this heading"></a></h3>
+<section id="formatted-with-black">
+<h3>Formatted with black<a class="headerlink" href="#formatted-with-black" title="Permalink to this heading"></a></h3>
+<p>All code should be formatted by black with a line length of 88 characters.</p>
+<p>In addition:</p>
 <ul class="simple">
 <li><p>Start with documentation and tests. Think, design and communicate first!</p></li>
 <li><p>Docstrings shall start and end with “”” and use Google style.</p></li>
 <li><p>Use pytest as testing engine</p></li>
-<li><p>Code shall be python 3.8 + compliant</p></li>
+<li><p>Code shall be Python 3.8 + compliant</p></li>
 </ul>
 </section>
 <section id="use-flake8-and-or-pylint-to-check">
 <h3>Use flake8 and/or pylint to check<a class="headerlink" href="#use-flake8-and-or-pylint-to-check" title="Permalink to this heading"></a></h3>
-<blockquote>
-<div><p>python -m flake8 mycode.py</p>
-</div></blockquote>
-<p>The pylint is rather strict and sometimes exceptions are needed… , but anyway
-quite useful! A targeted <code class="docutils literal notranslate"><span class="pre">.pylintrc</span></code> file is in the project root.</p>
-<blockquote>
-<div><p>python -m pylint mycode.py</p>
-</div></blockquote>
-</section>
-</section>
-<section id="get-started">
-<h2>Get Started!<a class="headerlink" href="#get-started" title="Permalink to this heading"></a></h2>
-<p>Ready to contribute? Here’s how to set up <cite>fmu-tools</cite> for local development.</p>
-<ol class="arabic">
-<li><p>Fork the <cite>fmu-tools</cite> repo in web browser to a personal fork</p></li>
-<li><p>Work in virtual environment, always!</p></li>
-<li><p>Clone your fork locally:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:&lt;your-user&gt;/fmu-tools.git
-$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>fmu-tools
-$<span class="w"> </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:equinor/fmu-tools.git
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> </span>mycode.py
 </pre></div>
 </div>
-<p>This means your <cite>origin</cite> is now your personal fork, while the actual master
-is at <cite>upstream</cite>.</p>
-</li>
+<p>The pylint is rather strict and sometimes exceptions are needed.
+A targeted <code class="docutils literal notranslate"><span class="pre">.pylintrc</span></code> file is in the project root.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>pylint<span class="w"> </span>mycode.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="contribute">
+<h2>Contribute<a class="headerlink" href="#contribute" title="Permalink to this heading"></a></h2>
+<p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">fmu-tools</span></code> for local development.</p>
+<ol class="arabic simple">
+<li><p>Fork the <code class="docutils literal notranslate"><span class="pre">fmu-tools</span></code> to a personal fork</p></li>
+<li><p>Work in virtual environment, always!</p></li>
+<li><p>Clone your fork locally:</p></li>
 </ol>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:&lt;your-user&gt;/fmu-tools.git
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>fmu-tools
+<span class="w">    </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:equinor/fmu-tools.git
+</pre></div>
+</div>
+<p>This means your <code class="docutils literal notranslate"><span class="pre">origin</span></code> is now your personal fork, while the actual main
+branch is at <code class="docutils literal notranslate"><span class="pre">upstream</span></code>.</p>
 <section id="running-testing-etc">
 <h3>Running, testing etc<a class="headerlink" href="#running-testing-etc" title="Permalink to this heading"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>&lt;your<span class="w"> </span>virtual<span class="w"> </span>env&gt;
-$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>&lt;your-fmu-tools-project-dir&gt;
-$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/equinor/xtgeo-testdata<span class="w"> </span>../.
-$<span class="w"> </span>git<span class="w"> </span>pull<span class="w"> </span>upstream<span class="w"> </span>main
-$<span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;your-branch-name&gt;
-$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>clean
-$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>develop<span class="w"> </span>or<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-
-...<span class="w"> </span><span class="k">do</span><span class="w"> </span>coding,<span class="w"> </span>run<span class="w"> </span>tests<span class="w"> </span>etc
-
-$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-p
-$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>&lt;your-branch-name&gt;
-
-..<span class="w"> </span>ask<span class="w"> </span><span class="k">for</span><span class="w"> </span>review<span class="w"> </span>on<span class="w"> </span>github
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nb">source</span><span class="w"> </span>&lt;your<span class="w"> </span>virtual<span class="w"> </span>env&gt;
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>&lt;your-fmu-tools-project-dir&gt;
+<span class="w">    </span>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/equinor/xtgeo-testdata<span class="w"> </span>../.
+<span class="w">    </span>git<span class="w"> </span>pull<span class="w"> </span>upstream<span class="w"> </span>main
+<span class="w">    </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;your-branch-name&gt;
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[tests,docs]&quot;</span>
 </pre></div>
 </div>
+<p>Once your changes are complete, commit and push them.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>git<span class="w"> </span>commit<span class="w"> </span>-p
+<span class="w">    </span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>&lt;your-branch-name&gt;
+</pre></div>
+</div>
+<p>And ask for review on GitHub.</p>
 </section>
 <section id="generating-docs-for-preliminary-view">
 <h3>Generating docs for preliminary view<a class="headerlink" href="#generating-docs-for-preliminary-view" title="Permalink to this heading"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>build_sphinx
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>sphinx-build<span class="w"> </span>-W<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>build/docs/html
 </pre></div>
 </div>
 </section>
@@ -255,7 +225,7 @@ $<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ensembles.html" class="btn btn-neutral float-left" title="Ensembles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="authors.html" class="btn btn-neutral float-right" title="Credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="API for fmu.tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

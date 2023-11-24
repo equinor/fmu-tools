@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The script library fmu.tools &mdash; fmu-tools 1.12.2.dev11+g676fb2d documentation</title>
+  <title>fmu-tools &mdash; fmu-tools 1.12.2.dev12+g4c93817 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,13 +13,13 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=31bf05e9"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=a1b1de4c"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="next" title="FMU design matrix" href="fmudesign.html" />
     <link rel="prev" title="Welcome to fmu-tools’ documentation!" href="index.html" /> 
 </head>
 
@@ -36,7 +36,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.12.2.dev11+g676fb2d
+                1.12.2.dev12+g4c93817
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,8 +47,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">The script library <em>fmu.tools</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fmu-tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#developing-contributing">Developing &amp; Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
@@ -59,8 +65,6 @@
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="history.html">HISTORY</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
 </ul>
 
@@ -78,7 +82,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">The script library <em>fmu.tools</em></li>
+      <li class="breadcrumb-item active">fmu-tools</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,19 +92,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="the-script-library-fmu-tools">
-<h1>The script library <em>fmu.tools</em><a class="headerlink" href="#the-script-library-fmu-tools" title="Permalink to this heading"></a></h1>
-<a class="reference external image-reference" href="https://github.com/equinor/fmu-tools/actions?query=workflow%3Afmu-tools"><img alt="https://img.shields.io/github/workflow/status/equinor/fmu-tools/fmu-tools" src="https://img.shields.io/github/workflow/status/equinor/fmu-tools/fmu-tools" /></a>
-<a class="reference external image-reference" href="https://codecov.io/gh/equinor/fmu-tools"><img alt="https://codecov.io/gh/equinor/fmu-tools/branch/main/graph/badge.svg" src="https://codecov.io/gh/equinor/fmu-tools/branch/main/graph/badge.svg" /></a>
-<a class="reference external image-reference" href="https://www.python.org"><img alt="https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue.svg" src="https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue.svg" /></a>
-<a class="reference external image-reference" href="https://pypi.python.org/pypi/fmu-tools/"><img alt="https://img.shields.io/pypi/v/fmu-tools.svg" src="https://img.shields.io/pypi/v/fmu-tools.svg" /></a>
-<p>FMU tools is a Python library containing tools for pre and post processing
-for FMU (Fast Model Update).</p>
-<p>This library will contain various tools for automatic QC, setting up and analysing sensitivities,
-and tools for visualization (coviz).</p>
-<p>Documentation can be found on <a class="reference external" href="https://equinor.github.io/fmu-tools/">https://equinor.github.io/fmu-tools/</a>.</p>
-<p>This software is released under LGPLv3.</p>
-<p>Copyright 2018-2023 Equinor ASA.</p>
+  <section id="fmu-tools">
+<h1>fmu-tools<a class="headerlink" href="#fmu-tools" title="Permalink to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/equinor/fmu-tools/actions/workflows/fmu-tools.yml"><img alt="fmu-tools" src="https://github.com/equinor/fmu-tools/actions/workflows/fmu-tools.yml/badge.svg" /></a>
+<a class="reference external" href="https://codecov.io/gh/equinor/fmu-tools"><img alt="codecov" src="https://codecov.io/gh/equinor/fmu-tools/branch/master/graph/badge.svg" /></a>
+<img alt="Python Version" src="https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue.svg" />
+<a class="reference external" href="https://www.gnu.org/licenses/lgpl-3.0"><img alt="License: LGPL v3" src="https://img.shields.io/github/license/equinor/fmu-tools" /></a>
+<a class="reference external" href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<a class="reference external" href="https://pypi.org/project/fmu-tools/"><img alt="PyPI" src="https://img.shields.io/pypi/v/fmu-tools.svg" /></a></p>
+<p><strong>fmu-tools</strong> is a library containing tools for pre- and post-processing in a
+Fast Model Update (FMU) context. These tools are used for automatic QC,
+setting up and analyzing sensitivites, and visualization.</p>
+<hr class="docutils" />
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>fmu-tools can be installed via pip</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>fmu-tools
+</pre></div>
+</div>
+<p>Note that some of utilities may depend upon commercial third-party
+software.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>As a collection of utilities fmu-tools has many different invocations and
+usages. Visit the <a class="reference external" href="https://equinor.github.io/fmu-tools">documentation</a>
+for a complete overview.</p>
+</section>
+<section id="developing-contributing">
+<h2>Developing &amp; Contributing<a class="headerlink" href="#developing-contributing" title="Permalink to this heading"></a></h2>
+<p>All contributions are welcome. Please see the
+<a class="reference external" href="https://equinor.github.io/fmu-tools/contributing.html">Contributing document</a>
+for more details and instructions for getting started.</p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
+<p>The documentation can be found at
+<a class="reference external" href="https://equinor.github.io/fmu-tools">https://equinor.github.io/fmu-tools</a>.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>This software is released under the LGPLv3 license.</p>
+</section>
 </section>
 
 
@@ -108,7 +141,7 @@ and tools for visualization (coviz).</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to fmu-tools’ documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmudesign.html" class="btn btn-neutral float-right" title="FMU design matrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
