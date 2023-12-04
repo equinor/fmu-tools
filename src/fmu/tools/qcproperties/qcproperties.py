@@ -113,7 +113,7 @@ class QCProperties:
         check_id = run_id
         count = 0
         while check_id in self._ids:
-            check_id = f"{run_id}({count+1})"
+            check_id = f"{run_id}({count + 1})"
             count += 1
         return check_id
 
