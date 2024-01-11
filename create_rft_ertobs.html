@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>create_rft_ertobs &mdash; fmu-tools 1.13.2 documentation</title>
+  <title>create_rft_ertobs &mdash; fmu-tools 1.13.3.dev1+g62113b0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=64fed235"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=137b974d"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -38,7 +38,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.13.2
+                1.13.3.dev1+g62113b0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -204,6 +204,7 @@ well, but padded with -1 at dates (report steps) where there is no data.</p>
     <span class="s2">&quot;gridname&quot;</span><span class="p">:</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
     <span class="s2">&quot;zonename&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
     <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;clipboard_folder&quot;</span><span class="p">:</span> <span class="s2">&quot;RFT_ERT_observations&quot;</span><span class="p">,</span> <span class="c1"># Optional folder for storage in RMS</span>
 <span class="p">}</span>
 
 <span class="n">create_rft_ertobs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">)</span>
@@ -258,6 +259,9 @@ and into zone queries.</p>
 </dd>
 <dt>trajectory_name</dt><dd><p>The trajectory name for the wellpaths in the RMS project. Defaults
 to “Drilled trajectory”.</p>
+</dd>
+<dt>clipboard_folder</dt><dd><p>Optional name of clipboard folder for storing RFT points inside the RMS project.
+The folder will be created if not present.</p>
 </dd>
 </dl>
 </section>

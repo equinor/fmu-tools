@@ -51,6 +51,7 @@ Additional options are specified through a RMS dictionary, and
       "gridname": "Simgrid",
       "zonename": "Zone",
       "verbose": True,
+      "clipboard_folder": "RFT_ERT_observations", # Optional folder for storage in RMS
   }
 
   create_rft_ertobs.main(CONFIG)
@@ -120,6 +121,11 @@ trajectory_name
   The trajectory name for the wellpaths in the RMS project. Defaults
   to "Drilled trajectory".
 
+clipboard_folder
+  Optional name of clipboard folder for storing RFT points inside the RMS project.
+  The folder will be created if not present.
+
+  
 See also
 ^^^^^^^^
 

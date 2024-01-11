@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.13.2 documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.13.3.dev1+g62113b0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=64fed235"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=137b974d"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -35,7 +35,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.13.2
+                1.13.3.dev1+g62113b0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -147,6 +147,7 @@
     <span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
     <span class="s2">&quot;welldatefile&quot;</span><span class="p">,</span>  <span class="c1"># WELL_AND_TIME_FILE in semeio</span>
     <span class="s2">&quot;zonename&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;clipboard_folder&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -526,7 +527,8 @@
     <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">])[</span>
         <span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span>
     <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written welldata file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span></div>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written welldata file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dframe</span></div>
 
 
 <div class="viewcode-block" id="fill_missing_md_xyz"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.fill_missing_md_xyz">[docs]</a><span class="k">def</span> <span class="nf">fill_missing_md_xyz</span><span class="p">(</span>
@@ -576,6 +578,60 @@
     <span class="k">return</span> <span class="n">dframe</span></div>
 
 
+<div class="viewcode-block" id="store_rft_as_points_inside_project"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.store_rft_as_points_inside_project">[docs]</a><span class="k">def</span> <span class="nf">store_rft_as_points_inside_project</span><span class="p">(</span><span class="n">dframe</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">clipboard_folder</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Store RFT observations for ERT as points in RMS under Clipboard.</span>
+<span class="sd">    The points will be stored per zone, well, and year and will include</span>
+<span class="sd">    useful attributes as pressure, wellname, date etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># create zone mismatch column to include as attribute</span>
+    <span class="k">if</span> <span class="s2">&quot;rms_cell_zone_str&quot;</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_MISMATCH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;rms_cell_zone_str&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="p">)</span>
+
+    <span class="c1"># create points and store in rms</span>
+    <span class="n">create_clipboard_points_with_attributes</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span> <span class="s2">&quot;All_RFT_observations&quot;</span><span class="p">,</span> <span class="n">dframe</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">groupby</span> <span class="o">=</span> <span class="p">(</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;YEAR&quot;</span><span class="p">,</span> <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
+            <span class="n">create_clipboard_points_with_attributes</span><span class="p">(</span>
+                <span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;RFT points by </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored RFT points under clipboard folder </span><span class="si">{</span><span class="n">clipboard_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_clipboard_points_with_attributes"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.create_clipboard_points_with_attributes">[docs]</a><span class="k">def</span> <span class="nf">create_clipboard_points_with_attributes</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+    <span class="n">attribute_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;PRESSURE&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;DATE&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">&quot;YEAR&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="s2">&quot;ZONE_MISMATCH&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">clipboard</span><span class="o">.</span><span class="n">create_points</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">folder</span><span class="p">)</span>
+
+    <span class="c1"># set XYZ for the points</span>
+    <span class="n">points</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+
+    <span class="c1"># set attributes for the points</span>
+    <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">attribute_dtypes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">set_attribute_values</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function to be called from a RMS client python script.</span>
 
@@ -616,6 +672,7 @@
             <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_cells_at_points</span><span class="p">([</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NORTH&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]]),</span>
             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;MD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="p">(</span>
             <span class="s2">&quot;MD and TVD must be supplied for all points &quot;</span>
@@ -681,7 +738,14 @@
     <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
 
     <span class="c1"># Export *.obs, *.txt and well_date_rft.txt</span>
-    <span class="n">ertobs_df_to_files</span><span class="p">(</span><span class="n">dframe</span><span class="p">,</span> <span class="n">exportdir</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">],</span> <span class="n">welldatefile</span><span class="o">=</span><span class="n">welldatefile</span><span class="p">)</span></div>
+    <span class="n">dframe</span> <span class="o">=</span> <span class="n">ertobs_df_to_files</span><span class="p">(</span>
+        <span class="n">dframe</span><span class="p">,</span> <span class="n">exportdir</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">],</span> <span class="n">welldatefile</span><span class="o">=</span><span class="n">welldatefile</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;clipboard_folder&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">store_rft_as_points_inside_project</span><span class="p">(</span>
+            <span class="n">dframe</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;clipboard_folder&quot;</span><span class="p">]</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>
