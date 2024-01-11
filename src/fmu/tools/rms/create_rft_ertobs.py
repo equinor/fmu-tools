@@ -60,6 +60,7 @@ SUPPORTED_OPTIONS = [
     "verbose",
     "welldatefile",  # WELL_AND_TIME_FILE in semeio
     "zonename",
+    "clipboard_folder",
 ]
 
 
@@ -440,6 +441,7 @@ def ertobs_df_to_files(
         ["WELL_NAME", "DATE", "REPORT_STEP"]
     ].first().to_csv(Path(exportdir) / welldatefile, sep=" ", index=False, header=False)
     logger.info("Written welldata file to %s", Path(exportdir) / welldatefile)
+    return dframe
 
 
 def fill_missing_md_xyz(
@@ -489,6 +491,60 @@ def fill_missing_md_xyz(
     return dframe
 
 
+def store_rft_as_points_inside_project(dframe, project, clipboard_folder):
+    """
+    Store RFT observations for ERT as points in RMS under Clipboard.
+    The points will be stored per zone, well, and year and will include
+    useful attributes as pressure, wellname, date etc.
+    """
+
+    dframe = dframe.copy()
+    dframe["DATE"] = dframe["DATE"].dt.strftime("%Y-%m-%d")
+
+    # create zone mismatch column to include as attribute
+    if "rms_cell_zone_str" in dframe:
+        dframe["ZONE_MISMATCH"] = np.where(
+            dframe["ZONE"] == dframe["rms_cell_zone_str"], 1, 0
+        )
+
+    # create points and store in rms
+    create_clipboard_points_with_attributes(
+        project, "All_RFT_observations", dframe, [clipboard_folder]
+    )
+
+    groupby = (col for col in ("ZONE", "YEAR", "WELL_NAME") if col in dframe)
+    for col in groupby:
+        for name, df in dframe.groupby(col):
+            create_clipboard_points_with_attributes(
+                project, name, df, [clipboard_folder, f"RFT points by {col}"]
+            )
+
+    print(f"Stored RFT points under clipboard folder {clipboard_folder}")
+
+
+def create_clipboard_points_with_attributes(project, name, df, folder):
+    attribute_dtypes = {
+        "PRESSURE": float,
+        "DATE": str,
+        "ZONE": str,
+        "WELL_NAME": str,
+        "ERROR": float,
+        "YEAR": int,
+        "ZONE_MISMATCH": int,
+    }
+
+    points = project.clipboard.create_points(str(name), folder)
+
+    # set XYZ for the points
+    points.set_values(df[["EAST", "NORTH", "TVD"]].to_numpy())
+
+    # set attributes for the points
+    for attr, dtype in attribute_dtypes.items():
+        if attr in df:
+            values = df[attr].values.astype(dtype)
+            points.set_attribute_values(attr, values)
+
+
 def main(config: Optional[Dict[str, Any]] = None) -> None:
     """The main function to be called from a RMS client python script.
 
@@ -529,6 +585,7 @@ def main(config: Optional[Dict[str, Any]] = None) -> None:
             lambda df: grid.get_cells_at_points([df["EAST"], df["NORTH"], df["TVD"]]),
             axis=1,
         )
+
     else:
         assert not dframe["MD"].isnull().any() and not dframe["TVD"].isnull().any(), (
             "MD and TVD must be supplied for all points "
@@ -594,4 +651,11 @@ def main(config: Optional[Dict[str, Any]] = None) -> None:
     dframe["WELL_NAME"] = dframe["WELL_NAME"].apply(lambda x: config["alias"].get(x, x))
 
     # Export *.obs, *.txt and well_date_rft.txt
-    ertobs_df_to_files(dframe, exportdir=config["exportdir"], welldatefile=welldatefile)
+    dframe = ertobs_df_to_files(
+        dframe, exportdir=config["exportdir"], welldatefile=welldatefile
+    )
+
+    if "project" in config and "clipboard_folder" in config:
+        store_rft_as_points_inside_project(
+            dframe, config["project"], config["clipboard_folder"]
+        )
