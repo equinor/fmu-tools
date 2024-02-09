@@ -1,4 +1,5 @@
 """Example use cases for fmudesign"""
+
 import pandas as pd
 import pytest
 from packaging import version

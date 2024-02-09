@@ -1,4 +1,5 @@
 """Fix RMS Python script file extensions and gather useful information"""
+
 import argparse
 import logging
 import os

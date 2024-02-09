@@ -56,6 +56,7 @@ and rerrun.
 Note that ``any`` and ``all`` will work as shortform to ``anywell`` and ``allwell``.
 
 """
+
 import json
 from collections import OrderedDict
 from pathlib import Path

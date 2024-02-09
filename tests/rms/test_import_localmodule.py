@@ -1,4 +1,5 @@
 """Test code for rms local module function."""
+
 import os
 import sys
 

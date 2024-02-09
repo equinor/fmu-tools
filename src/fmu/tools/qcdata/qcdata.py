@@ -4,6 +4,7 @@ This private module in qcforward is used to parse data on a general level.
 The resulting data will be stored as class instance attributes, e.g. self._grid
 
 """
+
 import re
 from glob import glob
 from os.path import join

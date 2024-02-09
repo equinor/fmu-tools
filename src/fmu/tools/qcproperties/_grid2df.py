@@ -70,9 +70,11 @@ class GridProps2df:
             xtg_input["gridprops"] = self._controls["unique_parameters"]
         else:
             xtg_input["gridprops"] = [
-                [param, xtg_input["pfiles"][param]]
-                if param in xtg_input["pfiles"]
-                else param
+                (
+                    [param, xtg_input["pfiles"][param]]
+                    if param in xtg_input["pfiles"]
+                    else param
+                )
                 for param in self._controls["unique_parameters"]
             ]
 
