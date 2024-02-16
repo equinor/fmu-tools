@@ -7,7 +7,6 @@ from copy import deepcopy
 import pytest
 import xtgeo
 import yaml
-
 from fmu.tools.ensembles import ensemble_well_props
 
 SOURCE = pathlib.Path(__file__).absolute().parent.parent.parent
@@ -28,7 +27,7 @@ FACIESFILE1 = RPATH0 / "grids" / "geogrid--facies.roff"
 @pytest.fixture(name="configdata")
 def fixture_configdata():
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
-    myconfig = {
+    return {
         "ensemble": {
             "root": str(root),
             "realizations": {"range": "0-3"},
@@ -69,13 +68,12 @@ def fixture_configdata():
             "keep_intermediate_logs": True,
         },
     }
-    return myconfig
 
 
 @pytest.fixture(name="configdata2")
 def fixture_configdata2():
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
-    myconfig = {
+    return {
         "ensemble": {
             "root": str(root),
             "realizations": {"range": "0-2"},
@@ -119,7 +117,6 @@ def fixture_configdata2():
             "keep_intermediate_logs": True,
         },
     }
-    return myconfig
 
 
 def test_dump_example(tmp_path):

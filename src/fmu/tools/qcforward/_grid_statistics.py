@@ -94,9 +94,11 @@ class GridStatistics(QCForward):
             )
 
             status = "OK"
-            if "warn_outside" in action:
-                if not action["warn_outside"][0] <= value <= action["warn_outside"][1]:
-                    status = "WARN"
+            if (
+                "warn_outside" in action
+                and not action["warn_outside"][0] <= value <= action["warn_outside"][1]
+            ):
+                status = "WARN"
             if not action["stop_outside"][0] <= value <= action["stop_outside"][1]:
                 status = "STOP"
 
@@ -115,11 +117,9 @@ class GridStatistics(QCForward):
 
             results.append(result)
 
-        dfr = self.make_report(
+        return self.make_report(
             results, reportfile=self.ldata.reportfile, nametag=self.ldata.nametag
         )
-
-        return dfr
 
     @staticmethod
     def _validate_input(data: dict):
@@ -130,7 +130,7 @@ class GridStatistics(QCForward):
 
         schemafile = "grid_statistics_asfile.json"
 
-        if "project" in data.keys():
+        if "project" in data:
             schemafile = "grid_statistics_asroxapi.json"
 
         with open((spath / schemafile), "r", encoding="utf-8") as thisschema:
@@ -178,7 +178,7 @@ class GridStatistics(QCForward):
         selectors = action.get("selectors", {})
         if "codename" in action:
             selectors.update({action["property"]: action["codename"]})
-        calculation = "Avg" if "calculation" not in action else action["calculation"]
+        calculation = action.get("calculation", "Avg")
         return selectors, calculation
 
     @staticmethod

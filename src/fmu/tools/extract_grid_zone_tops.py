@@ -40,7 +40,7 @@ def extract_grid_zone_tops(
     The function works both inside RMS and outside with file input. If input from files,
     and a MD log is not present in the well a quasi md log will be computed and used.
     """
-    use_gridzonelog = False if gridzonelog is None else True
+    use_gridzonelog = gridzonelog is not None
 
     if not use_gridzonelog:
         if grid is not None and zone_param is not None:
@@ -144,6 +144,4 @@ def make_alias_dict(
     """
     df = pd.read_csv(alias_file, index_col=rms_name)
     well_dict = df.to_dict()
-    well_dict = well_dict[ecl_name]
-
-    return well_dict
+    return well_dict[ecl_name]

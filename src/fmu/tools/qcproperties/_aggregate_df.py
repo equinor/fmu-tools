@@ -1,7 +1,6 @@
 """Module containing ....  """
 import numpy as np
 import pandas as pd
-
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcproperties._utils import list_combinations
 
@@ -158,11 +157,7 @@ class PropertyAggregation:
                 combo_list.append([prop])
                 self._controls["selectors"].append(prop)
 
-            select = (
-                self._controls["weights"][prop]
-                if prop in self._controls["weights"]
-                else prop
-            )
+            select = self._controls["weights"].get(prop, prop)
 
             for combo in combo_list:
                 df_prop = self._property_dataframe.dropna(subset=combo).copy()

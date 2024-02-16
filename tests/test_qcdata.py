@@ -4,7 +4,6 @@ from os.path import abspath
 
 import pytest
 import xtgeo
-
 from fmu.tools.qcdata import QCData
 
 # filedata

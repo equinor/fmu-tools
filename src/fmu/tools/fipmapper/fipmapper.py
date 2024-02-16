@@ -1,6 +1,7 @@
 """The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse."""
 
 import collections
+import contextlib
 import itertools
 import logging
 from pathlib import Path
@@ -256,12 +257,10 @@ class FipMapper:
         """
         assert "region2fipnum" in self._mapdata, "No data provided for region2fip"
         if region not in self._mapdata["region2fipnum"]:
-            try:
+            with contextlib.suppress(ValueError):
                 # If regions have mixed types in yaml, we are sometimes
                 # asked for a region as a stringified integer
                 region = int(region)
-            except ValueError:
-                pass
         try:
             fips = self._mapdata["region2fipnum"][region]
             if not isinstance(fips, list):
@@ -280,12 +279,10 @@ class FipMapper:
         """Maps a zone to FIPNUMs"""
         assert "zone2fipnum" in self._mapdata, "No data provided for zone2fip"
         if zone not in self._mapdata["zone2fipnum"]:
-            try:
+            with contextlib.suppress(ValueError):
                 # If zones have mixed types in yaml, we are sometimes
                 # asked for a zone as a stringified integer
                 zone = int(zone)
-            except ValueError:
-                pass
         try:
             fips = self._mapdata["zone2fipnum"][zone]
             if not isinstance(fips, list):
@@ -328,7 +325,7 @@ class FipMapper:
     def regzone2fip(self, region: str, zone: str) -> List[int]:
         fipreg = self.region2fip(region)
         fipzon = self.zone2fip(zone)
-        return sorted(list(set(fipreg).intersection(set(fipzon))))
+        return sorted(set(fipreg).intersection(set(fipzon)))
 
     def disjoint_sets(self) -> pd.DataFrame:
         """Determine the minimal disjoint sets of a reservoir
@@ -513,7 +510,7 @@ def webviz_to_prtvol2csv(webvizdict: dict):
     """Convert a dict representation of a region/zone map in the Webviz format
     to the prtvol2csv format"""
     if "FIPNUM" in webvizdict and isinstance(webvizdict["FIPNUM"], dict):
-        prtvoldict = dict()
+        prtvoldict = {}
         if "groups" in webvizdict["FIPNUM"]:
             if "REGION" in webvizdict["FIPNUM"]["groups"]:
                 prtvoldict["region2fipnum"] = webvizdict["FIPNUM"]["groups"]["REGION"]
@@ -549,17 +546,15 @@ def invert_map(
             continue
         if isinstance(value, list):
             for _value in value:
-                inv_map[_value] = list(
-                    set(inv_map.get(_value, set())).union(set([key]))
-                )
+                inv_map[_value] = list(set(inv_map.get(_value, set())).union({key}))
         else:
             base = set(inv_map.get(value, set()))
             # mypy workaround: https://github.com/python/mypy/issues/2013
-            inv_map[value] = list(base.union(set([key])))
+            inv_map[value] = list(base.union({key}))
 
     for key, value in inv_map.items():
         try:
-            inv_map[key] = sorted(list(inv_map[key]))
+            inv_map[key] = sorted(inv_map[key])
         except TypeError:
             # Datatype of keys are mixed, typically int and str.
             inv_map[key] = sorted(map(str, list(inv_map[key])))

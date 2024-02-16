@@ -305,7 +305,7 @@ class PythonCompMaster:
         `instance_name` that differs from its `standalonefilename`, i.e.
         the RMS name does not match the name of the file on disk.
         """
-        f = (
+        f = (  # noqa
             lambda k: self._entries[k]["instance_name"]
             != self._entries[k]["standalonefilename"]
         )
@@ -317,9 +317,9 @@ class PythonCompMaster:
         means they are `.py_1` but other variations exist (or occasionally
         there is no file extension at all).
         """
-        f = (
+        f = (  # noqa
             lambda k: self._entries[k]["standalonefilename"].endswith(".py") is False
-        )  # noqa
+        )
         return list(filter(f, self._entries.keys()))
 
     def get_invalid_instance_names(self) -> List[str]:

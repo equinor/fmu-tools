@@ -1,7 +1,6 @@
 from typing import Optional
 
 import pandas as pd
-
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
 from fmu.tools.qcproperties._config_parser import ConfigParser

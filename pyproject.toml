@@ -48,11 +48,8 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "black",
-    "flake8",
-    "isort",
     "mypy",
-    "pylint",
+    "ruff",
     "pytest",
     "pytest-cov",
     "pytest-runner",
@@ -81,32 +78,30 @@ fmudesign = "fmu.tools.sensitivities.fmudesignrunner:main"
 rename_rms_scripts = "fmu.tools.rms.rename_rms_scripts:main"
 rmsvolumetrics2csv = "fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main"
 
-[tool.black]
+[tool.ruff]
 line-length = 88
-target-version = ["py38", "py39", "py310", "py311"]
-include = '\.pyi?$'
-force-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | version.py
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+ignore = [
+    "C901",
+]
+select = [
+    "C",
+    "E",
+    "F",
+    "I",
+    "PIE",
+    "Q",
+    "RET",
+    "RSE",
+    "SIM",    
+    "TCH",
+    "TID",
+    "W",
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
 
 [tool.rstcheck]
 ignore_directives = ["argparse", "automodule"]

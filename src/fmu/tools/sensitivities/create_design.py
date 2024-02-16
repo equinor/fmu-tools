@@ -55,9 +55,8 @@ class DesignMatrix:
         """
         self.reset()  # Emptying if regenerating matrix
 
-        if "distribution_seed" in inputdict.keys():
-            if inputdict["distribution_seed"]:
-                numpy.random.seed(inputdict["distribution_seed"])
+        if "distribution_seed" in inputdict and inputdict["distribution_seed"]:
+            numpy.random.seed(inputdict["distribution_seed"])
 
         # Reading default values
         default_dict = inputdict["defaultvalues"]
@@ -66,23 +65,20 @@ class DesignMatrix:
         max_reals = _find_max_realisations(inputdict)
 
         # Reading or generating rms seed values
-        if "seeds" in inputdict.keys():
+        if "seeds" in inputdict:
             self.add_seeds(inputdict["seeds"], max_reals)
 
         # If background values used - read or generate
-        if "background" in inputdict.keys():
+        if "background" in inputdict:
             self.add_background(inputdict["background"], max_reals)
 
         if inputdict["designtype"] == "onebyone":
             self.designvalues["SENSNAME"] = None
             self.designvalues["SENSCASE"] = None
             counter = 0
-            for key in inputdict["sensitivities"].keys():
+            for key in inputdict["sensitivities"]:
                 sens = inputdict["sensitivities"][key]
-                if "numreal" in sens.keys():
-                    numreal = sens["numreal"]
-                else:
-                    numreal = inputdict["repeats"]
+                numreal = sens["numreal"] if "numreal" in sens else inputdict["repeats"]
                 if sens["senstype"] == "ref":
                     sensitivity = SingleRealisationReference(key)
                     sensitivity.generate(range(counter, counter + numreal))
@@ -109,7 +105,7 @@ class DesignMatrix:
                     self._add_sensitivity(sensitivity)
                 elif sens["senstype"] == "scenario":
                     sensitivity = ScenarioSensitivity(key)
-                    for casekey in sens["cases"].keys():
+                    for casekey in sens["cases"]:
                         case = sens["cases"][casekey]
                         temp_case = ScenarioSensitivityCase(casekey)
                         temp_case.generate(
@@ -139,14 +135,14 @@ class DesignMatrix:
                     counter += numreal
                     self._add_sensitivity(sensitivity)
                 print("Added sensitivity :", sensitivity.sensname)
-            if "background" in inputdict.keys():
+            if "background" in inputdict:
                 self._fill_with_background_values()
             self._fill_with_defaultvalues()
 
-            if "dependencies" in inputdict.keys():
+            if "dependencies" in inputdict:
                 self._fill_derived_params(inputdict["dependencies"])
 
-            if "decimals" in inputdict.keys():
+            if "decimals" in inputdict:
                 self._set_decimals(inputdict["decimals"])
             # Re-order columns
             start_cols = ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]
@@ -246,9 +242,9 @@ class DesignMatrix:
         """
         if back_dict is None:
             self.backgroundvalues = None
-        elif "extern" in back_dict.keys():
+        elif "extern" in back_dict:
             self.backgroundvalues = _parameters_from_extern(back_dict["extern"])
-        elif "parameters" in back_dict.keys():
+        elif "parameters" in back_dict:
             self._add_dist_background(back_dict, max_values)
 
     def background_to_excel(self, filename, backgroundsheet="Background"):
@@ -286,8 +282,8 @@ class DesignMatrix:
                 temp_df = case.reset_index()
                 temp_df.fillna(self.backgroundvalues, inplace=True)
                 temp_df.set_index("index")
-                for key in self.backgroundvalues.keys():
-                    if key not in case.keys():
+                for key in self.backgroundvalues:
+                    if key not in case:
                         temp_df[key] = self.backgroundvalues[key]
                         if len(temp_df) > len(self.backgroundvalues):
                             raise ValueError(
@@ -316,16 +312,16 @@ class DesignMatrix:
 
     def _fill_with_defaultvalues(self):
         """Filling NaNs with default values"""
-        for key in self.designvalues.keys():
-            if key in self.defaultvalues.keys():
+        for key in self.designvalues:
+            if key in self.defaultvalues:
                 self.designvalues[key].fillna(self.defaultvalues[key], inplace=True)
             elif key not in ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]:
                 raise LookupError(f"No defaultvalues given for parameter {key} ")
 
     def _fill_derived_params(self, depend_dict):
-        for from_param in depend_dict.keys():
-            if from_param in self.designvalues.keys():
-                for param in depend_dict[from_param]["to_params"].keys():
+        for from_param in depend_dict:
+            if from_param in self.designvalues:
+                for param in depend_dict[from_param]["to_params"]:
                     self.designvalues[param] = numpy.nan
                     for index in range(len(depend_dict[from_param]["from_values"])):
                         fill_these = depend_dict[from_param]["from_values"][index]
@@ -364,8 +360,8 @@ class DesignMatrix:
         mc_backgroundvalues = mc_background.sensvalues
 
         # Rounding of background values as specified
-        if "decimals" in back_dict.keys():
-            for key in back_dict["decimals"].keys():
+        if "decimals" in back_dict:
+            for key in back_dict["decimals"]:
                 if design_dist.is_number(mc_backgroundvalues[key].iloc[0]):
                     mc_backgroundvalues[key] = (
                         mc_backgroundvalues[key]
@@ -382,8 +378,8 @@ class DesignMatrix:
         Args:
             dict_decimals (dictionary): (key, value)s are (param, decimals)
         """
-        for key in self.designvalues.keys():
-            if key in dict_decimals.keys():
+        for key in self.designvalues:
+            if key in dict_decimals:
                 if design_dist.is_number(self.designvalues[key].iloc[0]):
                     self.designvalues[key] = (
                         self.designvalues[key]
@@ -435,7 +431,7 @@ class SeedSensitivity:
         self.sensvalues[seedname] = seedvalues[0 : len(realnums)]
 
         if parameters is not None:
-            for key in parameters.keys():
+            for key in parameters:
                 dist_name = parameters[key][0].lower()
                 constant = parameters[key][1]
                 if dist_name != "const":
@@ -566,20 +562,14 @@ class ScenarioSensitivity:
                 Equals SENSCASE in design matrix.
         """
         if self.case1 is not None:  # Case 1 has been read, this is case2
-            if (
-                "REAL" in senscase.casevalues.keys()
-                and "SENSCASE" in senscase.casevalues.keys()
-            ):
+            if "REAL" in senscase.casevalues and "SENSCASE" in senscase.casevalues:
                 self.case2 = senscase
                 senscase.casevalues["SENSNAME"] = self.sensname
                 self.sensvalues = pd.concat(
                     [self.sensvalues, senscase.casevalues], sort=True
                 )
         else:  # This is the first case
-            if (
-                "REAL" in senscase.casevalues.keys()
-                and "SENSCASE" in senscase.casevalues.keys()
-            ):
+            if "REAL" in senscase.casevalues and "SENSCASE" in senscase.casevalues:
                 self.case1 = senscase
                 self.sensvalues = senscase.casevalues.copy()
                 self.sensvalues["SENSNAME"] = self.sensname
@@ -622,7 +612,7 @@ class ScenarioSensitivityCase:
         """
 
         self.casevalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
-        for key in parameters.keys():
+        for key in parameters:
             self.casevalues[key] = parameters[key]
         self.casevalues["REAL"] = realnums
         self.casevalues["SENSCASE"] = self.casename
@@ -665,7 +655,7 @@ class MonteCarloSensitivity:
         self.sensvalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
         numreals = len(realnums)
         if corrdict is None:
-            for key in parameters.keys():
+            for key in parameters:
                 dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
                 try:
@@ -697,7 +687,7 @@ class MonteCarloSensitivity:
                         row["dist_name"],
                         row["dist_params"],
                     ]
-                if not correl == "nocorr":
+                if correl != "nocorr":
                     if len(group) == 1:
                         _printwarning(correl)
                     df_correlations = design_dist.read_correlations(corrdict, correl)
@@ -710,7 +700,7 @@ class MonteCarloSensitivity:
                     normalscoresamples_df = pd.DataFrame(
                         data=normalscoresamples, columns=multivariate_parameters
                     )
-                    for key in param_dict.keys():
+                    for key in param_dict:
                         dist_name = param_dict[key][0].lower()
                         dist_parameters = param_dict[key][1]
                         if key in multivariate_parameters:
@@ -736,7 +726,7 @@ class MonteCarloSensitivity:
                                 "that sheet".format(key, correl)
                             )
                 else:  # group nocorr where correlation matrix is not defined
-                    for key in param_dict.keys():
+                    for key in param_dict:
                         dist_name = param_dict[key][0].lower()
                         dist_parameters = param_dict[key][1]
                         try:
@@ -754,7 +744,7 @@ class MonteCarloSensitivity:
             self.sensvalues["REAL"] = realnums
             self.sensvalues["SENSNAME"] = self.sensname
             self.sensvalues["SENSCASE"] = "p10_p90"
-            if "RMS_SEED" not in self.sensvalues.keys() and seedvalues:
+            if "RMS_SEED" not in self.sensvalues and seedvalues:
                 self.sensvalues["RMS_SEED"] = seedvalues[: len(realnums)]
 
 
@@ -795,7 +785,7 @@ class ExternSensitivity:
                 "file {}".format(len(realnums), self.sensname, filename)
             )
         for param in parameters:
-            if param in extern_values.keys():
+            if param in extern_values:
                 self.sensvalues[param] = list(extern_values[param][: len(realnums)])
             else:
                 raise ValueError(f"Parameter {param} not in external file")
@@ -873,9 +863,9 @@ def _find_max_realisations(inputdict):
     """Finds the maximum number of realisations
     in a sensitivity case"""
     max_reals = inputdict["repeats"]
-    for key in inputdict["sensitivities"].keys():
+    for key in inputdict["sensitivities"]:
         sens = inputdict["sensitivities"][key]
-        if "numreal" in sens.keys():
+        if "numreal" in sens:
             max_reals = max(sens["numreal"], max_reals)
     return max_reals
 

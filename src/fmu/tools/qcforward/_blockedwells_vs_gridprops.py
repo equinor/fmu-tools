@@ -310,18 +310,14 @@ class BlockedWellsVsGridProperties(QCForward):
                     )
 
                     for _, issue in enumerate([warnrule, stoprule]):
-                        if wname != "all" and not issue.all:
+                        if (wname != "all" and not issue.all) or (
+                            wname == "all" and issue.all
+                        ):
                             rulename = issue.mode.upper() + "RULE"
                             result[rulename].append(issue.expression)
                             if issue.compare == "<" and match < issue.limit:
                                 status = issue.mode.upper()
 
-                        elif wname == "all" and issue.all:
-                            rulename = issue.mode.upper() + "RULE"
-                            result[rulename].append(issue.expression)
-
-                            if issue.compare == "<" and match < issue.limit:
-                                status = issue.mode.upper()
                 result["STATUS"].append(status)
 
         dfr = self.make_report(

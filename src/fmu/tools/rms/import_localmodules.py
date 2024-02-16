@@ -163,5 +163,4 @@ def import_localmodule(project, module_root_name, path=None):
     """
     if not path:
         return _localmodule_inside_rms(project, module_root_name)
-    else:
-        return _localmodule_outside_rms(module_root_name, path)
+    return _localmodule_outside_rms(module_root_name, path)

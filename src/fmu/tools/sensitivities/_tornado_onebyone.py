@@ -5,8 +5,7 @@ import pandas as pd
 
 def real_mask(dfr, start, end):
     """Creates mask for which realisations to calc from"""
-    mask = (dfr.REAL >= start) & (dfr.REAL <= end)
-    return mask
+    return (start <= dfr.REAL) & (end >= dfr.REAL)
 
 
 def check_selector(resultfile, selector):
@@ -40,14 +39,13 @@ def cut_by_ref(tornadotable, refname):
     reflow = tornadotable[maskref].low.abs()
     refhigh = tornadotable[maskref].high.abs()
     refmax = max(float(reflow), float(refhigh))
-    dfr_filtered = tornadotable.loc[
+    return tornadotable.loc[
         (tornadotable["sensname"] == refname)
         | (
             (tornadotable["low"].abs() >= refmax)
             | (tornadotable["high"].abs() >= refmax)
         )
     ]
-    return dfr_filtered
 
 
 def sort_by_max(tornadotable):

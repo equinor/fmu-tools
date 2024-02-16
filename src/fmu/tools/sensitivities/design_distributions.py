@@ -327,10 +327,11 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
         low = float(dist_parameters[0])
         mode = float(dist_parameters[1])
         high = float(dist_parameters[2])
-        if len(dist_parameters) == 4:
-            scale = float(dist_parameters[3])
-        else:
-            scale = 4  # pert 3 parameter distribution
+        scale = (
+            float(dist_parameters[3])
+            if len(dist_parameters) == 4
+            else 4  # pert 3 parameter distribution
+        )
 
         if normalscoresamples is not None:
             if high == low:  # collapsed distribution
@@ -377,9 +378,7 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
     else:
         raise ValueError(msg)
     # For pert distribution scale afterwards:
-    values = values * (dist_parameters[2] - dist_parameters[0]) + dist_parameters[0]
-
-    return values
+    return values * (dist_parameters[2] - dist_parameters[0]) + dist_parameters[0]
 
 
 def draw_values_loguniform(dist_parameters, numreals, normalscoresamples=None):
@@ -602,9 +601,7 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     diag = numpy.identity(dim)
     diag[range(dim), range(dim)] = stddevs
     cov_matrix = numpy.dot(diag, corr_matrix)
-    cov_matrix = numpy.dot(cov_matrix, diag)
-
-    return cov_matrix
+    return numpy.dot(cov_matrix, diag)
 
 
 def _nearest_positive_definite(a_mat):

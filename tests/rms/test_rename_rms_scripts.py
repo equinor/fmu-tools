@@ -6,7 +6,6 @@ from shutil import copytree
 from textwrap import dedent
 
 import pytest
-
 from fmu.tools.rms.rename_rms_scripts import PythonCompMaster
 
 logging.basicConfig(level=logging.INFO)

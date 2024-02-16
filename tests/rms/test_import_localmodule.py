@@ -2,9 +2,8 @@
 import os
 import sys
 
-import pytest
-
 import fmu.tools
+import pytest
 
 SNIPPET1 = """
 def add(a, b):

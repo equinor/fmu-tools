@@ -8,7 +8,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
-
 from fmu.tools.rms import create_rft_ertobs
 from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
 
@@ -463,7 +462,7 @@ def test_configparsing(tmpdir, caplog):
             {"input_dframe": pd.DataFrame(), "input_file": "tmp.csv"}
         )
 
-    check_and_parse_config({**minimal_config, **{"foobar": "com"}})
+    check_and_parse_config({**minimal_config, "foobar": "com"})
     assert "Unknown options ignored: {'foobar'}" in caplog.text
 
     assert check_and_parse_config(minimal_config)["exportdir"] == "."
@@ -471,10 +470,10 @@ def test_configparsing(tmpdir, caplog):
     with pytest.raises(
         AssertionError, match="Only linear and cubic interpolation is supported"
     ):
-        check_and_parse_config({**minimal_config, **{"interpolation": "bilinear"}})
+        check_and_parse_config({**minimal_config, "interpolation": "bilinear"})
 
     with pytest.raises(AssertionError, match="create upfront"):
-        check_and_parse_config({**minimal_config, **{"exportdir": "nonexistingdir"}})
+        check_and_parse_config({**minimal_config, "exportdir": "nonexistingdir"})
 
     assert check_and_parse_config(minimal_config)["welldatefile"] == "well_date_rft.txt"
 
@@ -506,12 +505,12 @@ def test_parse_alias_config(tmpdir):
     assert check_and_parse_config(minimal_config)["alias"] == {}
 
     # Empty alias dict ok to submit:
-    check_and_parse_config({**minimal_config, **{"alias": {}}})
+    check_and_parse_config({**minimal_config, "alias": {}})
 
     assert (
-        check_and_parse_config({**minimal_config, **{"alias": {"foo": "bar"}}})[
-            "alias"
-        ]["foo"]
+        check_and_parse_config({**minimal_config, "alias": {"foo": "bar"}})["alias"][
+            "foo"
+        ]
         == "bar"
     )
 
@@ -520,9 +519,7 @@ def test_parse_alias_config(tmpdir):
     alias_dframe.to_csv("alias.csv", index=False)
     with pytest.raises(ValueError):
         # pylint: disable=expression-not-assigned
-        check_and_parse_config({**minimal_config, **{"alias_file": "alias.csv"}})[
-            "alias"
-        ]
+        check_and_parse_config({**minimal_config, "alias_file": "alias.csv"})["alias"]
 
     # Use default header names
     alias_dframe = pd.DataFrame(
@@ -531,9 +528,9 @@ def test_parse_alias_config(tmpdir):
     )
     alias_dframe.to_csv("alias.csv", index=False)
     assert (
-        check_and_parse_config({**minimal_config, **{"alias_file": "alias.csv"}})[
-            "alias"
-        ]["NO 33/44 A-1"]
+        check_and_parse_config({**minimal_config, "alias_file": "alias.csv"})["alias"][
+            "NO 33/44 A-1"
+        ]
         == "A-1"
     )
 
@@ -547,11 +544,9 @@ def test_parse_alias_config(tmpdir):
         check_and_parse_config(
             {
                 **minimal_config,
-                **{
-                    "alias_file": "alias.csv",
-                    "rms_name": "RMS_NAME",
-                    "ecl_name": "ECLIPSE_NAME",
-                },
+                "alias_file": "alias.csv",
+                "rms_name": "RMS_NAME",
+                "ecl_name": "ECLIPSE_NAME",
             }
         )["alias"]["NO 33/44 A-1"]
         == "A-1"

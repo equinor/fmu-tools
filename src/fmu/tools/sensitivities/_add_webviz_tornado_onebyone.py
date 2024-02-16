@@ -142,7 +142,7 @@ def add_webviz_tornadoplots(web, configfile):
     """
     if not HAS_WEBVIZ_STATIC:
         print("ERROR: Cannot make Tornado plots without Webviz static")
-        return None
+        return
     print(WEBVIZ_STATIC_DEPRECIATION_WARNING)
 
     yamlfile = configfile

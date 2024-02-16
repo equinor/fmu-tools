@@ -69,17 +69,13 @@ jobs:
         if: ${{ always() }}
         run: pip freeze
 
-      - name: Lint with isort
+      - name: Ruff check
         if: ${{ always() }}
-        run: isort --check-only src tests
+        run: ruff check .
 
-      - name: Lint with black
+      - name: Ruff format check
         if: ${{ always() }}
-        run: black --check .
-
-      - name: Lint with flake8
-        if: ${{ always() }}
-        run: flake8 src tests
+        run: ruff format . --check
 
       - name: Enforce static typing
         if: ${{ always() }}

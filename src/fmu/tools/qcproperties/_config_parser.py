@@ -25,22 +25,22 @@ class ConfigParser:
                 "the QCProperties() instance instead!"
             )
 
-        self._aggregation_controls: dict = dict(
-            properties=[],
-            selectors=[],
-            weights={},
-        )
+        self._aggregation_controls: dict = {
+            "properties": [],
+            "selectors": [],
+            "weights": {},
+        }
 
-        self._prop2df_controls: dict = dict(
-            unique_parameters=[],
-            properties_input_names=[],
-            selectors_input_names=[],
-            filters={},
-            name_mapping={},
-            usercodes={},
-        )
+        self._prop2df_controls: dict = {
+            "unique_parameters": [],
+            "properties_input_names": [],
+            "selectors_input_names": [],
+            "filters": {},
+            "name_mapping": {},
+            "usercodes": {},
+        }
 
-        self._data_loading_input: dict = dict(pfiles={}, pdates={})
+        self._data_loading_input: dict = {"pfiles": {}, "pdates": {}}
 
         # set data loading input
         for item in ["grid", "wells", "bwells", "path", "verbosity"]:
@@ -162,13 +162,10 @@ class ConfigParser:
                 if not all(isinstance(item, str) for item in values["exclude"]):
                     values["exclude"] = [str(item) for item in values["exclude"]]
 
-            if "range" in values:
-                if not (
-                    isinstance(values["range"], list) and len(values["range"]) == 2
-                ):
-                    raise TypeError(
-                        "Filter range must be input as list with two values"
-                    )
+            if "range" in values and not (
+                isinstance(values["range"], list) and len(values["range"]) == 2
+            ):
+                raise TypeError("Filter range must be input as list with two values")
 
         QCC.print_debug(f"Filters: {self._prop2df_controls['filters']}")
 
