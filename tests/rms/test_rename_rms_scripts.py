@@ -1,12 +1,12 @@
 import logging
 from filecmp import cmp
-from os import listdir
+from os import chdir, listdir
 from pathlib import Path
 from shutil import copytree
 from textwrap import dedent
 
 import pytest
-from fmu.tools.rms.rename_rms_scripts import PythonCompMaster
+from fmu.tools.rms.rename_rms_scripts import PythonCompMaster, main
 
 logging.basicConfig(level=logging.INFO)
 
@@ -248,3 +248,32 @@ def test_write_master_file(tmp_path):
     assert cmp(exp_py / ".master", project.path) is True
 
     assert set(listdir(exp_py)) == set(listdir(project.parent))
+
+
+def test_cmdline_main(tmp_path, mocker):
+    """Test the cmndline utility runs without errors. Both with and
+    without test-run option.
+    """
+    project_path = tmp_path / "snakeoil.rms13.0.3"
+    copytree(TESTPROJ, project_path)
+
+    mocker.patch("sys.argv", ["rename_rms_scripts", str(project_path)])
+    main()
+
+    mocker.patch("sys.argv", ["rename_rms_scripts", str(project_path)], "--test-run")
+    main()
+
+
+def test_cmdline_main_backup(tmp_path, mocker):
+    """Test the backup of the pythoncomp through the cmndline."""
+    project_path = tmp_path / "snakeoil.rms13.0.3"
+    copytree(TESTPROJ, project_path)
+
+    # change directory to store the backup in the tmp_path
+    chdir(tmp_path)
+
+    mocker.patch("sys.argv", ["rename_rms_scripts", str(project_path), "--backup"])
+    main()
+
+    # check that the backup exists
+    assert (tmp_path / "backup_pythoncomp").exists()
