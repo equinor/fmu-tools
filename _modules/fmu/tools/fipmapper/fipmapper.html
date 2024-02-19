@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.fipmapper.fipmapper &mdash; fmu-tools 1.14.0 documentation</title>
+  <title>fmu.tools.fipmapper.fipmapper &mdash; fmu-tools 1.14.1.dev1+g6b23cea documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=79252d88"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=38610a0c"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -35,7 +35,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.14.0
+                1.14.1.dev1+g6b23cea
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -88,6 +88,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;The FipMapper class, mapping region/zones in RMS to FIPxxx in Eclipse.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -343,12 +344,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="s2">&quot;region2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for region2fip&quot;</span>
         <span class="k">if</span> <span class="n">region</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]:</span>
-            <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
                 <span class="c1"># If regions have mixed types in yaml, we are sometimes</span>
                 <span class="c1"># asked for a region as a stringified integer</span>
                 <span class="n">region</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="k">pass</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">][</span><span class="n">region</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fips</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -367,12 +366,10 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps a zone to FIPNUMs&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="s2">&quot;zone2fipnum&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">,</span> <span class="s2">&quot;No data provided for zone2fip&quot;</span>
         <span class="k">if</span> <span class="n">zone</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">]:</span>
-            <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">suppress</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
                 <span class="c1"># If zones have mixed types in yaml, we are sometimes</span>
                 <span class="c1"># asked for a zone as a stringified integer</span>
                 <span class="n">zone</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="k">pass</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fips</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapdata</span><span class="p">[</span><span class="s2">&quot;zone2fipnum&quot;</span><span class="p">][</span><span class="n">zone</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fips</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -415,7 +412,7 @@
 <div class="viewcode-block" id="FipMapper.regzone2fip"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.regzone2fip">[docs]</a>    <span class="k">def</span> <span class="nf">regzone2fip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="n">fipreg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region2fip</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
         <span class="n">fipzon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone2fip</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipreg</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipzon</span><span class="p">))))</span></div>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipreg</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fipzon</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="FipMapper.disjoint_sets"><a class="viewcode-back" href="../../../../fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.disjoint_sets">[docs]</a>    <span class="k">def</span> <span class="nf">disjoint_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine the minimal disjoint sets of a reservoir</span>
@@ -600,7 +597,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a dict representation of a region/zone map in the Webviz format</span>
 <span class="sd">    to the prtvol2csv format&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;FIPNUM&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="n">prtvoldict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">prtvoldict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="s2">&quot;groups&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="s2">&quot;REGION&quot;</span> <span class="ow">in</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">]:</span>
                 <span class="n">prtvoldict</span><span class="p">[</span><span class="s2">&quot;region2fipnum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">webvizdict</span><span class="p">[</span><span class="s2">&quot;FIPNUM&quot;</span><span class="p">][</span><span class="s2">&quot;groups&quot;</span><span class="p">][</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span>
@@ -636,17 +633,15 @@
             <span class="k">continue</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
-                <span class="n">inv_map</span><span class="p">[</span><span class="n">_value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">(</span><span class="n">inv_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_value</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">key</span><span class="p">]))</span>
-                <span class="p">)</span>
+                <span class="n">inv_map</span><span class="p">[</span><span class="n">_value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">inv_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_value</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="n">key</span><span class="p">}))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">base</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">inv_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span>
             <span class="c1"># mypy workaround: https://github.com/python/mypy/issues/2013</span>
-            <span class="n">inv_map</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">key</span><span class="p">])))</span>
+            <span class="n">inv_map</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="n">key</span><span class="p">}))</span>
 
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">inv_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+            <span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="c1"># Datatype of keys are mixed, typically int and str.</span>
             <span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">inv_map</span><span class="p">[</span><span class="n">key</span><span class="p">])))</span>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.14.0 documentation</title>
+  <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.14.1.dev1+g6b23cea documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=79252d88"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=38610a0c"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -35,7 +35,7 @@
               <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.14.0
+                1.14.1.dev1+g6b23cea
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -181,9 +181,11 @@
             <span class="p">)</span>
 
             <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
-            <span class="k">if</span> <span class="s2">&quot;warn_outside&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;warn_outside&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;warn_outside&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;WARN&quot;</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="s2">&quot;warn_outside&quot;</span> <span class="ow">in</span> <span class="n">action</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;warn_outside&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;warn_outside&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;WARN&quot;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;stop_outside&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;stop_outside&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;STOP&quot;</span>
 
@@ -202,11 +204,9 @@
 
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-        <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span><span class="p">(</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span><span class="p">(</span>
             <span class="n">results</span><span class="p">,</span> <span class="n">reportfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">reportfile</span><span class="p">,</span> <span class="n">nametag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">nametag</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">dfr</span></div>
+        <span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
@@ -217,7 +217,7 @@
 
         <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;grid_statistics_asfile.json&quot;</span>
 
-        <span class="k">if</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;grid_statistics_asroxapi.json&quot;</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">spath</span> <span class="o">/</span> <span class="n">schemafile</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thisschema</span><span class="p">:</span>
@@ -265,7 +265,7 @@
         <span class="n">selectors</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selectors&quot;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="k">if</span> <span class="s2">&quot;codename&quot;</span> <span class="ow">in</span> <span class="n">action</span><span class="p">:</span>
             <span class="n">selectors</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">action</span><span class="p">[</span><span class="s2">&quot;property&quot;</span><span class="p">]:</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;codename&quot;</span><span class="p">]})</span>
-        <span class="n">calculation</span> <span class="o">=</span> <span class="s2">&quot;Avg&quot;</span> <span class="k">if</span> <span class="s2">&quot;calculation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">action</span> <span class="k">else</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;calculation&quot;</span><span class="p">,</span> <span class="s2">&quot;Avg&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">calculation</span>
 
     <span class="nd">@staticmethod</span>

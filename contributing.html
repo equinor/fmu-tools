@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributing &mdash; fmu-tools 1.14.0 documentation</title>
+  <title>Contributing &mdash; fmu-tools 1.14.1.dev1+g6b23cea documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=79252d88"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=38610a0c"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -38,7 +38,7 @@
               <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.14.0
+                1.14.1.dev1+g6b23cea
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -69,8 +69,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#code-standards">Code standards</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#formatted-with-black">Formatted with black</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#use-flake8-and-or-pylint-to-check">Use flake8 and/or pylint to check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#formatted-with-ruff">Formatted with ruff</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linting">Linting</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#contribute">Contribute</a><ul>
@@ -158,9 +158,9 @@ are welcome :)</p></li>
 <section id="code-standards">
 <h2>Code standards<a class="headerlink" href="#code-standards" title="Permalink to this heading"></a></h2>
 <p>It is required to be complient to code standards. A summary:</p>
-<section id="formatted-with-black">
-<h3>Formatted with black<a class="headerlink" href="#formatted-with-black" title="Permalink to this heading"></a></h3>
-<p>All code should be formatted by black with a line length of 88 characters.</p>
+<section id="formatted-with-ruff">
+<h3>Formatted with ruff<a class="headerlink" href="#formatted-with-ruff" title="Permalink to this heading"></a></h3>
+<p>All code should be formatted by ruff with a line length of 88 characters.</p>
 <p>In addition:</p>
 <ul class="simple">
 <li><p>Start with documentation and tests. Think, design and communicate first!</p></li>
@@ -169,14 +169,9 @@ are welcome :)</p></li>
 <li><p>Code shall be Python 3.8 + compliant</p></li>
 </ul>
 </section>
-<section id="use-flake8-and-or-pylint-to-check">
-<h3>Use flake8 and/or pylint to check<a class="headerlink" href="#use-flake8-and-or-pylint-to-check" title="Permalink to this heading"></a></h3>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> </span>mycode.py
-</pre></div>
-</div>
-<p>The pylint is rather strict and sometimes exceptions are needed.
-A targeted <code class="docutils literal notranslate"><span class="pre">.pylintrc</span></code> file is in the project root.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>python<span class="w"> </span>-m<span class="w"> </span>pylint<span class="w"> </span>mycode.py
+<section id="linting">
+<h3>Linting<a class="headerlink" href="#linting" title="Permalink to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>ruff<span class="w"> </span>check<span class="w"> </span>.<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>.<span class="w"> </span>--check
 </pre></div>
 </div>
 </section>
