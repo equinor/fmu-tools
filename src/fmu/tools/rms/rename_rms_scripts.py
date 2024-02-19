@@ -509,11 +509,11 @@ def main() -> None:
 
     logging.basicConfig()
 
-    if args.verbose or args.test:
+    if args.verbose or args.test_run:
         _logger.setLevel(logging.INFO)
 
     # Don't write files if it's a test run
-    master = PythonCompMaster(args.path, write=not args.test)
+    master = PythonCompMaster(args.path, write=not args.test_run)
 
     if args.backup:
         _make_backup(master.parent)
@@ -522,7 +522,7 @@ def main() -> None:
     master.write_master_file()
     _print_skipped(skipped, master)
 
-    if args.verbose or args.test:
+    if args.verbose or args.test_run:
         unused = master.get_unused_scripts()
         _print_unused(unused, master)
 

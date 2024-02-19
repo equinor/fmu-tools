@@ -54,6 +54,7 @@ tests = [
     "pytest-cov",
     "pytest-runner",
     "pytest-xdist",
+    "pytest-mock", 
     "rstcheck",
     "types-PyYAML",
 ]
