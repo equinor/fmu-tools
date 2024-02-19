@@ -51,9 +51,9 @@ If you are proposing a feature:
 
 It is required to be complient to code standards. A summary:
 
-### Formatted with black
+### Formatted with ruff
 
-All code should be formatted by black with a line length of 88 characters.
+All code should be formatted by ruff with a line length of 88 characters.
 
 In addition:
 - Start with documentation and tests. Think, design and communicate first!
@@ -62,17 +62,10 @@ In addition:
 - Code shall be Python 3.8 + compliant
 
 
-### Use flake8 and/or pylint to check
+### Linting
 
 ```sh
-  python -m flake8 mycode.py
-```
-
-The pylint is rather strict and sometimes exceptions are needed.
-A targeted ``.pylintrc`` file is in the project root.
-
-```sh
-  python -m pylint mycode.py
+  ruff check . && ruff format . --check
 ```
 
 ## Contribute

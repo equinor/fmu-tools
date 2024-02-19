@@ -6,7 +6,6 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-
 from fmu.tools.rms import volumetrics
 
 TESTDIR = Path(__file__).parent / "volumetricsdata"

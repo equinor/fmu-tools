@@ -61,8 +61,8 @@ def inputdict_to_yaml(inputdict, filename):
         inputdict (OrderedDict)
         filename (str): path for where to write file
     """
-    stream = open(filename, "w")
-    yaml.dump(inputdict, stream)
+    with open(filename, "w", encoding="utf-8") as stream:
+        yaml.dump(inputdict, stream)
 
 
 def _find_geninput_sheetname(input_filename):
@@ -84,8 +84,9 @@ def _find_geninput_sheetname(input_filename):
 
     if len(general_input_sheet) > 1:
         raise ValueError(
-            "More than one sheet with general input"
-            "Sheetnames are {} ".format(general_input_sheet)
+            "More than one sheet with general input. Sheetnames are {} ".format(
+                general_input_sheet
+            )
         )
 
     if not general_input_sheet:
@@ -120,8 +121,9 @@ def _find_onebyone_defaults_sheet(input_filename):
             default_values_sheet.append(sheet)
     if len(default_values_sheet) > 1:
         raise ValueError(
-            "More than one sheet with default values"
-            "Sheetnames are {} ".format(default_values_sheet)
+            "More than one sheet with default values. Sheetnames are {} ".format(
+                default_values_sheet
+            )
         )
 
     if len(default_values_sheet) == []:
@@ -302,7 +304,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
     designinput["sensname"].fillna(method="ffill", inplace=True)
 
     # Read dependencies
-    if "dependencies" in designinput.keys():
+    if "dependencies" in designinput:
         inputdict["dependencies"] = OrderedDict()
         for row in designinput.itertuples():
             if _has_value(row.dependencies):
@@ -311,7 +313,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
                 )
 
     # Read decimals
-    if "decimals" in designinput.keys():
+    if "decimals" in designinput:
         inputdict["decimals"] = OrderedDict()
         for row in designinput.itertuples():
             if _has_value(row.decimals) and _is_int(row.decimals):
@@ -347,7 +349,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
             sensdict["senstype"] = "dist"
             sensdict["parameters"] = _read_dist_sensitivity(group)
             sensdict["correlations"] = None
-            if "corr_sheet" in group.keys():
+            if "corr_sheet" in group:
                 sensdict["correlations"] = _read_correlations(group, input_filename)
 
         elif group["type"].iloc[0] == "extern":
@@ -360,11 +362,10 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
                 f"Sensitivity {sensname} does not have a valid sensitivity type"
             )
 
-        if "numreal" in group.keys():
-            if _has_value(group["numreal"].iloc[0]):
-                # Using default number of realisations:
-                # 'repeats' from general_input sheet
-                sensdict["numreal"] = int(group["numreal"].iloc[0])
+        if "numreal" in group and _has_value(group["numreal"].iloc[0]):
+            # Using default number of realisations:
+            # 'repeats' from general_input sheet
+            sensdict["numreal"] = int(group["numreal"].iloc[0])
 
         inputdict["sensitivities"][str(sensname)] = sensdict
 
@@ -398,7 +399,7 @@ def _read_defaultvalues(filename, sheetname):
         for paramname in default_df.index
     ]
     for row in default_df.itertuples():
-        if str(row[0]) in default_dict.keys():
+        if str(row[0]) in default_dict:
             print(
                 "WARNING: The default value '{}' "
                 "is listed twice in the sheet '{}'. "
@@ -431,10 +432,10 @@ def _read_dependencies(filename, sheetname, from_parameter):
         :, ~depend_df.columns.astype(str).str.contains("^Unnamed")
     ]
 
-    if from_parameter in depend_df.keys():
+    if from_parameter in depend_df:
         depend_dict["from_values"] = depend_df[from_parameter].tolist()
         depend_dict["to_params"] = OrderedDict()
-        for key in depend_df.keys():
+        for key in depend_df:
             if key != from_parameter:
                 depend_dict["to_params"][key] = depend_df[key].tolist()
     else:
@@ -465,7 +466,7 @@ def _read_background(inp_filename, bck_sheet):
     ]
 
     backdict["correlations"] = None
-    if "corr_sheet" in bck_input.keys():
+    if "corr_sheet" in bck_input:
         backdict["correlations"] = _read_correlations(bck_input, inp_filename)
 
     if "dist_param1" not in bck_input.columns.values:
@@ -516,17 +517,14 @@ def _read_background(inp_filename, bck_sheet):
             ]
             if _has_value(item)
         ]
-        if "corr_sheet" in bck_input.keys():
-            if not _has_value(row.corr_sheet):
-                corrsheet = None
-            else:
-                corrsheet = row.corr_sheet
+        if "corr_sheet" in bck_input:
+            corrsheet = None if not _has_value(row.corr_sheet) else row.corr_sheet
         else:
             corrsheet = None
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams, corrsheet]
     backdict["parameters"] = paramdict
 
-    if "decimals" in bck_input.keys():
+    if "decimals" in bck_input:
         decimals = OrderedDict()
         for row in bck_input.itertuples():
             if _has_value(row.decimals) and _is_int(row.decimals):
@@ -675,11 +673,8 @@ def _read_dist_sensitivity(sensgroup):
             ]
             if _has_value(item)
         ]
-        if "corr_sheet" in sensgroup.keys():
-            if not _has_value(row.corr_sheet):
-                corrsheet = None
-            else:
-                corrsheet = row.corr_sheet
+        if "corr_sheet" in sensgroup:
+            corrsheet = None if not _has_value(row.corr_sheet) else row.corr_sheet
         else:
             corrsheet = None
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams, corrsheet]
@@ -688,15 +683,17 @@ def _read_dist_sensitivity(sensgroup):
 
 
 def _read_correlations(sensgroup, inputfile):
-    if "corr_sheet" in sensgroup.keys():
+    if "corr_sheet" in sensgroup:
         if not sensgroup["corr_sheet"].dropna().empty:
             correlations = OrderedDict()
             correlations["inputfile"] = inputfile
             correlations["sheetnames"] = []
             for _index, row in sensgroup.iterrows():
-                if _has_value(row["corr_sheet"]):
-                    if row["corr_sheet"] not in correlations["sheetnames"]:
-                        correlations["sheetnames"].append(row["corr_sheet"])
+                if (
+                    _has_value(row["corr_sheet"])
+                    and row["corr_sheet"] not in correlations["sheetnames"]
+                ):
+                    correlations["sheetnames"].append(row["corr_sheet"])
         else:
             correlations = None
     else:

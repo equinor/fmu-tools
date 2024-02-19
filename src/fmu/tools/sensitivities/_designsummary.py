@@ -87,12 +87,12 @@ def summarize_design(filename, sheetname="DesignSheet01"):
     endreal2 = None
 
     for row in dgn.itertuples():
-        if row.SENSNAME == currentsensname and row.SENSCASE == currentsenscase:
+        if currentsensname == row.SENSNAME and currentsenscase == row.SENSCASE:
             if secondcase is True:
                 endreal2 = row.REAL
             else:
                 endreal1 = row.REAL
-        elif row.SENSNAME == currentsensname:
+        elif currentsensname == row.SENSNAME:
             secondcase = True
             startreal2 = row.REAL
             endreal2 = row.REAL

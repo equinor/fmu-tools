@@ -288,7 +288,7 @@ class ConfigData:
     def _validate_codes(codes):
         """Check that codes input looks sane."""
         if codes is None:
-            return
+            return None
 
         if isinstance(codes, list):
             for code in codes:
@@ -303,7 +303,7 @@ class ConfigData:
     def _validate_interval(interval):
         """Check that interval input looks sane."""
         if interval is None:
-            return
+            return None
 
         if isinstance(interval, list):
             if len(interval) != 2:
@@ -440,7 +440,7 @@ class EnsembleWellProps:
                     dfr.loc[dfr[pidx] != 1, cname] = 0
 
             fractions = self.well.dataframe[cname].dropna().value_counts(normalize=True)
-            cfrac = fractions[1] if 1 in fractions else 0.0
+            cfrac = fractions.get(1, 0.0)
 
             clen = totlensegments * cfrac
 

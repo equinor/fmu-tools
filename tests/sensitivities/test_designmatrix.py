@@ -6,9 +6,8 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-from packaging import version
-
 from fmu.tools.sensitivities import DesignMatrix
+from packaging import version
 
 TESTDATA = Path(__file__).parent / "data"
 
@@ -37,15 +36,15 @@ def test_designmatrix():
 
     design = DesignMatrix()
 
-    mock_dict = dict(
-        designtype="onebyone",
-        seeds="default",
-        repeats=10,
-        defaultvalues=dict(),
-        sensitivities=dict(
-            rms_seed=dict(seedname="RMS_SEED", senstype="seed", parameters=None)
-        ),
-    )
+    mock_dict = {
+        "designtype": "onebyone",
+        "seeds": "default",
+        "repeats": 10,
+        "defaultvalues": {},
+        "sensitivities": {
+            "rms_seed": {"seedname": "RMS_SEED", "senstype": "seed", "parameters": None}
+        },
+    }
 
     design.generate(mock_dict)
     valid_designmatrix(design.designvalues)

@@ -212,26 +212,26 @@ def set_data_constant(config: Dict):
     """
     if not isinstance(config, dict):
         raise TypeError("Argument must be a Python dictionary!")
-    assert "project" in config.keys(), "Input dict must contain key 'project'!"
+    assert "project" in config, "Input dict must contain key 'project'!"
     project = config["project"]
     if not isinstance(project, _roxar.Project):
         raise RuntimeError("This run must be ran in an RoxAPI environment!")
 
-    assert "value" in config.keys(), "Input dict must contain key 'value'!"
+    assert "value" in config, "Input dict must contain key 'value'!"
     value = config["value"]
 
     # HORIZON DATA
-    if "horizons" in config.keys():
+    if "horizons" in config:
         print("Set horizons values to " + str(value) + "...")
         _set_surfaces_value(project, "horizons", config["horizons"], value)
 
     # ZONE DATA
-    if "zones" in config.keys():
+    if "zones" in config:
         print("Set zones values to " + str(value) + "...")
         _set_surfaces_value(project, "zones", config["zones"], value)
 
     # GRID MODEL DATA
-    if "grid_models" in config.keys():
+    if "grid_models" in config:
         print("Set 3D grid properties values to " + str(value) + "...")
         if isinstance(config["grid_models"], list):
             # work directly at grid models level
@@ -338,23 +338,23 @@ def set_data_empty(config: Dict):
 
     if not isinstance(config, dict):
         raise TypeError("Argument must be a Python dictionary!")
-    assert "project" in config.keys(), "Input dict must contain key 'project'!"
+    assert "project" in config, "Input dict must contain key 'project'!"
     project = config["project"]
     if not isinstance(project, _roxar.Project):
         raise RuntimeError("This run must be ran in an RoxAPI environment!")
 
     # HORIZON DATA
-    if "horizons" in config.keys():
+    if "horizons" in config:
         print("Set empty horizons...")
         _set_surfaces_empty(project, "horizons", config["horizons"])
 
     # ZONE DATA
-    if "zones" in config.keys():
+    if "zones" in config:
         print("Set empty zones...")
         _set_surfaces_empty(project, "zones", config["zones"])
 
     # GRID MODEL DATA
-    if "grid_models" in config.keys():
+    if "grid_models" in config:
         print("Set empty 3D grid properties...")
         if isinstance(config["grid_models"], list):
             # work directly at grid models level

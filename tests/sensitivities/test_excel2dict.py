@@ -4,10 +4,9 @@ import os
 import numpy as np
 import pandas as pd
 import pytest
-from packaging import version
-
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
 from fmu.tools.sensitivities._excel2dict import _has_value
+from packaging import version
 
 MOCK_GENERAL_INPUT = pd.DataFrame(
     data=[
@@ -79,7 +78,8 @@ def test_excel2dict_design(tmpdir):
     # Dump to yaml:
     inputdict_to_yaml(dict_design, "dictdesign.yaml")
     assert os.path.exists("dictdesign.yaml")
-    assert "RMS_SEED" in "".join(open("dictdesign.yaml").readlines())
+    with open("dictdesign.yaml", "r", encoding="utf-8") as inputfile:
+        assert "RMS_SEED" in inputfile.read()
 
 
 @pytest.mark.skipif(

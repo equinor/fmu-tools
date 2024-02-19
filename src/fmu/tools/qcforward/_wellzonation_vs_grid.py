@@ -55,12 +55,12 @@ class _LocalData:
 
         self.actions = data["actions"]
 
-        if "perflog" in data.keys() and data["perflog"]:
+        if "perflog" in data and data["perflog"]:
             self.perflogname = data["perflog"].get("name", None)
             self.perflogrange = data["perflog"].get("range", [1, 9999])
             self.infotext = "PERFLOG MATCH"
 
-        if "well_resample" in data.keys():
+        if "well_resample" in data:
             self.wellresample = data.get("well_resample", None)
 
 
@@ -168,9 +168,9 @@ class WellZonationVsGrid(QCForward):
                         continue
 
                     result[issue.mode.upper() + "RULE"].append(issue.expression)
-                    if issue.compare == ">" and actualmatch > issue.limit:
-                        status = issue.mode.upper()
-                    elif issue.compare == "<" and actualmatch < issue.limit:
+                    if (issue.compare == ">" and actualmatch > issue.limit) or (
+                        issue.compare == "<" and actualmatch < issue.limit
+                    ):
                         status = issue.mode.upper()
 
                 if status is not None:

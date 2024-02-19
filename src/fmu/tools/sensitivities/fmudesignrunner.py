@@ -61,7 +61,7 @@ def main():
     if args.general_input == parser.get_default("general_input"):
         args.general_input = None
 
-    sheetnames = dict()
+    sheetnames = {}
     if args.designinput:
         sheetnames["designinput"] = args.designinput
     if args.defaultvalues:

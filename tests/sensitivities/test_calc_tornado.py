@@ -2,9 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-from packaging import version
-
 from fmu.tools.sensitivities import calc_tornadoinput, summarize_design
+from packaging import version
 
 TESTDATA = Path(__file__).parent / "data"
 

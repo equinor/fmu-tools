@@ -1,9 +1,8 @@
 """Example use cases for fmudesign"""
 import pandas as pd
 import pytest
-from packaging import version
-
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
+from packaging import version
 
 
 @pytest.mark.skipif(

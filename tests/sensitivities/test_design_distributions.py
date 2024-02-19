@@ -3,7 +3,6 @@
 import numbers
 
 import pytest
-
 from fmu.tools.sensitivities import design_distributions as dists
 
 # pylint: disable=protected-access
@@ -120,10 +119,10 @@ def test_draw_values_normal():
     """Test drawing values"""
     values = dists.draw_values_normal([0, 1], 10)
     assert len(values) == 10
-    assert all([isinstance(value, numbers.Number) for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
 
     values = dists.draw_values_normal([0, 10, -1, 2], 50)
-    assert all([-1 <= value <= 2 for value in values])
+    assert all(-1 <= value <= 2 for value in values)
 
 
 def test_draw_values_lognormal():
@@ -131,8 +130,8 @@ def test_draw_values_lognormal():
     assert not dists.draw_values_lognormal([100, 10], 0).size
     values = dists.draw_values_lognormal([100, 10], 10)
     assert len(values) == 10
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([value > 0 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(value > 0 for value in values)
 
 
 def test_draw_values_uniform():
@@ -141,8 +140,8 @@ def test_draw_values_uniform():
 
     values = dists.draw_values_uniform([10, 100], 20)
     assert len(values) == 20
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([10 <= value <= 100 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(10 <= value <= 100 for value in values)
 
 
 def test_draw_values_triangular():
@@ -156,8 +155,8 @@ def test_draw_values_triangular():
 
     values = dists.draw_values_triangular([10, 100, 1000], 15)
     assert len(values) == 15
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([10 <= value <= 1000 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(10 <= value <= 1000 for value in values)
 
 
 def test_draw_values_pert():
@@ -166,8 +165,8 @@ def test_draw_values_pert():
 
     values = dists.draw_values_pert([10, 50, 100], 20)
     assert len(values) == 20
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([10 <= value <= 100 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(10 <= value <= 100 for value in values)
 
 
 def test_draw_values_loguniform():
@@ -176,8 +175,8 @@ def test_draw_values_loguniform():
 
     values = dists.draw_values_uniform([10, 100], 20)
     assert len(values) == 20
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([10 <= value <= 100 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(10 <= value <= 100 for value in values)
 
 
 def test_sample_discrete():
@@ -187,7 +186,7 @@ def test_sample_discrete():
     # NB: return type from sample_discrete is different from the others,
     # it returns a 3-tuple with the values in the second element.
     values = dists.sample_discrete([",".join(outcomes)], 10)[1]
-    assert all([value in outcomes for value in values])
+    assert all(value in outcomes for value in values)
 
     assert not dists.sample_discrete([",".join(outcomes)], 0)[1].size
     with pytest.raises(ValueError):
@@ -202,8 +201,8 @@ def test_draw_values():
 
     values = dists.draw_values("unif", [0, 1], 10)
     assert len(values) == 10
-    assert all([isinstance(value, numbers.Number) for value in values])
-    assert all([0 <= value <= 1 for value in values])
+    assert all(isinstance(value, numbers.Number) for value in values)
+    assert all(0 <= value <= 1 for value in values)
 
     values = dists.draw_values("UNIF", [0, 1], 10)
     assert len(values) == 10

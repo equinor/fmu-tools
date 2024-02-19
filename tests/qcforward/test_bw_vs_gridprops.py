@@ -5,7 +5,6 @@ from os.path import abspath
 
 import pandas as pd
 import pytest
-
 from fmu.tools import qcforward as qcf
 
 # filedata
@@ -19,7 +18,7 @@ COMPARE = {"Facies": "FACIES", "PHIT": "PHIT"}
 
 @pytest.fixture(name="datainput")
 def fixture_datainput(tmp_path):
-    data = {
+    return {
         "nametag": "MYDATA1",
         "verbosity": "info",
         "path": PATH,
@@ -34,7 +33,6 @@ def fixture_datainput(tmp_path):
             {"warn": "allwells < 90%", "stop": "allwells < 85%"},
         ],
     }
-    return data
 
 
 @pytest.mark.skipif(

@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import pytest
-
 from fmu.tools.qcdata import QCData
 from fmu.tools.qcproperties._grid2df import GridProps2df
 from fmu.tools.qcproperties._well2df import WellLogs2df
@@ -16,7 +15,7 @@ class TestProperties2df:
         pdf = WellLogs2df(data=data_wells, project=None, xtgdata=QCData())
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.1539, abs=0.001)
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3661, abs=0.001)
-        assert set(pdf.dataframe.columns) == set(["PORO", "PERM", "ZONE", "FACIES"])
+        assert set(pdf.dataframe.columns) == {"PORO", "PERM", "ZONE", "FACIES"}
 
     def test_blockedwells(self, data_bwells):
         """Test creating property dataframe from blocked wells"""
@@ -25,14 +24,14 @@ class TestProperties2df:
         )
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.1709, abs=0.001)
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3640, abs=0.001)
-        assert set(pdf.dataframe.columns) == set(["PORO", "FACIES"])
+        assert set(pdf.dataframe.columns) == {"PORO", "FACIES"}
 
     def test_gridprops(self, data_grid):
         """Test creating property dataframe from grid properties"""
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3613, abs=0.001)
-        assert set(pdf.dataframe.columns) == set(["PORO", "PERM", "ZONE", "FACIES"])
+        assert set(pdf.dataframe.columns) == {"PORO", "PERM", "ZONE", "FACIES"}
 
     def test_props_and_selectors_as_list(self, data_grid):
         """Test"""
@@ -46,14 +45,12 @@ class TestProperties2df:
         assert pdf.dataframe["reek_sim_poro.roff"].max() == pytest.approx(
             0.3613, abs=0.001
         )
-        assert set(pdf.dataframe.columns) == set(
-            [
-                "reek_sim_poro.roff",
-                "reek_sim_permx.roff",
-                "reek_sim_zone.roff",
-                "reek_sim_facies2.roff",
-            ]
-        )
+        assert set(pdf.dataframe.columns) == {
+            "reek_sim_poro.roff",
+            "reek_sim_permx.roff",
+            "reek_sim_zone.roff",
+            "reek_sim_facies2.roff",
+        }
 
     def test_filters(self, data_grid):
         """Test filters as argument"""
@@ -157,11 +154,11 @@ class TestProperties2df:
 
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
 
-        assert set(["TOP", "MID", "Below_Low_reek"]) == {
+        assert {"TOP", "MID", "Below_Low_reek"} == {
             x for x in list(pdf.dataframe["ZONE"].unique()) if x is not None
         }
 
-        assert set(["SAND", "SHALE"]) == {
+        assert {"SAND", "SHALE"} == {
             x for x in list(pdf.dataframe["FACIES"].unique()) if x is not None
         }
 
@@ -175,7 +172,7 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert set(qcp.dataframe["PROPERTY"].unique()) == set(["PORO", "PERM"])
+        assert set(qcp.dataframe["PROPERTY"].unique()) == {"PORO", "PERM"}
 
         row = qcp.dataframe[
             (qcp.dataframe["ZONE"] == "Total")
@@ -190,17 +187,15 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_well_statistics(data_wells)
 
-        assert set(qcp.dataframe["PROPERTY"].unique()) == set(["PORO", "PERM"])
-        assert set(qcp.dataframe["ZONE"].unique()) == set(
-            [
-                "Above_TopUpperReek",
-                "Below_TopLowerReek",
-                "Below_TopMidReek",
-                "Below_TopUpperReek",
-                "Below_BaseLowerReek",
-                "Total",
-            ]
-        )
+        assert set(qcp.dataframe["PROPERTY"].unique()) == {"PORO", "PERM"}
+        assert set(qcp.dataframe["ZONE"].unique()) == {
+            "Above_TopUpperReek",
+            "Below_TopLowerReek",
+            "Below_TopMidReek",
+            "Below_TopUpperReek",
+            "Below_BaseLowerReek",
+            "Total",
+        }
 
         row = qcp.dataframe[
             (qcp.dataframe["ZONE"] == "Total")
@@ -228,23 +223,21 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert set(qcp.dataframe.columns) == set(
-            [
-                "Avg_Weighted",
-                "Avg",
-                "Count",
-                "FACIES",
-                "Max",
-                "Min",
-                "P10",
-                "P90",
-                "PROPERTY",
-                "Stddev",
-                "ZONE",
-                "SOURCE",
-                "ID",
-            ]
-        )
+        assert set(qcp.dataframe.columns) == {
+            "Avg_Weighted",
+            "Avg",
+            "Count",
+            "FACIES",
+            "Max",
+            "Min",
+            "P10",
+            "P90",
+            "PROPERTY",
+            "Stddev",
+            "ZONE",
+            "SOURCE",
+            "ID",
+        }
         assert qcp._proptypes_all[0] == "CONT"
 
     def test_discrete_properties(self, data_grid):
@@ -259,23 +252,23 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert set(qcp.dataframe.columns) == set(
-            [
-                "Avg_Weighted",
-                "Avg",
-                "Count",
-                "FACIES",
-                "PROPERTY",
-                "ZONE",
-                "SOURCE",
-                "ID",
-            ]
-        )
+        assert set(qcp.dataframe.columns) == {
+            "Avg_Weighted",
+            "Avg",
+            "Count",
+            "FACIES",
+            "PROPERTY",
+            "ZONE",
+            "SOURCE",
+            "ID",
+        }
         assert qcp._proptypes_all[0] == "DISC"
         assert list(qcp.dataframe["PROPERTY"].unique()) == ["FACIES"]
-        assert set(qcp.dataframe["FACIES"].unique()) == set(
-            ["FINESAND", "COARSESAND", "SHALE"]
-        )
+        assert set(qcp.dataframe["FACIES"].unique()) == {
+            "FINESAND",
+            "COARSESAND",
+            "SHALE",
+        }
         row = qcp.dataframe[
             (qcp.dataframe["ZONE"] == "Total") & (qcp.dataframe["FACIES"] == "FINESAND")
         ]
@@ -333,7 +326,7 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert set(["test1", "test2"]) == set(qcp.dataframe["ID"].unique())
+        assert {"test1", "test2"} == set(qcp.dataframe["ID"].unique())
         assert qcp.dataframe[
             (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
         ]["Avg"].values == pytest.approx(0.1183, abs=0.001)

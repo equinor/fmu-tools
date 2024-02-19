@@ -2,10 +2,9 @@
 
 import pathlib
 
+import fmu.tools.qcforward as qcf
 import pandas as pd
 import pytest
-
-import fmu.tools.qcforward as qcf
 
 # filedata
 PATH = pathlib.Path(".").resolve().as_posix()

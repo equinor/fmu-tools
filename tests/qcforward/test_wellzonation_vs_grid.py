@@ -2,10 +2,9 @@
 
 from os.path import abspath
 
+import fmu.tools.qcforward as qcf
 import pandas as pd
 import pytest
-
-import fmu.tools.qcforward as qcf
 
 ZONENAME = "Zone"
 ZONELOGNAME = "Zonelog"
