@@ -31,6 +31,7 @@ Result:
 * ``obs`` files for each well written to ert/input/observations
 * ``well_date_rft.txt``
 """
+
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple

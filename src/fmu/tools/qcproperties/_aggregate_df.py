@@ -1,4 +1,5 @@
-"""Module containing ....  """
+"""Module containing ...."""
+
 import numpy as np
 import pandas as pd
 from fmu.tools._common import _QCCommon

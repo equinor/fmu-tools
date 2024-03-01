@@ -1,6 +1,7 @@
 """Module for generating design matrices that can be run by DESIGN2PARAMS
 and DESIGN_KW in FMU/ERT.
 """
+
 from collections import OrderedDict
 from pathlib import Path
 

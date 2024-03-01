@@ -1,6 +1,7 @@
 """Module for random sampling of parameter values from
 distributions. For use in generation of design matrices
 """
+
 import re
 from math import exp
 
