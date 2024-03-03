@@ -1,4 +1,5 @@
 """Testing excel2dict"""
+
 import os
 
 import numpy as np

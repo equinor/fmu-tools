@@ -1,6 +1,6 @@
 # type: ignore
-""" Module for generating a set of TornadoPlots
-for webviz on webviz Pages. """
+"""Module for generating a set of TornadoPlots
+for webviz on webviz Pages."""
 
 import copy
 import os.path

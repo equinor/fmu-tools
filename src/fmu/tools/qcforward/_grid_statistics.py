@@ -1,6 +1,7 @@
 """
 This private module in qcforward is used for grid statistics
 """
+
 import collections
 import json
 from pathlib import Path

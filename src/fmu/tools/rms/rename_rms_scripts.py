@@ -1,4 +1,5 @@
 """Fix RMS Python script file extensions and gather useful information"""
+
 import argparse
 import logging
 import os
@@ -406,9 +407,9 @@ class PythonCompMaster:
                 self._will_overwrite_file(iname) is True
                 and self._fix_bad_overwrite(iname) is False
             ):
-                self._entries[iname][
-                    "skipped"
-                ] = "fixing will overwrite non-identical file"
+                self._entries[iname]["skipped"] = (
+                    "fixing will overwrite non-identical file"
+                )
                 skip.append(iname)
             else:
                 self._update_file_on_disk(iname)
