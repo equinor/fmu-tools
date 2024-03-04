@@ -1,4 +1,4 @@
-""" Private class in qcproperties """
+"""Private class in qcproperties"""
 
 from fmu.tools._common import _QCCommon
 

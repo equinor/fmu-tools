@@ -1,4 +1,5 @@
-""" Module for summarizing design set up for one by one sensitivities """
+"""Module for summarizing design set up for one by one sensitivities"""
+
 import pandas as pd
 
 
