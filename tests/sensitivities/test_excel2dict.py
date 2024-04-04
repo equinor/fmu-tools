@@ -8,6 +8,7 @@ import pytest
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
 from fmu.tools.sensitivities._excel2dict import _has_value
 from packaging import version
+from fmu.tools._common import preserve_cwd
 
 MOCK_GENERAL_INPUT = pd.DataFrame(
     data=[
@@ -24,6 +25,7 @@ MOCK_DESIGNINPUT = pd.DataFrame(
 )
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",
@@ -83,6 +85,7 @@ def test_excel2dict_design(tmpdir):
         assert "RMS_SEED" in inputfile.read()
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",
@@ -116,6 +119,7 @@ def test_duplicate_sensname_exception(tmpdir):
         excel2dict_design("designinput3.xlsx")
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",
@@ -158,6 +162,7 @@ def test_strip_spaces(tmpdir):
     assert [par.strip() for par in def_params] == def_params
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",
@@ -198,6 +203,7 @@ def test_has_value():
     assert _has_value(None)
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",

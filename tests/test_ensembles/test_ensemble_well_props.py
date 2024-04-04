@@ -8,6 +8,7 @@ import pytest
 import xtgeo
 import yaml
 from fmu.tools.ensembles import ensemble_well_props
+from fmu.tools._common import preserve_cwd
 
 SOURCE = pathlib.Path(__file__).absolute().parent.parent.parent
 
@@ -119,6 +120,7 @@ def fixture_configdata2():
     }
 
 
+@preserve_cwd
 def test_dump_example(tmp_path):
     """Test the dump of example YAML file."""
     os.chdir(tmp_path)
@@ -234,6 +236,7 @@ def test_main(configdata):
     ensemble_well_props.main(newcfg)
 
 
+@preserve_cwd
 def test_script(tmp_path, configdata):
     """Test the command line script end point."""
 
@@ -257,6 +260,7 @@ def test_script(tmp_path, configdata):
     ensemble_well_props.main(["--config", "myconfig.yml"])
 
 
+@preserve_cwd
 @pytest.mark.parametrize(
     "faciescodes, poro_interval, expected",
     [

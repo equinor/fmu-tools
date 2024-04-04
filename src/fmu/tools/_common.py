@@ -1,8 +1,10 @@
 """
-This private module is used for some common functions
+This private module is used for some common functions and testing
 """
 
 import sys
+from functools import wraps
+import os
 
 
 class _QCCommon(object):
@@ -50,3 +52,17 @@ class _QCCommon(object):
         print()
 
         sys.exit(string)
+
+
+def preserve_cwd(func):
+    """Decorator to return to orginal CWD, applied in testing"""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        original_cwd = os.getcwd()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            os.chdir(original_cwd)
+
+    return wrapper

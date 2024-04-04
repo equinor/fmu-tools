@@ -4,7 +4,9 @@ import os
 import sys
 
 import fmu.tools
+import fmu.tools.rms as toolsrms
 import pytest
+from fmu.tools._common import preserve_cwd
 
 SNIPPET1 = """
 def add(a, b):
@@ -15,6 +17,7 @@ def say_hello(name):
 """
 
 
+@preserve_cwd
 @pytest.mark.skipif(sys.version_info > (3, 11), reason="Fails in Python 3.12")
 @pytest.mark.parametrize(
     "modulename, shall_warn, shall_fail",
@@ -27,7 +30,6 @@ def say_hello(name):
 )
 def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
     """Test import of a module via rms.import_localmodule."""
-
     pycomp = tmp_path / "myproject" / "pythoncomp"
     pycomp.mkdir(parents=True)
 
@@ -41,22 +43,23 @@ def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
     if not shall_fail:
         if shall_warn:
             with pytest.warns(UserWarning, match="Please avoid modules without"):
-                mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+                mylib = toolsrms.import_localmodule(fake_project, "mymod")
         else:
-            mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+            mylib = toolsrms.import_localmodule(fake_project, "mymod")
             id1 = id(mylib)
 
             assert mylib.add(3, 4) == 7
             assert mylib.say_hello("world") == "Hello world"
 
             id1 = id(mylib)
-            id2 = id(fmu.tools.rms.import_localmodule(fake_project, "mymod"))
+            id2 = id(toolsrms.import_localmodule(fake_project, "mymod"))
             assert id1 != id2
     else:
         with pytest.raises(ValueError, match="Cannot detect module"):
-            mylib = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+            mylib = toolsrms.import_localmodule(fake_project, "mymod")
 
 
+@preserve_cwd
 def test_rms_import_invalid_name(tmp_path):
     """Test import of a module that is invalid."""
 
@@ -70,9 +73,10 @@ def test_rms_import_invalid_name(tmp_path):
 
     fake_project = object()
     with pytest.raises(Exception, match=r"The project object is invalid"):
-        _ = fmu.tools.rms.import_localmodule(fake_project, "mymod")
+        _ = toolsrms.import_localmodule(fake_project, "mymod")
 
 
+@preserve_cwd
 def test_rms_import_ex1_localmodule_external_single(tmp_path):
     """Test import of a external (file) module via rms.import_localmodule."""
 
@@ -89,12 +93,13 @@ def test_rms_import_ex1_localmodule_external_single(tmp_path):
 
     fake_project = "dummy"
 
-    mylib = fmu.tools.rms.import_localmodule(fake_project, "some", path="../otherlib")
+    mylib = toolsrms.import_localmodule(fake_project, "some", path="../otherlib")
 
     assert mylib.add(3, 4) == 7
     assert mylib.say_hello("world") == "Hello world"
 
 
+@preserve_cwd
 def test_rms_import_ex2_localmodule_external_package(tmp_path):
     """Test import of a external (package) module via rms.import_localmodule."""
 
@@ -114,14 +119,12 @@ def test_rms_import_ex2_localmodule_external_package(tmp_path):
 
     fake_project = "dummy"
 
-    mylib = fmu.tools.rms.import_localmodule(fake_project, "mypackage", path="../lib")
+    mylib = toolsrms.import_localmodule(fake_project, "mypackage", path="../lib")
 
     assert mylib.mymod.add(3, 4) == 7
     assert mylib.mymod.say_hello("world") == "Hello world"
 
-    mylib = fmu.tools.rms.import_localmodule(
-        fake_project, "mymod", path="../lib/mypackage"
-    )
+    mylib = toolsrms.import_localmodule(fake_project, "mymod", path="../lib/mypackage")
 
     assert mylib.add(3, 4) == 7
     assert mylib.say_hello("world") == "Hello world"
