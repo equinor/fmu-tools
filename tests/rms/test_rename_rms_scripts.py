@@ -7,6 +7,7 @@ from textwrap import dedent
 
 import pytest
 from fmu.tools.rms.rename_rms_scripts import PythonCompMaster, main
+from fmu.tools._common import preserve_cwd
 
 logging.basicConfig(level=logging.INFO)
 
@@ -264,6 +265,7 @@ def test_cmdline_main(tmp_path, mocker):
     main()
 
 
+@preserve_cwd
 def test_cmdline_main_backup(tmp_path, mocker):
     """Test the backup of the pythoncomp through the cmndline."""
     project_path = tmp_path / "snakeoil.rms13.0.3"

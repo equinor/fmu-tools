@@ -4,8 +4,10 @@ import pandas as pd
 import pytest
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 from packaging import version
+from fmu.tools._common import preserve_cwd
 
 
+@preserve_cwd
 @pytest.mark.skipif(
     version.parse(pd.__version__) < version.parse("0.25.0"),
     reason="Pandas 0.25.0 is required for fmudesign",

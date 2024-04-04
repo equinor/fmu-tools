@@ -121,12 +121,12 @@ def test_qcreset():
     """Test qcreset metod in roxapi."""
     # ==================================================================================
     # pylint: disable=invalid-name
-    from fmu.tools.rms import qcreset
+    from fmu.tools.rms import qcreset  # noqa
 
     rox = xtgeo.RoxUtils(project=PRJ)
 
     SETUP1 = {
-        "project": rox._project,
+        "project": rox.project,
         "horizons": {
             "DS_whatever": ["TopReek", "MidReek"],
         },
@@ -137,7 +137,7 @@ def test_qcreset():
     }
 
     SETUP2 = {
-        "project": rox._project,
+        "project": rox.project,
         "horizons": {
             "DS_whatever": ["TopReek", "MidReek"],
         },
@@ -148,14 +148,14 @@ def test_qcreset():
 
     qcreset.set_data_constant(SETUP1)
 
-    topr = xtgeo.surface_from_roxar(rox._project, "TopReek", "DS_whatever")
+    topr = xtgeo.surface_from_roxar(rox.project, "TopReek", "DS_whatever")
     assert topr.values.mean() == pytest.approx(0.088)
 
-    poro = xtgeo.gridproperty_from_roxar(rox._project, "Simgrid", "PORO")
+    poro = xtgeo.gridproperty_from_roxar(rox.project, "Simgrid", "PORO")
     assert poro.values.mean() == pytest.approx(0.088)
 
     qcreset.set_data_empty(SETUP2)
 
-    top = rox._project.horizons["TopReek"]["DS_whatever"]
+    top = rox.project.horizons["TopReek"]["DS_whatever"]
 
     assert top.is_empty() is True

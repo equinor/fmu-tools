@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 from fmu.tools.rms import create_rft_ertobs
 from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
+from fmu.tools._common import preserve_cwd
 
 logging.basicConfig(level=logging.INFO)
 
@@ -230,6 +231,7 @@ def test_interp_from_xyz():
     )
 
 
+@preserve_cwd
 def test_ertobs_df_to_files_1(tmpdir):
     """Test the writing of obs and txt files to disk, from a dataframe"""
     tmpdir.chdir()
@@ -261,6 +263,7 @@ def test_ertobs_df_to_files_1(tmpdir):
     )
 
 
+@preserve_cwd
 def test_main_mock_drogon(tmpdir):
     """Check that the code when executed on the Drogon case provides a
     predefined set of files (that has been manually verified)"""
@@ -305,6 +308,7 @@ def test_main_mock_drogon(tmpdir):
     assert Path("exports/well_date_rft.txt").is_file()
 
 
+@preserve_cwd
 def test_alternative_trajectory_name(tmpdir):
     """Test that we can use a different trajectory in RMS, but it has to be
     the same for all wells"""
@@ -327,6 +331,7 @@ def test_alternative_trajectory_name(tmpdir):
         create_rft_ertobs.main(config)
 
 
+@preserve_cwd
 def test_main_no_rms(tmpdir):
     """Test that if we have a full CSV file with all values we don't need
     the RMS project"""
@@ -360,6 +365,7 @@ def test_main_no_rms(tmpdir):
     assert Path("well_date_rft.txt").read_text().strip() == "A-1 2099-01-01 1"
 
 
+@preserve_cwd
 @pytest.mark.parametrize(
     "data, expected_error",
     [
@@ -387,6 +393,7 @@ def test_missing_dframe_data(data, expected_error, tmpdir):
         create_rft_ertobs.main({"input_dframe": pd.DataFrame(data=[dframe_dict])})
 
 
+@preserve_cwd
 def test_absolute_error(tmpdir):
     """Test that we can specify absolute_error in the config"""
     tmpdir.chdir()
@@ -408,6 +415,7 @@ def test_absolute_error(tmpdir):
     ).all()
 
 
+@preserve_cwd
 def test_absolute_error_ignored(tmpdir):
     """Test that we can absolute_error in the config is ignored if ERROR is specified"""
     tmpdir.chdir()
@@ -430,6 +438,7 @@ def test_absolute_error_ignored(tmpdir):
     ).all()
 
 
+@preserve_cwd
 def test_configparsing(tmpdir, caplog):
     """Test that the function that validates and parses the config dictionary
     gives correct error messages, and returns a dict with defaults filled in"""
@@ -479,6 +488,7 @@ def test_configparsing(tmpdir, caplog):
     assert check_and_parse_config(minimal_config)["welldatefile"] == "well_date_rft.txt"
 
 
+@preserve_cwd
 def test_date_parsing(tmpdir):
     """Check that the ambiguous "DD MM YYYY" date format
     can be parsed "correctly" in input CSV files."""
@@ -495,6 +505,7 @@ def test_date_parsing(tmpdir):
     )
 
 
+@preserve_cwd
 def test_parse_alias_config(tmpdir):
     """Test that alias files can be parsed"""
     tmpdir.chdir()
@@ -554,6 +565,7 @@ def test_parse_alias_config(tmpdir):
     )
 
 
+@preserve_cwd
 @pytest.mark.parametrize("rftzone", [("Volon"), ("Nansen")])
 def test_zones(rftzone, tmpdir, caplog):
     """Test that a warning is emitted for RFT observations that in the RMS grid
@@ -585,6 +597,7 @@ def test_zones(rftzone, tmpdir, caplog):
         assert "Some points are in a different zone in the RMS grid" in caplog.text
 
 
+@preserve_cwd
 def test_rft_outside_grid(tmp_path, caplog):
     """Test behaviour when points are outside the grid."""
     os.chdir(tmp_path)
@@ -611,6 +624,7 @@ def test_rft_outside_grid(tmp_path, caplog):
     ).all()
 
 
+@preserve_cwd
 def test_rft_outside_grid_with_zone(tmp_path, caplog):
     """Test behaviour when points are outside the grid and we try
     to match with a zone (which can't be done when the point is outside the grid).
@@ -648,6 +662,7 @@ def test_rft_outside_grid_with_zone(tmp_path, caplog):
     ).all()
 
 
+@preserve_cwd
 def test_report_step_same_xyz(tmpdir):
     """For wells with RFT observations at multiple dates, the REPORT_STEP
     parameter must be set to something unique, the current code enumerates it
@@ -696,6 +711,7 @@ def test_report_step_same_xyz(tmpdir):
     )
 
 
+@preserve_cwd
 def test_report_step_different_xyz(tmpdir):
     """Multiple dates for a well at different xyz.
 
