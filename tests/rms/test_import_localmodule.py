@@ -3,7 +3,6 @@
 import os
 import sys
 
-import fmu.tools
 import fmu.tools.rms as toolsrms
 import pytest
 from fmu.tools._common import preserve_cwd

@@ -7,8 +7,8 @@ from copy import deepcopy
 import pytest
 import xtgeo
 import yaml
-from fmu.tools.ensembles import ensemble_well_props
 from fmu.tools._common import preserve_cwd
+from fmu.tools.ensembles import ensemble_well_props
 
 SOURCE = pathlib.Path(__file__).absolute().parent.parent.parent
 

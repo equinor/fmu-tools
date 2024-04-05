@@ -2,9 +2,9 @@
 
 import pandas as pd
 import pytest
+from fmu.tools._common import preserve_cwd
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 from packaging import version
-from fmu.tools._common import preserve_cwd
 
 
 @preserve_cwd

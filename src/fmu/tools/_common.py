@@ -2,9 +2,9 @@
 This private module is used for some common functions and testing
 """
 
+import os
 import sys
 from functools import wraps
-import os
 
 
 class _QCCommon(object):
