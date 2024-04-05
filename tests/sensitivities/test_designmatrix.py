@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from fmu.tools._common import preserve_cwd
 from fmu.tools.sensitivities import DesignMatrix
 from packaging import version
-from fmu.tools._common import preserve_cwd
 
 TESTDATA = Path(__file__).parent / "data"
 

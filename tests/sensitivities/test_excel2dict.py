@@ -5,10 +5,10 @@ import os
 import numpy as np
 import pandas as pd
 import pytest
+from fmu.tools._common import preserve_cwd
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
 from fmu.tools.sensitivities._excel2dict import _has_value
 from packaging import version
-from fmu.tools._common import preserve_cwd
 
 MOCK_GENERAL_INPUT = pd.DataFrame(
     data=[
