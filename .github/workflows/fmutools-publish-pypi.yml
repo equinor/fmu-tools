@@ -10,7 +10,7 @@ jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event.action == 'published'
     environment:
       name: pypi
       url: https://pypi.org/project/fmu-tools
@@ -25,7 +25,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
-
+          
+      - name: Install dependencies
+        run: pip install --upgrade setuptools build
+        
       - name: Build package
         run: python -m build
         
