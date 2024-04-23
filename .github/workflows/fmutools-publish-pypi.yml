@@ -1,31 +1,42 @@
 name: Publish Python 🐍 distributions 📦 to PyPI
 
 on:
+  pull_request:
+    branches: [main]
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
     runs-on: ubuntu-latest
+    if: github.event.action == 'published'
+    environment:
+      name: pypi
+      url: https://pypi.org/project/fmu-tools
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: 3.11
 
-      - name: Install dependencies
-        run: pip install --upgrade setuptools build twine
-
+      - name: Update pip
+        run: pip install pip --upgrade
+        
+      - name: Install build dependencies
+        run: pip install build --upgrade
+        
       - name: Build package
         run: python -m build
-
-      - name: Upload deploy
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.fmu_tools_pypi_token }}
-        run: python -m twine upload dist/*
+        
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+          verbose: true
+       
