@@ -1,0 +1,21 @@
+fmu.tools.properties package
+============================
+
+Submodules
+----------
+
+fmu.tools.properties.swfunction module
+--------------------------------------
+
+.. automodule:: fmu.tools.properties.swfunction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools.properties
+   :members:
+   :undoc-members:
+   :show-inheritance:

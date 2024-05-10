@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.14.2.dev4+gb3db900 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=e7db2247"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                1.14.2.dev4+gb3db900
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.properties.swfunction</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.properties.swfunction</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Sw J or BVW or Brooks-Corey general functions, by direct or integration.</span>
+
+<span class="sd">Solve a system on form:</span>
+
+<span class="sd">sw = a(m + x*h)^b</span>
+
+<span class="sd">The &quot;x&quot; can e.g. be the J term in the Leverett equation, but without the height term.</span>
+
+<span class="sd">In many cases m is zero.</span>
+
+<span class="sd">Note:</span>
+<span class="sd">The public library `xtgeo` must be available.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xtgeo</span>
+
+<span class="c1"># custom logger for this module</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">ALLOWED_METHODS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;cell_center&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cell_center_above_ffl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cell_corners_above_ffl&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="SwFunction"><a class="viewcode-back" href="../../../../fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SwFunction</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic Sw calc for formulation Sw = a * (m + x * h)^b.</span>
+
+<span class="sd">    Some theory for this is shown here: :download:`pdf &lt;pdf/sw_calc.pdf&gt;`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        grid: The xtgeo grid object</span>
+<span class="sd">        x: The ``x`` term in the generic saturation. For a simplified J function, this</span>
+<span class="sd">            will be sqrt(perm/poro).</span>
+<span class="sd">        a: The ``a`` term in the generic saturation.</span>
+<span class="sd">        b: The ``b`` term in the generic saturation.</span>
+<span class="sd">        ffl: The free fluid level, either as a number or a 3D xtgeo gridproperty</span>
+<span class="sd">            object.</span>
+<span class="sd">        m: The ``m`` term in the equation above, either as a number or a 3D xtgeo</span>
+<span class="sd">            gridproperty object. Defaults to zero.</span>
+<span class="sd">        swira: The absolute irreducable satuation applied as asymptote in the equation.</span>
+<span class="sd">            Defaults to zero.</span>
+<span class="sd">        swmax: The maximum applied as asymptote in the equation.</span>
+<span class="sd">            Defaults to 1.</span>
+<span class="sd">        method: How to look at cell geometry. There are three options: &#39;cell_center&#39;,</span>
+<span class="sd">            &#39;cell_center-above_ffl&#39; and &#39;cell_corners_above_ffl&#39;.</span>
+<span class="sd">        gridname: Optional - only needed when debug keyword is True.</span>
+<span class="sd">        project: Optional. Must be included when working in RMS.</span>
+<span class="sd">        invert: Optional, will in case invert ``a`` and ``b`` in case the J function</span>
+<span class="sd">            (or similar) is formulated as Sw = (J/A)^(1/B). This is the case in e.g.</span>
+<span class="sd">            RMS</span>
+<span class="sd">        zdepth: Optional. May speed up computation if provided, in case the function</span>
+<span class="sd">            is called several time for the same grid.</span>
+<span class="sd">        hcenter: Optional. May speed up computation if provided, in case the function</span>
+<span class="sd">            is called several time for the same grid, or hcenter is pre-computed in a</span>
+<span class="sd">            special way. The hcenter will work with direct method only, not integration.</span>
+<span class="sd">        htop: Optional. May speed up computation if provided, in case the function</span>
+<span class="sd">            is called several time for the same grid.</span>
+<span class="sd">        hbot: Optional. May speed up computation if provided, in case the function</span>
+<span class="sd">            is called several time for the same grid.</span>
+<span class="sd">        debug: If True, several &quot;check parameters&quot; will we given, either as grid</span>
+<span class="sd">            properties (if working in RMS) or as ROFF files (if working outside RMS).</span>
+<span class="sd">        tag: Optional string to identify debug parameters.</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span>
+    <span class="c1"># all input are constants or xtgeo grid or gridproperty</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">ffl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">999.0</span>
+
+    <span class="n">m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">swira</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">swmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cell_center_above_ffl&quot;</span>
+    <span class="n">gridname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># only used when debugging in RMS</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">invert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># if the SwJ function is on &quot;reverse&quot; form</span>
+
+    <span class="c1"># if None they will be computed here; otherwise they can be given explicitly:</span>
+    <span class="n">hcenter</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">htop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">hbot</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># debug flag for additional parameters. Given in RMS if project is given; otherwise</span>
+    <span class="c1"># as files on your working folder</span>
+    <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># identification tag to add to debug params</span>
+
+    <span class="c1"># derived and internal</span>
+    <span class="n">_swval</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_sw</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post init.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_process_input</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">hcenter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">htop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hbot</span><span class="p">]):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Essential geometries are pre-computed&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_htop_hbot</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;DEBUG_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridname</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s2">&quot;debug_grid.roff&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Work with a, b, x, ie. inversing and convert from float.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Process a, b, etc&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALLOWED_METHODS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The method &lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&gt; is invalid. Allowed: </span><span class="si">{</span><span class="n">ALLOWED_METHODS</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ffl</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ffl</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ffl</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swira</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swmax</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert</span><span class="p">:</span>
+            <span class="n">orig_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">orig_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">new_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">new_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Inverted a and b; original average was </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">, new is </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">orig_a</span><span class="p">,</span>
+                <span class="n">orig_b</span><span class="p">,</span>
+                <span class="n">new_a</span><span class="p">,</span>
+                <span class="n">new_b</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_htop_hbot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setting geometries for &#39;bottom&#39; and &#39;top&#39; cell.</span>
+
+<span class="sd">        All these values are relative to the given contact, as &quot;height above&quot;. For</span>
+<span class="sd">        cells under the contact, zero or a negative number will be applied.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ffl</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+
+        <span class="n">htop</span><span class="p">,</span> <span class="n">hbot</span><span class="p">,</span> <span class="n">hmid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_heights_above_ffl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ffl</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">htop</span> <span class="o">=</span> <span class="n">htop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbot</span> <span class="o">=</span> <span class="n">hbot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hcenter</span> <span class="o">=</span> <span class="n">hmid</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Use method </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">htop</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;TOP_SW&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span>
+            <span class="n">hbot</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;BOT_SW&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span>
+            <span class="n">hmid</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;CENTER_SW&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;TAG is &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                <span class="n">htop</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridname</span><span class="p">,</span> <span class="s2">&quot;HTOP&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                <span class="n">hbot</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridname</span><span class="p">,</span> <span class="s2">&quot;HBOT&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+                <span class="n">hmid</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridname</span><span class="p">,</span> <span class="s2">&quot;HCENTER&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">htop</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_htop</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
+                <span class="n">hbot</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_hbot</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
+                <span class="n">hmid</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_hcenter</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_sw_function_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use function on form Sw = A*(M + X*h)^B; generic function!&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+
+        <span class="c1"># the direct function is mostly used to compare with integrated approach, as QC</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hcenter</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">xh_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">height</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">xh_val</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># normalize before any limitations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">height</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+
+        <span class="c1"># store result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_sw_function_integrate_w_mterm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate a function on form Sw = A*(M + JX*H)^B; generic function!</span>
+
+<span class="sd">        It assumes here:</span>
+<span class="sd">        * A: self.a</span>
+<span class="sd">        * B: self.b</span>
+<span class="sd">        * X: self.x</span>
+<span class="sd">        * M: self.m</span>
+<span class="sd">        * self.ffl is the free fluid level for the phase under investigation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
+        <span class="n">ht</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">((</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># threshold height</span>
+
+        <span class="n">h2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">htop</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># h_top or H2 in integration</span>
+        <span class="n">h1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hbot</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># h_bot or H1 in integration</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">ht</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;HT&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">:</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gridname</span><span class="p">,</span> <span class="s2">&quot;THRESHOLD HEIGHT&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_ht</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
+
+        <span class="n">water</span> <span class="o">=</span> <span class="n">h2</span> <span class="o">*</span> <span class="mf">0.0</span>
+        <span class="n">water</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h2</span> <span class="o">&lt;</span> <span class="n">ht</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">water</span><span class="p">)</span>
+        <span class="n">water</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">water</span><span class="p">)</span>  <span class="c1"># may occur for negative ht</span>
+
+        <span class="c1"># get all possible corner cases when a cell is close to free fluid level</span>
+        <span class="c1"># some of these are probably hitting twice or more; the point is to integrate</span>
+        <span class="c1"># over correct interval</span>
+        <span class="n">h1x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">h1</span><span class="p">)</span>
+        <span class="n">h2x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h2</span> <span class="o">&lt;=</span> <span class="n">h1x</span><span class="p">,</span> <span class="n">h1x</span><span class="p">,</span> <span class="n">h2</span><span class="p">)</span>
+        <span class="n">htx</span> <span class="o">=</span> <span class="n">ht</span> <span class="o">-</span> <span class="n">h1x</span>
+        <span class="n">htx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">htx</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">htx</span><span class="p">)</span>
+        <span class="n">htx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">h2x</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">htx</span><span class="p">)</span>
+        <span class="n">hxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">ht</span> <span class="o">&gt;</span> <span class="n">h1x</span><span class="p">,</span> <span class="n">ht</span><span class="p">,</span> <span class="n">h1x</span><span class="p">)</span>
+
+        <span class="n">dh</span> <span class="o">=</span> <span class="n">h2x</span> <span class="o">-</span> <span class="n">h1x</span>
+        <span class="n">dh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dh</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">dh</span><span class="p">)</span>  <span class="c1"># avoid zero division</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">htx</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span>
+            <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="o">*</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">h2x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">hxx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">dh</span>
+
+        <span class="c1"># mark collapsed cells, where direct calulation is needed</span>
+        <span class="n">mark</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2x</span> <span class="o">-</span> <span class="n">h1x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.0</span>
+        <span class="n">mark</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dh</span> <span class="o">&lt;=</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">mark</span><span class="p">)</span>
+        <span class="n">jval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">h2x</span>
+        <span class="n">coll_swval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">jval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mark</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">coll_swval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+
+        <span class="c1"># normalize before any limitations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swmax</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swira</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span>
+        <span class="p">)</span>
+
+        <span class="c1"># limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">water</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span> <span class="o">&lt;</span> <span class="mf">0.00099</span><span class="p">,</span> <span class="mf">0.00099</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_integrated</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute Sw, integrated version.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Integration, do integration over height of cell...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sw_function_integrate_w_mterm</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW max out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW min out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_compute_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute Sw, direct version (less precise wiht thick cells).&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Direct, no integration over height...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sw_function_direct</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW max out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW min out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SwFunction.compute"><a class="viewcode-back" href="../../../../fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compute_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;integrated&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Common compute function for saturation, and returns the Sw property&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">compute_method</span> <span class="o">==</span> <span class="s2">&quot;integrated&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_integrated</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_direct</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

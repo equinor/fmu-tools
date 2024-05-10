@@ -9,6 +9,7 @@ Subpackages
 
    fmu.tools.ensembles
    fmu.tools.fipmapper
+   fmu.tools.properties
    fmu.tools.qcdata
    fmu.tools.qcforward
    fmu.tools.rms
