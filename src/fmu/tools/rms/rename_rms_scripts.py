@@ -334,14 +334,11 @@ class PythonCompMaster:
         """Returns a list of instance names that are not PEP8 compliant."""
 
         def _noncompliant_pep8(iname):
-            if (
+            return (
                 any(c.isupper() for c in iname)
                 or iname[0].isdigit()
                 or any(c == "-" for c in iname)
-            ):
-                return True
-
-            return False
+            )
 
         return list(filter(_noncompliant_pep8, self._entries.keys()))
 

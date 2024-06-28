@@ -61,7 +61,7 @@ class TestProperties2df:
         }
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
 
-        assert ["FINESAND", "COARSESAND"] == list(pdf.dataframe["FACIES"].unique())
+        assert list(pdf.dataframe["FACIES"].unique()) == ["FINESAND", "COARSESAND"]
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.2374, abs=0.001)
 
         data_grid["filters"] = {
@@ -90,7 +90,7 @@ class TestProperties2df:
         }
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
 
-        assert ["FINESAND"] == list(pdf.dataframe["FACIES"].unique())
+        assert list(pdf.dataframe["FACIES"].unique()) == ["FINESAND"]
 
         # test exclude values using list
         data_grid["selectors"] = {
@@ -119,7 +119,7 @@ class TestProperties2df:
         }
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
 
-        assert ["FINESAND", "COARSESAND"] == list(pdf.dataframe["FACIES"].unique())
+        assert list(pdf.dataframe["FACIES"].unique()) == ["FINESAND", "COARSESAND"]
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.2374, abs=0.001)
 
     def test_filters_and_property_filters(self, data_grid):
@@ -280,10 +280,10 @@ class TestStatistics:
 
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
-        assert ["Test_case"] == list(qcp.dataframe["ID"].unique())
+        assert list(qcp.dataframe["ID"].unique()) == ["Test_case"]
 
         qcp.get_grid_statistics(data_grid)
-        assert ["Test_case", "Test_case(1)"] == qcp.dataframe["ID"].unique().tolist()
+        assert qcp.dataframe["ID"].unique().tolist() == ["Test_case", "Test_case(1)"]
 
     def test_no_selectors(self, data_grid):
         """Test running without selectors"""
@@ -304,9 +304,9 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert ["Total"] == list(
+        assert list(
             qcp.dataframe[qcp.dataframe["ZONE"] == "Total"]["FACIES"].unique()
-        )
+        ) == ["Total"]
 
     def test_multiple_filters(self, data_grid):
         """Test running two statistics extractions using multiple_filters"""
@@ -345,7 +345,7 @@ class TestStatistics:
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
 
-        assert ["REEK"] == list(qcp.dataframe["ID"].unique())
+        assert list(qcp.dataframe["ID"].unique()) == ["REEK"]
         assert qcp.dataframe[
             (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["REGION"] == "2")
         ]["Avg"].values == pytest.approx(0.1661, abs=0.001)

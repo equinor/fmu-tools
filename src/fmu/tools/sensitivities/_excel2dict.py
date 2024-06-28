@@ -715,9 +715,7 @@ def _is_int(teststring):
     """Test if a string can be parsed as a float"""
     try:
         if not np.isnan(int(teststring)):
-            if (float(teststring) % 1) == 0:
-                return True
-            return False
+            return (float(teststring) % 1) == 0
         return False  # It was a "number", but it was NaN.
     except ValueError:
         return False

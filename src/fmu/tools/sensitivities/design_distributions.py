@@ -509,9 +509,7 @@ def sample_discrete(dist_params, numreals):
 def is_number(teststring):
     """Test if a string can be parsed as a float"""
     try:
-        if not numpy.isnan(float(teststring)):
-            return True
-        return False  # It was a "number", but it was NaN.
+        return not numpy.isnan(float(teststring))
     except ValueError:
         return False
 

@@ -53,11 +53,7 @@ def _detect_module_or_package(path, module_root_name):
         # module is a single file
         return True
 
-    if (usepath / module_root_name / "__init__.py").is_file():
-        # module is a package
-        return True
-
-    return False
+    return (usepath / module_root_name / "__init__.py").is_file()
 
 
 @no_type_check
