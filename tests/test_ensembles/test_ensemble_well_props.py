@@ -7,6 +7,7 @@ from copy import deepcopy
 import pytest
 import xtgeo
 import yaml
+
 from fmu.tools._common import preserve_cwd
 from fmu.tools.ensembles import ensemble_well_props
 

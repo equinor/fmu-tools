@@ -6,6 +6,7 @@ from shutil import copytree
 from textwrap import dedent
 
 import pytest
+
 from fmu.tools._common import preserve_cwd
 from fmu.tools.rms.rename_rms_scripts import PythonCompMaster, main
 

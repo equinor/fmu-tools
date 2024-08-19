@@ -2,6 +2,7 @@ from os.path import abspath
 
 import pandas as pd
 import pytest
+
 from fmu.tools import qcforward as qcf
 
 

@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import xtgeo
+
 from fmu.tools.properties import SwFunction
 
 TPATH = Path("../xtgeo-testdata")
