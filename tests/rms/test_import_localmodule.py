@@ -3,8 +3,9 @@
 import os
 import sys
 
-import fmu.tools.rms as toolsrms
 import pytest
+
+import fmu.tools.rms as toolsrms
 from fmu.tools._common import preserve_cwd
 
 SNIPPET1 = """

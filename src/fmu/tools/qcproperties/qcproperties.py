@@ -5,6 +5,7 @@ from typing import Any, Optional
 
 import pandas as pd
 import yaml
+
 from fmu.tools._common import _QCCommon
 from fmu.tools.qcdata import QCData
 from fmu.tools.qcproperties._aggregate_df import PropertyAggregation

@@ -3,6 +3,7 @@
 import numbers
 
 import pytest
+
 from fmu.tools.sensitivities import design_distributions as dists
 
 # pylint: disable=protected-access

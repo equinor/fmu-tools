@@ -1,7 +1,8 @@
 import pandas as pd
 import pytest
-from fmu.tools.fipmapper import fipmapper
 from packaging import version
+
+from fmu.tools.fipmapper import fipmapper
 
 
 @pytest.mark.skipif(

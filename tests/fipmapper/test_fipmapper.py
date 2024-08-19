@@ -1,4 +1,5 @@
 import pytest
+
 from fmu.tools.fipmapper import fipmapper
 
 
