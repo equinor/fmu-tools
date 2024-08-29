@@ -104,7 +104,7 @@ def extract_grid_zone_tops(
             .map(xtg_well.get_logrecord(xtg_well.zonelogname))
             .fillna("Outside")
         )
-        dfs.append(dframe.drop(columns=["TopName", "Q_INCL", "Q_AZI"]))
+        dfs.append(dframe.drop(columns=["TopName", "Q_INCL", "Q_AZI"], errors="ignore"))
 
     df = pd.concat(dfs)
     if alias_file is not None:
