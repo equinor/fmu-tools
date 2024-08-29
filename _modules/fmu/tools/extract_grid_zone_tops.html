@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.extract_grid_zone_tops &mdash; fmu-tools 1.15.1.dev2+g69aa7dd documentation</title>
+  <title>fmu.tools.extract_grid_zone_tops &mdash; fmu-tools 1.15.1.dev4+g35af710 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=50643df9"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=33c916b4"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -35,7 +35,7 @@
               <img src="../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                1.15.1.dev2+g69aa7dd
+                1.15.1.dev4+g35af710
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -87,26 +87,15 @@
              
   <h1>Source code for fmu.tools.extract_grid_zone_tops</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">xtgeo</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">_roxar</span>  <span class="c1"># type: ignore</span>
-<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-
-<div class="viewcode-block" id="MockRoxar"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.MockRoxar">[docs]</a>    <span class="k">class</span> <span class="nc">MockRoxar</span><span class="p">:</span>
-        <span class="nd">@property</span>
-        <span class="k">def</span> <span class="nf">Project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">pass</span></div>
-
-    <span class="n">_roxar</span> <span class="o">=</span> <span class="n">MockRoxar</span><span class="p">()</span>
-
 
 <div class="viewcode-block" id="extract_grid_zone_tops"><a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">[docs]</a><span class="k">def</span> <span class="nf">extract_grid_zone_tops</span><span class="p">(</span>
-    <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">well_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">logrun</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
     <span class="n">trajectory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
@@ -203,7 +192,7 @@
             <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">get_logrecord</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">))</span>
             <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;Outside&quot;</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TopName&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_INCL&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_AZI&quot;</span><span class="p">]))</span>
+        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TopName&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_INCL&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_AZI&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">))</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">alias_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
