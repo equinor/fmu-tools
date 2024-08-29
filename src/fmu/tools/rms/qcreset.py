@@ -4,7 +4,10 @@ from typing import Any, Dict, List, Union
 try:
     import _roxar  # type: ignore
 except ModuleNotFoundError:
-    warnings.warn("This script only supports interactive RMS usage", UserWarning)
+    try:
+        import _rmsapi as _roxar  # type: ignore
+    except ModuleNotFoundError:
+        warnings.warn("This script only supports interactive RMS usage", UserWarning)
 
 
 def _set_safe_value(
