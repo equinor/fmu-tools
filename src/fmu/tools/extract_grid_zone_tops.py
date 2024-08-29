@@ -1,24 +1,13 @@
 import pathlib
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 import numpy as np
 import pandas as pd
 import xtgeo
 
-try:
-    import _roxar  # type: ignore
-except ModuleNotFoundError:
-
-    class MockRoxar:
-        @property
-        def Project(self):
-            pass
-
-    _roxar = MockRoxar()
-
 
 def extract_grid_zone_tops(
-    project: Optional[_roxar.Project] = None,
+    project: Optional[Any] = None,
     well_list: Optional[list] = None,
     logrun: str = "log",
     trajectory: str = "Drilled trajectory",
