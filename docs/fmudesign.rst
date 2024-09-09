@@ -135,8 +135,7 @@ Alternatively from a notebook:
     from fmu.config import oyaml as yaml
     from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
-    with open('../input/config/design_input_example1.xlsx') as input_file:
-        input_dict = excel2dict_design(input_file)
+    input_dict = excel2dict_design('../input/config/design_input_example1.xlsx')
 
     design = DesignMatrix()
     design.generate(input_dict)
