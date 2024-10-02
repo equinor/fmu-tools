@@ -14,7 +14,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
@@ -29,6 +29,6 @@ jobs:
           pytest -n auto tests --disable-warnings --cov-report=xml:fmu-tools.xml;
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: fmu-tools.xml
