@@ -213,7 +213,7 @@ class PythonCompMaster:
         return start, end
 
     def _params_to_dict(self, lines: List[str]) -> Dict[str, str]:
-        """Converts the list of lines representing _a single_ PSJParams
+        """Converts the list of lines representing a single PSJParams
         object into a dictionary containing its values.
         """
         split_lines = [line.split("=", maxsplit=1) for line in lines]

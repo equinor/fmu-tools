@@ -2,7 +2,7 @@ Domain conversion
 =================
 
 In RMS it is possible to do domain conversion using the menu option, but in
-some cases it convinient to be able to convert domains using a script. This
+some cases it convenient to be able to convert domains using a script. This
 module provides a method to convert domains in pure python.
 
 The functions are based on that we have matching pairs of surfaces for the two
