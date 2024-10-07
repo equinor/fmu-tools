@@ -1,3 +1,5 @@
+"""Extract grid zone tops from wells."""
+
 import pathlib
 from typing import Any, Dict, Optional, Union
 

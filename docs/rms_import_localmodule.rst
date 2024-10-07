@@ -30,7 +30,7 @@ Given that the library module is made inside the RMS GUI, here is an example::
 The library is outside RMS
 --------------------------
 
-Sometimes it is convinient that the library is made outside RMS, and the same function can
+Sometimes it is convenient that the library is made outside RMS, and the same function can
 then be applied with a `path` keyword::
 
     import fmu.tools as tools

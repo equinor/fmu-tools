@@ -407,9 +407,10 @@ class SeedSensitivity:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
-        """Args:
-        sensname (str): Name of sensitivity.
-            Defines SENSNAME in design matrix
+        """Initiate method.
+
+        Args:
+            sensname (str): Name of sensitivity. Defines SENSNAME in design matrix.
         """
         self.sensname = sensname
         self.sensvalues = None
@@ -465,9 +466,10 @@ class SingleRealisationReference:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
-        """Args:
-        sensname (str): Name of sensitivity.
-            Defines SENSNAME in design matrix
+        """Initiate.
+
+        Args:
+            sensname (str): Name of sensitivity. Defines SENSNAME in design matrix.
         """
         self.sensname = sensname
         self.sensvalues = None
@@ -501,9 +503,10 @@ class BackgroundSensitivity:
 
     # pylint: disable=too-few-public-methods
     def __init__(self, sensname):
-        """Args:
-        sensname (str): Name of sensitivity.
-            Defines SENSNAME in design matrix
+        """Inititate
+
+        Args:
+            sensname (str): Name of sensitivity. Defines SENSNAME in design matrix.
         """
         self.sensname = sensname
         self.sensvalues = None

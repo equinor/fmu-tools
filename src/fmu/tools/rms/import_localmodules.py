@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @no_type_check
 def _detect_pyfile(path, module_root_name):
-    """A module shall be named *.py, but may have different 'actual' name in RMS.
+    """A module shall be named ``*.py``, but may have different 'actual' name in RMS.
 
     Returns:
         actual_file: e.g. mymodule_name_ondisk.py_1
