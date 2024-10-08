@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.15.2.dev5+gfeb3ad1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=7ab3649f" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=499e2963"></script>
+      <script src="../../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.domainconversion.dconvert</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.domainconversion.dconvert</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xtgeo</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DomainConversion"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DomainConversion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Domain conversion, tailored for fmu-sim2seis but also works as standalone.</span>
+
+<span class="sd">    The principle is to use matching sets of time and depth surfaces to create a</span>
+<span class="sd">    velocity (or slowness) cube, and use that further to domain convert either</span>
+<span class="sd">    seismics or surfaces.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># input</span>
+    <span class="n">cube_template</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span>  <span class="c1"># shall be in TWT if time_to_depth</span>
+    <span class="n">depth_surfaces</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">time_surfaces</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">use_interval_velocity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">time_to_depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># if False, it shall make a slowness cube in Depth</span>
+
+    <span class="c1"># instance variables (private)</span>
+    <span class="n">_cube_tmpl</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># actual template cube</span>
+    <span class="n">_vcube_t</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># avg velocity cube in time</span>
+    <span class="n">_vcube_i_t</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># intv vel. cube time</span>
+    <span class="n">_scube_d</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># avg slowness cube in depth</span>
+    <span class="n">_v_surfaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># velocities</span>
+    <span class="n">_s_surfaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># slowness</span>
+    <span class="n">_d_surfaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># depth</span>
+    <span class="n">_t_surfaces</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># time</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initialize post init&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cube_input</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_to_depth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resample_surfaces</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth_surfaces</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">ensure_consistency</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resample_surfaces</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_surfaces</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">ensure_consistency</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_surfaces_has_msl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_cube_input_vs_surfaces</span><span class="p">()</span>
+
+        <span class="c1"># create velocity or slowness cube(s)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_to_depth</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_interval_velocity</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_velo_maps_interval</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_velo_cubes_interval</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_velo_cube_average_from_interval</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_velo_maps_average</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_velo_cubes_average</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_slow_maps_average</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_slow_cubes_average</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_recreate_cube_from_msl</span><span class="p">(</span><span class="n">incube</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;If input cube does does start from MSL; create a cube where zori=0&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">incube</span><span class="o">.</span><span class="n">zori</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="n">incube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">incube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">incube</span><span class="o">.</span><span class="n">zinc</span>
+            <span class="n">new_nlay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">zmax</span> <span class="o">/</span> <span class="n">incube</span><span class="o">.</span><span class="n">zinc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># assume mapping is unique</span>
+            <span class="n">shift_mapping</span> <span class="o">=</span> <span class="n">incube</span><span class="o">.</span><span class="n">zori</span> <span class="o">/</span> <span class="n">incube</span><span class="o">.</span><span class="n">zinc</span>
+            <span class="n">shift_mapping</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift_mapping</span><span class="p">)</span> <span class="k">if</span> <span class="n">shift_mapping</span><span class="o">.</span><span class="n">is_integer</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
+
+            <span class="n">new_cube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+                <span class="n">ncol</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
+                <span class="n">nrow</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+                <span class="n">nlay</span><span class="o">=</span><span class="n">new_nlay</span><span class="p">,</span>
+                <span class="n">xinc</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">xinc</span><span class="p">,</span>
+                <span class="n">yinc</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">yinc</span><span class="p">,</span>
+                <span class="n">zinc</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">zinc</span><span class="p">,</span>
+                <span class="n">xori</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">xori</span><span class="p">,</span>
+                <span class="n">yori</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">yori</span><span class="p">,</span>
+                <span class="n">zori</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">yflip</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">yflip</span><span class="p">,</span>
+                <span class="n">rotation</span><span class="o">=</span><span class="n">incube</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span>
+                <span class="n">values</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">resample</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">shift_mapping</span><span class="p">:</span>
+                    <span class="n">new_cube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">shift_mapping</span><span class="p">:]</span> <span class="o">=</span> <span class="n">incube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_cube</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">incube</span><span class="p">)</span>  <span class="c1"># slower!</span>
+            <span class="k">return</span> <span class="n">new_cube</span>
+
+        <span class="k">return</span> <span class="n">incube</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_resample_surfaces</span><span class="p">(</span>
+        <span class="n">surflist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span>
+        <span class="n">cube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
+        <span class="n">fill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">ensure_consistency</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+        <span class="c1"># local function</span>
+        <span class="k">def</span> <span class="nf">_ensure_consistency</span><span class="p">(</span>
+            <span class="n">slist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Ensure consistensy for depth or time surfaces&quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">inum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">slist</span><span class="p">)):</span>
+                <span class="n">values0</span> <span class="o">=</span> <span class="n">slist</span><span class="p">[</span><span class="n">inum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">slist</span><span class="p">[</span><span class="n">inum</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="n">slist</span><span class="p">[</span><span class="n">inum</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">values0</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                    <span class="n">values0</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                    <span class="n">slist</span><span class="p">[</span><span class="n">inum</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">slist</span>
+
+        <span class="n">tmpl</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">zori</span><span class="p">)</span>
+        <span class="n">new_surfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="n">surflist</span><span class="p">:</span>
+            <span class="n">tmpl</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+            <span class="n">tmpl</span><span class="o">.</span><span class="n">fill</span><span class="p">()</span>
+            <span class="n">new_surfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpl</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">ensure_consistency</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_ensure_consistency</span><span class="p">(</span><span class="n">new_surfs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">new_surfs</span>
+
+    <span class="k">def</span> <span class="nf">_set_cube_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set template cube, checking basic requirements on cube input.</span>
+
+<span class="sd">        If the input cube does does start from MSL; create a new cube based on the</span>
+<span class="sd">        geometries from input, ensuring zori is 0.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Check input data, cube&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recreate_cube_from_msl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cube_template</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_surfaces_has_msl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure resampled surface input has a MSL surface.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">msl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">msl</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">msl</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">msl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">msl</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">msl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_cube_input_vs_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span>
+
+        <span class="c1"># find min and max of depth and time surfaces</span>
+        <span class="n">dmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="c1"># dmax = self._d_surfaces[-1].values.max()</span>
+        <span class="n">tmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tmin</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dmin</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;First time and depth surface must start at 0.0&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tmax</span> <span class="o">&gt;</span> <span class="n">cb</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">cb</span><span class="o">.</span><span class="n">zinc</span> <span class="o">*</span> <span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The deepest point on the input time surfaces is deeper &quot;</span>
+                <span class="s2">&quot;than the template cube.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_velo_maps_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create velocity maps per interval&quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps per interval (for intv velocity)&quot;</span><span class="p">)</span>
+
+        <span class="n">vel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">)):</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+            <span class="n">d0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+
+            <span class="n">vspeed</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">tdiff</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">t0</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">tdiff</span><span class="p">[</span><span class="n">tdiff</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="n">d1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">d0</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="n">tdiff</span>
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">*=</span> <span class="mi">2000</span>
+            <span class="n">stddev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">vspeed</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vspeed</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">stddev</span>
+            <span class="n">hig</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">stddev</span>
+
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">low</span>
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">hig</span><span class="p">]</span> <span class="o">=</span> <span class="n">hig</span>
+            <span class="n">vel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vspeed</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span> <span class="o">=</span> <span class="n">vel</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps per interval (for intv velocity) DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_velo_cubes_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create velocity cubes (in Depth/Time) as interval&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_i_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_i_t</span>
+        <span class="n">vcube</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">darr</span> <span class="o">=</span> <span class="p">[</span><span class="n">tc</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">tc</span><span class="o">.</span><span class="n">zinc</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+        <span class="n">vcube</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">darr</span>
+
+        <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">):</span>
+            <span class="n">vmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">tval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">surf</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">vval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">vmap</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_i_t</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vcube</span> <span class="o">&gt;=</span> <span class="n">tval</span><span class="p">,</span> <span class="n">vval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_velo_cube_average_from_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average velocity cube from interval velocity cube.&quot;&quot;&quot;</span>
+
+        <span class="n">arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_i_t</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">cum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="n">cum</span> <span class="o">/</span> <span class="n">cnt</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">avg</span>
+
+    <span class="k">def</span> <span class="nf">_velo_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average velocities from MSL to surface N&quot;&quot;&quot;</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL --&gt;&quot;</span><span class="p">)</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">)):</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+            <span class="n">d0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+
+            <span class="n">vspeed</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">tdiff</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">t0</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">d1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">d0</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">tdiff</span><span class="p">)</span>
+            <span class="n">vspeed</span><span class="o">.</span><span class="n">values</span> <span class="o">*=</span> <span class="mi">2000</span>
+            <span class="n">vel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vspeed</span><span class="p">)</span>
+
+        <span class="n">vel</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span> <span class="o">=</span> <span class="n">vel</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL...  DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_velo_cubes_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create velocity cubes (in Depth/Time) as average&quot;&quot;&quot;</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create average velocity cube&quot;</span><span class="p">)</span>
+        <span class="n">tc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span>
+        <span class="n">tcube</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">time_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">tc</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">tc</span><span class="o">.</span><span class="n">zinc</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+
+        <span class="n">vcube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">tcube</span><span class="p">)</span>
+        <span class="n">tlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">)</span>
+        <span class="n">vlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">vlen</span> <span class="o">==</span> <span class="n">tlen</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">tmap</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tlen</span><span class="p">)]</span>
+                <span class="n">vmap</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vlen</span><span class="p">)]</span>
+
+                <span class="n">vcube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">time_arr</span><span class="p">,</span> <span class="n">tmap</span><span class="p">,</span> <span class="n">vmap</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">vcube</span>
+
+    <span class="k">def</span> <span class="nf">_slow_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average slowness from MSL to surface N&quot;&quot;&quot;</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps averages from MSL --&gt;&quot;</span><span class="p">)</span>
+        <span class="n">slow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">)):</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+            <span class="n">d0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+
+            <span class="n">vslow</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">ddiff</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">d0</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">vslow</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">t1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">t0</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">ddiff</span><span class="p">)</span>
+            <span class="n">vslow</span><span class="o">.</span><span class="n">values</span> <span class="o">/=</span> <span class="mi">2000</span>
+            <span class="n">slow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vslow</span><span class="p">)</span>
+
+        <span class="n">slow</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">slow</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span> <span class="o">=</span> <span class="n">slow</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps for average from MSL...  DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_slow_cubes_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create slowness cubes (in Depth) as average&quot;&quot;&quot;</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create average slowness cube&quot;</span><span class="p">)</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>
+        <span class="n">dcube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">depth_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">dc</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">dc</span><span class="o">.</span><span class="n">zinc</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+
+        <span class="n">scube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dcube</span><span class="p">)</span>
+        <span class="n">dlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">)</span>
+        <span class="n">slen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">slen</span> <span class="o">==</span> <span class="n">dlen</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dcube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">dmap</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dlen</span><span class="p">)]</span>
+                <span class="n">smap</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">slen</span><span class="p">)]</span>
+
+                <span class="n">scube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">depth_arr</span><span class="p">,</span> <span class="n">dmap</span><span class="p">,</span> <span class="n">smap</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">scube</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">average_velocity_cube_in_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">average_slowness_cube_in_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">interval_velocity_cube_in_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_i_t</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cube_template_applied</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cube_tmpl</span>
+
+<div class="viewcode-block" id="DomainConversion.depth_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_cube">[docs]</a>    <span class="k">def</span> <span class="nf">depth_convert_cube</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
+        <span class="n">zinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">maxdepth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">undefined</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999.25</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the current average velocity model/cube to perform depth conversion.</span>
+
+<span class="sd">        If the user wants a cropped cube, that can be performed by using xtgeo&#39;s</span>
+<span class="sd">        cropping of the output.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Depth convert cube...&quot;</span><span class="p">)</span>
+
+        <span class="n">_incube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recreate_cube_from_msl</span><span class="p">(</span><span class="n">incube</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">seismic_attribute_cube</span> <span class="o">=</span> <span class="n">_incube</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">velocity_cube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">_incube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">/</span> <span class="mi">2000</span>  <span class="c1"># TWT in ms. to one way time in s.</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">_incube</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">tarr</span> <span class="o">=</span> <span class="p">[</span><span class="n">_incube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">dt</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_incube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tarr</span>
+        <span class="n">depth_cube</span> <span class="o">=</span> <span class="n">velocity_cube</span> <span class="o">*</span> <span class="n">times</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">new_nlay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxdepth</span> <span class="o">/</span> <span class="n">zinc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">maxdepth</span> <span class="k">else</span> <span class="n">_incube</span><span class="o">.</span><span class="n">nlay</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;NEW NLAY is </span><span class="si">%s</span><span class="s2">, in vcube </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">new_nlay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="o">.</span><span class="n">nlay</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span><span class="p">)</span>
+
+        <span class="n">dcube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+            <span class="n">xori</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">xori</span><span class="p">,</span>
+            <span class="n">yori</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yori</span><span class="p">,</span>
+            <span class="n">zori</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">ncol</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
+            <span class="n">nrow</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+            <span class="n">nlay</span><span class="o">=</span><span class="n">new_nlay</span><span class="p">,</span>
+            <span class="n">xinc</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">xinc</span><span class="p">,</span>
+            <span class="n">yinc</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yinc</span><span class="p">,</span>
+            <span class="n">zinc</span><span class="o">=</span><span class="n">zinc</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span>
+            <span class="n">yflip</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yflip</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">dcube</span><span class="p">)</span>
+        <span class="n">zmax</span> <span class="o">=</span> <span class="n">dcube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">dcube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dcube</span><span class="o">.</span><span class="n">zinc</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Zmax is </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
+        <span class="n">new_depth_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">+</span> <span class="n">zinc</span><span class="p">,</span> <span class="n">zinc</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+        <span class="n">seismic_attribute_depth_cube</span> <span class="o">=</span> <span class="n">dcube</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># Perform the interpolation for each (x, y) location</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seismic_attribute_cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seismic_attribute_cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">depth_trace</span> <span class="o">=</span> <span class="n">depth_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">seismic_trace</span> <span class="o">=</span> <span class="n">seismic_attribute_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">seismic_attribute_depth_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                    <span class="n">new_depth_axis</span><span class="p">,</span>
+                    <span class="n">depth_trace</span><span class="p">,</span>
+                    <span class="n">seismic_trace</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seismic_attribute_depth_cube</span><span class="o">.</span><span class="n">sum</span><span class="p">()):</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Result cube contains NAN, will be replaced with </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">undefined</span>
+            <span class="p">)</span>
+            <span class="n">seismic_attribute_depth_cube</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seismic_attribute_depth_cube</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">undefined</span>
+            <span class="p">)</span>
+
+        <span class="n">dcube</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">seismic_attribute_depth_cube</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Depth convert cube... DONE&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dcube</span></div>
+
+    <span class="c1"># TODO: time_convert... and depth_convert in one generic function</span>
+<div class="viewcode-block" id="DomainConversion.time_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_cube">[docs]</a>    <span class="k">def</span> <span class="nf">time_convert_cube</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
+        <span class="n">zinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">maxdepth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">undefined</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999.25</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the current average slowness model/cube to perform time conversion.</span>
+
+<span class="sd">        If the user wants a cropped cube, that can be performed by using xtgeo&#39;s</span>
+<span class="sd">        cropping of the output.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Time convert cube...&quot;</span><span class="p">)</span>
+
+        <span class="n">_incube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recreate_cube_from_msl</span><span class="p">(</span><span class="n">incube</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">seismic_attribute_cube</span> <span class="o">=</span> <span class="n">incube</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">slowness_cube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">_incube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">*</span> <span class="mi">2000</span>  <span class="c1"># TWT in ms. to one way time in s.</span>
+        <span class="n">depths</span> <span class="o">=</span> <span class="n">_incube</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">darr</span> <span class="o">=</span> <span class="p">[</span><span class="n">_incube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">dz</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_incube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+        <span class="n">depths</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">darr</span>
+        <span class="n">time_cube</span> <span class="o">=</span> <span class="n">slowness_cube</span> <span class="o">*</span> <span class="n">depths</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">new_nlay</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">maxdepth</span> <span class="o">/</span> <span class="n">zinc</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">maxdepth</span> <span class="k">else</span> <span class="n">_incube</span><span class="o">.</span><span class="n">nlay</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;NEW NLAY is </span><span class="si">%s</span><span class="s2">, in vcube </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">new_nlay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span><span class="o">.</span><span class="n">nlay</span><span class="p">)</span>
+
+        <span class="n">tcube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span>
+            <span class="n">xori</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">xori</span><span class="p">,</span>
+            <span class="n">yori</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yori</span><span class="p">,</span>
+            <span class="n">zori</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">ncol</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
+            <span class="n">nrow</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span>
+            <span class="n">nlay</span><span class="o">=</span><span class="n">new_nlay</span><span class="p">,</span>
+            <span class="n">xinc</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">xinc</span><span class="p">,</span>
+            <span class="n">yinc</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yinc</span><span class="p">,</span>
+            <span class="n">zinc</span><span class="o">=</span><span class="n">zinc</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span>
+            <span class="n">yflip</span><span class="o">=</span><span class="n">_incube</span><span class="o">.</span><span class="n">yflip</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">zmax</span> <span class="o">=</span> <span class="n">tcube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">tcube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tcube</span><span class="o">.</span><span class="n">zinc</span>
+        <span class="n">new_time_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">+</span> <span class="n">zinc</span><span class="p">,</span> <span class="n">zinc</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+        <span class="n">seismic_attribute_time_cube</span> <span class="o">=</span> <span class="n">tcube</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="c1"># Perform the interpolation for each (x, y) location</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seismic_attribute_cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seismic_attribute_cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">time_trace</span> <span class="o">=</span> <span class="n">time_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">seismic_trace</span> <span class="o">=</span> <span class="n">seismic_attribute_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="n">seismic_attribute_time_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                    <span class="n">new_time_axis</span><span class="p">,</span>
+                    <span class="n">time_trace</span><span class="p">,</span>
+                    <span class="n">seismic_trace</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seismic_attribute_time_cube</span><span class="o">.</span><span class="n">sum</span><span class="p">()):</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Result cube contains NAN, will be replaced with </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">undefined</span>
+            <span class="p">)</span>
+            <span class="n">seismic_attribute_time_cube</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seismic_attribute_time_cube</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">undefined</span>
+            <span class="p">)</span>
+
+        <span class="n">tcube</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">seismic_attribute_time_cube</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Time convert cube... DONE&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tcube</span></div>
+
+<div class="viewcode-block" id="DomainConversion.depth_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">depth_convert_surfaces</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the current average velocity model/cube to perform depth conversion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            insurfs: List of xtgeo surface objects to depth convert.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Depth convert surfaces...&quot;</span><span class="p">)</span>
+        <span class="n">vcube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span>  <span class="c1"># velocity cube in TWT</span>
+        <span class="n">tarr</span> <span class="o">=</span> <span class="n">vcube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">vcube</span><span class="o">.</span><span class="n">zinc</span>  <span class="c1"># TWT array</span>
+        <span class="n">original_surf</span> <span class="o">=</span> <span class="n">insurfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">insurfs_resampled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resample_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">vcube</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="n">insurfs_resampled</span><span class="p">:</span>
+            <span class="c1"># Extract TWT values and mask</span>
+            <span class="n">twt_values</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mask</span>
+
+            <span class="c1"># Vectorized interpolation</span>
+            <span class="n">depths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">twt_values</span><span class="p">)</span>
+            <span class="n">valid_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask</span>
+
+            <span class="c1"># Use advanced indexing for valid TWT values</span>
+            <span class="n">twt_valid</span> <span class="o">=</span> <span class="n">twt_values</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">i_indices</span><span class="p">,</span> <span class="n">j_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">)</span>
+
+            <span class="c1"># Interpolate velocities</span>
+            <span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tarr</span><span class="p">,</span> <span class="n">vcube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+                    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">twt_valid</span><span class="p">,</span> <span class="n">i_indices</span><span class="p">,</span> <span class="n">j_indices</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Calculate depth</span>
+            <span class="n">depths</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">twt_valid</span> <span class="o">*</span> <span class="n">velocities</span> <span class="o">/</span> <span class="mi">2000</span>
+
+            <span class="c1"># Update surface values with depth-converted values</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">depths</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># resample back to original topology for surfaces</span>
+        <span class="k">for</span> <span class="n">srf</span> <span class="ow">in</span> <span class="n">insurfs_resampled</span><span class="p">:</span>
+            <span class="n">smp</span> <span class="o">=</span> <span class="n">original_surf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">smp</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">srf</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">smp</span><span class="p">)</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Depth convert surfaces... DONE&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="DomainConversion.time_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">time_convert_surfaces</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the average slowness model/cube to perform depth to time conversion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            insurfs: List of xtgeo surface objects to time convert.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Time convert surfaces...&quot;</span><span class="p">)</span>
+        <span class="n">vcube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>  <span class="c1"># velocity cube in TWT</span>
+        <span class="n">tarr</span> <span class="o">=</span> <span class="n">vcube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">vcube</span><span class="o">.</span><span class="n">zinc</span>  <span class="c1"># TWT array</span>
+        <span class="n">original_surf</span> <span class="o">=</span> <span class="n">insurfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">insurfs_resampled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resample_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">vcube</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="n">insurfs_resampled</span><span class="p">:</span>
+            <span class="c1"># Extract TWT values and mask</span>
+            <span class="n">dep_values</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mask</span>
+
+            <span class="c1"># Vectorized interpolation</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dep_values</span><span class="p">)</span>
+            <span class="n">valid_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask</span>
+
+            <span class="c1"># Use advanced indexing for valid TWT values</span>
+            <span class="n">dep_valid</span> <span class="o">=</span> <span class="n">dep_values</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">i_indices</span><span class="p">,</span> <span class="n">j_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">valid_mask</span><span class="p">)</span>
+
+            <span class="c1"># Interpolate velocities</span>
+            <span class="n">velocities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tarr</span><span class="p">,</span> <span class="n">vcube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:])</span>
+                    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">dep_valid</span><span class="p">,</span> <span class="n">i_indices</span><span class="p">,</span> <span class="n">j_indices</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Calculate depth</span>
+            <span class="n">times</span><span class="p">[</span><span class="n">valid_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">dep_valid</span> <span class="o">*</span> <span class="n">velocities</span> <span class="o">*</span> <span class="mi">2000</span>
+
+            <span class="c1"># Update surface values with depth-converted values</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># resample back to original topology for surfaces</span>
+        <span class="k">for</span> <span class="n">srf</span> <span class="ow">in</span> <span class="n">insurfs_resampled</span><span class="p">:</span>
+            <span class="n">smp</span> <span class="o">=</span> <span class="n">original_surf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">smp</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">srf</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">smp</span><span class="p">)</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Time convert surfaces... DONE&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

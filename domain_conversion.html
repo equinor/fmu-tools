@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domain conversion &mdash; fmu-tools 1.15.2.dev5+gfeb3ad1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=7ab3649f" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=499e2963"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="create_rft_ertobs" href="create_rft_ertobs.html" />
+    <link rel="prev" title="The properties package" href="properties.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Domain conversion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-1">Example 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-2">Example 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-3">Example 3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Domain conversion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/domain_conversion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="domain-conversion">
+<h1>Domain conversion<a class="headerlink" href="#domain-conversion" title="Permalink to this heading"></a></h1>
+<p>In RMS it is possible to do domain conversion using the menu option, but in
+some cases it convenient to be able to convert domains using a script. This
+module provides a method to convert domains in pure python.</p>
+<p>The functions are based on that we have matching pairs of surfaces for the two
+domains. The code will then interpolate the data from the source domain to
+the target domain.</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<section id="example-1">
+<h3>Example 1<a class="headerlink" href="#example-1" title="Permalink to this heading"></a></h3>
+<p>Depth convert a cube from time to depth domain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">DomainConversion</span>
+
+<span class="n">cube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/time_cube/file.segy&quot;</span><span class="p">)</span>  <span class="c1"># assume this is in time domain</span>
+
+<span class="n">depth1</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth/file1.gri&quot;</span><span class="p">)</span>
+<span class="n">depth2</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth/file2.gri&quot;</span><span class="p">)</span>
+<span class="n">time1</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/time/file1.gri&quot;</span><span class="p">)</span>
+<span class="n">time2</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/time/file2.gri&quot;</span><span class="p">)</span>
+
+<span class="n">dc</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="p">[</span><span class="n">depth1</span><span class="p">,</span> <span class="n">depth2</span><span class="p">],</span> <span class="p">[</span><span class="n">time1</span><span class="p">,</span> <span class="n">time2</span><span class="p">])</span>
+
+<span class="c1"># now depth convert cube</span>
+<span class="n">cube_depth</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">cube_depth</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s2">&quot;path/to/output/cube_depth.segy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2">
+<h3>Example 2<a class="headerlink" href="#example-2" title="Permalink to this heading"></a></h3>
+<p>Time convert a cube and a surface from depth to time domain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">DomainConversion</span>
+
+<span class="n">cube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth_cube/file.segy&quot;</span><span class="p">)</span>  <span class="c1"># assume this is in depth domain</span>
+
+<span class="n">depth1</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth/file1.gri&quot;</span><span class="p">)</span>
+<span class="n">depth2</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth/file2.gri&quot;</span><span class="p">)</span>
+<span class="n">time1</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/time/file1.gri&quot;</span><span class="p">)</span>
+<span class="n">time2</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/time/file2.gri&quot;</span><span class="p">)</span>
+
+
+<span class="n">depth_other</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;path/to/depth_other.gri&quot;</span><span class="p">)</span>
+
+<span class="n">dlist</span> <span class="o">=</span> <span class="p">[</span><span class="n">depth1</span><span class="p">,</span> <span class="n">depth2</span><span class="p">]</span>
+<span class="n">tlist</span> <span class="o">=</span> <span class="p">[</span><span class="n">time1</span><span class="p">,</span> <span class="n">time2</span><span class="p">]</span>
+
+
+<span class="n">slowness</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">dlist</span><span class="p">,</span> <span class="n">tlist</span><span class="p">,</span> <span class="n">time_to_depth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">time_cube</span> <span class="o">=</span> <span class="n">slowness</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">time_other_aslist</span> <span class="o">=</span> <span class="n">slowness</span><span class="o">.</span><span class="n">time_convert_surfaces</span><span class="p">([</span><span class="n">depth_other</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="example-3">
+<h3>Example 3<a class="headerlink" href="#example-3" title="Permalink to this heading"></a></h3>
+<p>A larger example with cubes and surfaces in RMS python environment.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">DomainConversion</span>
+
+<span class="n">HORIZONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MSL&quot;</span><span class="p">,</span> <span class="s2">&quot;TopVolantis&quot;</span><span class="p">,</span> <span class="s2">&quot;BaseVolantis&quot;</span><span class="p">,</span> <span class="s2">&quot;BaseVelmodel&quot;</span><span class="p">]</span>
+<span class="n">MAINHORIZONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TopVolantis&quot;</span><span class="p">,</span> <span class="s2">&quot;BaseVolantis&quot;</span><span class="p">]</span>
+
+<span class="n">TEMPLATE_CUBE</span> <span class="o">=</span> <span class="s2">&quot;seismic--amplitude_far_time--20180101&quot;</span>
+<span class="n">TIME_CUBE</span> <span class="o">=</span> <span class="n">TEMPLATE_CUBE</span>
+
+<span class="n">AICUBE</span> <span class="o">=</span> <span class="s2">&quot;seismic--relai_near_time--20180101&quot;</span>
+
+<span class="n">DEPTH_CATEGORY</span> <span class="o">=</span> <span class="s2">&quot;DS_velmod&quot;</span>
+
+<span class="n">TIME_CATEGORY</span> <span class="o">=</span> <span class="s2">&quot;TS_time_extracted&quot;</span>
+
+<span class="n">TIME_CATEGORY_OTHER</span> <span class="o">=</span> <span class="s2">&quot;TS_interp&quot;</span>
+
+<span class="c1"># for sampling</span>
+<span class="n">ZINC</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">MAXDEPTH</span> <span class="o">=</span> <span class="mi">2000</span>
+
+<span class="n">RESULT_AMPL_DEPTH_CUBE</span> <span class="o">=</span> <span class="s2">&quot;seismic--amplitude_far_depth_alt1--20180101&quot;</span>
+<span class="n">RESULT_AICUBE_DEPTH_CUBE</span> <span class="o">=</span> <span class="s2">&quot;seismic--relai_near_depth_alt1--20180101&quot;</span>
+<span class="n">RESULT_AICUBE_TIME_CUBE</span> <span class="o">=</span> <span class="s2">&quot;seismic--relai_near_time_alt1--20180101&quot;</span>
+
+<span class="n">CLIP_CATALOG</span> <span class="o">=</span> <span class="s2">&quot;testing_dconv&quot;</span>
+<span class="n">GENERIC_DEPTH_HORIZON</span> <span class="o">=</span> <span class="s2">&quot;testing_dconv_depth&quot;</span>
+<span class="n">GENERIC_TIME_HORIZON</span> <span class="o">=</span> <span class="s2">&quot;testing_dconv_time&quot;</span>
+
+
+<span class="n">PRJ</span> <span class="o">=</span> <span class="n">project</span>
+
+
+<span class="k">def</span> <span class="nf">load_input</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load input data, such as cubes and surfaces.&quot;&quot;&quot;</span>
+    <span class="n">tmplcube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">TEMPLATE_CUBE</span><span class="p">)</span>
+
+    <span class="n">aicube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">AICUBE</span><span class="p">)</span>
+
+    <span class="n">depthsurfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">timesurfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">HORIZONS</span><span class="p">:</span>
+        <span class="n">dsrf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">DEPTH_CATEGORY</span><span class="p">)</span>
+        <span class="n">depthsurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dsrf</span><span class="p">)</span>
+        <span class="n">tsfr</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">TIME_CATEGORY</span><span class="p">)</span>
+        <span class="n">timesurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tsfr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tmplcube</span><span class="p">,</span> <span class="n">aicube</span><span class="p">,</span> <span class="n">depthsurfs</span><span class="p">,</span> <span class="n">timesurfs</span>
+
+
+<span class="k">def</span> <span class="nf">create_velocity_model</span><span class="p">(</span><span class="n">tmplcube</span><span class="p">,</span> <span class="n">dsurfs</span><span class="p">,</span> <span class="n">tsurfs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a velicity model from a template cube and surfaces.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create velocity model...&quot;</span><span class="p">)</span>
+    <span class="n">vm</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">tmplcube</span><span class="p">,</span> <span class="n">depth_surfaces</span><span class="o">=</span><span class="n">dsurfs</span><span class="p">,</span> <span class="n">time_surfaces</span><span class="o">=</span><span class="n">tsurfs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create velocity model... DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vm</span>
+
+
+<span class="k">def</span> <span class="nf">create_slowness_model</span><span class="p">(</span><span class="n">dcube</span><span class="p">,</span> <span class="n">dsurfs</span><span class="p">,</span> <span class="n">tsurfs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a slowness model (inverse of velocity model) for depth to time conv.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create slowness model...&quot;</span><span class="p">)</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span>
+        <span class="n">dcube</span><span class="p">,</span> <span class="n">depth_surfaces</span><span class="o">=</span><span class="n">dsurfs</span><span class="p">,</span> <span class="n">time_surfaces</span><span class="o">=</span><span class="n">tsurfs</span><span class="p">,</span> <span class="n">time_to_depth</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create slowness model... DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sm</span>
+
+
+<span class="k">def</span> <span class="nf">depth_convert_cube</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="n">mycube</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Depht convert a cube.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth convert cube...&quot;</span><span class="p">)</span>
+    <span class="n">dcube</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">mycube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="n">ZINC</span><span class="p">,</span> <span class="n">maxdepth</span><span class="o">=</span><span class="n">MAXDEPTH</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth convert cube... DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dcube</span>
+
+
+<span class="k">def</span> <span class="nf">time_convert_cube</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">dcube</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time convert a cube using the slowness model.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time convert cube...&quot;</span><span class="p">)</span>
+    <span class="n">tcube</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">dcube</span><span class="p">,</span> <span class="n">maxdepth</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time convert cube... DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tcube</span>
+
+
+<span class="k">def</span> <span class="nf">domain_convert_cubes</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Back and forth, to demonstrate the conversion of cubes.&quot;&quot;&quot;</span>
+    <span class="n">tmplcube</span><span class="p">,</span> <span class="n">aicube</span><span class="p">,</span> <span class="n">dsurfs</span><span class="p">,</span> <span class="n">tsurfs</span> <span class="o">=</span> <span class="n">load_input</span><span class="p">()</span>
+    <span class="n">vm</span> <span class="o">=</span> <span class="n">create_velocity_model</span><span class="p">(</span><span class="n">tmplcube</span><span class="p">,</span> <span class="n">dsurfs</span><span class="p">,</span> <span class="n">tsurfs</span><span class="p">)</span>  <span class="c1"># tmplcube is in time</span>
+    <span class="n">dcube</span> <span class="o">=</span> <span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="n">aicube</span><span class="p">)</span>
+
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">create_slowness_model</span><span class="p">(</span><span class="n">dcube</span><span class="p">,</span> <span class="n">dsurfs</span><span class="p">,</span> <span class="n">tsurfs</span><span class="p">)</span>
+    <span class="n">tcube</span> <span class="o">=</span> <span class="n">time_convert_cube</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">dcube</span><span class="p">)</span>  <span class="c1"># going back again, for demonstration</span>
+
+    <span class="c1"># do cropping after &quot;work&quot; but prior to save to RMS (limits are just examples)</span>
+    <span class="n">dcube</span><span class="o">.</span><span class="n">do_cropping</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+    <span class="n">dcube</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">RESULT_AICUBE_DEPTH_CUBE</span><span class="p">)</span>
+
+    <span class="n">tcube</span><span class="o">.</span><span class="n">do_cropping</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1400</span><span class="p">,</span> <span class="mi">120</span><span class="p">))</span>
+    <span class="n">tcube</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">RESULT_AICUBE_TIME_CUBE</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Crop and save cubes in RMS... DONE&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vm</span><span class="p">,</span> <span class="n">sm</span>  <span class="c1"># return velocity and slowness model for further use</span>
+
+
+<span class="k">def</span> <span class="nf">domain_convert_surfaces</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="n">sm</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use velocity and slowness model to depth and time convert some other surfaces.&quot;&quot;&quot;</span>
+
+    <span class="c1"># read some other time surfaces</span>
+    <span class="n">othertimesurfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="n">MAINHORIZONS</span><span class="p">:</span>
+        <span class="n">tsfr</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">TIME_CATEGORY_OTHER</span><span class="p">)</span>
+        <span class="n">othertimesurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tsfr</span><span class="p">)</span>
+
+    <span class="n">depthsurfaces</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">depth_convert_surfaces</span><span class="p">(</span><span class="n">othertimesurfs</span><span class="p">)</span>
+
+    <span class="c1"># store on clipboard</span>
+    <span class="k">for</span> <span class="n">no</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">MAINHORIZONS</span><span class="p">):</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">depthsurfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+            <span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">no</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">GENERIC_DEPTH_HORIZON</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># surfaces back to time</span>
+    <span class="n">new_timesurfaces</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">time_convert_surfaces</span><span class="p">(</span><span class="n">depthsurfaces</span><span class="p">)</span>
+
+    <span class="c1"># store new timesurfaces on clipboard</span>
+    <span class="k">for</span> <span class="n">no</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">MAINHORIZONS</span><span class="p">):</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">new_timesurfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+            <span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">no</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">GENERIC_TIME_HORIZON</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="c1"># entry point for script</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">vm</span><span class="p">,</span> <span class="n">sm</span> <span class="o">=</span> <span class="n">domain_convert_cubes</span><span class="p">()</span>
+    <span class="n">domain_convert_surfaces</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="n">sm</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="properties.html" class="btn btn-neutral float-left" title="The properties package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="create_rft_ertobs.html" class="btn btn-neutral float-right" title="create_rft_ertobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

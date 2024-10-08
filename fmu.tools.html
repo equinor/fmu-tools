@@ -6,20 +6,20 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.15.2.dev3+gc214f55 documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.15.2.dev5+gfeb3ad1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=7ab3649f" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=45ff23f6"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=499e2963"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="fmu.tools.ensembles package" href="fmu.tools.ensembles.html" />
+    <link rel="next" title="fmu.tools.domainconversion package" href="fmu.tools.domainconversion.html" />
     <link rel="prev" title="fmu package" href="fmu.html" /> 
 </head>
 
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
@@ -101,6 +102,48 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="fmu.tools.domainconversion.html">fmu.tools.domainconversion package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.domainconversion.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.domainconversion.html#module-fmu.tools.domainconversion.dconvert">fmu.tools.domainconversion.dconvert module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion"><code class="docutils literal notranslate"><span class="pre">DomainConversion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.cube_template"><code class="docutils literal notranslate"><span class="pre">DomainConversion.cube_template</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.depth_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.time_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.use_interval_velocity"><code class="docutils literal notranslate"><span class="pre">DomainConversion.use_interval_velocity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.time_to_depth"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_to_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.average_velocity_cube_in_time"><code class="docutils literal notranslate"><span class="pre">DomainConversion.average_velocity_cube_in_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.average_slowness_cube_in_depth"><code class="docutils literal notranslate"><span class="pre">DomainConversion.average_slowness_cube_in_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.interval_velocity_cube_in_time"><code class="docutils literal notranslate"><span class="pre">DomainConversion.interval_velocity_cube_in_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.cube_template_applied"><code class="docutils literal notranslate"><span class="pre">DomainConversion.cube_template_applied</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_cube"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_convert_cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_cube"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_convert_cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_convert_surfaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_convert_surfaces()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.domainconversion.html#module-fmu.tools.domainconversion">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion"><code class="docutils literal notranslate"><span class="pre">DomainConversion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.cube_template"><code class="docutils literal notranslate"><span class="pre">DomainConversion.cube_template</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.depth_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.time_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.use_interval_velocity"><code class="docutils literal notranslate"><span class="pre">DomainConversion.use_interval_velocity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.time_to_depth"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_to_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.average_velocity_cube_in_time"><code class="docutils literal notranslate"><span class="pre">DomainConversion.average_velocity_cube_in_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.average_slowness_cube_in_depth"><code class="docutils literal notranslate"><span class="pre">DomainConversion.average_slowness_cube_in_depth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.interval_velocity_cube_in_time"><code class="docutils literal notranslate"><span class="pre">DomainConversion.interval_velocity_cube_in_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.cube_template_applied"><code class="docutils literal notranslate"><span class="pre">DomainConversion.cube_template_applied</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.depth_convert_cube"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_convert_cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.time_convert_cube"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_convert_cube()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.depth_convert_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.depth_convert_surfaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.time_convert_surfaces"><code class="docutils literal notranslate"><span class="pre">DomainConversion.time_convert_surfaces()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.ensembles.html">fmu.tools.ensembles package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.ensembles.html#module-fmu.tools.ensembles.ensemble_well_props">fmu.tools.ensembles.ensemble_well_props module</a><ul>
@@ -492,11 +535,12 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-fmu.tools.extract_grid_zone_tops">
-<span id="fmu-tools-extract-grid-zone-tops-module"></span><h2>fmu.tools.extract_grid_zone_tops module<a class="headerlink" href="#module-fmu.tools.extract_grid_zone_tops" title="Permalink to this heading"></a></h2>
+<section id="module-fmu.tools.extract_grid_zone_tops_etc">
+<span id="fmu-tools-extract-grid-zone-tops-etc-module"></span><h2>fmu.tools.extract_grid_zone_tops_etc module<a class="headerlink" href="#module-fmu.tools.extract_grid_zone_tops_etc" title="Permalink to this heading"></a></h2>
+<p>Extract grid zone tops from wells.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">extract_grid_zone_tops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridzonelog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlogname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#extract_grid_zone_tops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.extract_grid_zone_tops" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops_etc.extract_grid_zone_tops">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops_etc.</span></span><span class="sig-name descname"><span class="pre">extract_grid_zone_tops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridzonelog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlogname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops_etc.html#extract_grid_zone_tops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops_etc.extract_grid_zone_tops" title="Permalink to this definition"></a></dt>
 <dd><p>Function for extracting top and base from gridzones, both in TVD and MD.
 A pandas dataframe will be returned.</p>
 <p>Users can either input a pre-generated gridzonelog or a grid and a zone parameter
@@ -511,8 +555,8 @@ and a MD log is not present in the well a quasi md log will be computed and used
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.shift_zone_values">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">shift_zone_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#shift_zone_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.shift_zone_values" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops_etc.shift_zone_values">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops_etc.</span></span><span class="sig-name descname"><span class="pre">shift_zone_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zvals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops_etc.html#shift_zone_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops_etc.shift_zone_values" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
@@ -521,8 +565,8 @@ and a MD log is not present in the well a quasi md log will be computed and used
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops.make_alias_dict">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops.</span></span><span class="sig-name descname"><span class="pre">make_alias_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops.html#make_alias_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops.make_alias_dict" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops_etc.make_alias_dict">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.extract_grid_zone_tops_etc.</span></span><span class="sig-name descname"><span class="pre">make_alias_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alias_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops_etc.html#make_alias_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops_etc.make_alias_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Create a correspondance dictionary so that well_dict[ &lt;RMS wellname&gt; ]
 = &lt;Eclipse wellname&gt;</p>
 <dl class="field-list simple">
@@ -539,6 +583,480 @@ and a MD log is not present in the well a quasi md log will be computed and used
 <section id="module-fmu.tools">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools" title="Permalink to this heading"></a></h2>
 <p>Top-level package for fmu-tools</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.extract_grid_zone_tops">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">extract_grid_zone_tops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">well_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logrun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Drilled</span> <span class="pre">trajectory'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridzonelog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlogname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RMS_WELL_NAME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecl_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ECLIPSE_WELL_NAME'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/extract_grid_zone_tops_etc.html#extract_grid_zone_tops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.extract_grid_zone_tops" title="Permalink to this definition"></a></dt>
+<dd><p>Function for extracting top and base from gridzones, both in TVD and MD.
+A pandas dataframe will be returned.</p>
+<p>Users can either input a pre-generated gridzonelog or a grid and a zone parameter
+for computing the gridzonelog.</p>
+<p>The function works both inside RMS and outside with file input. If input from files,
+and a MD log is not present in the well a quasi md log will be computed and used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.wellzonation_vs_grid">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">wellzonation_vs_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcforward/qcforward.html#wellzonation_vs_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.wellzonation_vs_grid" title="Permalink to this definition"></a></dt>
+<dd><p>Check well zonation or perforations vs 3D grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – This is dictonary telling where data comes from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">QCProperties</span></span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The QCProperties class consists of a set of methods for extracting
+property statistics from 3D Grids, Raw and Blocked wells.</p>
+<p>Statistics can be collected from either discrete or continous properties.
+Dependent on the property different statistics are collected.</p>
+<p>The methods for statistics extraction can be run individually, or a
+yaml-configuration file can be used to enable an automatic run of the
+methods. See the method ‘from_yaml’.</p>
+<p>When several methods of statistics extraction has been run within the instance,
+a merged dataframe is available through the ‘dataframe’ property.</p>
+<p>All methods can be run from either RMS python, or from files.</p>
+<p>XTGeo is being utilized to get a dataframe from the input parameter data.
+XTGeo data is reused in the instance to increase performance.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.dataframe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dataframe</span></span><a class="headerlink" href="#fmu.tools.QCProperties.dataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Dataframe with statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.get_grid_statistics">
+<span class="sig-name descname"><span class="pre">get_grid_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties.get_grid_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties.get_grid_statistics" title="Permalink to this definition"></a></dt>
+<dd><p>Extract property statistics from 3D Grid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.get_well_statistics">
+<span class="sig-name descname"><span class="pre">get_well_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties.get_well_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties.get_well_statistics" title="Permalink to this definition"></a></dt>
+<dd><p>Extract property statistics from wells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.get_bwell_statistics">
+<span class="sig-name descname"><span class="pre">get_bwell_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties.get_bwell_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties.get_bwell_statistics" title="Permalink to this definition"></a></dt>
+<dd><p>Extract property statistics from blocked wells</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.from_yaml">
+<span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties.from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties.from_yaml" title="Permalink to this definition"></a></dt>
+<dd><p>Use yaml-configuration file to run the statistics extractions methods</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.QCProperties.to_csv">
+<span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/qcproperties/qcproperties.html#QCProperties.to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.QCProperties.to_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Write combined dataframe to csv</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">DomainConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_interval_velocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_to_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DomainConversion" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Domain conversion, tailored for fmu-sim2seis but also works as standalone.</p>
+<p>The principle is to use matching sets of time and depth surfaces to create a
+velocity (or slowness) cube, and use that further to domain convert either
+seismics or surfaces.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.cube_template">
+<span class="sig-name descname"><span class="pre">cube_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Cube</span></code></em><a class="headerlink" href="#fmu.tools.DomainConversion.cube_template" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.depth_surfaces">
+<span class="sig-name descname"><span class="pre">depth_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.DomainConversion.depth_surfaces" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.time_surfaces">
+<span class="sig-name descname"><span class="pre">time_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.DomainConversion.time_surfaces" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.use_interval_velocity">
+<span class="sig-name descname"><span class="pre">use_interval_velocity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.use_interval_velocity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.time_to_depth">
+<span class="sig-name descname"><span class="pre">time_to_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.time_to_depth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.average_velocity_cube_in_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.average_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.average_slowness_cube_in_depth">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_slowness_cube_in_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.average_slowness_cube_in_depth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.interval_velocity_cube_in_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interval_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.interval_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.cube_template_applied">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cube_template_applied</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.DomainConversion.cube_template_applied" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.depth_convert_cube">
+<span class="sig-name descname"><span class="pre">depth_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DomainConversion.depth_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
+<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
+cropping of the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.time_convert_cube">
+<span class="sig-name descname"><span class="pre">time_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DomainConversion.time_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Use the current average slowness model/cube to perform time conversion.</p>
+<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
+cropping of the output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.depth_convert_surfaces">
+<span class="sig-name descname"><span class="pre">depth_convert_surfaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insurfs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DomainConversion.depth_convert_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects to depth convert.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DomainConversion.time_convert_surfaces">
+<span class="sig-name descname"><span class="pre">time_convert_surfaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insurfs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DomainConversion.time_convert_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Use the average slowness model/cube to perform depth to time conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects to time convert.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">DesignMatrix</span></span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for design matrix in FMU. Can contain a onebyone design
+or a full montecarlo design.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.designvalues">
+<span class="sig-name descname"><span class="pre">designvalues</span></span><a class="headerlink" href="#fmu.tools.DesignMatrix.designvalues" title="Permalink to this definition"></a></dt>
+<dd><p>design matrix on standard fmu format
+contains columns ‘REAL’ (realization number), and if a onebyone
+design, also columns ‘SENSNAME’ and ‘SENSCASE’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.defaultvalues">
+<span class="sig-name descname"><span class="pre">defaultvalues</span></span><a class="headerlink" href="#fmu.tools.DesignMatrix.defaultvalues" title="Permalink to this definition"></a></dt>
+<dd><p>default values for design</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OrderedDict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.backgroundvalues">
+<span class="sig-name descname"><span class="pre">backgroundvalues</span></span><a class="headerlink" href="#fmu.tools.DesignMatrix.backgroundvalues" title="Permalink to this definition"></a></dt>
+<dd><p>Used when background parameters are
+not constant. Either a set is sampled from specified distributions
+or they are read from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Resets DesignMatrix to empty. Necessary iin case method generate
+is used several times for same instance of DesignMatrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.generate" title="Permalink to this definition"></a></dt>
+<dd><p>Generating design matrix from input dictionary in specific
+format. Adding default values and background values if existing.
+Looping through sensitivities and adding them to designvalues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputdict</strong> (<em>OrderedDict</em>) – input parameters for design</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.to_xlsx">
+<span class="sig-name descname"><span class="pre">to_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">designsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DefaultValues'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.to_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.to_xlsx" title="Permalink to this definition"></a></dt>
+<dd><p>Writing design matrix to excel workfbook on standard fmu format
+to be used in FMU/ERT by DESIGN2PARAMS and DESIGN_KW</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>designsheet</strong> (<em>str</em>) – name of excel sheet containing design matrix
+(optional, defaults to ‘DesignSheet01’)</p></li>
+<li><p><strong>defaultsheet</strong> (<em>str</em>) – name of excel sheet containing default
+values (optional, defaults to ‘DefaultValues’)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.set_defaultvalues">
+<span class="sig-name descname"><span class="pre">set_defaultvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.set_defaultvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.set_defaultvalues" title="Permalink to this definition"></a></dt>
+<dd><p>Add default values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>defaults</strong> (<em>OrderedDict</em>) – (key, value) is (parameter_name, value)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.add_seeds">
+<span class="sig-name descname"><span class="pre">add_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_reals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.add_seeds" title="Permalink to this definition"></a></dt>
+<dd><p>Adding background as specified in dictionary.
+Either from external file or from distributions in background
+dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
+<li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.add_background">
+<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
+<dd><p>Adding background as specified in dictionary.
+Either from external file or from distributions in background
+dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
+<li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.DesignMatrix.background_to_excel">
+<span class="sig-name descname"><span class="pre">background_to_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backgroundsheet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Background'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.background_to_excel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.DesignMatrix.background_to_excel" title="Permalink to this definition"></a></dt>
+<dd><p>Writing background values to an Excel spreadsheet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – output filename (extension .xlsx)</p></li>
+<li><p><strong>backgroundsheet</strong> (<em>str</em>) – name of excel sheet</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.calc_tornadoinput">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">calc_tornadoinput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">designsummary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resultfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rms_seed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'percentage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutbyref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortsens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_tornado_onebyone.html#calc_tornadoinput"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.calc_tornadoinput" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Calculates input values for a tornadoplot for one response
+and one design set up</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>designsummary</strong> (<em>pd.DataFrame</em>) – Summary of designmatrix as output
+from summarize_design.</p></li>
+<li><p><strong>resultfile</strong> (<em>pd.DataFrame</em>) – DataFrame with collected results
+for different realizations where
+‘REAL’ is one of the columns.</p></li>
+<li><p><strong>response</strong> (<em>str</em>) – name of response in resultfile to plot tornado for</p></li>
+<li><p><strong>selectors</strong> (<em>list</em>) – List of strings. Selectors to choose/filter on</p></li>
+<li><p><strong>selections</strong> (<em>list</em>) – List of lists. Values to filter on for each selector.</p></li>
+<li><p><strong>reference</strong> (<em>str</em>) – Specifying what the reference is for
+the tornado plots. Defaults to ‘rms_seed’.
+Valid choices are a sensname or a
+realisation number.</p></li>
+<li><p><strong>scale</strong> (<em>str</em>) – Whether to plot absolute numbers or percentage
+compared to reference mean.  Defaults to ‘percentage’.
+Valid choices are ‘percentage’ and ‘absolute’.</p></li>
+<li><p><strong>cutbyref</strong> (<em>bool</em>) – If True sensitivities smaller than ref
+are excluded. Defaults to False.</p></li>
+<li><p><strong>sortsens</strong> (<em>bool</em>) – If True sensitivities are sorted so that
+largest comes first. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><dl class="simple">
+<dt>(pd.DataFrame): tornadoinput for DataFrame for</dt><dd><p>a tornado plot</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>(int): Average response value for realizations in</dt><dd><p>reference sensitivity.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<dl>
+<dt>Example::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">calc_tornadoplot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">designtable</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;designsummary.csv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;resultfile.csv&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="s1">&#39;STOIIP_OIL&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selectors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ZONE&#39;</span><span class="p">,</span> <span class="s1">&#39;REGION&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selection</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;Nansen&#39;</span><span class="p">,</span><span class="s1">&#39;Larsson&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;SegmentA&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reference</span> <span class="o">=</span> <span class="s1">&#39;rms_seed&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scale</span> <span class="o">=</span> <span class="s1">&#39;percentage&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cutbyref</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sortsens</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">tornadotable</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">)</span> <span class="o">=</span> <span class="n">calc_tornadoinput</span><span class="p">(</span>
+<span class="go">    designtable, results, response, selectors,</span>
+<span class="go">    selection, reference, scale, cutbyref, sortsens)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.excel2dict_design">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">excel2dict_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_excel2dict.html#excel2dict_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.excel2dict_design" title="Permalink to this definition"></a></dt>
+<dd><p>Read excel file with input to design setup
+Currently only specification of
+onebyone design is implemented</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_filename</strong> (<em>str</em>) – Name of excel input file</p></li>
+<li><p><strong>sheetnames</strong> (<em>dict</em>) – Dictionary of worksheet names to load
+information from. Supported keys: general_input, defaultvalues,
+and designinput.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OrderedDict on format for DesignMatrix.generate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.summarize_design">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">summarize_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheetname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DesignSheet01'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/_designsummary.html#summarize_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.summarize_design" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Summarizes the design set up for one by one sensitivities
+specified in a design matrix on standard fmu format.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Path to excel or csv file containting designmatrix
+for one by one sensitivities on standard FMU format.</p></li>
+<li><p><strong>sheetname</strong> (<em>str</em>) – Name of sheet in excel workbook which
+contains the designmatrix (only for excel input). Defaults to
+‘DesignSheet01’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Summary of sensitivities,
+corresponding realisation numbers,
+senstype(‘mc’ or ‘scalar’)
+and senscase (name of high and low cases).
+Each row represents one sensitivity
+with 1-2 cases (low/high).
+Column names are [‘sensno’, ‘sensname’,
+‘senstype’, ‘casename1’, ‘startreal1’, ‘endreal1’,
+‘casename2’, ‘startreal2’, ‘endreal2’]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<dl>
+<dt>Example::</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.sensitivities</span> <span class="kn">import</span> <span class="n">summarize_design</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">designname</span> <span class="o">=</span> <span class="s1">&#39;design_filename.xlsx&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">designsheet</span> <span class="o">=</span> <span class="s1">&#39;DesignSheet01&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">designtable</span> <span class="o">=</span> <span class="n">summarize_design</span><span class="p">(</span><span class="n">designname</span><span class="p">,</span> <span class="n">designsheet</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -547,7 +1065,7 @@ and a MD log is not present in the well a quasi md log will be computed and used
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="fmu.html" class="btn btn-neutral float-left" title="fmu package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fmu.tools.ensembles.html" class="btn btn-neutral float-right" title="fmu.tools.ensembles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmu.tools.domainconversion.html" class="btn btn-neutral float-right" title="fmu.tools.domainconversion package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

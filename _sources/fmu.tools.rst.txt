@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   fmu.tools.domainconversion
    fmu.tools.ensembles
    fmu.tools.fipmapper
    fmu.tools.properties
@@ -18,10 +19,10 @@ Subpackages
 Submodules
 ----------
 
-fmu.tools.extract\_grid\_zone\_tops module
-------------------------------------------
+fmu.tools.extract\_grid\_zone\_tops\_etc module
+-----------------------------------------------
 
-.. automodule:: fmu.tools.extract_grid_zone_tops
+.. automodule:: fmu.tools.extract_grid_zone_tops_etc
    :members:
    :undoc-members:
    :show-inheritance:

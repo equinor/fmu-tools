@@ -1,0 +1,21 @@
+fmu.tools.domainconversion package
+==================================
+
+Submodules
+----------
+
+fmu.tools.domainconversion.dconvert module
+------------------------------------------
+
+.. automodule:: fmu.tools.domainconversion.dconvert
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools.domainconversion
+   :members:
+   :undoc-members:
+   :show-inheritance:
