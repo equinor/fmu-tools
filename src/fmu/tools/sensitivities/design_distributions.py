@@ -153,12 +153,11 @@ def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
         list of values
     """
 
+    status, msg = _check_dist_params_normal(dist_parameters)
+    if not status:
+        raise ValueError(msg)
+
     if len(dist_parameters) == 2:  # normal
-        status, msg = _check_dist_params_normal(dist_parameters)
-
-        if not status:
-            raise ValueError(msg)
-
         dist_mean = float(dist_parameters[0])
         dist_stddev = float(dist_parameters[1])
         if normalscoresamples is not None:
@@ -172,11 +171,6 @@ def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
             values = distribution.rvs(size=numreals)
 
     else:  # truncated normal or invalid
-        status, msg = _check_dist_params_normal(dist_parameters)
-
-        if not status:
-            raise ValueError(msg)
-
         mean = float(dist_parameters[0])
         sigma = float(dist_parameters[1])
         clip1 = float(dist_parameters[2])
