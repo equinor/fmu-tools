@@ -12,7 +12,7 @@ import scipy.stats
 
 
 def _check_dist_params_normal(dist_params):
-    if len(dist_params) != 2 and len(dist_params) != 4:
+    if len(dist_params) not in [2, 4]:
         status = False
         msg = (
             "Normal distribution must have 2 parameters"
