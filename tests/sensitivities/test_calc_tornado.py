@@ -1,18 +1,12 @@
 from pathlib import Path
 
 import pandas as pd
-import pytest
-from packaging import version
 
 from fmu.tools.sensitivities import calc_tornadoinput, summarize_design
 
 TESTDATA = Path(__file__).parent / "data"
 
 
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_designsummary():
     """Test import and summary of design matrix"""
 

@@ -1,18 +1,12 @@
 """Example use cases for fmudesign"""
 
 import pandas as pd
-import pytest
-from packaging import version
 
 from fmu.tools._common import preserve_cwd
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_prediction_rejection_sampled_ensemble(tmpdir):
     """Test making a design matrix for prediction realizations based on an
     ensemble made with manual history matching (rejection sampling).
