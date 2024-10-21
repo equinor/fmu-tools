@@ -151,6 +151,25 @@ def test_draw_values_normal():
     assert len(values) == 10
     assert all(isinstance(value, numbers.Number) for value in values)
 
+    with pytest.raises(
+        ValueError,
+        match=(
+            "Normal distribution must have 2 parameters or 4 for a truncated normal, "
+            "but had 3 parameters."
+        ),
+    ):
+        values = dists.draw_values_normal([0, 1, 2], 10)
+
+    with pytest.raises(
+        ValueError, match="Parameters for normal distribution must be numbers."
+    ):
+        values = dists.draw_values_normal([0, "b"], 10)
+
+    with pytest.raises(
+        ValueError, match="Stddev for normal distribution must be >= 0."
+    ):
+        values = dists.draw_values_normal([0, -1], 10)
+
     values = dists.draw_values_normal([0, 10, -1, 2], 50)
     assert all(-1 <= value <= 2 for value in values)
 
