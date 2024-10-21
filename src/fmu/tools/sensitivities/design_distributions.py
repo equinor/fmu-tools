@@ -153,7 +153,6 @@ def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
         list of values
     """
 
-    distribution = None
     if len(dist_parameters) == 2:  # normal
         status, msg = _check_dist_params_normal(dist_parameters)
 
