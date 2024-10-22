@@ -193,3 +193,9 @@ def test_generate_full_mc(tmpdir):
     )
     assert not diskdefaults.empty
     assert len(diskdefaults.columns) == 2
+
+    # Make sure adding dependent discrete parameters works.
+    disk_depends = pd.read_excel(inputfile, sheet_name="depend1", engine="openpyxl")
+    df_merged = pd.merge(diskdesign, disk_depends, on="DATO", how="inner")
+    assert (df_merged["DERIVED_PARAM1_x"] == df_merged["DERIVED_PARAM1_y"]).all()
+    assert (df_merged["DERIVED_PARAM2_x"] == df_merged["DERIVED_PARAM2_y"]).all()
