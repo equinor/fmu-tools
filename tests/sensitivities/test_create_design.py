@@ -4,18 +4,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import pytest
-from packaging import version
 
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 TESTDATA = Path(__file__).parent / "data"
 
 
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_generate_onebyone(tmpdir):
     """Test generation of onebyone design"""
 
@@ -168,10 +162,6 @@ def test_generate_onebyone(tmpdir):
     # MULTZ_ILE contains random numbers so we won't test it here.
 
 
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_generate_full_mc(tmpdir):
     """Test generation of full monte carlo"""
     inputfile = TESTDATA / "config/design_input_mc_with_correls.xlsx"

@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pandas as pd
 import pytest
-from packaging import version
 
 from fmu.tools._common import preserve_cwd
 from fmu.tools.sensitivities import excel2dict_design, inputdict_to_yaml
@@ -27,10 +26,6 @@ MOCK_DESIGNINPUT = pd.DataFrame(
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_excel2dict_design(tmpdir):
     """Test that we can convert an Excelfile to a dictionary"""
     tmpdir.chdir()
@@ -87,10 +82,6 @@ def test_excel2dict_design(tmpdir):
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_duplicate_sensname_exception(tmpdir):
     """Test that exceptions are raised for erroneous sensnames"""
     # pylint: disable=abstract-class-instantiated
@@ -121,10 +112,6 @@ def test_duplicate_sensname_exception(tmpdir):
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_strip_spaces(tmpdir):
     """Spaces before and after parameter names are probabaly
     invisible user errors in Excel sheets. Remove them."""
@@ -164,10 +151,6 @@ def test_strip_spaces(tmpdir):
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_mixed_senstype_exception(tmpdir):
     """Test that exceptions are raised for mixups in user input on types"""
     # pylint: disable=abstract-class-instantiated
@@ -205,10 +188,6 @@ def test_has_value():
 
 
 @preserve_cwd
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.0"),
-    reason="Pandas 0.25.0 is required for fmudesign",
-)
 def test_background_sheet(tmpdir):
     """Test loading background values from a sheet"""
     tmpdir.chdir()

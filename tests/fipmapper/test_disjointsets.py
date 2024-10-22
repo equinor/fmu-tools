@@ -1,14 +1,9 @@
 import pandas as pd
 import pytest
-from packaging import version
 
 from fmu.tools.fipmapper import fipmapper
 
 
-@pytest.mark.skipif(
-    version.parse(pd.__version__) < version.parse("0.25.2"),
-    reason="Pandas 0.25.2 is required for fipmappers disjointsets()",
-)
 @pytest.mark.parametrize(
     "mapdata, expected_disjointsets",
     [
