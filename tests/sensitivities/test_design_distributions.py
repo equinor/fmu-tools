@@ -2,6 +2,7 @@
 
 import numbers
 
+import numpy as np
 import pytest
 
 from fmu.tools.sensitivities import design_distributions as dists
@@ -114,6 +115,34 @@ def test_check_dist_params_logunif():
     assert not dists._check_dist_params_logunif([0.00001, 0.0000001])[0]
 
     assert dists._check_dist_params_logunif([1, 1])[0]
+
+
+@pytest.mark.parametrize(
+    "dist_params",
+    [
+        [10.0, 2.0],  # normal distribution params [mean, std_dev]
+        [10.0, 2.0, 5.0, 15.0],  # truncated normal params [mean, std_dev, min, max]
+    ],
+)
+def test_draw_values_normal_correlation(dist_params):
+    # Create two sets of correlated normal scores
+    rng = np.random.default_rng()
+    correlation = 0.8
+    n_samples = 1000
+
+    # Generate correlated standard normal variables
+    cov_matrix = [[1.0, correlation], [correlation, 1.0]]
+    normal_scores = rng.multivariate_normal([0, 0], cov_matrix, size=n_samples)
+
+    # Draw values using the correlated normal scores
+    values1 = dists.draw_values_normal(dist_params, n_samples, normal_scores[:, 0])
+    values2 = dists.draw_values_normal(dist_params, n_samples, normal_scores[:, 1])
+
+    # Calculate the correlation between the transformed variables
+    actual_correlation = np.corrcoef(values1, values2)[0, 1]
+
+    # Test if the correlation is close to the expected value
+    assert abs(actual_correlation - correlation) < 0.1
 
 
 def test_draw_values_normal():
