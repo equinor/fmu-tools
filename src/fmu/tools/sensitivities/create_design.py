@@ -5,7 +5,7 @@ and DESIGN_KW in FMU/ERT.
 from collections import OrderedDict
 from pathlib import Path
 
-import numpy
+import numpy as np
 import pandas as pd
 
 from fmu.tools.sensitivities import design_distributions as design_dist
@@ -57,7 +57,7 @@ class DesignMatrix:
         self.reset()  # Emptying if regenerating matrix
 
         if "distribution_seed" in inputdict and inputdict["distribution_seed"]:
-            numpy.random.seed(inputdict["distribution_seed"])
+            np.random.seed(inputdict["distribution_seed"])
 
         # Reading default values
         default_dict = inputdict["defaultvalues"]
@@ -323,7 +323,7 @@ class DesignMatrix:
         for from_param in depend_dict:
             if from_param in self.designvalues:
                 for param in depend_dict[from_param]["to_params"]:
-                    self.designvalues[param] = numpy.nan
+                    self.designvalues[param] = np.nan
                     for index in range(len(depend_dict[from_param]["from_values"])):
                         fill_these = depend_dict[from_param]["from_values"][index]
                         fill_data = depend_dict[from_param]["to_params"][param][index]
@@ -698,7 +698,7 @@ class MonteCarloSensitivity:
                     multivariate_parameters = df_correlations.index.values
                     cov_matrix = design_dist.make_covariance_matrix(df_correlations)
                     normalscoremeans = len(multivariate_parameters) * [0]
-                    normalscoresamples = numpy.random.multivariate_normal(
+                    normalscoresamples = np.random.multivariate_normal(
                         normalscoremeans, cov_matrix, size=numreals
                     )
                     normalscoresamples_df = pd.DataFrame(

@@ -5,7 +5,7 @@ distributions. For use in generation of design matrices
 import re
 from math import exp
 
-import numpy
+import numpy as np
 import numpy.linalg as la
 import pandas as pd
 import scipy.stats
@@ -345,7 +345,7 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                 )
             else:
                 muval = (low + high + scale * mode) / (scale + 2)
-                if numpy.isclose(muval, mode):
+                if np.isclose(muval, mode):
                     alpha1 = (scale / 2) + 1
                 else:
                     alpha1 = ((muval - low) * (2 * mode - low - high)) / (
@@ -365,7 +365,7 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                 distribution = scipy.stats.uniform(loc=low, scale=0)
             else:
                 muval = (low + high + scale * mode) / (scale + 2)
-                if numpy.isclose(muval, mode):
+                if np.isclose(muval, mode):
                     alpha1 = (scale / 2) + 1
                 else:
                     alpha1 = ((muval - low) * (2 * mode - low - high)) / (
@@ -496,9 +496,9 @@ def sample_discrete(dist_params, numreals):
             )
         weightnmbr = [float(weight) for weight in weights]
         fractions = [weight / sum(weightnmbr) for weight in weightnmbr]
-        values = numpy.random.choice(outcomes, numreals, p=fractions)
+        values = np.random.choice(outcomes, numreals, p=fractions)
     elif len(dist_params) == 1:  # uniform
-        values = numpy.random.choice(outcomes, numreals)
+        values = np.random.choice(outcomes, numreals)
     else:
         status = False
         values = "Wrong input for discrete distribution"
@@ -509,7 +509,7 @@ def sample_discrete(dist_params, numreals):
 def is_number(teststring):
     """Test if a string can be parsed as a float"""
     try:
-        return not numpy.isnan(float(teststring))
+        return not np.isnan(float(teststring))
     except ValueError:
         return False
 
@@ -572,10 +572,10 @@ def make_covariance_matrix(df_correlations, stddevs=None):
         covariance matrix
     """
 
-    corr_matrix = numpy.array(df_correlations.values)
+    corr_matrix = np.array(df_correlations.values)
 
     # Assume upper triangular is empty, fill it:
-    i_upper = numpy.triu_indices(len(df_correlations.columns), 1)
+    i_upper = np.triu_indices(len(df_correlations.columns), 1)
     corr_matrix[i_upper] = corr_matrix.T[i_upper]
 
     # Project to nearest symmetric positive definite matrix
@@ -583,10 +583,10 @@ def make_covariance_matrix(df_correlations, stddevs=None):
         input_corr_matrix = corr_matrix.copy()
         corr_matrix = _nearest_positive_definite(corr_matrix)
         print("Input correlation matrix: ")
-        with numpy.printoptions(precision=3, suppress=True):
+        with np.printoptions(precision=3, suppress=True):
             print(input_corr_matrix)
         print("Used closest positive semi-definite correlation matrix:")
-        with numpy.printoptions(precision=3, suppress=True):
+        with np.printoptions(precision=3, suppress=True):
             print(corr_matrix)
     # Previously negative eigenvalues are now close to zero,
     # but might still be negative, that can be ignored
@@ -597,10 +597,10 @@ def make_covariance_matrix(df_correlations, stddevs=None):
 
     # Now generate the covariance matrix
     dim = len(stddevs)
-    diag = numpy.identity(dim)
+    diag = np.identity(dim)
     diag[range(dim), range(dim)] = stddevs
-    cov_matrix = numpy.dot(diag, corr_matrix)
-    return numpy.dot(cov_matrix, diag)
+    cov_matrix = np.dot(diag, corr_matrix)
+    return np.dot(cov_matrix, diag)
 
 
 def _nearest_positive_definite(a_mat):
@@ -612,7 +612,7 @@ def _nearest_positive_definite(a_mat):
     b_mat = (a_mat + a_mat.T) / 2
     _, s_mat, v_mat = la.svd(b_mat)
 
-    h_mat = numpy.dot(v_mat.T, numpy.dot(numpy.diag(s_mat), v_mat))
+    h_mat = np.dot(v_mat.T, np.dot(np.diag(s_mat), v_mat))
 
     a2_mat = (b_mat + h_mat) / 2
 
@@ -621,11 +621,11 @@ def _nearest_positive_definite(a_mat):
     if _is_positive_definite(a3_mat):
         return a3_mat
 
-    spacing = numpy.spacing(la.norm(a_mat))
-    identity = numpy.eye(a_mat.shape[0])
+    spacing = np.spacing(la.norm(a_mat))
+    identity = np.eye(a_mat.shape[0])
     kiter = 1
     while not _is_positive_definite(a3_mat):
-        mineig = numpy.min(numpy.real(la.eigvals(a3_mat)))
+        mineig = np.min(np.real(la.eigvals(a3_mat)))
         a3_mat += identity * (-mineig * kiter**2 + spacing)
         kiter += 1
 
