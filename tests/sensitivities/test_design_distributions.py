@@ -209,21 +209,71 @@ def test_draw_values_loguniform():
     assert all(10 <= value <= 100 for value in values)
 
 
-def test_sample_discrete():
-    """Test sampling discrete values"""
-    outcomes = ["foo", "bar.com"]
+def test_that_discrete_matches_with_expected_probabilities():
+    n_samples = 20
+    outcomes = ["a", "b", "c"]
+    probabilities = "0.2,0.3,0.5"
+    dist_params = [",".join(outcomes), probabilities]
+    status, values = dists.sample_discrete(dist_params, n_samples)
+    assert status
 
-    # NB: return type from sample_discrete is different from the others,
-    # it returns a 3-tuple with the values in the second element.
-    values = dists.sample_discrete([",".join(outcomes)], 10)[1]
+    from collections import Counter
+
+    counts = Counter(values)
+    actual_fractions = [counts[outcome] / n_samples for outcome in outcomes]
+    expected_fractions = [float(p) for p in probabilities.split(",")]
+
+    tolerance = 0.02
+    for expected, actual in zip(expected_fractions, actual_fractions):
+        assert (
+            abs(expected - actual) < tolerance
+        ), f"Expected fraction {expected:.3f} but got {actual:.3f}"
+
+
+def test_that_discrete_raises_errors():
+    # Add tests for invalid probabilities
+    outcomes = ["a", "b"]
+
+    dist_params = [",".join(outcomes)]
+    # Test negative samples
+    with pytest.raises(ValueError, match="numreal must be a positive integer"):
+        _ = dists.sample_discrete(dist_params, -1)[1]
+
+    # Test probabilities that don't sum to 1
+    with pytest.raises(ValueError, match="Probabilities must sum to 1"):
+        dist_params = [",".join(outcomes), "0.3,0.3"]
+        dists.sample_discrete(dist_params, 10)
+
+    # Test probabilities outside [0,1] range
+    with pytest.raises(ValueError, match="All probabilities must be between 0 and 1"):
+        dist_params = [",".join(outcomes), "1.2,-0.2"]
+        dists.sample_discrete(dist_params, 10)
+
+    # Test non-float weights
+    with pytest.raises(
+        ValueError, match="All weights must be valid floating point numbers"
+    ):
+        dist_params = [",".join(outcomes), "0.5,abc"]
+        dists.sample_discrete(dist_params, 10)
+
+
+def test_sample_discrete():
+    # Test uniform distribution
+    outcomes = ["foo", "bar.com"]
+    dist_params = [",".join(outcomes)]
+    status, values = dists.sample_discrete(dist_params, 10)
+    assert status
     assert all(value in outcomes for value in values)
 
-    assert not dists.sample_discrete([",".join(outcomes)], 0)[1].size
-    with pytest.raises(ValueError):
-        # pylint: disable=expression-not-assigned
-        dists.sample_discrete([",".join(outcomes)], -1)[1]
+    # Test zero samples
+    status, values = dists.sample_discrete(dist_params, 0)
+    assert status
+    assert len(values) == 0
 
-    assert "foo" not in dists.sample_discrete([",".join(outcomes), "0,1"], 10)[1]
+    # Test non-uniform distribution with extreme probabilities
+    dist_params = [",".join(outcomes), "0,1"]
+    status, values = dists.sample_discrete(dist_params, 10)
+    assert "foo" not in values
 
 
 def test_draw_values():
