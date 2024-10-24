@@ -9,6 +9,7 @@ import numpy as np
 import numpy.linalg as la
 import pandas as pd
 import scipy.stats
+from scipy.stats import qmc
 
 
 def _check_dist_params_normal(dist_params):
@@ -471,14 +472,13 @@ def draw_values(distname, dist_parameters, numreals, normalscoresamples=None):
 
 
 def sample_discrete(dist_params, numreals):
-    """Sample from discrete distribution
+    """Sample from discrete distribution using Latin Hypercube Sampling
 
     Args:
-        dist_params(list): parameters for distribution
-            dist_params[0] is possible outcomes separated
-            by comma
-            dist_params[1] is probabilities for each outcome,
-            separated by comma
+        dist_params(list): parameters for distribution.
+            dist_params[0] (str) is possible outcomes separated by comma.
+            dist_params[1] (str) is probabilities for each outcome, separated by comma.
+            Each probability should be between 0 and 1 and they should sum to 1.
         numreals (int): number of realisations to draw
 
     Returns:
@@ -487,6 +487,13 @@ def sample_discrete(dist_params, numreals):
     status = True
     outcomes = re.split(",", dist_params[0])
     outcomes = [item.strip() for item in outcomes]
+
+    if numreals == 0:
+        return status, np.array([])
+
+    if numreals < 0:
+        raise ValueError("numreal must be a positive integer")
+
     if len(dist_params) == 2:  # non uniform
         weights = re.split(",", dist_params[1])
         if len(outcomes) != len(weights):
@@ -494,14 +501,43 @@ def sample_discrete(dist_params, numreals):
                 "Number of weights for discrete distribution "
                 "is not the same as number of values."
             )
-        weightnmbr = [float(weight) for weight in weights]
-        fractions = [weight / sum(weightnmbr) for weight in weightnmbr]
-        values = np.random.choice(outcomes, numreals, p=fractions)
+
+        try:
+            probabilities = [float(weight) for weight in weights]
+        except ValueError as e:
+            raise ValueError(
+                "All weights must be valid floating point numbers. "
+                f"Got weights: {weights}"
+            ) from e
+
+        # Validate probabilities
+        if not all(0 <= p <= 1 for p in probabilities):
+            raise ValueError("All probabilities must be between 0 and 1")
+        if not np.isclose(sum(probabilities), 1.0):
+            raise ValueError("Probabilities must sum to 1")
+
+        fractions = probabilities
+
     elif len(dist_params) == 1:  # uniform
-        values = np.random.choice(outcomes, numreals)
+        fractions = [1.0 / len(outcomes)] * len(outcomes)
+
     else:
         status = False
         values = "Wrong input for discrete distribution"
+        return status, values
+
+    # Generate Latin Hypercube samples
+    sampler = qmc.LatinHypercube(d=1)
+    samples = sampler.random(n=numreals)
+
+    # Scale samples to [0,1]
+    scaled = qmc.scale(samples, 0, 1)
+
+    # Create cumulative probabilities
+    cum_prob = np.cumsum(fractions)
+
+    # Map samples to outcomes
+    values = np.array([outcomes[np.searchsorted(cum_prob, s[0])] for s in scaled])
 
     return status, values
 
