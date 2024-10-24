@@ -242,6 +242,11 @@ def test_generate_full_mc(tmpdir):
     assert "SENSCASE" in diskdesign
     assert not diskdesign.empty
 
+    dato_fractions = diskdesign["DATO"].value_counts(normalize=True)
+    assert dato_fractions["2018-11-02"] == 0.3
+    assert dato_fractions["2018-11-03"] == 0.4
+    assert dato_fractions["2018-11-04"] == 0.3
+
     diskdefaults = pd.read_excel(
         "designmatrix.xlsx", sheet_name="DefaultValues", engine="openpyxl"
     )

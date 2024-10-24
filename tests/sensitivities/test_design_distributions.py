@@ -1,6 +1,7 @@
 """Testing statistical helper functions for the design matrix generator"""
 
 import numbers
+from collections import Counter
 
 import numpy as np
 import pytest
@@ -267,10 +268,62 @@ def test_draw_values_loguniform():
     assert all(10 <= value <= 100 for value in values)
 
 
+@pytest.mark.parametrize(
+    "weights,expected_fractions",
+    [
+        ("0.2,0.3,0.5", [0.2, 0.3, 0.5]),
+        ("20,30,50", [0.2, 0.3, 0.5]),
+        ("30,40,20", [1 / 3, 4 / 9, 2 / 9]),
+    ],
+)
+def test_that_discrete_matches_with_expected_fraction(weights, expected_fractions):
+    rng = np.random.RandomState()
+    n_samples = 1000
+    outcomes = ["a", "b", "c"]
+    dist_params = [",".join(outcomes), weights]
+    status, values = dists.sample_discrete(dist_params, n_samples, rng)
+    assert status
+
+    counts = Counter(values)
+    actual_fractions = [counts[outcome] / n_samples for outcome in outcomes]
+
+    assert np.allclose(
+        actual_fractions, expected_fractions, rtol=0.01
+    ), f"Expected fractions {expected_fractions} but got {actual_fractions}"
+
+
+def test_that_discrete_raises_errors():
+    rng = np.random.RandomState()
+
+    # Add tests for invalid probabilities
+    outcomes = ["a", "b"]
+
+    dist_params = [",".join(outcomes)]
+    # Test negative samples
+    with pytest.raises(ValueError, match="numreal must be a positive integer"):
+        _ = dists.sample_discrete(dist_params, -1, rng)[1]
+
+    # Test probabilities outside [0,1] range
+    with pytest.raises(ValueError, match="All weights must be non-negative"):
+        dist_params = [",".join(outcomes), "1.2,-0.2"]
+        dists.sample_discrete(dist_params, 10, rng)
+
+    # Test non-float weights
+    with pytest.raises(
+        ValueError, match="All weights must be valid floating point numbers"
+    ):
+        dist_params = [",".join(outcomes), "0.5,abc"]
+        dists.sample_discrete(dist_params, 10, rng)
+
+
 def test_sample_discrete():
     rng = np.random.RandomState()
 
     outcomes = ["foo", "bar.com"]
+    dist_params = [",".join(outcomes)]
+    status, values = dists.sample_discrete(dist_params, 10, rng)
+    assert status
+    assert all(value in outcomes for value in values)
 
     # NB: return type from sample_discrete is different from the others,
     # it returns a 3-tuple with the values in the second element.
@@ -283,6 +336,26 @@ def test_sample_discrete():
         dists.sample_discrete([",".join(outcomes)], -1, rng)[1]
 
     assert "foo" not in dists.sample_discrete([",".join(outcomes), "0,1"], 10, rng)[1]
+
+    # Test random seed
+    rng = np.random.RandomState(12345)
+    dist_params = [",".join(outcomes)]
+    _, values = dists.sample_discrete(dist_params, 10, rng)
+    assert (
+        values
+        == [
+            "bar.com",
+            "bar.com",
+            "foo",
+            "bar.com",
+            "bar.com",
+            "bar.com",
+            "foo",
+            "foo",
+            "foo",
+            "foo",
+        ]
+    ).all()
 
 
 def test_draw_values():
