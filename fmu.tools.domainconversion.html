@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion package &mdash; fmu-tools 1.16.1.dev5+g3cd5215 documentation</title>
+  <title>fmu.tools.domainconversion package &mdash; fmu-tools 1.16.1.dev6+geab3b99 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=39538bbe"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=c7d1a5cf"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -106,90 +106,111 @@
 <span id="fmu-tools-domainconversion-dconvert-module"></span><h2>fmu.tools.domainconversion.dconvert module<a class="headerlink" href="#module-fmu.tools.domainconversion.dconvert" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.domainconversion.dconvert.</span></span><span class="sig-name descname"><span class="pre">DomainConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_interval_velocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_to_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.domainconversion.dconvert.</span></span><span class="sig-name descname"><span class="pre">DomainConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nlay_cropper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Domain conversion, tailored for fmu-sim2seis but also works as standalone.</p>
+<p>Domain conversion, tailored for fmu-sim2seis, but also works as standalone.</p>
 <p>The principle is to use matching sets of time and depth surfaces to create a
-velocity (or slowness) cube, and use that further to domain convert either
-seismics or surfaces.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.cube_template">
-<span class="sig-name descname"><span class="pre">cube_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Cube</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.cube_template" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+velocity (and slowness) model, and use that further to domain convert either
+seismic cubes or surfaces, time &lt;=&gt; depth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>depth_surfaces</strong> – List of depth surfaces.</p></li>
+<li><p><strong>time_surfaces</strong> – List of time surfaces.</p></li>
+<li><p><strong>names</strong> – Optional list of names for the surfaces. If not
+provided, the names will be inferred from the input object, or
+(if missing) generated as “surf_0”, “surf_1”, etc.</p></li>
+<li><p><strong>template</strong> – Optional template surface to use for resampling the input surfaces.
+If not provided, the last time surface will be used as template.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input surfaces must be in the same sorted order, and the number
+of depth and time surfaces must be equal. The first surface does not need
+to be MSL. The surfaces must extend the full area of the model, and the
+subsequent surfaces or cubes to be converted must be inside the area of
+the surfaces that define the model.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">xtgeo</span> <span class="kn">import</span> <span class="n">RegularSurface</span><span class="p">,</span> <span class="n">Cube</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.domainconversion</span> <span class="kn">import</span> <span class="n">DomainConversion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># read input surfaces into lists...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">depth_surfaces_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;depth1.gri&quot;</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time_surfaces_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;time1.gri&quot;</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dc</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">depth_surfaces_list</span><span class="p">,</span> <span class="n">time_surfaces_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># read a cube... and convert the cube from time to depth</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_cube_in_time</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_file</span><span class="p">(</span><span class="s2">&quot;input_cube.segy&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result_cube_in_depth</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">input_cube_in_time</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.depth_surfaces">
-<span class="sig-name descname"><span class="pre">depth_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.depth_surfaces" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">depth_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[xtgeo.RegularSurface]</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.depth_surfaces" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.time_surfaces">
-<span class="sig-name descname"><span class="pre">time_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.time_surfaces" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[xtgeo.RegularSurface]</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.time_surfaces" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.use_interval_velocity">
-<span class="sig-name descname"><span class="pre">use_interval_velocity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.use_interval_velocity" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.names">
+<span class="sig-name descname"><span class="pre">names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.names" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.time_to_depth">
-<span class="sig-name descname"><span class="pre">time_to_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.time_to_depth" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.template">
+<span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.RegularSurface</span> <span class="pre">|</span> <span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.template" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.max_depth_for_cube">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_depth_for_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.max_depth_for_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.max_depth_for_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the maximum depth for a cube.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.surface_names">
+<span class="sig-name descname"><span class="pre">surface_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.surface_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.surface_names" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of surface names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.velocity_surfaces">
+<span class="sig-name descname"><span class="pre">velocity_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.velocity_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.velocity_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of velocity surfaces.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.slowness_surfaces">
+<span class="sig-name descname"><span class="pre">slowness_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.slowness_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.slowness_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of slowness surfaces.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.average_velocity_cube_in_time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.average_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.Cube</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.average_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.average_slowness_cube_in_depth">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_slowness_cube_in_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.average_slowness_cube_in_depth" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_slowness_cube_in_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.Cube</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.average_slowness_cube_in_depth" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.interval_velocity_cube_in_time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interval_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.interval_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.cube_template_applied">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cube_template_applied</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.cube_template_applied" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_cube">
-<span class="sig-name descname"><span class="pre">depth_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_cube" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
-<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
-cropping of the output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_cube">
-<span class="sig-name descname"><span class="pre">time_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_cube" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average slowness model/cube to perform time conversion.</p>
-<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
-cropping of the output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_surfaces">
 <span class="sig-name descname"><span class="pre">depth_convert_surfaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insurfs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_surfaces" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
+<dd><p>Use the current average velocity model/surfaces to perform depth conversion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects to depth convert.</p>
+<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects (in time domain) to depth convert.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -205,6 +226,60 @@ cropping of the output.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_cube">
+<span class="sig-name descname"><span class="pre">depth_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.depth_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Depth convert a cube (time to depth).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incube</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span>) – Input cube (in time domain) to convert.</p></li>
+<li><p><strong>zinc</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z increment for the output cube.</p></li>
+<li><p><strong>zmin</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z minimum for the output cube.</p></li>
+<li><p><strong>zmax</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z maximum for the output cube.</p></li>
+<li><p><strong>undefined</strong> (<span class="sphinx_autodoc_typehints-type">float</span>) – Value to use for undefined values in the output cube.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The proposed zinc, zmin, zmax are optional and will be calculated from the
+existing input surfaces (making the velocity/slowness model) if not
+provided. If given, the actual values may differ from the proposed values,
+for technical reasons.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_cube">
+<span class="sig-name descname"><span class="pre">time_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.dconvert.DomainConversion.time_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Time convert a cube (depth to time).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incube</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span>) – Input cube (in depth domain) to convert.</p></li>
+<li><p><strong>tinc</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time increment for the output cube.</p></li>
+<li><p><strong>tmin</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time minimum for the output cube.</p></li>
+<li><p><strong>tmax</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time maximum for the output cube.</p></li>
+<li><p><strong>undefined</strong> (<span class="sphinx_autodoc_typehints-type">float</span>) – Value to use for undefined values in the output cube.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The proposed tinc, tmin, tmax are optional and will be calculated from the
+existing input surfaces (making the velocity/slowness model) if not
+provided. If given, the values may be adjusted for technical
+reasons.</p>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -212,90 +287,111 @@ cropping of the output.</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.domainconversion" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.domainconversion.</span></span><span class="sig-name descname"><span class="pre">DomainConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_interval_velocity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_to_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.domainconversion.</span></span><span class="sig-name descname"><span class="pre">DomainConversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_surfaces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_nlay_cropper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Domain conversion, tailored for fmu-sim2seis but also works as standalone.</p>
+<p>Domain conversion, tailored for fmu-sim2seis, but also works as standalone.</p>
 <p>The principle is to use matching sets of time and depth surfaces to create a
-velocity (or slowness) cube, and use that further to domain convert either
-seismics or surfaces.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.cube_template">
-<span class="sig-name descname"><span class="pre">cube_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Cube</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.cube_template" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+velocity (and slowness) model, and use that further to domain convert either
+seismic cubes or surfaces, time &lt;=&gt; depth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>depth_surfaces</strong> – List of depth surfaces.</p></li>
+<li><p><strong>time_surfaces</strong> – List of time surfaces.</p></li>
+<li><p><strong>names</strong> – Optional list of names for the surfaces. If not
+provided, the names will be inferred from the input object, or
+(if missing) generated as “surf_0”, “surf_1”, etc.</p></li>
+<li><p><strong>template</strong> – Optional template surface to use for resampling the input surfaces.
+If not provided, the last time surface will be used as template.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input surfaces must be in the same sorted order, and the number
+of depth and time surfaces must be equal. The first surface does not need
+to be MSL. The surfaces must extend the full area of the model, and the
+subsequent surfaces or cubes to be converted must be inside the area of
+the surfaces that define the model.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">xtgeo</span> <span class="kn">import</span> <span class="n">RegularSurface</span><span class="p">,</span> <span class="n">Cube</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmu.tools.domainconversion</span> <span class="kn">import</span> <span class="n">DomainConversion</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># read input surfaces into lists...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">depth_surfaces_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;depth1.gri&quot;</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time_surfaces_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;time1.gri&quot;</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dc</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">depth_surfaces_list</span><span class="p">,</span> <span class="n">time_surfaces_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># read a cube... and convert the cube from time to depth</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_cube_in_time</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_file</span><span class="p">(</span><span class="s2">&quot;input_cube.segy&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result_cube_in_depth</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">input_cube_in_time</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.depth_surfaces">
-<span class="sig-name descname"><span class="pre">depth_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.depth_surfaces" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">depth_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[xtgeo.RegularSurface]</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.depth_surfaces" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.time_surfaces">
-<span class="sig-name descname"><span class="pre">time_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.time_surfaces" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time_surfaces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[xtgeo.RegularSurface]</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.time_surfaces" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.use_interval_velocity">
-<span class="sig-name descname"><span class="pre">use_interval_velocity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.use_interval_velocity" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.names">
+<span class="sig-name descname"><span class="pre">names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list[str]</span> <span class="pre">|</span> <span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.names" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.time_to_depth">
-<span class="sig-name descname"><span class="pre">time_to_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.time_to_depth" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.template">
+<span class="sig-name descname"><span class="pre">template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.RegularSurface</span> <span class="pre">|</span> <span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.template" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.max_depth_for_cube">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_depth_for_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.max_depth_for_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.max_depth_for_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the maximum depth for a cube.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.surface_names">
+<span class="sig-name descname"><span class="pre">surface_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.surface_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.surface_names" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of surface names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.velocity_surfaces">
+<span class="sig-name descname"><span class="pre">velocity_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.velocity_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.velocity_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of velocity surfaces.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.slowness_surfaces">
+<span class="sig-name descname"><span class="pre">slowness_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.slowness_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.slowness_surfaces" title="Permalink to this definition"></a></dt>
+<dd><p>Return a generator of slowness surfaces.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.average_velocity_cube_in_time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.average_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.Cube</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.average_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.average_slowness_cube_in_depth">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_slowness_cube_in_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.average_slowness_cube_in_depth" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">average_slowness_cube_in_depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xtgeo.Cube</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.average_slowness_cube_in_depth" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.interval_velocity_cube_in_time">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interval_velocity_cube_in_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.interval_velocity_cube_in_time" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.cube_template_applied">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cube_template_applied</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Cube</span></em><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.cube_template_applied" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.depth_convert_cube">
-<span class="sig-name descname"><span class="pre">depth_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.depth_convert_cube" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
-<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
-cropping of the output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.time_convert_cube">
-<span class="sig-name descname"><span class="pre">time_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxdepth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.time_convert_cube" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average slowness model/cube to perform time conversion.</p>
-<p>If the user wants a cropped cube, that can be performed by using xtgeo’s
-cropping of the output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.depth_convert_surfaces">
 <span class="sig-name descname"><span class="pre">depth_convert_surfaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">insurfs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.depth_convert_surfaces" title="Permalink to this definition"></a></dt>
-<dd><p>Use the current average velocity model/cube to perform depth conversion.</p>
+<dd><p>Use the current average velocity model/surfaces to perform depth conversion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects to depth convert.</p>
+<dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects (in time domain) to depth convert.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -309,6 +405,60 @@ cropping of the output.</p>
 <dd class="field-odd"><p><strong>insurfs</strong> – List of xtgeo surface objects to time convert.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.depth_convert_cube">
+<span class="sig-name descname"><span class="pre">depth_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.depth_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.depth_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Depth convert a cube (time to depth).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incube</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span>) – Input cube (in time domain) to convert.</p></li>
+<li><p><strong>zinc</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z increment for the output cube.</p></li>
+<li><p><strong>zmin</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z minimum for the output cube.</p></li>
+<li><p><strong>zmax</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed z maximum for the output cube.</p></li>
+<li><p><strong>undefined</strong> (<span class="sphinx_autodoc_typehints-type">float</span>) – Value to use for undefined values in the output cube.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The proposed zinc, zmin, zmax are optional and will be calculated from the
+existing input surfaces (making the velocity/slowness model) if not
+provided. If given, the actual values may differ from the proposed values,
+for technical reasons.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.domainconversion.DomainConversion.time_convert_cube">
+<span class="sig-name descname"><span class="pre">time_convert_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tinc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-999.25</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/domainconversion/dconvert.html#DomainConversion.time_convert_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.domainconversion.DomainConversion.time_convert_cube" title="Permalink to this definition"></a></dt>
+<dd><p>Time convert a cube (depth to time).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incube</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span>) – Input cube (in depth domain) to convert.</p></li>
+<li><p><strong>tinc</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time increment for the output cube.</p></li>
+<li><p><strong>tmin</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time minimum for the output cube.</p></li>
+<li><p><strong>tmax</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – Proposed time maximum for the output cube.</p></li>
+<li><p><strong>undefined</strong> (<span class="sphinx_autodoc_typehints-type">float</span>) – Value to use for undefined values in the output cube.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type">xtgeo.Cube</span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The proposed tinc, tmin, tmax are optional and will be calculated from the
+existing input surfaces (making the velocity/slowness model) if not
+provided. If given, the values may be adjusted for technical
+reasons.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
