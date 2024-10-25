@@ -234,23 +234,24 @@ def draw_values_uniform(dist_parameters, numreals, normalscoresamples=None):
     Returns:
         list of values
     """
-    distribution = None
-    status, msg = _check_dist_params_uniform(dist_parameters)
-    if status:
-        low = float(dist_parameters[0])
-        high = float(dist_parameters[1])
-        uscale = high - low
-        if normalscoresamples is not None:
-            values = scipy.stats.uniform.ppf(
-                scipy.stats.norm.cdf(normalscoresamples), loc=low, scale=uscale
-            )
+    if numreals < 0:
+        raise ValueError("numreal must be a positive integer")
 
-        else:
-            distribution = scipy.stats.uniform(loc=low, scale=uscale)
-            values = distribution.rvs(size=numreals)
-    else:
+    status, msg = _check_dist_params_uniform(dist_parameters)
+    if not status:
         raise ValueError(msg)
-    return values
+
+    low = float(dist_parameters[0])
+    high = float(dist_parameters[1])
+    uscale = high - low
+
+    if normalscoresamples is not None:
+        return scipy.stats.uniform.ppf(
+            scipy.stats.norm.cdf(normalscoresamples), loc=low, scale=uscale
+        )
+
+    distribution = scipy.stats.uniform(loc=low, scale=uscale)
+    return distribution.rvs(size=numreals)
 
 
 def draw_values_triangular(dist_parameters, numreals, normalscoresamples=None):

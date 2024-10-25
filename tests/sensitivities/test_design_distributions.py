@@ -183,14 +183,48 @@ def test_draw_values_lognormal():
     assert all(value > 0 for value in values)
 
 
+def test_draw_uniform_with_correlation():
+    rng = np.random.default_rng()
+    correlation = 0.6
+    n_samples = 1000
+
+    cov_matrix = [[1.0, correlation], [correlation, 1.0]]
+    normal_scores = rng.multivariate_normal([0, 0], cov_matrix, size=n_samples)
+
+    values1 = dists.draw_values_uniform([0, 100], n_samples, normal_scores[:, 0])
+    values2 = dists.draw_values_uniform([10, 50], n_samples, normal_scores[:, 1])
+
+    actual_correlation = np.corrcoef(values1, values2)[0, 1]
+    assert (actual_correlation - correlation) < 0.1
+
+
 def test_draw_values_uniform():
-    """Test drawing uniform values"""
-    assert not dists.draw_values_uniform([10, 100], 0).size
+    values = dists.draw_values_uniform([10, 100], 0)
+    assert len(values) == 0
 
     values = dists.draw_values_uniform([10, 100], 20)
     assert len(values) == 20
     assert all(isinstance(value, numbers.Number) for value in values)
     assert all(10 <= value <= 100 for value in values)
+
+    with pytest.raises(
+        ValueError,
+        match="Uniform distribution must have 2 parameters, but had 3 parameters.",
+    ):
+        values = dists.draw_values_uniform([10, 50, 100], 10)
+
+    with pytest.raises(
+        ValueError, match="Uniform distribution must have dist_param2 >= dist_param1"
+    ):
+        values = dists.draw_values_uniform([50, 10], 10)
+
+    with pytest.raises(
+        ValueError, match="Parameters for uniform distribution must be numbers."
+    ):
+        values = dists.draw_values_uniform(["a", 10], 10)
+
+    with pytest.raises(ValueError, match="numreal must be a positive integer"):
+        values = dists.draw_values_uniform([10, 50], -10)
 
 
 def test_draw_values_triangular():
