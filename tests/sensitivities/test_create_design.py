@@ -1,10 +1,13 @@
 """Testing code for generation of design matrices"""
 
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
+import fmu.tools
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
 
 TESTDATA = Path(__file__).parent / "data"
@@ -160,6 +163,24 @@ def test_generate_onebyone(tmpdir):
     assert (diskdesign["OWC3"] == owc3).all()
 
     # MULTZ_ILE contains random numbers so we won't test it here.
+
+    diskmetadata = pd.read_excel(
+        "designmatrix.xlsx", sheet_name="Metadata", engine="openpyxl"
+    )
+
+    assert (diskmetadata.columns == ["Description", "Value"]).all()
+    assert diskmetadata["Description"].iloc[0] == "Created using fmu-tools version:"
+    assert diskmetadata["Value"].iloc[0] == fmu.tools.__version__
+    assert diskmetadata["Description"].iloc[1] == "Created on:"
+
+    # For the timestamp, we can't check the exact value since it will differ
+    # each time the test runs. Instead, we can verify it's a valid datetime string
+    # by attempting to parse it
+    timestamp = diskmetadata["Value"].iloc[1]
+    try:
+        datetime.fromisoformat(timestamp)
+    except ValueError:
+        pytest.fail("Timestamp in Metadata sheet is not in expected format")
 
 
 def test_generate_full_mc(tmpdir):
