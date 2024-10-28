@@ -3,11 +3,13 @@ and DESIGN_KW in FMU/ERT.
 """
 
 from collections import OrderedDict
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+import fmu.tools
 from fmu.tools.sensitivities import design_distributions as design_dist
 
 
@@ -194,6 +196,18 @@ class DesignMatrix:
         defaults.to_excel(
             xlsxwriter, sheet_name=defaultsheet, index=False, header=False
         )
+
+        version_info = pd.DataFrame(
+            {
+                "Description": ["Created using fmu-tools version:", "Created on:"],
+                "Value": [
+                    fmu.tools.__version__,
+                    datetime.now().isoformat(sep=" ", timespec="seconds"),
+                ],
+            }
+        )
+        version_info.to_excel(xlsxwriter, sheet_name="Metadata", index=False)
+
         xlsxwriter.close()
         print(
             f"A total of {len(self.designvalues['REAL'])} realizations were generated"
