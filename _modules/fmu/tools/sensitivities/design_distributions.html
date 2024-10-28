@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.16.1.dev12+g1862268 documentation</title>
+  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.16.1.dev13+g7b913a0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=e87d431a"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=6ba2372d"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -318,23 +318,24 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">distribution</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">high</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">uscale</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
-        <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span>
-                <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">normalscoresamples</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span>
-            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">numreals</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;numreal must be a positive integer&quot;</span><span class="p">)</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span><span class="p">)</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">values</span></div>
+
+    <span class="n">low</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">uscale</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
+
+    <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span>
+            <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">normalscoresamples</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span>
+        <span class="p">)</span>
+
+    <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="draw_values_triangular"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_triangular">[docs]</a><span class="k">def</span> <span class="nf">draw_values_triangular</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
