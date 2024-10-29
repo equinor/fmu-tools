@@ -140,23 +140,20 @@ def _check_dist_params_logunif(dist_params):
     return status, msg
 
 
-def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_normal(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from normal distribution.
-
     Args:
         dist_parameters(list): [mean, std dev, min, max],
-            min/max defining truncated normal
+        min/max defining truncated normal
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
-
     status, msg = _check_dist_params_normal(dist_parameters)
     if not status:
         raise ValueError(msg)
-
     if len(dist_parameters) == 2:  # normal
         dist_mean = float(dist_parameters[0])
         dist_stddev = float(dist_parameters[1])
@@ -168,8 +165,7 @@ def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
             )
         else:
             distribution = scipy.stats.norm(dist_mean, dist_stddev)
-            values = distribution.rvs(size=numreals)
-
+            values = distribution.rvs(size=numreals, random_state=rng)
     else:  # truncated normal or invalid
         mean = float(dist_parameters[0])
         sigma = float(dist_parameters[1])
@@ -187,19 +183,17 @@ def draw_values_normal(dist_parameters, numreals, normalscoresamples=None):
             )
         else:
             distribution = scipy.stats.truncnorm(low, high, loc=mean, scale=sigma)
-            values = distribution.rvs(size=numreals)
-
+            values = distribution.rvs(size=numreals, random_state=rng)
     return values
 
 
-def draw_values_lognormal(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_lognormal(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from lognormal distribution.
-
     Args:
         dist_parameters(list): [mu, sigma] for the logarithm of the variable
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
@@ -217,51 +211,45 @@ def draw_values_lognormal(dist_parameters, numreals, normalscoresamples=None):
             )
         else:
             distribution = scipy.stats.lognorm(s=sigma, scale=exp(mean))
-            values = distribution.rvs(size=numreals)
+            values = distribution.rvs(size=numreals, random_state=rng)
     else:
         raise ValueError(msg)
     return values
 
 
-def draw_values_uniform(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_uniform(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from uniform distribution.
-
     Args:
         dist_parameters(list): [minimum, maximum]
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
     if numreals < 0:
         raise ValueError("numreal must be a positive integer")
-
     status, msg = _check_dist_params_uniform(dist_parameters)
     if not status:
         raise ValueError(msg)
-
     low = float(dist_parameters[0])
     high = float(dist_parameters[1])
     uscale = high - low
-
     if normalscoresamples is not None:
         return scipy.stats.uniform.ppf(
             scipy.stats.norm.cdf(normalscoresamples), loc=low, scale=uscale
         )
-
     distribution = scipy.stats.uniform(loc=low, scale=uscale)
-    return distribution.rvs(size=numreals)
+    return distribution.rvs(size=numreals, random_state=rng)
 
 
-def draw_values_triangular(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_triangular(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from triangular distribution.
-
     Args:
-        dist_parameters(list): [min, mode,  max]
+        dist_parameters(list): [min, mode, max]
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
@@ -295,31 +283,29 @@ def draw_values_triangular(dist_parameters, numreals, normalscoresamples=None):
                     " are equal. Using constant {}".format(low)
                 )
                 distribution = scipy.stats.uniform(loc=low, scale=0)
-                values = distribution.rvs(size=numreals)
+                values = distribution.rvs(size=numreals, random_state=rng)
             else:
                 dist_scale = high - low
                 shape = (mode - low) / dist_scale
                 distribution = scipy.stats.triang(shape, loc=low, scale=dist_scale)
-                values = distribution.rvs(size=numreals)
+                values = distribution.rvs(size=numreals, random_state=rng)
     else:
         raise ValueError(msg)
     return values
 
 
-def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_pert(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from pert distribution.
-
     Args:
         dist_parameters(list): [min, mode,  max, scale]
-            where scale is only specified
-            for a 4 parameter pert distribution
+        where scale is only specified
+        for a 4 parameter pert distribution
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
-
     status, msg = _check_dist_params_pert(dist_parameters)
     if status:
         low = float(dist_parameters[0])
@@ -330,7 +316,6 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
             if len(dist_parameters) == 4
             else 4  # pert 3 parameter distribution
         )
-
         if normalscoresamples is not None:
             if high == low:  # collapsed distribution
                 print(
@@ -348,7 +333,6 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                     alpha1 = ((muval - low) * (2 * mode - low - high)) / (
                         (mode - muval) * (high - low)
                     )
-
                 alpha2 = alpha1 * (high - muval) / (muval - low)
                 values = scipy.stats.beta.ppf(
                     scipy.stats.norm.cdf(normalscoresamples), alpha1, alpha2
@@ -368,29 +352,25 @@ def draw_values_pert(dist_parameters, numreals, normalscoresamples=None):
                     alpha1 = ((muval - low) * (2 * mode - low - high)) / (
                         (mode - muval) * (high - low)
                     )
-
                 alpha2 = alpha1 * (high - muval) / (muval - low)
                 distribution = scipy.stats.beta(alpha1, alpha2)
-            values = distribution.rvs(size=numreals)
-
+            values = distribution.rvs(size=numreals, random_state=rng)
     else:
         raise ValueError(msg)
     # For pert distribution scale afterwards:
     return values * (dist_parameters[2] - dist_parameters[0]) + dist_parameters[0]
 
 
-def draw_values_loguniform(dist_parameters, numreals, normalscoresamples=None):
+def draw_values_loguniform(dist_parameters, numreals, rng, normalscoresamples=None):
     """Draws values from loguniform distribution.
-
     Args:
         dist_parameters(list): [minimum, maximum]
         numreals(int): number of realisations to draw
+        rng: numpy.random.RandomState instance
         normalscoresamples(list): samples for correlated parameters
-
     Returns:
         list of values
     """
-
     status, msg = _check_dist_params_logunif(dist_parameters)
     if status:
         low = float(dist_parameters[0])
@@ -401,43 +381,43 @@ def draw_values_loguniform(dist_parameters, numreals, normalscoresamples=None):
             )
         else:
             distribution = scipy.stats.reciprocal(low, high)
-            values = distribution.rvs(size=numreals)
+            values = distribution.rvs(size=numreals, random_state=rng)
     else:
         raise ValueError(msg)
-
     return values
 
 
-def draw_values(distname, dist_parameters, numreals, normalscoresamples=None):
+def draw_values(distname, dist_parameters, numreals, rng, normalscoresamples=None):
     """
     Prepare scipy distributions with parameters
-
     Args:
         distname (str): distribution name 'normal', 'lognormal', 'triang',
-                        'uniform', 'logunif', 'discrete', 'pert'
+        'uniform', 'logunif', 'discrete', 'pert'
         dist_parameters (list): list with parameters for distribution
-
+        numreals (int): number of realizations to generate
+        rng (numpy.random.RandomState): random number generator instance
+        normalscoresamples (array, optional): samples for correlated distributions
     Returns:
         scipy.stats distribution with parameters
     """
     if distname[0:4].lower() == "norm":
-        values = draw_values_normal(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_normal(dist_parameters, numreals, rng, normalscoresamples)
     elif distname[0:4].lower() == "logn":
-        values = draw_values_lognormal(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_lognormal(
+            dist_parameters, numreals, rng, normalscoresamples
+        )
     elif distname[0:4].lower() == "unif":
-        values = draw_values_uniform(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_uniform(dist_parameters, numreals, rng, normalscoresamples)
     elif distname[0:6].lower() == "triang":
-        values = draw_values_triangular(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_triangular(
+            dist_parameters, numreals, rng, normalscoresamples
+        )
     elif distname[0:4].lower() == "pert":
-        values = draw_values_pert(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_pert(dist_parameters, numreals, rng, normalscoresamples)
     elif distname[0:7].lower() == "logunif":
-        values = draw_values_loguniform(dist_parameters, numreals, normalscoresamples)
-
+        values = draw_values_loguniform(
+            dist_parameters, numreals, rng, normalscoresamples
+        )
     elif distname[0:5].lower() == "const":
         if normalscoresamples is not None:
             raise ValueError(
@@ -447,7 +427,6 @@ def draw_values(distname, dist_parameters, numreals, normalscoresamples=None):
                 "be used with correlation. "
             )
         values = [dist_parameters[0]] * numreals
-
     elif distname[0:4].lower() == "disc":
         if normalscoresamples is not None:
             raise ValueError(
@@ -456,28 +435,26 @@ def draw_values(distname, dist_parameters, numreals, normalscoresamples=None):
                 "but discrete distribution cannot "
                 "be used with correlation. "
             )
-        status, result = sample_discrete(dist_parameters, numreals)
+        status, result = sample_discrete(dist_parameters, numreals, rng)
         if status:
             values = result
         else:
             raise ValueError(result)
     else:
         raise ValueError(f"distribution name {distname} is not implemented")
-
     return values
 
 
-def sample_discrete(dist_params, numreals):
+def sample_discrete(dist_params, numreals, rng):
     """Sample from discrete distribution
-
     Args:
         dist_params(list): parameters for distribution
-            dist_params[0] is possible outcomes separated
-            by comma
-            dist_params[1] is probabilities for each outcome,
-            separated by comma
+        dist_params[0] is possible outcomes separated
+        by comma
+        dist_params[1] is probabilities for each outcome,
+        separated by comma
         numreals (int): number of realisations to draw
-
+        rng: numpy.random.RandomState instance
     Returns:
         np.ndarray: values drawn from distribution
     """
@@ -493,13 +470,12 @@ def sample_discrete(dist_params, numreals):
             )
         weightnmbr = [float(weight) for weight in weights]
         fractions = [weight / sum(weightnmbr) for weight in weightnmbr]
-        values = np.random.choice(outcomes, numreals, p=fractions)
+        values = rng.choice(outcomes, numreals, p=fractions)
     elif len(dist_params) == 1:  # uniform
-        values = np.random.choice(outcomes, numreals)
+        values = rng.choice(outcomes, numreals)
     else:
         status = False
         values = "Wrong input for discrete distribution"
-
     return status, values
 
 
