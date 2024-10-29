@@ -1,5 +1,6 @@
 """Testing code for generation of design matrices"""
 
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -181,6 +182,37 @@ def test_generate_onebyone(tmpdir):
         datetime.fromisoformat(timestamp)
     except ValueError:
         pytest.fail("Timestamp in Metadata sheet is not in expected format")
+
+
+def test_generate_full_mc_snapshot(snapshot):
+    """Test that full monte carlo design matrix generation remains consistent.
+
+    This is a snapshot test that verifies the entire output of the design matrix
+    generation process, including both the design values and default values.
+    """
+    # Setup
+    inputfile = TESTDATA / "config/design_input_mc_with_correls.xlsx"
+    input_dict = excel2dict_design(inputfile)
+    design = DesignMatrix()
+
+    # Generate the design matrix
+    design.generate(input_dict)
+
+    # Prepare data for snapshot comparison
+    snapshot_dict = {
+        "designvalues": design.designvalues.to_dict("records"),
+        "defaultvalues": dict(design.defaultvalues),
+    }
+
+    # Serialize to string for snapshot comparison
+    snapshot_str = json.dumps(
+        snapshot_dict,
+        indent=2,
+        sort_keys=True,
+    )
+
+    # Verify against snapshot
+    snapshot.assert_match(snapshot_str, "design_output_mc_with_correls.json")
 
 
 def test_generate_full_mc(tmpdir):
