@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.16.1.dev14+g020ba4f documentation</title>
+  <title>fmu.tools.sensitivities.design_distributions &mdash; fmu-tools 1.16.1.dev15+g1c7c677 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b7a8f25b"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=c12d3d5e"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -224,23 +224,20 @@
     <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">msg</span>
 
 
-<div class="viewcode-block" id="draw_values_normal"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_normal">[docs]</a><span class="k">def</span> <span class="nf">draw_values_normal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_normal"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_normal">[docs]</a><span class="k">def</span> <span class="nf">draw_values_normal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from normal distribution.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_parameters(list): [mean, std dev, min, max],</span>
-<span class="sd">            min/max defining truncated normal</span>
+<span class="sd">        min/max defining truncated normal</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_normal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># normal</span>
         <span class="n">dist_mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">dist_stddev</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -252,8 +249,7 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dist_mean</span><span class="p">,</span> <span class="n">dist_stddev</span><span class="p">)</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
-
+            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># truncated normal or invalid</span>
         <span class="n">mean</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -271,19 +267,17 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">truncnorm</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
-
+            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="draw_values_lognormal"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_lognormal">[docs]</a><span class="k">def</span> <span class="nf">draw_values_lognormal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_lognormal"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_lognormal">[docs]</a><span class="k">def</span> <span class="nf">draw_values_lognormal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from lognormal distribution.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_parameters(list): [mu, sigma] for the logarithm of the variable</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -301,51 +295,45 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">lognorm</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">exp</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="draw_values_uniform"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_uniform">[docs]</a><span class="k">def</span> <span class="nf">draw_values_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_uniform"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_uniform">[docs]</a><span class="k">def</span> <span class="nf">draw_values_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from uniform distribution.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_parameters(list): [minimum, maximum]</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">numreals</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;numreal must be a positive integer&quot;</span><span class="p">)</span>
-
     <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
     <span class="n">low</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">high</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">uscale</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
-
     <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span>
             <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">normalscoresamples</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span>
         <span class="p">)</span>
-
     <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">uscale</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="draw_values_triangular"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_triangular">[docs]</a><span class="k">def</span> <span class="nf">draw_values_triangular</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_triangular"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_triangular">[docs]</a><span class="k">def</span> <span class="nf">draw_values_triangular</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from triangular distribution.</span>
-
 <span class="sd">    Args:</span>
-<span class="sd">        dist_parameters(list): [min, mode,  max]</span>
+<span class="sd">        dist_parameters(list): [min, mode, max]</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -379,31 +367,29 @@
                     <span class="s2">&quot; are equal. Using constant </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">dist_scale</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">low</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">mode</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="n">dist_scale</span>
                 <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">triang</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">dist_scale</span><span class="p">)</span>
-                <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="draw_values_pert"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_pert">[docs]</a><span class="k">def</span> <span class="nf">draw_values_pert</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_pert"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_pert">[docs]</a><span class="k">def</span> <span class="nf">draw_values_pert</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from pert distribution.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_parameters(list): [min, mode,  max, scale]</span>
-<span class="sd">            where scale is only specified</span>
-<span class="sd">            for a 4 parameter pert distribution</span>
+<span class="sd">        where scale is only specified</span>
+<span class="sd">        for a 4 parameter pert distribution</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_pert</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
         <span class="n">low</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -414,7 +400,6 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
             <span class="k">else</span> <span class="mi">4</span>  <span class="c1"># pert 3 parameter distribution</span>
         <span class="p">)</span>
-
         <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">high</span> <span class="o">==</span> <span class="n">low</span><span class="p">:</span>  <span class="c1"># collapsed distribution</span>
                 <span class="nb">print</span><span class="p">(</span>
@@ -432,7 +417,6 @@
                     <span class="n">alpha1</span> <span class="o">=</span> <span class="p">((</span><span class="n">muval</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mode</span> <span class="o">-</span> <span class="n">low</span> <span class="o">-</span> <span class="n">high</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
                         <span class="p">(</span><span class="n">mode</span> <span class="o">-</span> <span class="n">muval</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span>
                     <span class="p">)</span>
-
                 <span class="n">alpha2</span> <span class="o">=</span> <span class="n">alpha1</span> <span class="o">*</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">muval</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">muval</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span>
                 <span class="n">values</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span>
                     <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">normalscoresamples</span><span class="p">),</span> <span class="n">alpha1</span><span class="p">,</span> <span class="n">alpha2</span>
@@ -452,29 +436,25 @@
                     <span class="n">alpha1</span> <span class="o">=</span> <span class="p">((</span><span class="n">muval</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mode</span> <span class="o">-</span> <span class="n">low</span> <span class="o">-</span> <span class="n">high</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
                         <span class="p">(</span><span class="n">mode</span> <span class="o">-</span> <span class="n">muval</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span>
                     <span class="p">)</span>
-
                 <span class="n">alpha2</span> <span class="o">=</span> <span class="n">alpha1</span> <span class="o">*</span> <span class="p">(</span><span class="n">high</span> <span class="o">-</span> <span class="n">muval</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">muval</span> <span class="o">-</span> <span class="n">low</span><span class="p">)</span>
                 <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="n">alpha1</span><span class="p">,</span> <span class="n">alpha2</span><span class="p">)</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
-
+            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="c1"># For pert distribution scale afterwards:</span>
     <span class="k">return</span> <span class="n">values</span> <span class="o">*</span> <span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="draw_values_loguniform"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_loguniform">[docs]</a><span class="k">def</span> <span class="nf">draw_values_loguniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values_loguniform"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values_loguniform">[docs]</a><span class="k">def</span> <span class="nf">draw_values_loguniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws values from loguniform distribution.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_parameters(list): [minimum, maximum]</span>
 <span class="sd">        numreals(int): number of realisations to draw</span>
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">        normalscoresamples(list): samples for correlated parameters</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        list of values</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">_check_dist_params_logunif</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
         <span class="n">low</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -485,43 +465,43 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">distribution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">reciprocal</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">distribution</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">numreals</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="draw_values"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values">[docs]</a><span class="k">def</span> <span class="nf">draw_values</span><span class="p">(</span><span class="n">distname</span><span class="p">,</span> <span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_values"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.draw_values">[docs]</a><span class="k">def</span> <span class="nf">draw_values</span><span class="p">(</span><span class="n">distname</span><span class="p">,</span> <span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prepare scipy distributions with parameters</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        distname (str): distribution name &#39;normal&#39;, &#39;lognormal&#39;, &#39;triang&#39;,</span>
-<span class="sd">                        &#39;uniform&#39;, &#39;logunif&#39;, &#39;discrete&#39;, &#39;pert&#39;</span>
+<span class="sd">        &#39;uniform&#39;, &#39;logunif&#39;, &#39;discrete&#39;, &#39;pert&#39;</span>
 <span class="sd">        dist_parameters (list): list with parameters for distribution</span>
-
+<span class="sd">        numreals (int): number of realizations to generate</span>
+<span class="sd">        rng (numpy.random.RandomState): random number generator instance</span>
+<span class="sd">        normalscoresamples (array, optional): samples for correlated distributions</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        scipy.stats distribution with parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;norm&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_normal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_normal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;logn&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_lognormal</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_lognormal</span><span class="p">(</span>
+            <span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;unif&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_uniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;triang&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_triangular</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_triangular</span><span class="p">(</span>
+            <span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pert&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_pert</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_pert</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;logunif&quot;</span><span class="p">:</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_loguniform</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">normalscoresamples</span><span class="p">)</span>
-
+        <span class="n">values</span> <span class="o">=</span> <span class="n">draw_values_loguniform</span><span class="p">(</span>
+            <span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">normalscoresamples</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;const&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -531,7 +511,6 @@
                 <span class="s2">&quot;be used with correlation. &quot;</span>
             <span class="p">)</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">dist_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="n">numreals</span>
-
     <span class="k">elif</span> <span class="n">distname</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;disc&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">normalscoresamples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -540,28 +519,26 @@
                 <span class="s2">&quot;but discrete distribution cannot &quot;</span>
                 <span class="s2">&quot;be used with correlation. &quot;</span>
             <span class="p">)</span>
-        <span class="n">status</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sample_discrete</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">)</span>
+        <span class="n">status</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sample_discrete</span><span class="p">(</span><span class="n">dist_parameters</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;distribution name </span><span class="si">{</span><span class="n">distname</span><span class="si">}</span><span class="s2"> is not implemented&quot;</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="n">values</span></div>
 
 
-<div class="viewcode-block" id="sample_discrete"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.sample_discrete">[docs]</a><span class="k">def</span> <span class="nf">sample_discrete</span><span class="p">(</span><span class="n">dist_params</span><span class="p">,</span> <span class="n">numreals</span><span class="p">):</span>
+<div class="viewcode-block" id="sample_discrete"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.sensitivities.design_distributions.sample_discrete">[docs]</a><span class="k">def</span> <span class="nf">sample_discrete</span><span class="p">(</span><span class="n">dist_params</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sample from discrete distribution</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        dist_params(list): parameters for distribution</span>
-<span class="sd">            dist_params[0] is possible outcomes separated</span>
-<span class="sd">            by comma</span>
-<span class="sd">            dist_params[1] is probabilities for each outcome,</span>
-<span class="sd">            separated by comma</span>
+<span class="sd">        dist_params[0] is possible outcomes separated</span>
+<span class="sd">        by comma</span>
+<span class="sd">        dist_params[1] is probabilities for each outcome,</span>
+<span class="sd">        separated by comma</span>
 <span class="sd">        numreals (int): number of realisations to draw</span>
-
+<span class="sd">        rng: numpy.random.RandomState instance</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        np.ndarray: values drawn from distribution</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -577,13 +554,12 @@
             <span class="p">)</span>
         <span class="n">weightnmbr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">]</span>
         <span class="n">fractions</span> <span class="o">=</span> <span class="p">[</span><span class="n">weight</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">weightnmbr</span><span class="p">)</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">weightnmbr</span><span class="p">]</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">fractions</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">numreals</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">fractions</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dist_params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># uniform</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">numreals</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">numreals</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">status</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">values</span> <span class="o">=</span> <span class="s2">&quot;Wrong input for discrete distribution&quot;</span>
-
     <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">values</span></div>
 
 

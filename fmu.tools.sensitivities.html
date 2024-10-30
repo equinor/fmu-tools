@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev14+g020ba4f documentation</title>
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev15+g1c7c677 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b7a8f25b"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=c12d3d5e"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -536,7 +536,7 @@ with realisation numbers as index.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate">
-<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrdict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">realnums</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seedvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrdict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#MonteCarloSensitivity.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.MonteCarloSensitivity.generate" title="Permalink to this definition"></a></dt>
 <dd><p>Generates parameter values by drawing from
 defined distributions.</p>
 <dl class="field-list simple">
@@ -609,153 +609,192 @@ from file</p>
 distributions. For use in generation of design matrices</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_normal">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_normal" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from normal distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_normal" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from normal distribution.
+:type dist_parameters: 
+:param dist_parameters: [mean, std dev, min, max],
+:type dist_parameters: list
+:param min/max defining truncated normal:
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [mean, std dev, min, max],
-min/max defining truncated normal</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_lognormal">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_lognormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_lognormal" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from lognormal distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_lognormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_lognormal" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from lognormal distribution.
+:type dist_parameters: 
+:param dist_parameters: [mu, sigma] for the logarithm of the variable
+:type dist_parameters: list
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [mu, sigma] for the logarithm of the variable</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_uniform">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_uniform" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from uniform distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_uniform" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from uniform distribution.
+:type dist_parameters: 
+:param dist_parameters: [minimum, maximum]
+:type dist_parameters: list
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [minimum, maximum]</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_triangular">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_triangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_triangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_triangular" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from triangular distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_triangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_triangular"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_triangular" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from triangular distribution.
+:type dist_parameters: 
+:param dist_parameters: [min, mode, max]
+:type dist_parameters: list
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [min, mode,  max]</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_pert">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_pert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_pert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_pert" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from pert distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_pert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_pert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_pert" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from pert distribution.
+:type dist_parameters: 
+:param dist_parameters: [min, mode,  max, scale]
+:type dist_parameters: list
+:param where scale is only specified:
+:param for a 4 parameter pert distribution:
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [min, mode,  max, scale]
-where scale is only specified
-for a 4 parameter pert distribution</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_loguniform">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_loguniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_loguniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_loguniform" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from loguniform distribution.</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_loguniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_loguniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_loguniform" title="Permalink to this definition"></a></dt>
+<dd><p>Draws values from loguniform distribution.
+:type dist_parameters: 
+:param dist_parameters: [minimum, maximum]
+:type dist_parameters: list
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated parameters
+:type normalscoresamples: list</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – [minimum, maximum]</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-<li><p><strong>normalscoresamples</strong> (<em>list</em>) – samples for correlated parameters</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of values</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values" title="Permalink to this definition"></a></dt>
-<dd><p>Prepare scipy distributions with parameters</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values" title="Permalink to this definition"></a></dt>
+<dd><p>Prepare scipy distributions with parameters
+:type distname: 
+:param distname: distribution name ‘normal’, ‘lognormal’, ‘triang’,
+:type distname: str
+:param ‘uniform’:
+:param ‘logunif’:
+:param ‘discrete’:
+:param ‘pert’:
+:type dist_parameters: 
+:param dist_parameters: list with parameters for distribution
+:type dist_parameters: list
+:type numreals: 
+:param numreals: number of realizations to generate
+:type numreals: int
+:type rng: 
+:param rng: random number generator instance
+:type rng: numpy.random.RandomState
+:type normalscoresamples: 
+:param normalscoresamples: samples for correlated distributions
+:type normalscoresamples: array, optional</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>distname</strong> (<em>str</em>) – distribution name ‘normal’, ‘lognormal’, ‘triang’,
-‘uniform’, ‘logunif’, ‘discrete’, ‘pert’</p></li>
-<li><p><strong>dist_parameters</strong> (<em>list</em>) – list with parameters for distribution</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>scipy.stats distribution with parameters</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>scipy.stats distribution with parameters</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.sample_discrete">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">sample_discrete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#sample_discrete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.sample_discrete" title="Permalink to this definition"></a></dt>
-<dd><p>Sample from discrete distribution</p>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">sample_discrete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#sample_discrete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.sample_discrete" title="Permalink to this definition"></a></dt>
+<dd><p>Sample from discrete distribution
+:type dist_params: 
+:param dist_params: parameters for distribution
+:type dist_params: list
+:param dist_params[0] is possible outcomes separated:
+:param by comma:
+:param dist_params[1] is probabilities for each outcome:
+:param :
+:param separated by comma:
+:type numreals: 
+:param numreals: number of realisations to draw
+:type numreals: int
+:type rng: 
+:param rng: numpy.random.RandomState instance</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dist_params</strong> (<em>list</em>) – parameters for distribution
-dist_params[0] is possible outcomes separated
-by comma
-dist_params[1] is probabilities for each outcome,
-separated by comma</p></li>
-<li><p><strong>numreals</strong> (<em>int</em>) – number of realisations to draw</p></li>
-</ul>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>values drawn from distribution</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>values drawn from distribution</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
