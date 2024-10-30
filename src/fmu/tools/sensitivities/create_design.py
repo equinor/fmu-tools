@@ -59,7 +59,9 @@ class DesignMatrix:
         self.reset()  # Emptying if regenerating matrix
 
         if "distribution_seed" in inputdict and inputdict["distribution_seed"]:
-            np.random.seed(inputdict["distribution_seed"])
+            rng = np.random.RandomState(inputdict["distribution_seed"])
+        else:
+            rng = np.random.RandomState()
 
         # Reading default values
         default_dict = inputdict["defaultvalues"]
@@ -124,6 +126,7 @@ class DesignMatrix:
                         sens["parameters"],
                         self.seedvalues,
                         sens["correlations"],
+                        rng=rng,
                     )
                     counter += numreal
                     self._add_sensitivity(sensitivity)
@@ -659,7 +662,7 @@ class MonteCarloSensitivity:
         self.sensname = sensname
         self.sensvalues = None
 
-    def generate(self, realnums, parameters, seedvalues, corrdict):
+    def generate(self, realnums, parameters, seedvalues, corrdict, rng):
         """Generates parameter values by drawing from
         defined distributions.
 
@@ -678,7 +681,7 @@ class MonteCarloSensitivity:
                 dist_params = parameters[key][1]
                 try:
                     self.sensvalues[key] = design_dist.draw_values(
-                        dist_name, dist_params, numreals
+                        dist_name, dist_params, numreals, rng
                     )
                 except ValueError as error:
                     raise ValueError(
@@ -712,7 +715,7 @@ class MonteCarloSensitivity:
                     multivariate_parameters = df_correlations.index.values
                     cov_matrix = design_dist.make_covariance_matrix(df_correlations)
                     normalscoremeans = len(multivariate_parameters) * [0]
-                    normalscoresamples = np.random.multivariate_normal(
+                    normalscoresamples = rng.multivariate_normal(
                         normalscoremeans, cov_matrix, size=numreals
                     )
                     normalscoresamples_df = pd.DataFrame(
@@ -727,6 +730,7 @@ class MonteCarloSensitivity:
                                     dist_name,
                                     dist_parameters,
                                     numreals,
+                                    rng,
                                     normalscoresamples_df[key],
                                 )
                             except ValueError as error:
@@ -749,7 +753,7 @@ class MonteCarloSensitivity:
                         dist_parameters = param_dict[key][1]
                         try:
                             self.sensvalues[key] = design_dist.draw_values(
-                                dist_name, dist_parameters, numreals
+                                dist_name, dist_parameters, numreals, rng
                             )
                         except ValueError as error:
                             raise ValueError(
