@@ -63,9 +63,7 @@ class DesignMatrix:
         else:
             rng = np.random.RandomState()
 
-        # Reading default values
-        default_dict = inputdict["defaultvalues"]
-        self.set_defaultvalues(default_dict)
+        self.defaultvalues = inputdict["defaultvalues"]
 
         max_reals = _find_max_realisations(inputdict)
 
@@ -216,14 +214,6 @@ class DesignMatrix:
             f"A total of {len(self.designvalues['REAL'])} realizations were generated"
         )
         print(f"Designmatrix written to {filename}")
-
-    def set_defaultvalues(self, defaults):
-        """Add default values
-
-        Args:
-            defaults (OrderedDict): (key, value) is (parameter_name, value)
-        """
-        self.defaultvalues = defaults
 
     def add_seeds(self, seeds, max_reals):
         """Adding background as specified in dictionary.
