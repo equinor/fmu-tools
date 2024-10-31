@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.16.1.dev15+g1c7c677 documentation</title>
+  <title>fmu.tools.sensitivities.create_design &mdash; fmu-tools 1.16.1.dev16+ge4c2ad2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=c12d3d5e"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=6f025799"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -159,7 +159,7 @@
 
         <span class="c1"># If background values used - read or generate</span>
         <span class="k">if</span> <span class="s2">&quot;background&quot;</span> <span class="ow">in</span> <span class="n">inputdict</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_background</span><span class="p">(</span><span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;background&quot;</span><span class="p">],</span> <span class="n">max_reals</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_background</span><span class="p">(</span><span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;background&quot;</span><span class="p">],</span> <span class="n">max_reals</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;designtype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;onebyone&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">designvalues</span><span class="p">[</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -333,7 +333,7 @@
                 <span class="s2">&quot;had been specified as </span><span class="si">{}</span><span class="s2"> .&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="DesignMatrix.add_background"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.DesignMatrix.add_background">[docs]</a>    <span class="k">def</span> <span class="nf">add_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">):</span>
+<div class="viewcode-block" id="DesignMatrix.add_background"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.DesignMatrix.add_background">[docs]</a>    <span class="k">def</span> <span class="nf">add_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adding background as specified in dictionary.</span>
 <span class="sd">        Either from external file or from distributions in background</span>
 <span class="sd">        dictionary</span>
@@ -341,13 +341,14 @@
 <span class="sd">        Args:</span>
 <span class="sd">            back_dict (OrderedDict): how to generate background values</span>
 <span class="sd">            max_values (int): number of background values to generate</span>
+<span class="sd">            rng (numpy.random.RandomState): Random number generator instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">back_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="s2">&quot;extern&quot;</span> <span class="ow">in</span> <span class="n">back_dict</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">backgroundvalues</span> <span class="o">=</span> <span class="n">_parameters_from_extern</span><span class="p">(</span><span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;extern&quot;</span><span class="p">])</span>
         <span class="k">elif</span> <span class="s2">&quot;parameters&quot;</span> <span class="ow">in</span> <span class="n">back_dict</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add_dist_background</span><span class="p">(</span><span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_dist_background</span><span class="p">(</span><span class="n">back_dict</span><span class="p">,</span> <span class="n">max_values</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DesignMatrix.background_to_excel"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.DesignMatrix.background_to_excel">[docs]</a>    <span class="k">def</span> <span class="nf">background_to_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">backgroundsheet</span><span class="o">=</span><span class="s2">&quot;Background&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writing background values to an Excel spreadsheet</span>
@@ -444,20 +445,25 @@
                             <span class="s2">&quot;should be specified as strings.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
                         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_add_dist_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">numreal</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_add_dist_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">,</span> <span class="n">numreal</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Drawing background values from distributions</span>
 <span class="sd">        specified in dictionary</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            back_dict (OrderedDict): parameters and distributions</span>
 <span class="sd">            numreal (int): Number of samples to generate</span>
+<span class="sd">            rng (numpy.random.RandomState): Random number generator instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">numreal</span><span class="p">,</span> <span class="nb">int</span>
         <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;numreal must be an integer, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">numreal</span><span class="p">)</span><span class="si">}</span><span class="s2"> with value </span><span class="si">{</span><span class="n">numreal</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">mc_background</span> <span class="o">=</span> <span class="n">MonteCarloSensitivity</span><span class="p">(</span><span class="s2">&quot;background&quot;</span><span class="p">)</span>
         <span class="n">mc_background</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-            <span class="nb">range</span><span class="p">(</span><span class="n">numreal</span><span class="p">),</span> <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;correlations&quot;</span><span class="p">]</span>
+            <span class="nb">range</span><span class="p">(</span><span class="n">numreal</span><span class="p">),</span>
+            <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+            <span class="n">back_dict</span><span class="p">[</span><span class="s2">&quot;correlations&quot;</span><span class="p">],</span>
+            <span class="n">rng</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">mc_backgroundvalues</span> <span class="o">=</span> <span class="n">mc_background</span><span class="o">.</span><span class="n">sensvalues</span>
 

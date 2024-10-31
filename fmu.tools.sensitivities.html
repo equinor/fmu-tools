@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev15+g1c7c677 documentation</title>
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev16+ge4c2ad2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=c12d3d5e"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=6f025799"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -215,7 +215,7 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.create_design.DesignMatrix.add_background">
-<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.create_design.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
@@ -224,6 +224,7 @@ dictionary</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
+<li><p><strong>rng</strong> (<em>numpy.random.RandomState</em>) – Random number generator instance</p></li>
 </ul>
 </dd>
 </dl>
@@ -1098,7 +1099,7 @@ dictionary</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.DesignMatrix.add_background">
-<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">back_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/create_design.html#DesignMatrix.add_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.DesignMatrix.add_background" title="Permalink to this definition"></a></dt>
 <dd><p>Adding background as specified in dictionary.
 Either from external file or from distributions in background
 dictionary</p>
@@ -1107,6 +1108,7 @@ dictionary</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>back_dict</strong> (<em>OrderedDict</em>) – how to generate background values</p></li>
 <li><p><strong>max_values</strong> (<em>int</em>) – number of background values to generate</p></li>
+<li><p><strong>rng</strong> (<em>numpy.random.RandomState</em>) – Random number generator instance</p></li>
 </ul>
 </dd>
 </dl>
