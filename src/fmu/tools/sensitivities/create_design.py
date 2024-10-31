@@ -333,7 +333,9 @@ class DesignMatrix:
         """Filling NaNs with default values"""
         for key in self.designvalues:
             if key in self.defaultvalues:
-                self.designvalues[key].fillna(self.defaultvalues[key], inplace=True)
+                self.designvalues[key] = self.designvalues[key].fillna(
+                    self.defaultvalues[key]
+                )
             elif key not in ["REAL", "SENSNAME", "SENSCASE", "RMS_SEED"]:
                 raise LookupError(f"No defaultvalues given for parameter {key} ")
 
@@ -345,10 +347,8 @@ class DesignMatrix:
                     for index in range(len(depend_dict[from_param]["from_values"])):
                         fill_these = depend_dict[from_param]["from_values"][index]
                         fill_data = depend_dict[from_param]["to_params"][param][index]
-                        self.designvalues[param].mask(
-                            self.designvalues[from_param] == fill_these,
-                            fill_data,
-                            inplace=True,
+                        self.designvalues[param] = self.designvalues[param].mask(
+                            self.designvalues[from_param] == fill_these, fill_data
                         )
                     if self.designvalues[param].isnull().any():
                         raise ValueError(
@@ -702,7 +702,7 @@ class MonteCarloSensitivity:
                 orient="index",
                 columns=["dist_name", "dist_params", "corr_sheet"],
             )
-            df_params["corr_sheet"].fillna("nocorr", inplace=True)
+            df_params["corr_sheet"] = df_params["corr_sheet"].fillna("nocorr")
             df_params.reset_index(inplace=True)
             df_params.rename(columns={"index": "param_name"}, inplace=True)
             param_groups = df_params.groupby("corr_sheet")
