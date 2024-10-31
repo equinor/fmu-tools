@@ -302,7 +302,7 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
 
     _check_designinput(designinput)
 
-    designinput["sensname"].fillna(method="ffill", inplace=True)
+    designinput["sensname"] = designinput["sensname"].ffill()
 
     # Read dependencies
     if "dependencies" in designinput:
