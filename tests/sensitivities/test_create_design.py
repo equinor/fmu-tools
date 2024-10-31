@@ -1,6 +1,7 @@
 """Testing code for generation of design matrices"""
 
 import json
+import shutil
 from datetime import datetime
 from pathlib import Path
 
@@ -252,3 +253,36 @@ def test_generate_full_mc(tmpdir):
     df_merged = pd.merge(diskdesign, disk_depends, on="DATO", how="inner")
     assert (df_merged["DERIVED_PARAM1_x"] == df_merged["DERIVED_PARAM1_y"]).all()
     assert (df_merged["DERIVED_PARAM2_x"] == df_merged["DERIVED_PARAM2_y"]).all()
+
+
+def test_generate_background(tmpdir):
+    inputfile = TESTDATA / "config/design_input_background.xlsx"
+    input_dict = excel2dict_design(inputfile)
+    source_file = TESTDATA / "config/doe1.xlsx"
+    dest_file = tmpdir.join("doe1.xlsx")
+    shutil.copy2(source_file, dest_file)
+
+    with tmpdir.as_cwd():
+        design = DesignMatrix()
+        design.generate(input_dict)
+
+        # Check that background parameters have same values in different sensitivies.
+        background_params = ["PARAM17", "PARAM18", "PARAM19"]
+
+        background_vals = design.designvalues.loc[
+            design.designvalues["SENSNAME"] == "background", background_params
+        ]
+        velmodel_vals = design.designvalues.loc[
+            design.designvalues["SENSNAME"] == "velmodel", background_params
+        ]
+
+        assert (background_vals.values == velmodel_vals.values).all()
+
+        faults_vals = design.designvalues.loc[
+            design.designvalues["SENSNAME"] == "faults", background_params
+        ]
+        contacts_vals = design.designvalues.loc[
+            design.designvalues["SENSNAME"] == "contacts", background_params
+        ]
+
+        assert (faults_vals.values == contacts_vals.values).all()
