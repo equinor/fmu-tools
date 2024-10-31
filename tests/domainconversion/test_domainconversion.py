@@ -77,7 +77,15 @@ def fixture_smallcube():
     cube_values[:, :, 68:70] = -1.0
 
     return xtgeo.Cube(
-        ncol=3, nrow=4, nlay=101, xinc=1.0, yinc=1.0, zinc=1.0, values=cube_values
+        ncol=3,
+        nrow=4,
+        nlay=101,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        values=cube_values,
+        ilines=[3, 6, 9],
+        xlines=[42, 40, 38, 36],
     )
 
 
@@ -161,6 +169,9 @@ def test_generate_simple_velocube(smallcube, simplesurfs):
     velocube = dc.average_velocity_cube_in_time
     assert velocube is not None
 
+    assert velocube.ilines == smallcube.ilines
+    assert velocube.xlines == smallcube.xlines
+
     plot_section(velocube, simplesurfs, title="Avg Velocity cube in T")
 
 
@@ -190,6 +201,9 @@ def test_proposing_zinc_etc_depthconvert(smallcube, simplesurfs, input, expected
     assert depthcube.zori == pytest.approx(expected_zmin)
     max = depthcube.zori + (depthcube.nlay - 1) * depthcube.zinc
     assert max == pytest.approx(expected_zmax)
+
+    assert depthcube.ilines == [3, 6, 9]
+    assert depthcube.xlines == [42, 40, 38, 36]
 
 
 @pytest.mark.parametrize(

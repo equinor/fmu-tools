@@ -149,6 +149,8 @@ class DomainConversion:
                 zori=0.0,
                 yflip=incube.yflip,
                 rotation=incube.rotation,
+                ilines=incube.ilines,
+                xlines=incube.xlines,
                 values=0.0,
             )
             if resample:
@@ -470,6 +472,8 @@ class DomainConversion:
             zinc=zinc_actual,
             rotation=incube.rotation,
             yflip=incube.yflip,
+            ilines=incube.ilines,
+            xlines=incube.xlines,
             values=0.0,
         )
         if time2depth:
