@@ -75,7 +75,7 @@ class DesignMatrix:
 
         # If background values used - read or generate
         if "background" in inputdict:
-            self.add_background(inputdict["background"], max_reals)
+            self.add_background(inputdict["background"], max_reals, rng)
 
         if inputdict["designtype"] == "onebyone":
             self.designvalues["SENSNAME"] = None
@@ -249,7 +249,7 @@ class DesignMatrix:
                 "had been specified as {} .".format(seeds)
             )
 
-    def add_background(self, back_dict, max_values):
+    def add_background(self, back_dict, max_values, rng: np.random.RandomState):
         """Adding background as specified in dictionary.
         Either from external file or from distributions in background
         dictionary
@@ -257,13 +257,14 @@ class DesignMatrix:
         Args:
             back_dict (OrderedDict): how to generate background values
             max_values (int): number of background values to generate
+            rng (numpy.random.RandomState): Random number generator instance
         """
         if back_dict is None:
             self.backgroundvalues = None
         elif "extern" in back_dict:
             self.backgroundvalues = _parameters_from_extern(back_dict["extern"])
         elif "parameters" in back_dict:
-            self._add_dist_background(back_dict, max_values)
+            self._add_dist_background(back_dict, max_values, rng)
 
     def background_to_excel(self, filename, backgroundsheet="Background"):
         """Writing background values to an Excel spreadsheet
@@ -360,20 +361,25 @@ class DesignMatrix:
                             "should be specified as strings.".format(param)
                         )
 
-    def _add_dist_background(self, back_dict, numreal):
+    def _add_dist_background(self, back_dict, numreal, rng: np.random.RandomState):
         """Drawing background values from distributions
         specified in dictionary
 
         Args:
             back_dict (OrderedDict): parameters and distributions
             numreal (int): Number of samples to generate
+            rng (numpy.random.RandomState): Random number generator instance
         """
         assert isinstance(
             numreal, int
         ), f"numreal must be an integer, got {type(numreal)} with value {numreal}"
         mc_background = MonteCarloSensitivity("background")
         mc_background.generate(
-            range(numreal), back_dict["parameters"], "None", back_dict["correlations"]
+            range(numreal),
+            back_dict["parameters"],
+            "None",
+            back_dict["correlations"],
+            rng,
         )
         mc_backgroundvalues = mc_background.sensvalues
 
