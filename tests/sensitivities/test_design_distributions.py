@@ -179,8 +179,25 @@ def test_draw_values_lognormal():
     assert not dists.draw_values_lognormal([100, 10], 0, rng).size
     values = dists.draw_values_lognormal([100, 10], 10, rng)
     assert len(values) == 10
+
     assert all(isinstance(value, numbers.Number) for value in values)
     assert all(value > 0 for value in values)
+
+    with pytest.raises(
+        ValueError,
+        match="Lognormal distribution must have 2 parameters, but had 3 parameters.",
+    ):
+        values = dists.draw_values_lognormal([10, 50, 100], 10, rng)
+
+    with pytest.raises(
+        ValueError, match="Parameters for lognormal distribution must be numbers."
+    ):
+        values = dists.draw_values_lognormal(["a", 10], 10, rng)
+
+    with pytest.raises(
+        ValueError, match="Lognormal distribution must have stddev >= 0."
+    ):
+        values = dists.draw_values_lognormal([0, -1], 10, rng)
 
 
 def test_draw_uniform_with_correlation():

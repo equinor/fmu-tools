@@ -197,23 +197,24 @@ def draw_values_lognormal(dist_parameters, numreals, rng, normalscoresamples=Non
     Returns:
         list of values
     """
-    distribution = None
     status, msg = _check_dist_params_lognormal(dist_parameters)
-    if status:
-        mean = float(dist_parameters[0])
-        sigma = float(dist_parameters[1])
-        if normalscoresamples is not None:
-            values = scipy.stats.lognorm.ppf(
-                scipy.stats.norm.cdf(normalscoresamples),
-                s=sigma,
-                loc=0,
-                scale=exp(mean),
-            )
-        else:
-            distribution = scipy.stats.lognorm(s=sigma, scale=exp(mean))
-            values = distribution.rvs(size=numreals, random_state=rng)
-    else:
+
+    if not status:
         raise ValueError(msg)
+
+    mean = float(dist_parameters[0])
+    sigma = float(dist_parameters[1])
+    if normalscoresamples is not None:
+        values = scipy.stats.lognorm.ppf(
+            scipy.stats.norm.cdf(normalscoresamples),
+            s=sigma,
+            loc=0,
+            scale=exp(mean),
+        )
+    else:
+        distribution = scipy.stats.lognorm(s=sigma, scale=exp(mean))
+        values = distribution.rvs(size=numreals, random_state=rng)
+
     return values
 
 
