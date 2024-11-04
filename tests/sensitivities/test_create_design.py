@@ -277,7 +277,7 @@ def test_generate_full_mc(tmpdir):
     assert r_ci[0] <= 0 <= r_ci[1]
 
     # Using wide tolerance because the non-linear transformation between normal
-    # and targed distributions cna alter correlation strength.
+    # and target distributions can alter correlation strength.
     assert np.isclose(
         stats.spearmanr(diskdesign["PARAM1"], diskdesign["PARAM3"])[0], 0.2, atol=0.1
     )
