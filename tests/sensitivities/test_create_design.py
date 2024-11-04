@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from scipy import stats
 
 import fmu.tools
 from fmu.tools.sensitivities import DesignMatrix, excel2dict_design
@@ -254,6 +255,33 @@ def test_generate_full_mc(tmpdir):
     assert (df_merged["DERIVED_PARAM1_x"] == df_merged["DERIVED_PARAM1_y"]).all()
     assert (df_merged["DERIVED_PARAM2_x"] == df_merged["DERIVED_PARAM2_y"]).all()
 
+    # Check that variables are correlated using Pearson correlation
+    # Using 95% confidence intervals for correlation coefficients.
+    #
+    # The confidence interval calculation assumes:
+    #   - Large sample size (n > 30)
+    #   - Bivariate normal distribution of variables
+    #   - Linear relationship between variables
+    # When these assumptions are violated (e.g. with skewed distributions),
+    # the intervals become less reliable
+    r_obj = stats.pearsonr(diskdesign["OWC1"], diskdesign["OWC2"])
+    r_ci = r_obj.confidence_interval(confidence_level=0.95)
+    assert r_ci[0] <= 0.5 <= r_ci[1]
+
+    r_obj = stats.pearsonr(diskdesign["OWC2"], diskdesign["OWC3"])
+    r_ci = r_obj.confidence_interval(confidence_level=0.95)
+    assert r_ci[0] <= -0.7 <= r_ci[1]
+
+    r_obj = stats.pearsonr(diskdesign["PARAM1"], diskdesign["PARAM2"])
+    r_ci = r_obj.confidence_interval(confidence_level=0.95)
+    assert r_ci[0] <= 0 <= r_ci[1]
+
+    # Using wide tolerance because the non-linear transformation between normal
+    # and target distributions can alter correlation strength.
+    assert np.isclose(
+        stats.spearmanr(diskdesign["PARAM1"], diskdesign["PARAM3"])[0], 0.2, atol=0.1
+    )
+
 
 def test_generate_background(tmpdir):
     inputfile = TESTDATA / "config/design_input_background.xlsx"
@@ -286,3 +314,23 @@ def test_generate_background(tmpdir):
         ]
 
         assert (faults_vals.values == contacts_vals.values).all()
+
+        sens7 = design.designvalues[design.designvalues["SENSNAME"] == "sens7"]
+
+        # PARAM9 and PARAM10 have a target correlation of 0.9 in the design config.
+        # The input correlation matrix is not positive semi-definite and is
+        # transformed to the closest positive semi-definite correlation matrix.
+        # The new correlation coefficient is 0.8.
+        # Using wide tolerance because the non-linear transformation between normal
+        # and target distributions can alter correlation strength.
+        assert np.isclose(
+            stats.spearmanr(sens7["PARAM9"], sens7["PARAM10"])[0],
+            0.8,
+            atol=0.2,
+        )
+
+        assert np.isclose(
+            stats.spearmanr(sens7["PARAM10"], sens7["PARAM11"])[0],
+            0.8,
+            atol=0.20,
+        )
