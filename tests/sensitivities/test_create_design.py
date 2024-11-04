@@ -322,7 +322,7 @@ def test_generate_background(tmpdir):
         # transformed to the closest positive semi-definite correlation matrix.
         # The new correlation coefficient is 0.8.
         # Using wide tolerance because the non-linear transformation between normal
-        # and targed distributions cna alter correlation strength.
+        # and target distributions can alter correlation strength.
         assert np.isclose(
             stats.spearmanr(sens7["PARAM9"], sens7["PARAM10"])[0],
             0.8,
