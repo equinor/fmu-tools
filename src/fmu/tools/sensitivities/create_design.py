@@ -7,10 +7,123 @@ from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+import numpy.linalg as la
 import pandas as pd
+import scipy
+from scipy.stats import norm, qmc, rankdata
 
 import fmu.tools
 from fmu.tools.sensitivities import design_distributions as design_dist
+
+
+def _is_positive_definite(b_mat):
+    """Returns true when input is positive-definite, via Cholesky"""
+    try:
+        _ = la.cholesky(b_mat)
+        return True
+    except la.LinAlgError:
+        return False
+
+
+def generate_van_der_waerden_scores(N, K, rng):
+    """Generate van der Waerden scores for Iman-Conover method.
+
+    Parameters
+    ----------
+    N : int
+        Number of samples
+    K : int
+        Number of parameters
+    rng : numpy.random.RandomState
+        Random number generator instance
+
+    Returns
+    -------
+    ndarray
+        Matrix of shape (N,K) containing van der Waerden scores,
+        randomly permuted within each column
+
+    Notes
+    -----
+    For a sample of size N, each column contains a random permutation of the
+    van der Waerden scores Φ^(-1)(i/(N+1)), i=1,...,N, where Φ^(-1) is the
+    inverse of the standard normal distribution function.
+    """
+    a = norm.ppf(np.arange(1, (N + 1)) / (N + 1))
+    R = np.zeros((N, K))
+    for k in range(K):
+        R[:, k] = rng.permutation(a)
+    return R
+
+
+def iman_conover(X, C, rng):
+    """Implementation of the Iman-Conover method for inducing rank correlations.
+
+    Parameters
+    ----------
+    X : ndarray
+        Input matrix of shape (N,K) with independent columns
+    C : ndarray
+        Target correlation matrix of shape (K,K)
+    rng : numpy.random.RandomState
+        Random number generator instance
+
+    Returns
+    -------
+    ndarray
+        Transformed matrix with same marginals as X but correlation structure C
+
+    Notes
+    -----
+    Implementation follows the original paper:
+    Iman, R. L., & Conover, W. J. (1982). A distribution-free approach to
+    inducing rank correlation among input variables. Communications in
+    Statistics - Simulation and Computation, 11(3), 311-334.
+
+    The method uses van der Waerden scores and Cholesky decomposition to induce
+    correlations while preserving marginal distributions through rank reordering.
+    """
+    N, K = X.shape
+    P = np.linalg.cholesky(C)
+    R = generate_van_der_waerden_scores(N, K, rng)
+    R_star = R @ P.T
+
+    # Reorder X columns to match R_star ranks
+    result = np.zeros_like(X)
+    for k in range(K):
+        ranks = rankdata(R_star[:, k]).astype(int) - 1
+        result[:, k] = np.sort(X[:, k])[ranks]
+
+    return result
+
+
+def _nearest_positive_definite(a_mat):
+    """Implementation taken from:
+    https://stackoverflow.com/questions/43238173/
+    python-convert-matrix-to-positive-semi-definite/43244194#43244194
+    """
+
+    b_mat = (a_mat + a_mat.T) / 2
+    _, s_mat, v_mat = la.svd(b_mat)
+
+    h_mat = np.dot(v_mat.T, np.dot(np.diag(s_mat), v_mat))
+
+    a2_mat = (b_mat + h_mat) / 2
+
+    a3_mat = (a2_mat + a2_mat.T) / 2
+
+    if _is_positive_definite(a3_mat):
+        return a3_mat
+
+    spacing = np.spacing(la.norm(a_mat))
+    identity = np.eye(a_mat.shape[0])
+    kiter = 1
+    while not _is_positive_definite(a3_mat):
+        mineig = np.min(np.real(la.eigvals(a3_mat)))
+        a3_mat += identity * (-mineig * kiter**2 + spacing)
+        kiter += 1
+
+    return a3_mat
 
 
 class DesignMatrix:
@@ -659,19 +772,20 @@ class MonteCarloSensitivity:
         self.sensvalues = None
 
     def generate(self, realnums, parameters, seedvalues, corrdict, rng):
-        """Generates parameter values by drawing from
-        defined distributions.
+        """Generates parameter values by drawing from defined distributions.
 
         Args:
             realnums (list): list of integers with realization numbers
-            parameters (OrderedDict):
-                dictionary of parameters and distributions
-            seeds (str): default or None
-            corrdict(OrderedDict): correlation info
+            parameters (OrderedDict): dictionary of parameters and distributions
+            seedvalues (str): default or None
+            corrdict (OrderedDict): correlation info
+            rng (np.random.RandomState): random number generator
         """
         self.sensvalues = pd.DataFrame(columns=parameters.keys(), index=realnums)
         numreals = len(realnums)
+
         if corrdict is None:
+            # Handle uncorrelated case as before
             for key in parameters:
                 dist_name = parameters[key][0].lower()
                 dist_params = parameters[key][1]
@@ -681,12 +795,12 @@ class MonteCarloSensitivity:
                     )
                 except ValueError as error:
                     raise ValueError(
-                        "Problem with parameter {} in sensitivity "
-                        "with sensname {}: {}.".format(
-                            key, self.sensname, error.args[0]
-                        )
+                        f"Problem with parameter {key} in sensitivity "
+                        f"with sensname {self.sensname}: {error.args[0]}"
                     ) from error
-        else:  # Some or all parameters are correlated
+
+        else:
+            # Handle correlated case with Iman-Conover method
             df_params = pd.DataFrame.from_dict(
                 parameters,
                 orient="index",
@@ -704,58 +818,72 @@ class MonteCarloSensitivity:
                         row["dist_name"],
                         row["dist_params"],
                     ]
+
                 if correl != "nocorr":
                     if len(group) == 1:
                         _printwarning(correl)
+                        continue
+
                     df_correlations = design_dist.read_correlations(corrdict, correl)
                     multivariate_parameters = df_correlations.index.values
-                    cov_matrix = design_dist.make_covariance_matrix(df_correlations)
-                    normalscoremeans = len(multivariate_parameters) * [0]
-                    normalscoresamples = rng.multivariate_normal(
-                        normalscoremeans, cov_matrix, size=numreals
+                    correlations = df_correlations.values
+
+                    # Make correlation matrix symmetric
+                    correlations = np.triu(correlations.T, k=1) + np.tril(correlations)
+
+                    correlations = _nearest_positive_definite(correlations)
+
+                    sampler = qmc.LatinHypercube(
+                        d=len(multivariate_parameters), seed=rng
                     )
-                    normalscoresamples_df = pd.DataFrame(
-                        data=normalscoresamples, columns=multivariate_parameters
+                    lhs_samples = sampler.random(n=numreals)
+
+                    correlated_samples = iman_conover(
+                        X=lhs_samples, C=correlations, rng=rng
                     )
-                    for key in param_dict:
-                        dist_name = param_dict[key][0].lower()
-                        dist_parameters = param_dict[key][1]
+
+                    # Transform uniform correlated samples to normal scores
+                    # This step maintains rank correlations while providing
+                    # normal scores needed by the draw_values() function
+                    normalscoresamples = scipy.stats.norm.ppf(correlated_samples)
+
+                    # Transform to desired distributions
+                    for idx, key in enumerate(param_dict):
                         if key in multivariate_parameters:
+                            dist_name = param_dict[key][0].lower()
+                            dist_params = param_dict[key][1]
                             try:
                                 self.sensvalues[key] = design_dist.draw_values(
                                     dist_name,
-                                    dist_parameters,
+                                    dist_params,
                                     numreals,
                                     rng,
-                                    normalscoresamples_df[key],
+                                    normalscoresamples[:, idx],
                                 )
                             except ValueError as error:
                                 raise ValueError(
-                                    "Problem in sensitivity "
-                                    "with sensname {} for "
-                                    "parameter {}: {}.".format(
-                                        self.sensname, key, error.args[0]
-                                    )
+                                    f"Problem in sensitivity with sensname "
+                                    f" {self.sensname} "
+                                    f"for parameter {key}: {error.args[0]}"
                                 ) from error
                         else:
                             raise ValueError(
-                                "Parameter{} specified with correlation "
-                                "matrix {} but is not listed in "
-                                "that sheet".format(key, correl)
+                                f"Parameter {key} specified with correlation "
+                                f"matrix {correl} but is not listed in that sheet"
                             )
-                else:  # group nocorr where correlation matrix is not defined
+                else:
+                    # Handle uncorrelated parameters in group
                     for key in param_dict:
                         dist_name = param_dict[key][0].lower()
-                        dist_parameters = param_dict[key][1]
+                        dist_params = param_dict[key][1]
                         try:
                             self.sensvalues[key] = design_dist.draw_values(
-                                dist_name, dist_parameters, numreals, rng
+                                dist_name, dist_params, numreals, rng
                             )
                         except ValueError as error:
                             raise ValueError(
-                                "Problem in sensitivity "
-                                "with sensname {} for parameter "
-                                "{}: {}.".format(self.sensname, key, error.args[0])
+                                f"Problem in sensitivity with sensname {self.sensname} "
+                                f"for parameter {key}: {error.args[0]}"
                             ) from error
 
         if self.sensname != "background":
