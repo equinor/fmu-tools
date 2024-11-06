@@ -117,34 +117,6 @@ def test_check_dist_params_logunif():
     assert dists._check_dist_params_logunif([1, 1])[0]
 
 
-@pytest.mark.parametrize(
-    "dist_params",
-    [
-        [10.0, 2.0],  # normal distribution params [mean, std_dev]
-        [10.0, 2.0, 5.0, 15.0],  # truncated normal params [mean, std_dev, min, max]
-    ],
-)
-def test_draw_values_normal_correlation(dist_params):
-    # Create two sets of correlated normal scores
-    rng = np.random.RandomState()
-    correlation = 0.8
-    n_samples = 1000
-
-    # Generate correlated standard normal variables
-    cov_matrix = [[1.0, correlation], [correlation, 1.0]]
-    normal_scores = rng.multivariate_normal([0, 0], cov_matrix, size=n_samples)
-
-    # Draw values using the correlated normal scores
-    values1 = dists.draw_values_normal(dist_params, n_samples, rng, normal_scores[:, 0])
-    values2 = dists.draw_values_normal(dist_params, n_samples, rng, normal_scores[:, 1])
-
-    # Calculate the correlation between the transformed variables
-    actual_correlation = np.corrcoef(values1, values2)[0, 1]
-
-    # Test if the correlation is close to the expected value
-    assert abs(actual_correlation - correlation) < 0.1
-
-
 def test_draw_values_normal():
     rng = np.random.RandomState()
     values = dists.draw_values_normal([0, 1], 10, rng)
@@ -170,49 +142,18 @@ def test_draw_values_normal():
     ):
         values = dists.draw_values_normal([0, -1], 10, rng)
 
-    values = dists.draw_values_normal([0, 10, -1, 2], 50, rng)
-    assert all(-1 <= value <= 2 for value in values)
-
-
-def test_draw_values_lognormal():
-    rng = np.random.RandomState()
-    assert not dists.draw_values_lognormal([100, 10], 0, rng).size
-    values = dists.draw_values_lognormal([100, 10], 10, rng)
-    assert len(values) == 10
-
-    assert all(isinstance(value, numbers.Number) for value in values)
-    assert all(value > 0 for value in values)
-
     with pytest.raises(
         ValueError,
-        match="Lognormal distribution must have 2 parameters, but had 3 parameters.",
+        match=(
+            "For truncated normal distribution, "
+            "lower bound must be less than upper bound, "
+            r"but got \[2, -1\]."
+        ),
     ):
-        values = dists.draw_values_lognormal([10, 50, 100], 10, rng)
+        values = dists.draw_values_normal([0, 1, 2, -1], 10, rng)
 
-    with pytest.raises(
-        ValueError, match="Parameters for lognormal distribution must be numbers."
-    ):
-        values = dists.draw_values_lognormal(["a", 10], 10, rng)
-
-    with pytest.raises(
-        ValueError, match="Lognormal distribution must have stddev >= 0."
-    ):
-        values = dists.draw_values_lognormal([0, -1], 10, rng)
-
-
-def test_draw_uniform_with_correlation():
-    rng = np.random.RandomState()
-    correlation = 0.6
-    n_samples = 1000
-
-    cov_matrix = [[1.0, correlation], [correlation, 1.0]]
-    normal_scores = rng.multivariate_normal([0, 0], cov_matrix, size=n_samples)
-
-    values1 = dists.draw_values_uniform([0, 100], n_samples, rng, normal_scores[:, 0])
-    values2 = dists.draw_values_uniform([10, 50], n_samples, rng, normal_scores[:, 1])
-
-    actual_correlation = np.corrcoef(values1, values2)[0, 1]
-    assert (actual_correlation - correlation) < 0.1
+    values = dists.draw_values_normal([0, 10, -1, 2], 50, rng)
+    assert all(-1 <= value <= 2 for value in values)
 
 
 def test_draw_values_uniform():

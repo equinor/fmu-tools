@@ -25,6 +25,13 @@ def _check_dist_params_normal(dist_params):
     elif float(dist_params[1]) < 0:
         status = False
         msg = "Stddev for normal distribution must be >= 0. "
+    elif len(dist_params) == 4 and float(dist_params[2]) >= float(dist_params[3]):
+        status = False
+        msg = (
+            "For truncated normal distribution, "
+            "lower bound must be less than upper bound, "
+            f"but got [{dist_params[2]}, {dist_params[3]}]. "
+        )
     else:
         status = True
         msg = ""
@@ -141,7 +148,7 @@ def _check_dist_params_logunif(dist_params):
 
 
 def draw_values_normal(dist_parameters, numreals, rng, normalscoresamples=None):
-    """Draws values from normal distribution.
+    """Draws values from normal or truncated normal.
     Args:
         dist_parameters(list): [mean, std dev, min, max],
         min/max defining truncated normal
@@ -152,39 +159,40 @@ def draw_values_normal(dist_parameters, numreals, rng, normalscoresamples=None):
         list of values
     """
     status, msg = _check_dist_params_normal(dist_parameters)
+
     if not status:
         raise ValueError(msg)
-    if len(dist_parameters) == 2:  # normal
-        dist_mean = float(dist_parameters[0])
-        dist_stddev = float(dist_parameters[1])
+
+    mean = float(dist_parameters[0])
+    stddev = float(dist_parameters[1])
+
+    if len(dist_parameters) == 2:
         if normalscoresamples is not None:
-            values = scipy.stats.norm.ppf(
+            return scipy.stats.norm.ppf(
                 scipy.stats.norm.cdf(normalscoresamples),
-                loc=dist_mean,
-                scale=dist_stddev,
-            )
-        else:
-            distribution = scipy.stats.norm(dist_mean, dist_stddev)
-            values = distribution.rvs(size=numreals, random_state=rng)
-    else:  # truncated normal or invalid
-        mean = float(dist_parameters[0])
-        sigma = float(dist_parameters[1])
-        clip1 = float(dist_parameters[2])
-        clip2 = float(dist_parameters[3])
-        low = (clip1 - mean) / sigma
-        high = (clip2 - mean) / sigma
-        if normalscoresamples is not None:
-            values = scipy.stats.truncnorm.ppf(
-                scipy.stats.norm.cdf(normalscoresamples),
-                low,
-                high,
                 loc=mean,
-                scale=sigma,
+                scale=stddev,
             )
-        else:
-            distribution = scipy.stats.truncnorm(low, high, loc=mean, scale=sigma)
-            values = distribution.rvs(size=numreals, random_state=rng)
-    return values
+        distribution = scipy.stats.norm(mean, stddev)
+        return distribution.rvs(size=numreals, random_state=rng)
+
+    # Handle truncated normal case
+    clip1 = float(dist_parameters[2])
+    clip2 = float(dist_parameters[3])
+    low = (clip1 - mean) / stddev
+    high = (clip2 - mean) / stddev
+
+    if normalscoresamples is not None:
+        return scipy.stats.truncnorm.ppf(
+            scipy.stats.norm.cdf(normalscoresamples),
+            low,
+            high,
+            loc=mean,
+            scale=stddev,
+        )
+
+    distribution = scipy.stats.truncnorm(low, high, loc=mean, scale=stddev)
+    return distribution.rvs(size=numreals, random_state=rng)
 
 
 def draw_values_lognormal(dist_parameters, numreals, rng, normalscoresamples=None):
