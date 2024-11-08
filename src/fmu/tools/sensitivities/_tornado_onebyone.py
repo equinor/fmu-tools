@@ -1,6 +1,7 @@
 """Module for calculating values for a tornadoplot"""
 
 import pandas as pd
+from deprecation import deprecated
 
 
 def real_mask(dfr, start, end):
@@ -60,6 +61,7 @@ def sort_by_max(tornadotable):
     return df_sorted
 
 
+@deprecated(details="Use TornadoPlotterFMU from webviz instead")
 def calc_tornadoinput(
     designsummary,
     resultfile,
