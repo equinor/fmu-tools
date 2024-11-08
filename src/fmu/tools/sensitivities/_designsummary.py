@@ -3,6 +3,12 @@
 import pandas as pd
 
 
+def _get_sensitivity_type(senscase: str) -> str:
+    """Determine sensitivity type based on the case name"""
+    sensitivity_types = {"p10_p90": "mc", "ref": "ref", "skip": "skip"}
+    return sensitivity_types.get(senscase.lower(), "scalar")
+
+
 def summarize_design(filename, sheetname="DesignSheet01"):
     """
      Summarizes the design set up for one by one sensitivities
@@ -72,12 +78,7 @@ def summarize_design(filename, sheetname="DesignSheet01"):
         )
     sensname = dgn.loc[0]["SENSNAME"]
     casename1 = dgn.loc[0]["SENSCASE"]
-    if casename1.lower() == "p10_p90":
-        senstype = "mc"
-    elif casename1.lower() == "ref":
-        senstype = "ref"
-    else:
-        senstype = "scalar"
+    senstype = _get_sensitivity_type(casename1)
 
     currentsensname = sensname
     currentsenscase = casename1
@@ -136,12 +137,7 @@ def summarize_design(filename, sheetname="DesignSheet01"):
             sensname = row.SENSNAME
             currentsenscase = casename1
             currentsensname = sensname
-            if row.SENSCASE.lower() == "p10_p90":
-                senstype = "mc"
-            elif row.SENSCASE.lower() == "skip":
-                senstype = "skip"
-            else:
-                senstype = "scalar"
+            senstype = _get_sensitivity_type(row.SENSCASE)
 
     # For last row
     if senstype != "skip":
