@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev24+gc8e260f documentation</title>
+  <title>fmu.tools.sensitivities package &mdash; fmu-tools 1.16.1.dev25+g4fc530a documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=90b32be8"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=827d7fee"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -600,7 +600,7 @@ distributions. For use in generation of design matrices</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.sensitivities.design_distributions.draw_values_normal">
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.sensitivities.design_distributions.</span></span><span class="sig-name descname"><span class="pre">draw_values_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dist_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numreals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalscoresamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/sensitivities/design_distributions.html#draw_values_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sensitivities.design_distributions.draw_values_normal" title="Permalink to this definition"></a></dt>
-<dd><p>Draws values from normal distribution.
+<dd><p>Draws values from normal or truncated normal.
 :type dist_parameters: 
 :param dist_parameters: [mean, std dev, min, max],
 :type dist_parameters: list
