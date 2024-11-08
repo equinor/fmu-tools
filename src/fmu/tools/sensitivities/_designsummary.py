@@ -114,7 +114,6 @@ def summarize_design(filename, sheetname="DesignSheet01"):
                         startreal2,
                         endreal2,
                     ]
-                    sensno += 1
                 else:
                     designsummary.loc[sensno] = [
                         sensno,
@@ -127,7 +126,8 @@ def summarize_design(filename, sheetname="DesignSheet01"):
                         None,
                         None,
                     ]
-                    sensno += 1
+
+                sensno += 1
             secondcase = False
             startreal1 = row.REAL
             endreal1 = row.REAL
