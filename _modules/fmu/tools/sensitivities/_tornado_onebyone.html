@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 1.16.1.dev23+ge15975c documentation</title>
+  <title>fmu.tools.sensitivities._tornado_onebyone &mdash; fmu-tools 1.16.1.dev24+gc8e260f documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=d521a63b"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=90b32be8"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -85,6 +85,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;Module for calculating values for a tornadoplot&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">deprecation</span> <span class="kn">import</span> <span class="n">deprecated</span>
 
 
 <span class="k">def</span> <span class="nf">real_mask</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
@@ -144,7 +145,8 @@
     <span class="k">return</span> <span class="n">df_sorted</span>
 
 
-<div class="viewcode-block" id="calc_tornadoinput"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.calc_tornadoinput">[docs]</a><span class="k">def</span> <span class="nf">calc_tornadoinput</span><span class="p">(</span>
+<div class="viewcode-block" id="calc_tornadoinput"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.calc_tornadoinput">[docs]</a><span class="nd">@deprecated</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="s2">&quot;Use TornadoPlotterFMU from webviz instead&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">calc_tornadoinput</span><span class="p">(</span>
     <span class="n">designsummary</span><span class="p">,</span>
     <span class="n">resultfile</span><span class="p">,</span>
     <span class="n">response</span><span class="p">,</span>
