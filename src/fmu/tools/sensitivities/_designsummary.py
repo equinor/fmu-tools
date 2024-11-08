@@ -76,8 +76,8 @@ def summarize_design(filename, sheetname="DesignSheet01"):
             "Design matrix must be on Excel or csv format"
             " and filename must end with .xlsx or .csv"
         )
-    sensname = dgn.loc[0]["SENSNAME"]
-    casename1 = dgn.loc[0]["SENSCASE"]
+    sensname = dgn.iloc[0]["SENSNAME"]
+    casename1 = dgn.iloc[0]["SENSCASE"]
     senstype = _get_sensitivity_type(casename1)
 
     currentsensname = sensname
