@@ -315,6 +315,14 @@ def test_generate_background(tmpdir):
 
         assert (faults_vals.values == contacts_vals.values).all()
 
+        sens6 = design.designvalues[design.designvalues["SENSNAME"] == "sens6"]
+        # PARAM5 ~ TruncatedNormal(3, 1, 1, 5)
+        # PARAM6 ~ Uniform(0, 1)
+        assert np.isclose(
+            stats.spearmanr(sens6["PARAM5"], sens6["PARAM6"])[0],
+            0.8,
+            atol=0.1,
+        )
         sens7 = design.designvalues[design.designvalues["SENSNAME"] == "sens7"]
 
         # PARAM9 and PARAM10 have a target correlation of 0.9 in the design config.
