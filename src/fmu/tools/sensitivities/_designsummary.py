@@ -88,6 +88,14 @@ def summarize_design(filename, sheetname="DesignSheet01"):
     startreal2 = None
     endreal2 = None
 
+    # The "skip" option was added when creating tornado plots with calc_tornadoinput.
+    # It allowed manual exclusion of sensitivities from tornado plots by changing
+    # SENSCASE to "skip" in the design matrix after running the experiment.
+    # This would exclude the sensitivity from both the
+    # *designsummary table and the tornado plot.
+    # calc_tornadoinput is deprecated so this can be removed once
+    # calc_tornadoinput is removed.
+
     for row in dgn.itertuples():
         if currentsensname == row.SENSNAME and currentsenscase == row.SENSCASE:
             if secondcase is True:
