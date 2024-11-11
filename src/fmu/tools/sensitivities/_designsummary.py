@@ -40,7 +40,20 @@ def summarize_design(filename, sheetname="DesignSheet01"):
 
     """
 
-    # Initialisation of dataframe to store results
+    # Read design matrix
+    if str(filename).endswith(".xlsx"):
+        dgn = pd.read_excel(filename, sheetname, engine="openpyxl")
+        dgn.dropna(axis=0, how="all", inplace=True)
+        dgn = dgn.loc[:, ~dgn.columns.str.contains("^Unnamed")]
+    elif str(filename).endswith(".csv"):
+        dgn = pd.read_csv(filename)
+    else:
+        raise ValueError(
+            "Design matrix must be on Excel or csv format"
+            " and filename must end with .xlsx or .csv"
+        )
+
+    # Initialize results DataFrame with same columns
     designsummary = pd.DataFrame(
         columns=[
             "sensno",
@@ -54,124 +67,59 @@ def summarize_design(filename, sheetname="DesignSheet01"):
             "endreal2",
         ]
     )
+
+    # Get unique sensitivity names in order of appearance
+    sensnames = dgn["SENSNAME"].unique()
+
     sensno = 0
-    startreal1 = 0
-    endreal1 = 0
+    for sensname in sensnames:
+        sens_group = dgn[dgn["SENSNAME"] == sensname].copy()
+        # Get cases in order of appearance
+        cases = sens_group.drop_duplicates("SENSCASE")[["SENSCASE"]].values.flatten()
 
-    # Read design matrix and find realisation numbers for each sensitivity
-    if str(filename).endswith(".xlsx"):
-        dgn = pd.read_excel(filename, sheetname, engine="openpyxl")
+        # Skip if first case type is 'skip'
+        # The "skip" option was added when creating tornado plots
+        # with calc_tornadoinput.
+        # It allowed manual exclusion of sensitivities from tornado plots by changing
+        # SENSCASE to "skip" in the design matrix after running the experiment.
+        # This would exclude the sensitivity from both the
+        # *designsummary table and the tornado plot.
+        # calc_tornadoinput is deprecated so this can be removed once
+        # calc_tornadoinput is removed.
+        senstype = _get_sensitivity_type(cases[0])
+        if senstype == "skip":
+            continue
 
-        # Drop empty rows or columns that have been read in
-        # due to having background colour/formatting
+        # First case
+        case1_data = sens_group[sens_group["SENSCASE"] == cases[0]]
+        casename1 = cases[0]
+        startreal1 = case1_data["REAL"].min()
+        endreal1 = case1_data["REAL"].max()
 
-        dgn.dropna(axis=0, how="all", inplace=True)
-        dgn = dgn.loc[:, ~dgn.columns.str.contains("^Unnamed")]
-
-    elif str(filename).endswith(".csv"):
-        dgn = pd.read_csv(filename)
-
-    else:
-        raise ValueError(
-            "Design matrix must be on Excel or csv format"
-            " and filename must end with .xlsx or .csv"
-        )
-    sensname = dgn.iloc[0]["SENSNAME"]
-    casename1 = dgn.iloc[0]["SENSCASE"]
-    senstype = _get_sensitivity_type(casename1)
-
-    currentsensname = sensname
-    currentsenscase = casename1
-    # starting with first case
-    secondcase = False
-    casename2 = None
-    startreal2 = None
-    endreal2 = None
-
-    # The "skip" option was added when creating tornado plots with calc_tornadoinput.
-    # It allowed manual exclusion of sensitivities from tornado plots by changing
-    # SENSCASE to "skip" in the design matrix after running the experiment.
-    # This would exclude the sensitivity from both the
-    # *designsummary table and the tornado plot.
-    # calc_tornadoinput is deprecated so this can be removed once
-    # calc_tornadoinput is removed.
-
-    for row in dgn.itertuples():
-        if currentsensname == row.SENSNAME and currentsenscase == row.SENSCASE:
-            if secondcase is True:
-                endreal2 = row.REAL
-            else:
-                endreal1 = row.REAL
-        elif currentsensname == row.SENSNAME:
-            secondcase = True
-            startreal2 = row.REAL
-            endreal2 = row.REAL
-            casename2 = row.SENSCASE
-            currentsensname = row.SENSNAME
-            currentsenscase = casename2
+        # Handle second case if it exists
+        if len(cases) > 1:
+            case2_data = sens_group[sens_group["SENSCASE"] == cases[1]]
+            casename2 = cases[1]
+            startreal2 = case2_data["REAL"].min()
+            endreal2 = case2_data["REAL"].max()
         else:
-            if senstype != "skip":
-                if secondcase is True:
-                    designsummary.loc[sensno] = [
-                        sensno,
-                        sensname,
-                        senstype,
-                        casename1,
-                        startreal1,
-                        endreal1,
-                        casename2,
-                        startreal2,
-                        endreal2,
-                    ]
-                else:
-                    designsummary.loc[sensno] = [
-                        sensno,
-                        sensname,
-                        senstype,
-                        casename1,
-                        startreal1,
-                        endreal1,
-                        None,
-                        None,
-                        None,
-                    ]
+            casename2 = None
+            startreal2 = None
+            endreal2 = None
 
-                sensno += 1
-            secondcase = False
-            startreal1 = row.REAL
-            endreal1 = row.REAL
+        # Add row to results
+        designsummary.loc[sensno] = [
+            sensno,
+            sensname,
+            senstype,
+            casename1,
+            startreal1,
+            endreal1,
+            casename2,
+            startreal2,
+            endreal2,
+        ]
 
-            casename1 = row.SENSCASE
-            sensname = row.SENSNAME
-            currentsenscase = casename1
-            currentsensname = sensname
-            senstype = _get_sensitivity_type(row.SENSCASE)
-
-    # For last row
-    if senstype != "skip":
-        if secondcase is True:
-            designsummary.loc[sensno] = [
-                sensno,
-                sensname,
-                senstype,
-                casename1,
-                startreal1,
-                endreal1,
-                casename2,
-                startreal2,
-                endreal2,
-            ]
-        else:
-            designsummary.loc[sensno] = [
-                sensno,
-                sensname,
-                senstype,
-                casename1,
-                startreal1,
-                endreal1,
-                None,
-                None,
-                None,
-            ]
+        sensno += 1
 
     return designsummary
