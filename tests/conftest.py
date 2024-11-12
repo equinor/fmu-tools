@@ -3,6 +3,9 @@ import pathlib
 
 import pytest
 
+# Capture the initial working directory at the start of the test session
+initial_pwd = pathlib.Path.cwd()
+
 
 def pytest_runtest_setup(item):
     """Called for each test, see also pytest section in setup.cfg."""
@@ -33,7 +36,7 @@ def pytest_configure(config):
 def pytest_addoption(parser):
     parser.addoption(
         "--testdatapath",
-        help="Path to xtgeo-testdata, defaults to ../xtgeo-testdata"
+        help="Relative path to xtgeo-testdata, defaults to ../xtgeo-testdata"
         "and is overriden by the XTG_TESTPATH environment variable."
         "Experimental feature, not all tests obey this option.",
         action="store",
@@ -45,4 +48,7 @@ def pytest_addoption(parser):
 def testdata_path(request):
     # Prefer 'XTG_TESTPATH' environment variable, fallback to the pytest --testdatapath
     # environment variable, which defaults to '../xtgeo-testdata'
-    return os.environ.get("XTG_TESTPATH", request.config.getoption("--testdatapath"))
+    testdatapath = os.environ.get(
+        "XTG_TESTPATH", request.config.getoption("--testdatapath")
+    )
+    return (initial_pwd / testdatapath).resolve()
