@@ -1,4 +1,5 @@
 import os
+import pathlib
 
 import pytest
 
@@ -15,3 +16,33 @@ def pytest_runtest_setup(item):
     # pytest.mark.skipunlessroxar:
     if "skipunlessroxar" in markers and "ROXENV" not in os.environ:
         pytest.skip("Skip test if outside ROXENV (env variable ROXENV is present)")
+
+
+def pytest_configure(config):
+    # Ensure xtgeo-testdata is present where expected before running
+    testdatapath = os.environ.get("XTG_TESTPATH", config.getoption("--testdatapath"))
+    xtg_testdata = pathlib.Path(testdatapath)
+    if not xtg_testdata.is_dir():
+        raise RuntimeError(
+            f"xtgeo-testdata path {testdatapath} does not exist! Clone it from "
+            "https://github.com/equinor/xtgeo-testdata. The preferred location "
+            " is ../xtgeo-testdata."
+        )
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--testdatapath",
+        help="Path to xtgeo-testdata, defaults to ../xtgeo-testdata"
+        "and is overriden by the XTG_TESTPATH environment variable."
+        "Experimental feature, not all tests obey this option.",
+        action="store",
+        default="../xtgeo-testdata",
+    )
+
+
+@pytest.fixture(scope="session")
+def testdata_path(request):
+    # Prefer 'XTG_TESTPATH' environment variable, fallback to the pytest --testdatapath
+    # environment variable, which defaults to '../xtgeo-testdata'
+    return os.environ.get("XTG_TESTPATH", request.config.getoption("--testdatapath"))
