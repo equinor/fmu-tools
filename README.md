@@ -2,9 +2,9 @@
 
 [![fmu-tools](https://github.com/equinor/fmu-tools/actions/workflows/fmu-tools.yml/badge.svg)](https://github.com/equinor/fmu-tools/actions/workflows/fmu-tools.yml)
 [![codecov](https://codecov.io/gh/equinor/fmu-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/equinor/fmu-tools)
-![Python Version](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11-blue.svg)
 [![License: LGPL v3](https://img.shields.io/github/license/equinor/fmu-tools)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fmu-tools.svg)
 [![PyPI](https://img.shields.io/pypi/v/fmu-tools.svg)](https://pypi.org/project/fmu-tools/)
 
 **fmu-tools** is a library containing tools for pre- and post-processing in a
