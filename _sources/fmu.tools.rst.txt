@@ -15,6 +15,7 @@ Subpackages
    fmu.tools.qcforward
    fmu.tools.rms
    fmu.tools.sensitivities
+   fmu.tools.utilities
 
 Submodules
 ----------

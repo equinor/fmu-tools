@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The fmu-tools utilities package &mdash; fmu-tools 1.16.1.dev28+gda3140c documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=d1220124"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rmsvolumetrics2csv" href="rmsvolumetrics2csv.html" />
+    <link rel="prev" title="rms.import_localmodule" href="rms_import_localmodule.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The fmu-tools utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sample-attributes-for-sim2seis">Sample attributes for sim2seis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-1">Example 1</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The fmu-tools utilities package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utilities.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-fmu-tools-utilities-package">
+<h1>The fmu-tools utilities package<a class="headerlink" href="#the-fmu-tools-utilities-package" title="Permalink to this heading"></a></h1>
+<section id="sample-attributes-for-sim2seis">
+<h2>Sample attributes for sim2seis<a class="headerlink" href="#sample-attributes-for-sim2seis" title="Permalink to this heading"></a></h2>
+<p>This function takes an attribute surface (typically seismic attributes from 4D)
+and generates points with error values as input to ERT and Webviz, on approximate
+simgrid resolution.</p>
+<p>A grid model (typically the simgrid) is required, with (optionally) region and zones.</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h3>
+<section id="example-1">
+<h4>Example 1<a class="headerlink" href="#example-1" title="Permalink to this heading"></a></h4>
+<p>Sample an attribute surface and generate points with error values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xtgeo</span>
+
+<span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">sample_attributes_for_sim2seis</span>
+
+<span class="n">grd</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="s2">&quot;somefile.roff&quot;</span><span class="p">)</span>
+<span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="s2">&quot;somefile.roff&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Region&quot;</span><span class="p">)</span>
+<span class="n">zones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="s2">&quot;somefile.roff&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
+<span class="n">attr</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_file</span><span class="p">(</span><span class="s2">&quot;some_attr.gri&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">sample_attributes_for_sim2seis</span><span class="p">(</span>
+    <span class="n">grd</span><span class="p">,</span>
+    <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+    <span class="n">zones</span><span class="o">=</span><span class="n">zones</span><span class="p">,</span>
+    <span class="n">attribute</span><span class="o">=</span><span class="n">attr</span><span class="p">,</span>
+    <span class="n">attribute_error</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>  <span class="c1"># relative error if number</span>
+    <span class="n">attribute_minimum_error</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span>
+    <span class="n">position</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Valysar&quot;</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">ert_out</span> <span class="o">=</span> <span class="s2">&quot;../ert/observations/seismic/some_attr_1.txt&quot;</span>
+<span class="n">webviz_out</span> <span class="o">=</span> <span class="s2">&quot;../webviz/observations/seismic/meta--some_attr_1.txt&quot;</span>
+<span class="n">df</span><span class="p">[[</span><span class="s2">&quot;OBS&quot;</span><span class="p">,</span> <span class="s2">&quot;OBS_ERROR&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
+    <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6f</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">path_or_buf</span><span class="o">=</span><span class="n">ert_out</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6f</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">path_or_buf</span><span class="o">=</span><span class="n">webviz_out</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rms_import_localmodule.html" class="btn btn-neutral float-left" title="rms.import_localmodule" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rmsvolumetrics2csv.html" class="btn btn-neutral float-right" title="rmsvolumetrics2csv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

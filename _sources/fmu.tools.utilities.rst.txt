@@ -1,0 +1,21 @@
+fmu.tools.utilities package
+===========================
+
+Submodules
+----------
+
+fmu.tools.utilities.sample\_attributes module
+---------------------------------------------
+
+.. automodule:: fmu.tools.utilities.sample_attributes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools.utilities
+   :members:
+   :undoc-members:
+   :show-inheritance:

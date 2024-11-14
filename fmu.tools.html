@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.16.1.dev25+g4fc530a documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.16.1.dev28+gda3140c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=827d7fee"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=d1220124"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
@@ -529,6 +530,31 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="fmu.tools.utilities.html">fmu.tools.utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.utilities.html#module-fmu.tools.utilities.sample_attributes">fmu.tools.utilities.sample_attributes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs"><code class="docutils literal notranslate"><span class="pre">Attrs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs.OBS"><code class="docutils literal notranslate"><span class="pre">Attrs.OBS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs.OBS_ERROR"><code class="docutils literal notranslate"><span class="pre">Attrs.OBS_ERROR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs.REGION"><code class="docutils literal notranslate"><span class="pre">Attrs.REGION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs.VALUES"><code class="docutils literal notranslate"><span class="pre">Attrs.VALUES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position.TOP"><code class="docutils literal notranslate"><span class="pre">Position.TOP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position.CENTER"><code class="docutils literal notranslate"><span class="pre">Position.CENTER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position.BASE"><code class="docutils literal notranslate"><span class="pre">Position.BASE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.sample_attributes_for_sim2seis"><code class="docutils literal notranslate"><span class="pre">sample_attributes_for_sim2seis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.utilities.html#module-fmu.tools.utilities">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes_for_sim2seis"><code class="docutils literal notranslate"><span class="pre">sample_attributes_for_sim2seis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -855,6 +881,43 @@ reasons.</p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.sample_attributes_for_sim2seis">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">sample_attributes_for_sim2seis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error=0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error_minimum=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position=(''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;Position.CENTER:</span> <span class="pre">'center'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#sample_attributes_for_sim2seis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.sample_attributes_for_sim2seis" title="Permalink to this definition"></a></dt>
+<dd><p>Sample attributes on grid resolution as poinst sets.</p>
+<p>This usage is for setting attributes on grid resolution, e.g. a seismic attribute
+(from a map) combined with a region parameter from the grid.</p>
+<p>This is targeted to the “sim2seis” workflow in FMU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Grid</span>) – The grid to sample the attributes on.</p></li>
+<li><p><strong>attribute</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface</span>) – The seismic (or custom) map/surface to sample the attribute from.</p></li>
+<li><p><strong>attribute_error</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface | float</span>) – The error to apply to the attribute (optional).
+Shall be absolute (positive) values. If the user wants to apply a polygons
+with different error values, the user can ise surface-polygons functions
+in xtgeo to achieve this.</p></li>
+<li><p><strong>attribute_error_minimum</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – The minimum error to apply to the attribute (optional).</p></li>
+<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The region parameter to sample from the grid (optional).</p></li>
+<li><p><strong>zone</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The zone parameter to sample from the grid (optional).</p></li>
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type">tuple[str, Position]</span>) – The position to sample the attributes on the grid. This
+shall be given as a tuple, as e.g. (“MyZone”, “center”) where the first
+is zone name, and the second is vertical position (“top”, “center”, “base”)
+in that zone. Default is (“”, “center”) which will take the middle layer
+of the total grid. The zone name is case sensitive. If zone is not given,
+the full grid interval will be applied to determine the layer.</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type">Any</span>) – Additional keywords (developer settings).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Points with the sampled attributes and attributes combined.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Dataframe</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">

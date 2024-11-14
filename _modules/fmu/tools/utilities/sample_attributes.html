@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.utilities.sample_attributes &mdash; fmu-tools 1.16.1.dev28+gda3140c documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=d1220124"></script>
+      <script src="../../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.utilities.sample_attributes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.utilities.sample_attributes</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Sample attributes on grid resolution as dataframe points sets.</span>
+
+<span class="sd">This usage is for setting attributes on grid resolution, e.g. a seismic attribute</span>
+<span class="sd">(from a map) combined with a region parameter from the same 3D grid.</span>
+
+<span class="sd">This is targeted to the &quot;sim2seis&quot; workflow in FMU.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xtgeo</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># custom logger for this module</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Attrs"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Attrs">[docs]</a><span class="k">class</span> <span class="nc">Attrs</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">OBS</span> <span class="o">=</span> <span class="s2">&quot;OBS&quot;</span>
+    <span class="n">OBS_ERROR</span> <span class="o">=</span> <span class="s2">&quot;OBS_ERROR&quot;</span>
+    <span class="n">REGION</span> <span class="o">=</span> <span class="s2">&quot;REGION&quot;</span>
+    <span class="n">VALUES</span> <span class="o">=</span> <span class="s2">&quot;VALUES&quot;</span></div>
+
+
+<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">TOP</span> <span class="o">=</span> <span class="s2">&quot;top&quot;</span>
+    <span class="n">CENTER</span> <span class="o">=</span> <span class="s2">&quot;center&quot;</span>
+    <span class="n">BASE</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_layer</span><span class="p">(</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Position</span><span class="p">],</span> <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the layer index (base=1!) based on the position and zone.&quot;&quot;&quot;</span>
+    <span class="n">zone_name</span><span class="p">,</span> <span class="n">where</span> <span class="o">=</span> <span class="n">position</span>
+
+    <span class="n">position_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">Position</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">where</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">position_values</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position shall be one of: </span><span class="si">{</span><span class="n">position_values</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">top_value</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">center_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">nlay</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">base_value</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">nlay</span>
+
+    <span class="k">if</span> <span class="n">zone</span> <span class="ow">and</span> <span class="n">zone_name</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">zone_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">zone</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone name &#39;</span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&#39; not found in the grid.&quot;</span><span class="p">)</span>
+
+        <span class="n">nzone</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">zone</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">zone_name</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Zone index to apply for </span><span class="si">%s</span><span class="s2"> is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">nzone</span><span class="p">)</span>
+
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">nzone</span><span class="p">)</span>
+        <span class="n">upper</span><span class="p">,</span> <span class="n">lower</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># base=1</span>
+
+        <span class="n">top_value</span> <span class="o">=</span> <span class="n">upper</span>
+        <span class="n">center_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper</span> <span class="o">+</span> <span class="n">lower</span><span class="p">))</span>
+        <span class="n">base_value</span> <span class="o">=</span> <span class="n">lower</span>
+
+    <span class="k">if</span> <span class="n">Position</span><span class="o">.</span><span class="n">TOP</span> <span class="ow">in</span> <span class="n">where</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">top_value</span>
+
+    <span class="k">if</span> <span class="n">Position</span><span class="o">.</span><span class="n">BASE</span> <span class="ow">in</span> <span class="n">where</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">base_value</span>
+
+    <span class="k">return</span> <span class="n">center_value</span>  <span class="c1"># default is center</span>
+
+
+<span class="k">def</span> <span class="nf">_dataframe_from_surface</span><span class="p">(</span>
+    <span class="n">surface</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span> <span class="n">newname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the data frame via xtgeo Points (makes it easier to debug)&quot;&quot;&quot;</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">points_from_surface</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+    <span class="n">points</span><span class="o">.</span><span class="n">zname</span> <span class="o">=</span> <span class="n">newname</span> <span class="k">if</span> <span class="n">newname</span> <span class="k">else</span> <span class="n">Attrs</span><span class="o">.</span><span class="n">VALUES</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">())</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">temp_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;debug_points_</span><span class="si">{</span><span class="n">newname</span><span class="si">}</span><span class="s2">.poi&quot;</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Debug points written to:&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<div class="viewcode-block" id="sample_attributes_for_sim2seis"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.sample_attributes_for_sim2seis">[docs]</a><span class="k">def</span> <span class="nf">sample_attributes_for_sim2seis</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+    <span class="n">attribute</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span>
+    <span class="n">attribute_error</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">attribute_error_minimum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">zone</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Position</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">Position</span><span class="o">.</span><span class="n">CENTER</span><span class="p">),</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sample attributes on grid resolution as poinst sets.</span>
+
+<span class="sd">    This usage is for setting attributes on grid resolution, e.g. a seismic attribute</span>
+<span class="sd">    (from a map) combined with a region parameter from the grid.</span>
+
+<span class="sd">    This is targeted to the &quot;sim2seis&quot; workflow in FMU.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        grid: The grid to sample the attributes on.</span>
+<span class="sd">        attribute: The seismic (or custom) map/surface to sample the attribute from.</span>
+<span class="sd">        attribute_error: The error to apply to the attribute (optional).</span>
+<span class="sd">            Shall be absolute (positive) values. If the user wants to apply a polygons</span>
+<span class="sd">            with different error values, the user can ise surface-polygons functions</span>
+<span class="sd">            in xtgeo to achieve this.</span>
+<span class="sd">        attribute_error_minimum: The minimum error to apply to the attribute (optional).</span>
+<span class="sd">        region: The region parameter to sample from the grid (optional).</span>
+<span class="sd">        zone: The zone parameter to sample from the grid (optional).</span>
+<span class="sd">        position: The position to sample the attributes on the grid. This</span>
+<span class="sd">            shall be given as a tuple, as e.g. (&quot;MyZone&quot;, &quot;center&quot;) where the first</span>
+<span class="sd">            is zone name, and the second is vertical position (&quot;top&quot;, &quot;center&quot;, &quot;base&quot;)</span>
+<span class="sd">            in that zone. Default is (&quot;&quot;, &quot;center&quot;) which will take the middle layer</span>
+<span class="sd">            of the total grid. The zone name is case sensitive. If zone is not given,</span>
+<span class="sd">            the full grid interval will be applied to determine the layer.</span>
+<span class="sd">        **kwargs: Additional keywords (developer settings).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.Dataframe: Points with the sampled attributes and attributes combined.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sampling attributes on grid resolution as points set.&quot;</span><span class="p">)</span>
+
+    <span class="n">debug</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">_get_layer</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">zone</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Layer index (base=1) to apply is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">layer</span><span class="p">)</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_grid3d</span><span class="p">(</span>
+        <span class="n">grid</span><span class="p">,</span>
+        <span class="n">template</span><span class="o">=</span><span class="s2">&quot;native&quot;</span><span class="p">,</span>  <span class="c1"># used to appromimate the native grid resolution</span>
+        <span class="n">where</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+        <span class="nb">property</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># prepare the attribute and error to the grid</span>
+    <span class="n">attribute_sampled</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">attribute_error_sampled</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># do the resampling and get the points as dataframe</span>
+    <span class="n">attribute_sampled</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span>
+    <span class="n">dataframe</span> <span class="o">=</span> <span class="n">_dataframe_from_surface</span><span class="p">(</span>
+        <span class="n">attribute_sampled</span><span class="p">,</span> <span class="n">newname</span><span class="o">=</span><span class="n">Attrs</span><span class="o">.</span><span class="n">OBS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute_error</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">attribute_error</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The attribute error shall be an absolute value.&quot;</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">attribute</span> <span class="o">*</span> <span class="n">attribute_error</span>
+        <span class="n">err</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">attribute_error</span>
+        <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The attribute error shall be an absolute value.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">attribute_error_minimum</span><span class="p">:</span>
+        <span class="n">err</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">attribute_error_minimum</span><span class="p">)</span>
+
+    <span class="n">attribute_error_sampled</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="n">df_err</span> <span class="o">=</span> <span class="n">_dataframe_from_surface</span><span class="p">(</span>
+        <span class="n">attribute_error_sampled</span><span class="p">,</span> <span class="n">newname</span><span class="o">=</span><span class="n">Attrs</span><span class="o">.</span><span class="n">OBS_ERROR</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span>
+    <span class="p">)</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">OBS_ERROR</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_err</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">OBS_ERROR</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="n">df_region</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">region</span><span class="p">:</span>
+        <span class="n">region_sampled</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_grid3d</span><span class="p">(</span>
+            <span class="n">grid</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">region</span>
+        <span class="p">)</span>
+        <span class="n">df_region</span> <span class="o">=</span> <span class="n">_dataframe_from_surface</span><span class="p">(</span>
+            <span class="n">region_sampled</span><span class="p">,</span> <span class="n">newname</span><span class="o">=</span><span class="n">Attrs</span><span class="o">.</span><span class="n">REGION</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span>
+        <span class="p">)</span>
+        <span class="n">dataframe</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">REGION</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_region</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">REGION</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
