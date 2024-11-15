@@ -129,6 +129,6 @@ clipboard_folder
 See also
 ^^^^^^^^
 
-* `GENDATA_RFT forward model in ERT <https://fmu-docs.equinor.com/docs/ert/reference/forward_models.html#GENDATA_RFT>`__
-* `GENDATA keyword in ERT <https://fmu-docs.equinor.com/docs/ert/reference/configuration/keywords.html#gen-data>`__
-* `merge_rft_ertobs in subscript <https://fmu-docs.equinor.com/docs/subscript/scripts/merge_rft_ertobs.html>`__
+* `GENDATA_RFT forward model in ERT <https://fmu-docs.equinor.com/docs/ert/reference/configuration/forward_model.html#GENDATA_RFT>`__
+* `GENDATA keyword in ERT <https://ert.readthedocs.io/en/latest/reference/configuration/keywords.html#gen-data>`__
+* `merge_rft_ertobs in subscript <https://equinor.github.io/subscript/scripts/merge_rft_ertobs.html>`__
