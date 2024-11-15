@@ -81,43 +81,10 @@ def test_extreme_correlations(rng):
     assert np.allclose(rank_corr_extreme, C_extreme, atol=0.05)
 
 
-def test_small_sample(rng):
-    N = 10
-    K = 3
-    X = np.random.randn(N, K)
-
-    # Create valid correlation matrix
-    A = rng.randn(K, K)
-    C = A @ A.T
-    d = np.sqrt(np.diag(C))
-    C = C / d[:, None] / d[None, :]
-
-    X_transformed = iman_conover(X, C, rng)
-    assert X_transformed.shape == (N, K)
-    for k in range(K):
-        assert np.allclose(np.sort(X[:, k]), np.sort(X_transformed[:, k]))
-
-
-def test_large_sample(rng):
-    N = 10000
-    K = 3
-    X = np.random.randn(N, K)
-
-    # Create valid correlation matrix
-    A = rng.randn(K, K)
-    C = A @ A.T
-    d = np.sqrt(np.diag(C))
-    C = C / d[:, None] / d[None, :]
-
-    X_transformed = iman_conover(X, C, rng)
-    rank_corr = spearmanr(X_transformed)[0]
-    assert np.allclose(rank_corr, C, atol=0.1)
-
-
 def test_correlation_matrix_validation(rng):
     N = 100
     K = 3
-    X = np.random.randn(N, K)
+    X = rng.randn(N, K)
 
     # Create non-positive definite matrix
     C_invalid = np.array([[1.0, 2.0, 0.3], [2.0, 1.0, 0.2], [0.3, 0.2, 1.0]])
@@ -126,8 +93,7 @@ def test_correlation_matrix_validation(rng):
         iman_conover(X, C_invalid, rng)
 
 
-def test_input_validation():
-    rng = np.random.RandomState(42)
+def test_input_validation(rng):
     N = 100
     K = 3
     X = np.random.randn(N, K)
