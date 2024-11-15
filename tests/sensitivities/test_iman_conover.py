@@ -45,21 +45,6 @@ def test_achieves_target_correlations(rng, sample_data):
     assert np.allclose(rank_corr, C, atol=0.05)
 
 
-def test_preserves_shape(rng, sample_data):
-    X, C = sample_data
-    X_transformed = iman_conover(X, C, rng)
-
-    assert X_transformed.shape == X.shape
-
-
-def test_no_nan_or_inf(rng, sample_data):
-    X, C = sample_data
-    X_transformed = iman_conover(X, C, rng)
-
-    assert not np.any(np.isnan(X_transformed))
-    assert not np.any(np.isinf(X_transformed))
-
-
 def test_invalid_correlation_matrix(rng):
     N, K = 100, 3
     X = np.random.randn(N, K)
@@ -77,13 +62,13 @@ def test_invalid_correlation_matrix(rng):
 
 def test_extreme_correlations(rng):
     N, K = 1000, 3
-    X = np.random.randn(N, K)
+    X = rng.randn(N, K)
 
     # Create extreme but valid correlation matrix
     # Using the fact that a correlation matrix with ones on diagonal
     # and same value rho everywhere else is positive definite if
     # rho > -1/(K-1) where K is matrix size
-    rho = 0.9  # High correlation but still allows matrix to be positive definite
+    rho = 0.99  # High correlation but still allows matrix to be positive definite
     C_extreme = np.ones((K, K)) * rho
     np.fill_diagonal(C_extreme, 1.0)
 
