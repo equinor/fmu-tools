@@ -57,8 +57,7 @@ def generate_van_der_waerden_scores(N, K, rng):
 
 
 def iman_conover(X, C, rng):
-    """Implementation of the Iman-Conover method for inducing rank correlations.
-
+    """Implementation of the Iman-Conover method with variance reduction.
     Parameters
     ----------
     X : ndarray
@@ -67,26 +66,26 @@ def iman_conover(X, C, rng):
         Target correlation matrix of shape (K,K)
     rng : numpy.random.RandomState
         Random number generator instance
-
     Returns
     -------
     ndarray
         Transformed matrix with same marginals as X but correlation structure C
-
-    Notes
-    -----
-    Implementation follows the original paper:
-    Iman, R. L., & Conover, W. J. (1982). A distribution-free approach to
-    inducing rank correlation among input variables. Communications in
-    Statistics - Simulation and Computation, 11(3), 311-334.
-
-    The method uses van der Waerden scores and Cholesky decomposition to induce
-    correlations while preserving marginal distributions through rank reordering.
     """
     N, K = X.shape
-    P = np.linalg.cholesky(C)
+
+    # Generate scores
     R = generate_van_der_waerden_scores(N, K, rng)
-    R_star = R @ P.T
+
+    # Calculate sample correlation matrix of R
+    I = np.corrcoef(R, rowvar=False)  # noqa
+
+    # Cholesky decompositions
+    Q = np.linalg.cholesky(I)  # QQ' = I
+    P = np.linalg.cholesky(C)  # PP' = C
+
+    # Variance reduction transformation
+    S = P @ np.linalg.inv(Q)  # S = PQ^(-1)
+    R_star = R @ S.T
 
     # Reorder X columns to match R_star ranks
     result = np.zeros_like(X)
@@ -95,6 +94,47 @@ def iman_conover(X, C, rng):
         result[:, k] = np.sort(X[:, k])[ranks]
 
     return result
+
+
+# def iman_conover(X, C, rng):
+#     """Implementation of the Iman-Conover method for inducing rank correlations.
+
+#     Parameters
+#     ----------
+#     X : ndarray
+#         Input matrix of shape (N,K) with independent columns
+#     C : ndarray
+#         Target correlation matrix of shape (K,K)
+#     rng : numpy.random.RandomState
+#         Random number generator instance
+
+#     Returns
+#     -------
+#     ndarray
+#         Transformed matrix with same marginals as X but correlation structure C
+
+#     Notes
+#     -----
+#     Implementation follows the original paper:
+#     Iman, R. L., & Conover, W. J. (1982). A distribution-free approach to
+#     inducing rank correlation among input variables. Communications in
+#     Statistics - Simulation and Computation, 11(3), 311-334.
+
+#     The method uses van der Waerden scores and Cholesky decomposition to induce
+#     correlations while preserving marginal distributions through rank reordering.
+#     """
+#     N, K = X.shape
+#     P = np.linalg.cholesky(C)
+#     R = generate_van_der_waerden_scores(N, K, rng)
+#     R_star = R @ P.T
+
+#     # Reorder X columns to match R_star ranks
+#     result = np.zeros_like(X)
+#     for k in range(K):
+#         ranks = rankdata(R_star[:, k]).astype(int) - 1
+#         result[:, k] = np.sort(X[:, k])[ranks]
+
+#     return result
 
 
 def _nearest_positive_definite(a_mat):
