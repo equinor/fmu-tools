@@ -98,7 +98,9 @@ jobs:
           sphinx-build -W -b html docs build/docs/html
 
       - name: Update GitHub pages
-        if: github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && matrix.python-version == '3.8'
+        if: |
+          github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && 
+          matrix.python-version == '3.8' && matrix.pandas-version == '1.1.3'
         run: |
           cp -R ./build/docs/html ../html
           git config --local user.email "fmu-tools-github-action"
