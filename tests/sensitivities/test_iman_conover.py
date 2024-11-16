@@ -31,7 +31,7 @@ def sample_data(rng):
 
 def test_preserves_marginal_distributions(rng, sample_data):
     X, C = sample_data
-    X_transformed = iman_conover(X, C, rng)
+    X_transformed = iman_conover(X, C)
 
     for k in range(X.shape[1]):
         assert np.allclose(np.sort(X[:, k]), np.sort(X_transformed[:, k]))
@@ -39,7 +39,7 @@ def test_preserves_marginal_distributions(rng, sample_data):
 
 def test_achieves_target_correlations(rng, sample_data):
     X, C = sample_data
-    X_transformed = iman_conover(X, C, rng)
+    X_transformed = iman_conover(X, C)
 
     rank_corr = spearmanr(X_transformed)[0]
     assert np.allclose(rank_corr, C, atol=0.05)
@@ -57,7 +57,7 @@ def test_invalid_correlation_matrix(rng):
     )
 
     with pytest.raises((ValueError, np.linalg.LinAlgError)):
-        iman_conover(X, C_invalid, rng)
+        iman_conover(X, C_invalid)
 
 
 def test_extreme_correlations(rng):
@@ -76,7 +76,7 @@ def test_extreme_correlations(rng):
     eigenvals = np.linalg.eigvals(C_extreme)
     assert np.all(eigenvals > 0), "Test correlation matrix is not positive definite"
 
-    X_extreme = iman_conover(X, C_extreme, rng)
+    X_extreme = iman_conover(X, C_extreme)
     rank_corr_extreme = spearmanr(X_extreme)[0]
     assert np.allclose(rank_corr_extreme, C_extreme, atol=0.05)
 
@@ -90,7 +90,7 @@ def test_correlation_matrix_validation(rng):
     C_invalid = np.array([[1.0, 2.0, 0.3], [2.0, 1.0, 0.2], [0.3, 0.2, 1.0]])
 
     with pytest.raises(np.linalg.LinAlgError):
-        iman_conover(X, C_invalid, rng)
+        iman_conover(X, C_invalid)
 
 
 def test_input_validation(rng):
@@ -105,7 +105,7 @@ def test_input_validation(rng):
     )
 
     with pytest.raises(ValueError):
-        iman_conover(X, C, rng)
+        iman_conover(X, C)
 
 
 def test_orthogonality_precision(rng):
@@ -124,7 +124,7 @@ def test_orthogonality_precision(rng):
     )
 
     X = rng.randn(N, K)
-    X_transformed = iman_conover(X, C_target, rng)
+    X_transformed = iman_conover(X, C_target)
     rank_corr = spearmanr(X_transformed)[0]
 
     # Get the elements that should be zero

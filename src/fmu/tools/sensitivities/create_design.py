@@ -25,39 +25,70 @@ def _is_positive_definite(b_mat):
         return False
 
 
-def generate_van_der_waerden_scores(N, K, rng):
-    """Generate van der Waerden scores for Iman-Conover method.
+# def generate_van_der_waerden_scores(N, K, rng):
+#     """Generate van der Waerden scores for Iman-Conover method.
+
+#     Parameters
+#     ----------
+#     N : int
+#         Number of samples
+#     K : int
+#         Number of parameters
+#     rng : numpy.random.RandomState
+#         Random number generator instance
+
+#     Returns
+#     -------
+#     ndarray
+#         Matrix of shape (N,K) containing van der Waerden scores,
+#         randomly permuted within each column
+
+#     Notes
+#     -----
+#     For a sample of size N, each column contains a random permutation of the
+#     van der Waerden scores Φ^(-1)(i/(N+1)), i=1,...,N, where Φ^(-1) is the
+#     inverse of the standard normal distribution function.
+#     """
+#     a = norm.ppf(np.arange(1, (N + 1)) / (N + 1))
+#     R = np.zeros((N, K))
+#     for k in range(K):
+#         R[:, k] = rng.permutation(a)
+#     return R
+
+
+def generate_van_der_waerden_scores(X):
+    """Generate van der Waerden scores based on ranks of input data.
+    Follow https://blogs.sas.com/content/iml/2021/06/14/simulate-iman-conover-transformation.html
+    which provides an implementation that does not require rng.
 
     Parameters
     ----------
-    N : int
-        Number of samples
-    K : int
-        Number of parameters
-    rng : numpy.random.RandomState
-        Random number generator instance
+    X : ndarray
+        Input matrix of shape (N,K)
 
     Returns
     -------
     ndarray
-        Matrix of shape (N,K) containing van der Waerden scores,
-        randomly permuted within each column
+        Matrix of shape (N,K) containing van der Waerden scores
+        derived from ranks of input data
 
     Notes
     -----
-    For a sample of size N, each column contains a random permutation of the
-    van der Waerden scores Φ^(-1)(i/(N+1)), i=1,...,N, where Φ^(-1) is the
-    inverse of the standard normal distribution function.
+    For each column in X, converts ranks to van der Waerden scores
+    using Φ^(-1)(rank/(N+1)) where Φ^(-1) is the inverse normal CDF.
+    Handles ties using average ranks.
     """
-    a = norm.ppf(np.arange(1, (N + 1)) / (N + 1))
-    R = np.zeros((N, K))
-    for k in range(K):
-        R[:, k] = rng.permutation(a)
-    return R
+    N, K = X.shape
+    S = np.zeros((N, K))
+    for i in range(K):
+        ranks = rankdata(X[:, i], method="average")  # ranktie with "mean"
+        S[:, i] = norm.ppf(ranks / (N + 1))  # quantile("Normal")
+    return S
 
 
-def iman_conover(X, C, rng):
+def iman_conover(X, C):
     """Implementation of the Iman-Conover method with variance reduction.
+
     Parameters
     ----------
     X : ndarray
@@ -66,6 +97,7 @@ def iman_conover(X, C, rng):
         Target correlation matrix of shape (K,K)
     rng : numpy.random.RandomState
         Random number generator instance
+
     Returns
     -------
     ndarray
@@ -74,7 +106,7 @@ def iman_conover(X, C, rng):
     N, K = X.shape
 
     # Generate scores
-    R = generate_van_der_waerden_scores(N, K, rng)
+    R = generate_van_der_waerden_scores(X)
 
     # Calculate sample correlation matrix of R
     I = np.corrcoef(R, rowvar=False)  # noqa
@@ -125,7 +157,7 @@ def iman_conover(X, C, rng):
 #     """
 #     N, K = X.shape
 #     P = np.linalg.cholesky(C)
-#     R = generate_van_der_waerden_scores(N, K, rng)
+#     R = generate_van_der_waerden_scores(X)
 #     R_star = R @ P.T
 
 #     # Reorder X columns to match R_star ranks
@@ -878,9 +910,7 @@ class MonteCarloSensitivity:
                     )
                     lhs_samples = sampler.random(n=numreals)
 
-                    correlated_samples = iman_conover(
-                        X=lhs_samples, C=correlations, rng=rng
-                    )
+                    correlated_samples = iman_conover(X=lhs_samples, C=correlations)
 
                     # Transform uniform correlated samples to normal scores
                     # This step maintains rank correlations while providing
