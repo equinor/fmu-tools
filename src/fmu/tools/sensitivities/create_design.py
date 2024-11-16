@@ -25,37 +25,6 @@ def _is_positive_definite(b_mat):
         return False
 
 
-# def generate_van_der_waerden_scores(N, K, rng):
-#     """Generate van der Waerden scores for Iman-Conover method.
-
-#     Parameters
-#     ----------
-#     N : int
-#         Number of samples
-#     K : int
-#         Number of parameters
-#     rng : numpy.random.RandomState
-#         Random number generator instance
-
-#     Returns
-#     -------
-#     ndarray
-#         Matrix of shape (N,K) containing van der Waerden scores,
-#         randomly permuted within each column
-
-#     Notes
-#     -----
-#     For a sample of size N, each column contains a random permutation of the
-#     van der Waerden scores Φ^(-1)(i/(N+1)), i=1,...,N, where Φ^(-1) is the
-#     inverse of the standard normal distribution function.
-#     """
-#     a = norm.ppf(np.arange(1, (N + 1)) / (N + 1))
-#     R = np.zeros((N, K))
-#     for k in range(K):
-#         R[:, k] = rng.permutation(a)
-#     return R
-
-
 def generate_van_der_waerden_scores(X):
     """Generate van der Waerden scores based on ranks of input data.
     Follow https://blogs.sas.com/content/iml/2021/06/14/simulate-iman-conover-transformation.html
