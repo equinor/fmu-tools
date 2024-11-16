@@ -31,21 +31,33 @@ def sample_data(rng):
 
 def test_preserves_marginal_distributions(rng, sample_data):
     X, C = sample_data
-    X_transformed = iman_conover(X, C)
 
+    # Test basic method
+    X_basic = iman_conover(X, C, variance_reduction=False)
     for k in range(X.shape[1]):
-        assert np.allclose(np.sort(X[:, k]), np.sort(X_transformed[:, k]))
+        assert np.allclose(np.sort(X[:, k]), np.sort(X_basic[:, k]))
+
+    # Test variance reduction method
+    X_var_red = iman_conover(X, C, variance_reduction=True)
+    for k in range(X.shape[1]):
+        assert np.allclose(np.sort(X[:, k]), np.sort(X_var_red[:, k]))
 
 
-def test_achieves_target_correlations(rng, sample_data):
+def test_achieves_target_correlations(sample_data):
     X, C = sample_data
-    X_transformed = iman_conover(X, C)
 
-    rank_corr = spearmanr(X_transformed)[0]
-    assert np.allclose(rank_corr, C, atol=0.05)
+    # Test basic method
+    X_basic = iman_conover(X, C, variance_reduction=False)
+    rank_corr_basic = spearmanr(X_basic)[0]
+    assert np.allclose(rank_corr_basic, C, atol=0.1)
+
+    # Test variance reduction method
+    X_var_red = iman_conover(X, C, variance_reduction=True)
+    rank_corr_var_red = spearmanr(X_var_red)[0]
+    assert np.allclose(rank_corr_var_red, C, atol=0.05)
 
 
-def test_invalid_correlation_matrix(rng):
+def test_invalid_correlation_matrix():
     N, K = 100, 3
     X = np.random.randn(N, K)
     C_invalid = np.array(
@@ -93,7 +105,7 @@ def test_correlation_matrix_validation(rng):
         iman_conover(X, C_invalid)
 
 
-def test_input_validation(rng):
+def test_input_validation():
     N = 100
     K = 3
     X = np.random.randn(N, K)
