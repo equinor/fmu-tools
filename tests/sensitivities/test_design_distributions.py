@@ -227,20 +227,26 @@ def test_draw_values_loguniform():
 
 def test_sample_discrete():
     rng = np.random.RandomState()
-
     outcomes = ["foo", "bar.com"]
-
-    # NB: return type from sample_discrete is different from the others,
-    # it returns a 3-tuple with the values in the second element.
+    # Test basic functionality
     values = dists.sample_discrete([",".join(outcomes)], 10, rng)[1]
     assert all(value in outcomes for value in values)
 
+    # Test empty case
     assert not dists.sample_discrete([",".join(outcomes)], 0, rng)[1].size
+
+    # Test negative numreals
     with pytest.raises(ValueError):
-        # pylint: disable=expression-not-assigned
         dists.sample_discrete([",".join(outcomes)], -1, rng)[1]
 
+    # Test weighted case where only bar.com should appear
     assert "foo" not in dists.sample_discrete([",".join(outcomes), "0,1"], 10, rng)[1]
+
+    # Test weights that don't sum to 1
+    weighted_values = dists.sample_discrete([",".join(outcomes), "2,6"], 100, rng)[1]
+    # Should see roughly 25% foo and 75% bar.com
+    foo_count = np.sum(weighted_values == "foo")
+    assert 15 <= foo_count <= 35  # Allow some variance due to randomness
 
 
 def test_draw_values():
