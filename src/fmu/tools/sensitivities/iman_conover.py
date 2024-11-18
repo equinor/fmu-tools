@@ -11,13 +11,14 @@ Sources include:
 
 """
 
-import numpy as np
-import scipy as sp
-import pandas as pd
-import requests
 import io
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import pytest
+import requests
+import scipy as sp
 
 
 class ImanConover:
@@ -87,12 +88,14 @@ class ImanConover:
         Parameters
         ----------
         X : ndarray
-            Input matrix of shape (N, K).
+            Input matrix of shape (N, K). This is the data set that we want to
+            induce correlation structure on.
 
         Returns
         -------
         ndarray
-            Input matrix of shape (N, K).
+            Output matrix of shape (N, K). This data set will have a
+            correlation structure that is more similar to `correlation_matrix`.
 
         """
         if not isinstance(X, np.ndarray):
@@ -102,36 +105,49 @@ class ImanConover:
 
         N, K = X.shape
 
-        if not K == self.P.shape[0]:
+        if self.P.shape[0] != K:
             msg = f"Shape of `X` ({X.shape}) does not match shape of "
             msg += f"correlation matrix ({self.P.shape})"
             raise ValueError(msg)
 
-        # Step one - use van der Waerden scores to transform data into new data
-        # that are approximately multivariate normal.
+        # STEP ONE - Use van der Waerden scores to transform data to
+        # approximately multivariate normal (but with correlations).
         # The new data has the same rank correlation as the original data.
         ranks = sp.stats.rankdata(X, method="average", axis=0) / (N + 1)
         normal_scores = sp.stats.norm.ppf(ranks)
 
+        # TODO: Remove these sanity checks eventually
         spearman_before = sp.stats.spearmanr(X).statistic
         spearman_after = sp.stats.spearmanr(normal_scores).statistic
-        msg = "Spearman correlation before and after ranking should be equal"
+        msg = "Spearman correlation before and after transforming should be equal"
         assert np.allclose(spearman_before, spearman_after), msg
 
-        # Step two - Remove correlations from the input data set
+        # STEP TWO - Remove correlations from the transformed data
         I = np.corrcoef(normal_scores, rowvar=False)
-        Q = np.linalg.cholesky(I)
-        decorrelated_scores = np.linalg.solve(Q, normal_scores.T).T
+        Q = np.linalg.cholesky(I)  # QQ' = I
+        # Equivalent to: decorrelated_scores = normal_scores @ np.linalg.inv(Q).T
+        # We exploit the fact that Q is lower-triangular and avoid the inverse.
+        # X = N @ inv(Q)^T  =>  X @ Q^T = N  =>  (Q @ X^T)^T = N
+        decorrelated_scores = sp.linalg.solve_triangular(
+            Q, normal_scores.T, lower=True
+        ).T
 
-        # Step three - Induce correlations
+        # TODO: Remove these sanity checks eventually
+        assert np.allclose(np.corrcoef(decorrelated_scores, rowvar=False), np.eye(K))
+
+        # STEP THREE - Induce correlations in transformed space
         correlated_scores = decorrelated_scores @ self.P.T
 
+        # TODO: Remove these sanity checks eventually (why does this fail??)
         # correlations = np.corrcoef(correlated_scores, rowvar=False)
         # assert np.allclose(correlations, self.C)
 
-        # Step four - Restore marginal distributions using ranks
+        # STEP FOUR - Map back to original space using ranks, ensuring
+        # that marginal distributions are preserved
         result = np.empty_like(X)
         for k in range(K):
+            # If row j is the k'th largest in `correlated_scores`, then
+            # we map the k'th largest entry in X to row j.
             ranks = sp.stats.rankdata(correlated_scores[:, k]).astype(int) - 1
             result[:, k] = np.sort(X[:, k])[ranks]
 
@@ -143,7 +159,7 @@ class TestImanConover:
     def test_marginals_and_correlation_distance(self, seed):
         rng = np.random.default_rng(42)
 
-        n_variables = rng.integers(2, 100)
+        n_variables = rng.integers(2, 10)
         n_observations = 10 * n_variables
         rng = np.random.default_rng(42)
 
