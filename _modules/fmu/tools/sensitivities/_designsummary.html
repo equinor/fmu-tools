@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities._designsummary &mdash; fmu-tools 1.16.1.dev30+g57efdd7 documentation</title>
+  <title>fmu.tools.sensitivities._designsummary &mdash; fmu-tools 1.16.1.dev31+g4701ee9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=5300b9bf"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=f16dec7b"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -88,6 +88,12 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
+<span class="k">def</span> <span class="nf">_get_sensitivity_type</span><span class="p">(</span><span class="n">senscase</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine sensitivity type based on the case name&quot;&quot;&quot;</span>
+    <span class="n">sensitivity_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;p10_p90&quot;</span><span class="p">:</span> <span class="s2">&quot;mc&quot;</span><span class="p">,</span> <span class="s2">&quot;ref&quot;</span><span class="p">:</span> <span class="s2">&quot;ref&quot;</span><span class="p">,</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="s2">&quot;skip&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">sensitivity_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">senscase</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;scalar&quot;</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="summarize_design"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.summarize_design">[docs]</a><span class="k">def</span> <span class="nf">summarize_design</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="o">=</span><span class="s2">&quot;DesignSheet01&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     Summarizes the design set up for one by one sensitivities</span>
@@ -119,7 +125,22 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Initialisation of dataframe to store results</span>
+    <span class="c1"># Read design matrix</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">):</span>
+        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
+        <span class="c1"># Drop empty rows or columns that have been read in</span>
+        <span class="c1"># due to having background colour/formatting</span>
+        <span class="n">dgn</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dgn</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">dgn</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
+    <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Design matrix must be on Excel or csv format&quot;</span>
+            <span class="s2">&quot; and filename must end with .xlsx or .csv&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Initialize results DataFrame with same columns</span>
     <span class="n">designsummary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
             <span class="s2">&quot;sensno&quot;</span><span class="p">,</span>
@@ -133,127 +154,60 @@
             <span class="s2">&quot;endreal2&quot;</span><span class="p">,</span>
         <span class="p">]</span>
     <span class="p">)</span>
+
+    <span class="c1"># Get unique sensitivity names in order of appearance</span>
+    <span class="n">sensnames</span> <span class="o">=</span> <span class="n">dgn</span><span class="p">[</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
     <span class="n">sensno</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">startreal1</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">endreal1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">sensname</span> <span class="ow">in</span> <span class="n">sensnames</span><span class="p">:</span>
+        <span class="n">sens_group</span> <span class="o">=</span> <span class="n">dgn</span><span class="p">[</span><span class="n">dgn</span><span class="p">[</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">sensname</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># Get cases in order of appearance</span>
+        <span class="n">cases</span> <span class="o">=</span> <span class="n">sens_group</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">)[[</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-    <span class="c1"># Read design matrix and find realisation numbers for each sensitivity</span>
-    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xlsx&quot;</span><span class="p">):</span>
-        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sheetname</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
+        <span class="c1"># Skip if first case type is &#39;skip&#39;</span>
+        <span class="c1"># The &quot;skip&quot; option was added when creating tornado plots</span>
+        <span class="c1"># with calc_tornadoinput.</span>
+        <span class="c1"># It allowed manual exclusion of sensitivities from tornado plots by changing</span>
+        <span class="c1"># SENSCASE to &quot;skip&quot; in the design matrix after running the experiment.</span>
+        <span class="c1"># This would exclude the sensitivity from both the</span>
+        <span class="c1"># *designsummary table and the tornado plot.</span>
+        <span class="c1"># calc_tornadoinput is deprecated so this can be removed once</span>
+        <span class="c1"># calc_tornadoinput is removed.</span>
+        <span class="n">senstype</span> <span class="o">=</span> <span class="n">_get_sensitivity_type</span><span class="p">(</span><span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">senstype</span> <span class="o">==</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
 
-        <span class="c1"># Drop empty rows or columns that have been read in</span>
-        <span class="c1"># due to having background colour/formatting</span>
+        <span class="c1"># First case</span>
+        <span class="n">case1_data</span> <span class="o">=</span> <span class="n">sens_group</span><span class="p">[</span><span class="n">sens_group</span><span class="p">[</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">casename1</span> <span class="o">=</span> <span class="n">cases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">startreal1</span> <span class="o">=</span> <span class="n">case1_data</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">endreal1</span> <span class="o">=</span> <span class="n">case1_data</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-        <span class="n">dgn</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">dgn</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">dgn</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;^Unnamed&quot;</span><span class="p">)]</span>
-
-    <span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
-        <span class="n">dgn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Design matrix must be on Excel or csv format&quot;</span>
-            <span class="s2">&quot; and filename must end with .xlsx or .csv&quot;</span>
-        <span class="p">)</span>
-    <span class="n">sensname</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;SENSNAME&quot;</span><span class="p">]</span>
-    <span class="n">casename1</span> <span class="o">=</span> <span class="n">dgn</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">casename1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;p10_p90&quot;</span><span class="p">:</span>
-        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;mc&quot;</span>
-    <span class="k">elif</span> <span class="n">casename1</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;ref&quot;</span><span class="p">:</span>
-        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;ref&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;scalar&quot;</span>
-
-    <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">sensname</span>
-    <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename1</span>
-    <span class="c1"># starting with first case</span>
-    <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">casename2</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">startreal2</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">endreal2</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dgn</span><span class="o">.</span><span class="n">itertuples</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">currentsensname</span> <span class="o">==</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span> <span class="ow">and</span> <span class="n">currentsenscase</span> <span class="o">==</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="n">endreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">endreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
-        <span class="k">elif</span> <span class="n">currentsensname</span> <span class="o">==</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span><span class="p">:</span>
-            <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">startreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
-            <span class="n">endreal2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
-            <span class="n">casename2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span>
-            <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span>
-            <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename2</span>
+        <span class="c1"># Handle second case if it exists</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">case2_data</span> <span class="o">=</span> <span class="n">sens_group</span><span class="p">[</span><span class="n">sens_group</span><span class="p">[</span><span class="s2">&quot;SENSCASE&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cases</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">casename2</span> <span class="o">=</span> <span class="n">cases</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">startreal2</span> <span class="o">=</span> <span class="n">case2_data</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="n">endreal2</span> <span class="o">=</span> <span class="n">case2_data</span><span class="p">[</span><span class="s2">&quot;REAL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">senstype</span> <span class="o">!=</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">sensno</span><span class="p">,</span>
-                        <span class="n">sensname</span><span class="p">,</span>
-                        <span class="n">senstype</span><span class="p">,</span>
-                        <span class="n">casename1</span><span class="p">,</span>
-                        <span class="n">startreal1</span><span class="p">,</span>
-                        <span class="n">endreal1</span><span class="p">,</span>
-                        <span class="n">casename2</span><span class="p">,</span>
-                        <span class="n">startreal2</span><span class="p">,</span>
-                        <span class="n">endreal2</span><span class="p">,</span>
-                    <span class="p">]</span>
-                    <span class="n">sensno</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">sensno</span><span class="p">,</span>
-                        <span class="n">sensname</span><span class="p">,</span>
-                        <span class="n">senstype</span><span class="p">,</span>
-                        <span class="n">casename1</span><span class="p">,</span>
-                        <span class="n">startreal1</span><span class="p">,</span>
-                        <span class="n">endreal1</span><span class="p">,</span>
-                        <span class="kc">None</span><span class="p">,</span>
-                        <span class="kc">None</span><span class="p">,</span>
-                        <span class="kc">None</span><span class="p">,</span>
-                    <span class="p">]</span>
-                    <span class="n">sensno</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">secondcase</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">startreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
-            <span class="n">endreal1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">REAL</span>
+            <span class="n">casename2</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">startreal2</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">endreal2</span> <span class="o">=</span> <span class="kc">None</span>
 
-            <span class="n">casename1</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span>
-            <span class="n">sensname</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSNAME</span>
-            <span class="n">currentsenscase</span> <span class="o">=</span> <span class="n">casename1</span>
-            <span class="n">currentsensname</span> <span class="o">=</span> <span class="n">sensname</span>
-            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;p10_p90&quot;</span><span class="p">:</span>
-                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;mc&quot;</span>
-            <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">SENSCASE</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
-                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;skip&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">senstype</span> <span class="o">=</span> <span class="s2">&quot;scalar&quot;</span>
+        <span class="c1"># Add row to results</span>
+        <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">sensno</span><span class="p">,</span>
+            <span class="n">sensname</span><span class="p">,</span>
+            <span class="n">senstype</span><span class="p">,</span>
+            <span class="n">casename1</span><span class="p">,</span>
+            <span class="n">startreal1</span><span class="p">,</span>
+            <span class="n">endreal1</span><span class="p">,</span>
+            <span class="n">casename2</span><span class="p">,</span>
+            <span class="n">startreal2</span><span class="p">,</span>
+            <span class="n">endreal2</span><span class="p">,</span>
+        <span class="p">]</span>
 
-    <span class="c1"># For last row</span>
-    <span class="k">if</span> <span class="n">senstype</span> <span class="o">!=</span> <span class="s2">&quot;skip&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">secondcase</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">sensno</span><span class="p">,</span>
-                <span class="n">sensname</span><span class="p">,</span>
-                <span class="n">senstype</span><span class="p">,</span>
-                <span class="n">casename1</span><span class="p">,</span>
-                <span class="n">startreal1</span><span class="p">,</span>
-                <span class="n">endreal1</span><span class="p">,</span>
-                <span class="n">casename2</span><span class="p">,</span>
-                <span class="n">startreal2</span><span class="p">,</span>
-                <span class="n">endreal2</span><span class="p">,</span>
-            <span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">designsummary</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sensno</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">sensno</span><span class="p">,</span>
-                <span class="n">sensname</span><span class="p">,</span>
-                <span class="n">senstype</span><span class="p">,</span>
-                <span class="n">casename1</span><span class="p">,</span>
-                <span class="n">startreal1</span><span class="p">,</span>
-                <span class="n">endreal1</span><span class="p">,</span>
-                <span class="kc">None</span><span class="p">,</span>
-                <span class="kc">None</span><span class="p">,</span>
-                <span class="kc">None</span><span class="p">,</span>
-            <span class="p">]</span>
+        <span class="n">sensno</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">designsummary</span></div>
 </pre></div>
