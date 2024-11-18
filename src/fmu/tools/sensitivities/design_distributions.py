@@ -456,14 +456,9 @@ def draw_values(distname, dist_parameters, numreals, rng, normalscoresamples=Non
             )
         values = [dist_parameters[0]] * numreals
     elif distname[0:4].lower() == "disc":
-        if normalscoresamples is not None:
-            raise ValueError(
-                "Parameter with discrete distribution "
-                "was defined in correlation matrix, "
-                "but discrete distribution cannot "
-                "be used with correlation. "
-            )
-        status, result = sample_discrete(dist_parameters, numreals, rng)
+        status, result = sample_discrete(
+            dist_parameters, numreals, rng, normalscoresamples
+        )
         if status:
             values = result
         else:
@@ -473,16 +468,15 @@ def draw_values(distname, dist_parameters, numreals, rng, normalscoresamples=Non
     return values
 
 
-def sample_discrete(dist_params, numreals, rng):
-    """Sample from discrete distribution.
+def sample_discrete(dist_params, numreals, rng, normalscoresamples=None):
+    """Sample from discrete distribution with support for correlation.
     Args:
         dist_params(list): parameters for distribution
-        dist_params[0] is possible outcomes separated
-        by comma
-        dist_params[1] is probabilities for each outcome,
-        separated by comma
+            dist_params[0] is possible outcomes separated by comma
+            dist_params[1] is probabilities for each outcome (optional)
         numreals (int): number of realisations to draw
         rng: numpy.random.RandomState instance
+        normalscoresamples(list): samples for correlated parameters
     Returns:
         tuple: (status, np.ndarray of values drawn from distribution)
     """
@@ -492,10 +486,10 @@ def sample_discrete(dist_params, numreals, rng):
 
     if numreals == 0:
         return status, np.array([])
-
     if numreals < 0:
         raise ValueError("numreal must be a positive integer")
 
+    # Handle probability weights
     if len(dist_params) == 2:  # non uniform
         weights = re.split(",", dist_params[1])
         if len(outcomes) != len(weights):
@@ -503,7 +497,6 @@ def sample_discrete(dist_params, numreals, rng):
                 "Number of weights for discrete distribution "
                 "is not the same as number of values."
             )
-
         try:
             probabilities = [float(weight) for weight in weights]
         except ValueError as e:
@@ -511,30 +504,29 @@ def sample_discrete(dist_params, numreals, rng):
                 "All weights must be valid floating point numbers. "
                 f"Got weights: {weights}"
             ) from e
-
         # Validate probabilities
         if not all(0 <= p <= 1 for p in probabilities):
             raise ValueError("All probabilities must be between 0 and 1")
         if not np.isclose(sum(probabilities), 1.0):
             raise ValueError("Probabilities must sum to 1")
-
         fractions = probabilities
-
     elif len(dist_params) == 1:  # uniform
         fractions = [1.0 / len(outcomes)] * len(outcomes)
-
     else:
         status = False
         values = "Wrong input for discrete distribution"
         return status, values
 
-    uniform_samples = generate_stratified_samples(numreals, rng)
+    # Handle correlation through normalscoresamples
+    if normalscoresamples is not None:
+        # Convert normal scores to uniform samples using normal CDF
+        uniform_samples = scipy.stats.norm.cdf(normalscoresamples)
+    else:
+        uniform_samples = generate_stratified_samples(numreals, rng)
 
     cum_prob = np.cumsum(fractions)
-
     # Map samples to outcomes
     values = np.array([outcomes[np.searchsorted(cum_prob, s)] for s in uniform_samples])
-
     return status, values
 
 

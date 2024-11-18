@@ -279,6 +279,16 @@ def test_generate_full_mc(tmpdir):
         stats.spearmanr(diskdesign["PARAM1"], diskdesign["PARAM3"])[0], 0.2, atol=0.1
     )
 
+    # Check that we can add correlations to discrete variables
+    assert np.isclose(
+        stats.spearmanr(diskdesign["DATO"], diskdesign["NTG1"])[0], 0.8, atol=0.1
+    )
+
+    date_fractions = diskdesign["DATO"].value_counts(normalize=True)
+    assert date_fractions.loc["2018-11-02"] == 0.3
+    assert date_fractions.loc["2018-11-03"] == 0.4
+    assert date_fractions.loc["2018-11-04"] == 0.3
+
 
 def test_generate_background(tmpdir):
     inputfile = TESTDATA / "config/design_input_background.xlsx"
