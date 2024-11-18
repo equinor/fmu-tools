@@ -16,6 +16,7 @@ Contents:
    create_rft_ertobs
    rename_rms_scripts
    rms_import_localmodule
+   utilities
    rmsvolumetrics2csv
    ensembles
    contributing
