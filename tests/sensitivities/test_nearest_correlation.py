@@ -74,3 +74,25 @@ def test_exceeded_max_iterations():
     A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
     with pytest.raises(ValueError, match="No convergence after 10 iterations"):
         nearcorr(A, max_iterations=10)
+
+
+def test_weights_documented_example():
+    """Test weights using the exact example from examples:
+    https://github.com/mikecroucher/nearest_correlation"""
+    A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
+    weights = np.array([1, 2, 3])
+    X = nearcorr(A, weights=weights)
+
+    expected_result = np.array(
+        [
+            [1.0, 0.66774961, 0.16723692],
+            [0.66774961, 1.0, 0.84557496],
+            [0.16723692, 0.84557496, 1.0],
+        ]
+    )
+
+    assert np.allclose(X, expected_result, atol=1e-8), (
+        f"Result doesn't match documented example.\n"
+        f"Expected:\n{expected_result}\n"
+        f"Got:\n{X}"
+    )
