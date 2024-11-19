@@ -11,6 +11,7 @@ Contents:
    qcforward
    qcproperties
    qcreset
+   generate_petro_jobs_for_field_update
    properties
    domain_conversion
    create_rft_ertobs
