@@ -42,6 +42,10 @@ if not ROXAR:
     from fmu.tools.sensitivities import calc_tornadoinput  # noqa
     from fmu.tools.sensitivities import excel2dict_design  # noqa
     from fmu.tools.sensitivities import summarize_design  # noqa
+    from fmu.tools.sensitivities.nearest_correlation import (
+        nearcorr,
+        ExceededMaxIterationsError,
+    )
 
     __all__.extend(
         [
