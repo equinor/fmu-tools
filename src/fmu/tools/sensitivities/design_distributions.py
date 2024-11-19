@@ -586,35 +586,6 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     return np.dot(cov_matrix, diag)
 
 
-def _nearest_positive_definite(a_mat):
-    """Implementation taken from:
-    https://stackoverflow.com/questions/43238173/
-    python-convert-matrix-to-positive-semi-definite/43244194#43244194
-    """
-
-    b_mat = (a_mat + a_mat.T) / 2
-    _, s_mat, v_mat = la.svd(b_mat)
-
-    h_mat = np.dot(v_mat.T, np.dot(np.diag(s_mat), v_mat))
-
-    a2_mat = (b_mat + h_mat) / 2
-
-    a3_mat = (a2_mat + a2_mat.T) / 2
-
-    if _is_positive_definite(a3_mat):
-        return a3_mat
-
-    spacing = np.spacing(la.norm(a_mat))
-    identity = np.eye(a_mat.shape[0])
-    kiter = 1
-    while not _is_positive_definite(a3_mat):
-        mineig = np.min(np.real(la.eigvals(a3_mat)))
-        a3_mat += identity * (-mineig * kiter**2 + spacing)
-        kiter += 1
-
-    return a3_mat
-
-
 def _is_positive_definite(b_mat):
     """Returns true when input is positive-definite, via Cholesky"""
     try:
