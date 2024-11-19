@@ -7,7 +7,6 @@ import warnings
 from collections import OrderedDict
 
 import numpy as np
-import openpyxl
 import pandas as pd
 import yaml
 
@@ -69,8 +68,8 @@ def inputdict_to_yaml(inputdict, filename):
 def _find_geninput_sheetname(input_filename):
     """Finding general input sheet, allowing for name
     variations."""
-    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
-    sheets = xlsx.sheetnames
+    xlsx = pd.ExcelFile(input_filename)
+    sheets = xlsx.sheet_names
     general_input_sheet = []
     for sheet in sheets:
         if sheet in [
@@ -105,8 +104,8 @@ def _find_onebyone_defaults_sheet(input_filename):
     Returns:
         string, name of a sheet in the excel file
     """
-    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
-    sheets = xlsx.sheetnames
+    xlsx = pd.ExcelFile(input_filename)
+    sheets = xlsx.sheet_names
 
     default_values_sheet = []
 
@@ -141,8 +140,8 @@ def _find_onebyone_input_sheet(input_filename):
     Returns:
         string, name of a sheet in the excel file
     """
-    xlsx = openpyxl.load_workbook(input_filename, read_only=True, keep_links=False)
-    sheets = xlsx.sheetnames
+    xlsx = pd.ExcelFile(input_filename)
+    sheets = xlsx.sheet_names
 
     design_input_sheet = []
 
