@@ -21,11 +21,13 @@ def excel2dict_design(input_filename, sheetnames=None):
     """Read excel file with input to design setup
     Currently only specification of
     onebyone design is implemented
+
     Args:
         input_filename (str): Name of excel input file
         sheetnames (dict): Dictionary of worksheet names to load
-            information from. Supported keys: general_input, defaultvalues,
-            and designinput.
+        information from. Supported keys: general_input, defaultvalues,
+        and designinput.
+
     Returns:
         OrderedDict on format for DesignMatrix.generate
     """
@@ -143,18 +145,15 @@ def _find_onebyone_input_sheet(input_filename):
 
 def _check_designinput(dsgn_input):
     """Checks for valid input in designinput sheet"""
-
     # Check for duplicate sensnames
-    sensitivity_names = []
-    for row in dsgn_input.itertuples():
-        if _has_value(row.sensname):
-            if row.sensname in sensitivity_names:
-                raise ValueError(
-                    "sensname '{}' was found on more than one row in designinput "
-                    "sheet. Two sensitivities can not share the same sensname. "
-                    "Please correct this and rerun".format(row.sensname)
-                )
-            sensitivity_names.append(row.sensname)
+    duplicates = dsgn_input[dsgn_input["sensname"].notna()]["sensname"].duplicated()
+    if duplicates.any():
+        duplicate_names = dsgn_input.loc[duplicates, "sensname"].values
+        raise ValueError(
+            f"sensname '{duplicate_names[0]}' was found on more than one row in "
+            f"designinput sheet. Two sensitivities can not share the same "
+            f"sensname. Please correct this and rerun"
+        )
 
 
 def _check_for_mixed_sensitivities(sens_name, sens_group):
