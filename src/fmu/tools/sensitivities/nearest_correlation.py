@@ -6,7 +6,7 @@ from numpy.linalg import norm
 
 def nearcorr(
     A,
-    tol=[],
+    tol=None,
     flag=0,
     max_iterations=100,
     weights=None,
@@ -17,7 +17,7 @@ def nearcorr(
     ARGUMENTS
     ~~~~~~~~~
     A: symmetric numpy array
-    tol: convergence tolerance, defaults to 16*EPS
+    tol: convergence tolerance
     flag: 0 for full eigendecomposition (only option supported)
     max_iterations: maximum number of iterations (default 100)
     weights: optional vector defining a diagonal weight matrix diag(W)
