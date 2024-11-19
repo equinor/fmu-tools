@@ -9,6 +9,7 @@ import numpy as np
 import numpy.linalg as la
 import pandas as pd
 import scipy.stats
+
 from fmu.tools.sensitivities.nearest_correlation import nearcorr
 
 

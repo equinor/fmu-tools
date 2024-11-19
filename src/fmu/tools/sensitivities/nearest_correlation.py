@@ -1,6 +1,5 @@
 import numpy as np
-from numpy import inf
-from numpy import copy
+from numpy import copy, inf
 from numpy.linalg import norm
 
 
@@ -12,13 +11,21 @@ def nearcorr(
 ):
     """
     Finds the nearest correlation matrix to the symmetric matrix A.
+    Based on https://github.com/mikecroucher/nearest_correlation
 
-    ARGUMENTS
-    ~~~~~~~~~
+    Parameters
+    ----------
     A: symmetric numpy array
     tol: convergence tolerance
     max_iterations: maximum number of iterations (default 100)
     weights: optional vector defining a diagonal weight matrix diag(W)
+
+    References
+    ----------
+
+    https://nhigham.com/2013/02/13/the-nearest-correlation-matrix/
+    https://eprints.maths.manchester.ac.uk/232/1/paper3.pdf
+
     """
     eps = np.spacing(1)
     if not np.all((np.transpose(A) == A)):
@@ -68,5 +75,4 @@ def proj_spd(A):
     # NOTE: the input matrix is assumed to be symmetric
     d, v = np.linalg.eigh(A)
     A = (v * np.maximum(d, 0)).dot(v.T)
-    A = (A + A.T) / 2
-    return A
+    return (A + A.T) / 2

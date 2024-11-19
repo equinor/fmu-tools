@@ -1,9 +1,11 @@
-import pytest
 import numpy as np
+import pytest
+
 from fmu.tools import nearcorr
 
 # References
-# [1] 'Computing the nearest correlation matrix - a problem from finance': Higham, IMA Journal of Numerical Analysis (2002) 22, 329.343
+# [1] 'Computing the nearest correlation matrix -
+# a problem from finance': Higham, IMA Journal of Numerical Analysis (2002) 22, 329.343
 
 
 def test_nag_example():
@@ -71,4 +73,4 @@ def test_exceeded_max_iterations():
     """Test that exceeding max iterations raises ValueError"""
     A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
     with pytest.raises(ValueError, match="No convergence after 10 iterations"):
-        X = nearcorr(A, max_iterations=10)
+        nearcorr(A, max_iterations=10)
