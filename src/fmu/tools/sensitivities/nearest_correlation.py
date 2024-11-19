@@ -1,6 +1,6 @@
 import numpy as np
-from numpy import diag, inf
-from numpy import copy, dot
+from numpy import inf
+from numpy import copy
 from numpy.linalg import norm
 
 
