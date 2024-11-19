@@ -27,10 +27,10 @@ def nearcorr(
     https://eprints.maths.manchester.ac.uk/232/1/paper3.pdf
 
     """
-    eps = np.spacing(1)
-    if not np.all((np.transpose(A) == A)):
-        raise ValueError("Input Matrix is not symmetric")
+    if not np.array_equal(A, A.T):
+        raise ValueError("A must be symmetric")
 
+    eps = np.spacing(1)
     if not tol:
         tol = eps * np.shape(A)[0] * np.array([1, 1])
     if weights is None:
