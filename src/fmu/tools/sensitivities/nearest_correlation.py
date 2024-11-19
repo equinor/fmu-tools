@@ -7,7 +7,6 @@ from numpy.linalg import norm
 def nearcorr(
     A,
     tol=None,
-    flag=0,
     max_iterations=100,
     weights=None,
 ):
@@ -18,7 +17,6 @@ def nearcorr(
     ~~~~~~~~~
     A: symmetric numpy array
     tol: convergence tolerance
-    flag: 0 for full eigendecomposition (only option supported)
     max_iterations: maximum number of iterations (default 100)
     weights: optional vector defining a diagonal weight matrix diag(W)
     """
@@ -49,12 +47,7 @@ def nearcorr(
         Xold = copy(X)
         R = X - ds
         R_wtd = Whalf * R
-        if flag == 0:
-            X = proj_spd(R_wtd)
-        elif flag == 1:
-            raise NotImplementedError(
-                "Setting 'flag' to 1 is currently not implemented."
-            )
+        X = proj_spd(R_wtd)
 
         X = X / Whalf
         ds = X - R
