@@ -21,13 +21,11 @@ def excel2dict_design(input_filename, sheetnames=None):
     """Read excel file with input to design setup
     Currently only specification of
     onebyone design is implemented
-
     Args:
         input_filename (str): Name of excel input file
         sheetnames (dict): Dictionary of worksheet names to load
             information from. Supported keys: general_input, defaultvalues,
             and designinput.
-
     Returns:
         OrderedDict on format for DesignMatrix.generate
     """
@@ -35,21 +33,19 @@ def excel2dict_design(input_filename, sheetnames=None):
         gen_input_sheet = _find_geninput_sheetname(input_filename)
     else:
         gen_input_sheet = sheetnames["general_input"]
-
     generalinput = pd.read_excel(
         input_filename, gen_input_sheet, header=None, index_col=0, engine="openpyxl"
     )
     generalinput.dropna(axis=0, how="all", inplace=True)
     generalinput.dropna(axis=1, how="all", inplace=True)
-
     if str(generalinput[1]["designtype"]) == "onebyone":
         returndict = _excel2dict_onebyone(input_filename, sheetnames)
     else:
         raise ValueError(
-            "Generation of DesignMatrix only "
-            "implemented for type onebyone "
-            "In general_input designtype was "
-            "set to {}".format(str(generalinput[1]["designtype"]))
+            f"Generation of DesignMatrix only "
+            f"implemented for type onebyone "
+            f"In general_input designtype was "
+            f"set to {str(generalinput[1]['designtype'])}"
         )
     return returndict
 
@@ -66,71 +62,54 @@ def inputdict_to_yaml(inputdict, filename):
 
 
 def _find_geninput_sheetname(input_filename):
-    """Finding general input sheet, allowing for name
-    variations."""
+    """Finding general input sheet, allowing for name variations."""
     xlsx = pd.ExcelFile(input_filename)
-    sheets = xlsx.sheet_names
-    general_input_sheet = []
-    for sheet in sheets:
-        if sheet in [
-            "general_input",
-            "generalinput",
-            "GeneralInput",
-            "Generalinput",
-            "General_Input",
-            "General_input",
-        ]:
-            general_input_sheet.append(sheet)
-
+    valid_names = [
+        "general_input",
+        "generalinput",
+        "GeneralInput",
+        "Generalinput",
+        "General_Input",
+        "General_input",
+    ]
+    general_input_sheet = [sheet for sheet in xlsx.sheet_names if sheet in valid_names]
     if len(general_input_sheet) > 1:
         raise ValueError(
-            "More than one sheet with general input. Sheetnames are {} ".format(
-                general_input_sheet
-            )
+            f"More than one sheet with general input. "
+            f"Sheetnames are {general_input_sheet}"
         )
-
     if not general_input_sheet:
         raise ValueError(
-            f"No general_input sheet provided in Excel file {input_filename} "
+            f"No general_input sheet provided in Excel file {input_filename}"
         )
-
     return general_input_sheet[0]
 
 
 def _find_onebyone_defaults_sheet(input_filename):
-    """Finds correct sheet name for default values to use when parsing
-    excel file.
+    """Finds correct sheet name for default values to use when parsing excel file.
 
     Returns:
         string, name of a sheet in the excel file
     """
     xlsx = pd.ExcelFile(input_filename)
-    sheets = xlsx.sheet_names
-
-    default_values_sheet = []
-
-    for sheet in sheets:
-        if sheet in [
-            "default_values",
-            "defaultvalues",
-            "DefaultValues",
-            "Defaultvalues",
-            "Default_Values",
-            "Default_values",
-        ]:
-            default_values_sheet.append(sheet)
+    valid_names = [
+        "default_values",
+        "defaultvalues",
+        "DefaultValues",
+        "Defaultvalues",
+        "Default_Values",
+        "Default_values",
+    ]
+    default_values_sheet = [sheet for sheet in xlsx.sheet_names if sheet in valid_names]
     if len(default_values_sheet) > 1:
         raise ValueError(
-            "More than one sheet with default values. Sheetnames are {} ".format(
-                default_values_sheet
-            )
+            f"More than one sheet with default values. "
+            f"Sheetnames are {default_values_sheet}"
         )
-
-    if len(default_values_sheet) == []:
+    if not default_values_sheet:
         raise ValueError(
-            f"No defaultvalues sheet provided in Excel file {input_filename} "
+            f"No defaultvalues sheet provided in Excel file {input_filename}"
         )
-
     return default_values_sheet[0]
 
 
@@ -141,28 +120,23 @@ def _find_onebyone_input_sheet(input_filename):
         string, name of a sheet in the excel file
     """
     xlsx = pd.ExcelFile(input_filename)
-    sheets = xlsx.sheet_names
-
-    design_input_sheet = []
-
-    for sheet in sheets:
-        if sheet in [
-            "design_input",
-            "designinput",
-            "DesignInput",
-            "Designinput",
-            "Design_Input",
-            "Design_input",
-        ]:
-            design_input_sheet.append(sheet)
+    valid_names = [
+        "design_input",
+        "designinput",
+        "DesignInput",
+        "Designinput",
+        "Design_Input",
+        "Design_input",
+    ]
+    design_input_sheet = [sheet for sheet in xlsx.sheet_names if sheet in valid_names]
     if len(design_input_sheet) > 1:
         raise ValueError(
-            f"More than one sheet with design inputSheetnames are {design_input_sheet} "
+            f"More than one sheet with design input. "
+            f"Sheetnames are {design_input_sheet}"
         )
-
     if not design_input_sheet:
         raise ValueError(
-            f"No designinput sheet provided in Excel file {input_filename} "
+            f"No designinput sheet provided in Excel file {input_filename}"
         )
     return design_input_sheet[0]
 
@@ -186,14 +160,13 @@ def _check_designinput(dsgn_input):
 def _check_for_mixed_sensitivities(sens_name, sens_group):
     """Checks for valid input in designinput sheet. A sensitivity cannot contain
     two different sensitivity types"""
-
     types = sens_group.groupby("type", sort=False)
     if len(types) > 1:
         raise ValueError(
-            "The sensitivity with sensname '{}' in designinput sheet contains more "
-            "than one sensitivity type. For each sensname all parameters must be "
-            "specified using the same type (seed, scenario, dist, ref, background, "
-            "extern)".format(sens_name)
+            f"The sensitivity with sensname '{sens_name}' in designinput sheet "
+            f"contains more than one sensitivity type. For each sensname all "
+            f"parameters must be specified using the same type (seed, scenario, "
+            f"dist, ref, background, extern)"
         )
 
 
@@ -401,11 +374,9 @@ def _read_defaultvalues(filename, sheetname):
     for row in default_df.itertuples():
         if str(row[0]) in default_dict:
             print(
-                "WARNING: The default value '{}' "
-                "is listed twice in the sheet '{}'. "
-                "Only the first entry will be used in output file".format(
-                    row[0], sheetname
-                )
+                f"WARNING: The default value '{row[0]}' "
+                f"is listed twice in the sheet '{sheetname}'. "
+                f"Only the first entry will be used in output file"
             )
         else:
             default_dict[str(row[0])] = row[1]
@@ -487,25 +458,21 @@ def _read_background(inp_filename, bck_sheet):
             )
         if not _has_value(row.dist_param1):
             raise ValueError(
-                "Parameter {} has been input "
-                "in background sheet but with empty "
-                "first distribution parameter ".format(row.param_name)
+                f"Parameter {row.param_name} has been input "
+                f"in background sheet but with empty "
+                f"first distribution parameter"
             )
         if not _has_value(row.dist_param2) and _has_value(row.dist_param3):
             raise ValueError(
-                "Parameter {} has been input in "
-                "background sheet with "
-                'value for "dist_param3" while '
-                '"dist_param2" is empty. This is not '
-                "allowed".format(row.param_name)
+                f"Parameter {row.param_name} has been input in "
+                f"background sheet with value for 'dist_param3' while "
+                f"'dist_param2' is empty. This is not allowed"
             )
         if not _has_value(row.dist_param3) and _has_value(row.dist_param4):
             raise ValueError(
-                "Parameter {} has been input in "
-                "background sheet with "
-                'value for "dist_param4" while '
-                '"dist_param3" is empty. This is not '
-                "allowed".format(row.param_name)
+                f"Parameter {row.param_name} has been input in "
+                f"background sheet with value for 'dist_param4' while "
+                f"'dist_param3' is empty. This is not allowed"
             )
         distparams = [
             item
@@ -542,39 +509,30 @@ def _read_scenario_sensitivity(sensgroup):
     sdict["cases"] = OrderedDict()
     casedict1 = OrderedDict()
     casedict2 = OrderedDict()
-
     if not _has_value(sensgroup["senscase1"].iloc[0]):
         raise ValueError(
-            "Sensitivity {} has been input "
-            "as a scenario sensitivity, but "
-            "without a name in senscase1 column.".format(sensgroup["sensname"].iloc[0])
+            f"Sensitivity {sensgroup['sensname'].iloc[0]} has been input "
+            f"as a scenario sensitivity, but without a name in senscase1 column."
         )
-
     for row in sensgroup.itertuples():
         if not _has_value(row.param_name):
             raise ValueError(
-                "Scenario sensitivity {} specified "
-                "where one line has empty parameter "
-                "name ".format(row.sensname)
+                f"Scenario sensitivity {row.sensname} specified "
+                f"where one line has empty parameter name"
             )
         if not _has_value(row.value1):
             raise ValueError(
-                "Parameter {} har been input "
-                'as type "scenario" but with empty '
-                "value in value1 column ".format(row.param_name)
+                f"Parameter {row.param_name} har been input as type 'scenario' "
+                f"but with empty value in value1 column"
             )
         casedict1[str(row.param_name)] = row.value1
-
     if _has_value(sensgroup["senscase2"].iloc[0]):
         for row in sensgroup.itertuples():
             if not _has_value(row.value2):
                 raise ValueError(
-                    "Sensitivity {} has been input "
-                    "with a name in senscase2 column "
-                    "but without a value for parameter {} "
-                    "in value2 column.".format(
-                        sensgroup["sensname"].iloc[0], row.param_name
-                    )
+                    f"Sensitivity {sensgroup['sensname'].iloc[0]} has been input "
+                    f"with a name in senscase2 column but without a value for "
+                    f"parameter {row.param_name} in value2 column."
                 )
             casedict2[str(row.param_name)] = row.value2
         sdict["cases"][str(sensgroup["senscase1"].iloc[0])] = casedict1
@@ -583,13 +541,9 @@ def _read_scenario_sensitivity(sensgroup):
         for row in sensgroup.itertuples():
             if _has_value(row.value2):
                 raise ValueError(
-                    "Sensitivity {} has been input "
-                    "with a value for parameter {} "
-                    "in value2 column "
-                    "but without a name for the scenario "
-                    "in senscase2 column.".format(
-                        sensgroup["sensname"].iloc[0], row.param_name
-                    )
+                    f"Sensitivity {sensgroup['sensname'].iloc[0]} has been input "
+                    f"with a value for parameter {row.param_name} in value2 column "
+                    f"but without a name for the scenario in senscase2 column."
                 )
         sdict["cases"][str(sensgroup["senscase1"].iloc[0])] = casedict1
     return sdict
@@ -604,19 +558,15 @@ def _read_constants(sensgroup):
     for row in sensgroup.itertuples():
         if not _has_value(row.dist_param1):
             raise ValueError(
-                "Parameter name {} has been input "
-                'in a sensitivity of type "seed". \n'
-                "If {} was meant to be the name of "
-                "the seed parameter, this is "
-                "unfortunately not allowed. "
-                "The seed parameter name is standardised "
-                "to RMS_SEED and should not be specified.\n "
-                "If you instead meant to specify a constant "
-                "value for another parameter in the seed "
-                'sensitivity, please remember "const" in '
-                'dist_name and a value in "dist_param1". '.format(
-                    row.param_name, row.param_name
-                )
+                f"Parameter name {row.param_name} has been input "
+                f"in a sensitivity of type 'seed'.\n"
+                f"If {row.param_name} was meant to be the name of "
+                f"the seed parameter, this is unfortunately not allowed. "
+                f"The seed parameter name is standardised to RMS_SEED "
+                f"and should not be specified.\n"
+                f"If you instead meant to specify a constant value for "
+                f"another parameter in the seed sensitivity, please remember "
+                f"'const' in dist_name and a value in 'dist_param1'."
             )
         distparams = row.dist_param1
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams]
@@ -639,29 +589,25 @@ def _read_dist_sensitivity(sensgroup):
     for row in sensgroup.itertuples():
         if not _has_value(row.param_name):
             raise ValueError(
-                "Dist sensitivity {} specified "
-                "where one line has empty parameter "
-                "name ".format(row.sensname)
+                f"Dist sensitivity {row.sensname} specified "
+                f"where one line has empty parameter name"
             )
         if not _has_value(row.dist_param1):
             raise ValueError(
-                "Parameter {} has been input "
-                'as type "dist" but with empty '
-                "first distribution parameter ".format(row.param_name)
+                f"Parameter {row.param_name} has been input "
+                f"as type 'dist' but with empty first distribution parameter"
             )
         if not _has_value(row.dist_param2) and _has_value(row.dist_param3):
             raise ValueError(
-                "Parameter {} has been input with "
-                'value for "dist_param3" while '
-                '"dist_param2" is empty. This is not '
-                "allowed".format(row.param_name)
+                f"Parameter {row.param_name} has been input with "
+                f"value for 'dist_param3' while 'dist_param2' is empty. "
+                f"This is not allowed"
             )
         if not _has_value(row.dist_param3) and _has_value(row.dist_param4):
             raise ValueError(
-                "Parameter {} has been input with "
-                'value for "dist_param4" while '
-                '"dist_param3" is empty. This is not '
-                "allowed".format(row.param_name)
+                f"Parameter {row.param_name} has been input with "
+                f"value for 'dist_param4' while 'dist_param3' is empty. "
+                f"This is not allowed"
             )
         distparams = [
             item
@@ -678,7 +624,6 @@ def _read_dist_sensitivity(sensgroup):
         else:
             corrsheet = None
         paramdict[str(row.param_name)] = [str(row.dist_name), distparams, corrsheet]
-
     return paramdict
 
 
