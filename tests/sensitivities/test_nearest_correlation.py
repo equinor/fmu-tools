@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from fmu.tools import nearcorr, ExceededMaxIterationsError
+from fmu.tools import nearcorr
 
 # References
 # [1] 'Computing the nearest correlation matrix - a problem from finance': Higham, IMA Journal of Numerical Analysis (2002) 22, 329.343
@@ -59,37 +59,6 @@ def test_weights():
     assert (np.abs((X - expected_result)) < 1e-8).all()
 
 
-def test_restart():
-    """Test that restarting calculation gives same results"""
-    A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
-
-    # Do 3 iterations on A and gather the result
-    try:
-        Y = nearcorr(A, max_iterations=3)
-    except ExceededMaxIterationsError as e:
-        result3 = np.copy(e.matrix)
-
-    # Do 1 iteration on A
-    try:
-        X = nearcorr(A, max_iterations=1)
-    except ExceededMaxIterationsError as e:
-        restart = e
-
-    # restart from previous result and do another iteration
-    try:
-        X = nearcorr(restart, max_iterations=1)
-    except ExceededMaxIterationsError as e:
-        restart = e
-
-    # restart from previous result and do another iteration
-    try:
-        X = nearcorr(restart, max_iterations=1)
-    except ExceededMaxIterationsError as e:
-        result1 = e.matrix
-
-    assert np.all(result1 == result3)
-
-
 def test_assert_symmetric():
     """Test that non-symmetric matrix raises ValueError"""
     A = np.array([[1, 1, 0], [1, 1, 1], [1, 1, 1]])
@@ -99,16 +68,7 @@ def test_assert_symmetric():
 
 
 def test_exceeded_max_iterations():
-    """Test that exceeding max iterations raises ExceededMaxIterationsError"""
+    """Test that exceeding max iterations raises ValueError"""
     A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
-
-    with pytest.raises(ExceededMaxIterationsError):
-        nearcorr(A, max_iterations=10)
-
-
-def test_exceeded_max_iterations_false():
-    """Test that exceeding max iterations doesn't raise exception when flag is False"""
-    A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
-
-    X = nearcorr(A, max_iterations=10, except_on_too_many_iterations=False)
-    # No assertion needed - test passes if no exception is raised
+    with pytest.raises(ValueError, match="No convergence after 10 iterations"):
+        X = nearcorr(A, max_iterations=10)
