@@ -30,9 +30,10 @@ def nearcorr(
     if not np.array_equal(A, A.T):
         raise ValueError("A must be symmetric")
 
-    eps = np.spacing(1)
     if not tol:
+        eps = np.spacing(1)
         tol = eps * np.shape(A)[0] * np.array([1, 1])
+
     if weights is None:
         weights = np.ones(np.shape(A)[0])
 

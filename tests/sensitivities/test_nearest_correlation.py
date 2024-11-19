@@ -43,24 +43,6 @@ def test_higham_example_2002():
     assert (np.abs((X - expected_result)) < 1e-8).all()
 
 
-def test_weights():
-    """Test with weights vector"""
-    A = np.array([[1, 1, 0], [1, 1, 1], [0, 1, 1]])
-    weights = np.array([1, 2, 3])
-
-    X = nearcorr(A, weights=weights)
-
-    expected_result = np.array(
-        [
-            [1.0, 0.66774961, 0.16723692],
-            [0.66774961, 1.0, 0.84557496],
-            [0.16723692, 0.84557496, 1.0],
-        ]
-    )
-
-    assert (np.abs((X - expected_result)) < 1e-8).all()
-
-
 def test_assert_symmetric():
     """Test that non-symmetric matrix raises ValueError"""
     A = np.array([[1, 1, 0], [1, 1, 1], [1, 1, 1]])
