@@ -9,6 +9,7 @@ import numpy as np
 import numpy.linalg as la
 import pandas as pd
 import scipy.stats
+from fmu.tools.sensitivities.nearest_correlation import nearcorr
 
 
 def _check_dist_params_normal(dist_params):
@@ -563,7 +564,7 @@ def make_covariance_matrix(df_correlations, stddevs=None):
     # Project to nearest symmetric positive definite matrix
     if not _is_positive_definite(corr_matrix):
         input_corr_matrix = corr_matrix.copy()
-        corr_matrix = _nearest_positive_definite(corr_matrix)
+        corr_matrix = nearcorr(corr_matrix)
         print("Input correlation matrix: ")
         with np.printoptions(precision=3, suppress=True):
             print(input_corr_matrix)
