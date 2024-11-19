@@ -9,9 +9,7 @@ def nearcorr(
     tol=[],
     flag=0,
     max_iterations=100,
-    n_pos_eig=0,
     weights=None,
-    verbose=False,
 ):
     """
     Finds the nearest correlation matrix to the symmetric matrix A.
