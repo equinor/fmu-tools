@@ -1,0 +1,14 @@
+# Name of grid model for the petrophysics jobs
+grid_name: SingleZoneBox
+
+# Name of original petro job using facies realization as input
+original_job_name: original_single_zone
+
+# Use default as zone name for single zone grids and zone name for multizone grids.
+# For each zone, specify facies and for each facies specify
+# petro variables to be used as field parameters in ERT update
+used_petro_var:
+  default: 
+    F1:  [P1, P2]
+    F2:  [P1, P2]
+    F3:  [P1, P2]
