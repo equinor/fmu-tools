@@ -3,18 +3,11 @@ a design matrix and converting to an OrderedDict that can be
 read by fmu.tools.DesignMatrix.generate
 """
 
-import warnings
 from collections import OrderedDict
 
 import numpy as np
 import pandas as pd
 import yaml
-
-SEEDS_DEPRECATION_WARNING = """
-The keyword "seeds" in the "general_input" sheet is changed
-to "rms_seeds", and will be deprecated in a future version.
-Please update your excel spreadsheet
-"""
 
 
 def excel2dict_design(input_filename, sheetnames=None):
@@ -42,6 +35,11 @@ def excel2dict_design(input_filename, sheetnames=None):
     generalinput.dropna(axis=1, how="all", inplace=True)
     if str(generalinput[1]["designtype"]) == "onebyone":
         returndict = _excel2dict_onebyone(input_filename, sheetnames)
+    elif "seeds" in generalinput[1]:
+        raise ValueError(
+            "The 'seeds' parameter has been deprecated and is no longer supported. "
+            "Use 'rms_seeds' instead"
+        )
     else:
         raise ValueError(
             f"Generation of DesignMatrix only "
@@ -214,13 +212,6 @@ def _excel2dict_onebyone(input_filename, sheetnames=None):
             inputdict["seeds"] = None
         else:
             inputdict["seeds"] = generalinput[1]["rms_seeds"]
-    elif "seeds" in generalinput[1]:
-        warnings.simplefilter("always")
-        warnings.warn(SEEDS_DEPRECATION_WARNING, DeprecationWarning)
-        if str(generalinput[1]["seeds"]) == "None":
-            inputdict["seeds"] = None
-        else:
-            inputdict["seeds"] = generalinput[1]["seeds"]
     else:
         inputdict["seeds"] = None
 
