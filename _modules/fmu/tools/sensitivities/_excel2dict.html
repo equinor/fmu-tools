@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.16.1.dev31+g4701ee9 documentation</title>
+  <title>fmu.tools.sensitivities._excel2dict &mdash; fmu-tools 1.16.1.dev32+g5880b9f documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=f16dec7b"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=e0399041"></script>
       <script src="../../../../_static/doctools.js?v=888ff710"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -88,19 +88,12 @@
 <span class="sd">read by fmu.tools.DesignMatrix.generate</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openpyxl</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
-
-<span class="n">SEEDS_DEPRECATION_WARNING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">The keyword &quot;seeds&quot; in the &quot;general_input&quot; sheet is changed</span>
-<span class="s2">to &quot;rms_seeds&quot;, and will be deprecated in a future version.</span>
-<span class="s2">Please update your excel spreadsheet</span>
-<span class="s2">&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="excel2dict_design"><a class="viewcode-back" href="../../../../fmu.tools.sensitivities.html#fmu.tools.excel2dict_design">[docs]</a><span class="k">def</span> <span class="nf">excel2dict_design</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">sheetnames</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -130,6 +123,11 @@
 
     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;designtype&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;onebyone&quot;</span><span class="p">:</span>
         <span class="n">returndict</span> <span class="o">=</span> <span class="n">_excel2dict_onebyone</span><span class="p">(</span><span class="n">input_filename</span><span class="p">,</span> <span class="n">sheetnames</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">&quot;seeds&quot;</span> <span class="ow">in</span> <span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;seeds&#39; parameter has been deprecated and is no longer supported. &quot;</span>
+            <span class="s2">&quot;Use &#39;rms_seeds&#39; instead&quot;</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Generation of DesignMatrix only &quot;</span>
@@ -328,13 +326,6 @@
             <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;rms_seeds&quot;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s2">&quot;seeds&quot;</span> <span class="ow">in</span> <span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">SEEDS_DEPRECATION_WARNING</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;seeds&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
-            <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generalinput</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">inputdict</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
