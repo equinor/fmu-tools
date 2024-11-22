@@ -45,6 +45,8 @@ import numpy as np
 import pytest
 import scipy as sp
 
+from fmu.tools.sensitivities.design_distributions import _is_positive_definite
+
 
 class ImanConover:
     def __init__(self, correlation_matrix):
@@ -118,6 +120,8 @@ class ImanConover:
             raise ValueError("Correlation matrix must have 1.0 on diagonal.")
         if not np.allclose(correlation_matrix.T, correlation_matrix):
             raise ValueError("Correlation matrix must be symmetric.")
+        if not _is_positive_definite(correlation_matrix):
+            raise ValueError("Correlation matrix must be positive definite.")
 
         self.C = correlation_matrix.copy()
         self.P = np.linalg.cholesky(self.C)
@@ -162,25 +166,23 @@ class ImanConover:
         # approximately multivariate normal (but with correlations).
         # The new data has the same rank correlation as the original data.
         ranks = sp.stats.rankdata(X, axis=0) / (N + 1)
-        normal_scores = sp.stats.norm.ppf(ranks)
-
-        # TODO: Remove these sanity checks eventually
-        spearman_before = sp.stats.spearmanr(X).statistic
-        spearman_after = sp.stats.spearmanr(normal_scores).statistic
-        msg = "Spearman correlation before and after transforming should be equal"
-        assert np.allclose(spearman_before, spearman_after), msg
+        normal_scores = sp.stats.norm.ppf(ranks)  # + np.random.randn(N, K) * epsilon
 
         # STEP TWO - Remove correlations from the transformed data
         empirical_correlation = np.corrcoef(normal_scores, rowvar=False)
+        if not _is_positive_definite(empirical_correlation):
+            msg = "Rank data correlation not positive definite."
+            msg += "There are perfect correlations in the ranked data."
+            msg += "Supply more data (rows in X) or sample differently."
+            raise ValueError(msg)
+
         decorrelation_matrix = np.linalg.cholesky(empirical_correlation)
+
         # We exploit the fact that Q is lower-triangular and avoid the inverse.
         # X = N @ inv(Q)^T  =>  X @ Q^T = N  =>  (Q @ X^T)^T = N
         decorrelated_scores = sp.linalg.solve_triangular(
             decorrelation_matrix, normal_scores.T, lower=True
         ).T
-
-        # TODO: Remove these sanity checks eventually
-        assert np.allclose(np.corrcoef(decorrelated_scores, rowvar=False), np.eye(K))
 
         # STEP THREE - Induce correlations in transformed space
         correlated_scores = decorrelated_scores @ self.P.T
@@ -197,18 +199,53 @@ class ImanConover:
         return result
 
 
+def decorrelate(X, remove_variance=True):
+    """Removes correlations or covariance from data X.
+
+    Examples
+    --------
+    >>> X = np.array([[1. , 1. ],
+    ...               [2. , 1.1],
+    ...               [2.1, 3. ]])
+    >>> X_decorr = decorrelate(X)
+    >>> np.cov(X_decorr, rowvar=False).round(6)
+    array([[1., 0.],
+           [0., 1.]])
+    >>> np.allclose(np.mean(X, axis=0), np.mean(X_decorr, axis=0))
+    True
+
+    >>> X_decorr = decorrelate(X, remove_variance=False)
+    >>> np.cov(X_decorr, rowvar=False).round(6)
+    array([[0.246667, 0.      ],
+           [0.      , 0.846667]])
+    >>> np.allclose(np.mean(X, axis=0), np.mean(X_decorr, axis=0))
+    True
+    """
+    mean = np.mean(X, axis=0)
+    var = np.var(X, axis=0)
+    cov = np.cov(X, rowvar=False)
+
+    L = np.linalg.cholesky(cov)  # L @ L.T = cov
+    if not remove_variance:
+        L = L / np.sqrt(var)
+
+    # Computes X = (X - mean) @ inv(L).T
+    X = sp.linalg.solve_triangular(L, (X - mean).T, lower=True).T
+
+    return mean + X
+
+
 class TestImanConover:
     @pytest.mark.parametrize("seed", range(100))
     def test_marginals_and_correlation_distance(self, seed):
         rng = np.random.default_rng(seed)
 
         n_variables = rng.integers(2, 10)
-        n_observations = n_variables + 1
-        rng = np.random.default_rng(42)
+        n_observations = n_variables * 10
 
         # Create a random correlation matrix and a random data matrix
         A = rng.normal(size=(n_variables * 2, n_variables))
-        desired_corr = np.corrcoef(A, rowvar=False)
+        desired_corr = 0.9 * np.corrcoef(A, rowvar=False) + 0.1 * np.eye(n_variables)
         X = rng.normal(size=(n_observations, n_variables))
 
         # Tranform the data
@@ -231,12 +268,40 @@ class TestImanConover:
 
         assert distance_after <= distance_before
 
+    def test_identity_correlation_matrix(self):
+        rng = np.random.default_rng(42)
+
+        n_observations = 5
+        n_variables = 3
+        rng = np.random.default_rng(42)
+
+        # Create a random correlation matrix and a random data matrix
+        desired_corr = np.identity(n_variables)
+        transform = ImanConover(desired_corr)
+
+        # Create data and decorrelate it completely
+        X = rng.normal(size=(n_observations, n_variables))
+        X = decorrelate(X, remove_variance=True)
+        assert np.allclose(np.corrcoef(X, rowvar=False), np.eye(n_variables))
+
+        # Transform it to identity correlation, which it already has
+        transform = ImanConover(desired_corr)
+        X_transformed = transform(X)
+
+        assert np.allclose(X, X_transformed)
+
+    def test_dataset_with_unity_correlation_in_ranks(self):
+        # This dataset is interesting because while the correlation
+        # between the variables is ~0.6, when the data is ranked the
+        # correlation becomes 1. Rank(row) = [1, 2, 3] for both rows.
+        X = np.array([[1.0, 1], [2.0, 1.1], [2.1, 3]])
+
+        desired_corr = np.identity(2)
+
+        transform = ImanConover(desired_corr)
+        with pytest.raises(ValueError):
+            transform(X)
+
 
 if __name__ == "__main__":
-    pytest.main(
-        args=[
-            __file__,
-            "--doctest-modules",
-            "-v",
-        ]
-    )
+    pytest.main(args=[__file__, "--doctest-modules", "-v", "-l"])
