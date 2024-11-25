@@ -36,23 +36,6 @@ __all__ = [
     "sample_attributes_for_sim2seis",
 ]
 
-if not ROXAR:
-    from fmu.tools.rms import volumetrics  # noqa
-    from fmu.tools.sensitivities import DesignMatrix  # noqa
-    from fmu.tools.sensitivities import calc_tornadoinput  # noqa
-    from fmu.tools.sensitivities import excel2dict_design  # noqa
-    from fmu.tools.sensitivities import summarize_design  # noqa
-
-    __all__.extend(
-        [
-            "volumetrics",
-            "DesignMatrix",
-            "calc_tornadoinput",
-            "excel2dict_design",
-            "summarize_design",
-        ]
-    )
-
 try:
     from fmu.tools.version import version
 
