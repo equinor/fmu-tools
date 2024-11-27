@@ -9,7 +9,7 @@
 
 **fmu-tools** is a library containing tools for pre- and post-processing in a
 Fast Model Update (FMU) context. These tools are used for automatic QC,
-setting up and analyzing sensitivites, and visualization.
+and visualization.
 
 ---
 

@@ -76,7 +76,6 @@ Documentation = "https://equinor.github.io/fmu-tools/"
 
 [project.scripts]
 ensemble_well_props = "fmu.tools.ensembles.ensemble_well_props:main"
-fmudesign = "fmu.tools.sensitivities.fmudesignrunner:main"
 rename_rms_scripts = "fmu.tools.rms.rename_rms_scripts:main"
 rmsvolumetrics2csv = "fmu.tools.rms.volumetrics:rmsvolumetrics2csv_main"
 
