@@ -1,10 +1,10 @@
-grid_name: "MultiZoneBox"
-grid_file_name: "multizonegrid.roff"
-facies_real_name: "Facies"
-facies_file_name: "multizonefacies.roff"
-original_job_name: "original_multi_zone"
+grid_name: MultiZoneBox
+grid_file_name: multizonegrid.roff
+facies_real_name: Facies
+facies_file_name: multizonefacies.roff
+original_job_name: original_multi_zone
 # mode is either: simulation or prediction
-mode: "simulation"
+mode: simulation
 original_job_settings:
   zones:
     Zone1: 

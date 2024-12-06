@@ -17,13 +17,13 @@ from os.path import isdir
 from pathlib import Path
 
 import pytest
-import xtgeo
+import xtgeo  # type: ignore
 
 with contextlib.suppress(ImportError):
     import roxar  # type: ignore
     import roxar.jobs  # type: ignore
 
-from fmu.tools.rms.generate_petro_jobs_for_field_update import (
+from fmu.tools.rms.generate_petro_jobs_for_field_update import (  # type: ignore
     check_rms_project,
     create_new_petro_job_per_facies,
     define_new_variable_names_and_correlation_matrix,
@@ -44,7 +44,7 @@ PRJ = str(TMPD / PROJNAME)
 RESULTDIR = TMPD / "jobs"
 RESULTDIR.mkdir(parents=True, exist_ok=True)
 
-REFERENCE_DIR = Path("rms/generate_jobs_testdata")
+REFERENCE_DIR = Path("tests/rms/generate_jobs_testdata")
 CONFIG_FILE_ORIGINAL_SINGLE_ZONE_JOB = (
     REFERENCE_DIR / "generate_original_single_zone_job.yml"
 )
@@ -73,7 +73,7 @@ OWNER_STRING_MULTI_ZONE = ["Grid models", "MultiZoneBox", "Grid"]
 
 @pytest.mark.parametrize(
     "original_variable_names, facies_name, new_variable_names_input, "
-    "original_Lcorr_mat, reference_var_names, reference_corr_mat",
+    "original_lower_corr_mat, reference_var_names, reference_corr_mat",
     [
         (
             ["phit", "vsh", "klogh", "vphyl"],
@@ -102,26 +102,26 @@ OWNER_STRING_MULTI_ZONE = ["Grid models", "MultiZoneBox", "Grid"]
     ],
 )
 def test_define_new_variable_names_and_correlation_matrix(
-    original_variable_names,
-    facies_name,
-    new_variable_names_input,
-    original_Lcorr_mat,
-    reference_var_names,
-    reference_corr_mat,
-):
-    new_variable_names, new_Lcorr_mat = (
+    original_variable_names: list[str],
+    facies_name: str,
+    new_variable_names_input: list[str],
+    original_lower_corr_mat: list[list[float]],
+    reference_var_names: list[str],
+    reference_corr_mat: list[list[float]],
+) -> None:
+    new_variable_names, new_lower_corr_mat = (
         define_new_variable_names_and_correlation_matrix(
             original_variable_names,
             facies_name,
             new_variable_names_input,
-            original_Lcorr_mat,
+            original_lower_corr_mat,
         )
     )
 
     print(f"Original var names:  {original_variable_names}")
     print(f"New var names:       {new_variable_names}")
-    print(f"Original correlations:  {original_Lcorr_mat}")
-    print(f"New correlations:       {new_Lcorr_mat}")
+    print(f"Original correlations:  {original_lower_corr_mat}")
+    print(f"New correlations:       {new_lower_corr_mat}")
 
     # Compare lists with reference
     l1 = new_variable_names
@@ -130,16 +130,16 @@ def test_define_new_variable_names_and_correlation_matrix(
     assert len(res) == 0
 
     # Compare corr matrix with reference
-    nrows = len(new_Lcorr_mat)
+    nrows = len(new_lower_corr_mat)
     assert nrows == len(reference_corr_mat)
     for j in range(nrows):
-        ncol = len(new_Lcorr_mat[j])
+        ncol = len(new_lower_corr_mat[j])
         assert ncol == len(reference_corr_mat[j])
         for i in range(ncol):
-            assert new_Lcorr_mat[j][i] == reference_corr_mat[j][i]
+            assert new_lower_corr_mat[j][i] == reference_corr_mat[j][i]
 
 
-def create_original_petro_job(spec_dict):
+def create_original_petro_job(spec_dict: dict) -> str:
     grid_name = spec_dict["grid_name"]
     owner_string_list = ["Grid models", grid_name, "Grid"]
     job_name = spec_dict["original_job_name"]
@@ -163,7 +163,7 @@ def create_original_petro_job(spec_dict):
     return job_name
 
 
-def define_setting_for_original_job(spec_dict):
+def define_setting_for_original_job(spec_dict: dict) -> dict:
     # Use specified zones, facies and variable names and selected model parameters,
     # but assign default to all other settings
     facies_real_name = spec_dict["facies_real_name"]
@@ -258,7 +258,7 @@ def define_setting_for_original_job(spec_dict):
     }
 
 
-def rename_subgrids(xtgeo_grd):
+def rename_subgrids(xtgeo_grd: xtgeo.Grid) -> None:
     nsubgrids = len(list(xtgeo_grd.subgrids.keys()))
     subgrid_names = []
     for i in range(nsubgrids):
@@ -269,8 +269,6 @@ def rename_subgrids(xtgeo_grd):
 
 # Here the temporary RMS project is created. It contains a grid,
 # a facies parameter and an original petrophysical job
-# @pytest.mark.skipunlessroxar
-# @pytest.fixture
 def create_project():
     """Create a tmp RMS project for testing, populate with basic data.
 
@@ -350,7 +348,7 @@ def create_project():
 # as the original petro job for the
 # petrophysical properties.
 @pytest.mark.skipunlessroxar
-def test_generate_jobs():
+def test_generate_jobs() -> None:
     """Test generate_petro_jobs_for_field_update"""
 
     project = create_project()
@@ -363,11 +361,11 @@ def test_generate_jobs():
         filename = RESULTDIR / Path(job_name + "_single.txt")
         reference_filename = REFERENCE_FILES_SINGLE_ZONE_GRID[n]
         write_petro_job_to_file(OWNER_STRING_SINGLE_ZONE, JOB_TYPE, job_name, filename)
-    # Compare text files with job parameters with reference for single zone jobs
-    check = filecmp.cmp(filename, reference_filename)
-    if check:
-        print("Check OK for single zone grid")
-    assert check
+        # Compare text files with job parameters with reference for single zone jobs
+        check = filecmp.cmp(filename, reference_filename)
+        if check:
+            print("Check OK for single zone grid")
+        assert check
 
     for n, job_name in enumerate(job_name_list):
         petro_job = roxar.jobs.Job.get_job(OWNER_STRING_SINGLE_ZONE, JOB_TYPE, job_name)
@@ -381,11 +379,11 @@ def test_generate_jobs():
         filename = RESULTDIR / Path(job_name + "_multi.txt")
         reference_filename = REFERENCE_FILES_MULTI_ZONE_GRID[n]
         write_petro_job_to_file(OWNER_STRING_MULTI_ZONE, JOB_TYPE, job_name, filename)
-    # Compare text files with job parameters with reference for single zone jobs
-    check = filecmp.cmp(filename, reference_filename)
-    if check:
-        print("Check OK for multi zone grid")
-    assert check
+        # Compare text files with job parameters with reference for single zone jobs
+        check = filecmp.cmp(filename, reference_filename)
+        if check:
+            print("Check OK for multi zone grid")
+        assert check
 
     for n, job_name in enumerate(job_name_list):
         petro_job = roxar.jobs.Job.get_job(OWNER_STRING_MULTI_ZONE, JOB_TYPE, job_name)

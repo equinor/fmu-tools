@@ -1,10 +1,10 @@
-grid_name: "SingleZoneBox"
-grid_file_name: "singlezonegrid.roff"
-facies_real_name: "Facies"
-facies_file_name: "singlezonefacies.roff"
-original_job_name: "original_single_zone"
+grid_name: SingleZoneBox
+grid_file_name: singlezonegrid.roff
+facies_real_name: Facies
+facies_file_name: singlezonefacies.roff
+original_job_name: original_single_zone
 # mode is either: simulation or prediction
-mode: "prediction"
+mode: prediction
 original_job_settings:
   zones:
     "":
