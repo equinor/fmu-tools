@@ -1,0 +1,20 @@
+grid_name: SingleZoneBox
+grid_file_name: singlezonegrid.roff
+facies_real_name: Facies
+facies_file_name: singlezonefacies.roff
+original_job_name: original_single_zone
+# mode is either: simulation or prediction
+mode: prediction
+original_job_settings:
+  zones:
+    "":
+      F1: 
+        P1: [0.3,  0.0001]     # [mean, stdev]
+        P2: [0.25, 0.0001]
+      F2: 
+        P1: [0.15, 0.0001]
+        P2: [0.1, 0.0001]
+      F3: 
+        P1: [0.02, 0.0001]
+        P2: [0.04, 0.0001]
+

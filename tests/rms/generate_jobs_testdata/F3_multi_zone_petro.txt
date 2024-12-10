@@ -1,0 +1,174 @@
+{
+   "Algorithm": "SIMULATION",
+   "ConditionOnBlockedWells": false,
+   "VariableNames": [
+      "F3_P1",
+      "F3_P2"
+   ],
+   "Zone Models": [
+      {
+         "Facies Models": [
+            {
+               "Correlation Model": [
+                  {
+                     "CorrelationMatrix": [
+                        [],
+                        [
+                           0.5
+                        ]
+                     ]
+                  }
+               ],
+               "FaciesName": "F3",
+               "Variable Models": [
+                  {
+                     "Transform Sequence": [
+                        {
+                           "EstimationMode": "FIXED",
+                           "Mean": [
+                              {
+                                 "Automated": false,
+                                 "Mean": 0.05000000074505806,
+                                 "SequenceNumber": 1
+                              }
+                           ],
+                           "Truncate": [
+                              {}
+                           ],
+                           "WeightLog": "- none -"
+                        }
+                     ],
+                     "VariableName": "F3_P1",
+                     "Variogram Models": [
+                        {
+                           "GeneralExponentialPower": 1.7999999523162842,
+                           "Mode": "STANDARD",
+                           "RangeAzimuth": 2500.0,
+                           "RangeVertical": 25.0,
+                           "TextureRoughness": 0.7999999523162842,
+                           "Type": "GENERAL_EXPONENTIAL",
+                           "VariogramSill": 0.009999999776482582,
+                           "VariogramSillType": "CONSTANT"
+                        }
+                     ]
+                  },
+                  {
+                     "Transform Sequence": [
+                        {
+                           "EstimationMode": "FIXED",
+                           "Mean": [
+                              {
+                                 "Automated": false,
+                                 "Mean": 0.07000000029802322,
+                                 "SequenceNumber": 1
+                              }
+                           ],
+                           "Truncate": [
+                              {}
+                           ],
+                           "WeightLog": "- none -"
+                        }
+                     ],
+                     "VariableName": "F3_P2",
+                     "Variogram Models": [
+                        {
+                           "GeneralExponentialPower": 1.7999999523162842,
+                           "Mode": "STANDARD",
+                           "RangeAzimuth": 2500.0,
+                           "RangeVertical": 25.0,
+                           "TextureRoughness": 0.7999999523162842,
+                           "Type": "GENERAL_EXPONENTIAL",
+                           "VariogramSill": 0.014999999664723873,
+                           "VariogramSillType": "CONSTANT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "ZoneName": "Zone1"
+      },
+      {
+         "Facies Models": [
+            {
+               "Correlation Model": [
+                  {
+                     "CorrelationMatrix": [
+                        [],
+                        [
+                           0.5
+                        ]
+                     ]
+                  }
+               ],
+               "FaciesName": "F3",
+               "Variable Models": [
+                  {
+                     "Transform Sequence": [
+                        {
+                           "EstimationMode": "FIXED",
+                           "Mean": [
+                              {
+                                 "Automated": false,
+                                 "Mean": 0.05000000074505806,
+                                 "SequenceNumber": 1
+                              }
+                           ],
+                           "Truncate": [
+                              {}
+                           ],
+                           "WeightLog": "- none -"
+                        }
+                     ],
+                     "VariableName": "F3_P1",
+                     "Variogram Models": [
+                        {
+                           "GeneralExponentialPower": 1.7999999523162842,
+                           "Mode": "STANDARD",
+                           "RangeAzimuth": 2500.0,
+                           "RangeVertical": 25.0,
+                           "TextureRoughness": 0.7999999523162842,
+                           "Type": "GENERAL_EXPONENTIAL",
+                           "VariogramSill": 0.009999999776482582,
+                           "VariogramSillType": "CONSTANT"
+                        }
+                     ]
+                  },
+                  {
+                     "Transform Sequence": [
+                        {
+                           "EstimationMode": "FIXED",
+                           "Mean": [
+                              {
+                                 "Automated": false,
+                                 "Mean": 0.07000000029802322,
+                                 "SequenceNumber": 1
+                              }
+                           ],
+                           "Truncate": [
+                              {}
+                           ],
+                           "WeightLog": "- none -"
+                        }
+                     ],
+                     "VariableName": "F3_P2",
+                     "Variogram Models": [
+                        {
+                           "GeneralExponentialPower": 1.7999999523162842,
+                           "Mode": "STANDARD",
+                           "RangeAzimuth": 2500.0,
+                           "RangeVertical": 25.0,
+                           "TextureRoughness": 0.7999999523162842,
+                           "Type": "GENERAL_EXPONENTIAL",
+                           "VariogramSill": 0.014999999664723873,
+                           "VariogramSillType": "CONSTANT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "ZoneName": "Zone2"
+      }
+   ]
+}
