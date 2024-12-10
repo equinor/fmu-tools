@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.17.0 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.17.1.dev1+g21780d4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=eb5af363"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0f8ae5f7"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
@@ -320,6 +321,238 @@ useful attributes as pressure, wellname, date etc.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fmu.tools.rms.generate_petro_jobs_for_field_update">
+<span id="fmu-tools-rms-generate-petro-jobs-for-field-update-module"></span><h2>fmu.tools.rms.generate_petro_jobs_for_field_update module<a class="headerlink" href="#module-fmu.tools.rms.generate_petro_jobs_for_field_update" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>Description:</dt><dd><p>Implementation of a function to create new petrosim jobs, one per facies
+given an existing petrosim job using facies realization as input.</p>
+</dd>
+</dl>
+<p>Summary:</p>
+<blockquote>
+<div><p>The current script is made to simplify the preparation step of the RMS project by
+creating the necessary petrosim jobs for a workflow supporting simultaneous update
+of both facies and petrophysical properties in ERT.</p>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.main">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_unused</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.main" title="Permalink to this definition"></a></dt>
+<dd><p>Generate new RMS petrosim jobs from an original petrosim job.</p>
+<p>Description
+:rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<blockquote>
+<div><p>This function can be used to generate new petrosim jobs in RMS from an existing
+petrosim job. The input (original) petrosim job is assumed to be a job for
+either a single zone or multi zone grid where the petrophysical properties
+are conditioned to an existing facies realization.
+The new generated petrosim jobs will not use facies realization as input,
+but assume that all grid cells belongs to the same facies.
+Hence, if the original petrosim job specify model parameters for
+petrophysical properties conditioned to a facies
+realization with N different facies, this script can generate up to N new
+petrosim jobs, one per facies the user wants to use in field parameter
+updating in ERT.</p>
+</div></blockquote>
+<p>Input</p>
+<blockquote>
+<div><p>An existing RMS project with a petrophysical job conditioning petrophysical
+properties on an existing facies realization.</p>
+<p>A yaml format configuration file specifying necessary input to the function.
+This includes name of original petrosim job, grid model name and for each zone
+and each facies which petrophysical variables to use in the new petrosim jobs
+that are created. It is possible to not use all petrophysical variables in the
+original job and this can vary from facies to facies and zone to zone.</p>
+</div></blockquote>
+<p>Output</p>
+<blockquote>
+<div><p>A set of new petrosim jobs, one per facies that is specified in at least
+one of the zones. For a multi zone grid, each of the new petrosim jobs will
+contain specification of the petrophysical properties that is to be modelled
+for each zone for a given facies. The new jobs will get a name reflecting which
+facies it belongs to.</p>
+</div></blockquote>
+<p>How to use the new petrosim jobs in the RMS workflow</p>
+<blockquote>
+<div><p>When initial ensemble is created (ERT iteration = 0)</p>
+<blockquote>
+<div><p>The RMS workflow should first use the original petrosim job to generate
+realizations of petrophysical properties as usual when not all of the
+petrophysical properties are going to be used as field parameters in RMS.
+If all petrophysical properties are going to be updated as field parameters
+in ERT, it is not necessary to do this step.
+Add all the new petrosim jobs (one per facies) into the workflow in RMS.
+Copy the petrophysical property realizations for each facies from the
+geomodel grid into the ERTBOX grid used for field parameter update in ERT.
+Export the petrophysical properties for each of the facies to ERT in
+ROFF format. Use a script that take as input the facies realization and
+the petrophysical properties per facies and use the facies realization
+as filter to select which values to copy from the petrophysical realizations
+to put into the petrophysical property parameter that was generated by
+the original job. This will overwrite the petrophysical properties
+in the realization from the original job for those
+parameters that are used as field parameters to be updated by ERT.
+The other petrophysical parameters generated by the original job but not
+used as field parameters in ERT will be untouched.</p>
+</div></blockquote>
+<p>When updated ensemble is fetched from ERT (ERT iteration &gt; 0):</p>
+<blockquote>
+<div><p>Run the original petrosim job to generate all petrophysical parameters
+in the geogrid. Import the updated field parameters for petrophysical
+properties per facies into ERTBOX grid.
+Copy the petrophysical property parameters that were updated as
+field parameters by ERT into geomodel grid from the ERTBOX grid.
+This operation is the same as the last step
+when initial ensemble realization was created. This step will then
+overwrite the petrophysical property parameters already created by
+the original job by the new values updated by ERT. All petrophysical
+property parameters not updated as field parameters by ERT will be
+untouched and will therefore have the same values as they
+had after the original petrosim job was run.</p>
+</div></blockquote>
+</div></blockquote>
+<p>Summary</p>
+<blockquote>
+<div><p>The current function is made to simplify the preparation step of the
+RMS project by creating the necessary petrosim jobs for a workflow
+supporting simultaneous update of both facies and petrophysical
+properties in ERT.</p>
+</div></blockquote>
+<p>Usage of this function</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Input</dt><dd><p>Name of config file with specification of which field parameters
+to simulate per zone per facies.</p>
+</dd>
+<dt>Optional parameters</dt><dd><p>debug info (True/False),
+report field parameters not used (True/False)</p>
+</dd>
+<dt>Output</dt><dd><p>A set of new petro sim jobs to appear in RMS project.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">check_rms_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#check_rms_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">read_specification_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#read_specification_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">check_specification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#check_specification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">define_new_variable_names_and_correlation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_var_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_var_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_corr_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#define_new_variable_names_and_correlation_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">sort_new_var_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">original_variable_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_variable_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#sort_new_var_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">get_original_job_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner_string_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#get_original_job_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">create_copy_of_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner_string_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_job_arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_job_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#create_copy_of_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">get_zone_names_per_facies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">used_petro_per_zone_per_facies_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#get_zone_names_per_facies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">get_used_petro_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">used_petro_per_zone_per_facies_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#get_used_petro_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">set_new_var_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">facies_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">petro_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#set_new_var_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">report_unused_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner_string_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_per_zone_per_facies_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#report_unused_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">check_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner_string_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_per_zone_per_facies_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_unused</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#check_consistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">create_new_petro_job_per_facies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_unused</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#create_new_petro_job_per_facies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_petro_jobs_for_field_update.</span></span><span class="sig-name descname"><span class="pre">write_petro_job_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner_string_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_petro_jobs_for_field_update.html#write_petro_job_to_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -868,6 +1101,104 @@ and load a module stored outside RMS.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_petro_jobs">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">generate_petro_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_unused</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmu.tools.rms.generate_petro_jobs" title="Permalink to this definition"></a></dt>
+<dd><p>Generate new RMS petrosim jobs from an original petrosim job.</p>
+<p>Description
+:rtype: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<blockquote>
+<div><p>This function can be used to generate new petrosim jobs in RMS from an existing
+petrosim job. The input (original) petrosim job is assumed to be a job for
+either a single zone or multi zone grid where the petrophysical properties
+are conditioned to an existing facies realization.
+The new generated petrosim jobs will not use facies realization as input,
+but assume that all grid cells belongs to the same facies.
+Hence, if the original petrosim job specify model parameters for
+petrophysical properties conditioned to a facies
+realization with N different facies, this script can generate up to N new
+petrosim jobs, one per facies the user wants to use in field parameter
+updating in ERT.</p>
+</div></blockquote>
+<p>Input</p>
+<blockquote>
+<div><p>An existing RMS project with a petrophysical job conditioning petrophysical
+properties on an existing facies realization.</p>
+<p>A yaml format configuration file specifying necessary input to the function.
+This includes name of original petrosim job, grid model name and for each zone
+and each facies which petrophysical variables to use in the new petrosim jobs
+that are created. It is possible to not use all petrophysical variables in the
+original job and this can vary from facies to facies and zone to zone.</p>
+</div></blockquote>
+<p>Output</p>
+<blockquote>
+<div><p>A set of new petrosim jobs, one per facies that is specified in at least
+one of the zones. For a multi zone grid, each of the new petrosim jobs will
+contain specification of the petrophysical properties that is to be modelled
+for each zone for a given facies. The new jobs will get a name reflecting which
+facies it belongs to.</p>
+</div></blockquote>
+<p>How to use the new petrosim jobs in the RMS workflow</p>
+<blockquote>
+<div><p>When initial ensemble is created (ERT iteration = 0)</p>
+<blockquote>
+<div><p>The RMS workflow should first use the original petrosim job to generate
+realizations of petrophysical properties as usual when not all of the
+petrophysical properties are going to be used as field parameters in RMS.
+If all petrophysical properties are going to be updated as field parameters
+in ERT, it is not necessary to do this step.
+Add all the new petrosim jobs (one per facies) into the workflow in RMS.
+Copy the petrophysical property realizations for each facies from the
+geomodel grid into the ERTBOX grid used for field parameter update in ERT.
+Export the petrophysical properties for each of the facies to ERT in
+ROFF format. Use a script that take as input the facies realization and
+the petrophysical properties per facies and use the facies realization
+as filter to select which values to copy from the petrophysical realizations
+to put into the petrophysical property parameter that was generated by
+the original job. This will overwrite the petrophysical properties
+in the realization from the original job for those
+parameters that are used as field parameters to be updated by ERT.
+The other petrophysical parameters generated by the original job but not
+used as field parameters in ERT will be untouched.</p>
+</div></blockquote>
+<p>When updated ensemble is fetched from ERT (ERT iteration &gt; 0):</p>
+<blockquote>
+<div><p>Run the original petrosim job to generate all petrophysical parameters
+in the geogrid. Import the updated field parameters for petrophysical
+properties per facies into ERTBOX grid.
+Copy the petrophysical property parameters that were updated as
+field parameters by ERT into geomodel grid from the ERTBOX grid.
+This operation is the same as the last step
+when initial ensemble realization was created. This step will then
+overwrite the petrophysical property parameters already created by
+the original job by the new values updated by ERT. All petrophysical
+property parameters not updated as field parameters by ERT will be
+untouched and will therefore have the same values as they
+had after the original petrosim job was run.</p>
+</div></blockquote>
+</div></blockquote>
+<p>Summary</p>
+<blockquote>
+<div><p>The current function is made to simplify the preparation step of the
+RMS project by creating the necessary petrosim jobs for a workflow
+supporting simultaneous update of both facies and petrophysical
+properties in ERT.</p>
+</div></blockquote>
+<p>Usage of this function</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Input</dt><dd><p>Name of config file with specification of which field parameters
+to simulate per zone per facies.</p>
+</dd>
+<dt>Optional parameters</dt><dd><p>debug info (True/False),
+report field parameters not used (True/False)</p>
+</dd>
+<dt>Output</dt><dd><p>A set of new petro sim jobs to appear in RMS project.</p>
+</dd>
+</dl>
+</div></blockquote>
 </dd></dl>
 
 </section>

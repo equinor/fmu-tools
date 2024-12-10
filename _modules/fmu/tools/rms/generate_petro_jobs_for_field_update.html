@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.rms.generate_petro_jobs_for_field_update &mdash; fmu-tools 1.17.1.dev1+g21780d4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=0f8ae5f7"></script>
+      <script src="../../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.rms.generate_petro_jobs_for_field_update</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.rms.generate_petro_jobs_for_field_update</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Description:</span>
+<span class="sd">    Implementation of a function to create new petrosim jobs, one per facies</span>
+<span class="sd">    given an existing petrosim job using facies realization as input.</span>
+
+<span class="sd">Summary:</span>
+
+<span class="sd">    The current script is made to simplify the preparation step of the RMS project by</span>
+<span class="sd">    creating the necessary petrosim jobs for a workflow supporting simultaneous update</span>
+<span class="sd">    of both facies and petrophysical properties in ERT.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">_roxar</span>  <span class="c1"># type: ignore</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">_rmsapi</span> <span class="k">as</span> <span class="nn">_roxar</span>  <span class="c1"># type: ignore</span>
+        <span class="kn">import</span> <span class="nn">roxar.jobs</span>  <span class="c1"># type: ignore</span>
+        <span class="kn">import</span> <span class="nn">roxar.jobs.Job</span>  <span class="c1"># type: ignore</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This script only supports interactive RMS usage&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">no_type_check</span>
+
+<span class="c1"># Fixed global variables</span>
+<span class="n">GRID_MODELS</span> <span class="o">=</span> <span class="s2">&quot;Grid models&quot;</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;Grid&quot;</span>
+<span class="n">JOB_TYPE</span> <span class="o">=</span> <span class="s2">&quot;Petrophysical Modeling&quot;</span>
+<span class="n">PP</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate new RMS petrosim jobs from an original petrosim job.</span>
+
+<span class="sd">    Description</span>
+
+<span class="sd">        This function can be used to generate new petrosim jobs in RMS from an existing</span>
+<span class="sd">        petrosim job. The input (original) petrosim job is assumed to be a job for</span>
+<span class="sd">        either a single zone or multi zone grid where the petrophysical properties</span>
+<span class="sd">        are conditioned to an existing facies realization.</span>
+<span class="sd">        The new generated petrosim jobs will not use facies realization as input,</span>
+<span class="sd">        but assume that all grid cells belongs to the same facies.</span>
+<span class="sd">        Hence, if the original petrosim job specify model parameters for</span>
+<span class="sd">        petrophysical properties conditioned to a facies</span>
+<span class="sd">        realization with N different facies, this script can generate up to N new</span>
+<span class="sd">        petrosim jobs, one per facies the user wants to use in field parameter</span>
+<span class="sd">        updating in ERT.</span>
+
+<span class="sd">    Input</span>
+
+<span class="sd">        An existing RMS project with a petrophysical job conditioning petrophysical</span>
+<span class="sd">        properties on an existing facies realization.</span>
+
+<span class="sd">        A yaml format configuration file specifying necessary input to the function.</span>
+<span class="sd">        This includes name of original petrosim job, grid model name and for each zone</span>
+<span class="sd">        and each facies which petrophysical variables to use in the new petrosim jobs</span>
+<span class="sd">        that are created. It is possible to not use all petrophysical variables in the</span>
+<span class="sd">        original job and this can vary from facies to facies and zone to zone.</span>
+
+<span class="sd">    Output</span>
+
+<span class="sd">        A set of new petrosim jobs, one per facies that is specified in at least</span>
+<span class="sd">        one of the zones. For a multi zone grid, each of the new petrosim jobs will</span>
+<span class="sd">        contain specification of the petrophysical properties that is to be modelled</span>
+<span class="sd">        for each zone for a given facies. The new jobs will get a name reflecting which</span>
+<span class="sd">        facies it belongs to.</span>
+
+<span class="sd">    How to use the new petrosim jobs in the RMS workflow</span>
+
+<span class="sd">        When initial ensemble is created (ERT iteration = 0)</span>
+
+<span class="sd">            The RMS workflow should first use the original petrosim job to generate</span>
+<span class="sd">            realizations of petrophysical properties as usual when not all of the</span>
+<span class="sd">            petrophysical properties are going to be used as field parameters in RMS.</span>
+<span class="sd">            If all petrophysical properties are going to be updated as field parameters</span>
+<span class="sd">            in ERT, it is not necessary to do this step.</span>
+<span class="sd">            Add all the new petrosim jobs (one per facies) into the workflow in RMS.</span>
+<span class="sd">            Copy the petrophysical property realizations for each facies from the</span>
+<span class="sd">            geomodel grid into the ERTBOX grid used for field parameter update in ERT.</span>
+<span class="sd">            Export the petrophysical properties for each of the facies to ERT in</span>
+<span class="sd">            ROFF format. Use a script that take as input the facies realization and</span>
+<span class="sd">            the petrophysical properties per facies and use the facies realization</span>
+<span class="sd">            as filter to select which values to copy from the petrophysical realizations</span>
+<span class="sd">            to put into the petrophysical property parameter that was generated by</span>
+<span class="sd">            the original job. This will overwrite the petrophysical properties</span>
+<span class="sd">            in the realization from the original job for those</span>
+<span class="sd">            parameters that are used as field parameters to be updated by ERT.</span>
+<span class="sd">            The other petrophysical parameters generated by the original job but not</span>
+<span class="sd">            used as field parameters in ERT will be untouched.</span>
+
+<span class="sd">        When updated ensemble is fetched from ERT (ERT iteration &gt; 0):</span>
+
+<span class="sd">            Run the original petrosim job to generate all petrophysical parameters</span>
+<span class="sd">            in the geogrid. Import the updated field parameters for petrophysical</span>
+<span class="sd">            properties per facies into ERTBOX grid.</span>
+<span class="sd">            Copy the petrophysical property parameters that were updated as</span>
+<span class="sd">            field parameters by ERT into geomodel grid from the ERTBOX grid.</span>
+<span class="sd">            This operation is the same as the last step</span>
+<span class="sd">            when initial ensemble realization was created. This step will then</span>
+<span class="sd">            overwrite the petrophysical property parameters already created by</span>
+<span class="sd">            the original job by the new values updated by ERT. All petrophysical</span>
+<span class="sd">            property parameters not updated as field parameters by ERT will be</span>
+<span class="sd">            untouched and will therefore have the same values as they</span>
+<span class="sd">            had after the original petrosim job was run.</span>
+
+
+<span class="sd">    Summary</span>
+
+<span class="sd">        The current function is made to simplify the preparation step of the</span>
+<span class="sd">        RMS project by creating the necessary petrosim jobs for a workflow</span>
+<span class="sd">        supporting simultaneous update of both facies and petrophysical</span>
+<span class="sd">        properties in ERT.</span>
+
+<span class="sd">    Usage of this function</span>
+
+<span class="sd">        Input</span>
+<span class="sd">            Name of config file with specification of which field parameters</span>
+<span class="sd">            to simulate per zone per facies.</span>
+
+<span class="sd">        Optional parameters</span>
+<span class="sd">            debug info (True/False),</span>
+<span class="sd">            report field parameters not used (True/False)</span>
+
+<span class="sd">        Output</span>
+<span class="sd">            A set of new petro sim jobs to appear in RMS project.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+    <span class="n">create_new_petro_job_per_facies</span><span class="p">(</span>
+        <span class="n">spec_dict</span><span class="p">,</span> <span class="n">debug_print</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span> <span class="n">report_unused</span><span class="o">=</span><span class="n">report_unused</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_rms_project"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project">[docs]</a><span class="nd">@no_type_check</span>
+<span class="k">def</span> <span class="nf">check_rms_project</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">_roxar</span><span class="o">.</span><span class="n">Project</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;This run must be ran in an RoxAPI environment!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_specification_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file">[docs]</a><span class="k">def</span> <span class="nf">read_specification_file</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yml_file</span><span class="p">:</span>
+        <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yml_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">check</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">check_specification</span><span class="p">(</span><span class="n">spec_dict</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Errors found in </span><span class="si">{</span><span class="n">config_file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec_dict</span></div>
+
+
+<div class="viewcode-block" id="check_specification"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification">[docs]</a><span class="k">def</span> <span class="nf">check_specification</span><span class="p">(</span><span class="n">spec_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># Check that the same petro variables are specified for</span>
+    <span class="c1"># all zones using the same facies. This means that for instance</span>
+    <span class="c1"># if the case has zone A,B,C and facies F1 is present in zone A and C</span>
+    <span class="c1"># and zone A for facies F1 has petro variables P1, P2, then</span>
+    <span class="c1"># zone C which also has facies F1 must use petro variables P1, P2</span>
+    <span class="c1"># for facies F1.</span>
+    <span class="n">used_petro_var_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_petro_var_dict</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">zone_name1</span><span class="p">,</span> <span class="n">zone_dict1</span> <span class="ow">in</span> <span class="n">used_petro_var_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">zone_name2</span><span class="p">,</span> <span class="n">zone_dict2</span> <span class="ow">in</span> <span class="n">used_petro_var_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">zone_name1</span> <span class="o">!=</span> <span class="n">zone_name2</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">facies_name1</span><span class="p">,</span> <span class="n">petro_list1</span> <span class="ow">in</span> <span class="n">zone_dict1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">petro_set1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">petro_list1</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">facies_name2</span><span class="p">,</span> <span class="n">petro_list2</span> <span class="ow">in</span> <span class="n">zone_dict2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="n">petro_set2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">petro_list2</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="n">facies_name1</span> <span class="o">==</span> <span class="n">facies_name2</span>
+                                <span class="ow">and</span> <span class="n">petro_set1</span> <span class="o">!=</span> <span class="n">petro_set2</span>
+                            <span class="p">):</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="s2">&quot;Petro variables to use must be &quot;</span>
+                                    <span class="s2">&quot;the same for all zones for facies: &quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">facies_name1</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="p">)</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="sa">f</span><span class="s2">&quot; This is specified for zone </span><span class="si">{</span><span class="n">zone_name1</span><span class="si">}</span><span class="s2">:&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">petro_list1</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="p">)</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="sa">f</span><span class="s2">&quot; This is specified for zone </span><span class="si">{</span><span class="n">zone_name2</span><span class="si">}</span><span class="s2">:&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">petro_list2</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="p">)</span>
+                                <span class="n">ok</span> <span class="o">=</span> <span class="kc">False</span>
+                                <span class="k">break</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">ok</span></div>
+
+
+<div class="viewcode-block" id="define_new_variable_names_and_correlation_matrix"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix">[docs]</a><span class="k">def</span> <span class="nf">define_new_variable_names_and_correlation_matrix</span><span class="p">(</span>
+    <span class="n">orig_var_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">new_var_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">orig_corr_matrix</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+    <span class="n">nvar_new</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_var_names</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nvar_new</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># No correlation matrix</span>
+        <span class="k">return</span> <span class="n">new_var_names</span><span class="p">,</span> <span class="p">[]</span>
+
+    <span class="c1"># Order the var_names_to_keep list to be in same sequence</span>
+    <span class="c1"># as orig_var_names for those variables that are common with the var_names_to_keep</span>
+    <span class="c1"># Example: the keep list is: [&quot;A&quot;, &quot;C&quot;,  &quot;B&quot;]</span>
+    <span class="c1"># and the original var name list</span>
+    <span class="c1"># is [&quot;A&quot;, &quot;D&quot;, &quot;F&quot;, &quot;B&quot;, &quot;C&quot;]</span>
+    <span class="c1"># The sorted keep list should be: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]</span>
+
+    <span class="n">sorted_new_var_names</span> <span class="o">=</span> <span class="n">sort_new_var_names</span><span class="p">(</span>
+        <span class="n">orig_var_names</span><span class="p">,</span> <span class="n">facies_name</span><span class="p">,</span> <span class="n">new_var_names</span>
+    <span class="p">)</span>
+    <span class="n">new_corr_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">index_in_orig_var</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">orig_var_names</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_var_names</span><span class="p">:</span>
+            <span class="n">index_in_orig_var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvar_new</span><span class="p">):</span>
+        <span class="n">row_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+            <span class="n">row_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">orig_corr_matrix</span><span class="p">[</span><span class="n">index_in_orig_var</span><span class="p">[</span><span class="n">row</span><span class="p">]][</span><span class="n">index_in_orig_var</span><span class="p">[</span><span class="n">col</span><span class="p">]]</span>
+            <span class="p">)</span>
+        <span class="n">new_corr_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sorted_new_var_names</span><span class="p">,</span> <span class="n">new_corr_matrix</span></div>
+
+
+<div class="viewcode-block" id="sort_new_var_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names">[docs]</a><span class="k">def</span> <span class="nf">sort_new_var_names</span><span class="p">(</span>
+    <span class="n">original_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">sorted_keep_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">original_variable_names</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">,</span> <span class="n">varname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_variable_names</span><span class="p">:</span>
+            <span class="n">sorted_keep_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sorted_keep_list</span></div>
+
+
+<div class="viewcode-block" id="get_original_job_settings"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings">[docs]</a><span class="k">def</span> <span class="nf">get_original_job_settings</span><span class="p">(</span>
+    <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">original_job</span> <span class="o">=</span> <span class="n">roxar</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">get_job</span><span class="p">(</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">original_job</span><span class="o">.</span><span class="n">get_arguments</span><span class="p">(</span><span class="n">skip_defaults</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_copy_of_job"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job">[docs]</a><span class="k">def</span> <span class="nf">create_copy_of_job</span><span class="p">(</span>
+    <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">original_job_arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">new_job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">new_job</span> <span class="o">=</span> <span class="n">roxar</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">new_job_name</span><span class="p">)</span>
+    <span class="n">new_job</span><span class="o">.</span><span class="n">set_arguments</span><span class="p">(</span><span class="n">original_job_arguments</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_job</span></div>
+
+
+<div class="viewcode-block" id="get_zone_names_per_facies"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies">[docs]</a><span class="k">def</span> <span class="nf">get_zone_names_per_facies</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="n">zone_names_with_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">facies_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">facies_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">zone_names_with_facies_dict</span><span class="p">:</span>
+                <span class="n">zone_names_with_facies_dict</span><span class="p">[</span><span class="n">facies_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">zone_names_with_facies_dict</span><span class="p">[</span><span class="n">facies_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zone_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zone_names_with_facies_dict</span></div>
+
+
+<div class="viewcode-block" id="get_used_petro_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names">[docs]</a><span class="k">def</span> <span class="nf">get_used_petro_names</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">all_petro_var_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">petro_per_facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">petro_list</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">petro_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">petro_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_petro_var_list</span><span class="p">:</span>
+                    <span class="n">all_petro_var_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">petro_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_petro_var_list</span></div>
+
+
+<div class="viewcode-block" id="set_new_var_name"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name">[docs]</a><span class="k">def</span> <span class="nf">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">petro_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">facies_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">petro_name</span></div>
+
+
+<div class="viewcode-block" id="report_unused_fields"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields">[docs]</a><span class="k">def</span> <span class="nf">report_unused_fields</span><span class="p">(</span>
+    <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">job_arguments</span> <span class="o">=</span> <span class="n">get_original_job_settings</span><span class="p">(</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="n">JOB_TYPE</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+    <span class="n">zone_models_list</span> <span class="o">=</span> <span class="n">job_arguments</span><span class="p">[</span><span class="s2">&quot;Zone Models&quot;</span><span class="p">]</span>
+    <span class="c1"># First report which field parameters from original model</span>
+    <span class="c1"># that is not specified to be used</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Report of unused petrophysical variables in generated jobs:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">zone_model</span> <span class="ow">in</span> <span class="n">zone_models_list</span><span class="p">:</span>
+        <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_model</span><span class="p">[</span><span class="s2">&quot;ZoneName&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">zone_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; No field parameters are used from zone: </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">petro_per_facies_dict</span> <span class="o">=</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">[</span><span class="n">zone_name</span><span class="p">]</span>
+            <span class="n">facies_models_list</span> <span class="o">=</span> <span class="n">zone_model</span><span class="p">[</span><span class="s2">&quot;Facies Models&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">facies_model</span> <span class="ow">in</span> <span class="n">facies_models_list</span><span class="p">:</span>
+                <span class="n">facies_name</span> <span class="o">=</span> <span class="n">facies_model</span><span class="p">[</span><span class="s2">&quot;FaciesName&quot;</span><span class="p">]</span>
+                <span class="n">petro_model_list</span> <span class="o">=</span> <span class="n">facies_model</span><span class="p">[</span><span class="s2">&quot;Variable Models&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">facies_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot; No field parameters are used for facies &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">facies_name</span><span class="si">}</span><span class="s2"> for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">petro_list</span> <span class="o">=</span> <span class="n">petro_per_facies_dict</span><span class="p">[</span><span class="n">facies_name</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">petro_model</span> <span class="ow">in</span> <span class="n">petro_model_list</span><span class="p">:</span>
+                        <span class="n">var_name</span> <span class="o">=</span> <span class="n">petro_model</span><span class="p">[</span><span class="s2">&quot;VariableName&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">var_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">petro_list</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot; Field parameter </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2"> is not used &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;for facies </span><span class="si">{</span><span class="n">facies_name</span><span class="si">}</span><span class="s2"> for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_consistency"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency">[docs]</a><span class="k">def</span> <span class="nf">check_consistency</span><span class="p">(</span>
+    <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Check if there are specified field parameters which does not exist</span>
+    <span class="c1"># in the original job and report errors if this is the case</span>
+    <span class="n">job_arguments</span> <span class="o">=</span> <span class="n">get_original_job_settings</span><span class="p">(</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="n">JOB_TYPE</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
+    <span class="n">zone_models_list</span> <span class="o">=</span> <span class="n">job_arguments</span><span class="p">[</span><span class="s2">&quot;Zone Models&quot;</span><span class="p">]</span>
+    <span class="n">specified_petro_var_list</span> <span class="o">=</span> <span class="n">get_used_petro_names</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">)</span>
+    <span class="n">err_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">specified_petro_var</span> <span class="ow">in</span> <span class="n">specified_petro_var_list</span><span class="p">:</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">zone_model</span> <span class="ow">in</span> <span class="n">zone_models_list</span><span class="p">:</span>
+            <span class="n">facies_models_list</span> <span class="o">=</span> <span class="n">zone_model</span><span class="p">[</span><span class="s2">&quot;Facies Models&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">facies_model</span> <span class="ow">in</span> <span class="n">facies_models_list</span><span class="p">:</span>
+                <span class="n">petro_model_list</span> <span class="o">=</span> <span class="n">facies_model</span><span class="p">[</span><span class="s2">&quot;Variable Models&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">petro_model</span> <span class="ow">in</span> <span class="n">petro_model_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">specified_petro_var</span> <span class="o">==</span> <span class="n">petro_model</span><span class="p">[</span><span class="s2">&quot;VariableName&quot;</span><span class="p">]:</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">err_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">specified_petro_var</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">err_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error in specification of used petrophysical variables.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unknown petrophysical variables:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">err_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown petrophysical variable names are specified.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_new_petro_job_per_facies"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies">[docs]</a><span class="k">def</span> <span class="nf">create_new_petro_job_per_facies</span><span class="p">(</span>
+    <span class="n">spec_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">grid_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;grid_name&quot;</span><span class="p">]</span>
+    <span class="n">original_job_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;original_job_name&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_per_zone_per_facies_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Only one zone, set zone name to empty</span>
+        <span class="n">zone_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmp</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">[</span><span class="n">zone_name</span><span class="p">]</span>
+        <span class="n">used_petro_per_zone_per_facies_dict</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="c1"># Original job parameter setting</span>
+    <span class="n">owner_string_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">GRID_MODELS</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">GRID</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">report_unused</span><span class="p">:</span>
+        <span class="n">report_unused_fields</span><span class="p">(</span>
+            <span class="n">owner_string_list</span><span class="p">,</span> <span class="n">original_job_name</span><span class="p">,</span> <span class="n">used_petro_per_zone_per_facies_dict</span>
+        <span class="p">)</span>
+
+    <span class="n">check_consistency</span><span class="p">(</span>
+        <span class="n">owner_string_list</span><span class="p">,</span>
+        <span class="n">original_job_name</span><span class="p">,</span>
+        <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">,</span>
+        <span class="n">report_unused</span><span class="o">=</span><span class="n">report_unused</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">orig_job_arguments</span> <span class="o">=</span> <span class="n">get_original_job_settings</span><span class="p">(</span>
+        <span class="n">owner_string_list</span><span class="p">,</span> <span class="n">JOB_TYPE</span><span class="p">,</span> <span class="n">original_job_name</span>
+    <span class="p">)</span>
+
+    <span class="n">zone_names_per_facies_dict</span> <span class="o">=</span> <span class="n">get_zone_names_per_facies</span><span class="p">(</span>
+        <span class="n">used_petro_per_zone_per_facies_dict</span>
+    <span class="p">)</span>
+
+    <span class="c1"># for each facies used in any zone, find the zone models having the facies</span>
+    <span class="n">original_zone_models_list</span> <span class="o">=</span> <span class="n">orig_job_arguments</span><span class="p">[</span><span class="s2">&quot;Zone Models&quot;</span><span class="p">]</span>
+    <span class="n">new_job_name_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">facies_name</span><span class="p">,</span> <span class="n">zone_name_list</span> <span class="ow">in</span> <span class="n">zone_names_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Facies:  </span><span class="si">{</span><span class="n">facies_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">new_job_arguments_current</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">orig_job_arguments</span><span class="p">)</span>
+        <span class="c1"># Remove unused keys or keys that should be set to default for new job</span>
+        <span class="k">del</span> <span class="n">new_job_arguments_current</span><span class="p">[</span><span class="s2">&quot;InputFaciesProperty&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">new_job_arguments_current</span><span class="p">[</span><span class="s2">&quot;PrefixOutputName&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Only keep specification for zones having the facies</span>
+        <span class="n">new_job_arguments_current</span><span class="p">[</span><span class="s2">&quot;Zone Models&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_variable_names_all_zones</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">zone_model_dict</span> <span class="ow">in</span> <span class="n">original_zone_models_list</span><span class="p">:</span>
+            <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_model_dict</span><span class="p">[</span><span class="s2">&quot;ZoneName&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">zone_name</span> <span class="ow">in</span> <span class="n">zone_name_list</span><span class="p">:</span>
+                <span class="n">zone_model_dict_current</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zone_model_dict</span><span class="p">)</span>
+                <span class="n">new_job_arguments_current</span><span class="p">[</span><span class="s2">&quot;Zone Models&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zone_model_dict_current</span><span class="p">)</span>
+                <span class="c1"># for this zone model remove all specifications not relevant</span>
+                <span class="c1"># for current facies_name</span>
+
+                <span class="n">used_petro_var_list</span> <span class="o">=</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">[</span><span class="n">zone_name</span><span class="p">][</span>
+                    <span class="n">facies_name</span>
+                <span class="p">]</span>
+
+                <span class="c1"># Loop over facies for this zone and keep only current facies</span>
+                <span class="n">tmp_list</span> <span class="o">=</span> <span class="n">zone_model_dict_current</span><span class="p">[</span><span class="s2">&quot;Facies Models&quot;</span><span class="p">]</span>
+                <span class="n">current_facies_model_dict</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">facies_model_dict</span> <span class="ow">in</span> <span class="n">tmp_list</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">facies_model_dict</span><span class="p">[</span><span class="s2">&quot;FaciesName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">facies_name</span><span class="p">:</span>
+                        <span class="n">current_facies_model_dict</span> <span class="o">=</span> <span class="n">facies_model_dict</span>
+                        <span class="k">break</span>
+                <span class="c1"># Here at least one facies model must exist in the tmp_list,</span>
+                <span class="c1"># if not there is a consistency error in input dictionary</span>
+                <span class="c1"># used_petro_per_zone_per_facies_dict related to the</span>
+                <span class="c1"># specified original job.</span>
+                <span class="k">if</span> <span class="n">current_facies_model_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;There are some facies name errors in input dict&quot;</span>
+                        <span class="s2">&quot; &#39;used_petro_per_zone_per_facies_dict&#39;. &quot;</span>
+                        <span class="s2">&quot;Check consistency with original job &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">original_job_name</span><span class="si">}</span><span class="s2">&#39; and facies name &#39;</span><span class="si">{</span><span class="n">facies_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="p">)</span>
+                <span class="c1"># Assign current facies model as only entry in the list</span>
+                <span class="n">zone_model_dict_current</span><span class="p">[</span><span class="s2">&quot;Facies Models&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_facies_model_dict</span><span class="p">]</span>
+
+                <span class="c1"># Loop over petro variable for this facies model and only keep</span>
+                <span class="c1"># the petro variables specified to be used</span>
+                <span class="n">new_petro_variable_model_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">new_variable_names</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">current_petro_variable_model_list</span> <span class="o">=</span> <span class="n">current_facies_model_dict</span><span class="p">[</span>
+                    <span class="s2">&quot;Variable Models&quot;</span>
+                <span class="p">]</span>
+                <span class="k">for</span> <span class="n">petro_variable_dict</span> <span class="ow">in</span> <span class="n">current_petro_variable_model_list</span><span class="p">:</span>
+                    <span class="n">petro_name</span> <span class="o">=</span> <span class="n">petro_variable_dict</span><span class="p">[</span><span class="s2">&quot;VariableName&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">used_petro_var_list</span><span class="p">:</span>
+                        <span class="c1"># Set a new name of the petro variables to keep</span>
+                        <span class="n">new_petro_name</span> <span class="o">=</span> <span class="n">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">,</span> <span class="n">petro_name</span><span class="p">)</span>
+                        <span class="n">petro_variable_dict</span><span class="p">[</span><span class="s2">&quot;VariableName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_petro_name</span>
+                        <span class="n">new_variable_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_petro_name</span><span class="p">)</span>
+                        <span class="n">new_petro_variable_model_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">petro_variable_dict</span><span class="p">)</span>
+                <span class="n">current_facies_model_dict</span><span class="p">[</span><span class="s2">&quot;Variable Models&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">new_petro_variable_model_list</span>
+                <span class="p">)</span>
+
+                <span class="n">original_variable_names</span> <span class="o">=</span> <span class="n">orig_job_arguments</span><span class="p">[</span><span class="s2">&quot;VariableNames&quot;</span><span class="p">]</span>
+                <span class="c1"># Only one element in this always ??????????</span>
+                <span class="n">original_corr_model_dict</span> <span class="o">=</span> <span class="n">current_facies_model_dict</span><span class="p">[</span>
+                    <span class="s2">&quot;Correlation Model&quot;</span>
+                <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">original_corr_matrix</span> <span class="o">=</span> <span class="n">original_corr_model_dict</span><span class="p">[</span><span class="s2">&quot;CorrelationMatrix&quot;</span><span class="p">]</span>
+                <span class="n">new_variable_names</span><span class="p">,</span> <span class="n">new_corr_matrix</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">define_new_variable_names_and_correlation_matrix</span><span class="p">(</span>
+                        <span class="n">original_variable_names</span><span class="p">,</span>
+                        <span class="n">facies_name</span><span class="p">,</span>
+                        <span class="n">new_variable_names</span><span class="p">,</span>
+                        <span class="n">original_corr_matrix</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">original_corr_model_dict</span><span class="p">[</span><span class="s2">&quot;CorrelationMatrix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_corr_matrix</span>
+                <span class="c1"># Add variable names for current zone which is not already</span>
+                <span class="c1"># within the list</span>
+                <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">new_variable_names</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">var_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_variable_names_all_zones</span><span class="p">:</span>
+                        <span class="n">new_variable_names_all_zones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+
+        <span class="n">new_job_arguments_current</span><span class="p">[</span><span class="s2">&quot;VariableNames&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_variable_names_all_zones</span>
+
+        <span class="n">new_job_name</span> <span class="o">=</span> <span class="n">facies_name</span> <span class="o">+</span> <span class="s2">&quot;_petro&quot;</span>
+        <span class="n">new_job_name</span> <span class="o">=</span> <span class="n">new_job_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">new_job_name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_job_name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Create job:  </span><span class="si">{</span><span class="n">new_job_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="n">PP</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">new_job_arguments_current</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">new_job</span> <span class="o">=</span> <span class="n">create_copy_of_job</span><span class="p">(</span>
+            <span class="n">owner_string_list</span><span class="p">,</span> <span class="n">JOB_TYPE</span><span class="p">,</span> <span class="n">new_job_arguments_current</span><span class="p">,</span> <span class="n">new_job_name</span>
+        <span class="p">)</span>
+        <span class="n">ok</span><span class="p">,</span> <span class="n">err_msg_list</span><span class="p">,</span> <span class="n">warn_msg_list</span> <span class="o">=</span> <span class="n">roxar</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">new_job</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error messages from created job object:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">err_msg</span> <span class="ow">in</span> <span class="n">err_msg_list</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warnings from created job object:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">warn_msg</span> <span class="ow">in</span> <span class="n">warn_msg_list</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">warn_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The job with name  </span><span class="si">{</span><span class="n">new_job_name</span><span class="si">}</span><span class="s2"> is not saved.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save new job: </span><span class="si">{</span><span class="n">new_job_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">new_job_name_list</span></div>
+
+
+<div class="viewcode-block" id="write_petro_job_to_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file">[docs]</a><span class="k">def</span> <span class="nf">write_petro_job_to_file</span><span class="p">(</span>
+    <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">job_instance</span> <span class="o">=</span> <span class="n">roxar</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">get_job</span><span class="p">(</span>
+        <span class="n">owner</span><span class="o">=</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">job_type</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">job_name</span>
+    <span class="p">)</span>
+    <span class="n">arguments</span> <span class="o">=</span> <span class="n">job_instance</span><span class="o">.</span><span class="n">get_arguments</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Write file: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">config_file</span> <span class="o">=</span> <span class="s2">&quot;generate_petro_jobs.yml&quot;</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

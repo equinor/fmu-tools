@@ -12,6 +12,14 @@ fmu.tools.rms.create\_rft\_ertobs module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.generate\_petro\_jobs\_for\_field\_update module
+--------------------------------------------------------------
+
+.. automodule:: fmu.tools.rms.generate_petro_jobs_for_field_update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.import\_localmodules module
 -----------------------------------------
 

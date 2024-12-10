@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.17.0 documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.17.1.dev1+g21780d4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=eb5af363"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=0f8ae5f7"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
@@ -386,6 +387,24 @@
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.generate_petro_jobs_for_field_update">fmu.tools.rms.generate_petro_jobs_for_field_update module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project"><code class="docutils literal notranslate"><span class="pre">check_rms_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file"><code class="docutils literal notranslate"><span class="pre">read_specification_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification"><code class="docutils literal notranslate"><span class="pre">check_specification()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix"><code class="docutils literal notranslate"><span class="pre">define_new_variable_names_and_correlation_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names"><code class="docutils literal notranslate"><span class="pre">sort_new_var_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings"><code class="docutils literal notranslate"><span class="pre">get_original_job_settings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job"><code class="docutils literal notranslate"><span class="pre">create_copy_of_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies"><code class="docutils literal notranslate"><span class="pre">get_zone_names_per_facies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names"><code class="docutils literal notranslate"><span class="pre">get_used_petro_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name"><code class="docutils literal notranslate"><span class="pre">set_new_var_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields"><code class="docutils literal notranslate"><span class="pre">report_unused_fields()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency"><code class="docutils literal notranslate"><span class="pre">check_consistency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies"><code class="docutils literal notranslate"><span class="pre">create_new_petro_job_per_facies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file"><code class="docutils literal notranslate"><span class="pre">write_petro_job_to_file()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.import_localmodules">fmu.tools.rms.import_localmodules module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule"><code class="docutils literal notranslate"><span class="pre">import_localmodule()</span></code></a></li>
 </ul>
@@ -426,6 +445,7 @@
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rmsvolumetrics_txt2df"><code class="docutils literal notranslate"><span class="pre">rmsvolumetrics_txt2df()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_localmodule"><code class="docutils literal notranslate"><span class="pre">import_localmodule()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs"><code class="docutils literal notranslate"><span class="pre">generate_petro_jobs()</span></code></a></li>
 </ul>
 </li>
 </ul>
