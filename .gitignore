@@ -71,3 +71,4 @@ target/
 .projectile
 .vscode
 src/fmu/tools/version.py
+.venv/
