@@ -12,7 +12,7 @@ write_to = "src/fmu/tools/version.py"
 name = "fmu-tools"
 description = "Library for various tools and scripts within Fast Model Update"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { file = "LICENSE" }
 authors = [
     { name = "Equinor", email = "fg_fmu-atlas@equinor.com" },
@@ -26,7 +26,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
     "Topic :: Utilities",
     "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -87,18 +86,21 @@ ignore = [
     "C901",
 ]
 select = [
-    "C",
-    "E",
-    "F",
-    "I",
-    "PIE",
-    "Q",
-    "RET",
-    "RSE",
-    "SIM",    
-    "TCH",
-    "TID",
-    "W",
+    # "B",  # flake-8-bugbear
+    "C",  # pylint-convention
+    "E",  # pycodestyle-error
+    "F",  # pyflakes
+    "I",  # isort
+    "NPY",  # numpy
+    "PIE",  # flake8-pie
+    "Q",  # flake8-quotes
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports
+    # "UP",  # pyupgrade
+    "W",  # pylint-warnings
 ]
 
 [tool.ruff.lint.isort]
