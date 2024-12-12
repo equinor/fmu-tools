@@ -59,7 +59,7 @@ In addition:
 - Start with documentation and tests. Think, design and communicate first!
 - Docstrings shall start and end with """ and use Google style.
 - Use pytest as testing engine
-- Code shall be Python 3.8 + compliant
+- Code shall be Python 3.9+ compliant
 
 
 ### Linting
