@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.18.0 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.18.1.dev1+gab5c4c9 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=5d495ce7"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=3dcab88f"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -321,6 +322,43 @@ useful attributes as pressure, wellname, date etc.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fmu.tools.rms.generate_bw_per_facies">
+<span id="fmu-tools-rms-generate-bw-per-facies-module"></span><h2>fmu.tools.rms.generate_bw_per_facies module<a class="headerlink" href="#module-fmu.tools.rms.generate_bw_per_facies" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.generate_bw_per_facies.create_bw_per_facies">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.generate_bw_per_facies.</span></span><span class="sig-name descname"><span class="pre">create_bw_per_facies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_petro_log_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_log_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_code_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_bw_per_facies.html#create_bw_per_facies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.generate_bw_per_facies.create_bw_per_facies" title="Permalink to this definition"></a></dt>
+<dd><p>Function to be imported and applied in a RMS python job
+to create new petrophysical logs from original logs,
+but with one log per facies.
+All grid blocks for the blocked wells not belonging to the facies
+is set to undefined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Purpose:</dt><dd><p>Create the blocked well logs to be used to condition
+petrophysical realizations where all grid cells are
+assumed to belong to only one facies. This script will
+not modify any of the original logs, only create new logs where only
+petrophysical log values for one facies is selected
+and all other are set ot undefined.</p>
+</dd>
+<dt>Input:</dt><dd><p>grid model name,
+blocked well set name,
+list of original log names to use,
+facies log name,
+facies code with facies name dictionary</p>
+</dd>
+<dt>Output:</dt><dd><p>One new petro log per facies per petro variables in the
+input list of original log names. The output will be saved in
+the given blocked well set specified in the input.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1020,7 +1058,7 @@ concerns, oil, gas or the “total” phase.</p>
 </section>
 <section id="module-fmu.tools.rms">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.rms" title="Permalink to this heading"></a></h2>
-<p>Processing of volumetrics from RMS</p>
+<p>Initialize modules for use in RMS</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.rms.rmsvolumetrics_txt2df">
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">rmsvolumetrics_txt2df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txtfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regionrenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zonerenamer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/volumetrics.html#rmsvolumetrics_txt2df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.rmsvolumetrics_txt2df" title="Permalink to this definition"></a></dt>
@@ -1199,6 +1237,40 @@ report field parameters not used (True/False)</p>
 </dd>
 </dl>
 </div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.create_bw_per_facies">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">create_bw_per_facies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_petro_log_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_log_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_code_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/generate_bw_per_facies.html#create_bw_per_facies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.create_bw_per_facies" title="Permalink to this definition"></a></dt>
+<dd><p>Function to be imported and applied in a RMS python job
+to create new petrophysical logs from original logs,
+but with one log per facies.
+All grid blocks for the blocked wells not belonging to the facies
+is set to undefined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Purpose:</dt><dd><p>Create the blocked well logs to be used to condition
+petrophysical realizations where all grid cells are
+assumed to belong to only one facies. This script will
+not modify any of the original logs, only create new logs where only
+petrophysical log values for one facies is selected
+and all other are set ot undefined.</p>
+</dd>
+<dt>Input:</dt><dd><p>grid model name,
+blocked well set name,
+list of original log names to use,
+facies log name,
+facies code with facies name dictionary</p>
+</dd>
+<dt>Output:</dt><dd><p>One new petro log per facies per petro variables in the
+input list of original log names. The output will be saved in
+the given blocked well set specified in the input.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

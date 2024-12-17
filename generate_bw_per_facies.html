@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rms.create_bw_per_facies &mdash; fmu-tools 1.18.1.dev1+gab5c4c9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=3dcab88f"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The fmu-tools utilities package" href="utilities.html" />
+    <link rel="prev" title="rms.import_localmodule" href="rms_import_localmodule.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.create_bw_per_facies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-of-use-as-rms-python-job">Example of use as RMS python job</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">rms.create_bw_per_facies</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/generate_bw_per_facies.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rms-create-bw-per-facies">
+<h1>rms.create_bw_per_facies<a class="headerlink" href="#rms-create-bw-per-facies" title="Permalink to this heading"></a></h1>
+<p>The RMS python job to generate new blocked wells with petrophysical
+values for one facies per blocked well log is used as part of a workflow
+to create petrophysical 3D grid realizations conditioned to only one facies.
+This is used in FMU workflows where both facies and petrophysical variables
+are used as field parameters in assisted history matching (AHM) with ERT.</p>
+<p>Input</p>
+<ul class="simple">
+<li><p>Grid name</p></li>
+<li><p>Existing blocked well set (containing the original blocked well logs)</p></li>
+<li><p>List of original petrophysical blocked well log names to be used to generate new logs</p></li>
+<li><p>Facies log name</p></li>
+<li><p>Python dictionary with code and facies names per code for relevant facies</p></li>
+</ul>
+<p>Output</p>
+<p>For each of the specified original petrophysical logs, one new log per facies
+for the specified facies is made. The values are copies of the original blocked
+well logs except that all values belonging to other facies than the one for the
+created log is set to undefined. The new logs will have name of
+the form “faciesname_petroname”.</p>
+<section id="example-of-use-as-rms-python-job">
+<h2>Example of use as RMS python job<a class="headerlink" href="#example-of-use-as-rms-python-job" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools.rms</span> <span class="kn">import</span> <span class="n">create_bw_per_facies</span>
+<span class="kn">from</span> <span class="nn">fmu.config</span> <span class="kn">import</span> <span class="n">utilities</span> <span class="k">as</span> <span class="n">ut</span>
+<span class="n">DEBUG_PRINT</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">CFG</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">yaml_load</span><span class="p">(</span><span class="s2">&quot;../../fmuconfig/output/global_variables.yml&quot;</span><span class="p">)[</span><span class="s2">&quot;global&quot;</span><span class="p">]</span>
+<span class="n">FACIES_ZONE</span> <span class="o">=</span> <span class="n">CFG</span><span class="p">[</span><span class="s2">&quot;FACIES_ZONE&quot;</span><span class="p">]</span>
+
+<span class="n">GRID_NAMES</span> <span class="o">=</span> <span class="p">{</span>
+     <span class="s2">&quot;Valysar&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid_Valysar&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;Therys&quot;</span><span class="p">:</span>  <span class="s2">&quot;Geogrid_Therys&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;Volon&quot;</span><span class="p">:</span>   <span class="s2">&quot;Geogrid_Volon&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Blocked well set</span>
+<span class="n">BW_NAME</span> <span class="o">=</span> <span class="s2">&quot;BW&quot;</span>
+
+<span class="c1"># Original logs to make copy of per facies</span>
+<span class="n">ORIGINAL_BW_LOG_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="s2">&quot;KLOGH&quot;</span><span class="p">]</span>
+
+<span class="c1"># Facies log in original blocked well set</span>
+<span class="n">FACIES_LOG_NAME</span> <span class="o">=</span> <span class="s2">&quot;Facies&quot;</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
+     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">facies_code_names_for_zone</span>  <span class="ow">in</span> <span class="n">FACIES_ZONE</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+          <span class="c1"># For each of the single zone grids, calculate updated BW set</span>
+          <span class="n">create_bw_per_facies</span><span class="p">(</span>
+               <span class="n">project</span><span class="p">,</span>
+               <span class="n">GRID_NAMES</span><span class="p">[</span><span class="n">zone_name</span><span class="p">],</span>
+               <span class="n">BW_NAME</span><span class="p">,</span>
+               <span class="n">ORIGINAL_BW_LOG_NAMES</span><span class="p">,</span>
+               <span class="n">FACIES_LOG_NAME</span><span class="p">,</span>
+               <span class="n">FACIES_ZONE</span><span class="p">[</span><span class="n">zone_name</span><span class="p">],</span>
+               <span class="n">debug_print</span><span class="o">=</span><span class="n">DEBUG_PRINT</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+     <span class="n">main</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The example above will create the following new blocked well logs for
+each well based on the original logs “PHIT” and “KLOGH”:</p>
+<ul class="simple">
+<li><p>Floodplain_PHIT</p></li>
+<li><p>Floodplain_KLOGH</p></li>
+<li><p>Channel_PHIT</p></li>
+<li><p>Channel_KLOGH</p></li>
+<li><p>Crevasse_PHIT</p></li>
+<li><p>Crevasse_KLOGH</p></li>
+<li><p>Coal_PHIT</p></li>
+<li><p>Coal_KLOGH</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rms_import_localmodule.html" class="btn btn-neutral float-left" title="rms.import_localmodule" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utilities.html" class="btn btn-neutral float-right" title="The fmu-tools utilities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

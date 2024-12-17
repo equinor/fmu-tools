@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.rms.generate_bw_per_facies &mdash; fmu-tools 1.18.1.dev1+gab5c4c9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=3dcab88f"></script>
+      <script src="../../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.rms.generate_bw_per_facies</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.rms.generate_bw_per_facies</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xtgeo</span>
+
+
+<div class="viewcode-block" id="create_bw_per_facies"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_bw_per_facies.create_bw_per_facies">[docs]</a><span class="k">def</span> <span class="nf">create_bw_per_facies</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">bw_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">original_petro_log_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">facies_log_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">facies_code_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to be imported and applied in a RMS python job</span>
+<span class="sd">    to create new petrophysical logs from original logs,</span>
+<span class="sd">    but with one log per facies.</span>
+<span class="sd">    All grid blocks for the blocked wells not belonging to the facies</span>
+<span class="sd">    is set to undefined.</span>
+
+<span class="sd">    Purpose:</span>
+<span class="sd">        Create the blocked well logs to be used to condition</span>
+<span class="sd">        petrophysical realizations where all grid cells are</span>
+<span class="sd">        assumed to belong to only one facies. This script will</span>
+<span class="sd">        not modify any of the original logs, only create new logs where only</span>
+<span class="sd">        petrophysical log values for one facies is selected</span>
+<span class="sd">        and all other are set ot undefined.</span>
+
+<span class="sd">    Input:</span>
+<span class="sd">        grid model name,</span>
+<span class="sd">        blocked well set name,</span>
+<span class="sd">        list of original log names to use,</span>
+<span class="sd">        facies log name,</span>
+<span class="sd">        facies code with facies name dictionary</span>
+
+<span class="sd">    Output:</span>
+<span class="sd">        One new petro log per facies per petro variables in the</span>
+<span class="sd">        input list of original log names. The output will be saved in</span>
+<span class="sd">        the given blocked well set specified in the input.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">original_log_names</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">original_petro_log_names</span><span class="p">)</span>
+    <span class="n">original_log_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">facies_log_name</span><span class="p">)</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">blockedwells_from_roxar</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">bw_name</span><span class="p">,</span> <span class="n">lognames</span><span class="o">=</span><span class="n">original_log_names</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Update blocked well set </span><span class="si">{</span><span class="n">bw_name</span><span class="si">}</span><span class="s2"> for grid model </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">bw</span><span class="o">.</span><span class="n">wells</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wellname: </span><span class="si">{</span><span class="n">well</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Update the new logs by only keeping petro variables</span>
+        <span class="c1"># belonging to the current facies</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">well</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">()</span>
+        <span class="n">new_log_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">facies_code</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">facies_code_names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">filtered_rows</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">facies_log_name</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">facies_code</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">original_petro_log_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">well</span><span class="o">.</span><span class="n">lognames</span><span class="p">:</span>
+                    <span class="n">new_log_name</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">petro_name</span>
+                    <span class="n">well</span><span class="o">.</span><span class="n">create_log</span><span class="p">(</span><span class="n">new_log_name</span><span class="p">)</span>
+
+                    <span class="n">df</span><span class="p">[</span><span class="n">new_log_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">petro_name</span><span class="p">]</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">new_log_name</span><span class="p">][</span><span class="n">filtered_rows</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Create new log: </span><span class="si">{</span><span class="n">new_log_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">new_log_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_log_name</span><span class="p">)</span>
+
+        <span class="n">well</span><span class="o">.</span><span class="n">set_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Well:  </span><span class="si">{</span><span class="n">well</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All logs:  </span><span class="si">{</span><span class="n">well</span><span class="o">.</span><span class="n">lognames_all</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataframe for facies log and new logs:&quot;</span><span class="p">)</span>
+            <span class="n">df_updated</span> <span class="o">=</span> <span class="n">well</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">()</span>
+            <span class="n">selected_log_names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">selected_log_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">facies_log_name</span><span class="p">)</span>
+            <span class="n">selected_log_names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_log_names</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df_updated</span><span class="p">[</span><span class="n">selected_log_names</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Create new logs for well </span><span class="si">{</span><span class="n">well</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+        <span class="n">well</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+            <span class="n">project</span><span class="p">,</span>
+            <span class="n">grid_name</span><span class="p">,</span>
+            <span class="n">bw_name</span><span class="p">,</span>
+            <span class="n">well</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">lognames</span><span class="o">=</span><span class="n">new_log_names</span><span class="p">,</span>
+            <span class="n">update_option</span><span class="o">=</span><span class="s2">&quot;overwrite&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New logs: &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">new_log_names</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

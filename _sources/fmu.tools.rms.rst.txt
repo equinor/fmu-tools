@@ -12,6 +12,14 @@ fmu.tools.rms.create\_rft\_ertobs module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.generate\_bw\_per\_facies module
+----------------------------------------------
+
+.. automodule:: fmu.tools.rms.generate_bw_per_facies
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.generate\_petro\_jobs\_for\_field\_update module
 --------------------------------------------------------------
 
