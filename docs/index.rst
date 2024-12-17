@@ -17,6 +17,7 @@ Contents:
    create_rft_ertobs
    rename_rms_scripts
    rms_import_localmodule
+   generate_bw_per_facies
    utilities
    rmsvolumetrics2csv
    ensembles
