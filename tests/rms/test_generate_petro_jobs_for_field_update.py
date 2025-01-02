@@ -219,7 +219,6 @@ def define_setting_for_original_job(spec_dict: Dict) -> Dict:
                                     {
                                         "Active": True,
                                         "AppliedTo": "INPUT_AND_OUTPUT",
-                                        "Automated": False,
                                         "Mode": "MIN",
                                         "Min": 0,
                                         "SequenceNumber": 0,
