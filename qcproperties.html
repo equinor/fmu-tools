@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The qcproperties class &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -280,14 +280,14 @@ to the source string.</p>
 <p><strong>Example in RMS (continous properties - basic):</strong></p>
 <p>Example extracting statistics for porosity and permeability for each zone and facies.
 Result is written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">]</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -311,7 +311,7 @@ are used to extract statistics for HC zone and Water zone separately.
 Statistics will be combined for regions with code values 2 and 3.
 Both properties are weighted on a Total_bulk parameter.
 Result is written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
@@ -331,7 +331,7 @@ Result is written to csv.</p>
     <span class="s2">&quot;Water_zone&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Fluid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;water&quot;</span><span class="p">]}},</span>
 <span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -361,7 +361,7 @@ selector, for extracting statistics in one run.</p>
 <p>Example extracting statistics for a discrete facies parameter for each region.
 The facies parameter are weighted on a Total_bulk parameter.</p>
 <p>The result is written out to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
@@ -371,7 +371,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/discrete_stats.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -391,7 +391,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;grid.roff&quot;</span>
@@ -407,7 +407,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 <span class="p">}</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -427,7 +427,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 </pre></div>
 </div>
 <p><strong>Example when executed from file using Eclipse INIT-file as input:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
 <span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE.EGRID&quot;</span>
@@ -440,7 +440,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 <span class="p">}</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -467,7 +467,7 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 All wells starting with 33_10 and all 34_11 wells containing “A” will be included in statistics.
 Note the use of python regular expressions!
 Result is written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;33_10.*&quot;</span><span class="p">,</span> <span class="s2">&quot;34_11-.*A.*&quot;</span><span class="p">],</span>
@@ -478,7 +478,7 @@ Result is written to csv.</p>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -501,7 +501,7 @@ Result is written to csv.</p>
 First extracting statistics for wells starting with “34_10-A”, then wells
 starting with “34_10-B” in a subsequent run.
 Result is written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-A.*&quot;</span><span class="p">]</span>
 <span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
@@ -509,7 +509,7 @@ Result is written to csv.</p>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -542,7 +542,7 @@ Result is written to csv.</p>
 <p>Example extracting statistics for permeability for each zone and facies.
 All blocked wells will be included in statistics.
 Result is written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span>
@@ -552,7 +552,7 @@ Result is written to csv.</p>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -603,7 +603,7 @@ Several steps have been to ensure consistency between the sources, making the re
 <li><p>The zone codes “UpperReek”, “MidReek”, “LowerReek” is present in the two grids, to get the same codes in the wells
 the codes are updated and redundant codes are excluded.</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
@@ -626,7 +626,7 @@ the codes are updated and redundant codes are excluded.</p></li>
 <span class="n">WDATA</span> <span class="o">=</span> <span class="n">BWDATA</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">WDATA</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
@@ -666,12 +666,12 @@ element.</p>
 <p>Example using yaml input in RMS for extracting statistics for porosity and permeability from
 four data sources (geogrid, simgrid, wells and blocked wells). The resulting combined
 dataframe are written to csv.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">YAML_PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/somefile.yml&quot;</span>
 <span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
 
-<span class="k">def</span> <span class="nf">extract_statistics</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">YAML_PATH</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.rms.import_localmodules &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -87,21 +87,21 @@
   <h1>Source code for fmu.tools.rms.import_localmodules</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Import a local module made inside RMS, and refresh the content.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">no_type_check</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">join</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">no_type_check</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">_detect_pyfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_detect_pyfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A module shall be named ``*.py``, but may have different &#39;actual&#39; name in RMS.</span>
 
 <span class="sd">    Returns:</span>
@@ -131,7 +131,7 @@
 
 
 <span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">_detect_module_or_package</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_detect_module_or_package</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect a module of package external of rms.&quot;&quot;&quot;</span>
 
     <span class="n">usepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -144,7 +144,7 @@
 
 
 <span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">_localmodule_inside_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_localmodule_inside_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists inside the RMS project.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -156,7 +156,7 @@
         <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s2">&quot;The project object is invalid, perhaps not inside RMS?&quot;</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
     <span class="n">mypath</span> <span class="o">=</span> <span class="n">prj</span> <span class="o">+</span> <span class="s2">&quot;/pythoncomp&quot;</span>
 
@@ -185,7 +185,7 @@
 
 
 <span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">_localmodule_outside_rms</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_localmodule_outside_rms</span><span class="p">(</span><span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists outside the RMS project.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_detect_module_or_package</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">):</span>
@@ -207,7 +207,7 @@
 
 
 <div class="viewcode-block" id="import_localmodule"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule">[docs]</a><span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">module_root_name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a library module in RMS which exists either inside or outside RMS.</span>
 
 <span class="sd">    Inside a RMS project it can be beneficial to have a module that serves as a library,</span>

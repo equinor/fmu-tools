@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -99,14 +99,14 @@
 <span class="sd">The public library `xtgeo` must be available.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 
 <span class="c1"># custom logger for this module</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -119,7 +119,7 @@
 
 
 <div class="viewcode-block" id="SwFunction"><a class="viewcode-back" href="../../../../fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">SwFunction</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SwFunction</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic Sw calc for formulation Sw = a * (m + x * h)^b.</span>
 
 <span class="sd">    Some theory for this is shown here: :download:`pdf &lt;pdf/sw_calc.pdf&gt;`.</span>
@@ -192,7 +192,7 @@
     <span class="n">_swval</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_sw</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Post init.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
@@ -211,7 +211,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s2">&quot;debug_grid.roff&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_process_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Work with a, b, x, ie. inversing and convert from float.&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Process a, b, etc&quot;</span><span class="p">)</span>
 
@@ -250,7 +250,7 @@
                 <span class="n">new_b</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_compute_htop_hbot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_htop_hbot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setting geometries for &#39;bottom&#39; and &#39;top&#39; cell.</span>
 
 <span class="sd">        All these values are relative to the given contact, as &quot;height above&quot;. For</span>
@@ -279,7 +279,7 @@
                 <span class="n">hbot</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_hbot</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
                 <span class="n">hmid</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;debug_hcenter</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">.roff&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_sw_function_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sw_function_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use function on form Sw = A*(M + X*h)^B; generic function!&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">)</span>  <span class="c1"># mypy</span>
@@ -305,7 +305,7 @@
         <span class="c1"># store result</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_sw_function_integrate_w_mterm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sw_function_integrate_w_mterm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate a function on form Sw = A*(M + JX*H)^B; generic function!</span>
 
 <span class="sd">        It assumes here:</span>
@@ -381,7 +381,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_swval</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_compute_integrated</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_integrated</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute Sw, integrated version.&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Integration, do integration over height of cell...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sw_function_integrate_w_mterm</span><span class="p">()</span>
@@ -391,7 +391,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW min out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_compute_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute Sw, direct version (less precise wiht thick cells).&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Direct, no integration over height...&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sw_function_direct</span><span class="p">()</span>
@@ -401,7 +401,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SW min out of range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SwFunction.compute"><a class="viewcode-back" href="../../../../fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compute_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;integrated&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">:</span>
+<div class="viewcode-block" id="SwFunction.compute"><a class="viewcode-back" href="../../../../fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.compute">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compute_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;integrated&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Common compute function for saturation, and returns the Sw property&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">compute_method</span> <span class="o">==</span> <span class="s2">&quot;integrated&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_compute_integrated</span><span class="p">()</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.qcforward._grid_statistics &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -89,38 +89,38 @@
 <span class="sd">This private module in qcforward is used for grid statistics</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">collections</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
 
-<span class="kn">import</span> <span class="nn">fmu.tools</span>
-<span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._qcforward</span> <span class="kn">import</span> <span class="n">QCForward</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcproperties.qcproperties</span> <span class="kn">import</span> <span class="n">QCProperties</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools._common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_QCCommon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.qcforward._qcforward</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCForward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.qcproperties.qcproperties</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
 
-<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_LocalData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing the actual data&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nametag&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;actions&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="GridStatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics">[docs]</a><span class="k">class</span> <span class="nc">GridStatistics</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
-<div class="viewcode-block" id="GridStatistics.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+<div class="viewcode-block" id="GridStatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GridStatistics</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
+<div class="viewcode-block" id="GridStatistics.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.run">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -155,7 +155,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">&quot;grid statistics&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridStatistics.check_gridstatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.check_gridstatistics">[docs]</a>    <span class="k">def</span> <span class="nf">check_gridstatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="GridStatistics.check_gridstatistics"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridStatistics.check_gridstatistics">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">check_gridstatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract statistics per action and check if property value is</span>
 <span class="sd">        within user specified limits.</span>
@@ -210,7 +210,7 @@
         <span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate data against JSON schemas&quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: complete JSON files</span>
@@ -227,7 +227,7 @@
         <span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_parameters_from_action</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extract property and selector data from actions</span>
 <span class="sd">        and convert to desired input format for QCProperties</span>
@@ -257,7 +257,7 @@
         <span class="k">return</span> <span class="n">data</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_selecors_and_calculation</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_selecors_and_calculation</span><span class="p">(</span><span class="n">action</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get selectors and selected calculation from the action.</span>
 <span class="sd">        If a discrete property has been input it is added to the selctors.</span>
@@ -270,7 +270,7 @@
         <span class="k">return</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">calculation</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_statistical_value</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_statistical_value</span><span class="p">(</span>
         <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">prop</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">calculation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>

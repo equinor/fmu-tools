@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -85,20 +85,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.domainconversion.dconvert</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DomainConversion"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">DomainConversion</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DomainConversion</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Domain conversion, tailored for fmu-sim2seis, but also works as standalone.</span>
 
@@ -154,7 +154,7 @@
     <span class="n">_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># names of surfaces</span>
     <span class="n">_nlay_cropper</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># cropping of depth cube</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Running post init&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_deprecated_args_order</span><span class="p">()</span>
 
@@ -164,7 +164,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_velo_maps_average</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_slow_maps_average</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_check_deprecated_args_order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_deprecated_args_order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_surfaces</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;In the very first version of this, the first argument was a Cube. &quot;</span>
@@ -172,7 +172,7 @@
                 <span class="s2">&quot;stored internally as special surfaces.&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get names of surfaces.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_surfaces</span><span class="p">):</span>
@@ -189,7 +189,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">surf</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_fix_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_fix_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that depth and time surfaces are consistent and fix if needed.&quot;&quot;&quot;</span>
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Check and fix surfaces...&quot;</span><span class="p">)</span>
@@ -211,7 +211,7 @@
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Check and fix surfaces... DONE&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_recreate_cube_from_msl</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_recreate_cube_from_msl</span><span class="p">(</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">resample</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;If input cube does does start from MSL; create a cube where zori=0&quot;&quot;&quot;</span>
@@ -254,7 +254,7 @@
         <span class="k">return</span> <span class="n">incube</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_resample_check_surfaces</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resample_check_surfaces</span><span class="p">(</span>
         <span class="n">surflist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span>
         <span class="n">template</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span>
         <span class="n">fill</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -263,7 +263,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Resample surfaces to match the template surface.&quot;&quot;&quot;</span>
 
         <span class="c1"># local function</span>
-        <span class="k">def</span> <span class="nf">_ensure_consistency</span><span class="p">(</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_consistency</span><span class="p">(</span>
             <span class="n">slist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Ensure consistensy and check order for depth or time surfaces&quot;&quot;&quot;</span>
@@ -295,7 +295,7 @@
 
         <span class="k">return</span> <span class="n">new_surfs</span>
 
-    <span class="k">def</span> <span class="nf">_ensure_surfaces_has_msl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_surfaces_has_msl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure resampled (internal) surface input has a MSL surface.</span>
 
 <span class="sd">        If so, it will still insert a __MSL surface as the first surface in the list</span>
@@ -314,7 +314,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;__MSL&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;__MSL&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_velo_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_velo_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average velocities from MSL to surface N&quot;&quot;&quot;</span>
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL...&quot;</span><span class="p">)</span>
@@ -336,7 +336,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span> <span class="o">=</span> <span class="n">vel</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL...  DONE&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_slow_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_slow_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average slowness from MSL to surface N&quot;&quot;&quot;</span>
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps averages from MSL...&quot;</span><span class="p">)</span>
@@ -358,7 +358,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span> <span class="o">=</span> <span class="n">slow</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps for average from MSL...  DONE&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_surfaces_are_inside_area</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_surfaces_are_inside_area</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that the input surfaces are inside the area that makes the DC model.</span>
@@ -385,7 +385,7 @@
                     <span class="s2">&quot;the model area.&quot;</span>
                 <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_cube_is_inside_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_cube_is_inside_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that the input cube is inside the surfaces that makes the DC model.</span>
 
 <span class="sd">        This is to ensure that the domain conversion becomes correct, and will raise</span>
@@ -400,7 +400,7 @@
         <span class="k">if</span> <span class="n">tmpl</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input cube is not fully inside the model area.&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_resample_surfaces_to_cube</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resample_surfaces_to_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Resample surfaces to match the input cube.</span>
@@ -424,11 +424,11 @@
         <span class="k">return</span> <span class="n">x_surfaces</span><span class="p">,</span> <span class="n">s_surfaces</span>
 
 <div class="viewcode-block" id="DomainConversion.max_depth_for_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.max_depth_for_cube">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">max_depth_for_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">max_depth_for_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the maximum depth for a cube.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cube</span><span class="o">.</span><span class="n">zinc</span></div>
 
-    <span class="k">def</span> <span class="nf">_extend_incube_create_speed_cube_average</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extend_incube_create_speed_cube_average</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extend incube to MSL and from that create speed cube with avg speed.</span>
@@ -482,7 +482,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_depth_cube</span> <span class="o">=</span> <span class="n">_incube</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span> <span class="o">=</span> <span class="n">_speed</span>
 
-    <span class="k">def</span> <span class="nf">_derive_result_cube_design</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_derive_result_cube_design</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">zinc_proposed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -570,7 +570,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_nlay_cropper</span> <span class="o">=</span> <span class="p">(</span><span class="n">nlay_above</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_domain_convert_surfaces</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_domain_convert_surfaces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span> <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use current average model to perform generic domain conversion for surfaces.</span>
@@ -634,7 +634,7 @@
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Domain convert surfaces... DONE&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 
-    <span class="k">def</span> <span class="nf">_domain_convert_cube</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_domain_convert_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">zinc_proposed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -713,30 +713,30 @@
     <span class="c1"># Public methods and properties</span>
     <span class="c1"># ==================================================================================</span>
 
-<div class="viewcode-block" id="DomainConversion.surface_names"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.surface_names">[docs]</a>    <span class="k">def</span> <span class="nf">surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DomainConversion.surface_names"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.surface_names">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of surface names.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">name</span></div>
 
-<div class="viewcode-block" id="DomainConversion.velocity_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.velocity_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">velocity_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<div class="viewcode-block" id="DomainConversion.velocity_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.velocity_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">velocity_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of velocity surfaces.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">surf</span></div>
 
-<div class="viewcode-block" id="DomainConversion.slowness_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.slowness_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">slowness_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<div class="viewcode-block" id="DomainConversion.slowness_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.slowness_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">slowness_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of slowness surfaces.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">surf</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">average_velocity_cube_in_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">average_velocity_cube_in_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">average_slowness_cube_in_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">average_slowness_cube_in_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>
 
-<div class="viewcode-block" id="DomainConversion.depth_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">depth_convert_surfaces</span><span class="p">(</span>
+<div class="viewcode-block" id="DomainConversion.depth_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_surfaces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the current average velocity model/surfaces to perform depth conversion.</span>
@@ -746,7 +746,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">time2depth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.time_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_surfaces">[docs]</a>    <span class="k">def</span> <span class="nf">time_convert_surfaces</span><span class="p">(</span>
+<div class="viewcode-block" id="DomainConversion.time_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_surfaces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the average slowness model/cube to perform depth to time conversion.</span>
@@ -757,7 +757,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">time2depth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.depth_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_cube">[docs]</a>    <span class="k">def</span> <span class="nf">depth_convert_cube</span><span class="p">(</span>
+<div class="viewcode-block" id="DomainConversion.depth_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_cube">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">zinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -790,7 +790,7 @@
             <span class="n">time2depth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.time_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_cube">[docs]</a>    <span class="k">def</span> <span class="nf">time_convert_cube</span><span class="p">(</span>
+<div class="viewcode-block" id="DomainConversion.time_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_cube">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">tinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

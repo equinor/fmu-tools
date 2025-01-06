@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.utilities.sample_attributes &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -93,38 +93,38 @@
 <span class="sd">This is targeted to the &quot;sim2seis&quot; workflow in FMU.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># custom logger for this module</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Attrs"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Attrs">[docs]</a><span class="k">class</span> <span class="nc">Attrs</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Attrs"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Attrs">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Attrs</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
     <span class="n">OBS</span> <span class="o">=</span> <span class="s2">&quot;OBS&quot;</span>
     <span class="n">OBS_ERROR</span> <span class="o">=</span> <span class="s2">&quot;OBS_ERROR&quot;</span>
     <span class="n">REGION</span> <span class="o">=</span> <span class="s2">&quot;REGION&quot;</span>
     <span class="n">VALUES</span> <span class="o">=</span> <span class="s2">&quot;VALUES&quot;</span></div>
 
 
-<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Position">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
     <span class="n">TOP</span> <span class="o">=</span> <span class="s2">&quot;top&quot;</span>
     <span class="n">CENTER</span> <span class="o">=</span> <span class="s2">&quot;center&quot;</span>
     <span class="n">BASE</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_layer</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_layer</span><span class="p">(</span>
     <span class="n">position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Position</span><span class="p">],</span> <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">zone</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the layer index (base=1!) based on the position and zone.&quot;&quot;&quot;</span>
@@ -161,7 +161,7 @@
     <span class="k">return</span> <span class="n">center_value</span>  <span class="c1"># default is center</span>
 
 
-<span class="k">def</span> <span class="nf">_dataframe_from_surface</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_dataframe_from_surface</span><span class="p">(</span>
     <span class="n">surface</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span> <span class="n">newname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the data frame via xtgeo Points (makes it easier to debug)&quot;&quot;&quot;</span>
@@ -178,7 +178,7 @@
     <span class="k">return</span> <span class="n">df</span>
 
 
-<div class="viewcode-block" id="sample_attributes_for_sim2seis"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.sample_attributes_for_sim2seis">[docs]</a><span class="k">def</span> <span class="nf">sample_attributes_for_sim2seis</span><span class="p">(</span>
+<div class="viewcode-block" id="sample_attributes_for_sim2seis"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.sample_attributes_for_sim2seis">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">sample_attributes_for_sim2seis</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
     <span class="n">attribute</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span>
     <span class="n">attribute_error</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>

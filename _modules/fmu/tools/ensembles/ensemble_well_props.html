@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.ensembles.ensemble_well_props &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -92,41 +92,41 @@
 <span class="sd">Output will be RMS well file and/or CSV files, in addition to screen info.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">no_type_check</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">no_type_check</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">xtgeo</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="n">GCELLNAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ICELL&quot;</span><span class="p">,</span> <span class="s2">&quot;JCELL&quot;</span><span class="p">,</span> <span class="s2">&quot;KCELL&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="ScreenInfo"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ScreenInfo</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScreenInfo</span><span class="p">:</span>
     <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">moreverbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="ScreenInfo.oprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint">[docs]</a>    <span class="k">def</span> <span class="nf">oprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="ScreenInfo.oprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">oprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ordinary print info for users.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScreenInfo.cprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint">[docs]</a>    <span class="k">def</span> <span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="ScreenInfo.cprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ordinary but clean print withou leading &gt;&gt;, useful for e.g. dataframes.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScreenInfo.xprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint">[docs]</a>    <span class="k">def</span> <span class="nf">xprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="ScreenInfo.xprint"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">xprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extra print if more verbose output is asked for.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">moreverbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;x&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="get_parser_args"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args">[docs]</a><span class="k">def</span> <span class="nf">get_parser_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="get_parser_args"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_parser_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up parser for command line end point.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -155,7 +155,7 @@
     <span class="k">return</span> <span class="n">myargs</span></div>
 
 
-<div class="viewcode-block" id="dump_example_config"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.dump_example_config">[docs]</a><span class="k">def</span> <span class="nf">dump_example_config</span><span class="p">():</span>
+<div class="viewcode-block" id="dump_example_config"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.dump_example_config">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dump_example_config</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dump an example config file as example.yml.&quot;&quot;&quot;</span>
 
     <span class="n">example</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -233,7 +233,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;See example.yml, and use this as template for your case!&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_config"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.parse_config">[docs]</a><span class="k">def</span> <span class="nf">parse_config</span><span class="p">(</span><span class="n">configfile</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_config"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.parse_config">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">parse_config</span><span class="p">(</span><span class="n">configfile</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse YAML file.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">configfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
@@ -246,7 +246,7 @@
 
 
 <div class="viewcode-block" id="PropsData"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">PropsData</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PropsData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holding property data and criteria&quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
@@ -257,7 +257,7 @@
 
 
 <div class="viewcode-block" id="ConfigData"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ConfigData</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConfigData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Other class data than config are evaluated from config in post_init.&quot;&quot;&quot;</span>
 
     <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span>
@@ -278,7 +278,7 @@
     <span class="n">report_keep_intermediate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">report_show_in_terminal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Derive input data from config.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;root&quot;</span><span class="p">])</span>
@@ -347,7 +347,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report_show_in_terminal</span> <span class="o">=</span> <span class="n">rpt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;show_in_terminal&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_mdranges</span><span class="p">(</span><span class="n">mdranges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_mdranges</span><span class="p">(</span><span class="n">mdranges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that mdranges are on proper form and that intervals do not overlap&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mdranges</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mandatory input &#39;mdranges&#39; is not set!&quot;</span><span class="p">)</span>
@@ -372,7 +372,7 @@
         <span class="k">return</span> <span class="n">mdranges</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_codes</span><span class="p">(</span><span class="n">codes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_codes</span><span class="p">(</span><span class="n">codes</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that codes input looks sane.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">codes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -387,7 +387,7 @@
         <span class="k">return</span> <span class="n">codes</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_interval</span><span class="p">(</span><span class="n">interval</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_interval</span><span class="p">(</span><span class="n">interval</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that interval input looks sane.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -416,13 +416,13 @@
 
 
 <div class="viewcode-block" id="WellCase"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.WellCase">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">WellCase</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">WellCase</span><span class="p">:</span>
     <span class="n">well</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Well</span>
     <span class="n">mdlog</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">mdranges</span><span class="p">:</span> <span class="nb">list</span>
     <span class="n">delta</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Various post init operations.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
 
@@ -438,7 +438,7 @@
 
 
 <div class="viewcode-block" id="EnsembleWellProps"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EnsembleWellProps</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EnsembleWellProps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The ensemble well props is use for post loop analysis.&quot;&quot;&quot;</span>
 
     <span class="n">well</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Well</span>
@@ -451,7 +451,7 @@
     <span class="n">cumlenreport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">cumlenreport_summary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">allprops</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">proplist</span><span class="p">:</span>
             <span class="n">plist</span> <span class="o">=</span> <span class="p">[]</span>
@@ -461,7 +461,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">added_logs</span> <span class="o">=</span> <span class="n">allprops</span>
 
 <div class="viewcode-block" id="EnsembleWellProps.process_ensemble_avglogs"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs">[docs]</a>    <span class="nd">@no_type_check</span>
-    <span class="k">def</span> <span class="nf">process_ensemble_avglogs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble_avglogs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Make ensemble mean or mode (most-of) logs.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_avg_file</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -485,7 +485,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="EnsembleWellProps.process_ensemble_cumlen"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen">[docs]</a>    <span class="nd">@no_type_check</span>
-    <span class="k">def</span> <span class="nf">process_ensemble_cumlen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble_cumlen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide cumulative length statistics.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="p">:</span>
@@ -565,14 +565,14 @@
 
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="EnsembleWellProps.optionally_delete_logs"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs">[docs]</a>    <span class="k">def</span> <span class="nf">optionally_delete_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EnsembleWellProps.optionally_delete_logs"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_logs">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">optionally_delete_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">keep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_keep_intermediate</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">added_logs</span><span class="p">:</span>
             <span class="n">wll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">well</span>
             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">added_logs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">wll</span><span class="o">.</span><span class="n">delete_logs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EnsembleWellProps.optionally_delete_flag_logs"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs">[docs]</a>    <span class="k">def</span> <span class="nf">optionally_delete_flag_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EnsembleWellProps.optionally_delete_flag_logs"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.optionally_delete_flag_logs">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">optionally_delete_flag_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">keep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_keep_intermediate</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">added_flag_logs</span><span class="p">:</span>
             <span class="n">wll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">well</span>
@@ -580,7 +580,7 @@
 
 
 <div class="viewcode-block" id="loop_for_compute"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.loop_for_compute">[docs]</a><span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">loop_for_compute</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loop_for_compute</span><span class="p">(</span>
     <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">sinfo</span><span class="p">:</span> <span class="n">ScreenInfo</span><span class="p">,</span> <span class="n">_dryrun</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnsembleWellProps</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect for computing the ensemble statistics.</span>
@@ -641,7 +641,7 @@
     <span class="k">return</span> <span class="n">EnsembleWellProps</span><span class="p">(</span><span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="p">,</span> <span class="n">used_realizations</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">sinfo</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="run_compute"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.run_compute">[docs]</a><span class="k">def</span> <span class="nf">run_compute</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">well</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">theprop</span><span class="p">):</span>
+<div class="viewcode-block" id="run_compute"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.run_compute">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">run_compute</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">well</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">theprop</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute well props sampled from gridproperties for one propert and realization.</span>
 
 <span class="sd">    The well.dataframe is updated in-place with new column(s)</span>
@@ -654,7 +654,7 @@
 
 
 <div class="viewcode-block" id="process_ensemble"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.process_ensemble">[docs]</a><span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">process_ensemble</span><span class="p">(</span><span class="n">ens</span><span class="p">:</span> <span class="n">EnsembleWellProps</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble</span><span class="p">(</span><span class="n">ens</span><span class="p">:</span> <span class="n">EnsembleWellProps</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Process the ensemble (seen in well) according to client &#39;report&#39; requirements.</span>
 
 <span class="sd">    Args:</span>
@@ -689,7 +689,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.main">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Main routine for ensemble_well_props.</span>
 
 <span class="sd">    Args:</span>

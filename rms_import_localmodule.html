@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>rms.import_localmodule &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -108,7 +108,7 @@ library in a much easier way.</p>
 <section id="the-library-is-inside-rms">
 <h2>The library is inside rms<a class="headerlink" href="#the-library-is-inside-rms" title="Permalink to this heading"></a></h2>
 <p>Given that the library module is made inside the RMS GUI, here is an example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>
 
 <span class="c1"># mylib.py is inside the RMS project</span>
 <span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
@@ -121,7 +121,7 @@ library in a much easier way.</p>
 <h2>The library is outside RMS<a class="headerlink" href="#the-library-is-outside-rms" title="Permalink to this heading"></a></h2>
 <p>Sometimes it is convenient that the library is made outside RMS, and the same function can
 then be applied with a <cite>path</cite> keyword:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>
 
 <span class="c1"># extlib.py is outside the RMS project, relative path ../lib/extlib.py</span>
 

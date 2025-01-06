@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.rms.rename_rms_scripts &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -87,12 +87,12 @@
   <h1>Source code for fmu.tools.rms.rename_rms_scripts</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Fix RMS Python script file extensions and gather useful information&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -103,7 +103,7 @@
 <span class="n">_END_PARAM</span> <span class="o">=</span> <span class="s2">&quot;End parameter&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a parser for the command line utility&quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -135,7 +135,7 @@
     <span class="k">return</span> <span class="n">parser</span>
 
 
-<div class="viewcode-block" id="PythonCompMaster"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster">[docs]</a><span class="k">class</span> <span class="nc">PythonCompMaster</span><span class="p">:</span>
+<div class="viewcode-block" id="PythonCompMaster"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PythonCompMaster</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The PythonCompMaster class parses a .master specific to those</span>
 <span class="sd">    found in an RMS pythoncomp/ directory. These .master files are</span>
 <span class="sd">    structured as so::</span>
@@ -181,7 +181,7 @@
 <span class="sd">    filenames.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">write</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">write</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_write</span> <span class="o">=</span> <span class="n">write</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File writing set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -202,7 +202,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parses a pythoncomp/.master file. Results are stored internally.&quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
@@ -211,7 +211,7 @@
             <span class="n">header_start</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">_BEGIN_HEADER</span><span class="p">)</span>
             <span class="n">header_end</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">_END_HEADER</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid pythoncomp/.master file&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid pythoncomp/.master file&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 
         <span class="k">if</span> <span class="n">header_start</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">header_start</span> <span class="o">&gt;=</span> <span class="n">header_end</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid pythoncomp/.master file&quot;</span><span class="p">)</span>
@@ -220,7 +220,7 @@
         <span class="n">inner_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_parentparams</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">header_end</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_psjparams</span><span class="p">(</span><span class="n">inner_params</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse_parentparams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_parentparams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parses a ParentParams object in a pythoncomp/.master file.</span>
 
 <span class="sd">        This object is essentially a wrapper object around all of the</span>
@@ -247,7 +247,7 @@
         <span class="n">start</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">_BEGIN_PARAM</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_parse_psjparams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_psjparams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parses the list of PSJParams lines from the .master file into a</span>
 <span class="sd">        list of dictionaries, where each dictionary represents the values</span>
 <span class="sd">        of the PSJParams object, plus an added `path` entry to its on-disk</span>
@@ -278,7 +278,7 @@
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span><span class="si">}</span><span class="s2"> Python entries&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">entries</span>
 
-    <span class="k">def</span> <span class="nf">_param_begin_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_param_begin_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects the given list for the nearest `Begin parameter` and</span>
 <span class="sd">        `End parameter` demarcation of a PSJParams parameter object, and</span>
 <span class="sd">        returns their index (or -1 if not there).</span>
@@ -299,7 +299,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span>
 
-    <span class="k">def</span> <span class="nf">_params_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_params_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the list of lines representing a single PSJParams</span>
 <span class="sd">        object into a dictionary containing its values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -307,7 +307,7 @@
         <span class="n">tuple_lines</span> <span class="o">=</span> <span class="p">[(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">split_lines</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tuple_lines</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_will_overwrite_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_will_overwrite_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if there exists a filename on-disk with a name equivalent</span>
 <span class="sd">        to the provided `instance_name`. If so, we cannot safely fix this</span>
 <span class="sd">        Python script to have equivalent names in RMS and on-disk without</span>
@@ -316,7 +316,7 @@
         <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">/</span> <span class="n">iname</span>
         <span class="k">return</span> <span class="n">fname</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_fix_bad_overwrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fix_bad_overwrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tries to resolve an overwrite issue of the following form:</span>
 
 <span class="sd">        Entry A:</span>
@@ -355,7 +355,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_file_on_disk</span><span class="p">(</span><span class="n">blocking_entry</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">_update_file_on_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_file_on_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the filename on disk to the instance_name in RMS, as</span>
 <span class="sd">        well as its dict representation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -369,26 +369,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">iname</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_path</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Path to the pythoncomp/ directory&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Path to the pythoncomp/.master file&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The dict representing the GEOMATIC header of the .master file.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_header</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The list of Python file entries&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span>
 
-<div class="viewcode-block" id="PythonCompMaster.get_inconsistent_entries"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_inconsistent_entries">[docs]</a>    <span class="k">def</span> <span class="nf">get_inconsistent_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_inconsistent_entries"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_inconsistent_entries">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_inconsistent_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects all Python entries for Python scripts that have an</span>
 <span class="sd">        `instance_name` that differs from its `standalonefilename`, i.e.</span>
 <span class="sd">        the RMS name does not match the name of the file on disk.</span>
@@ -399,7 +399,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_invalid_extensions"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_invalid_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_invalid_extensions"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_extensions">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_invalid_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects all Python entries for Python scripts that have a</span>
 <span class="sd">        non-standard file extension (not `.py`) on disk. Frequently this</span>
 <span class="sd">        means they are `.py_1` but other variations exist (or occasionally</span>
@@ -410,17 +410,17 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_invalid_instance_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_instance_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_invalid_instance_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_invalid_instance_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_invalid_instance_names">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_invalid_instance_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects all Python entries for Python scripts that have a</span>
 <span class="sd">        non-standard file extension (not `.py`) in RMS.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># noqa</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_pep8_noncompliant"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant">[docs]</a>    <span class="k">def</span> <span class="nf">get_pep8_noncompliant</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_pep8_noncompliant"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_pep8_noncompliant</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of instance names that are not PEP8 compliant.&quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">_noncompliant_pep8</span><span class="p">(</span><span class="n">iname</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_noncompliant_pep8</span><span class="p">(</span><span class="n">iname</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="nb">any</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">iname</span><span class="p">)</span>
                 <span class="ow">or</span> <span class="n">iname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span>
@@ -429,14 +429,14 @@
 
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">_noncompliant_pep8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_nonexistent_standalonefilenames"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_nonexistent_standalonefilenames">[docs]</a>    <span class="k">def</span> <span class="nf">get_nonexistent_standalonefilenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_nonexistent_standalonefilenames"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_nonexistent_standalonefilenames">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_nonexistent_standalonefilenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspects all Python entries for Python scripts that have a</span>
 <span class="sd">        non-existent file. Assumes the path is up-to-date and correct.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># noqa</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_unused_scripts"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_unused_scripts">[docs]</a>    <span class="k">def</span> <span class="nf">get_unused_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_unused_scripts"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_unused_scripts">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_unused_scripts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a list of Python scripts that aren&#39;t used in any workflow.&quot;&quot;&quot;</span>
         <span class="n">main_master</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;.master&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">main_master</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
@@ -449,11 +449,11 @@
                 <span class="n">unused</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">unused</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.get_entry"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_entry">[docs]</a>    <span class="k">def</span> <span class="nf">get_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.get_entry"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_entry">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an entry reference by its iname&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">iname</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.fix_standalone_filenames"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">fix_standalone_filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="PythonCompMaster.fix_standalone_filenames"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">fix_standalone_filenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Attempts to fix the Python files on disk that are inconsistent</span>
 <span class="sd">        with the files in RMS. This fix is rather simple and just copies</span>
 <span class="sd">        the `instance_name` to be the `standalonefilename` under the</span>
@@ -500,7 +500,7 @@
 
         <span class="k">return</span> <span class="n">skip</span></div>
 
-<div class="viewcode-block" id="PythonCompMaster.write_master_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.write_master_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_master_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="PythonCompMaster.write_master_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.write_master_file">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">write_master_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes the fixed .master file out, with a non-optional backup.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Skipped writing .master&quot;</span><span class="p">)</span>
@@ -537,14 +537,14 @@
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wrote new .master&quot;</span><span class="p">)</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">_make_backup</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_backup</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">dir_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
     <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Making a copy of pythoncomp/ as backup_</span><span class="si">{</span><span class="n">dir_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;backup_</span><span class="si">{</span><span class="n">dir_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backed up </span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2"> as backup_</span><span class="si">{</span><span class="n">dir_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_print_skipped</span><span class="p">(</span><span class="n">skipped</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_skipped</span><span class="p">(</span><span class="n">skipped</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipped the following Python script(s):&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">iname</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">:</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">get_entry</span><span class="p">(</span><span class="n">iname</span><span class="p">)</span>
@@ -557,7 +557,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_print_unused</span><span class="p">(</span><span class="n">unused</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_unused</span><span class="p">(</span><span class="n">unused</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span>
         <span class="s2">&quot;The following file(s) are included in the RMS project&quot;</span>
         <span class="s2">&quot; but do not appear to be used in any workflow&quot;</span>
@@ -575,7 +575,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_print_pep8</span><span class="p">(</span><span class="n">noncompliant</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_pep8</span><span class="p">(</span><span class="n">noncompliant</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">master</span><span class="p">:</span> <span class="n">PythonCompMaster</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The following file(s) have PEP8 non-compliant instance name(s)&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">iname</span> <span class="ow">in</span> <span class="n">noncompliant</span><span class="p">:</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">get_entry</span><span class="p">(</span><span class="n">iname</span><span class="p">)</span>
@@ -588,7 +588,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;They must be changed in RMS to all lowercase, no hyphen, no number names.&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.main">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">_get_parser</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 

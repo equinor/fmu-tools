@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The properties package &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -116,9 +116,9 @@ This is partly due to computing height across a cell is a bit different implemen
 <h3>Example: Using simple Sw Leverett J<a class="headerlink" href="#example-using-simple-sw-leverett-j" title="Permalink to this heading"></a></h3>
 <p>The Leverett J is given as $S_w = a J^b$, where $J$ is $hsqrt(k/phi)$. In this example, the
 factors are constant numbers:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xtgeo</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.properties</span> <span class="kn">import</span> <span class="n">SwFunction</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.properties</span><span class="w"> </span><span class="kn">import</span> <span class="n">SwFunction</span>
 
 <span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;Geogrid&quot;</span>
 <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
@@ -134,7 +134,7 @@ factors are constant numbers:</p>
 <span class="n">SW_RESULT</span> <span class="o">=</span> <span class="s2">&quot;SwJ&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">compute_saturation</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_saturation</span><span class="p">():</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">)</span>
     <span class="n">poro</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PORONAME</span><span class="p">)</span>
     <span class="n">perm</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PERMNAME</span><span class="p">)</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.qcdata.qcdata &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -92,18 +92,18 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">join</span>
 
-<span class="kn">import</span> <span class="nn">xtgeo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 
-<span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools._common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_QCCommon</span>
 
 <span class="n">CMN</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="QCData"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData">[docs]</a><span class="k">class</span> <span class="nc">QCData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">QCData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is a class which parse/reads and stores some common data</span>
 <span class="sd">    like 3D grids, maps etc.</span>
@@ -116,7 +116,7 @@
 <span class="sd">    of two different instances of the QCData()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reuse</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># All XTGeo data, to be reused</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>  <span class="c1"># usually not needed to set explisit</span>
@@ -133,45 +133,45 @@
     <span class="c1"># ==================================================================================</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Project attribute as Roxar project instance&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Grid attribute as XTGeo Grid() instance&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;GridProperties attribute as XTGeo GridProperties() instance&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">wells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wells attribute as XTGeo Wells() instance&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wells</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">bwells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bwells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Wells attribute as XTGeo BlockedWells() instance&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bwells</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">xtgdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xtgdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;All xtgeo based data as a dictionay&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span>
 
     <span class="c1"># Class methods:</span>
     <span class="c1"># ==================================================================================</span>
 
-    <span class="k">def</span> <span class="nf">_set_xtgdata_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_xtgdata_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;bwells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="QCData.parse"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span>
+<div class="viewcode-block" id="QCData.parse"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -210,11 +210,11 @@
             <span class="k">if</span> <span class="n">welltype</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">read_wells</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">welltype</span><span class="p">],</span> <span class="n">welltype</span><span class="p">,</span> <span class="n">wells_settings</span><span class="p">,</span> <span class="n">reuse</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="QCData.set_path"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.set_path">[docs]</a>    <span class="k">def</span> <span class="nf">set_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData.set_path"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.set_path">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;General path prefix settings&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span></div>
 
-<div class="viewcode-block" id="QCData.parse_project"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project">[docs]</a>    <span class="k">def</span> <span class="nf">parse_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData.parse_project"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">parse_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the RoxarAPI project magics&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -223,7 +223,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="QCData.read_grid"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_grid">[docs]</a>    <span class="k">def</span> <span class="nf">read_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">reuse</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData.read_grid"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_grid">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">read_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">reuse</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read 3D grid (which is required), from file or RMS&quot;&quot;&quot;</span>
 
         <span class="n">gridname</span> <span class="o">=</span> <span class="n">gridname</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
@@ -242,7 +242,7 @@
             <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reusing grid </span><span class="si">{</span><span class="n">gridname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="QCData.read_gridprops"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_gridprops">[docs]</a>    <span class="k">def</span> <span class="nf">read_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData.read_gridprops"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_gridprops">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">read_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read 3D grid props, from file or RMS.&quot;&quot;&quot;</span>
 
         <span class="n">gridname</span> <span class="o">=</span> <span class="n">gridname</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
@@ -284,7 +284,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperties</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span><span class="o">.</span><span class="n">append_props</span><span class="p">(</span><span class="n">gprops</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_well_preparations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_well_preparations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Account for wildcards and regex in wellist&quot;&quot;&quot;</span>
 
         <span class="n">input_wells</span> <span class="o">=</span> <span class="p">[]</span>
@@ -307,7 +307,7 @@
 
         <span class="k">return</span> <span class="n">input_wells</span>
 
-<div class="viewcode-block" id="QCData.read_wells"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells">[docs]</a>    <span class="k">def</span> <span class="nf">read_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="o">=</span><span class="s2">&quot;wells&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="QCData.read_wells"><a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">read_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="o">=</span><span class="s2">&quot;wells&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reading wells&quot;&quot;&quot;</span>
 
         <span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span> <span class="k">if</span> <span class="n">settings</span> <span class="k">else</span> <span class="p">{}</span>
@@ -372,7 +372,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No wells read, wrong settings?&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_reuse_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reuse_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Identify which gridprops are available for reusing, reusable</span>
 <span class="sd">        gridprops and new gridprops are returned in separate lists</span>
@@ -403,7 +403,7 @@
 
         <span class="k">return</span> <span class="n">reused_gprops</span><span class="p">,</span> <span class="n">new_gprops</span>
 
-    <span class="k">def</span> <span class="nf">_reuse_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reuse_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Identify which wells are available for reusing, reusable</span>
 <span class="sd">        wells and new wells are returned in separate lists</span>

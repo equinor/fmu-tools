@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The qcforward functions &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -245,7 +245,7 @@ one may encounter different results if another tool is applied.</p></li>
 </section>
 <section id="example-when-ran-inside-rms">
 <h3>Example when ran inside RMS<a class="headerlink" href="#example-when-ran-inside-rms" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing &quot;A&quot;</span>
 <span class="c1"># Note that these are python regular expressions!</span>
@@ -269,7 +269,7 @@ one may encounter different results if another tool is applied.</p></li>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span> <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
@@ -291,7 +291,7 @@ one may encounter different results if another tool is applied.</p></li>
 </section>
 <section id="example-when-ran-from-python-script-in-terminal">
 <h3>Example when ran from python script in terminal:<a class="headerlink" href="#example-when-ran-from-python-script-in-terminal" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="n">WPATH</span> <span class="o">=</span> <span class="s2">&quot;../output/wells/&quot;</span>
 
@@ -305,7 +305,7 @@ one may encounter different results if another tool is applied.</p></li>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="s2">&quot;</span>
@@ -324,8 +324,8 @@ one may encounter different results if another tool is applied.</p></li>
 </section>
 <section id="example-in-rms-with-setting-from-a-yaml-file">
 <h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#example-in-rms-with-setting-from-a-yaml-file" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/somefile.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
@@ -334,7 +334,7 @@ one may encounter different results if another tool is applied.</p></li>
   <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 80&quot;</span><span class="p">},</span>
 <span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -367,7 +367,7 @@ one may encounter different results if another tool is applied.</p></li>
 <h3>Example when ran inside RMS with different settings for wells<a class="headerlink" href="#example-when-ran-inside-rms-with-different-settings-for-wells" title="Permalink to this heading"></a></h3>
 <p>It may be the case where some wells are less important to match strict
 than other wells.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmu.tools.qcforward</span> <span class="k">as</span> <span class="nn">qcf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools.qcforward</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qcf</span>
 
 <span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing &quot;A&quot;</span>
 <span class="c1"># Note that these are python regular expressions!</span>
@@ -398,7 +398,7 @@ than other wells.</p>
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcf</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata1</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">WELLS1</span><span class="p">,</span> <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
@@ -521,7 +521,7 @@ is that a single word is present</p></li>
 </section>
 <section id="id6">
 <h3>Example when ran inside RMS<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
 <span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
 
@@ -537,7 +537,7 @@ is that a single word is present</p></li>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">GridQuality</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
@@ -555,7 +555,7 @@ is that a single word is present</p></li>
 </section>
 <section id="id7">
 <h3>Example when ran from python script in terminal:<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
 
 <span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;../output/checks/simgrid.roff&quot;</span>
@@ -563,7 +563,7 @@ is that a single word is present</p></li>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">GridQuality</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
@@ -580,12 +580,12 @@ is that a single word is present</p></li>
 </section>
 <section id="id8">
 <h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/gridquality.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -691,8 +691,8 @@ outside RMS but not needed when run inside RMS.</p>
 </section>
 <section id="example-when-run-inside-rms">
 <h3>Example when run inside RMS<a class="headerlink" href="#example-when-run-inside-rms" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">fmu.tools</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
 
 <span class="n">GNAME</span> <span class="o">=</span> <span class="s2">&quot;Geogrid_Valysar&quot;</span>
 
@@ -715,7 +715,7 @@ outside RMS but not needed when run inside RMS.</p>
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="c1"># make report folder if not present</span>
     <span class="n">reportpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">REPORTPATH1</span><span class="p">)</span>
@@ -744,8 +744,8 @@ outside RMS but not needed when run inside RMS.</p>
 </section>
 <section id="example-when-run-from-python-script-in-terminal">
 <h3>Example when run from python script in terminal<a class="headerlink" href="#example-when-run-from-python-script-in-terminal" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">fmu.tools</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
 
 <span class="n">GFILE</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/grid/geogrid_valysar.roff&quot;</span>  <span class="c1"># has both grid and props</span>
 <span class="n">BWELLFILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;../qc/output/wells/bw/valysar*.bw&quot;</span><span class="p">]</span>
@@ -764,7 +764,7 @@ outside RMS but not needed when run inside RMS.</p>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="c1"># make report folder if not present</span>
     <span class="n">reportpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">REPORTPATH1</span><span class="p">)</span>
@@ -866,7 +866,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 </section>
 <section id="example-when-executed-inside-rms-continous-properties-basic">
 <h3>Example when executed inside RMS (continous properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-basic" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
 
@@ -884,7 +884,7 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="p">},</span>
 <span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
@@ -901,7 +901,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 </section>
 <section id="example-when-executed-inside-rms-discrete-properties-basic">
 <h3>Example when executed inside RMS (discrete properties - basic):<a class="headerlink" href="#example-when-executed-inside-rms-discrete-properties-basic" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
 
@@ -922,7 +922,7 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="p">},</span>
 <span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
@@ -939,7 +939,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 </section>
 <section id="example-when-executed-inside-rms-continous-properties-more-settings">
 <h3>Example when executed inside RMS (continous properties - more settings):<a class="headerlink" href="#example-when-executed-inside-rms-continous-properties-more-settings" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for the porosity in HC-zone</span>
 <span class="c1"># Separate checks for the different zones</span>
@@ -953,7 +953,7 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="s2">&quot;Bottom_Zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
 <span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">zone</span><span class="p">,</span> <span class="n">limits</span> <span class="ow">in</span> <span class="n">ZONE_STOPS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -982,7 +982,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 </section>
 <section id="example-when-executed-from-python-script-in-terminal">
 <h3>Example when executed from python script in terminal:<a class="headerlink" href="#example-when-executed-from-python-script-in-terminal" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 
 <span class="c1"># Check average grid statistics for a porosity</span>
 
@@ -999,7 +999,7 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="p">},</span>
 <span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">path</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
@@ -1017,12 +1017,12 @@ Later this YAML file can be edited and applied for a single line input</p>
 </section>
 <section id="id11">
 <h3>Example in RMS with setting from a YAML file:<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmu.tools</span> <span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/somefile.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">check</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

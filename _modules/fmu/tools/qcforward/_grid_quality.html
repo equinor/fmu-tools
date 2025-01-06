@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fmu.tools.qcforward._grid_quality &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
@@ -89,25 +89,25 @@
 <span class="sd">This private module in qcforward is used to check grid quality</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
 
-<span class="kn">import</span> <span class="nn">fmu.tools</span>
-<span class="kn">from</span> <span class="nn">fmu.tools._common</span> <span class="kn">import</span> <span class="n">_QCCommon</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcdata</span> <span class="kn">import</span> <span class="n">QCData</span>
-<span class="kn">from</span> <span class="nn">fmu.tools.qcforward._qcforward</span> <span class="kn">import</span> <span class="n">ActionsParser</span><span class="p">,</span> <span class="n">QCForward</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools._common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_QCCommon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.qcdata</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.qcforward._qcforward</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionsParser</span><span class="p">,</span> <span class="n">QCForward</span>
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
 <span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">_LocalData</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_LocalData</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="kc">None</span>
@@ -116,7 +116,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writeicon</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing the actual data&quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: verify and qc</span>
@@ -132,8 +132,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">writeicon</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;writeicon&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="GridQuality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality">[docs]</a><span class="k">class</span> <span class="nc">GridQuality</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
-<div class="viewcode-block" id="GridQuality.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridQuality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GridQuality</span><span class="p">(</span><span class="n">QCForward</span><span class="p">):</span>
+<div class="viewcode-block" id="GridQuality.run"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.run">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Main routine for evaluating grid quality and stop/warn if too bad</span>
 
 <span class="sd">        The routine depends on existing XTGeo functions for this purpose.</span>
@@ -169,7 +169,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">&quot;grid quality&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridQuality.check_gridquality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">[docs]</a>    <span class="k">def</span> <span class="nf">check_gridquality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridQuality.check_gridquality"><a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">check_gridquality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given data, do check of gridquality via XTGeo</span>
 
@@ -243,7 +243,7 @@
         <span class="k">return</span> <span class="n">dfr</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_evaluate_allcells</span><span class="p">(</span><span class="n">issue</span><span class="p">,</span> <span class="n">inresult</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">instatus</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_allcells</span><span class="p">(</span><span class="n">issue</span><span class="p">,</span> <span class="n">inresult</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">instatus</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluation of all cells per issue (warn or stop) given the criteria.&quot;&quot;&quot;</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">inresult</span><span class="p">)</span>
@@ -279,7 +279,7 @@
         <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">result</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate data against JSON schemas, TODO complete schemas&quot;&quot;&quot;</span>
 
         <span class="n">spath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;qcforward&quot;</span> <span class="o">/</span> <span class="s2">&quot;_schemas&quot;</span>
