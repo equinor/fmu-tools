@@ -20,12 +20,6 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
-        # 2.0.2 for RMS 14.2+, 2.* for Komodo
-        pandas-version: ["2.0.2", "2.*"]
-        exclude:
-            # No built wheel for Python 3.12
-          - python-version: "3.12"
-            pandas-version: "2.0.2"
 
     steps:
       - name: Checkout
@@ -43,7 +37,6 @@ jobs:
         run: |
           pip install -U pip
           pip install .[docs,tests]
-          pip install pandas==${{ matrix.pandas-version }}
 
       - name: List all installed packages
         if: ${{ always() }}
@@ -80,7 +73,7 @@ jobs:
       - name: Update GitHub pages
         if: |
           github.repository_owner == 'equinor' && github.ref == 'refs/heads/main' && 
-          matrix.python-version == '3.11' && matrix.pandas-version == '2.0.2'
+          matrix.python-version == '3.11'
         run: |
           cp -R ./build/docs/html ../html
           git config --local user.email "fmu-tools-github-action"
@@ -98,3 +91,55 @@ jobs:
             git commit -m "Update Github Pages"
             git push "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
           fi
+
+  rms:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+              name: "RMS 14.2",
+              os: ubuntu-latest,
+              python: 3.11.3,
+              pip: 23.3.1,
+              wheel: 0.37.1,
+              setuptools: 63.4.3,
+              matplotlib: 3.7.1,
+              numpy: 1.24.3,
+              pandas: 2.0.2,
+              scipy: 1.10.1,
+            }
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.config.python }}
+
+      - name: Install packages
+        run: |
+          pip install pip==${{ matrix.config.pip }}
+          pip install ".[tests]"
+          pip install \
+            wheel==${{ matrix.config.wheel }} \
+            setuptools==${{ matrix.config.setuptools }} \
+            matplotlib==${{ matrix.config.matplotlib }} \
+            numpy==${{ matrix.config.numpy }} \
+            pandas==${{ matrix.config.pandas }} \
+            scipy==${{ matrix.config.scipy }}
+
+      - name: List dependencies
+        run: pip freeze
+
+      - name: Run tests
+        if: ${{ always() }}
+        run: |
+          git clone --depth 1 https://github.com/equinor/xtgeo-testdata ../xtgeo-testdata
+          pytest -n auto tests --disable-warnings
