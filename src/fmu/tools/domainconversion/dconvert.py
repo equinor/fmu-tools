@@ -589,11 +589,13 @@ class DomainConversion:
         zmax_actual = self.max_depth_for_cube(rcube)
 
         _logger.debug("Zmax for depth cube is %s", zmax_actual)
-        new_vertical_axis = np.arange(
-            rcube.zori, zmax_actual + rcube.zinc, rcube.zinc
-        ).astype("float")
-        seismic_attribute_result_cube = np.full(rcube.values.shape, undefined)
 
+        start = rcube.zori
+        stop = zmax_actual + rcube.zinc
+        num_steps = int((stop - start) / (rcube.zinc - np.finfo(np.float32).eps))
+        new_vertical_axis = np.linspace(start, stop, num_steps)
+
+        seismic_attribute_result_cube = np.full(rcube.values.shape, undefined)
         # Perform the interpolation for each (x, y) location
         for i in range(xcube.values.shape[0]):
             for j in range(xcube.values.shape[1]):
