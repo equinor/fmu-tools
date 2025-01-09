@@ -1,20 +1,20 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.utilities.sample_attributes &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>fmu.tools.utilities.sample_attributes &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="../../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../../../_static/documentation_options.js?v=81b9b667"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -111,17 +111,23 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Attrs"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Attrs">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Attrs</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Attrs">
+<a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Attrs">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Attrs</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
     <span class="n">OBS</span> <span class="o">=</span> <span class="s2">&quot;OBS&quot;</span>
     <span class="n">OBS_ERROR</span> <span class="o">=</span> <span class="s2">&quot;OBS_ERROR&quot;</span>
     <span class="n">REGION</span> <span class="o">=</span> <span class="s2">&quot;REGION&quot;</span>
     <span class="n">VALUES</span> <span class="o">=</span> <span class="s2">&quot;VALUES&quot;</span></div>
 
 
-<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Position">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Position">
+<a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.Position">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
     <span class="n">TOP</span> <span class="o">=</span> <span class="s2">&quot;top&quot;</span>
     <span class="n">CENTER</span> <span class="o">=</span> <span class="s2">&quot;center&quot;</span>
     <span class="n">BASE</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span></div>
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_layer</span><span class="p">(</span>
@@ -178,7 +184,9 @@
     <span class="k">return</span> <span class="n">df</span>
 
 
-<div class="viewcode-block" id="sample_attributes_for_sim2seis"><a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.sample_attributes_for_sim2seis">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">sample_attributes_for_sim2seis</span><span class="p">(</span>
+<div class="viewcode-block" id="sample_attributes_for_sim2seis">
+<a class="viewcode-back" href="../../../../fmu.tools.utilities.html#fmu.tools.sample_attributes_for_sim2seis">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_attributes_for_sim2seis</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
     <span class="n">attribute</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span>
     <span class="n">attribute_error</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
@@ -269,6 +277,7 @@
         <span class="n">dataframe</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">REGION</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_region</span><span class="p">[</span><span class="n">Attrs</span><span class="o">.</span><span class="n">REGION</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div>
+
 </pre></div>
 
            </div>

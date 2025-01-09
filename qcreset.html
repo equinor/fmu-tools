@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcreset module &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>The qcreset module &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -110,11 +110,11 @@
            <div itemprop="articleBody">
              
   <section id="the-qcreset-module">
-<h1>The qcreset module<a class="headerlink" href="#the-qcreset-module" title="Permalink to this heading"></a></h1>
+<h1>The qcreset module<a class="headerlink" href="#the-qcreset-module" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qcreset</span></code> module provides methods (functions) to reset the selected data
 before starting a forward modelling workflow.</p>
 <section id="design-philosophy">
-<h2>Design philosophy<a class="headerlink" href="#design-philosophy" title="Permalink to this heading"></a></h2>
+<h2>Design philosophy<a class="headerlink" href="#design-philosophy" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>The client (user) scripts shall be small and simple and easy to use also
 for modellers with little Python experience.</p></li>
@@ -124,12 +124,12 @@ a modelling process</p></li>
 </ul>
 </section>
 <section id="method-set-data-empty">
-<h2>Method set_data_empty<a class="headerlink" href="#method-set-data-empty" title="Permalink to this heading"></a></h2>
+<h2>Method set_data_empty<a class="headerlink" href="#method-set-data-empty" title="Link to this heading"></a></h2>
 <p>This method set all data described as input as empty. The data are not deleted
 so that the geometry of the data (surfaces or 3D grid properties) should be
 preserved and no workflow component (job or other) should be reset.</p>
 <section id="signature">
-<h3>Signature<a class="headerlink" href="#signature" title="Permalink to this heading"></a></h3>
+<h3>Signature<a class="headerlink" href="#signature" title="Link to this heading"></a></h3>
 <p>The input of this method is a Python dictionary with defined keys. The key
 “project” is required while “horizons”, “zones” and “grid_models” are optional
 (at least one of them should be provided for the method to have any effect).</p>
@@ -164,15 +164,15 @@ dictionary, the method will apply to all properties within these grid models.</p
 </dl>
 </section>
 <section id="known-issues">
-<h3>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this heading"></a></h3>
+<h3>Known issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>None for now</p></li>
 </ul>
 </section>
 <section id="examples-to-run-from-rms">
-<h3>Examples to run from RMS<a class="headerlink" href="#examples-to-run-from-rms" title="Permalink to this heading"></a></h3>
+<h3>Examples to run from RMS<a class="headerlink" href="#examples-to-run-from-rms" title="Link to this heading"></a></h3>
 <section id="example-1">
-<h4>Example 1<a class="headerlink" href="#example-1" title="Permalink to this heading"></a></h4>
+<h4>Example 1<a class="headerlink" href="#example-1" title="Link to this heading"></a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcreset</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">roxar</span>
 
@@ -203,14 +203,14 @@ dictionary, the method will apply to all properties within these grid models.</p
 </section>
 </section>
 <section id="method-set-data-constant">
-<h2>Method set_data_constant<a class="headerlink" href="#method-set-data-constant" title="Permalink to this heading"></a></h2>
+<h2>Method set_data_constant<a class="headerlink" href="#method-set-data-constant" title="Link to this heading"></a></h2>
 <p>This method set all values of the data described as input to a constant.
 The data are therefore not made empty or deleted. This ensure that the geometry
 of the data (surfaces or 3D grid properties) is preserved and no workflow
 component (job or other) is reset.
 This method is more conservative than the <code class="docutils literal notranslate"><span class="pre">set_data_empty</span></code> method.</p>
 <section id="id1">
-<h3>Signature<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<h3>Signature<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <p>The input of this method is a Python dictionary with defined keys. The keys
 “project” and “value” are required while “horizons”, “zones” and “grid_models”
 are optional (at least one of them should be provided for the method to have
@@ -250,15 +250,15 @@ dictionary, the method will apply to all properties within these grid models.</p
 </dl>
 </section>
 <section id="id2">
-<h3>Known issues<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<h3>Known issues<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>None for now</p></li>
 </ul>
 </section>
 <section id="id3">
-<h3>Examples to run from RMS<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<h3>Examples to run from RMS<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <section id="id4">
-<h4>Example 1<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
+<h4>Example 1<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcreset</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">roxar</span>
 
@@ -288,7 +288,7 @@ dictionary, the method will apply to all properties within these grid models.</p
 </div>
 </section>
 <section id="example-2">
-<h4>Example 2<a class="headerlink" href="#example-2" title="Permalink to this heading"></a></h4>
+<h4>Example 2<a class="headerlink" href="#example-2" title="Link to this heading"></a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcreset</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">roxar</span>
 

@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.rename_rms_scripts &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>rms.rename_rms_scripts &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -55,8 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rms.rename_rms_scripts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#positional-arguments">Positional Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#named-arguments">Named Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fmu.tools.rms.rename_rms_scripts-_get_parser-positional-arguments">Positional Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fmu.tools.rms.rename_rms_scripts-_get_parser-named-arguments">Named Arguments</a></li>
 </ul>
 </li>
 </ul>
@@ -95,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="rms-rename-rms-scripts">
-<h1>rms.rename_rms_scripts<a class="headerlink" href="#rms-rename-rms-scripts" title="Permalink to this heading"></a></h1>
+<h1>rms.rename_rms_scripts<a class="headerlink" href="#rms-rename-rms-scripts" title="Link to this heading"></a></h1>
 <p>A common annoyance in RMS projects is that RMS saves its Python scripts
 on-disk with non-Python file extensions such as <code class="docutils literal notranslate"><span class="pre">.py_1</span></code>, <code class="docutils literal notranslate"><span class="pre">.py_2</span></code>, etc.
 RMS also does not offer a way for users to see which Python scripts are
@@ -106,32 +106,32 @@ outside of RMS without RMS running, allows you to find and fix these things.</p>
 .master file!</em> Use with some caution, take a backup, but some safeguards
 are built in.</p>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rename_rms_scripts</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span><span class="p">]</span> <span class="n">path</span>
 </pre></div>
 </div>
-<section id="positional-arguments">
-<h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this heading"></a></h3>
+<section id="fmu.tools.rms.rename_rms_scripts-_get_parser-positional-arguments">
+<h3>Positional Arguments<a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts-_get_parser-positional-arguments" title="Link to this heading"></a></h3>
 <dl class="option-list">
 <dt><kbd>path</kbd></dt>
 <dd><p>Path to the RMS project</p>
 </dd>
 </dl>
 </section>
-<section id="named-arguments">
-<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this heading"></a></h3>
+<section id="fmu.tools.rms.rename_rms_scripts-_get_parser-named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#fmu.tools.rms.rename_rms_scripts-_get_parser-named-arguments" title="Link to this heading"></a></h3>
 <dl class="option-list">
 <dt><kbd>-v, --verbose</kbd></dt>
 <dd><p>Print logging information, a list of Python scripts that are are not used in any RMS workflow, and a list of Python scripts that do not have PEP8 compliant filenames.</p>
-<p>Default: False</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><kbd>-b, --backup</kbd></dt>
 <dd><p>Make a backup of the pythoncomp/ directory before doing anything</p>
-<p>Default: False</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><kbd>-t, --test-run</kbd></dt>
 <dd><p>Do a test run without making any file changes. Prints verbose information about the changes that will be made without making them.</p>
-<p>Default: False</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 </dl>
 </section>

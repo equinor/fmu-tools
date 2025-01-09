@@ -1,20 +1,20 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcproperties.qcproperties &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>fmu.tools.qcproperties.qcproperties &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="../../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../../../_static/documentation_options.js?v=81b9b667"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -102,7 +102,9 @@
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="QCProperties"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">QCProperties</span><span class="p">:</span>
+<div class="viewcode-block" id="QCProperties">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">QCProperties</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The QCProperties class consists of a set of methods for extracting</span>
 <span class="sd">    property statistics from 3D Grids, Raw and Blocked wells.</span>
@@ -274,7 +276,9 @@
     <span class="c1"># QC methods:</span>
     <span class="c1"># ==================================================================================</span>
 
-<div class="viewcode-block" id="QCProperties.get_grid_statistics"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_grid_statistics">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_grid_statistics</span><span class="p">(</span>
+<div class="viewcode-block" id="QCProperties.get_grid_statistics">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_grid_statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_grid_statistics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -287,7 +291,10 @@
             <span class="n">source</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">stem</span><span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="QCProperties.get_well_statistics"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_well_statistics">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_well_statistics</span><span class="p">(</span>
+
+<div class="viewcode-block" id="QCProperties.get_well_statistics">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_well_statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_well_statistics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -300,7 +307,10 @@
             <span class="n">source</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;wells&quot;</span><span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="QCProperties.get_bwell_statistics"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_bwell_statistics">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_bwell_statistics</span><span class="p">(</span>
+
+<div class="viewcode-block" id="QCProperties.get_bwell_statistics">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.get_bwell_statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bwell_statistics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -316,14 +326,22 @@
             <span class="p">),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="QCProperties.from_yaml"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.from_yaml">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="QCProperties.from_yaml">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.from_yaml">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use yaml-configuration file to run the statistics extractions methods&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_initiate_from_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="QCProperties.to_csv"><a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.to_csv">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="QCProperties.to_csv">
+<a class="viewcode-back" href="../../../../fmu.tools.html#fmu.tools.QCProperties.to_csv">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write combined dataframe to csv&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataframe with statistics written to </span><span class="si">{</span><span class="n">csvfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dataframe with statistics written to </span><span class="si">{</span><span class="n">csvfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

@@ -1,20 +1,20 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.generate_petro_jobs_for_field_update &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>fmu.tools.rms.generate_petro_jobs_for_field_update &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="../../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../../../_static/documentation_options.js?v=81b9b667"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -124,7 +124,9 @@
 <span class="n">PP</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.main">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate new RMS petrosim jobs from an original petrosim job.</span>
 
 <span class="sd">    Description</span>
@@ -227,13 +229,19 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_rms_project"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project">[docs]</a><span class="nd">@no_type_check</span>
+
+<div class="viewcode-block" id="check_rms_project">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_rms_project">[docs]</a>
+<span class="nd">@no_type_check</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_rms_project</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">rmsapi</span><span class="o">.</span><span class="n">Project</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;This run must be ran in an RoxAPI environment!&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="read_specification_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_specification_file</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+
+<div class="viewcode-block" id="read_specification_file">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.read_specification_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_specification_file</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file_name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yml_file</span><span class="p">:</span>
         <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yml_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">check</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">check_specification</span><span class="p">(</span><span class="n">spec_dict</span><span class="p">)):</span>
@@ -241,7 +249,10 @@
         <span class="k">return</span> <span class="n">spec_dict</span></div>
 
 
-<div class="viewcode-block" id="check_specification"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">check_specification</span><span class="p">(</span><span class="n">spec_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="check_specification">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_specification</span><span class="p">(</span><span class="n">spec_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="c1"># Check that the same petro variables are specified for</span>
     <span class="c1"># all zones using the same facies. This means that for instance</span>
     <span class="c1"># if the case has zone A,B,C and facies F1 is present in zone A and C</span>
@@ -286,7 +297,10 @@
     <span class="k">return</span> <span class="n">ok</span></div>
 
 
-<div class="viewcode-block" id="define_new_variable_names_and_correlation_matrix"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">define_new_variable_names_and_correlation_matrix</span><span class="p">(</span>
+
+<div class="viewcode-block" id="define_new_variable_names_and_correlation_matrix">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.define_new_variable_names_and_correlation_matrix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">define_new_variable_names_and_correlation_matrix</span><span class="p">(</span>
     <span class="n">orig_var_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">new_var_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -325,7 +339,10 @@
     <span class="k">return</span> <span class="n">sorted_new_var_names</span><span class="p">,</span> <span class="n">new_corr_matrix</span></div>
 
 
-<div class="viewcode-block" id="sort_new_var_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">sort_new_var_names</span><span class="p">(</span>
+
+<div class="viewcode-block" id="sort_new_var_names">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.sort_new_var_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sort_new_var_names</span><span class="p">(</span>
     <span class="n">original_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_variable_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">sorted_keep_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -336,14 +353,20 @@
     <span class="k">return</span> <span class="n">sorted_keep_list</span></div>
 
 
-<div class="viewcode-block" id="get_original_job_settings"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_original_job_settings</span><span class="p">(</span>
+
+<div class="viewcode-block" id="get_original_job_settings">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_original_job_settings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_original_job_settings</span><span class="p">(</span>
     <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="n">original_job</span> <span class="o">=</span> <span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">get_job</span><span class="p">(</span><span class="n">owner_string_list</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">job_name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">original_job</span><span class="o">.</span><span class="n">get_arguments</span><span class="p">(</span><span class="n">skip_defaults</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_copy_of_job"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">create_copy_of_job</span><span class="p">(</span>
+
+<div class="viewcode-block" id="create_copy_of_job">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_copy_of_job</span><span class="p">(</span>
     <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">original_job_arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
@@ -354,7 +377,10 @@
     <span class="k">return</span> <span class="n">new_job</span></div>
 
 
-<div class="viewcode-block" id="get_zone_names_per_facies"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_zone_names_per_facies</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+
+<div class="viewcode-block" id="get_zone_names_per_facies">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_zone_names_per_facies">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_zone_names_per_facies</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
     <span class="n">zone_names_with_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">facies_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -364,7 +390,10 @@
     <span class="k">return</span> <span class="n">zone_names_with_facies_dict</span></div>
 
 
-<div class="viewcode-block" id="get_used_petro_names"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_used_petro_names</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="get_used_petro_names">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.get_used_petro_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_used_petro_names</span><span class="p">(</span><span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">all_petro_var_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">petro_per_facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_per_zone_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">petro_list</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -374,11 +403,17 @@
     <span class="k">return</span> <span class="n">all_petro_var_list</span></div>
 
 
-<div class="viewcode-block" id="set_new_var_name"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">petro_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="set_new_var_name">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.set_new_var_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_new_var_name</span><span class="p">(</span><span class="n">facies_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">petro_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">facies_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">petro_name</span></div>
 
 
-<div class="viewcode-block" id="report_unused_fields"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">report_unused_fields</span><span class="p">(</span>
+
+<div class="viewcode-block" id="report_unused_fields">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.report_unused_fields">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">report_unused_fields</span><span class="p">(</span>
     <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
@@ -415,7 +450,10 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_consistency"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">check_consistency</span><span class="p">(</span>
+
+<div class="viewcode-block" id="check_consistency">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_consistency">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_consistency</span><span class="p">(</span>
     <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">used_petro_per_zone_per_facies_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
@@ -451,7 +489,10 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown petrophysical variable names are specified.&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_new_petro_job_per_facies"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">create_new_petro_job_per_facies</span><span class="p">(</span>
+
+<div class="viewcode-block" id="create_new_petro_job_per_facies">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_new_petro_job_per_facies</span><span class="p">(</span>
     <span class="n">spec_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">report_unused</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">grid_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;grid_name&quot;</span><span class="p">]</span>
@@ -604,7 +645,10 @@
     <span class="k">return</span> <span class="n">new_job_name_list</span></div>
 
 
-<div class="viewcode-block" id="write_petro_job_to_file"><a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">write_petro_job_to_file</span><span class="p">(</span>
+
+<div class="viewcode-block" id="write_petro_job_to_file">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.write_petro_job_to_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_petro_job_to_file</span><span class="p">(</span>
     <span class="n">owner_string_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">job_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">job_instance</span> <span class="o">=</span> <span class="n">jobs</span><span class="o">.</span><span class="n">Job</span><span class="o">.</span><span class="n">get_job</span><span class="p">(</span>
@@ -616,6 +660,7 @@
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">arguments</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
         <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

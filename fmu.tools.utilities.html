@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.utilities package &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>fmu.tools.utilities package &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -100,68 +100,66 @@
            <div itemprop="articleBody">
              
   <section id="fmu-tools-utilities-package">
-<h1>fmu.tools.utilities package<a class="headerlink" href="#fmu-tools-utilities-package" title="Permalink to this heading"></a></h1>
+<h1>fmu.tools.utilities package<a class="headerlink" href="#fmu-tools-utilities-package" title="Link to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-fmu.tools.utilities.sample_attributes">
-<span id="fmu-tools-utilities-sample-attributes-module"></span><h2>fmu.tools.utilities.sample_attributes module<a class="headerlink" href="#module-fmu.tools.utilities.sample_attributes" title="Permalink to this heading"></a></h2>
+<span id="fmu-tools-utilities-sample-attributes-module"></span><h2>fmu.tools.utilities.sample_attributes module<a class="headerlink" href="#module-fmu.tools.utilities.sample_attributes" title="Link to this heading"></a></h2>
 <p>Sample attributes on grid resolution as dataframe points sets.</p>
 <p>This usage is for setting attributes on grid resolution, e.g. a seismic attribute
 (from a map) combined with a region parameter from the same 3D grid.</p>
 <p>This is targeted to the “sim2seis” workflow in FMU.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Attrs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">Attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#Attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">Attrs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#Attrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Attrs.OBS">
-<span class="sig-name descname"><span class="pre">OBS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBS'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.OBS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">OBS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBS'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.OBS" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Attrs.OBS_ERROR">
-<span class="sig-name descname"><span class="pre">OBS_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBS_ERROR'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.OBS_ERROR" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">OBS_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'OBS_ERROR'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.OBS_ERROR" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Attrs.REGION">
-<span class="sig-name descname"><span class="pre">REGION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'REGION'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.REGION" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">REGION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'REGION'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.REGION" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Attrs.VALUES">
-<span class="sig-name descname"><span class="pre">VALUES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'VALUES'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.VALUES" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'VALUES'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Attrs.VALUES" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Position">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">Position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#Position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">Position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#Position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Position.TOP">
-<span class="sig-name descname"><span class="pre">TOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'top'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.TOP" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'top'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.TOP" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Position.CENTER">
-<span class="sig-name descname"><span class="pre">CENTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'center'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.CENTER" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">CENTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'center'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.CENTER" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.Position.BASE">
-<span class="sig-name descname"><span class="pre">BASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.BASE" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">BASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base'</span></em><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.Position.BASE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes.sample_attributes_for_sim2seis">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">sample_attributes_for_sim2seis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error=0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error_minimum=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position=(''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;Position.CENTER:</span> <span class="pre">'center'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#sample_attributes_for_sim2seis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.sample_attributes_for_sim2seis" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.sample_attributes.</span></span><span class="sig-name descname"><span class="pre">sample_attributes_for_sim2seis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error_minimum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('',</span> <span class="pre">Position.CENTER)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#sample_attributes_for_sim2seis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes.sample_attributes_for_sim2seis" title="Link to this definition"></a></dt>
 <dd><p>Sample attributes on grid resolution as poinst sets.</p>
 <p>This usage is for setting attributes on grid resolution, e.g. a seismic attribute
 (from a map) combined with a region parameter from the grid.</p>
@@ -169,22 +167,22 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Grid</span>) – The grid to sample the attributes on.</p></li>
-<li><p><strong>attribute</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface</span>) – The seismic (or custom) map/surface to sample the attribute from.</p></li>
-<li><p><strong>attribute_error</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface | float</span>) – The error to apply to the attribute (optional).
+<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></span>) – The grid to sample the attributes on.</p></li>
+<li><p><strong>attribute</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegularSurface</span></code></span>) – The seismic (or custom) map/surface to sample the attribute from.</p></li>
+<li><p><strong>attribute_error</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegularSurface</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – The error to apply to the attribute (optional).
 Shall be absolute (positive) values. If the user wants to apply a polygons
 with different error values, the user can ise surface-polygons functions
 in xtgeo to achieve this.</p></li>
-<li><p><strong>attribute_error_minimum</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – The minimum error to apply to the attribute (optional).</p></li>
-<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The region parameter to sample from the grid (optional).</p></li>
-<li><p><strong>zone</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The zone parameter to sample from the grid (optional).</p></li>
-<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type">tuple[str, Position]</span>) – The position to sample the attributes on the grid. This
+<li><p><strong>attribute_error_minimum</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The minimum error to apply to the attribute (optional).</p></li>
+<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The region parameter to sample from the grid (optional).</p></li>
+<li><p><strong>zone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The zone parameter to sample from the grid (optional).</p></li>
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#fmu.tools.utilities.sample_attributes.Position" title="fmu.tools.utilities.sample_attributes.Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>]</span>) – The position to sample the attributes on the grid. This
 shall be given as a tuple, as e.g. (“MyZone”, “center”) where the first
 is zone name, and the second is vertical position (“top”, “center”, “base”)
 in that zone. Default is (“”, “center”) which will take the middle layer
 of the total grid. The zone name is case sensitive. If zone is not given,
 the full grid interval will be applied to determine the layer.</p></li>
-<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type">Any</span>) – Additional keywords (developer settings).</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span>) – Additional keywords (developer settings).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -198,10 +196,10 @@ the full grid interval will be applied to determine the layer.</p></li>
 
 </section>
 <section id="module-fmu.tools.utilities">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.utilities" title="Permalink to this heading"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmu.tools.utilities" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmu.tools.utilities.sample_attributes_for_sim2seis">
-<span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.</span></span><span class="sig-name descname"><span class="pre">sample_attributes_for_sim2seis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error=0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error_minimum=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position=(''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;Position.CENTER:</span> <span class="pre">'center'&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#sample_attributes_for_sim2seis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes_for_sim2seis" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.utilities.</span></span><span class="sig-name descname"><span class="pre">sample_attributes_for_sim2seis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_error_minimum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('',</span> <span class="pre">Position.CENTER)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/utilities/sample_attributes.html#sample_attributes_for_sim2seis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.utilities.sample_attributes_for_sim2seis" title="Link to this definition"></a></dt>
 <dd><p>Sample attributes on grid resolution as poinst sets.</p>
 <p>This usage is for setting attributes on grid resolution, e.g. a seismic attribute
 (from a map) combined with a region parameter from the grid.</p>
@@ -209,22 +207,22 @@ the full grid interval will be applied to determine the layer.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.Grid</span>) – The grid to sample the attributes on.</p></li>
-<li><p><strong>attribute</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface</span>) – The seismic (or custom) map/surface to sample the attribute from.</p></li>
-<li><p><strong>attribute_error</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.RegularSurface | float</span>) – The error to apply to the attribute (optional).
+<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></span>) – The grid to sample the attributes on.</p></li>
+<li><p><strong>attribute</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegularSurface</span></code></span>) – The seismic (or custom) map/surface to sample the attribute from.</p></li>
+<li><p><strong>attribute_error</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">RegularSurface</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – The error to apply to the attribute (optional).
 Shall be absolute (positive) values. If the user wants to apply a polygons
 with different error values, the user can ise surface-polygons functions
 in xtgeo to achieve this.</p></li>
-<li><p><strong>attribute_error_minimum</strong> (<span class="sphinx_autodoc_typehints-type">float | None</span>) – The minimum error to apply to the attribute (optional).</p></li>
-<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The region parameter to sample from the grid (optional).</p></li>
-<li><p><strong>zone</strong> (<span class="sphinx_autodoc_typehints-type">xtgeo.GridProperty | None</span>) – The zone parameter to sample from the grid (optional).</p></li>
-<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type">tuple[str, Position]</span>) – The position to sample the attributes on the grid. This
+<li><p><strong>attribute_error_minimum</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The minimum error to apply to the attribute (optional).</p></li>
+<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The region parameter to sample from the grid (optional).</p></li>
+<li><p><strong>zone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – The zone parameter to sample from the grid (optional).</p></li>
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#fmu.tools.utilities.sample_attributes.Position" title="fmu.tools.utilities.sample_attributes.Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>]</span>) – The position to sample the attributes on the grid. This
 shall be given as a tuple, as e.g. (“MyZone”, “center”) where the first
 is zone name, and the second is vertical position (“top”, “center”, “base”)
 in that zone. Default is (“”, “center”) which will take the middle layer
 of the total grid. The zone name is case sensitive. If zone is not given,
 the full grid interval will be applied to determine the layer.</p></li>
-<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type">Any</span>) – Additional keywords (developer settings).</p></li>
+<li><p><strong>**kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span>) – Additional keywords (developer settings).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

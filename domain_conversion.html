@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Domain conversion &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>Domain conversion &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -96,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="domain-conversion">
-<h1>Domain conversion<a class="headerlink" href="#domain-conversion" title="Permalink to this heading"></a></h1>
+<h1>Domain conversion<a class="headerlink" href="#domain-conversion" title="Link to this heading"></a></h1>
 <p>In RMS it is possible to do domain conversion using the menu option, but in
 some cases it convenient to be able to convert domains using a script. This
 module provides a method to convert domains in pure python.</p>
@@ -105,9 +105,9 @@ domains. The code will then interpolate the data from the source domain to
 the target domain. This will be based on <em>average</em> velocity or slowness, in constrast to
 the RMS domain conversion which is based on an <em>interval</em> velocity model.</p>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <section id="example-1">
-<h3>Example 1<a class="headerlink" href="#example-1" title="Permalink to this heading"></a></h3>
+<h3>Example 1<a class="headerlink" href="#example-1" title="Link to this heading"></a></h3>
 <p>Depth convert a cube from time to depth domain.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>
@@ -129,7 +129,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 </div>
 </section>
 <section id="example-2">
-<h3>Example 2<a class="headerlink" href="#example-2" title="Permalink to this heading"></a></h3>
+<h3>Example 2<a class="headerlink" href="#example-2" title="Link to this heading"></a></h3>
 <p>Time convert a cube and a surface from depth to time domain.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>
@@ -157,7 +157,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 </div>
 </section>
 <section id="example-3">
-<h3>Example 3<a class="headerlink" href="#example-3" title="Permalink to this heading"></a></h3>
+<h3>Example 3<a class="headerlink" href="#example-3" title="Link to this heading"></a></h3>
 <p>A larger example with cubes and surfaces in RMS python environment.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>

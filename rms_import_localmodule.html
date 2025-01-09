@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.import_localmodule &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>rms.import_localmodule &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -92,7 +92,7 @@
            <div itemprop="articleBody">
              
   <section id="rms-import-localmodule">
-<h1>rms.import_localmodule<a class="headerlink" href="#rms-import-localmodule" title="Permalink to this heading"></a></h1>
+<h1>rms.import_localmodule<a class="headerlink" href="#rms-import-localmodule" title="Link to this heading"></a></h1>
 <p>Inside the RMS project it can be beneficial to have a module that serves as a library,
 not only a front end script. Several problems exist in current RMS</p>
 <ul class="simple">
@@ -106,7 +106,7 @@ differ.</p></li>
 <p>This function solves all these issues, and makes it possible to import a RMS project
 library in a much easier way.</p>
 <section id="the-library-is-inside-rms">
-<h2>The library is inside rms<a class="headerlink" href="#the-library-is-inside-rms" title="Permalink to this heading"></a></h2>
+<h2>The library is inside rms<a class="headerlink" href="#the-library-is-inside-rms" title="Link to this heading"></a></h2>
 <p>Given that the library module is made inside the RMS GUI, here is an example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>
 
@@ -118,7 +118,7 @@ library in a much easier way.</p>
 </div>
 </section>
 <section id="the-library-is-outside-rms">
-<h2>The library is outside RMS<a class="headerlink" href="#the-library-is-outside-rms" title="Permalink to this heading"></a></h2>
+<h2>The library is outside RMS<a class="headerlink" href="#the-library-is-outside-rms" title="Link to this heading"></a></h2>
 <p>Sometimes it is convenient that the library is made outside RMS, and the same function can
 then be applied with a <cite>path</cite> keyword:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>

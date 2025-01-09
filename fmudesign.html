@@ -1,21 +1,21 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FMU design matrix &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=81b9b667"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -108,9 +108,9 @@
            <div itemprop="articleBody">
              
   <section id="fmu-design-matrix">
-<h1>FMU design matrix<a class="headerlink" href="#fmu-design-matrix" title="Permalink to this heading"></a></h1>
+<h1>FMU design matrix<a class="headerlink" href="#fmu-design-matrix" title="Link to this heading"></a></h1>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>fmu-tools is designed for use in several scenarios:</p>
 <ul class="simple">
 <li><p>Part of an ERT workflow, typically as a pre or postprocessing
@@ -134,17 +134,17 @@ Study the examples for how to configure the input for the design matrix</p>
 Study the examples to learn how to use it.</p>
 </section>
 <section id="examples-to-learn-from">
-<h2>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Permalink to this heading"></a></h2>
+<h2>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Link to this heading"></a></h2>
 </section>
 <section id="create-design-matrix-for-one-by-one-sensitivities">
-<h2>Create design matrix for one by one sensitivities<a class="headerlink" href="#create-design-matrix-for-one-by-one-sensitivities" title="Permalink to this heading"></a></h2>
+<h2>Create design matrix for one by one sensitivities<a class="headerlink" href="#create-design-matrix-for-one-by-one-sensitivities" title="Link to this heading"></a></h2>
 <p>These examples show use of the <code class="docutils literal notranslate"><span class="pre">fmu.tools.sensitivities</span></code> package to
 generate design matrices automatically. Input is given as a dictionary
 which can be generated from an excel workbook. The excel workbook must
 be set up using a specific format. These examples explain how to set
 up the workbook.</p>
 <section id="what-are-the-types-of-sensitivities-that-can-be-set-up">
-<h3>What are the types of sensitivities that can be set up<a class="headerlink" href="#what-are-the-types-of-sensitivities-that-can-be-set-up" title="Permalink to this heading"></a></h3>
+<h3>What are the types of sensitivities that can be set up<a class="headerlink" href="#what-are-the-types-of-sensitivities-that-can-be-set-up" title="Link to this heading"></a></h3>
 <p>The functionallity so far is covering set-ups for running single sensitivities (one by one sensitivities), but with some options for more advanced set-ups.
 The types of sensitivities that are covered are:</p>
 <dl>
@@ -180,7 +180,7 @@ The types of sensitivities that are covered are:</p>
 </dl>
 </section>
 <section id="input-configuration-format">
-<h3>Input configuration format<a class="headerlink" href="#input-configuration-format" title="Permalink to this heading"></a></h3>
+<h3>Input configuration format<a class="headerlink" href="#input-configuration-format" title="Link to this heading"></a></h3>
 <p>Currently supported is configuration in an excel workbook.
 The excel workbook contains several sheets. The three sheets <strong>general_input</strong>, <strong>designinput</strong> and <strong>defaultvalues</strong> need to exist in the input workbook (although variants like GeneralInput, generalinput, Generalinput etc. are also supported).</p>
 <p>The <em>general_input</em> sheet contains the <em>designtype</em>, which has to be set to <em>onebyone</em>. The parameter <em>repeats</em> tells how many RMS seeds (RMS_SEED) that should be repeated for each sensitivity. This is also the default number of realisations per sensitivity/sensitivity case. When <em>rms_seeds</em> is set to <em>default</em> it means that RMS_SEED numbers 1000, 1001, 1002, … will be used. These RMS_SEED numbers are repeated for each sensitivity/sensitivity case.</p>
@@ -197,7 +197,7 @@ The excel workbook contains several sheets. The three sheets <strong>general_inp
 </ul>
 </section>
 <section id="example1-excel-file-for-one-by-one-sensitivities-with-repeating-rms-seeds">
-<h3>Example1: Excel file for one by one sensitivities with repeating RMS seeds<a class="headerlink" href="#example1-excel-file-for-one-by-one-sensitivities-with-repeating-rms-seeds" title="Permalink to this heading"></a></h3>
+<h3>Example1: Excel file for one by one sensitivities with repeating RMS seeds<a class="headerlink" href="#example1-excel-file-for-one-by-one-sensitivities-with-repeating-rms-seeds" title="Link to this heading"></a></h3>
 <p>In this first example the <em>general_input</em> and <em>defaultvalues</em> are as in the figures above. In the <em>designinput</em> sheet four sensitivities are specified in addition to the seed sensitivity: ‘faults’, ‘velmodel’, ‘contacts’ and ‘multz’. Each sensitivity can contain one or several rows with parameters, but the sensitivity type and senscase (names for the 1-2 cases per scenario) is defined in the first row of the sensitivity. In the <em>faults</em> sensitivity two alternative values for the parameter <em>FAULT_POSITION</em> are specified, in senscase ‘east’ and ‘west’.  Typically these will in tornado calculations be compared to the rms_seed sensitivity where the <em>FAULT_POSITION</em> will be set to its default value (0).  In the <em>velmodel</em> sensitivity only one alternative senscase is specified for the parameter <em>DC_MODEL</em>. In the <em>contacts</em> sensitivity three parameters are varied at the same time. In the <em>shallow</em> case, all contacts are set shallow, and opposite in the <em>deep</em> sensitiviy case.</p>
 <p>The last sensitivity is a monte carlo sensitivity where the parameter <em>MULTZ_ILE</em> has values sampled from the distribution <em>loguniform(0.0001, 1)</em>. Note that for this last sensitivity the numbers of realisations <em>(numreal)</em> is set to 20, which overrides the default number of realisations given in the <em>general_input</em> spreadsheet. The RMS_SEED numbers will for these 20 realisations be from 1000 to 1019, since <em>rms_seeds</em> was set to <em>default</em> in the <em>general_input</em> sheet.</p>
 <img alt="_images/design_designinput1.png" src="_images/design_designinput1.png" />
@@ -219,7 +219,7 @@ The excel workbook contains several sheets. The three sheets <strong>general_inp
 </div>
 </section>
 <section id="example-2-excel-input-for-sensitivities-with-group-of-correlated-parameters-sampled-from-distributions">
-<h3>Example 2: Excel input for sensitivities with group of (correlated) parameters sampled from distributions<a class="headerlink" href="#example-2-excel-input-for-sensitivities-with-group-of-correlated-parameters-sampled-from-distributions" title="Permalink to this heading"></a></h3>
+<h3>Example 2: Excel input for sensitivities with group of (correlated) parameters sampled from distributions<a class="headerlink" href="#example-2-excel-input-for-sensitivities-with-group-of-correlated-parameters-sampled-from-distributions" title="Link to this heading"></a></h3>
 <p>In this example the <em>general_input</em> and <em>defaultvalues</em> are the same as for Example 1 but the designinput is a bit different. For sensitivity <em>sens6</em> there are several parameters sampled from different distributions. Note that for the <em>normal</em> distributions the truncated versions will be used if <em>dist_param3</em> (min) and <em>dist_param4</em> (max) are specified in addition to <em>dist_param1</em> (mean) and <em>dist_param2</em> (standard deviation).</p>
 <p>For sensitivity <em>sens7</em> <em>corr1</em> is specified in the <em>corr_sheet</em> column. This means that the parameters for this sensitivity should be correlated, and the correlations should be read from the sheet with the same name. If there are several groups of correlated parameters within a sensitivity, there can be several correlations sheets with different names. Specify the name of the correlation sheet the parameter belongs to in the <em>corr_sheet</em> column.</p>
 <p>Note also that the integer value in the <em>decimals</em> columns specifies how many decimals the parameter value should be rounded to before output in the design matrix. Only used for sensitivities of type <em>dist</em>. The <em>numreal</em> and <em>decimals</em> columns are optional.</p>
@@ -229,7 +229,7 @@ The excel workbook contains several sheets. The three sheets <strong>general_inp
 <img alt="_images/design_corr1.png" src="_images/design_corr1.png" />
 </section>
 <section id="example-3-testing-different-velocity-models-with-uncertainty">
-<h3>Example 3: Testing different velocity  models with uncertainty<a class="headerlink" href="#example-3-testing-different-velocity-models-with-uncertainty" title="Permalink to this heading"></a></h3>
+<h3>Example 3: Testing different velocity  models with uncertainty<a class="headerlink" href="#example-3-testing-different-velocity-models-with-uncertainty" title="Link to this heading"></a></h3>
 <p>This example shows a set-up for testing the effects of different velocity models run with structural uncertainty (Simulation mode) with HUM in RMS. In the general_input tab <em>repeats</em> is set to 10 and <em>rms_seeds</em> is set to ‘default’, so that for each sensitivity 10 realisations with RMS seeds 1000, 1001, –, 1009 are created.</p>
 <p>The reference sensitivity <em>rms_seed</em> is set up with COHIBA_MODE ‘prediction’, and VEL_MODEL (velocity model) number 1 read from <em>defaultvalues</em>. So for this sensitivity the seed variation will only affect other jobs using RMS_SEED, such as facies/property modelling.</p>
 <p>In the sensitivity <em>velmod1</em> COHIBA_MODE is set to ‘simulation’ which will control the HUM job to be run in simulation mode. Velocity model is set to model number 1. This explores the how the RMS seed variation affects the structure for velocity model 1. Similarly the sensitivity <em>velmod2</em> will explore how the RMS seed variation affects the structure for velocity model 2. Note that all these three first sensitivities are set up with <em>type</em> set to <em>seed</em> which flags that SENSCASE in the output design matrix should be set to <em>p10_p90</em> so that P10/P90 is calculated for the tornado plot.</p>
@@ -237,39 +237,39 @@ The excel workbook contains several sheets. The three sheets <strong>general_inp
 <img alt="_images/design_designinput_example_velocities.png" src="_images/design_designinput_example_velocities.png" />
 </section>
 <section id="example-4-excel-input-for-sensitivities-with-background-parameters">
-<h3>Example 4: Excel input for sensitivities with background parameters<a class="headerlink" href="#example-4-excel-input-for-sensitivities-with-background-parameters" title="Permalink to this heading"></a></h3>
+<h3>Example 4: Excel input for sensitivities with background parameters<a class="headerlink" href="#example-4-excel-input-for-sensitivities-with-background-parameters" title="Link to this heading"></a></h3>
 <p>The use of background parameters is flagged in the general_input sheet by changing <em>background</em> from <em>None</em> to either a name of the sheet where the background parameters are specified, or a path to an excel file where the only/first sheet is specifying the background parameters. If the external file contains less samples than number of realisations for a sensitivity, the rest will be filled with default values. In this example it is specified that the background parameters should be generated from distributions as defined in the sheet (in the same workbook) called ‘background’. The specification is the same as for a sensitivity of type ‘dist’:  distribution types, distribution parameters, and optionally decimals and correlation sheet. The background sheet for this example is shown in the figure below.</p>
 <img alt="_images/design_background_geninput.png" src="_images/design_background_geninput.png" />
 <img alt="_images/design_backgroundvalues.png" src="_images/design_backgroundvalues.png" />
 </section>
 <section id="example-5-sensitivities-with-a-single-reference-realisation">
-<h3>Example 5: Sensitivities with a single reference realisation<a class="headerlink" href="#example-5-sensitivities-with-a-single-reference-realisation" title="Permalink to this heading"></a></h3>
+<h3>Example 5: Sensitivities with a single reference realisation<a class="headerlink" href="#example-5-sensitivities-with-a-single-reference-realisation" title="Link to this heading"></a></h3>
 <p>This type of set up might be used if one do not want to include any RMS seed variation or background parameters, but want to create a single realisation that can be used as reference for the tornado plot. In the <em>general_input</em> sheet <em>rms_seeds</em> is set to <em>None</em>. The first line in the <em>designinput</em> sheet is using <em>senstype</em> set to ‘ref’. This is flagging that it should take parameter values from the <em>defaultvalues</em> sheet, and that it will get <em>SENSCASE</em> set to ‘ref’ in the output design matrix. This ensures it can only be used as a reference for tornado calculations, but will not itself plot as a sensitivity in the tornado plot. The next three sensitivities in this example are scenario sensitivities with only one realisation (as there is no RMS seed variation), while the final one samples 10 values for MULTZ_ILE from a distribution.</p>
 <img alt="_images/design_designinput_singlereference.png" src="_images/design_designinput_singlereference.png" />
 </section>
 <section id="example-6-sensitivities-with-a-single-reference-realisation-and-seed-sensitivity">
-<h3>Example 6: Sensitivities with a single reference realisation and seed sensitivity<a class="headerlink" href="#example-6-sensitivities-with-a-single-reference-realisation-and-seed-sensitivity" title="Permalink to this heading"></a></h3>
+<h3>Example 6: Sensitivities with a single reference realisation and seed sensitivity<a class="headerlink" href="#example-6-sensitivities-with-a-single-reference-realisation-and-seed-sensitivity" title="Link to this heading"></a></h3>
 <p>It is also possible to set up a design matrix that includes <em>both</em> a single reference realisation and a seed sensitivity that can be used as reference for tornado plots. In this example the single reference realisation will get the RMS_SEED value as specified in <em>defaultvalues</em>, while the other sensitivities will get the number of realisations and RMS_SEED values as specified in <em>general_input</em> tab. This allows the user to later choose which reference (realisation 0 or the sensitivity called ‘rms_seed’) to use for the tornado plots.</p>
 <img alt="_images/design_designinput_singlereference_and_seed.png" src="_images/design_designinput_singlereference_and_seed.png" />
 </section>
 <section id="example-7-sensitivities-with-background-but-without-rms-seed">
-<h3>Example 7: Sensitivities with background but without RMS seed<a class="headerlink" href="#example-7-sensitivities-with-background-but-without-rms-seed" title="Permalink to this heading"></a></h3>
+<h3>Example 7: Sensitivities with background but without RMS seed<a class="headerlink" href="#example-7-sensitivities-with-background-but-without-rms-seed" title="Link to this heading"></a></h3>
 <p>This set up might be used if running a one by one design on top of varying background parameters, but the seed sensitivity is not included. In this case there will be no ‘seed’ sensitivity to use as reference for tornado plot, so one need to generate a reference where only the background parameters are varying and the other parameters are set to their default values. This is flagged by using the sensitivity type ‘background’ which do not take any additional parameters. In the output design matrix this first sensitivity will have SENSNAME ‘background’ and SENSCASE ‘p10_p90’. The background sensitivity is by default included in the tornado plot.</p>
 <img alt="_images/design_designinput_background_noseed.png" src="_images/design_designinput_background_noseed.png" />
 </section>
 <section id="example-8-full-monte-carlo-sensitivity">
-<h3>Example 8: Full monte carlo sensitivity<a class="headerlink" href="#example-8-full-monte-carlo-sensitivity" title="Permalink to this heading"></a></h3>
+<h3>Example 8: Full monte carlo sensitivity<a class="headerlink" href="#example-8-full-monte-carlo-sensitivity" title="Link to this heading"></a></h3>
 <p>This example shows a full monte carlo design with correlated parameters. This means all the parameters are randomly drawn from their distributions, and could have correlations as provided in the correlation sheet. In this example there are two groups of correlated parameters, and their correlation matrices are specified in the sheets <em>corr1</em> and <em>corr2</em>. The remaining parameters are not correlated. In this case there is actually only one <em>sensname</em> as all the parameters belong to the same sensitivity. The number of realisations can either be provided in the <em>general_input</em> sheet, or in the <em>numreal</em> column in the <em>designinput</em> sheet. All parameters in the design must also be included in the <em>defaultvalues</em> sheet.</p>
 <img alt="_images/design_fullmc_corr.png" src="_images/design_fullmc_corr.png" />
 </section>
 <section id="example-9-adding-dependent-discrete-parameters-to-monte-carlo-designs">
-<h3>Example 9: Adding dependent discrete parameters to monte carlo designs<a class="headerlink" href="#example-9-adding-dependent-discrete-parameters-to-monte-carlo-designs" title="Permalink to this heading"></a></h3>
+<h3>Example 9: Adding dependent discrete parameters to monte carlo designs<a class="headerlink" href="#example-9-adding-dependent-discrete-parameters-to-monte-carlo-designs" title="Link to this heading"></a></h3>
 <p>If parameter A is sampled from a discrete distribution, and one or more additional parameters is to be set based on the value of parameter A, this can be specified in a separate sheet, and sheetname added to the designinput sheet in an optional column called <em>dependencies</em>. In this example the parameter LIFTCURVE_SINGLE is drawn from a weighted discrete distribution, while LIFTCURVE_DUAL and ANOTHER PARAMETER is set based on the value of LIFTCURVE_SINGLE. Note that there cannot be  more than one “mother” parameter, and you cannot have more complicated dependencies like if statements, formulas or inequalities. This solution is only provided for 100% correlated discrete parameters.</p>
 <img alt="_images/design_designinput_dependencies.png" src="_images/design_designinput_dependencies.png" />
 <img alt="_images/design_depend1.png" src="_images/design_depend1.png" />
 </section>
 <section id="example-summary-of-design-matrix">
-<h3>Example: summary of design matrix<a class="headerlink" href="#example-summary-of-design-matrix" title="Permalink to this heading"></a></h3>
+<h3>Example: summary of design matrix<a class="headerlink" href="#example-summary-of-design-matrix" title="Link to this heading"></a></h3>
 <p>Use summarize_design on a design matrix on standard fmu format for
 one-by-one sensitivities to summarize the realisation numbers for each
 SENSNAME and SENSTYPE, and whether they are scalar sensitivities or
@@ -292,7 +292,7 @@ monte carlo sensitivities.</p>
 </div>
 </section>
 <section id="example-calculating-one-tornadotable">
-<h3>Example: calculating one tornadotable<a class="headerlink" href="#example-calculating-one-tornadotable" title="Permalink to this heading"></a></h3>
+<h3>Example: calculating one tornadotable<a class="headerlink" href="#example-calculating-one-tornadotable" title="Link to this heading"></a></h3>
 <p>Using calc_tornadoplot with a ‘designsummary’ and a resultfile as
 input, and calculating statistics to visualize in a tornado plot for a
 given choice of SELECTOR (e.g. ZONE:’Nansen’) and RESPONSE

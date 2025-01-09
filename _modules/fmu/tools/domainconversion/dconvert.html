@@ -1,20 +1,20 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.18.1.dev2+g39c3f3f documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.18.1.dev5+g148a46c documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=00fb3d2d"></script>
-      <script src="../../../../_static/doctools.js?v=888ff710"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../../../_static/documentation_options.js?v=81b9b667"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -97,7 +97,9 @@
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DomainConversion"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion">[docs]</a><span class="nd">@dataclass</span>
+<div class="viewcode-block" id="DomainConversion">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion">[docs]</a>
+<span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DomainConversion</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Domain conversion, tailored for fmu-sim2seis, but also works as standalone.</span>
@@ -423,10 +425,13 @@
 
         <span class="k">return</span> <span class="n">x_surfaces</span><span class="p">,</span> <span class="n">s_surfaces</span>
 
-<div class="viewcode-block" id="DomainConversion.max_depth_for_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.max_depth_for_cube">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="DomainConversion.max_depth_for_cube">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.max_depth_for_cube">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">max_depth_for_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the maximum depth for a cube.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cube</span><span class="o">.</span><span class="n">zinc</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extend_incube_create_speed_cube_average</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -676,11 +681,13 @@
         <span class="n">zmax_actual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_depth_for_cube</span><span class="p">(</span><span class="n">rcube</span><span class="p">)</span>
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Zmax for depth cube is </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">zmax_actual</span><span class="p">)</span>
-        <span class="n">new_vertical_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-            <span class="n">rcube</span><span class="o">.</span><span class="n">zori</span><span class="p">,</span> <span class="n">zmax_actual</span> <span class="o">+</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span><span class="p">,</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
-        <span class="n">seismic_attribute_result_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">undefined</span><span class="p">)</span>
 
+        <span class="n">start</span> <span class="o">=</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zori</span>
+        <span class="n">stop</span> <span class="o">=</span> <span class="n">zmax_actual</span> <span class="o">+</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span>
+        <span class="n">num_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">))</span>
+        <span class="n">new_vertical_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">)</span>
+
+        <span class="n">seismic_attribute_result_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">undefined</span><span class="p">)</span>
         <span class="c1"># Perform the interpolation for each (x, y) location</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
@@ -713,20 +720,29 @@
     <span class="c1"># Public methods and properties</span>
     <span class="c1"># ==================================================================================</span>
 
-<div class="viewcode-block" id="DomainConversion.surface_names"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.surface_names">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="DomainConversion.surface_names">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.surface_names">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">surface_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of surface names.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">name</span></div>
 
-<div class="viewcode-block" id="DomainConversion.velocity_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.velocity_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">velocity_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="DomainConversion.velocity_surfaces">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.velocity_surfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">velocity_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of velocity surfaces.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">surf</span></div>
 
-<div class="viewcode-block" id="DomainConversion.slowness_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.slowness_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">slowness_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="DomainConversion.slowness_surfaces">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.slowness_surfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">slowness_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of slowness surfaces.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">surf</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">average_velocity_cube_in_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -736,7 +752,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">average_slowness_cube_in_depth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>
 
-<div class="viewcode-block" id="DomainConversion.depth_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_surfaces</span><span class="p">(</span>
+<div class="viewcode-block" id="DomainConversion.depth_convert_surfaces">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_surfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_surfaces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the current average velocity model/surfaces to perform depth conversion.</span>
@@ -746,7 +764,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">time2depth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.time_convert_surfaces"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_surfaces">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_surfaces</span><span class="p">(</span>
+
+<div class="viewcode-block" id="DomainConversion.time_convert_surfaces">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_surfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_surfaces</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the average slowness model/cube to perform depth to time conversion.</span>
@@ -757,7 +778,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_surfaces</span><span class="p">(</span><span class="n">insurfs</span><span class="p">,</span> <span class="n">time2depth</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.depth_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_cube">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_cube</span><span class="p">(</span>
+
+<div class="viewcode-block" id="DomainConversion.depth_convert_cube">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.depth_convert_cube">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">depth_convert_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">zinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -790,7 +814,10 @@
             <span class="n">time2depth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="DomainConversion.time_convert_cube"><a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_cube">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_cube</span><span class="p">(</span>
+
+<div class="viewcode-block" id="DomainConversion.time_convert_cube">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.time_convert_cube">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_convert_cube</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span>
         <span class="n">tinc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -820,7 +847,9 @@
             <span class="n">zmax_proposed</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span>
             <span class="n">undefined</span><span class="o">=</span><span class="n">undefined</span><span class="p">,</span>
             <span class="n">time2depth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
