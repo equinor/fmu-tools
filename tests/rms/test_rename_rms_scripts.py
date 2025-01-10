@@ -213,7 +213,7 @@ def test_fix_standalone_filenames(tmp_path):
         assert e["instance_name"] == e["standalonefilename"]
         with open(e["path"], "r", encoding="utf-8") as f:
             code = f.read().strip()
-        assert code == f"print(\"{entry.split('.')[0]}\")"
+        assert code == f'print("{entry.split(".")[0]}")'
 
     unfixed = project.get_inconsistent_entries()
     assert len(unfixed) - len(skipped) == 0

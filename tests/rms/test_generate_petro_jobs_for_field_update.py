@@ -262,7 +262,7 @@ def rename_subgrids(xtgeo_grd: xtgeo.Grid) -> None:
     nsubgrids = len(list(xtgeo_grd.subgrids.keys()))
     subgrid_names = []
     for i in range(nsubgrids):
-        name_of_subgrid = f"Zone{i+1}"
+        name_of_subgrid = f"Zone{i + 1}"
         subgrid_names.append(name_of_subgrid)
     xtgeo_grd.rename_subgrids(subgrid_names)
 

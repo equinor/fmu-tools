@@ -78,9 +78,9 @@ def check_and_parse_config(config: Dict[str, Any]) -> Dict[str, Any]:
     else:
         config["loglevel"] = logging.WARNING
 
-    assert not (
-        "input_dframe" not in config and "input_file" not in config
-    ), "Specify either input_file or input_dframe"
+    assert not ("input_dframe" not in config and "input_file" not in config), (
+        "Specify either input_file or input_dframe"
+    )
 
     if "input_dframe" in config and "input_file" in config:
         raise ValueError("Do not specify both input_dframe and input_file")
@@ -137,9 +137,9 @@ def check_and_parse_config(config: Dict[str, Any]) -> Dict[str, Any]:
     assert isinstance(config["rft_prefix"], str), "rft_prefix must be a string"
 
     config["trajectory_name"] = config.get("trajectory_name", "Drilled trajectory")
-    assert isinstance(
-        config["trajectory_name"], str
-    ), "trajectory_name must be a string"
+    assert isinstance(config["trajectory_name"], str), (
+        "trajectory_name must be a string"
+    )
 
     return config
 
