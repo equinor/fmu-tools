@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.19.1.dev1+g81af438 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.19.1.dev2+g23f2b9e documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ad733a20"></script>
+      <script src="_static/documentation_options.js?v=d266690a"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -56,6 +56,8 @@
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -949,6 +951,126 @@ rather than try to figure it out.</p>
 </dd></dl>
 
 </section>
+<section id="module-fmu.tools.rms.update_petro_real">
+<span id="fmu-tools-rms-update-petro-real-module"></span><h2>fmu.tools.rms.update_petro_real module<a class="headerlink" href="#module-fmu.tools.rms.update_petro_real" title="Link to this heading"></a></h2>
+<p>Merge petrophysical realizations created individually per facies
+into one realization using facies realization as filter</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.update_petro_real">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">update_petro_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_code_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_real_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_code_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_missing_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#update_petro_real"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.update_petro_real" title="Link to this definition"></a></dt>
+<dd><p>Combine multiple petrophysical realizations (one per facies) into one parameter
+using facies realization as filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl>
+<dt>Description:</dt><dd><p>This function will read petrophysical realization for multiple facies
+(where all grid cells have the same facies) and use the facies
+realization to combine them into one realization conditioned to facies.</p>
+</dd>
+<dt>Input:</dt><dd><p>Choose either to use a config file of the same type as for the function
+generate_petro_real in fmu.tools.rms or choose to specify the
+dictionary defining which petro variables to use as field parameters for
+each zone and facies. In the last case also specify grid model
+and facies realization name.</p>
+<p>If multi zone grid is used, also specify dictionary defining
+zone name and zone code and zone parameter name.</p>
+</dd>
+<dt>Output:</dt><dd><p>Updated version of petrophysical realizations
+for the specified petrophysical variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.import_updated_field_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">import_updated_field_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERTBOX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">import_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'../..'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#import_updated_field_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.import_updated_field_parameters" title="Link to this definition"></a></dt>
+<dd><p>Import ROFF files with field parameters updated by ERT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Description:</dt><dd><p>This function will import ROFF format files generated by ERT when using
+the FIELD keyword in ERT to update petrophysical field parameters.
+The naming convention is files with the name of the form:
+zonename_faciesname_petrovarname with suffix “.roff”
+The files are assumed to be located at the top directory level
+where updated fields are written by ERT.</p>
+</dd>
+<dt>Input:</dt><dd><p>A dictionary specifying which petrophysical variables to use as field parameters
+for each facies for each zone.
+The grid model name to import the field parameters into (ERTBOX grid).
+For singe zone grids, also a name of the zone for the single zone
+must be specified.</p>
+</dd>
+</dl>
+<p>The result will be new petrophysical parameters in ERTBOX grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.export_initial_field_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">export_initial_field_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERTBOX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'../../rms/output/aps'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#export_initial_field_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.export_initial_field_parameters" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Export ROFF files with field parameters simulated by RMS to files to be</dt><dd><p>read by ERT and used as field parameters.</p>
+</dd>
+<dt>Description:</dt><dd><p>This function will export ROFF format files generated by RMS in workflows
+where field parameters are updated by ERT.
+The parameter names will be in the format: zonename_faciesname_petroname
+and the file names will have extension “.roff”.
+The files are assumed to be located in the directory:  rms/output/aps
+together with field parameters used by the facies modelling method APS.</p>
+</dd>
+<dt>Input:</dt><dd><p>A dictionary specifying which petrophysical variables to use as field parameters
+for each facies for each zone.
+The grid model name to export the field parameters from (ERTBOX grid).
+For singe zone grids, also a name of the zone for the single zone must
+be specified.</p>
+</dd>
+</dl>
+<p>The result will be files with petrophysical parameters per zone per facies with
+size equal to the ERTBOX grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">combine_petro_real_from_multiple_facies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_real_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_code_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_code_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_missing_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#combine_petro_real_from_multiple_facies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.code_per_name">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">code_per_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_name_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#code_per_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.code_per_name" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_real.get_petro_var">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.update_petro_real.</span></span><span class="sig-name descname"><span class="pre">get_petro_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#get_petro_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.update_petro_real.get_petro_var" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-fmu.tools.rms.volumetrics">
 <span id="fmu-tools-rms-volumetrics-module"></span><h2>fmu.tools.rms.volumetrics module<a class="headerlink" href="#module-fmu.tools.rms.volumetrics" title="Link to this heading"></a></h2>
 <p>Module for handling volumetrics text files from RMS</p>
@@ -1271,6 +1393,91 @@ input list of original log names. The output will be saved in
 the given blocked well set specified in the input.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.update_petro_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">update_petro_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_code_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facies_real_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_code_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_param_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_missing_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmu.tools.rms.update_petro_parameters" title="Link to this definition"></a></dt>
+<dd><p>Combine multiple petrophysical realizations (one per facies) into one parameter
+using facies realization as filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl>
+<dt>Description:</dt><dd><p>This function will read petrophysical realization for multiple facies
+(where all grid cells have the same facies) and use the facies
+realization to combine them into one realization conditioned to facies.</p>
+</dd>
+<dt>Input:</dt><dd><p>Choose either to use a config file of the same type as for the function
+generate_petro_real in fmu.tools.rms or choose to specify the
+dictionary defining which petro variables to use as field parameters for
+each zone and facies. In the last case also specify grid model
+and facies realization name.</p>
+<p>If multi zone grid is used, also specify dictionary defining
+zone name and zone code and zone parameter name.</p>
+</dd>
+<dt>Output:</dt><dd><p>Updated version of petrophysical realizations
+for the specified petrophysical variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.import_updated_field_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">import_updated_field_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERTBOX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">import_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'../..'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#import_updated_field_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.import_updated_field_parameters" title="Link to this definition"></a></dt>
+<dd><p>Import ROFF files with field parameters updated by ERT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Description:</dt><dd><p>This function will import ROFF format files generated by ERT when using
+the FIELD keyword in ERT to update petrophysical field parameters.
+The naming convention is files with the name of the form:
+zonename_faciesname_petrovarname with suffix “.roff”
+The files are assumed to be located at the top directory level
+where updated fields are written by ERT.</p>
+</dd>
+<dt>Input:</dt><dd><p>A dictionary specifying which petrophysical variables to use as field parameters
+for each facies for each zone.
+The grid model name to import the field parameters into (ERTBOX grid).
+For singe zone grids, also a name of the zone for the single zone
+must be specified.</p>
+</dd>
+</dl>
+<p>The result will be new petrophysical parameters in ERTBOX grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.export_initial_field_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">export_initial_field_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_petro_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERTBOX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name_for_single_zone_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'../../rms/output/aps'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_print</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/update_petro_real.html#export_initial_field_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.export_initial_field_parameters" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Export ROFF files with field parameters simulated by RMS to files to be</dt><dd><p>read by ERT and used as field parameters.</p>
+</dd>
+<dt>Description:</dt><dd><p>This function will export ROFF format files generated by RMS in workflows
+where field parameters are updated by ERT.
+The parameter names will be in the format: zonename_faciesname_petroname
+and the file names will have extension “.roff”.
+The files are assumed to be located in the directory:  rms/output/aps
+together with field parameters used by the facies modelling method APS.</p>
+</dd>
+<dt>Input:</dt><dd><p>A dictionary specifying which petrophysical variables to use as field parameters
+for each facies for each zone.
+The grid model name to export the field parameters from (ERTBOX grid).
+For singe zone grids, also a name of the zone for the single zone must
+be specified.</p>
+</dd>
+</dl>
+<p>The result will be files with petrophysical parameters per zone per facies with
+size equal to the ERTBOX grid.</p>
 </dd></dl>
 
 </section>

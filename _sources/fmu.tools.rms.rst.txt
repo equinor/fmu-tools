@@ -52,6 +52,14 @@ fmu.tools.rms.rename\_rms\_scripts module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.update\_petro\_real module
+----------------------------------------
+
+.. automodule:: fmu.tools.rms.update_petro_real
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.volumetrics module
 --------------------------------
 

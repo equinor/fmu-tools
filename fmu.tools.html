@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.19.1.dev1+g81af438 documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.19.1.dev2+g23f2b9e documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ad733a20"></script>
+      <script src="_static/documentation_options.js?v=d266690a"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -56,6 +56,8 @@
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -439,6 +441,15 @@
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.update_petro_real">fmu.tools.rms.update_petro_real module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.update_petro_real"><code class="docutils literal notranslate"><span class="pre">update_petro_real()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.import_updated_field_parameters"><code class="docutils literal notranslate"><span class="pre">import_updated_field_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.export_initial_field_parameters"><code class="docutils literal notranslate"><span class="pre">export_initial_field_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies"><code class="docutils literal notranslate"><span class="pre">combine_petro_real_from_multiple_facies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.code_per_name"><code class="docutils literal notranslate"><span class="pre">code_per_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.get_petro_var"><code class="docutils literal notranslate"><span class="pre">get_petro_var()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.volumetrics">fmu.tools.rms.volumetrics module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.merge_rms_volumetrics"><code class="docutils literal notranslate"><span class="pre">merge_rms_volumetrics()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics_txt2df"><code class="docutils literal notranslate"><span class="pre">rmsvolumetrics_txt2df()</span></code></a></li>
@@ -452,6 +463,9 @@
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_localmodule"><code class="docutils literal notranslate"><span class="pre">import_localmodule()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs"><code class="docutils literal notranslate"><span class="pre">generate_petro_jobs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_bw_per_facies"><code class="docutils literal notranslate"><span class="pre">create_bw_per_facies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_parameters"><code class="docutils literal notranslate"><span class="pre">update_petro_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_updated_field_parameters"><code class="docutils literal notranslate"><span class="pre">import_updated_field_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.export_initial_field_parameters"><code class="docutils literal notranslate"><span class="pre">export_initial_field_parameters()</span></code></a></li>
 </ul>
 </li>
 </ul>

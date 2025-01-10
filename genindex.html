@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmu-tools 1.19.1.dev1+g81af438 documentation</title>
+  <title>Index &mdash; fmu-tools 1.19.1.dev2+g23f2b9e documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ad733a20"></script>
+      <script src="_static/documentation_options.js?v=d266690a"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -53,6 +53,8 @@
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -105,6 +107,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
@@ -196,18 +199,22 @@
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.check_specification">check_specification() (in module fmu.tools.rms.generate_petro_jobs_for_field_update)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.code_per_name">code_per_name() (in module fmu.tools.rms.update_petro_real)</a>
+</li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.codes">codes (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies">combine_petro_real_from_multiple_facies() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props">compare_bw_props() (fmu.tools.qcforward.BlockedWellsVsGridProperties method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.compute">compute() (fmu.tools.properties.SwFunction method)</a>
 
       <ul>
         <li><a href="fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.compute">(fmu.tools.properties.swfunction.SwFunction method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.config">config (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
 </li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData">ConfigData (class in fmu.tools.ensembles.ensemble_well_props)</a>
@@ -298,10 +305,16 @@
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.entries">entries (fmu.tools.rms.rename_rms_scripts.PythonCompMaster property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">ertobs_df_to_files() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.export_initial_field_parameters">export_initial_field_parameters() (in module fmu.tools.rms)</a>
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.export_initial_field_parameters">(in module fmu.tools.rms.update_petro_real)</a>
+</li>
+      </ul></li>
       <li><a href="fmu.tools.html#fmu.tools.extract_grid_zone_tops">extract_grid_zone_tops() (in module fmu.tools)</a>
 
       <ul>
@@ -411,8 +424,6 @@
         <li><a href="fmu.tools.properties.html#module-fmu.tools.properties.swfunction">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcdata
 
@@ -420,6 +431,8 @@
         <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcdata.qcdata
 
@@ -491,6 +504,13 @@
 </li>
       </ul></li>
       <li>
+    fmu.tools.rms.update_petro_real
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.update_petro_real">module</a>
+</li>
+      </ul></li>
+      <li>
     fmu.tools.rms.volumetrics
 
       <ul>
@@ -551,6 +571,8 @@
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args">get_parser_args() (in module fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.get_pep8_noncompliant">get_pep8_noncompliant() (fmu.tools.rms.rename_rms_scripts.PythonCompMaster method)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.get_petro_var">get_petro_var() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_regions">get_regions() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
 </li>
@@ -652,12 +674,18 @@
         <li><a href="fmu.tools.rms.html#fmu.tools.rms.import_localmodules.import_localmodule">(in module fmu.tools.rms.import_localmodules)</a>
 </li>
       </ul></li>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">interp_from_md() (in module fmu.tools.rms.create_rft_ertobs)</a>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.import_updated_field_parameters">import_updated_field_parameters() (in module fmu.tools.rms)</a>
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.import_updated_field_parameters">(in module fmu.tools.rms.update_petro_real)</a>
 </li>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+      </ul></li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">interp_from_md() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.interval">interval (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
 </li>
       <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.invert">invert (fmu.tools.properties.SwFunction attribute)</a>
@@ -769,6 +797,8 @@
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.qcreset">fmu.tools.rms.qcreset</a>
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.rename_rms_scripts">fmu.tools.rms.rename_rms_scripts</a>
+</li>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.update_petro_real">fmu.tools.rms.update_petro_real</a>
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.volumetrics">fmu.tools.rms.volumetrics</a>
 </li>
@@ -1082,6 +1112,18 @@
       <li><a href="fmu.tools.html#fmu.tools.QCProperties.to_csv">to_csv() (fmu.tools.QCProperties method)</a>
 </li>
       <li><a href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position.TOP">TOP (fmu.tools.utilities.sample_attributes.Position attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_parameters">update_petro_parameters() (in module fmu.tools.rms)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.update_petro_real">update_petro_real() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
   </ul></td>
 </tr></table>

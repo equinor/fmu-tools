@@ -18,6 +18,8 @@ Contents:
    rename_rms_scripts
    rms_import_localmodule
    generate_bw_per_facies
+   update_petro_real
+   export_and_import_fields
    utilities
    rmsvolumetrics2csv
    ensembles
