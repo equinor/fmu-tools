@@ -42,6 +42,6 @@ install_test_dependencies () {
 run_pytest () {
     echo "Running fmu-tools tests with pytest..."
     pushd $CI_TEST_ROOT
-    pytest -n 4 -vv -m "not skipunlessroxar"
+    pytest -n 4 -vv
     popd
 }
