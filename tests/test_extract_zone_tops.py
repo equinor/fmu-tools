@@ -4,13 +4,17 @@ import pytest
 
 from fmu.tools import extract_grid_zone_tops
 
-GRID = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff")
-GRIDPROP = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff")
+GRID_PATH = "3dgrids/reek/reek_sim_grid.roff"
+GRIDPROP_PATH = "3dgrids/reek/reek_sim_zone.roff"
 WELLS = [abspath("tests/data/zone_tops_from_grid/OP_1.w")]
 
 
-def test_extract_no_md_log():
-    dframe = extract_grid_zone_tops(well_list=WELLS, grid=GRID, zone_param=GRIDPROP)
+def test_extract_no_md_log(testdata_path):
+    grid_path = abspath(testdata_path / GRID_PATH)
+    gridprop_path = abspath(testdata_path / GRIDPROP_PATH)
+    dframe = extract_grid_zone_tops(
+        well_list=WELLS, grid=grid_path, zone_param=gridprop_path
+    )
     assert set(dframe["ZONE"].unique()) == {
         "Below_Top_reek",
         "Below_Mid_reek",
@@ -22,9 +26,11 @@ def test_extract_no_md_log():
     assert dframe["BASE_MD"].max() == pytest.approx(2427.98, abs=0.1)
 
 
-def test_extract_with_dummy_md_log():
+def test_extract_with_dummy_md_log(testdata_path):
+    grid_path = abspath(testdata_path / GRID_PATH)
+    gridprop_path = abspath(testdata_path / GRIDPROP_PATH)
     dframe = extract_grid_zone_tops(
-        well_list=WELLS, grid=GRID, zone_param=GRIDPROP, mdlogname="MDLog"
+        well_list=WELLS, grid=grid_path, zone_param=gridprop_path, mdlogname="MDLog"
     )
     assert set(dframe["ZONE"].unique()) == {
         "Below_Top_reek",

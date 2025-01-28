@@ -4,9 +4,9 @@ import pytest
 
 
 @pytest.fixture()
-def data_grid():
+def data_grid(testdata_path):
     return {
-        "path": abspath("../xtgeo-testdata/3dgrids/reek/"),
+        "path": abspath(testdata_path / "3dgrids/reek/"),
         "grid": "reek_sim_grid.roff",
         "properties": {
             "PORO": {"name": "reek_sim_poro.roff"},
@@ -21,9 +21,9 @@ def data_grid():
 
 
 @pytest.fixture()
-def data_wells():
+def data_wells(testdata_path):
     return {
-        "path": abspath("../xtgeo-testdata/wells/reek/1/"),
+        "path": abspath(testdata_path / "wells/reek/1/"),
         "wells": ["OP_*.w"],
         "properties": {
             "PORO": {"name": "Poro"},
@@ -38,9 +38,9 @@ def data_wells():
 
 
 @pytest.fixture()
-def data_bwells():
+def data_bwells(testdata_path):
     return {
-        "path": abspath("../xtgeo-testdata/wells/reek/1/"),
+        "path": abspath(testdata_path / "wells/reek/1/"),
         "wells": ["OP_1.bw"],
         "properties": {
             "PORO": {"name": "Poro"},

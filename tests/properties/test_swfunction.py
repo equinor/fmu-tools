@@ -2,19 +2,12 @@
 
 # for tests vs RMS cf /private/jriv/work/testing/swfunc/test_swfunc.rms13.1.2
 import math
-from pathlib import Path
 
 import numpy as np
 import pytest
 import xtgeo
 
 from fmu.tools.properties import SwFunction
-
-TPATH = Path("../xtgeo-testdata")
-
-GRIDDATA1 = TPATH / "3dgrids/reek/reek_sim_grid.roff"
-PORODATA1 = TPATH / "3dgrids/reek/reek_sim_poro.roff"
-PERMDATA1 = TPATH / "3dgrids/reek/reek_sim_permx.roff"
 
 
 @pytest.mark.parametrize(
@@ -104,16 +97,20 @@ def test_swj_simple_threshold_2grids():
         (False, "cell_corners_above_ffl", 0.674485, 0.046791),  # n/a vs RMS
     ],
 )
-def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1):
+def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1, testdata_path):
     """Test a simple SwJ setup, expected mean are checked with RMS Sw job"""
+
+    griddata1 = testdata_path / "3dgrids/reek/reek_sim_grid.roff"
+    porodata1 = testdata_path / "3dgrids/reek/reek_sim_poro.roff"
+    permdata1 = testdata_path / "3dgrids/reek/reek_sim_permx.roff"
 
     avalue = 1
     bvalue = -0.5
     ffl = 1700
 
-    grid = xtgeo.grid_from_file(GRIDDATA1)
-    poro = xtgeo.gridproperty_from_file(PORODATA1)
-    perm = xtgeo.gridproperty_from_file(PERMDATA1)
+    grid = xtgeo.grid_from_file(griddata1)
+    poro = xtgeo.gridproperty_from_file(porodata1)
+    perm = xtgeo.gridproperty_from_file(permdata1)
 
     xval = perm.copy()
 

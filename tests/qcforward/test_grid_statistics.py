@@ -7,11 +7,11 @@ from fmu.tools import qcforward as qcf
 
 
 @pytest.fixture
-def make_data(tmp_path):
+def make_data(tmp_path, testdata_path):
     report_path = str(tmp_path / "somefile.csv")
     yaml_path = str(tmp_path / "somefile.yml")
     data = {
-        "path": abspath("../xtgeo-testdata/3dgrids/reek/"),
+        "path": abspath(testdata_path / "3dgrids/reek/"),
         "grid": "reek_sim_grid.roff",
         "report": report_path,
         "verbosity": 1,

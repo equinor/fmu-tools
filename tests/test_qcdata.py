@@ -9,32 +9,32 @@ from fmu.tools.qcdata import QCData
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
-GRIDFILE = "../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff"
 ZONENAME = "Zone"
-ZONEFILE = "../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff"
-WELLFILES = [
-    "../xtgeo-testdata/wells/reek/1/OP*.w",
-    "../xtgeo-testdata/wells/reek/1/WI*.w",
-]
-
 ZONELOGNAME = "Zonelog"
 PERFLOGNAME = "Perflog"
 REPORT = abspath("./somefile.csv")
 
-DATA1 = {
-    "verbosity": "info",
-    "path": PATH,
-    "grid": GRIDFILE,
-    "gridprops": [[ZONENAME, ZONEFILE]],
-    "wells": WELLFILES,
-}
 
-
-def test_qcdata():
+def test_qcdata(testdata_path):
     """Testing getting data with _QCForwardData class"""
 
+    gridfile = str(testdata_path / "3dgrids/reek/reek_sim_grid.roff")
+    zonefile = str(testdata_path / "3dgrids/reek/reek_sim_zone.roff")
+    wellfiles = [
+        str(testdata_path / "wells/reek/1/OP*.w"),
+        str(testdata_path / "wells/reek/1/WI*.w"),
+    ]
+
     qcdata = QCData()
-    qcdata.parse(data=DATA1)
+    qcdata.parse(
+        data={
+            "verbosity": "info",
+            "path": PATH,
+            "grid": gridfile,
+            "gridprops": [[ZONENAME, zonefile]],
+            "wells": wellfiles,
+        }
+    )
 
     assert isinstance(qcdata, QCData)
     assert isinstance(qcdata.grid, xtgeo.Grid)
