@@ -10,24 +10,22 @@ from fmu.tools import qcforward as qcf
 
 # filedata
 PATH = abspath(".")  # normally not needed; here due to pytest fixture tmpdir
-GRIDFILE = "../xtgeo-testdata/3dgrids/drogon/3/valysar.roff"
-BWELLFILES = [
-    "../xtgeo-testdata/wells/drogon/3/valysar*.bw",
-]
 COMPARE = {"Facies": "FACIES", "PHIT": "PHIT"}
 
 
 @pytest.fixture(name="datainput")
-def fixture_datainput(tmp_path):
+def fixture_datainput(tmp_path, testdata_path):
+    gridfile = str(testdata_path / "3dgrids/drogon/3/valysar.roff")
+    bwellfiles = [str(testdata_path / "wells/drogon/3/valysar*.bw")]
     return {
         "nametag": "MYDATA1",
         "verbosity": "info",
         "path": PATH,
-        "grid": GRIDFILE,
+        "grid": gridfile,
         "report": tmp_path / "bw_vs_gprop.csv",
         "compare": COMPARE,
-        "gridprops": [["FACIES", GRIDFILE], ["PHIT", GRIDFILE]],
-        "bwells": BWELLFILES,
+        "gridprops": [["FACIES", gridfile], ["PHIT", gridfile]],
+        "bwells": bwellfiles,
         "tolerance": 0.01,
         "actions": [
             {"warn": "anywell < 80%", "stop": "anywell < 75%"},
