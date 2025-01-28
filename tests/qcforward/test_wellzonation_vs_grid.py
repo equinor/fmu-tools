@@ -11,25 +11,24 @@ ZONENAME = "Zone"
 ZONELOGNAME = "Zonelog"
 PERFLOGNAME = "PERF"
 
-GRIDFILE = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_grid.roff")
-ZONEFILE = abspath("../xtgeo-testdata/3dgrids/reek/reek_sim_zone.roff")
-WELLFILES = [
-    abspath("../xtgeo-testdata/wells/reek/1/OP*.w"),
-    abspath("../xtgeo-testdata/wells/reek/1/WI*.w"),
-]
-
 
 @pytest.fixture
-def make_data(tmp_path):
+def make_data(tmp_path, testdata_path):
     report_path = str(tmp_path / "somefile.csv")
     yaml_path = str(tmp_path / "somefile.yml")
+    gridfile = abspath(testdata_path / "3dgrids/reek/reek_sim_grid.roff")
+    zonefile = abspath(testdata_path / "3dgrids/reek/reek_sim_zone.roff")
+    wellfiles = [
+        abspath(testdata_path / "wells/reek/1/OP*.w"),
+        abspath(testdata_path / "wells/reek/1/WI*.w"),
+    ]
     data = {
         "nametag": "MYDATA1",
         "verbosity": "debug",
         "path": str(tmp_path),
-        "grid": GRIDFILE,
-        "gridprops": [[ZONENAME, ZONEFILE]],
-        "wells": WELLFILES,
+        "grid": gridfile,
+        "gridprops": [[ZONENAME, zonefile]],
+        "wells": wellfiles,
         "zonelog": {"name": ZONELOGNAME, "range": [1, 3]},
         "depthrange": [1580, 9999],
         "actions": [
