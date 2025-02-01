@@ -1,0 +1,14 @@
+-----------------------------------------------------
+-- AHM - APS
+-----------------------------------------------------
+-- Use ert/updated field parameters if they exist
+-- Ert parameters are generated for the second iteration/posterior (i.e. after prior is finished)
+
+GRID     ../../../rms/output/aps/ERTBOX.EGRID     -- Neccessary for AHM using field parameters
+
+FIELD aps_Valysar_GRF1   PARAMETER   aps_Valysar_GRF1.roff   INIT_FILES:rms/output/aps/aps_Valysar_GRF1.roff   MIN:-5.5   MAX:5.5   FORWARD_INIT:True
+FIELD aps_Valysar_GRF2   PARAMETER   aps_Valysar_GRF2.roff   INIT_FILES:rms/output/aps/aps_Valysar_GRF2.roff   MIN:-5.5   MAX:5.5   FORWARD_INIT:True
+FIELD aps_Valysar_GRF3   PARAMETER   aps_Valysar_GRF3.roff   INIT_FILES:rms/output/aps/aps_Valysar_GRF3.roff   MIN:-5.5   MAX:5.5   FORWARD_INIT:True
+FIELD aps_Therys_GRF1    PARAMETER   aps_Therys_GRF1.roff    INIT_FILES:rms/output/aps/aps_Therys_GRF1.roff    MIN:-5.5   MAX:5.5   FORWARD_INIT:True
+FIELD aps_Therys_GRF2    PARAMETER   aps_Therys_GRF2.roff    INIT_FILES:rms/output/aps/aps_Therys_GRF2.roff    MIN:-5.5   MAX:5.5   FORWARD_INIT:True
+FIELD aps_Therys_GRF3    PARAMETER   aps_Therys_GRF3.roff    INIT_FILES:rms/output/aps/aps_Therys_GRF3.roff    MIN:-5.5   MAX:5.5   FORWARD_INIT:True
