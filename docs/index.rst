@@ -20,6 +20,7 @@ Contents:
    generate_bw_per_facies
    update_petro_real
    export_and_import_fields
+   copy_rms_param_to_ertbox_grid
    utilities
    rmsvolumetrics2csv
    ensembles
