@@ -1,6 +1,8 @@
+import os
 from pathlib import Path
 
 import pytest
+import yaml
 
 from fmu.tools.qcdata import QCData
 from fmu.tools.qcproperties._grid2df import GridProps2df
@@ -368,8 +370,47 @@ class TestStatisticsMultipleSources:
         qcp.get_bwell_statistics(data_bwells)
         assert len(qcp.dataframe["ID"].unique()) == 3
 
-    def test_from_yaml(self):
+    def test_from_yaml(self, testdata_path, tmp_path):
         """Tests extracting statistics from yaml-file"""
         qcp = QCProperties()
         yaml_input = Path(__file__).parent / "data/propstat.yml"
-        qcp.from_yaml(yaml_input)
+        try:
+            qcp.from_yaml(yaml_input)
+        except IOError:
+            # xtgeo-testdata could be placed at a custom path set in
+            # 'XTG_TESTPATH' environment variable or pytest --testdatapath"
+
+            with open(yaml_input, "r") as f:
+                yaml_doc = yaml.safe_load(f)
+            custom_testdata_path = str(testdata_path)
+            custom_grid_path = str(yaml_doc["common_grid_data"]["path"]).replace(
+                "../xtgeo-testdata", custom_testdata_path
+            )
+            custom_well_path = str(yaml_doc["common_well_data"]["path"]).replace(
+                "../xtgeo-testdata", custom_testdata_path
+            )
+            custom_bwell_path = str(yaml_doc["common_bwell_data"]["path"]).replace(
+                "../xtgeo-testdata", custom_testdata_path
+            )
+
+            yaml_doc["common_grid_data"]["path"] = custom_grid_path
+            yaml_doc["common_well_data"]["path"] = custom_well_path
+            yaml_doc["common_bwell_data"]["path"] = custom_bwell_path
+            for grid_cell in yaml_doc["grid"]:
+                grid_cell["path"] = custom_grid_path
+            for well_cell in yaml_doc["wells"]:
+                well_cell["path"] = custom_well_path
+            for blocked_well_cell in yaml_doc["blockedwells"]:
+                blocked_well_cell["path"] = custom_bwell_path
+
+            run_pwd = os.getcwd()
+            os.chdir(tmp_path)
+
+            os.mkdir("data")
+            yaml_tmp_path = Path(tmp_path) / "data/propstat.yml"
+            with open(yaml_tmp_path, "w") as f:
+                yaml.dump(yaml_doc, f)
+
+            os.chdir(run_pwd)
+
+            qcp.from_yaml(yaml_tmp_path)
