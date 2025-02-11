@@ -4,6 +4,14 @@ fmu.tools.rms package
 Submodules
 ----------
 
+fmu.tools.rms.copy\_rms\_param\_to\_ertbox\_grid module
+-------------------------------------------------------
+
+.. automodule:: fmu.tools.rms.copy_rms_param_to_ertbox_grid
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmu.tools.rms.create\_rft\_ertobs module
 ----------------------------------------
 

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.19.1.dev3+g9788a6c documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.19.1.dev4+g08a2638 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=1bb541b5"></script>
+      <script src="_static/documentation_options.js?v=6bca1b24"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -58,6 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
 <li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copy_rms_param_to_ertbox_grid.html">rms.copy_rms_param</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -106,6 +107,287 @@
 <h1>fmu.tools.rms package<a class="headerlink" href="#fmu-tools-rms-package" title="Link to this heading"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-fmu.tools.rms.copy_rms_param_to_ertbox_grid">
+<span id="fmu-tools-rms-copy-rms-param-to-ertbox-grid-module"></span><h2>fmu.tools.rms.copy_rms_param_to_ertbox_grid module<a class="headerlink" href="#module-fmu.tools.rms.copy_rms_param_to_ertbox_grid" title="Link to this heading"></a></h2>
+<p>This module is used in FMU workflows to copy a continuous 3D parameter
+from geomodel grid to ERTBOX grid and extrapolate values that are undefined
+in ERTBOX grid. This functionality is used when the user wants to
+use FIELD keywords for petrophysical properties in ERT in Assisted History Matching.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_rms_param">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">copy_rms_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#copy_rms_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_rms_param" title="Link to this definition"></a></dt>
+<dd><p>Copy 3D RMS parameters between geogrid to ERTBOX grid and optionally
+extrapolate and fill all ERTBOX grid cells.
+Specify input as dictionary with all input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_missing_keywords_list">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">check_missing_keywords_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#check_missing_keywords_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_missing_keywords_list" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_geogrid_to_ertbox">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">from_geogrid_to_ertbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12345</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#from_geogrid_to_ertbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_geogrid_to_ertbox" title="Link to this definition"></a></dt>
+<dd><p>Function to copy a set of field parameters from geogrid to ertbox grid.
+A parameter in geogrid is copied to ertbox with name
+zone_name + ‘_’ + petrovariablename.
+The input is a dictionary with specification of grid names, parameter names,
+grid layout (conformity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_ertbox_to_geogrid">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">from_ertbox_to_geogrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#from_ertbox_to_geogrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_ertbox_to_geogrid" title="Link to this definition"></a></dt>
+<dd><p>Function to copy a set of field parameters from ertbox grid into geogrid.
+A parameter in ertbox with name  zone_name + ‘_’ + petrovariablename
+is copied into the variable with name petrovariablename in the geogrid
+and only into the zone with the correct name.
+The input is a dictionary with specification of grid names, parameter names,
+grid layout (conformity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_zone_layer_numbering">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">get_zone_layer_numbering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#get_zone_layer_numbering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_zone_layer_numbering" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_model">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">get_grid_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#get_grid_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_model" title="Link to this definition"></a></dt>
+<dd><p>For given grid model name, return grid_model and grid objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_and_get_grid_dimensions">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">check_and_get_grid_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geogrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertboxgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#check_and_get_grid_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_and_get_grid_dimensions" title="Link to this definition"></a></dt>
+<dd><p>For a given geogrid and ertbox grid return grid dimensions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_indices">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">get_grid_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geogrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#get_grid_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.active_params_in_zone">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">active_params_in_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geo_i_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_j_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_k_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_nz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#active_params_in_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.active_params_in_zone" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.ertbox_active_param_to_rms">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">ertbox_active_param_to_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_active</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#ertbox_active_param_to_rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.ertbox_active_param_to_rms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_parameters_in_ertbox">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">define_active_parameters_in_ertbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_aps_workflow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#define_active_parameters_in_ertbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_parameters_in_ertbox" title="Link to this definition"></a></dt>
+<dd><p>zone_dict[zone_name] = (zone_number, region_number, conformity, param_name_list)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_param_values">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">get_param_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geogrid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#get_param_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_param_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_parameters_for_zone">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">copy_parameters_for_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zone_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geogrid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_cell_numbers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conformity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#copy_parameters_for_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_parameters_for_zone" title="Link to this definition"></a></dt>
+<dd><p>Description:
+For specified zone name a parameter from the geomodel is copied
+to the ertbox grid. The i,j,k indices coming from the geogrid
+defines the (i,j,k) indices with actively used values.
+The zone_cell_numbers define active cell numbers in geomodel.
+The mapping from geogrid to ertbox grid is defined by the
+specified geogrid conformity and the layer interval.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_int">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">update_ertbox_properties_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#update_ertbox_properties_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_float">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">update_ertbox_properties_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">real_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#update_ertbox_properties_float"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_float" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_constant">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">assign_undefined_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#assign_undefined_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_constant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.fill_remaining_masked_values_within_colum">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">fill_remaining_masked_values_within_colum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_values_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#fill_remaining_masked_values_within_colum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.fill_remaining_masked_values_within_colum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_vertical">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">assign_undefined_vertical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#assign_undefined_vertical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_vertical" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_lateral">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">assign_undefined_lateral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#assign_undefined_lateral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_lateral" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.extrapolate_values_for_zone">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">extrapolate_values_for_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolation_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12345</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_noise_to_inactive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#extrapolate_values_for_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.extrapolate_values_for_zone" title="Link to this definition"></a></dt>
+<dd><p>Description:
+Here all inactive cells in ertbox are filled with values using
+some chosen extrapolation method. Returns a flatten 1D array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.add_noise_to_undefined_grid_cell_values">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">add_noise_to_undefined_grid_cell_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined_grid_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_relative_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#add_noise_to_undefined_grid_cell_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.add_noise_to_undefined_grid_cell_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_from_geo_to_ertbox_grid">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">copy_from_geo_to_ertbox_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolation_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete_param_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_active_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_noise_to_inactive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_aps_workflow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12345</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#copy_from_geo_to_ertbox_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_from_geo_to_ertbox_grid" title="Link to this definition"></a></dt>
+<dd><p>Copy grid parameters from geomodel grid to ertbox grid
+and both continuous and discrete parameters can be copied.
+Continuous parameters can be extrapolated in ertbox grid model.</p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>geogrid name,
+ertbox grid name,
+parameters to be copied per zone (zone_dict) defined by
+zone_dict[zone_name] = (zone_number, region_number, conformity, param_name_list)
+extrapolation method for continuous 3D parameters,</p>
+</dd>
+<dt>Optional input:</dt><dd><p>list of discrete parameter names to be copied,
+debug_level (0 for off, 1 or larger for on),
+save_active_param (False/True) if this should be calculated,
+add_noise_to_inactive (False/True)  if random noise with small variance
+is to be added to grid cell values in ERTBOX grid that are extrapolated,
+normalize_trend (False/True) is only relevant when used in APS,
+not_aps_workflow (False/True) turn on prefix ‘aps’ if False else no prefix
+for 3D parameters in ERTBOX grid,
+seed is input to random generator to draw the noise values
+if add_noise_to_inactive is True.</p>
+</dd>
+</dl>
+<p>Extrapolation alternative method:</p>
+<blockquote>
+<div><p>zero -  where all undefined cells get 0 as value</p>
+<p>mean - where all undefined cells get mean value of defined cell values</p>
+<dl class="simple">
+<dt>extend_layer_mean - where all undefined values in a layer is replaced by the</dt><dd><p>layer average. For undefined grid cells above or below the
+layers having some defined values, the upper most defined
+cell value is copied to all undefined cell values above
+this cell for each cell column and bottom most defined
+cell value is copied to all undefined cell values below
+this cell for each cell column.</p>
+</dd>
+<dt>repeat_layer_mean - where all undefined values in a layer is replaced by the</dt><dd><p>layer average. For undefined cells above the uppermost
+active cell are assigned the values of the active cells
+in the same column but in reverse order to avoid
+discontinuity at the border between the initially active
+and undefined cell values. If the number of active cells
+in a column is less than the undefined cells above the
+uppermost active cell, they will be assigned a constant
+value in the same way as option EXTEND_LAYER_MEAN.
+The same procedure is used to fill in inactive cell
+values below lowermost active cell.</p>
+</dd>
+<dt>repeat -            where all undefined values in a column is defined by</dt><dd><p>repeating values upwards and downwards from the defined
+value at the border between defined and undefined grid
+cells. The repeat is taken in reverse order
+(like making a mirror copy of the defined values upwards
+and downwards from the defined to the undefined grid cells.)</p>
+</dd>
+<dt>extend -            where all undefined values in a column is defined by</dt><dd><p>repeating values upwards and downwards from the defined
+value at the border between defined and undefined grid
+cells. The uppermost defined value is copied to all
+undefined grid cells above and the lowermost defined
+value is copied to all undefined grid cells below.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_geogrid_parameters">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">check_geogrid_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_names_geogrid_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#check_geogrid_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_geogrid_parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_layer_range">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">get_layer_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmu_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#get_layer_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_layer_range" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_cell_indices">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">define_active_cell_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_numbers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ijk_handedness</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_left_handed_grid_indexing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">switch_handedness_for_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#define_active_cell_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_cell_indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param_to_ertbox_grid.set_continuous_3d_parameter_values_in_zone_region">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">set_continuous_3d_parameter_values_in_zone_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_values_for_zones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zone_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_parameter_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">realisation_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_shared</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmu_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_left_handed_grid_indexing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">switch_handedness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#set_continuous_3d_parameter_values_in_zone_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.set_continuous_3d_parameter_values_in_zone_region" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Set 3D parameter with values for specified grid model for</dt><dd><p>specified zone (and region)</p>
+</dd>
+</dl>
+<p>Input:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>grid_model:</dt><dd><p>Grid model object</p>
+</dd>
+<dt>parameter_names:</dt><dd><p>List of names of 3D parameter to update.</p>
+</dd>
+<dt>input_values_for_zones:</dt><dd><p>A list of numpy 3D arrays.
+They corresponds to the parameter names in parameter_names.
+The size of the numpy input arrays are (nx,ny,nLayers) where
+nx, ny must match the gridModels 3D grid size for the simulation
+box grid and nLayers must match the number of layers for the
+zone in simulationx box. Note that since nx, ny are the simulation
+box grid size, they can be larger than the number of cells reported
+for the grid in reverse faulted grids. The grid values must be of type
+numpy.float32. Only the grid cells belonging to the specified zone
+are updated, and error is raised if the number of grid cells for
+the zone doesn’t match the size of the input array.</p>
+</dd>
+<dt>zone_number:</dt><dd><p>The zone number (counted from 1 in the input)</p>
+</dd>
+<dt>regionNumber:</dt><dd><p>The region number for the grid cells to be updated.</p>
+</dd>
+<dt>region_parameter_name:</dt><dd><p>The name of the 3D grid parameter containing a discrete
+3D parameter with region numbers</p>
+</dd>
+<dt>realisation_number:</dt><dd><p>Realisation number counted from 0 for the parameter to get.</p>
+</dd>
+<dt>is_shared:</dt><dd><p>Is set to true or false if the parameter is to be set
+to shared or non-shared.</p>
+</dd>
+</dl>
+<p>debug_level: 0 is off, 1 or larger is on for additional output to screen</p>
+</div></blockquote>
+</dd></dl>
+
 </section>
 <section id="module-fmu.tools.rms.create_rft_ertobs">
 <span id="fmu-tools-rms-create-rft-ertobs-module"></span><h2>fmu.tools.rms.create_rft_ertobs module<a class="headerlink" href="#module-fmu.tools.rms.create_rft_ertobs" title="Link to this heading"></a></h2>
@@ -1478,6 +1760,19 @@ be specified.</p>
 </dl>
 <p>The result will be files with petrophysical parameters per zone per facies with
 size equal to the ERTBOX grid.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.rms.copy_rms_param">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.</span></span><span class="sig-name descname"><span class="pre">copy_rms_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#copy_rms_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param" title="Link to this definition"></a></dt>
+<dd><p>Copy 3D RMS parameters between geogrid to ERTBOX grid and optionally
+extrapolate and fill all ERTBOX grid cells.
+Specify input as dictionary with all input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

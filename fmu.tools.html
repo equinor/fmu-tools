@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.19.1.dev3+g9788a6c documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.19.1.dev4+g08a2638 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=1bb541b5"></script>
+      <script src="_static/documentation_options.js?v=6bca1b24"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -58,6 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
 <li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copy_rms_param_to_ertbox_grid.html">rms.copy_rms_param</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
@@ -377,6 +378,35 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.rms.html">fmu.tools.rms package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.copy_rms_param_to_ertbox_grid">fmu.tools.rms.copy_rms_param_to_ertbox_grid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_rms_param"><code class="docutils literal notranslate"><span class="pre">copy_rms_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_missing_keywords_list"><code class="docutils literal notranslate"><span class="pre">check_missing_keywords_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_geogrid_to_ertbox"><code class="docutils literal notranslate"><span class="pre">from_geogrid_to_ertbox()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_ertbox_to_geogrid"><code class="docutils literal notranslate"><span class="pre">from_ertbox_to_geogrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_zone_layer_numbering"><code class="docutils literal notranslate"><span class="pre">get_zone_layer_numbering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_model"><code class="docutils literal notranslate"><span class="pre">get_grid_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_and_get_grid_dimensions"><code class="docutils literal notranslate"><span class="pre">check_and_get_grid_dimensions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_grid_indices"><code class="docutils literal notranslate"><span class="pre">get_grid_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.active_params_in_zone"><code class="docutils literal notranslate"><span class="pre">active_params_in_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.ertbox_active_param_to_rms"><code class="docutils literal notranslate"><span class="pre">ertbox_active_param_to_rms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_parameters_in_ertbox"><code class="docutils literal notranslate"><span class="pre">define_active_parameters_in_ertbox()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_param_values"><code class="docutils literal notranslate"><span class="pre">get_param_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_parameters_for_zone"><code class="docutils literal notranslate"><span class="pre">copy_parameters_for_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_int"><code class="docutils literal notranslate"><span class="pre">update_ertbox_properties_int()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.update_ertbox_properties_float"><code class="docutils literal notranslate"><span class="pre">update_ertbox_properties_float()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_constant"><code class="docutils literal notranslate"><span class="pre">assign_undefined_constant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.fill_remaining_masked_values_within_colum"><code class="docutils literal notranslate"><span class="pre">fill_remaining_masked_values_within_colum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_vertical"><code class="docutils literal notranslate"><span class="pre">assign_undefined_vertical()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_lateral"><code class="docutils literal notranslate"><span class="pre">assign_undefined_lateral()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.extrapolate_values_for_zone"><code class="docutils literal notranslate"><span class="pre">extrapolate_values_for_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.add_noise_to_undefined_grid_cell_values"><code class="docutils literal notranslate"><span class="pre">add_noise_to_undefined_grid_cell_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.copy_from_geo_to_ertbox_grid"><code class="docutils literal notranslate"><span class="pre">copy_from_geo_to_ertbox_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_geogrid_parameters"><code class="docutils literal notranslate"><span class="pre">check_geogrid_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_layer_range"><code class="docutils literal notranslate"><span class="pre">get_layer_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_cell_indices"><code class="docutils literal notranslate"><span class="pre">define_active_cell_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.set_continuous_3d_parameter_values_in_zone_region"><code class="docutils literal notranslate"><span class="pre">set_continuous_3d_parameter_values_in_zone_region()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">fmu.tools.rms.create_rft_ertobs module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config"><code class="docutils literal notranslate"><span class="pre">check_and_parse_config()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords"><code class="docutils literal notranslate"><span class="pre">get_well_coords()</span></code></a></li>
@@ -466,6 +496,7 @@
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.update_petro_parameters"><code class="docutils literal notranslate"><span class="pre">update_petro_parameters()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.import_updated_field_parameters"><code class="docutils literal notranslate"><span class="pre">import_updated_field_parameters()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.export_initial_field_parameters"><code class="docutils literal notranslate"><span class="pre">export_initial_field_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param"><code class="docutils literal notranslate"><span class="pre">copy_rms_param()</span></code></a></li>
 </ul>
 </li>
 </ul>

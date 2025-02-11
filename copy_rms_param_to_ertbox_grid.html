@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rms.copy_rms_param &mdash; fmu-tools 1.19.1.dev4+g08a2638 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6bca1b24"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The fmu-tools utilities package" href="utilities.html" />
+    <link rel="prev" title="rms.export_and_import_field_parameters" href="export_and_import_fields.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.copy_rms_param</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#about-the-ertbox-grid-and-its-purpose">About the ERTBOX grid and its purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose-of-the-function">Purpose of the function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-of-rms-python-job-using-this-function-to-copy-from-geogrid-to-ertbox-grid">Example of RMS python job using this function to copy from geogrid to ERTBOX grid</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">rms.copy_rms_param</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/copy_rms_param_to_ertbox_grid.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rms-copy-rms-param">
+<h1>rms.copy_rms_param<a class="headerlink" href="#rms-copy-rms-param" title="Link to this heading"></a></h1>
+<p>The RMS python job to copy petrophysical field parameters between
+geomodel grid and ERTBOX grid is used as a part of a workflow
+to update petrophysical field parameters (RMS 3D parameters) in ERT
+as a part of an assisted history matching.</p>
+<section id="about-the-ertbox-grid-and-its-purpose">
+<h2>About the ERTBOX grid and its purpose<a class="headerlink" href="#about-the-ertbox-grid-and-its-purpose" title="Link to this heading"></a></h2>
+<p>The ERTBOX grid is a grid with same lateral extent, orientation, location and grid resolution as
+the geogrid assuming the geogrid has close to regular grid layout laterally. The ERTBOX grid is
+a regular grid without any structure (just a box) and the geometry is not of importance. It is
+used as input to the GRID keyword in ERT config files when using FIELD keyword in ERT. The purpose
+of the grid is to ensure fixed size of the field parameters and hence also the state vectors
+(realizations in ERT). It enable the workflow to handle field parameters from multizone
+geogrids and structural uncertainty ( varying number of layers per zone due to
+top conform or base conform grid layout of zones in the geogrid or stair stepped faults) in ERT.
+The number of layers must be at least as large as the geomodel zone with
+most layers  (of the zones having field parameters to be updated in ERT). Since the number of
+layers may vary from realization to realization in the geomodel grid, the ERTBOX grid must
+have a number of layers that is as large as the largest zone in the geomodel for all realizations
+of the geomodel grid, but not larger than necessary to avoid unnecessary large state vectors,
+cpu time, memory usage and disk space usage by ERT. The ERTBOX grid is used with its fixed size
+for all field parameters for all zones and all realizations.</p>
+</section>
+<section id="purpose-of-the-function">
+<h2>Purpose of the function<a class="headerlink" href="#purpose-of-the-function" title="Link to this heading"></a></h2>
+<p>The copy from geogrid to ertbox grid will usually leave grid cells in ertbox undefined
+for grid cell values in ertbox that does not corresponds to any active grid cell in the geogrid.
+To avoid missing code or any other unphysical values in the ertbox, the values are extrapolated.
+The purpose is to deliver field parameters with size equal to the ertbox size (nx, ny, nz_ertbox) where all field
+parameters for all grid cells have sensible physical values also for those that may not be used.
+ERT will per today require that all realizations (all state vectors) are of same size and be consistent.
+For a field parameter F(i,j,k), all realizations of F must have exactly the same set of active and inactive grid cells,
+and this may not automatically be the case when the geogrid zones have varying number of layers or the
+geogrid has stair step faults. To handle this, a pragmatic solution is use a fixed sized help grid, the ERTBOX grid.
+The workflow is to first copy the values for a field parameter for a zone into the ERTBOX grid
+and fill the ERTBOX grid cell values (for those grid cells that is still not filled with values)
+with extrapolated values that have at least sensible
+value and not just 0 or Nan or similar ‘missing’ code. The field parameters are then exported to file to be read
+by ERT. This ensure that all field parameters have same size for all realizations and that ERT in
+the analysis step does not make linear combinations of field parameters where some realization have physical values
+and others have unphysical values or Nan.</p>
+<p>Input is a python dictionary with all relevant specifications:</p>
+<ul class="simple">
+<li><p>Name of geomodel grid and ertbox grid</p></li>
+<li><p>Name of petrophysical variable in the geomodel grid to used as field parameters in ERT.</p></li>
+<li><p>Name of the petrophysical variable in the ERTBOX grid.</p></li>
+<li><p>Typically the field name in the ERTBOX grid will be zone_name combined with variable name.</p></li>
+<li><p>Grid conformity per zone.</p></li>
+<li><p>Optional if a active/inactive parameter is to be created in ERTBOX grid.</p></li>
+<li><p>Extrapolation method when copying from geomodel grid to ERTBOX grid.</p></li>
+</ul>
+</section>
+<section id="example-of-rms-python-job-using-this-function-to-copy-from-geogrid-to-ertbox-grid">
+<h2>Example of RMS python job using this function to copy from geogrid to ERTBOX grid<a class="headerlink" href="#example-of-rms-python-job-using-this-function-to-copy-from-geogrid-to-ertbox-grid" title="Link to this heading"></a></h2>
+<p>In this example the geomodel grid has zone <em>ZoneA</em> and <em>ZoneB</em> and the
+petrophysical parameters <em>P1</em> and <em>P2</em>. They will be copied to the ERTBOX grid
+and will get the names <em>ZoneA_P1</em>, <em>ZoneA_P2</em> and similarly for <em>ZoneB</em>. The zone
+number is specified as the key and corresponding parameters must come in the same
+order in the list for both the keyword <em>GeoGridParameters</em> and <em>ErtboxParameters</em>.
+The available keywords are:</p>
+<ul class="simple">
+<li><p>project (The internal project variable for RMS python jobs)</p></li>
+<li><p>debug_print to control printed output to screen (value 0 is no output, value 1 or 2 for more output)</p></li>
+<li><p>Mode with the two options <em>from_geo_to_ertbox</em> or <em>from_ertbox_to_geo</em></p></li>
+<li><p>GeoGridParameters with list of which parameters to use per zone.</p></li>
+<li><p>ErtboxParameters with corresponding parameter names in ERTBOX for each zone and parameter combination.</p></li>
+<li><p>Conformity with legal values <em>Proportional, TopConform, BaseConform</em>.</p></li>
+<li><p>GridModelName  specify grid model name in RMS for the geomodel.</p></li>
+<li><p>ERTBoxGridName specify the name of the gridmodel used as ERTBOX grid.</p></li>
+<li><p>ZoneParam specify the name of the zone parameter in the grid model for the geomodel.</p></li>
+<li><p>ExtrapolationMethod specify which method to use. Implemented alternatives are <em>extend, repeat, mean, zero</em>.</p></li>
+<li><p>SaveActiveParam turns on/off if a 0/1 parameter is to be created for the ERTBOX grid.</p></li>
+<li><p>AddNoiseToInactive is optional and will add some small random noise to extrapolated values for grid cell values.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy_rms_param</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;debug_level&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;from_geo_to_ertbox&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ErtboxParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneA_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneB_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Conformity&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;BaseConform&quot;</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;TopConform&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;GridModelName&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ZoneParam&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ERTBoxGridName&quot;</span><span class="p">:</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ExtrapolationMethod&quot;</span><span class="p">:</span> <span class="s2">&quot;repeat&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SaveActiveParam&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;AddNoiseToInactive&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">copy_rms_param</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The next example will copy from the ERTBOX grid to the geomodel grid.
+This corresponds to using the <em>from_ertbox_to_geo</em> mode instead.
+In this case the keywords <em>SaveActiveParam. AddNoiseToInactive,ExtrapolationMethod</em> are not used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy_rms_param</span>
+
+<span class="n">params</span> <span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">&quot;debug_level&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;from_ertbox_to_geo&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ErtboxParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneA_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneB_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneB_P2&quot;</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Conformity&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;BaseConform&quot;</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;TopConform&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;GridModelName&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ZoneParam&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ERTBoxGridName&quot;</span><span class="p">:</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">copy_rms_param</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>aps_fmu_tools</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="export_and_import_fields.html" class="btn btn-neutral float-left" title="rms.export_and_import_field_parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utilities.html" class="btn btn-neutral float-right" title="The fmu-tools utilities package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
