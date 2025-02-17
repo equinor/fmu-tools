@@ -6,6 +6,7 @@ use FIELD keywords for petrophysical properties in ERT in Assisted History Match
 """
 
 import math
+from typing import Any, Union
 
 import numpy as np
 import numpy.ma as ma
@@ -16,11 +17,11 @@ if ROXAR:
     try:
         import rmsapi
         from rmsapi import Direction
+        from rmsapi.jobs import Job
     except ModuleNotFoundError:
         import roxar as rmsapi
-        from roxar import Direction
-
-
+        from rmsapi import Direction
+        from rmsapi.jobs import Job
 else:
     pass
 
@@ -134,6 +135,9 @@ def copy_rms_param(params: dict) -> None:
     required_kw_list = ["Mode"]
     check_missing_keywords_list(params, required_kw_list)
     mode = params["Mode"]
+    debug_level = DEBUG_ON
+    if "debug_level" in params:
+        debug_level = params["debug_level"]
     if mode == "from_geo_to_ertbox":
         # The names of the parameters in ertbox is automatically set to
         # <zone_name>_<param_name_from_geomodel> since it follows
@@ -144,12 +148,23 @@ def copy_rms_param(params: dict) -> None:
             "GridModelName",
             "ERTBoxGridName",
             "ZoneParam",
-            "Conformity",
             "SaveActiveParam",
             "ExtrapolationMethod",
             "GeoGridParameters",
         ]
+        # Keyword 'Conformity' is required only if the grid is not created
+        # by an RMS job or there exists multiple RMS jobs to build the
+        # specified grid model in keyword 'GridModelName'
         check_missing_keywords_list(params, required_kw_list)
+
+        # Check if necessary to specify grid conformity
+        if get_grid_conformity(params["GridModelName"], debug_level=debug_level):
+            params["Conformity_required"] = False
+        else:
+            params["Conformity_required"] = True
+            required_kw_list = ["Conformity"]
+            check_missing_keywords_list(params, required_kw_list)
+
         from_geogrid_to_ertbox(project, params, seed=project.seed)
     elif mode == "from_ertbox_to_geo":
         # The name both in ertbox and in geogrid is required
@@ -159,11 +174,19 @@ def copy_rms_param(params: dict) -> None:
             "GridModelName",
             "ERTBoxGridName",
             "ZoneParam",
-            "Conformity",
             "ErtboxParameters",
             "GeoGridParameters",
         ]
         check_missing_keywords_list(params, required_kw_list)
+
+        # Check if necessary to specify grid conformity
+        if get_grid_conformity(params["GridModelName"], debug_level=debug_level):
+            params["Conformity_required"] = False
+        else:
+            params["Conformity_required"] = True
+            required_kw_list = ["Conformity"]
+            check_missing_keywords_list(params, required_kw_list)
+
         from_ertbox_to_geogrid(project, params)
     else:
         raise KeyError(
@@ -182,7 +205,7 @@ def check_missing_keywords_list(params: dict, required_kw: list) -> None:
         raise ValueError(f"Missing specification of the keywords: {missing_kw}")
 
 
-def from_geogrid_to_ertbox(project, params: dict, seed: int = 12345) -> None:
+def from_geogrid_to_ertbox(project: Any, params: dict, seed: int = 12345) -> None:
     """Function to copy a set of field parameters from geogrid to ertbox grid.
     A parameter in geogrid is copied to ertbox with name
     zone_name + '_' + petrovariablename.
@@ -196,9 +219,9 @@ def from_geogrid_to_ertbox(project, params: dict, seed: int = 12345) -> None:
     ertbox_grid_model_name = params["ERTBoxGridName"]
     method = params.get("ExtrapolationMethod", "extend_layer_mean")
     param_names_geogrid_dict = params["GeoGridParameters"]
-
-    conformity_dict_input = params["Conformity"]
     debug_level = int(params["debug_level"])
+
+    conformity_dict = assign_conformity(params, debug_level=debug_level)
 
     # Optional parameter
     save_active_param = params.get("SaveActiveParam", False)
@@ -209,11 +232,6 @@ def from_geogrid_to_ertbox(project, params: dict, seed: int = 12345) -> None:
     (continuous_type_param_dict, discrete_type_param_list) = check_geogrid_parameters(
         project, grid_model_name, param_names_geogrid_dict
     )
-
-    # Some conversion
-    conformity_dict = {}
-    for znr, conform_text in conformity_dict_input.items():
-        conformity_dict[znr] = conform_text
 
     geogrid_model, geogrid3D = get_grid_model(project, grid_model_name)
     if zone_param_name not in geogrid_model.properties:
@@ -245,7 +263,7 @@ def from_geogrid_to_ertbox(project, params: dict, seed: int = 12345) -> None:
     zone_names_used = []
     if debug_level >= DEBUG_ON:
         print(
-            f"\n- Copy RMS 3D parameters from {grid_model_name} "
+            f"- Copy RMS 3D parameters from {grid_model_name} "
             f"to {ertbox_grid_model_name} for zones:"
         )
     if debug_level >= DEBUG_ON:
@@ -289,7 +307,7 @@ def from_geogrid_to_ertbox(project, params: dict, seed: int = 12345) -> None:
         )
 
 
-def from_ertbox_to_geogrid(project, params: dict) -> None:
+def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
     """Function to copy a set of field parameters from ertbox grid into geogrid.
     A parameter in ertbox with name  zone_name + '_' + petrovariablename
     is copied into the variable with name petrovariablename in the geogrid
@@ -305,13 +323,9 @@ def from_ertbox_to_geogrid(project, params: dict) -> None:
     ertbox_grid_model_name = params["ERTBoxGridName"]
     param_names_geogrid_dict = params["GeoGridParameters"]
     param_names_ertbox_dict = params["ErtboxParameters"]
-    conformity_dict_input = params["Conformity"]
     debug_level = int(params["debug_level"])
 
-    # Some conversion
-    conformity_dict = {}
-    for znr, conform_text in conformity_dict_input.items():
-        conformity_dict[znr] = conform_text
+    conformity_dict = assign_conformity(params, debug_level=debug_level)
 
     # Create
     geogrid_model, grid3D = get_grid_model(project, grid_model_name)
@@ -396,7 +410,7 @@ def from_ertbox_to_geogrid(project, params: dict) -> None:
         )
 
 
-def get_zone_layer_numbering(grid):
+def get_zone_layer_numbering(grid: Any) -> tuple[list[int], list[int], list[int]]:
     indexer = grid.simbox_indexer
     number_layers_per_zone = []
     start_layers_per_zone = []
@@ -415,7 +429,7 @@ def get_zone_layer_numbering(grid):
     return number_layers_per_zone, start_layers_per_zone, end_layers_per_zone
 
 
-def get_grid_model(project, grid_model_name: str):
+def get_grid_model(project: Any, grid_model_name: str) -> tuple[Any, Any]:
     """
     For given grid model name, return grid_model and grid objects.
     """
@@ -430,8 +444,8 @@ def get_grid_model(project, grid_model_name: str):
 
 
 def check_and_get_grid_dimensions(
-    geogrid, ertboxgrid, geo_grid_model_name: str, ertbox_grid_model_name: str
-):
+    geogrid: Any, ertboxgrid: Any, geo_grid_model_name: str, ertbox_grid_model_name: str
+) -> tuple[int, int, int, int]:
     """
     For a given geogrid and ertbox grid return grid dimensions.
     """
@@ -449,7 +463,9 @@ def check_and_get_grid_dimensions(
     return nx, ny, nz, nz_ertbox
 
 
-def get_grid_indices(geogrid, nx: int, ny: int, start_layer: int, end_layer: int):
+def get_grid_indices(
+    geogrid, nx: int, ny: int, start_layer: int, end_layer: int
+) -> tuple[Any, Any, Any, Any]:
     start = (0, 0, start_layer)
     end = (nx, ny, end_layer + 1)
     indexer = geogrid.simbox_indexer
@@ -471,9 +487,9 @@ def get_grid_indices(geogrid, nx: int, ny: int, start_layer: int, end_layer: int
 
 
 def active_params_in_zone(
-    geo_i_indices,
-    geo_j_indices,
-    geo_k_indices,
+    geo_i_indices: Any,
+    geo_j_indices: Any,
+    geo_k_indices: Any,
     geo_nx: int,
     geo_ny: int,
     geo_nz: int,
@@ -482,7 +498,7 @@ def active_params_in_zone(
     number_layers: int,
     start_layer: int,
     end_layer: int,
-):
+) -> Any:
     # Define active parameter for geogrid
     active_3d = np.zeros((geo_nx, geo_ny, geo_nz), dtype=np.int32)
     active_3d[geo_i_indices, geo_j_indices, geo_k_indices] = 1
@@ -509,10 +525,10 @@ def ertbox_active_param_to_rms(
     prefix: str,
     real_number: int,
     zone_name: str,
-    ertbox_grid_model,
+    ertbox_grid_model: Any,
     ertbox_active,
     debug_level: int = DEBUG_OFF,
-):
+) -> Any:
     # Create and save a parameter for grid cells in ERTBOX
     # corresponding to active cells from geomodel for current geomodel zone
     active_param_name = prefix + zone_name + "_active"
@@ -532,13 +548,13 @@ def ertbox_active_param_to_rms(
 
 
 def define_active_parameters_in_ertbox(
-    project,
+    project: Any,
     geo_grid_model_name: str,
     ertbox_grid_model_name: str,
     zone_dict: dict,
     debug_level: int = DEBUG_OFF,
     not_aps_workflow=True,
-):
+) -> None:
     """
     zone_dict[zone_name] = (zone_number, region_number, conformity, param_name_list)
     """
@@ -611,10 +627,10 @@ def define_active_parameters_in_ertbox(
 
 
 def get_param_values(
-    geogrid_model,
+    geogrid_model: Any,
     param_name: str,
     real_number: int,
-):
+) -> Any:
     if param_name not in geogrid_model.properties:
         raise ValueError(
             f"The 3D parameter {param_name} does not exist "
@@ -631,13 +647,13 @@ def get_param_values(
 
 def copy_parameters_for_zone(
     zone_name: str,
-    geogrid_model,
+    geogrid_model: Any,
     ertbox_model_name: str,
     param_name: str,
-    i_indices,
-    j_indices,
-    k_indices,
-    zone_cell_numbers,
+    i_indices: Any,
+    j_indices: Any,
+    k_indices: Any,
+    zone_cell_numbers: Any,
     conformity: str,
     nx: int,
     ny: int,
@@ -649,7 +665,7 @@ def copy_parameters_for_zone(
     real_number: int,
     param_type: str = "float",
     debug_level: int = DEBUG_OFF,
-):
+) -> Any:
     """
     Description:
     For specified zone name a parameter from the geomodel is copied
@@ -713,11 +729,11 @@ def update_ertbox_properties_int(
     prefix: str,
     zone_name: str,
     param_name: str,
-    ertbox_grid_model,
+    ertbox_grid_model: Any,
     ertbox_values,
     real_number: int,
     debug_level: int = DEBUG_OFF,
-):
+) -> None:
     # Create /Update ertbox properties in RMS
     full_param_name = prefix + zone_name + "_" + param_name
     if full_param_name in ertbox_grid_model.properties:
@@ -738,12 +754,12 @@ def update_ertbox_properties_float(
     prefix: str,
     zone_name: str,
     param_name: str,
-    ertbox_grid_model,
-    ertbox_values,
+    ertbox_grid_model: Any,
+    ertbox_values: Any,
     real_number: int,
     normalize_trend: bool = False,
     debug_level: int = DEBUG_OFF,
-):
+) -> None:
     # Create /Update ertbox properties in RMS
     full_param_name = prefix + zone_name + "_" + param_name
     if full_param_name in ertbox_grid_model.properties:
@@ -764,14 +780,16 @@ def update_ertbox_properties_float(
 
 
 def assign_undefined_constant(
-    ertbox_values_3d_masked, value, debug_level: int = DEBUG_OFF
-):
+    ertbox_values_3d_masked: Any, value, debug_level: int = DEBUG_OFF
+) -> Any:
     if debug_level >= DEBUG_VERY_VERBOSE:
         print(f"--- All inactive values set to:{value}")
     return ertbox_values_3d_masked.filled(value)
 
 
-def fill_remaining_masked_values_within_colum(column_values_masked, nz_ertbox: int):
+def fill_remaining_masked_values_within_colum(
+    column_values_masked: Any, nz_ertbox: int
+) -> Any:
     if not ma.is_masked(column_values_masked):
         return column_values_masked
     index_array = np.arange(nz_ertbox)
@@ -801,8 +819,13 @@ def fill_remaining_masked_values_within_colum(column_values_masked, nz_ertbox: i
 
 
 def assign_undefined_vertical(
-    method, nx: int, ny: int, nz_ertbox: int, ertbox_values_3d_masked, fill_value
-):
+    method: Any,
+    nx: int,
+    ny: int,
+    nz_ertbox: int,
+    ertbox_values_3d_masked: Any,
+    fill_value: Any,
+) -> Any:
     k_indices = np.arange(nz_ertbox)
     for i in range(nx):
         for j in range(ny):
@@ -884,7 +907,7 @@ def assign_undefined_vertical(
     return ertbox_values_3d_masked.filled(fill_value)
 
 
-def assign_undefined_lateral(nz_ertbox: int, ertbox_values_3d_masked):
+def assign_undefined_lateral(nz_ertbox: int, ertbox_values_3d_masked: Any) -> Any:
     for k in range(nz_ertbox):
         layer_values = ertbox_values_3d_masked[:, :, k]
         if layer_values.count() > 0:
@@ -895,7 +918,7 @@ def assign_undefined_lateral(nz_ertbox: int, ertbox_values_3d_masked):
 
 
 def extrapolate_values_for_zone(
-    ertbox_values_3d_masked,
+    ertbox_values_3d_masked: Any,
     extrapolation_method: str,
     nx: int,
     ny: int,
@@ -903,7 +926,7 @@ def extrapolate_values_for_zone(
     debug_level: int = DEBUG_OFF,
     seed: int = 12345,
     add_noise_to_inactive: bool = False,
-):
+) -> Any:
     """
     Description:
     Here all inactive cells in ertbox are filled with values using
@@ -973,11 +996,11 @@ def extrapolate_values_for_zone(
 
 
 def add_noise_to_undefined_grid_cell_values(
-    ertbox_values_3d_masked,
-    undefined_grid_cells,
+    ertbox_values_3d_masked: Any,
+    undefined_grid_cells: Any,
     seed: int,
     max_relative_noise: float = 0.05,
-):
+) -> Any:
     mean = np.mean(ertbox_values_3d_masked)
     low = 0.0
     high = math.fabs(mean) * max_relative_noise
@@ -992,7 +1015,7 @@ def add_noise_to_undefined_grid_cell_values(
 
 
 def copy_from_geo_to_ertbox_grid(
-    project,
+    project: Any,
     geo_grid_model_name: str,
     ertbox_grid_model_name: str,
     zone_dict: dict,
@@ -1004,7 +1027,7 @@ def copy_from_geo_to_ertbox_grid(
     normalize_trend: bool = False,
     not_aps_workflow: bool = False,
     seed: int = 12345,
-):
+) -> None:
     """Copy grid parameters from geomodel grid to ertbox grid
     and both continuous and discrete parameters can be copied.
     Continuous parameters can be extrapolated in ertbox grid model.
@@ -1240,8 +1263,8 @@ def copy_from_geo_to_ertbox_grid(
 
 
 def check_geogrid_parameters(
-    project, grid_model_name: str, param_names_geogrid_dict: dict
-):
+    project: Any, grid_model_name: str, param_names_geogrid_dict: dict
+) -> tuple[Any, Any]:
     if grid_model_name in project.grid_models:
         grid_model = project.grid_models[grid_model_name]
     else:
@@ -1280,7 +1303,9 @@ def check_geogrid_parameters(
     return continuous_type_param_dict, discrete_type_param_list
 
 
-def get_layer_range(indexer, zone_number: int, fmu_mode: bool = False):
+def get_layer_range(
+    indexer: Any, zone_number: int, fmu_mode: bool = False
+) -> tuple[int, int]:
     _, _, nz = indexer.dimensions
     if fmu_mode:
         if len(indexer.zonation) == 1:
@@ -1304,14 +1329,14 @@ def get_layer_range(indexer, zone_number: int, fmu_mode: bool = False):
 
 
 def define_active_cell_indices(
-    indexer,
+    indexer: Any,
     cell_numbers: np.ndarray,
-    ijk_handedness,
+    ijk_handedness: Any,
     use_left_handed_grid_indexing: bool,
     grid_model_name: str,
     debug_level: int = DEBUG_OFF,
     switch_handedness_for_parameters: bool = False,
-):
+) -> tuple[Any, Any, Any]:
     _, ny, _ = indexer.dimensions
     defined_cell_indices = indexer.get_indices(cell_numbers)
     switch_handedness = switch_handedness_for_parameters
@@ -1333,7 +1358,7 @@ def define_active_cell_indices(
 
 
 def set_continuous_3d_parameter_values_in_zone_region(
-    grid_model,
+    grid_model: Any,
     parameter_names: list[str],
     input_values_for_zones: list[np.ndarray],
     zone_number: int,
@@ -1345,7 +1370,7 @@ def set_continuous_3d_parameter_values_in_zone_region(
     fmu_mode: bool = False,
     use_left_handed_grid_indexing: bool = False,
     switch_handedness: bool = False,
-):
+) -> bool:
     """Set 3D parameter with values for specified grid model for
        specified zone (and region)
 
@@ -1517,3 +1542,170 @@ def set_continuous_3d_parameter_values_in_zone_region(
         property_param.set_values(current_values, realisation_number)
 
     return True
+
+
+def get_conformity(grid_model_name: str, rms_grid_job_name: str) -> tuple[dict, bool]:
+    """Function to get conformity from the grid.
+    Restrictions:
+    - All horizons used are specified to be honored and not sampled.
+    - The zones must be defined with Horizon as reference for both
+      top and base and no Surface is used to define grid layout.
+    - If the two above mentioned criteria is satisfied, it is possible
+      to use the 'ConformalMode' list from rmsapi to get conformity status.
+
+    If restrictions above are not satisfied, the current function will return
+    undefined for the conformity for all zones.
+    """
+    owner_strings = ["Grid models", grid_model_name, "Grid"]
+    type_string = "Create Grid"
+    name = rms_grid_job_name
+    grid_job = Job.get_job(owner_strings, type_string, name)
+    arguments = grid_job.get_arguments()
+    conformal_mode_list = arguments["ConformalMode"]
+    zone_names = arguments["ZoneNames"]
+    use_base_surface = arguments["UseBottomSurface"]
+    use_top_surface = arguments["UseTopSurface"]
+
+    conformity_dict: dict[int, dict] = {}
+    is_defined = True
+    # zone_number starts at 1
+    if len(zone_names) > len(conformal_mode_list):
+        # This indicates that some zone borders are calculated using 'Sample'
+        # and not 'Honor'. In this case the conformal_mode_list no longer
+        # match the modelling zones since sone zones are merged when
+        # defining grid layout.
+        is_defined = False
+        return conformity_dict, is_defined
+
+    for zone_number, zone_name in enumerate(zone_names, start=1):
+        conform_mode = conformal_mode_list[zone_number - 1]
+        use_top_surf = use_top_surface[zone_number - 1]
+        use_base_surf = use_base_surface[zone_number - 1]
+        if use_top_surf or use_base_surf:
+            is_defined = False
+            return {}, is_defined
+        assert conform_mode in [0, 1, 2]
+        if conform_mode == 0:
+            conform = "Proportional"
+        elif conform_mode == 1:
+            conform = "TopConform"
+        else:
+            conform = "BaseConform"
+
+        conformity_dict[zone_number] = {"zone_name": zone_name, "conformity": conform}
+    return conformity_dict, is_defined
+
+
+def get_job_name(grid_model_name: str) -> Union[str, None]:
+    """Get job name for a specified grid model.
+    Return None if no job found , the job name if found
+    and error if multiple job names are found.
+    """
+    owner_strings = ["Grid models", grid_model_name, "Grid"]
+    type_string = "Create Grid"
+    job_names = Job.get_job_names(owner_strings, type_string)
+    if len(job_names) == 0:
+        return None
+    return job_names
+
+
+def get_grid_conformity(
+    grid_model_name: str, debug_level: int = DEBUG_OFF
+) -> Union[dict[int, str], None]:
+    job_names = get_job_name(grid_model_name)
+
+    # Check that it is possible to check specified conformity against grid conformity
+    if job_names is None:
+        if debug_level >= DEBUG_VERBOSE:
+            print(
+                f"-- Can not get grid conformity for '{grid_model_name}' since "
+                "there does not exist any grid building job in RMS for this grid."
+            )
+        return None
+    if len(job_names) > 1:
+        if debug_level >= DEBUG_VERBOSE:
+            print(
+                f"-- Can not get grid conformity for '{grid_model_name}' since there "
+                f"are multiple grid building jobs in RMS for this grid."
+            )
+            print("-- Don't know which grid building job is used.")
+        return None
+    # Check if conformity in the grid is one of the implemented mappings
+    # between geogrid and ERTBOX grid
+    rms_grid_job_name = job_names[0]
+    conformity_dict, is_defined = get_conformity(grid_model_name, rms_grid_job_name)
+
+    if not is_defined:
+        if debug_level >= DEBUG_ON:
+            print("WARNING: ")
+            print(
+                "        Grid conformity can not automatically be defined from the "
+                f"grid '{grid_model_name}'."
+            )
+            print(
+                f"        The grid building job '{rms_grid_job_name}' is built by "
+                "using 'Sample' for zone borders or "
+            )
+            print(
+                "        uses 'Surface' and not 'Horizon' as top and/or base "
+                "reference map."
+            )
+            print(
+                "        The copy between geogrid and ERTBOX grid for this grid layout"
+                " is not unique."
+            )
+            print(
+                "        You must choose the best of the three possible implemented "
+                "conformities (Proportional, TopConform or BaseConform)"
+            )
+            print()
+        return None
+
+    out_conformity_dict = {}
+    for zone_number, zone_conformity_dict in conformity_dict.items():
+        zone_name = zone_conformity_dict["zone_name"]
+        conformity = zone_conformity_dict["conformity"]
+        out_conformity_dict[zone_number] = conformity
+        if debug_level >= DEBUG_VERY_VERBOSE:
+            print(
+                f"--- Grid conformity for'{grid_model_name}' for zone "
+                f"'{zone_name}' with zone number {zone_number} is '{conformity}'"
+            )
+
+    return out_conformity_dict
+
+
+def check_unique_grid_job_exists(grid_model_name: str) -> bool:
+    job_names = get_job_name(grid_model_name)
+    if job_names is not None:
+        return len(job_names) == 1
+    return False
+
+
+def assign_conformity(params: dict, debug_level: int = DEBUG_OFF) -> dict[int, str]:
+    grid_model_name = params["GridModelName"]
+
+    if params["Conformity_required"]:
+        conformity_dict = params["Conformity"]
+        if debug_level >= DEBUG_ON:
+            print("\nWARNING: No check on grid conformity.")
+            print(
+                f"         The grid '{grid_model_name}'is either not built by an "
+                f"RMS grid building job"
+            )
+            print(
+                "         or there are multiple grid building "
+                "jobs for the grid or grid conformity is mixed."
+            )
+            print()
+    else:
+        # Get conformity from the RMS grid building job for the grid model
+        if debug_level >= DEBUG_VERBOSE and "Conformity" in params:
+            print(
+                "-- Specified conformity is not used since conformity "
+                "is read from the RMS grid building job for grid model "
+                f"'{grid_model_name}' instead."
+            )
+        conformity_dict = get_grid_conformity(grid_model_name, debug_level=debug_level)
+        assert conformity_dict
+    return conformity_dict
