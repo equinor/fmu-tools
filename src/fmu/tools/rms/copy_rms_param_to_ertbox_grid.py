@@ -471,7 +471,7 @@ def check_and_get_grid_dimensions(
 
 def get_grid_indices(
     geogrid, nx: int, ny: int, start_layer: int, end_layer: int
-) -> tuple[Any, Any, Any, Any]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     start = (0, 0, start_layer)
     end = (nx, ny, end_layer + 1)
     indexer = geogrid.simbox_indexer
@@ -493,9 +493,9 @@ def get_grid_indices(
 
 
 def active_params_in_zone(
-    geo_i_indices: Any,
-    geo_j_indices: Any,
-    geo_k_indices: Any,
+    geo_i_indices: np.ndarray,
+    geo_j_indices: np.ndarray,
+    geo_k_indices: np.ndarray,
     geo_nx: int,
     geo_ny: int,
     geo_nz: int,
@@ -504,7 +504,7 @@ def active_params_in_zone(
     number_layers: int,
     start_layer: int,
     end_layer: int,
-) -> Any:
+) -> np.ndarray:
     # Define active parameter for geogrid
     active_3d = np.zeros((geo_nx, geo_ny, geo_nz), dtype=np.int32)
     active_3d[geo_i_indices, geo_j_indices, geo_k_indices] = 1
@@ -626,7 +626,7 @@ def get_param_values(
     geogrid_model: Any,
     param_name: str,
     real_number: int,
-) -> Any:
+) -> np.ndarray:
     if param_name not in geogrid_model.properties:
         raise ValueError(
             f"The 3D parameter {param_name} does not exist "
@@ -646,10 +646,10 @@ def copy_parameters_for_zone(
     geogrid_model: Any,
     ertbox_model_name: str,
     param_name: str,
-    i_indices: Any,
-    j_indices: Any,
-    k_indices: Any,
-    zone_cell_numbers: Any,
+    i_indices: np.ndarray,
+    j_indices: np.ndarray,
+    k_indices: np.ndarray,
+    zone_cell_numbers: np.ndarray,
     conformity: str,
     nx: int,
     ny: int,
@@ -661,7 +661,7 @@ def copy_parameters_for_zone(
     real_number: int,
     param_type: str = "float",
     debug_level: int = DEBUG_OFF,
-) -> Any:
+) -> np.ma.MaskedArray[Any, Any]:
     """
     Description:
     For specified zone name a parameter from the geomodel is copied
@@ -743,7 +743,7 @@ def update_ertbox_properties_float(
     zone_name: str,
     param_name: str,
     ertbox_grid_model: Any,
-    ertbox_values: Any,
+    ertbox_values: np.ndarray,
     real_number: int,
     normalize_trend: bool = False,
     debug_level: int = DEBUG_OFF,
@@ -768,16 +768,18 @@ def update_ertbox_properties_float(
 
 
 def assign_undefined_constant(
-    ertbox_values_3d_masked: Any, value, debug_level: int = DEBUG_OFF
-) -> Any:
+    ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
+    value: float,
+    debug_level: int = DEBUG_OFF,
+) -> np.ma.MaskedArray:
     if debug_level >= DEBUG_VERY_VERBOSE:
         print(f"--- All inactive values set to:{value}")
     return ertbox_values_3d_masked.filled(value)
 
 
 def fill_remaining_masked_values_within_colum(
-    column_values_masked: Any, nz_ertbox: int
-) -> Any:
+    column_values_masked: np.ndarray, nz_ertbox: int
+) -> np.ndarray:
     if not ma.is_masked(column_values_masked):
         return column_values_masked
     index_array = np.arange(nz_ertbox)
@@ -807,13 +809,13 @@ def fill_remaining_masked_values_within_colum(
 
 
 def assign_undefined_vertical(
-    method: Any,
+    method: str,
     nx: int,
     ny: int,
     nz_ertbox: int,
-    ertbox_values_3d_masked: Any,
-    fill_value: Any,
-) -> Any:
+    ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
+    fill_value: float,
+) -> np.ma.MaskedArray[Any, Any]:
     k_indices = np.arange(nz_ertbox)
     for i in range(nx):
         for j in range(ny):
@@ -895,7 +897,10 @@ def assign_undefined_vertical(
     return ertbox_values_3d_masked.filled(fill_value)
 
 
-def assign_undefined_lateral(nz_ertbox: int, ertbox_values_3d_masked: Any) -> Any:
+def assign_undefined_lateral(
+    nz_ertbox: int,
+    ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
+) -> np.ma.MaskedArray[Any, Any]:
     for k in range(nz_ertbox):
         layer_values = ertbox_values_3d_masked[:, :, k]
         if layer_values.count() > 0:
@@ -906,7 +911,7 @@ def assign_undefined_lateral(nz_ertbox: int, ertbox_values_3d_masked: Any) -> An
 
 
 def extrapolate_values_for_zone(
-    ertbox_values_3d_masked: Any,
+    ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
     extrapolation_method: str,
     nx: int,
     ny: int,
@@ -914,7 +919,7 @@ def extrapolate_values_for_zone(
     debug_level: int = DEBUG_OFF,
     seed: int = 12345,
     add_noise_to_inactive: bool = False,
-) -> Any:
+) -> np.ndarray:
     """
     Description:
     Here all inactive cells in ertbox are filled with values using
@@ -984,22 +989,22 @@ def extrapolate_values_for_zone(
 
 
 def add_noise_to_undefined_grid_cell_values(
-    ertbox_values_3d_masked: Any,
-    undefined_grid_cells: Any,
+    ertbox_values_3d: np.ma.MaskedArray[Any, Any],
+    undefined_grid_cells: np.ndarray,
     seed: int,
     max_relative_noise: float = 0.05,
-) -> Any:
-    mean = np.mean(ertbox_values_3d_masked)
+) -> np.ma.MaskedArray[Any, Any]:
+    mean = np.mean(ertbox_values_3d)
     low = 0.0
     high = math.fabs(mean) * max_relative_noise
     # To avoid making negative values for positive random numbers
     # (e.g. from lognormal distribution), add a small positive noise
     rng = np.random.default_rng(seed)
-    noise = rng.uniform(low, high, size=ertbox_values_3d_masked.shape)
-    ertbox_values_3d_masked[undefined_grid_cells] = (
-        ertbox_values_3d_masked[undefined_grid_cells] + noise[undefined_grid_cells]
+    noise = rng.uniform(low, high, size=ertbox_values_3d.shape)
+    ertbox_values_3d[undefined_grid_cells] = (
+        ertbox_values_3d[undefined_grid_cells] + noise[undefined_grid_cells]
     )
-    return ertbox_values_3d_masked
+    return ertbox_values_3d
 
 
 def copy_from_geo_to_ertbox_grid(
@@ -1098,7 +1103,6 @@ def copy_from_geo_to_ertbox_grid(
     # Get parameter names from model specification
     for zone_name, zone_item in zone_dict.items():
         zone_number, _, conformity, param_name_list = zone_item
-        print(f"conformity:  {conformity}")
         zone_index = zone_number - 1
         number_layers = number_layers_per_zone[zone_index]
         start_layer = start_layers_per_zone[zone_index]
@@ -1253,7 +1257,7 @@ def copy_from_geo_to_ertbox_grid(
 
 def check_geogrid_parameters(
     project: Any, grid_model_name: str, param_names_geogrid_dict: dict
-) -> tuple[Any, Any]:
+) -> tuple[dict, list]:
     if grid_model_name in project.grid_models:
         grid_model = project.grid_models[grid_model_name]
     else:
@@ -1325,7 +1329,7 @@ def define_active_cell_indices(
     grid_model_name: str,
     debug_level: int = DEBUG_OFF,
     switch_handedness_for_parameters: bool = False,
-) -> tuple[Any, Any, Any]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     _, ny, _ = indexer.dimensions
     defined_cell_indices = indexer.get_indices(cell_numbers)
     switch_handedness = switch_handedness_for_parameters
@@ -1611,6 +1615,14 @@ def get_job_names(grid_model_name: str) -> list[str]:
     return Job.get_job_names(owner_strings, type_string)
 
 
+def log_warning(message_lines, debug_level=DEBUG_ON):
+    """Helper function to print warning messages if debug_level is above threshold."""
+    if debug_level >= DEBUG_ON:
+        print("WARNING:")
+        for line in message_lines:
+            print(f"         {line}")
+
+
 def check_and_get_grid_job_name(
     grid_model_name: str, debug_level: int = DEBUG_OFF
 ) -> Union[None, str]:
@@ -1621,24 +1633,26 @@ def check_and_get_grid_job_name(
     """
     job_names = get_job_names(grid_model_name)
     if job_names is None or len(job_names) == 0:
-        if debug_level >= DEBUG_ON:
-            print("WARNING: ")
-            print(
-                f"         No automatic grid conformity check for '{grid_model_name}'"
-            )
-            print("         This grid is not created by an RMS grid building job.")
+        log_warning(
+            [
+                f"No automatic grid conformity check for '{grid_model_name}'",
+                "This grid is not created by an RMS grid building job.",
+            ],
+            debug_level,
+        )
         return None
 
     if len(job_names) > 1:
-        if debug_level >= DEBUG_ON:
-            print("WARNING:")
-            print(
-                f"         No automatic grid conformity check for '{grid_model_name}'"
-            )
-            print("         There exists multiple grid building jobs for this grid.")
-            print("         Cannot know which one to use to check grid conformity.")
-            print("         The jobs are:")
-            print(f"        {job_names}")
+        log_warning(
+            [
+                f"No automatic grid conformity check for '{grid_model_name}'",
+                "There exist multiple grid building jobs for this grid.",
+                "Cannot know which one to use to check grid conformity.",
+                "The jobs are:",
+                f"{job_names}",
+            ],
+            debug_level,
+        )
         return None
 
     rms_grid_job_name = job_names[0]
@@ -1654,24 +1668,17 @@ def check_and_get_grid_job_name(
             # match the modelling zones since sone zones are merged when
             # defining grid layout.
             err = True
-            if debug_level >= DEBUG_ON:
-                print("WARNING: ")
-                print(
-                    f"         The grid definition in the job '{rms_grid_job_name}' "
-                    f"for the grid model '{grid_model_name}' is not implemented."
-                )
-                print(
-                    f"         Zone boundary {indx + 1} is defined by the "
-                    "option 'Sample'."
-                )
-                print(
-                    "         Only zone boundaries defined by option 'Honor' is "
-                    "implemented."
-                )
-    if err:
-        return None
+            log_warning(
+                [
+                    f"The grid definition in the job '{rms_grid_job_name}' "
+                    f"for the grid model '{grid_model_name}' is not implemented.",
+                    f"Zone boundary {indx + 1} is defined by the option 'Sample'.",
+                    "Only zone boundaries defined by option 'Honor' is implemented.",
+                ],
+                debug_level,
+            )
 
-    return rms_grid_job_name
+    return None if err else rms_grid_job_name
 
 
 def check_grid_layout(
@@ -1713,7 +1720,13 @@ def check_grid_layout(
         # the conformity found in the grid
         if debug_level >= DEBUG_ON:
             print(f"- Grid conformity found for zone '{zone_name}' is not implemented.")
-            print(f"- Will accept to use the user specified conformity: {grid_layout}.")
+            if grid_layout:
+                print(
+                    "- Will accept to use the user specified conformity: "
+                    f"{grid_layout}."
+                )
+            else:
+                print("- Will accept to use the user specified conformity.")
         return grid_layout
 
     if return_grid_layout:
@@ -1804,13 +1817,13 @@ def assign_conformity(
 
 
 def extract_values_from_geogrid_simbox_to_ertbox_grid(
-    ertbox_values_3d_masked: Any,
-    geogrid_values_3d_all: Any,
+    ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
+    geogrid_values_3d_all: np.ndarray,
     nz_zone_geogrid: int,
     start_layer_geogrid: int,
     end_layer_geogrid: int,
     conformity: str,
-) -> Any:
+) -> np.ma.MaskedArray[Any, Any]:
     # The RMS simbox layers (num_layers) are copied into ertbox grid
     # at top if grid layout is top conform or proportional and
     # at the bottom if grid layout is base conform.
@@ -1828,16 +1841,16 @@ def extract_values_from_geogrid_simbox_to_ertbox_grid(
         ]
 
     else:
-        raise ValueError(f"Grid conformity {conformity} is not implemented.")
+        raise NotImplementedError(f"Grid conformity {conformity} is not implemented.")
 
     return ertbox_values_3d_masked
 
 
 def extract_values_from_ertbox_grid_to_geogrid_simbox(
-    field_values_3d: Any,
+    field_values_3d: np.ndarray,
     grid_layout_as_string: str,
     number_of_layers_in_geo_grid_zone: int,
-) -> Any:
+) -> np.ndarray:
     """Updates or replaces the input field_values for fmu ertbox grid to contain
     only the values that are used in the geomodel simbox.
     Use grid conformity definition to select layers from top of fmu ertbox grid
@@ -1861,13 +1874,13 @@ def extract_values_from_ertbox_grid_to_geogrid_simbox(
 
 
 def extract_active_values_from_geogrid_simbox_to_ertbox_grid(
-    ertbox_active_3d: Any,
-    geogrid_active_3d: Any,
+    ertbox_active_3d: np.ndarray,
+    geogrid_active_3d: np.ndarray,
     nz_zone_geogrid: int,
     start_layer_geogrid: int,
     end_layer_geogrid: int,
     conformity: str,
-) -> Any:
+) -> np.ndarray:
     # The RMS simbox layers (num_layers) integer parameter is copied into ertbox grid
     # at top if grid layout is top conform or proportional and
     # at the bottom if grid layout is base conform

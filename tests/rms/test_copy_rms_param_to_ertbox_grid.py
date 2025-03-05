@@ -11,6 +11,7 @@ import contextlib
 import shutil
 from os.path import isdir
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -35,7 +36,7 @@ DEBUG_ON = 1
 DEBUG_VERBOSE = 2
 DEBUG_VERY_VERBOSE = 3
 
-DEBUG_LEVEL = DEBUG_OFF
+DEBUG_LEVEL = DEBUG_ON
 
 REMOVE_RMS_PROJECT_AFTER_TEST = True
 
@@ -177,7 +178,7 @@ class GridJob:
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
             [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            DEBUG_VERY_VERBOSE,
+            DEBUG_ON,
         ),
         (
             # Here the option 'Sample' is used for zone borders.
@@ -195,7 +196,7 @@ class GridJob:
             ],  # Use 'Honor' for first zone boundary and 'Sample' for the next
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
             [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            DEBUG_VERY_VERBOSE,
+            DEBUG_ON,
         ),
         (
             # Here the conformity defined in grid job uses 'Surface'
@@ -219,7 +220,7 @@ class GridJob:
             [False, False, False],  # Use 'Honor' for all horizons
             [TOPCONFORM, TOPCONFORM],
             [ZONEA_NUMBER, ZONEB_NUMBER],
-            DEBUG_VERY_VERBOSE,
+            DEBUG_ON,
         ),
         (
             # No grid building job exist. Must have user specified conformities
@@ -232,7 +233,7 @@ class GridJob:
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
             [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            DEBUG_VERY_VERBOSE,
+            DEBUG_ON,
         ),
         (
             # Multiple grid building jobs. No unique job.
@@ -246,12 +247,12 @@ class GridJob:
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
             [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            DEBUG_VERY_VERBOSE,
+            DEBUG_ON,
         ),
     ],
 )
 def test_check_grid_layout(
-    mocker,
+    mocker: Any,
     rms_grid_building_jobs: list[str],
     rms_zone_numbers: list[int],
     rms_zone_names: list[str],
@@ -322,7 +323,7 @@ def test_check_grid_layout(
                 assert conformity == grid_layout
 
 
-def create_grids(project):
+def create_grids(project: Any):
     nx = NX
     ny = NY
     nz_zoneA = NZ_ZONEA
@@ -370,7 +371,7 @@ def create_grids(project):
     ertboxgrid.to_roxar(project, GRID_MODEL_ERTBOX)
 
 
-def compare_results_with_reference(project):
+def compare_results_with_reference(project: Any):
     # Compare with reference
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
@@ -384,7 +385,7 @@ def compare_results_with_reference(project):
         assert np.allclose(values1, values2)
 
 
-def import_petro_params(project):
+def import_petro_params(project: Any):
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         filename = Path(REFERENCE_DIR) / Path(petro_name_reference + ".roff")
