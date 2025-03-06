@@ -11,6 +11,7 @@ import contextlib
 import shutil
 from os.path import isdir
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -18,13 +19,25 @@ import xtgeo
 
 with contextlib.suppress(ImportError):
     import rmsapi
+    from rmsapi.jobs import Job
 
 from fmu.tools.rms import copy_rms_param
+from fmu.tools.rms.copy_rms_param_to_ertbox_grid import (
+    assign_conformity,
+    check_grid_conformity,
+)
 
 # ======================================================================================
 # settings to create RMS project!
 
-DEBUG_LEVEL = 2
+
+DEBUG_OFF = 0
+DEBUG_ON = 1
+DEBUG_VERBOSE = 2
+DEBUG_VERY_VERBOSE = 3
+
+DEBUG_LEVEL = DEBUG_ON
+
 REMOVE_RMS_PROJECT_AFTER_TEST = True
 
 TMPD = Path("TMP")
@@ -43,7 +56,33 @@ PETROPARAMS = ["P1_new", "P2_new"]
 ERTBOX_PETRO_PARAMS_A = ["ZoneA_P1", "ZoneA_P2"]
 ERTBOX_PETRO_PARAMS_B = ["ZoneB_P1", "ZoneB_P2"]
 ZONE_PARAM_NAME = "Zone"
+NX = 50
+NY = 70
+NZ_ZONEA = 10
+NZ_ZONEB = 15
+XINC = 50.0
+YINC = 50.0
+ZINC = 5.0
+ORIGIN = (0.0, 0.0, 0.0)
+ROTATION = 50.0
+ZONEA = "ZoneA"
+ZONEB = "ZoneB"
+PROPORTIONAL_CODE = 0
+TOPCONFORM_CODE = 1
+BASECONFORM_CODE = 2
+PROPORTIONAL = "Proportional"
+TOPCONFORM = "TopConform"
+BASECONFORM = "BaseConform"
 
+ZONEA = "ZoneA"
+ZONEB = "ZoneB"
+ZONEC = "ZoneC"
+ZONEA_NUMBER = 1
+ZONEB_NUMBER = 2
+ZONEC_NUMBER = 3
+
+GRID_MODEL_NAME = "Geogrid"
+GRID_BUILDING_JOB_NAME = "Grid_building_job_name"
 GEO_TO_ERTBOX_DICT = {
     "project": None,
     "debug_level": DEBUG_LEVEL,
@@ -57,8 +96,8 @@ GEO_TO_ERTBOX_DICT = {
         2: ERTBOX_PETRO_PARAMS_B,
     },
     "Conformity": {
-        1: "BaseConform",
-        2: "TopConform",
+        1: BASECONFORM,
+        2: TOPCONFORM,
     },
     "GridModelName": GRID_MODEL,
     "ZoneParam": ZONE_PARAM_NAME,
@@ -81,8 +120,8 @@ ERTBOX_TO_GEO_DICT = {
         2: ERTBOX_PETRO_PARAMS_B,
     },
     "Conformity": {
-        1: "BaseConform",
-        2: "TopConform",
+        1: BASECONFORM,
+        2: TOPCONFORM,
     },
     "GridModelName": GRID_MODEL,
     "ZoneParam": ZONE_PARAM_NAME,
@@ -90,21 +129,215 @@ ERTBOX_TO_GEO_DICT = {
 }
 
 
-def create_grids(project):
-    nx = 50
-    ny = 70
-    nz_zoneA = 10
-    nz_zoneB = 15
+class GridJob:
+    def __init__(
+        self,
+        zone_numbers: list[int],
+        zone_names: list[str],
+        conform_mode_list: list[int],
+        use_bottom_surface_list: list[bool],
+        use_top_surface_list: list[bool],
+        use_sampled_horizons_list: list[bool],
+    ) -> None:
+        self.conformal_mode_list = conform_mode_list
+        self.zone_names = zone_names
+        self.zone_numbers = zone_numbers
+        self.use_bottom_surface_list = use_bottom_surface_list
+        self.use_top_surface_list = use_top_surface_list
+        self.use_sampled_horizons_list = use_sampled_horizons_list
+
+    def get_arguments(self) -> dict:
+        return {
+            "ConformalMode": self.conformal_mode_list,
+            "ZoneNames": self.zone_names,
+            "UseBottomSurface": self.use_bottom_surface_list,
+            "UseTopSurface": self.use_top_surface_list,
+            "SampledHorizons": self.use_sampled_horizons_list,
+        }
+
+
+@pytest.mark.skipunlessroxar
+@pytest.mark.parametrize(
+    "rms_grid_building_jobs, rms_zone_numbers, rms_zone_names,"
+    "rms_conform_mode_list, rms_use_top_surface_list,"
+    "rms_use_bottom_surface_list, rms_use_sampled_horizons_list,"
+    "specified_grid_layout_list,specified_zone_numbers, debug_level",
+    [
+        # The variables starting with rms is variables read from grid buidling job
+        # The variables starting with specified is related to
+        # user specified conformities
+        (
+            # Here the conformity from the grid job is one of the implemented types
+            # and can be used. No need for usr specified conformities in this case.
+            ["Grid_building_job_1"],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA, ZONEB, ZONEC],
+            [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
+            [False, False, False],  # Surface option not used for Top
+            [False, False, False],  # Surface option not use for Base
+            [False, False, False],  # Use 'Honor' for all horizons
+            [BASECONFORM, TOPCONFORM, PROPORTIONAL],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            DEBUG_ON,
+        ),
+        (
+            # Here the option 'Sample' is used for zone borders.
+            # This means the grid conformity is not implemented and the
+            # user must specify conformities in this case.
+            ["Grid_building_job_2"],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA, ZONEB, ZONEC],
+            [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
+            [False, False, False],  # Surface option not used for Top
+            [False, False, False],  # Surface option not use for Base
+            [
+                False,
+                True,
+            ],  # Use 'Honor' for first zone boundary and 'Sample' for the next
+            [BASECONFORM, TOPCONFORM, PROPORTIONAL],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            DEBUG_ON,
+        ),
+        (
+            # Here the conformity defined in grid job uses 'Surface'
+            # option for two zones and therefore no conformity
+            # is implemented for this case for zone 1 and 3
+            # Will need a user specification of conformity for this.
+            ["Grid_building_job_3"],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            [ZONEA, ZONEB],
+            [TOPCONFORM_CODE, TOPCONFORM_CODE],
+            [
+                True,
+                False,
+                False,
+            ],  # Surface option used for top zone 1, not for zone 2,3
+            [
+                False,
+                False,
+                True,
+            ],  # Surface option used for base zone 3, not for zone 1,2
+            [False, False, False],  # Use 'Honor' for all horizons
+            [TOPCONFORM, TOPCONFORM],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            DEBUG_ON,
+        ),
+        (
+            # No grid building job exist. Must have user specified conformities
+            [],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA, ZONEB, ZONEC],
+            [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
+            [False, False, False],  # Surface option not used for Top
+            [False, False, False],  # Surface option not use for Base
+            [False, False, False],  # Use 'Honor' for all horizons
+            [BASECONFORM, TOPCONFORM, PROPORTIONAL],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            DEBUG_ON,
+        ),
+        (
+            # Multiple grid building jobs. No unique job.
+            # Must have user specified conformities
+            ["Grid_building_job1", "Grid_building_job2"],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA, ZONEB, ZONEC],
+            [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
+            [False, False, False],  # Surface option not used for Top
+            [False, False, False],  # Surface option not used for Base
+            [False, False, False],  # Use 'Honor' for all horizons
+            [BASECONFORM, TOPCONFORM, PROPORTIONAL],
+            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            DEBUG_ON,
+        ),
+    ],
+)
+def test_check_grid_layout(
+    mocker: Any,
+    rms_grid_building_jobs: list[str],
+    rms_zone_numbers: list[int],
+    rms_zone_names: list[str],
+    rms_conform_mode_list: list[int],
+    rms_use_top_surface_list: list[bool],
+    rms_use_bottom_surface_list: list[bool],
+    rms_use_sampled_horizons_list: list[bool],
+    specified_grid_layout_list: list[str],
+    specified_zone_numbers: list[int],
+    debug_level: int,
+) -> None:
+    # Create a mock version of rmsapi functions in rmsapi.jobs.Job object
+    mocker.patch.object(Job, "get_job_names", return_value=rms_grid_building_jobs)
+    mocker.patch.object(
+        Job,
+        "get_job",
+        return_value=GridJob(
+            rms_zone_numbers,
+            rms_zone_names,
+            rms_conform_mode_list,
+            rms_use_bottom_surface_list,
+            rms_use_top_surface_list,
+            rms_use_sampled_horizons_list,
+        ),
+    )
+
+    # For each zone check grid layout with RMS grid building job
+    # (here the mock of the rmsapi functions)
+
+    geogrid_param_dict = {}
+    for zone_number in specified_zone_numbers:
+        geogrid_param_dict[zone_number] = "petrovar"
+
+    params = {
+        "GridModelName": GRID_MODEL_NAME,
+        "Conformity_required": False,
+        "GeoGridParameters": geogrid_param_dict,
+    }
+
+    if not check_grid_conformity(
+        GRID_MODEL_NAME, specified_zone_numbers, debug_level=debug_level
+    ):
+        # Grid conformity is not possible to get directly from the grid
+        # Assign a user specified conformity to each zone
+        if debug_level >= DEBUG_ON:
+            print(
+                "\nCannot get grid conformity from the grid job: "
+                f"{rms_grid_building_jobs}, must rely on user specified conformity"
+            )
+        conformity_dict = {}
+        for indx, zone_number in enumerate(specified_zone_numbers):
+            conformity_dict[zone_number] = specified_grid_layout_list[indx]
+
+        params["Conformity_required"] = True
+        params["Conformity"] = conformity_dict
+    else:
+        if debug_level >= DEBUG_ON:
+            print(
+                f"\nCan get grid conformity from the grid job: {rms_grid_building_jobs}"
+            )
+
+    conformity_dict = assign_conformity(params, debug_level=DEBUG_OFF)
+    if conformity_dict:
+        for indx, zone_number in enumerate(specified_zone_numbers):
+            grid_layout = specified_grid_layout_list[indx]
+            conformity = conformity_dict[zone_number]
+            if conformity != "Undefined":
+                assert conformity == grid_layout
+
+
+def create_grids(project: Any):
+    nx = NX
+    ny = NY
+    nz_zoneA = NZ_ZONEA
+    nz_zoneB = NZ_ZONEB
     nz = nz_zoneA + nz_zoneB
     dimension = (nx, ny, nz)
     dimension_ertbox = (nx, ny, max(nz_zoneA, nz_zoneB))
-    increment = (50.0, 50.0, 5.0)
-    origin = (0.0, 0.0, 0.0)
-    rotation = 45.0
+    increment = (XINC, YINC, ZINC)
+    origin = ORIGIN
+    rotation = ROTATION
 
     subgrid_dict = {
-        "ZoneA": nz_zoneA,
-        "ZoneB": nz_zoneB,
+        ZONEA: nz_zoneA,
+        ZONEB: nz_zoneB,
     }
     geogrid = xtgeo.create_box_grid(
         dimension,
@@ -138,7 +371,7 @@ def create_grids(project):
     ertboxgrid.to_roxar(project, GRID_MODEL_ERTBOX)
 
 
-def compare_results_with_reference(project):
+def compare_results_with_reference(project: Any):
     # Compare with reference
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
@@ -152,7 +385,7 @@ def compare_results_with_reference(project):
         assert np.allclose(values1, values2)
 
 
-def import_petro_params(project):
+def import_petro_params(project: Any):
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         filename = Path(REFERENCE_DIR) / Path(petro_name_reference + ".roff")

@@ -55,6 +55,27 @@ Input is a python dictionary with all relevant specifications:
 * Optional if a active/inactive parameter is to be created in ERTBOX grid.
 * Extrapolation method when copying from geomodel grid to ERTBOX grid.
 
+Consistency check with the grid model
+--------------------------------------
+
+The keyword *Conformity* should specify the correct grid conformity for each of the zones in the grid model.
+If the grid model is built using RMS grid building job, it is possible to check that the specified conformities
+are correct. There are however a few requirements for the consistency check:
+
+* The grid model must be built by an RMS grid building job for the geogrid.
+* There can only be one RMS grid building job for the grid model that is used.
+* The option in the grid building job to *Honor* zone boundaries must be used.
+* The zone grid layout must be defined by *Horizon* as reference and not *Surface*.
+
+If all these requirements are satisfied, the keyword *Conformity* is not necessary and will
+be ignored and the grid conformity information from the grid building job will be used instead.
+In the case some of the requirements are not satisfied, the *Conformity* keyword must be specified.
+But note that in this case the grid conformity may be of a type that is not supported and this will
+have effect on the field update done by ERT.
+*It is recommended to stick to the grid conformity that is implemented.*
+If the grid is built outside of RMS or by a script, there are no check and the user will have to
+ensure this is correctly specified in the keyword *Conformity*. Some warnings will
+appear in log output when it is not possible to check conformity or the conformity is not supported.
 
 Example of RMS python job using this function to copy from geogrid to ERTBOX grid
 ----------------------------------------------------------------------------------
@@ -139,5 +160,3 @@ In this case the keywords *SaveActiveParam. AddNoiseToInactive,ExtrapolationMeth
         "ERTBoxGridName": "ERTBOX",
     }
     copy_rms_param(params)
-
-aps_fmu_tools
