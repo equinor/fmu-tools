@@ -36,6 +36,15 @@ __all__ = [
     "sample_attributes_for_sim2seis",
 ]
 
+if not ROXAR:
+    from fmu.tools.rms import volumetrics  # noqa
+
+    __all__.extend(
+        [
+            "volumetrics",
+        ]
+    )
+
 try:
     from fmu.tools.version import version
 
