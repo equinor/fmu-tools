@@ -3,6 +3,7 @@
 import subprocess
 import sys
 from pathlib import Path
+from unittest import mock
 
 import pandas as pd
 import pytest
@@ -277,3 +278,26 @@ def test_commandlineclient(tmpdir):
     volumetrics.rmsvolumetrics2csv_main()
     disk_df = pd.read_csv("foo/bar/com.csv")
     assert "GIIP_GAS" in disk_df
+
+
+def test_importable_from_package_root() -> None:
+    """Tests that this module is exported at the root level if not running in RMS, or is
+    not available if running in RMS.
+
+    This preserves existing logic."""
+
+    # Clear out existing import (i.e. fmu.tools.ROXAR state)
+    if "fmu.tools" in sys.modules:
+        del sys.modules["fmu.tools"]
+
+    with mock.patch.dict(sys.modules, {"rmsapi": None}):
+        try:
+            from fmu.tools import volumetrics  # noqa
+        except ImportError:
+            pytest.fail("Failed to import 'volumetrics' from 'fmu.tools'")
+
+    with (
+        mock.patch.dict(sys.modules, {"rmsapi": mock.MagicMock()}),
+        pytest.raises(ImportError, match="cannot import name 'volumetrics'"),
+    ):
+        from fmu.tools import volumetrics  # noqa
