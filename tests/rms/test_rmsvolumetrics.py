@@ -290,7 +290,10 @@ def test_importable_from_package_root() -> None:
     if "fmu.tools" in sys.modules:
         del sys.modules["fmu.tools"]
 
-    with mock.patch.dict(sys.modules, {"rmsapi": None}):
+    with (
+        mock.patch.dict(sys.modules, {"rmsapi": None}),
+        mock.patch.dict(sys.modules, {"roxar": None}),
+    ):
         try:
             from fmu.tools import volumetrics  # noqa
         except ImportError:
