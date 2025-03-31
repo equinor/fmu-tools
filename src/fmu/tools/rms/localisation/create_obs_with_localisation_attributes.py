@@ -789,6 +789,7 @@ def create_obs_local(project, config_file):
     defined_zone_names = get_defined_zone_names(defined_field_names, zone_dict)
 
     # Set default settings for all observations initially
+    min_hlength = 100
     output_dict_default = {}
     output_dict = {}
     for zone_name in defined_zone_names:
@@ -801,6 +802,14 @@ def create_obs_local(project, config_file):
             obs_localisation_dict["yrange"] = default_ranges[1]
             obs_localisation_dict["anisotropy_angle"] = default_ranges[2]
             obs_localisation_dict["summary_key"] = obs_dict["KEY"]
+            if obs_localisation_dict["hlength"] > min_hlength:
+                well_path_angle = obs_localisation_dict["well_path_angle"]
+                obs_localisation_dict["anisotropy_angle"] = well_path_angle
+                obs_localisation_dict["xrange"] = max(
+                    obs_localisation_dict["hlength"],
+                    1.5 * obs_localisation_dict["xrange"],
+                )
+
             if result_id not in output_dict_default:
                 output_dict_default[result_id] = obs_localisation_dict
 
