@@ -147,6 +147,12 @@ def get_specification(spec: dict) -> tuple:
     default_ranges = get_ranges(
         default_field_settings, "ranges", "default_field_settings"
     )
+    min_range_hwell = get_value(
+        default_field_settings, "min_range_hwell", "default_field_settings"
+    )
+    mult_hwell_length = get_value(
+        default_field_settings, "mult_hwell_length", "default_field_settings"
+    )
 
     # Optional
     field_settings = get_dict(local_dict, "field_settings", kw_main, required=False)
@@ -163,6 +169,8 @@ def get_specification(spec: dict) -> tuple:
         ert_config_field_param_file,
         rms_field_correlation_file,
         default_ranges,
+        min_range_hwell,
+        mult_hwell_length,
         zone_dict,
         field_settings,
         expand_specification,
@@ -302,6 +310,17 @@ def get_ranges(input_dict: dict, kw: str, parent_kw: str) -> tuple:
     if ranges[0] <= 0.0 or ranges[1] <= 0.0:
         raise ValueError("Expecting positive range parameters")
     return ranges
+
+
+def get_value(input_dict: dict, kw: str, parent_kw: str):
+    if kw not in input_dict:
+        raise KeyError(f"Missing keyword {kw} under keyword {parent_kw}")
+    value = float(input_dict[kw])
+    if value <= 0.0:
+        raise ValueError(
+            f"Specified value for {kw} under  {parent_kw} must be positive"
+        )
+    return value
 
 
 def read_renaming_table(filename: str) -> dict:
@@ -710,8 +729,8 @@ def write_localisation_obs_attributes(
 
             xpos = float(obs_dict["xpos"])
             ypos = float(obs_dict["ypos"])
-            main_range = float(obs_dict["xrange"])
-            perp_range = float(obs_dict["yrange"])
+            main_range = float(obs_dict["main_range"])
+            perp_range = float(obs_dict["perp_range"])
             rotation_angle = float(obs_dict["anisotropy_angle"])
             content = ""
             content += f"{wellname:<{max_well_name_length}}"
@@ -759,6 +778,8 @@ def create_obs_local(project, config_file):
         field_param_config_file,
         rms_field_correlation_file,
         default_ranges,
+        min_range_hwell,
+        mult_hwell_length,
         zone_dict,
         field_settings_spec_list,
         expand_specification,
@@ -789,7 +810,6 @@ def create_obs_local(project, config_file):
     defined_zone_names = get_defined_zone_names(defined_field_names, zone_dict)
 
     # Set default settings for all observations initially
-    min_hlength = 100
     output_dict_default = {}
     output_dict = {}
     for zone_name in defined_zone_names:
@@ -798,16 +818,16 @@ def create_obs_local(project, config_file):
             ert_id = obs_dict["ert_id"]
             result_id = (zone_name, ert_id)
             obs_localisation_dict = copy.deepcopy(obs_dict)
-            obs_localisation_dict["xrange"] = default_ranges[0]
-            obs_localisation_dict["yrange"] = default_ranges[1]
+            obs_localisation_dict["main_range"] = default_ranges[0]
+            obs_localisation_dict["perp_range"] = default_ranges[1]
             obs_localisation_dict["anisotropy_angle"] = default_ranges[2]
             obs_localisation_dict["summary_key"] = obs_dict["KEY"]
-            if obs_localisation_dict["hlength"] > min_hlength:
+            if obs_localisation_dict["hlength"] > min_range_hwell:
                 well_path_angle = obs_localisation_dict["well_path_angle"]
                 obs_localisation_dict["anisotropy_angle"] = well_path_angle
-                obs_localisation_dict["xrange"] = max(
+                obs_localisation_dict["main_range"] = max(
                     obs_localisation_dict["hlength"],
-                    1.5 * obs_localisation_dict["xrange"],
+                    mult_hwell_length * obs_localisation_dict["main_range"],
                 )
 
             if result_id not in output_dict_default:
@@ -881,8 +901,8 @@ def create_obs_local(project, config_file):
                             #                            print(f"Add   {result_id}")
                             obs_localisation_dict = {}
                             obs_localisation_dict = copy.deepcopy(obs_dict)
-                            obs_localisation_dict["xrange"] = ranges[0]
-                            obs_localisation_dict["yrange"] = ranges[1]
+                            obs_localisation_dict["main_range"] = ranges[0]
+                            obs_localisation_dict["perp_range"] = ranges[1]
                             obs_localisation_dict["anisotropy_angle"] = ranges[2]
                             obs_localisation_dict["summary_key"] = obs_dict["KEY"]
                             output_dict[result_id] = obs_localisation_dict

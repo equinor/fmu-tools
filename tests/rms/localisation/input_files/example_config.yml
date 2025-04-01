@@ -22,7 +22,9 @@ localisation:
     
   default_field_settings:
     ranges: [2000.0,  1000.0, 45.0] # (main_range, perpendicular_range, rotation)
-    
+    min_range_hwell: 150
+    mult_hwell_length: 1.5
+
   # Select scaling function (how scaling factor decreases from 1 to 0 as function of distance from position of observation)
   #tapering: "gauss"
   
