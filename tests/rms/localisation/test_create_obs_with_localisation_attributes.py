@@ -319,7 +319,8 @@ def test_read_ert_summary_obs(filename, result_dict_list):
     "ref_use_wellhead_pos, ref_grid_model_name, ref_blocked_well_set_name,"
     "ref_trajector_name, ref_well_renaming_file, ref_ert_obs_file,"
     "ref_ert_config_field_param_file, ref_rms_corr_file,"
-    "ref_default_ranges, ref_zone_dict, ref_field_settings, ref_expand_spec",
+    "ref_default_ranges, ref_min_range_hwell, ref_mult_hwell_length,"
+    "ref_zone_dict, ref_field_settings, ref_expand_spec",
     [
         (
             {
@@ -346,6 +347,8 @@ def test_read_ert_summary_obs(filename, result_dict_list):
                     },
                     "default_field_settings": {
                         "ranges": [2000.0, 1000.0, 45.0],
+                        "min_range_hwell": 150.0,
+                        "mult_hwell_length": 1.5,
                     },
                     "field_settings": [
                         {
@@ -374,6 +377,8 @@ def test_read_ert_summary_obs(filename, result_dict_list):
             "ahm_field_aps.ert",
             "correlation_ranges.txt",
             [2000.0, 1000.0, 45.0],
+            150.0,
+            1.5,
             {
                 "Valysar": 1,
                 "Therys": 2,
@@ -420,6 +425,8 @@ def test_read_ert_summary_obs(filename, result_dict_list):
                     },
                     "default_field_settings": {
                         "ranges": [2000.0, 1000.0, 45.0],
+                        "min_range_hwell": 150.0,
+                        "mult_hwell_length": 1.5,
                     },
                     "field_settings": [
                         {
@@ -448,6 +455,8 @@ def test_read_ert_summary_obs(filename, result_dict_list):
             "ahm_field_aps.ert",
             "correlation_ranges.txt",
             [2000.0, 1000.0, 45.0],
+            150.0,
+            1.5,
             {
                 "Valysar": 1,
                 "Therys": 2,
@@ -484,6 +493,8 @@ def test_get_specification(
     ref_ert_config_field_param_file: str,
     ref_rms_corr_file: str,
     ref_default_ranges: list[float],
+    ref_min_range_hwell: float,
+    ref_mult_hwell_length: float,
     ref_zone_dict: dict,
     ref_field_settings: dict,
     ref_expand_spec: bool,
@@ -500,6 +511,8 @@ def test_get_specification(
         ert_config_field_param_file,
         rms_field_correlation_file,
         default_ranges,
+        min_range_hwell,
+        mult_hwell_length,
         zone_dict,
         field_settings,
         expand_spec,
@@ -518,6 +531,8 @@ def test_get_specification(
     assert ert_config_field_param_file == ref_ert_config_field_param_file
     assert rms_field_correlation_file == ref_rms_corr_file
     assert default_ranges == ref_default_ranges
+    assert min_range_hwell == ref_min_range_hwell
+    assert mult_hwell_length == ref_mult_hwell_length
     assert zone_dict == ref_zone_dict
     assert field_settings == ref_field_settings
     assert expand_spec == ref_expand_spec
