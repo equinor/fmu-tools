@@ -26,6 +26,7 @@ from fmu.tools.rms.copy_rms_param_to_ertbox_grid import (
     assign_conformity,
     check_grid_conformity,
 )
+from fmu.tools.rms.zone_mapping import ZoneMapping
 
 # ======================================================================================
 # settings to create RMS project!
@@ -36,9 +37,9 @@ DEBUG_ON = 1
 DEBUG_VERBOSE = 2
 DEBUG_VERY_VERBOSE = 3
 
-DEBUG_LEVEL = DEBUG_ON
+DEBUG_LEVEL = DEBUG_VERY_VERBOSE
 
-REMOVE_RMS_PROJECT_AFTER_TEST = True
+REMOVE_RMS_PROJECT_AFTER_TEST = False
 
 TMPD = Path("TMP")
 TMPD.mkdir(parents=True, exist_ok=True)
@@ -56,6 +57,9 @@ PETROPARAMS = ["P1_new", "P2_new"]
 ERTBOX_PETRO_PARAMS_A = ["ZoneA_P1", "ZoneA_P2"]
 ERTBOX_PETRO_PARAMS_B = ["ZoneB_P1", "ZoneB_P2"]
 ZONE_PARAM_NAME = "Zone"
+ZONE_PARAM_FILE = "Zone.roff"
+ZONE_PARAM_FILE_2 = "Zone2.roff"
+
 NX = 50
 NY = 70
 NZ_ZONEA = 10
@@ -67,6 +71,7 @@ ORIGIN = (0.0, 0.0, 0.0)
 ROTATION = 50.0
 ZONEA = "ZoneA"
 ZONEB = "ZoneB"
+
 PROPORTIONAL_CODE = 0
 TOPCONFORM_CODE = 1
 BASECONFORM_CODE = 2
@@ -74,12 +79,10 @@ PROPORTIONAL = "Proportional"
 TOPCONFORM = "TopConform"
 BASECONFORM = "BaseConform"
 
-ZONEA = "ZoneA"
-ZONEB = "ZoneB"
-ZONEC = "ZoneC"
+
 ZONEA_NUMBER = 1
 ZONEB_NUMBER = 2
-ZONEC_NUMBER = 3
+
 
 GRID_MODEL_NAME = "Geogrid"
 GRID_BUILDING_JOB_NAME = "Grid_building_job_name"
@@ -128,6 +131,51 @@ ERTBOX_TO_GEO_DICT = {
     "ERTBoxGridName": GRID_MODEL_ERTBOX,
 }
 
+GEO_TO_ERTBOX_DICT_2 = {
+    "project": None,
+    "debug_level": DEBUG_LEVEL,
+    "Mode": "from_geo_to_ertbox",
+    "GeoGridParameters": {
+        5: PETROPARAMS_REFERENCE,
+        2: PETROPARAMS_REFERENCE,
+    },
+    "ErtboxParameters": {
+        5: ERTBOX_PETRO_PARAMS_A,
+        2: ERTBOX_PETRO_PARAMS_B,
+    },
+    "Conformity": {
+        5: BASECONFORM,
+        2: TOPCONFORM,
+    },
+    "GridModelName": GRID_MODEL,
+    "ZoneParam": ZONE_PARAM_NAME,
+    "ERTBoxGridName": GRID_MODEL_ERTBOX,
+    "ExtrapolationMethod": "repeat",
+    "SaveActiveParam": True,
+    "AddNoiseToInactive": True,
+}
+
+ERTBOX_TO_GEO_DICT_2 = {
+    "project": None,
+    "debug_level": DEBUG_LEVEL,
+    "Mode": "from_ertbox_to_geo",
+    "GeoGridParameters": {
+        5: PETROPARAMS,
+        2: PETROPARAMS,
+    },
+    "ErtboxParameters": {
+        5: ERTBOX_PETRO_PARAMS_A,
+        2: ERTBOX_PETRO_PARAMS_B,
+    },
+    "Conformity": {
+        5: BASECONFORM,
+        2: TOPCONFORM,
+    },
+    "GridModelName": GRID_MODEL,
+    "ZoneParam": ZONE_PARAM_NAME,
+    "ERTBoxGridName": GRID_MODEL_ERTBOX,
+}
+
 
 class GridJob:
     def __init__(
@@ -156,9 +204,37 @@ class GridJob:
         }
 
 
+class ZoneMappingMock:
+    def __init__(
+        self,
+        number_of_grid_zones: int,
+        zone_dict: dict[int, dict],
+    ) -> None:
+        self.number_of_grid_zones = number_of_grid_zones
+        self.zone_dict = zone_dict
+
+    def get_zone_name_for_zone_number(self, zone_number: int):
+        return self.zone_dict[zone_number]["zone_name"]
+
+    def get_zone_index_for_zone_number(self, zone_number: int):
+        return self.zone_dict[zone_number]["zone_index"]
+
+    def get_start_end_layer_for_zone_number(self, zone_number: int):
+        return self.zone_dict[zone_number]["start"], self.zone_dict_list[zone_number][
+            "end"
+        ]
+
+    def number_of_layers_for_zone_number(self, zone_number: int):
+        return self.zone_dict[zone_number]["nlayers"]
+
+    def get_number_of_zones_in_grid(self):
+        return self.number_of_grid_zones
+
+
 @pytest.mark.skipunlessroxar
 @pytest.mark.parametrize(
     "rms_grid_building_jobs, rms_zone_numbers, rms_zone_names,"
+    "nzones, zone_mapping_dict,"
     "rms_conform_mode_list, rms_use_top_surface_list,"
     "rms_use_bottom_surface_list, rms_use_sampled_horizons_list,"
     "specified_grid_layout_list,specified_zone_numbers, debug_level",
@@ -170,14 +246,31 @@ class GridJob:
             # Here the conformity from the grid job is one of the implemented types
             # and can be used. No need for usr specified conformities in this case.
             ["Grid_building_job_1"],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            [ZONEA, ZONEB, ZONEC],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            [ZONEA, ZONEB],
+            2,
+            {
+                1: {
+                    "zone_name": ZONEA,
+                    "zone_index": 0,
+                    "start": 0,
+                    "end": NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEA,
+                },
+                2: {
+                    "zone_name": ZONEB,
+                    "zone_index": 1,
+                    "start": NZ_ZONEA,
+                    "end": NZ_ZONEB + NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEB,
+                },
+            },
             [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
             [False, False, False],  # Surface option not used for Top
             [False, False, False],  # Surface option not use for Base
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
             DEBUG_ON,
         ),
         (
@@ -185,8 +278,25 @@ class GridJob:
             # This means the grid conformity is not implemented and the
             # user must specify conformities in this case.
             ["Grid_building_job_2"],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            [ZONEA, ZONEB, ZONEC],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            [ZONEA, ZONEB],
+            2,
+            {
+                1: {
+                    "zone_name": ZONEB,
+                    "zone_index": 1,
+                    "start": NZ_ZONEA,
+                    "end": NZ_ZONEB + NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEB,
+                },
+                2: {
+                    "zone_name": ZONEA,
+                    "zone_index": 0,
+                    "start": 0,
+                    "end": NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEA,
+                },
+            },
             [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
             [False, False, False],  # Surface option not used for Top
             [False, False, False],  # Surface option not use for Base
@@ -195,7 +305,7 @@ class GridJob:
                 True,
             ],  # Use 'Honor' for first zone boundary and 'Sample' for the next
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
             DEBUG_ON,
         ),
         (
@@ -206,6 +316,23 @@ class GridJob:
             ["Grid_building_job_3"],
             [ZONEA_NUMBER, ZONEB_NUMBER],
             [ZONEA, ZONEB],
+            2,
+            {
+                1: {
+                    "zone_name": ZONEB,
+                    "zone_index": 1,
+                    "start": NZ_ZONEA,
+                    "end": NZ_ZONEB + NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEB,
+                },
+                2: {
+                    "zone_name": ZONEA,
+                    "zone_index": 0,
+                    "start": 0,
+                    "end": NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEA,
+                },
+            },
             [TOPCONFORM_CODE, TOPCONFORM_CODE],
             [
                 True,
@@ -225,28 +352,62 @@ class GridJob:
         (
             # No grid building job exist. Must have user specified conformities
             [],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            [ZONEA, ZONEB, ZONEC],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            [ZONEA, ZONEB],
+            2,
+            {
+                1: {
+                    "zone_name": ZONEA,
+                    "zone_index": 0,
+                    "start": 0,
+                    "end": NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEA,
+                },
+                2: {
+                    "zone_name": ZONEB,
+                    "zone_index": 1,
+                    "start": NZ_ZONEA,
+                    "end": NZ_ZONEB + NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEB,
+                },
+            },
             [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
             [False, False, False],  # Surface option not used for Top
             [False, False, False],  # Surface option not use for Base
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
             DEBUG_ON,
         ),
         (
             # Multiple grid building jobs. No unique job.
             # Must have user specified conformities
             ["Grid_building_job1", "Grid_building_job2"],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
-            [ZONEA, ZONEB, ZONEC],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
+            [ZONEA, ZONEB],
+            2,
+            {
+                1: {
+                    "zone_name": ZONEA,
+                    "zone_index": 0,
+                    "start": 0,
+                    "end": NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEA,
+                },
+                2: {
+                    "zone_name": ZONEB,
+                    "zone_index": 1,
+                    "start": NZ_ZONEA,
+                    "end": NZ_ZONEB + NZ_ZONEA - 1,
+                    "nlayers": NZ_ZONEB,
+                },
+            },
             [BASECONFORM_CODE, TOPCONFORM_CODE, PROPORTIONAL_CODE],
             [False, False, False],  # Surface option not used for Top
             [False, False, False],  # Surface option not used for Base
             [False, False, False],  # Use 'Honor' for all horizons
             [BASECONFORM, TOPCONFORM, PROPORTIONAL],
-            [ZONEA_NUMBER, ZONEB_NUMBER, ZONEC_NUMBER],
+            [ZONEA_NUMBER, ZONEB_NUMBER],
             DEBUG_ON,
         ),
     ],
@@ -256,6 +417,8 @@ def test_check_grid_layout(
     rms_grid_building_jobs: list[str],
     rms_zone_numbers: list[int],
     rms_zone_names: list[str],
+    nzones: int,
+    zone_mapping_dict: dict[int, dict],
     rms_conform_mode_list: list[int],
     rms_use_top_surface_list: list[bool],
     rms_use_bottom_surface_list: list[bool],
@@ -278,7 +441,12 @@ def test_check_grid_layout(
             rms_use_sampled_horizons_list,
         ),
     )
-
+    mocker.patch.object(
+        ZoneMapping,
+        "__init__",
+        return_values=ZoneMappingMock(nzones, zone_mapping_dict),
+    )
+    zone_mapping = ZoneMappingMock(nzones, zone_mapping_dict)
     # For each zone check grid layout with RMS grid building job
     # (here the mock of the rmsapi functions)
 
@@ -293,7 +461,7 @@ def test_check_grid_layout(
     }
 
     if not check_grid_conformity(
-        GRID_MODEL_NAME, specified_zone_numbers, debug_level=debug_level
+        GRID_MODEL_NAME, specified_zone_numbers, zone_mapping, debug_level=debug_level
     ):
         # Grid conformity is not possible to get directly from the grid
         # Assign a user specified conformity to each zone
@@ -314,7 +482,7 @@ def test_check_grid_layout(
                 f"\nCan get grid conformity from the grid job: {rms_grid_building_jobs}"
             )
 
-    conformity_dict = assign_conformity(params, debug_level=DEBUG_OFF)
+    conformity_dict = assign_conformity(params, zone_mapping)
     if conformity_dict:
         for indx, zone_number in enumerate(specified_zone_numbers):
             grid_layout = specified_grid_layout_list[indx]
@@ -371,30 +539,36 @@ def create_grids(project: Any):
     ertboxgrid.to_roxar(project, GRID_MODEL_ERTBOX)
 
 
-def compare_results_with_reference(project: Any):
+def compare_results_with_reference(project: Any, test=1):
     # Compare with reference
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         petro_name = PETROPARAMS[i]
         values1 = project.grid_models[GRID_MODEL].properties[petro_name].get_values()
-        values2 = (
-            project.grid_models[GRID_MODEL]
-            .properties[petro_name_reference]
-            .get_values()
-        )
+        if test == 1:
+            values2 = (
+                project.grid_models[GRID_MODEL]
+                .properties[petro_name_reference]
+                .get_values()
+            )
+        else:
+            values2 = (
+                project.grid_models[GRID_MODEL]
+                .properties[petro_name_reference]
+                .get_values()
+            )
         assert np.allclose(values1, values2)
 
 
-def import_petro_params(project: Any):
+def import_petro_params(project: Any, file_name_for_zone_param: str):
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         filename = Path(REFERENCE_DIR) / Path(petro_name_reference + ".roff")
         petro_reference = xtgeo.gridproperty_from_file(filename, fformat="roff")
         petro_reference.to_roxar(project, GRID_MODEL, petro_name_reference)
 
-    filename = Path(REFERENCE_DIR) / Path(ZONE_PARAM_NAME + ".roff")
-    zone_param = xtgeo.gridproperty_from_file(filename, fformat="roff")
-    zone_param.to_roxar(project, GRID_MODEL, ZONE_PARAM_NAME)
+    zone_param = xtgeo.gridproperty_from_file(file_name_for_zone_param, fformat="roff")
+    zone_param.to_roxar(project, GRID_MODEL, "Zone")
 
 
 @pytest.mark.skipunlessroxar
@@ -417,8 +591,10 @@ def test_copy_between_geo_and_ertbox_grids():
     create_grids(project)
 
     # Load zone and petro params from file into geogrid
-    import_petro_params(project)
+    file_name_zone_param = Path(REFERENCE_DIR) / Path(ZONE_PARAM_FILE)
+    import_petro_params(project, file_name_zone_param)
 
+    # Test 1 with zone numbering is 1 and 2 in zone parameter
     # Copy to ertbox
     GEO_TO_ERTBOX_DICT["project"] = project
     copy_rms_param(GEO_TO_ERTBOX_DICT)
@@ -428,7 +604,21 @@ def test_copy_between_geo_and_ertbox_grids():
     copy_rms_param(ERTBOX_TO_GEO_DICT)
 
     # Verify that original is equal to the new params
-    compare_results_with_reference(project)
+    compare_results_with_reference(project, test=1)
+
+    # Test 2 with zone numbering is 2 and 3 in zone parameter
+    file_name_zone_param = Path(REFERENCE_DIR) / Path(ZONE_PARAM_FILE_2)
+    import_petro_params(project, file_name_zone_param)
+    # Copy to ertbox
+    GEO_TO_ERTBOX_DICT_2["project"] = project
+    copy_rms_param(GEO_TO_ERTBOX_DICT_2)
+
+    # Copy back from ertbox
+    ERTBOX_TO_GEO_DICT_2["project"] = project
+    copy_rms_param(ERTBOX_TO_GEO_DICT_2)
+
+    # Verify that original is equal to the new params
+    compare_results_with_reference(project, test=2)
 
     project.save_as(prj1)
     project.close()
