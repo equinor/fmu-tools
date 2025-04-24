@@ -76,6 +76,14 @@ fmu.tools.rms.volumetrics module
    :undoc-members:
    :show-inheritance:
 
+fmu.tools.rms.zone\_mapping module
+----------------------------------
+
+.. automodule:: fmu.tools.rms.zone_mapping
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

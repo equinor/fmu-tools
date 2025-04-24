@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.rms.zone_mapping &mdash; fmu-tools 1.20.3.dev1+g7ff358d documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=31b0548c"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copy_rms_param_to_ertbox_grid.html">rms.copy_rms_param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.rms.zone_mapping</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.rms.zone_mapping</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="n">DEBUG_OFF</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">DEBUG_ON</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">DEBUG_VERBOSE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">DEBUG_VERY_VERBOSE</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<div class="viewcode-block" id="ZoneMapping">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZoneMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Keep info about available zones in modelling grid,</span>
+<span class="sd">    its zone numbers in the zone parameter and corresponding zone names.</span>
+<span class="sd">    The grid object contains info about zone names for the grid and</span>
+<span class="sd">    number of layers per zone as the most important info in this class.</span>
+<span class="sd">    The zone parameter (3D parameter with zone number per grid cell) contains</span>
+<span class="sd">    a table with corresponding zone name and zone number.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">grid_model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">grid</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">real_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">fmu_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">assert</span> <span class="n">grid_model</span>
+        <span class="k">assert</span> <span class="n">grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_model</span> <span class="o">=</span> <span class="n">grid_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_number</span> <span class="o">=</span> <span class="n">real_number</span>
+
+        <span class="c1"># Key is zone index in the zones in the grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Key is zone_number and value is zone name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Key is zone_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fmu_mode</span><span class="p">:</span>
+            <span class="c1"># The zone parameter</span>
+            <span class="n">zone_param</span> <span class="o">=</span> <span class="n">get_zone_parameter</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_model</span><span class="p">,</span>
+                <span class="n">realization_number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">real_number</span><span class="p">,</span>
+                <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span> <span class="o">=</span> <span class="n">zone_param</span><span class="o">.</span><span class="n">code_names</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zone_param_name</span> <span class="o">=</span> <span class="n">zone_param</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;Zone1&quot;</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zone_param_name</span> <span class="o">=</span> <span class="s2">&quot;Zone1&quot;</span>
+
+        <span class="n">indexer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">simbox_indexer</span>
+        <span class="n">zonation</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span>
+        <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- Zone parameter with zone_code_names: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- Grid with zone names: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">zone_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">zone_names_from_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">zone_names</span>
+        <span class="k">for</span> <span class="n">zone_index</span> <span class="ow">in</span> <span class="n">zonation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">zone_names_from_grid</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">zonation</span><span class="p">)</span>
+
+        <span class="c1"># same index in zonation and in zone_names corresponds to the same zone</span>
+        <span class="k">for</span> <span class="n">zone_index</span> <span class="ow">in</span> <span class="n">zonation</span><span class="p">:</span>
+            <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_names_from_grid</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;name_from_grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_name</span>
+
+            <span class="n">layer_ranges</span> <span class="o">=</span> <span class="n">zonation</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">layer_ranges</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="p">)</span>  <span class="c1"># No repeated layer numbering for simbox indexer</span>
+            <span class="n">layer_range</span> <span class="o">=</span> <span class="n">layer_ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">layer_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">layer_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">number_of_layers</span> <span class="o">=</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">start</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;nlayers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">number_of_layers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;start_layer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;end_layer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end</span>
+
+            <span class="n">zone_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zone_number</span><span class="p">(</span><span class="n">zone_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;zone_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">zone_index</span>
+
+<div class="viewcode-block" id="ZoneMapping.validate_zone_number_for_grid">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.validate_zone_number_for_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_zone_number_for_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">zone_number</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">zone_number</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Zone name: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;with zone code: </span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2"> in zone parameter &quot;</span>
+                    <span class="s2">&quot;does not exist in the grid.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Zone number: </span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2"> is not found in zone parameter.&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_number_of_zones_in_grid">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_number_of_zones_in_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_zones_in_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">simbox_indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_names_from_grid">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_names_from_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_names_from_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zone names got from the grid object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">zone_names</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_names_from_param">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_names_from_param">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_names_from_param</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zone names corresponding to the grid zones, but the names are</span>
+<span class="sd">        got from the zone parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">zone_name_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">nzones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_zones_in_grid</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">zone_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nzones</span><span class="p">):</span>
+            <span class="n">zone_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zone_number_for_zone_index</span><span class="p">(</span><span class="n">zone_index</span><span class="p">)</span>
+            <span class="n">zone_name_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">zone_name_dict</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_numbers">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_numbers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_numbers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_numbers_in_grid">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_numbers_in_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_numbers_in_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">nzones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_zones_in_grid</span><span class="p">()</span>
+        <span class="n">zone_numbers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">zone_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nzones</span><span class="p">):</span>
+            <span class="n">zone_numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;zone_number&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">zone_numbers</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_number">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># Unique zone name for each zone code</span>
+        <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">zone_name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">code</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown zone name: </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Check that zone names in grid and zone parameter </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">zone_param_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot;are consistent.&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_name_for_zone_number">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_name_for_zone_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_name_for_zone_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_name_for_zone_index">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_name_for_zone_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_name_for_zone_index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">zone_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">zone_name_from_param</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return zone name in zone_code table in zone parameter or</span>
+<span class="sd">        alternatively zone name from grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">zone_name_from_param</span><span class="p">:</span>
+            <span class="c1"># Zone name from grid</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">zone_names</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+        <span class="c1"># zone name from param</span>
+        <span class="n">zone_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zone_number_for_zone_index</span><span class="p">(</span><span class="n">zone_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">zone_code_names</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_number_for_zone_index">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_number_for_zone_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_number_for_zone_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;zone_number&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_zone_index_for_zone_number">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_index_for_zone_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_zone_index_for_zone_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_zone_number_for_grid</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.is_zone_number_defined">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.is_zone_number_defined">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_zone_number_defined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">zone_numbers_in_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_zone_numbers_in_grid</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">zone_number</span> <span class="ow">in</span> <span class="n">zone_numbers_in_grid</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.number_of_layers_for_zone_number">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.number_of_layers_for_zone_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_layers_for_zone_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_zone_number_for_grid</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;nlayers&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.number_of_layers_for_zone_index">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.number_of_layers_for_zone_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_of_layers_for_zone_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;nlayers&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_start_end_layer_for_zone_number">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_start_end_layer_for_zone_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_end_layer_for_zone_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_zone_number_for_grid</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_index_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="s2">&quot;start_layer&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">index</span><span class="p">][</span>
+            <span class="s2">&quot;end_layer&quot;</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_start_end_layer_for_zone_index">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_start_end_layer_for_zone_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_end_layer_for_zone_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zone_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span><span class="n">zone_index</span><span class="p">][</span><span class="s2">&quot;start_layer&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_zone_dict</span><span class="p">[</span>
+            <span class="n">zone_index</span>
+        <span class="p">][</span><span class="s2">&quot;end_layer&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ZoneMapping.get_number_of_layers_per_zone">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_number_of_layers_per_zone">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_number_of_layers_per_zone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">nzones</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_of_zones_in_grid</span><span class="p">()</span>
+        <span class="n">number_of_layers_per_zone</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">zone_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nzones</span><span class="p">):</span>
+            <span class="n">number_of_layers_per_zone</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">number_of_layers_for_zone_index</span><span class="p">(</span><span class="n">zone_index</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">number_of_layers_per_zone</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_zone_parameter">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.get_zone_parameter">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_zone_parameter</span><span class="p">(</span>
+    <span class="n">grid_model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
+    <span class="n">realization_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Description:</span>
+<span class="sd">    Return zone parameter for given grid model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="n">zone_parameter</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- Found existing zone parameter with name </span><span class="si">{</span><span class="n">zone_parameter</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">zone_parameter</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="n">realisation</span><span class="o">=</span><span class="n">realization_number</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone parameter: </span><span class="si">{</span><span class="n">zone_parameter</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is empty.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone parameter </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not exists.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zone_parameter</span></div>
+
+
+
+<div class="viewcode-block" id="get_zone_mapping">
+<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.zone_mapping.get_zone_mapping">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_zone_mapping</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZoneMapping</span><span class="p">:</span>
+    <span class="n">grid_model</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">grid_model_name</span><span class="p">]</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">get_grid</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">current_realisation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ZoneMapping</span><span class="p">(</span>
+        <span class="n">grid_model</span><span class="p">,</span>
+        <span class="n">grid</span><span class="p">,</span>
+        <span class="n">real_number</span><span class="o">=</span><span class="n">project</span><span class="o">.</span><span class="n">current_realisation</span><span class="p">,</span>
+        <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

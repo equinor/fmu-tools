@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.copy_rms_param_to_ertbox_grid &mdash; fmu-tools 1.20.2 documentation</title>
+  <title>fmu.tools.rms.copy_rms_param_to_ertbox_grid &mdash; fmu-tools 1.20.3.dev1+g7ff358d documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9eefb84"></script>
+      <script src="../../../../_static/documentation_options.js?v=31b0548c"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -104,6 +104,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy.ma</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ROXAR</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms.zone_mapping</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZoneMapping</span><span class="p">,</span> <span class="n">get_zone_mapping</span>
 
 <span class="k">if</span> <span class="n">ROXAR</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -251,9 +252,13 @@
         <span class="c1"># specified grid model in keyword &#39;GridModelName&#39;</span>
         <span class="n">check_missing_keywords_list</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">required_kw_list</span><span class="p">)</span>
         <span class="n">zone_numbers</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">grid_model_name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GridModelName&quot;</span><span class="p">]</span>
+        <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">get_zone_mapping</span><span class="p">(</span>
+            <span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
+        <span class="p">)</span>
         <span class="c1"># Check if necessary to specify grid conformity</span>
         <span class="k">if</span> <span class="n">check_grid_conformity</span><span class="p">(</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GridModelName&quot;</span><span class="p">],</span> <span class="n">zone_numbers</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
+            <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_numbers</span><span class="p">,</span> <span class="n">zone_mapping</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
         <span class="p">):</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;Conformity_required&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
@@ -275,9 +280,13 @@
         <span class="p">]</span>
         <span class="n">check_missing_keywords_list</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">required_kw_list</span><span class="p">)</span>
         <span class="n">zone_numbers</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">grid_model_name</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GridModelName&quot;</span><span class="p">]</span>
+        <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">get_zone_mapping</span><span class="p">(</span>
+            <span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
+        <span class="p">)</span>
         <span class="c1"># Check if necessary to specify grid conformity</span>
         <span class="k">if</span> <span class="n">check_grid_conformity</span><span class="p">(</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GridModelName&quot;</span><span class="p">],</span> <span class="n">zone_numbers</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
+            <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_numbers</span><span class="p">,</span> <span class="n">zone_mapping</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
         <span class="p">):</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;Conformity_required&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
@@ -325,8 +334,6 @@
     <span class="n">param_names_geogrid_dict</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">]</span>
     <span class="n">debug_level</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;debug_level&quot;</span><span class="p">])</span>
 
-    <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">assign_conformity</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">)</span>
-
     <span class="c1"># Optional parameter</span>
     <span class="n">save_active_param</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SaveActiveParam&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="c1"># Optional parameter, Default is to add noise to inactive grid cell values</span>
@@ -338,6 +345,11 @@
     <span class="p">)</span>
 
     <span class="n">geogrid_model</span><span class="p">,</span> <span class="n">geogrid3D</span> <span class="o">=</span> <span class="n">get_grid_model</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">)</span>
+    <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">ZoneMapping</span><span class="p">(</span>
+        <span class="n">geogrid_model</span><span class="p">,</span> <span class="n">geogrid3D</span><span class="p">,</span> <span class="n">real_number</span><span class="o">=</span><span class="n">project</span><span class="o">.</span><span class="n">current_realisation</span>
+    <span class="p">)</span>
+    <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">assign_conformity</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">zone_mapping</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">zone_param_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">geogrid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;The parameter </span><span class="si">{</span><span class="n">zone_param_name</span><span class="si">}</span><span class="s2"> does not exist in </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2"> .&quot;</span>
@@ -434,10 +446,11 @@
     <span class="n">param_names_ertbox_dict</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ErtboxParameters&quot;</span><span class="p">]</span>
     <span class="n">debug_level</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;debug_level&quot;</span><span class="p">])</span>
 
-    <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">assign_conformity</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">)</span>
-
-    <span class="c1"># Create</span>
+    <span class="c1"># Geogrid and zone mapping object</span>
     <span class="n">geogrid_model</span><span class="p">,</span> <span class="n">grid3D</span> <span class="o">=</span> <span class="n">get_grid_model</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">)</span>
+    <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">ZoneMapping</span><span class="p">(</span><span class="n">geogrid_model</span><span class="p">,</span> <span class="n">grid3D</span><span class="p">,</span> <span class="n">real_number</span><span class="o">=</span><span class="n">real_number</span><span class="p">)</span>
+    <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">assign_conformity</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">zone_mapping</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">)</span>
+
     <span class="n">ertbox_grid_model</span><span class="p">,</span> <span class="n">ertbox3D</span> <span class="o">=</span> <span class="n">get_grid_model</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">ertbox_grid_model_name</span><span class="p">)</span>
 
     <span class="c1"># Check grid index origin</span>
@@ -455,10 +468,8 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: ERTBOX grid should have &#39;Eclipse grid index origin&#39;.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;         Use the grid index origin job in RMS to set this.&quot;</span><span class="p">)</span>
 
-    <span class="n">number_of_layers_per_zone_in_geo_grid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_zone_layer_numbering</span><span class="p">(</span><span class="n">grid3D</span><span class="p">)</span>
     <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz_ertbox</span> <span class="o">=</span> <span class="n">ertbox3D</span><span class="o">.</span><span class="n">simbox_indexer</span><span class="o">.</span><span class="n">dimensions</span>
     <span class="k">for</span> <span class="n">zone_number</span> <span class="ow">in</span> <span class="n">param_names_geogrid_dict</span><span class="p">:</span>
-        <span class="n">zone_index</span> <span class="o">=</span> <span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">conformity</span> <span class="o">=</span> <span class="n">conformity_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
         <span class="n">param_names_geogrid_list</span> <span class="o">=</span> <span class="n">param_names_geogrid_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
         <span class="n">param_names_ertbox_list</span> <span class="o">=</span> <span class="n">param_names_ertbox_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span>
@@ -467,7 +478,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-- Conformity: </span><span class="si">{</span><span class="n">conformity</span><span class="si">}</span><span class="s2">  &quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-- Copy from:  </span><span class="si">{</span><span class="n">param_names_ertbox_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;-- Copy to:    </span><span class="si">{</span><span class="n">param_names_geogrid_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">nz_for_zone</span> <span class="o">=</span> <span class="n">number_of_layers_per_zone_in_geo_grid</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+        <span class="n">nz_for_zone</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">number_of_layers_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
         <span class="n">parameter_names_geo_grid</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">parameter_values_geo_grid</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -497,15 +509,15 @@
         <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">parameter_names_geo_grid</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;--- Update parameter </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> for zone number &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">geogrid_model</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;--- Update parameter </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> for zone &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">geogrid_model</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-
+        <span class="n">zone_index</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_index_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
         <span class="n">set_continuous_3d_parameter_values_in_zone_region</span><span class="p">(</span>
             <span class="n">geogrid_model</span><span class="p">,</span>
             <span class="n">parameter_names_geo_grid</span><span class="p">,</span>
             <span class="n">parameter_values_geo_grid</span><span class="p">,</span>
-            <span class="n">zone_number</span><span class="p">,</span>
+            <span class="n">zone_index</span><span class="p">,</span>
             <span class="n">realisation_number</span><span class="o">=</span><span class="n">project</span><span class="o">.</span><span class="n">current_realisation</span><span class="p">,</span>
             <span class="n">is_shared</span><span class="o">=</span><span class="n">geogrid_model</span><span class="o">.</span><span class="n">shared</span><span class="p">,</span>
             <span class="n">switch_handedness</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -515,28 +527,6 @@
             <span class="sa">f</span><span class="s2">&quot;- Finished copy rms parameters from </span><span class="si">{</span><span class="n">ertbox_grid_model_name</span><span class="si">}</span><span class="s2">  &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="get_zone_layer_numbering">
-<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_zone_layer_numbering">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_zone_layer_numbering</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-    <span class="n">indexer</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">simbox_indexer</span>
-    <span class="n">number_layers_per_zone</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">start_layers_per_zone</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">end_layers_per_zone</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">:</span>
-        <span class="n">layer_ranges</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="n">number_layers</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_ranges</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># Required for simbox indexer</span>
-        <span class="n">layer_range</span> <span class="o">=</span> <span class="n">layer_ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">layer_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">layer_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">number_layers</span> <span class="o">+=</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">start</span>
-        <span class="n">number_layers_per_zone</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number_layers</span><span class="p">)</span>
-        <span class="n">start_layers_per_zone</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-        <span class="n">end_layers_per_zone</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">number_layers_per_zone</span><span class="p">,</span> <span class="n">start_layers_per_zone</span><span class="p">,</span> <span class="n">end_layers_per_zone</span></div>
 
 
 
@@ -671,6 +661,7 @@
     <span class="n">geo_grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">ertbox_grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">zone_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">zone_mapping</span><span class="p">:</span> <span class="n">ZoneMapping</span><span class="p">,</span>
     <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
     <span class="n">not_aps_workflow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -688,17 +679,15 @@
         <span class="n">geogrid</span><span class="p">,</span> <span class="n">ertboxgrid</span><span class="p">,</span> <span class="n">geo_grid_model_name</span><span class="p">,</span> <span class="n">ertbox_grid_model_name</span>
     <span class="p">)</span>
 
-    <span class="n">number_layers_per_zone</span><span class="p">,</span> <span class="n">start_layers_per_zone</span><span class="p">,</span> <span class="n">end_layers_per_zone</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">get_zone_layer_numbering</span><span class="p">(</span><span class="n">geogrid</span><span class="p">)</span>
-    <span class="p">)</span>
-
     <span class="c1"># Get zone_name and parameter names from model specification</span>
     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">zone_item</span> <span class="ow">in</span> <span class="n">zone_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">zone_number</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">conformity</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">zone_item</span>
-        <span class="n">zone_index</span> <span class="o">=</span> <span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">number_layers</span> <span class="o">=</span> <span class="n">number_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
-        <span class="n">start_layer</span> <span class="o">=</span> <span class="n">start_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
-        <span class="n">end_layer</span> <span class="o">=</span> <span class="n">end_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+        <span class="n">number_layers</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">number_of_layers_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="n">start_layer</span><span class="p">,</span> <span class="n">end_layer</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_start_end_layer_for_zone_number</span><span class="p">(</span>
+            <span class="n">zone_number</span>
+        <span class="p">)</span>
+        <span class="n">zone_name2</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">zone_name</span> <span class="o">==</span> <span class="n">zone_name2</span>
         <span class="k">if</span> <span class="n">number_layers</span> <span class="o">&gt;</span> <span class="n">nz_ertbox</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Number of layers of </span><span class="si">{</span><span class="n">ertbox_grid_model_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">nz_ertbox</span><span class="si">}</span><span class="s2">) &quot;</span>
@@ -1242,6 +1231,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">real_number</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">current_realisation</span>
     <span class="n">geogrid_model</span><span class="p">,</span> <span class="n">geogrid</span> <span class="o">=</span> <span class="n">get_grid_model</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">geo_grid_model_name</span><span class="p">)</span>
+    <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">ZoneMapping</span><span class="p">(</span><span class="n">geogrid_model</span><span class="p">,</span> <span class="n">geogrid</span><span class="p">,</span> <span class="n">real_number</span><span class="o">=</span><span class="n">real_number</span><span class="p">)</span>
     <span class="n">ertbox_grid_model</span><span class="p">,</span> <span class="n">ertboxgrid</span> <span class="o">=</span> <span class="n">get_grid_model</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">ertbox_grid_model_name</span><span class="p">)</span>
 
     <span class="c1"># Both ERTBOX grid and geogrid should have same nx, ny dimensions</span>
@@ -1251,17 +1241,15 @@
         <span class="n">geogrid</span><span class="p">,</span> <span class="n">ertboxgrid</span><span class="p">,</span> <span class="n">geo_grid_model_name</span><span class="p">,</span> <span class="n">ertbox_grid_model_name</span>
     <span class="p">)</span>
 
-    <span class="n">number_layers_per_zone</span><span class="p">,</span> <span class="n">start_layers_per_zone</span><span class="p">,</span> <span class="n">end_layers_per_zone</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">get_zone_layer_numbering</span><span class="p">(</span><span class="n">geogrid</span><span class="p">)</span>
-    <span class="p">)</span>
-
     <span class="c1"># Get parameter names from model specification</span>
     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">zone_item</span> <span class="ow">in</span> <span class="n">zone_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">zone_number</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">conformity</span><span class="p">,</span> <span class="n">param_name_list</span> <span class="o">=</span> <span class="n">zone_item</span>
-        <span class="n">zone_index</span> <span class="o">=</span> <span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">number_layers</span> <span class="o">=</span> <span class="n">number_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
-        <span class="n">start_layer</span> <span class="o">=</span> <span class="n">start_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
-        <span class="n">end_layer</span> <span class="o">=</span> <span class="n">end_layers_per_zone</span><span class="p">[</span><span class="n">zone_index</span><span class="p">]</span>
+        <span class="n">number_layers</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">number_of_layers_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="n">start_layer</span><span class="p">,</span> <span class="n">end_layer</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_start_end_layer_for_zone_number</span><span class="p">(</span>
+            <span class="n">zone_number</span>
+        <span class="p">)</span>
+        <span class="n">zone_name2</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">zone_name2</span> <span class="o">==</span> <span class="n">zone_name</span>
         <span class="k">if</span> <span class="n">number_layers</span> <span class="o">&gt;</span> <span class="n">nz_ertbox</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Number of layers of </span><span class="si">{</span><span class="n">ertbox_grid_model_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">nz_ertbox</span><span class="si">}</span><span class="s2">) &quot;</span>
@@ -1455,34 +1443,6 @@
 
 
 
-<div class="viewcode-block" id="get_layer_range">
-<a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_layer_range">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_layer_range</span><span class="p">(</span>
-    <span class="n">indexer</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fmu_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">nz</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">dimensions</span>
-    <span class="k">if</span> <span class="n">fmu_mode</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">layer_ranges</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;While in FMU / ERT mode, the grid must have EXACTLY 1 zone&quot;</span>
-            <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">layer_ranges</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">[</span>
-            <span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="p">]</span>  <span class="c1"># Zonation is 0-indexed, while zone numbers are 1-indexed</span>
-    <span class="n">start_layer</span> <span class="o">=</span> <span class="n">nz</span>
-    <span class="n">end_layer</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">layer_range</span> <span class="ow">in</span> <span class="n">layer_ranges</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">start_layer</span> <span class="o">&gt;</span> <span class="n">layer_range</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
-            <span class="n">start_layer</span> <span class="o">=</span> <span class="n">layer_range</span><span class="o">.</span><span class="n">start</span>
-        <span class="k">if</span> <span class="n">end_layer</span> <span class="o">&lt;</span> <span class="n">layer_range</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
-            <span class="n">end_layer</span> <span class="o">=</span> <span class="n">layer_range</span><span class="o">.</span><span class="n">stop</span>
-    <span class="k">return</span> <span class="n">end_layer</span><span class="p">,</span> <span class="n">start_layer</span></div>
-
-
-
 <div class="viewcode-block" id="define_active_cell_indices">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.define_active_cell_indices">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">define_active_cell_indices</span><span class="p">(</span>
@@ -1521,7 +1481,7 @@
     <span class="n">grid_model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">parameter_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">input_values_for_zones</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-    <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">zone_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">region_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">region_parameter_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">realisation_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -1531,61 +1491,57 @@
     <span class="n">use_left_handed_grid_indexing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">switch_handedness</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set 3D parameter with values for specified grid model for</span>
-<span class="sd">       specified zone (and region)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set 3D parameter with values for specified grid model</span>
+<span class="sd">    for specified zone (and region)</span>
 
 <span class="sd">    Input:</span>
+<span class="sd">           grid_model      - Grid model object</span>
 
-<span class="sd">           grid_model:</span>
-<span class="sd">                Grid model object</span>
+<span class="sd">           parameter_names - List of names of 3D parameter to update.</span>
 
-<span class="sd">           parameter_names:</span>
-<span class="sd">                List of names of 3D parameter to update.</span>
-
-<span class="sd">           input_values_for_zones:</span>
-<span class="sd">                A list of numpy 3D arrays.</span>
+<span class="sd">           input_values_for_zones  - A list of numpy 3D arrays.</span>
 <span class="sd">                They corresponds to the parameter names in parameter_names.</span>
-<span class="sd">                The size of the numpy input arrays are (nx,ny,nLayers) where</span>
-<span class="sd">                nx, ny must match the gridModels 3D grid size for the simulation</span>
-<span class="sd">                box grid and nLayers must match the number of layers for the</span>
-<span class="sd">                zone in simulationx box. Note that since nx, ny are the simulation</span>
-<span class="sd">                box grid size, they can be larger than the number of cells reported</span>
-<span class="sd">                for the grid in reverse faulted grids. The grid values must be of type</span>
-<span class="sd">                numpy.float32. Only the grid cells belonging to the specified zone</span>
-<span class="sd">                are updated, and error is raised if the number of grid cells for</span>
-<span class="sd">                the zone doesn&#39;t match the size of the input array.</span>
+<span class="sd">                The size of the numpy input arrays are (nx,ny,nLayers)</span>
+<span class="sd">                where nx, ny must match the gridModels 3D grid size for the</span>
+<span class="sd">                simulation box grid and nLayers must match the number of layers</span>
+<span class="sd">                for the zone in simulationx box. Note that since nx, ny</span>
+<span class="sd">                are the simulation box grid size, they can be larger than the</span>
+<span class="sd">                number of cells reported for the grid in reverse faulted grids.</span>
+<span class="sd">                The grid values must be of type numpy.float32. Only the</span>
+<span class="sd">                grid cells belonging to the specified zone are updated,</span>
+<span class="sd">                and error is raised if the number of grid cells for the</span>
+<span class="sd">                zone doesn&#39;t match the size of the input array.</span>
 
-<span class="sd">           zone_number:</span>
-<span class="sd">                The zone number (counted from 1 in the input)</span>
+<span class="sd">           zone_index    - The zone index is referring to zone in grid</span>
 
-<span class="sd">           regionNumber:</span>
-<span class="sd">                The region number for the grid cells to be updated.</span>
+<span class="sd">           regionNumber  - The region number for the grid cells to be updated.</span>
 
-<span class="sd">           region_parameter_name:</span>
-<span class="sd">                The name of the 3D grid parameter containing a discrete</span>
-<span class="sd">                3D parameter with region numbers</span>
+<span class="sd">           region_parameter_name - The name of the 3D grid parameter containing</span>
+<span class="sd">                a discrete 3D parameter with region numbers</span>
 
-<span class="sd">           realisation_number:</span>
-<span class="sd">                Realisation number counted from 0 for the parameter to get.</span>
+<span class="sd">           realisation_number    - Realisation number counted from 0 for</span>
+<span class="sd">                the parameter to get.</span>
 
-<span class="sd">           is_shared:</span>
-<span class="sd">                Is set to true or false if the parameter is to be set</span>
-<span class="sd">                to shared or non-shared.</span>
+<span class="sd">           is_shared      - Is set to true or false if the parameter</span>
+<span class="sd">                 is to be set to shared or non-shared.</span>
 
-<span class="sd">           debug_level: 0 is off, 1 or larger is on for additional output to screen</span>
-
+<span class="sd">           debug_level   - (value 0,1,2 or 3) and specify how much</span>
+<span class="sd">                info is to be printed to screen.</span>
+<span class="sd">                (0 - almost nothing, 3 - also some debug info)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check if specified grid model exists and is not empty</span>
     <span class="k">if</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="n">realisation_number</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Specified grid model: </span><span class="si">{</span><span class="n">grid_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;is empty for realisation </span><span class="si">{</span><span class="n">realisation_number</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Specified grid model: </span><span class="si">{</span><span class="n">grid_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is empty for &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;realisation </span><span class="si">{</span><span class="n">realisation_number</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="c1"># Check if the parameter is defined and create new if not existing</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">get_grid</span><span class="p">(</span><span class="n">realisation_number</span><span class="p">)</span>
+    <span class="n">zone_mapping</span> <span class="o">=</span> <span class="n">ZoneMapping</span><span class="p">(</span><span class="n">grid_model</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">real_number</span><span class="o">=</span><span class="n">realisation_number</span><span class="p">)</span>
 
     <span class="c1"># Find grid layers for the zone</span>
     <span class="n">indexer</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">simbox_indexer</span>
@@ -1595,7 +1551,14 @@
         <span class="n">ijk_handedness</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">handedness</span>
 
     <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">dimensions</span>
-    <span class="n">end_layer</span><span class="p">,</span> <span class="n">start_layer</span> <span class="o">=</span> <span class="n">get_layer_range</span><span class="p">(</span><span class="n">indexer</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">,</span> <span class="n">fmu_mode</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmu_mode</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">indexer</span><span class="o">.</span><span class="n">zonation</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;While in FMU / ERT mode, the ERTBOX grid must have EXACTLY 1 zone&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">start_layer</span><span class="p">,</span> <span class="n">end_layer</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_start_end_layer_for_zone_index</span><span class="p">(</span><span class="n">zone_index</span><span class="p">)</span>
+    <span class="n">end_layer</span> <span class="o">=</span> <span class="n">end_layer</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_index</span><span class="p">(</span><span class="n">zone_index</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start_layer</span><span class="p">)</span>
     <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">end_layer</span><span class="p">)</span>
     <span class="n">zone_cell_numbers</span> <span class="o">=</span> <span class="n">indexer</span><span class="o">.</span><span class="n">get_cell_numbers_in_range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
@@ -1608,8 +1571,8 @@
             <span class="s2">&quot;Input array with values has different dimensions than the grid model:</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Grid model nx: </span><span class="si">{</span><span class="n">nx</span><span class="si">}</span><span class="s2">  Input array nx: </span><span class="si">{</span><span class="n">nx_in</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Grid model ny: </span><span class="si">{</span><span class="n">ny</span><span class="si">}</span><span class="s2">  Input array ny: </span><span class="si">{</span><span class="n">ny_in</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Grid model nLayers for zone </span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2"> is: &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">num_layers</span><span class="si">}</span><span class="s2">    Input array nz: </span><span class="si">{</span><span class="n">nz_in</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Grid model nLayers for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> is: </span><span class="si">{</span><span class="n">num_layers</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Input array nz: </span><span class="si">{</span><span class="n">nz_in</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="n">use_regions</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">region_parameter_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">region_parameter_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">fmu_mode</span><span class="p">:</span>
@@ -1625,14 +1588,21 @@
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Get region parameter values</span>
+        <span class="n">region_param_values</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">zone_region_cell_numbers</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">region_parameter_name</span> <span class="ow">in</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">region_parameter_name</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_empty</span><span class="p">(</span><span class="n">realisation_number</span><span class="p">):</span>
                 <span class="n">region_param_values</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">realisation_number</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="n">region_parameter_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;is empty in grid model </span><span class="si">{</span><span class="n">grid_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Parameter </span><span class="si">{</span><span class="n">region_parameter_name</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;does not exist or is empty in grid model </span><span class="si">{</span><span class="n">grid_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;does not exist in grid model </span><span class="si">{</span><span class="n">grid_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
         <span class="n">region_param_values_in_zone</span> <span class="o">=</span> <span class="n">region_param_values</span><span class="p">[</span><span class="n">zone_cell_numbers</span><span class="p">]</span>
         <span class="n">zone_region_cell_numbers</span> <span class="o">=</span> <span class="n">zone_cell_numbers</span><span class="p">[</span>
@@ -1700,7 +1670,8 @@
             <span class="p">]</span>
 
         <span class="n">property_param</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">current_values</span><span class="p">,</span> <span class="n">realisation_number</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- Updated zone: </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> for parameter: </span><span class="si">{</span><span class="n">parameter_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -1710,14 +1681,26 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_conformity</span><span class="p">(</span>
     <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">zone_numbers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">zone_mapping</span><span class="p">:</span> <span class="n">ZoneMapping</span><span class="p">,</span>
+    <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to get conformity from the grid.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get conformity from the grid.</span>
+<span class="sd">    Input:</span>
+<span class="sd">    Name of grid model</span>
+<span class="sd">    List of zone numbers.</span>
+<span class="sd">    An object defining the mapping between zone index and zone_number.</span>
+
+<span class="sd">    Note that zone numbers refer to the values the zone has</span>
+<span class="sd">    in the zone parameter, in other words in the code_names dict</span>
+<span class="sd">    from zone parameter and not to the order of the zone in the grid.</span>
+
 <span class="sd">    Restrictions:</span>
-<span class="sd">    - All horizons used are specified to be honored and not sampled.</span>
-<span class="sd">    - The zones must be defined with Horizon as reference for both</span>
-<span class="sd">      top and base and no Surface is used to define grid layout.</span>
-<span class="sd">    - If the two above mentioned criteria is satisfied, it is possible</span>
-<span class="sd">      to use the &#39;ConformalMode&#39; list from rmsapi to get conformity status.</span>
+<span class="sd">    All horizons used are specified to be honored and not sampled.</span>
+<span class="sd">    The zones must be defined with Horizon as reference for both</span>
+<span class="sd">    top and base and no Surface is used to define grid layout.</span>
+<span class="sd">    If the two above mentioned criteria is satisfied, it is possible</span>
+<span class="sd">    to use the &#39;ConformalMode&#39; list from rmsapi to get conformity status.</span>
 
 <span class="sd">    If restrictions above are not satisfied, the conformity will be &#39;Undefined&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1727,8 +1710,12 @@
 
     <span class="n">conformity_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">zone_number</span> <span class="ow">in</span> <span class="n">zone_numbers</span><span class="p">:</span>
+        <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
         <span class="n">conform_zone_dict</span> <span class="o">=</span> <span class="n">get_conformity_per_zone</span><span class="p">(</span>
-            <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">,</span> <span class="n">rms_grid_job_name</span>
+            <span class="n">grid_model_name</span><span class="p">,</span>
+            <span class="n">zone_name</span><span class="p">,</span>
+            <span class="n">rms_grid_job_name</span><span class="p">,</span>
+            <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">conformity_dict</span><span class="p">[</span><span class="n">zone_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">conform_zone_dict</span><span class="p">[</span><span class="s2">&quot;conformity&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">conformity_dict</span></div>
@@ -1739,22 +1726,35 @@
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.get_conformity_per_zone">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_conformity_per_zone</span><span class="p">(</span>
     <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">zone_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">rms_grid_job_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="k">assert</span> <span class="n">grid_model_name</span>
     <span class="k">assert</span> <span class="n">rms_grid_job_name</span>
-    <span class="k">assert</span> <span class="n">zone_number</span> <span class="o">&gt;</span> <span class="mi">0</span>
     <span class="n">arguments</span> <span class="o">=</span> <span class="n">get_grid_building_job_arguments</span><span class="p">(</span><span class="n">grid_model_name</span><span class="p">,</span> <span class="n">rms_grid_job_name</span><span class="p">)</span>
+
+    <span class="c1"># Zones in grid where zone_index refer to the zone ordered from top and downward</span>
     <span class="n">conformal_mode_list</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;ConformalMode&quot;</span><span class="p">]</span>
     <span class="n">zone_names</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;ZoneNames&quot;</span><span class="p">]</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">zone_names</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">zone_name</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown zone name: </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> in grid job name: </span><span class="si">{</span><span class="n">rms_grid_job_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="n">use_base_surface</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;UseBottomSurface&quot;</span><span class="p">]</span>
     <span class="n">use_top_surface</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s2">&quot;UseTopSurface&quot;</span><span class="p">]</span>
-
-    <span class="c1"># zone_number starts at 1</span>
-    <span class="n">conform_mode</span> <span class="o">=</span> <span class="n">conformal_mode_list</span><span class="p">[</span><span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">use_top_surf</span> <span class="o">=</span> <span class="n">use_top_surface</span><span class="p">[</span><span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">use_base_surf</span> <span class="o">=</span> <span class="n">use_base_surface</span><span class="p">[</span><span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- conformal mode list: </span><span class="si">{</span><span class="n">conformal_mode_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--- zone names list: </span><span class="si">{</span><span class="n">zone_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># zone_index starts at 0</span>
+    <span class="n">conform_mode</span> <span class="o">=</span> <span class="n">conformal_mode_list</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="n">use_top_surf</span> <span class="o">=</span> <span class="n">use_top_surface</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="n">use_base_surf</span> <span class="o">=</span> <span class="n">use_base_surface</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
     <span class="k">assert</span> <span class="n">conform_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">conform_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1768,7 +1768,7 @@
         <span class="n">conform</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;zone_name&quot;</span><span class="p">:</span> <span class="n">zone_names</span><span class="p">[</span><span class="n">zone_number</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;zone_name&quot;</span><span class="p">:</span> <span class="n">zone_names</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
         <span class="s2">&quot;conformity&quot;</span><span class="p">:</span> <span class="n">conform</span><span class="p">,</span>
     <span class="p">}</span></div>
 
@@ -1871,7 +1871,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_grid_layout">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_grid_layout</span><span class="p">(</span>
     <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">zone_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">zone_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">grid_layout</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">aps_job_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">return_grid_layout</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1894,7 +1894,10 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">zone_conformity_dict</span> <span class="o">=</span> <span class="n">get_conformity_per_zone</span><span class="p">(</span>
-        <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_number</span><span class="p">,</span> <span class="n">rms_grid_job_name</span>
+        <span class="n">grid_model_name</span><span class="p">,</span>
+        <span class="n">zone_name</span><span class="p">,</span>
+        <span class="n">rms_grid_job_name</span><span class="p">,</span>
+        <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_conformity_dict</span><span class="p">[</span><span class="s2">&quot;zone_name&quot;</span><span class="p">]</span>
@@ -1923,7 +1926,7 @@
         <span class="k">if</span> <span class="n">debug_level</span> <span class="o">&gt;=</span> <span class="n">DEBUG_VERY_VERBOSE</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="s2">&quot;--- Use grid conformity from the grid model for zone &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">conformity</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">conformity</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">conformity</span>
 
@@ -1936,8 +1939,7 @@
             <span class="n">aps_job_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Specified zone conformity for zone &#39;</span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&#39; with zone number &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">zone_number</span><span class="si">}</span><span class="s2"> is &#39;</span><span class="si">{</span><span class="n">grid_layout</span><span class="si">}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Specified zone conformity for zone &#39;</span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&#39; is &#39;</span><span class="si">{</span><span class="n">grid_layout</span><span class="si">}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Grid model &#39;</span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">&#39; has different zone conformity: &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">conformity</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Change conformity setting </span><span class="si">{</span><span class="n">aps_job_string</span><span class="si">}</span><span class="s2"> to match the correct &quot;</span>
@@ -1955,13 +1957,17 @@
 <div class="viewcode-block" id="check_grid_conformity">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.check_grid_conformity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_grid_conformity</span><span class="p">(</span>
-    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">zone_numbers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span>
+    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">zone_numbers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">zone_mapping</span><span class="p">:</span> <span class="n">ZoneMapping</span><span class="p">,</span>
+    <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">for</span> <span class="n">zone_number</span> <span class="ow">in</span> <span class="n">zone_numbers</span><span class="p">:</span>
+        <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_mapping</span><span class="o">.</span><span class="n">get_zone_name_for_zone_number</span><span class="p">(</span><span class="n">zone_number</span><span class="p">)</span>
         <span class="n">conformity</span> <span class="o">=</span> <span class="n">check_grid_layout</span><span class="p">(</span>
             <span class="n">grid_model_name</span><span class="p">,</span>
-            <span class="n">zone_number</span><span class="p">,</span>
+            <span class="n">zone_name</span><span class="p">,</span>
             <span class="n">return_grid_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1975,6 +1981,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_conformity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">assign_conformity</span><span class="p">(</span>
     <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">zone_mapping</span><span class="p">:</span> <span class="n">ZoneMapping</span><span class="p">,</span>
     <span class="n">debug_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEBUG_OFF</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This function assumes that grid conformity is already checked</span>
@@ -2005,7 +2012,9 @@
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">.&quot;</span>
                 <span class="p">)</span>
 
-        <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">get_conformity</span><span class="p">(</span><span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_numbers</span><span class="p">)</span>
+        <span class="n">conformity_dict</span> <span class="o">=</span> <span class="n">get_conformity</span><span class="p">(</span>
+            <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">zone_numbers</span><span class="p">,</span> <span class="n">zone_mapping</span><span class="p">,</span> <span class="n">debug_level</span><span class="o">=</span><span class="n">debug_level</span>
+        <span class="p">)</span>
         <span class="k">assert</span> <span class="n">conformity_dict</span>
     <span class="k">return</span> <span class="n">conformity_dict</span></div>
 

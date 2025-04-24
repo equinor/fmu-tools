@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.copy_rms_param &mdash; fmu-tools 1.20.2 documentation</title>
+  <title>rms.copy_rms_param &mdash; fmu-tools 1.20.3.dev1+g7ff358d documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=b9eefb84"></script>
+      <script src="_static/documentation_options.js?v=31b0548c"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -176,8 +176,12 @@ appear in log output when it is not possible to check conformity or the conformi
 petrophysical parameters <em>P1</em> and <em>P2</em>. They will be copied to the ERTBOX grid
 and will get the names <em>ZoneA_P1</em>, <em>ZoneA_P2</em> and similarly for <em>ZoneB</em>. The zone
 number is specified as the key and corresponding parameters must come in the same
-order in the list for both the keyword <em>GeoGridParameters</em> and <em>ErtboxParameters</em>.
-The available keywords are:</p>
+order in the list for both the keyword <em>GeoGridParameters</em> and <em>ErtboxParameters</em>.</p>
+<p>NOTE: The zone number must match the zone number in the Zone parameter. The zone numbers used
+in the zone parameter does not have to start at 1. For instance, if a multi-zone grid is split into
+a set of single zone grids (sometimes called subgrids), the zone parameter for the single zone grids
+may contain the original zone number (e.g. 5 if the zone number for the zone was 5 originally).</p>
+<p>The available keywords are:</p>
 <ul class="simple">
 <li><p>project (The internal project variable for RMS python jobs)</p></li>
 <li><p>debug_print to control printed output to screen (value 0 is no output, value 1 or 2 for more output)</p></li>

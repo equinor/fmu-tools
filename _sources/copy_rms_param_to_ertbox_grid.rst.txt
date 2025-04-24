@@ -85,6 +85,12 @@ petrophysical parameters *P1* and *P2*. They will be copied to the ERTBOX grid
 and will get the names *ZoneA_P1*, *ZoneA_P2* and similarly for *ZoneB*. The zone
 number is specified as the key and corresponding parameters must come in the same
 order in the list for both the keyword *GeoGridParameters* and *ErtboxParameters*.
+
+NOTE: The zone number must match the zone number in the Zone parameter. The zone numbers used
+in the zone parameter does not have to start at 1. For instance, if a multi-zone grid is split into
+a set of single zone grids (sometimes called subgrids), the zone parameter for the single zone grids
+may contain the original zone number (e.g. 5 if the zone number for the zone was 5 originally).
+
 The available keywords are:
 
 * project (The internal project variable for RMS python jobs)
