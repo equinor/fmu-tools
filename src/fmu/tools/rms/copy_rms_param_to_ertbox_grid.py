@@ -14,6 +14,7 @@ import numpy as np
 import numpy.ma as ma
 
 from fmu.tools import ROXAR
+from fmu.tools.rms.zone_mapping import ZoneMapping, get_zone_mapping
 
 if ROXAR:
     try:
@@ -159,9 +160,13 @@ def copy_rms_param(params: dict) -> None:
         # specified grid model in keyword 'GridModelName'
         check_missing_keywords_list(params, required_kw_list)
         zone_numbers = params["GeoGridParameters"].keys()
+        grid_model_name = params["GridModelName"]
+        zone_mapping = get_zone_mapping(
+            project, grid_model_name, debug_level=debug_level
+        )
         # Check if necessary to specify grid conformity
         if check_grid_conformity(
-            params["GridModelName"], zone_numbers, debug_level=debug_level
+            grid_model_name, zone_numbers, zone_mapping, debug_level=debug_level
         ):
             params["Conformity_required"] = False
         else:
@@ -183,9 +188,13 @@ def copy_rms_param(params: dict) -> None:
         ]
         check_missing_keywords_list(params, required_kw_list)
         zone_numbers = params["GeoGridParameters"].keys()
+        grid_model_name = params["GridModelName"]
+        zone_mapping = get_zone_mapping(
+            project, grid_model_name, debug_level=debug_level
+        )
         # Check if necessary to specify grid conformity
         if check_grid_conformity(
-            params["GridModelName"], zone_numbers, debug_level=debug_level
+            grid_model_name, zone_numbers, zone_mapping, debug_level=debug_level
         ):
             params["Conformity_required"] = False
         else:
@@ -227,8 +236,6 @@ def from_geogrid_to_ertbox(project: Any, params: dict, seed: int = 12345) -> Non
     param_names_geogrid_dict = params["GeoGridParameters"]
     debug_level = int(params["debug_level"])
 
-    conformity_dict = assign_conformity(params, debug_level=debug_level)
-
     # Optional parameter
     save_active_param = params.get("SaveActiveParam", False)
     # Optional parameter, Default is to add noise to inactive grid cell values
@@ -240,6 +247,11 @@ def from_geogrid_to_ertbox(project: Any, params: dict, seed: int = 12345) -> Non
     )
 
     geogrid_model, geogrid3D = get_grid_model(project, grid_model_name)
+    zone_mapping = ZoneMapping(
+        geogrid_model, geogrid3D, real_number=project.current_realisation
+    )
+    conformity_dict = assign_conformity(params, zone_mapping, debug_level=debug_level)
+
     if zone_param_name not in geogrid_model.properties:
         raise ValueError(
             f"The parameter {zone_param_name} does not exist in {grid_model_name} ."
@@ -333,10 +345,11 @@ def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
     param_names_ertbox_dict = params["ErtboxParameters"]
     debug_level = int(params["debug_level"])
 
-    conformity_dict = assign_conformity(params, debug_level=debug_level)
-
-    # Create
+    # Geogrid and zone mapping object
     geogrid_model, grid3D = get_grid_model(project, grid_model_name)
+    zone_mapping = ZoneMapping(geogrid_model, grid3D, real_number=real_number)
+    conformity_dict = assign_conformity(params, zone_mapping, debug_level=debug_level)
+
     ertbox_grid_model, ertbox3D = get_grid_model(project, ertbox_grid_model_name)
 
     # Check grid index origin
@@ -354,10 +367,8 @@ def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
         print("WARNING: ERTBOX grid should have 'Eclipse grid index origin'.")
         print("         Use the grid index origin job in RMS to set this.")
 
-    number_of_layers_per_zone_in_geo_grid, _, _ = get_zone_layer_numbering(grid3D)
     nx, ny, nz_ertbox = ertbox3D.simbox_indexer.dimensions
     for zone_number in param_names_geogrid_dict:
-        zone_index = zone_number - 1
         conformity = conformity_dict[zone_number]
         param_names_geogrid_list = param_names_geogrid_dict[zone_number]
         param_names_ertbox_list = param_names_ertbox_dict[zone_number]
@@ -366,7 +377,8 @@ def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
             print(f"-- Conformity: {conformity}  ")
             print(f"-- Copy from:  {param_names_ertbox_list}")
             print(f"-- Copy to:    {param_names_geogrid_list}")
-        nz_for_zone = number_of_layers_per_zone_in_geo_grid[zone_index]
+        nz_for_zone = zone_mapping.number_of_layers_for_zone_number(zone_number)
+        zone_name = zone_mapping.get_zone_name_for_zone_number(zone_number)
         parameter_names_geo_grid = []
         parameter_values_geo_grid = []
 
@@ -396,15 +408,15 @@ def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
         if debug_level >= DEBUG_VERY_VERBOSE:
             for name in parameter_names_geo_grid:
                 print(
-                    f"--- Update parameter {name} for zone number "
-                    f"{zone_number} in {geogrid_model}"
+                    f"--- Update parameter {name} for zone "
+                    f"{zone_name} in {geogrid_model}"
                 )
-
+        zone_index = zone_mapping.get_zone_index_for_zone_number(zone_number)
         set_continuous_3d_parameter_values_in_zone_region(
             geogrid_model,
             parameter_names_geo_grid,
             parameter_values_geo_grid,
-            zone_number,
+            zone_index,
             realisation_number=project.current_realisation,
             is_shared=geogrid_model.shared,
             switch_handedness=True,
@@ -414,25 +426,6 @@ def from_ertbox_to_geogrid(project: Any, params: dict) -> None:
             f"- Finished copy rms parameters from {ertbox_grid_model_name}  "
             f"to {grid_model_name}."
         )
-
-
-def get_zone_layer_numbering(grid: Any) -> tuple[list[int], list[int], list[int]]:
-    indexer = grid.simbox_indexer
-    number_layers_per_zone = []
-    start_layers_per_zone = []
-    end_layers_per_zone = []
-    for key in indexer.zonation:
-        layer_ranges = indexer.zonation[key]
-        number_layers = 0
-        assert len(layer_ranges) == 1  # Required for simbox indexer
-        layer_range = layer_ranges[0]
-        start = layer_range[0]
-        end = layer_range[-1]
-        number_layers += end + 1 - start
-        number_layers_per_zone.append(number_layers)
-        start_layers_per_zone.append(start)
-        end_layers_per_zone.append(end)
-    return number_layers_per_zone, start_layers_per_zone, end_layers_per_zone
 
 
 def get_grid_model(project: Any, grid_model_name: str) -> tuple[Any, Any]:
@@ -549,6 +542,7 @@ def define_active_parameters_in_ertbox(
     geo_grid_model_name: str,
     ertbox_grid_model_name: str,
     zone_dict: dict,
+    zone_mapping: ZoneMapping,
     debug_level: int = DEBUG_OFF,
     not_aps_workflow=True,
 ) -> None:
@@ -566,17 +560,15 @@ def define_active_parameters_in_ertbox(
         geogrid, ertboxgrid, geo_grid_model_name, ertbox_grid_model_name
     )
 
-    number_layers_per_zone, start_layers_per_zone, end_layers_per_zone = (
-        get_zone_layer_numbering(geogrid)
-    )
-
     # Get zone_name and parameter names from model specification
     for zone_name, zone_item in zone_dict.items():
         zone_number, _, conformity, _ = zone_item
-        zone_index = zone_number - 1
-        number_layers = number_layers_per_zone[zone_index]
-        start_layer = start_layers_per_zone[zone_index]
-        end_layer = end_layers_per_zone[zone_index]
+        number_layers = zone_mapping.number_of_layers_for_zone_number(zone_number)
+        start_layer, end_layer = zone_mapping.get_start_end_layer_for_zone_number(
+            zone_number
+        )
+        zone_name2 = zone_mapping.get_zone_name_for_zone_number(zone_number)
+        assert zone_name == zone_name2
         if number_layers > nz_ertbox:
             raise ValueError(
                 f"Number of layers of {ertbox_grid_model_name} ({nz_ertbox}) "
@@ -1087,6 +1079,7 @@ def copy_from_geo_to_ertbox_grid(
     """
     real_number = project.current_realisation
     geogrid_model, geogrid = get_grid_model(project, geo_grid_model_name)
+    zone_mapping = ZoneMapping(geogrid_model, geogrid, real_number=real_number)
     ertbox_grid_model, ertboxgrid = get_grid_model(project, ertbox_grid_model_name)
 
     # Both ERTBOX grid and geogrid should have same nx, ny dimensions
@@ -1096,17 +1089,15 @@ def copy_from_geo_to_ertbox_grid(
         geogrid, ertboxgrid, geo_grid_model_name, ertbox_grid_model_name
     )
 
-    number_layers_per_zone, start_layers_per_zone, end_layers_per_zone = (
-        get_zone_layer_numbering(geogrid)
-    )
-
     # Get parameter names from model specification
     for zone_name, zone_item in zone_dict.items():
         zone_number, _, conformity, param_name_list = zone_item
-        zone_index = zone_number - 1
-        number_layers = number_layers_per_zone[zone_index]
-        start_layer = start_layers_per_zone[zone_index]
-        end_layer = end_layers_per_zone[zone_index]
+        number_layers = zone_mapping.number_of_layers_for_zone_number(zone_number)
+        start_layer, end_layer = zone_mapping.get_start_end_layer_for_zone_number(
+            zone_number
+        )
+        zone_name2 = zone_mapping.get_zone_name_for_zone_number(zone_number)
+        assert zone_name2 == zone_name
         if number_layers > nz_ertbox:
             raise ValueError(
                 f"Number of layers of {ertbox_grid_model_name} ({nz_ertbox}) "
@@ -1296,31 +1287,6 @@ def check_geogrid_parameters(
     return continuous_type_param_dict, discrete_type_param_list
 
 
-def get_layer_range(
-    indexer: Any, zone_number: int, fmu_mode: bool = False
-) -> tuple[int, int]:
-    _, _, nz = indexer.dimensions
-    if fmu_mode:
-        if len(indexer.zonation) == 1:
-            layer_ranges = indexer.zonation[0]
-        else:
-            raise ValueError(
-                "While in FMU / ERT mode, the grid must have EXACTLY 1 zone"
-            )
-    else:
-        layer_ranges = indexer.zonation[
-            zone_number - 1
-        ]  # Zonation is 0-indexed, while zone numbers are 1-indexed
-    start_layer = nz
-    end_layer = 0
-    for layer_range in layer_ranges:
-        if start_layer > layer_range.start:
-            start_layer = layer_range.start
-        if end_layer < layer_range.stop:
-            end_layer = layer_range.stop
-    return end_layer, start_layer
-
-
 def define_active_cell_indices(
     indexer: Any,
     cell_numbers: np.ndarray,
@@ -1354,7 +1320,7 @@ def set_continuous_3d_parameter_values_in_zone_region(
     grid_model: Any,
     parameter_names: list[str],
     input_values_for_zones: list[np.ndarray],
-    zone_number: int,
+    zone_index: int,
     region_number: int = 0,
     region_parameter_name: str = "",
     realisation_number: int = 0,
@@ -1364,61 +1330,57 @@ def set_continuous_3d_parameter_values_in_zone_region(
     use_left_handed_grid_indexing: bool = False,
     switch_handedness: bool = False,
 ) -> bool:
-    """Set 3D parameter with values for specified grid model for
-       specified zone (and region)
+    """
+    Set 3D parameter with values for specified grid model
+    for specified zone (and region)
 
     Input:
+           grid_model      - Grid model object
 
-           grid_model:
-                Grid model object
+           parameter_names - List of names of 3D parameter to update.
 
-           parameter_names:
-                List of names of 3D parameter to update.
-
-           input_values_for_zones:
-                A list of numpy 3D arrays.
+           input_values_for_zones  - A list of numpy 3D arrays.
                 They corresponds to the parameter names in parameter_names.
-                The size of the numpy input arrays are (nx,ny,nLayers) where
-                nx, ny must match the gridModels 3D grid size for the simulation
-                box grid and nLayers must match the number of layers for the
-                zone in simulationx box. Note that since nx, ny are the simulation
-                box grid size, they can be larger than the number of cells reported
-                for the grid in reverse faulted grids. The grid values must be of type
-                numpy.float32. Only the grid cells belonging to the specified zone
-                are updated, and error is raised if the number of grid cells for
-                the zone doesn't match the size of the input array.
+                The size of the numpy input arrays are (nx,ny,nLayers)
+                where nx, ny must match the gridModels 3D grid size for the
+                simulation box grid and nLayers must match the number of layers
+                for the zone in simulationx box. Note that since nx, ny
+                are the simulation box grid size, they can be larger than the
+                number of cells reported for the grid in reverse faulted grids.
+                The grid values must be of type numpy.float32. Only the
+                grid cells belonging to the specified zone are updated,
+                and error is raised if the number of grid cells for the
+                zone doesn't match the size of the input array.
 
-           zone_number:
-                The zone number (counted from 1 in the input)
+           zone_index    - The zone index is referring to zone in grid
 
-           regionNumber:
-                The region number for the grid cells to be updated.
+           regionNumber  - The region number for the grid cells to be updated.
 
-           region_parameter_name:
-                The name of the 3D grid parameter containing a discrete
-                3D parameter with region numbers
+           region_parameter_name - The name of the 3D grid parameter containing
+                a discrete 3D parameter with region numbers
 
-           realisation_number:
-                Realisation number counted from 0 for the parameter to get.
+           realisation_number    - Realisation number counted from 0 for
+                the parameter to get.
 
-           is_shared:
-                Is set to true or false if the parameter is to be set
-                to shared or non-shared.
+           is_shared      - Is set to true or false if the parameter
+                 is to be set to shared or non-shared.
 
-           debug_level: 0 is off, 1 or larger is on for additional output to screen
-
+           debug_level   - (value 0,1,2 or 3) and specify how much
+                info is to be printed to screen.
+                (0 - almost nothing, 3 - also some debug info)
     """
 
     # Check if specified grid model exists and is not empty
     if grid_model.is_empty(realisation_number):
         print(
-            f"Specified grid model: {grid_model.name} "
-            f"is empty for realisation {realisation_number + 1}"
+            f"Specified grid model: {grid_model.name} is empty for "
+            f"realisation {realisation_number + 1}"
         )
         return False
 
     # Check if the parameter is defined and create new if not existing
     grid = grid_model.get_grid(realisation_number)
+    zone_mapping = ZoneMapping(grid_model, grid, real_number=realisation_number)
 
     # Find grid layers for the zone
     indexer = grid.simbox_indexer
@@ -1428,7 +1390,14 @@ def set_continuous_3d_parameter_values_in_zone_region(
         ijk_handedness = indexer.handedness
 
     nx, ny, nz = indexer.dimensions
-    end_layer, start_layer = get_layer_range(indexer, zone_number, fmu_mode)
+    if fmu_mode and len(indexer.zonation) != 1:
+        raise ValueError(
+            "While in FMU / ERT mode, the ERTBOX grid must have EXACTLY 1 zone"
+        )
+
+    start_layer, end_layer = zone_mapping.get_start_end_layer_for_zone_index(zone_index)
+    end_layer = end_layer + 1
+    zone_name = zone_mapping.get_zone_name_for_zone_index(zone_index)
     start = (0, 0, start_layer)
     end = (nx, ny, end_layer)
     zone_cell_numbers = indexer.get_cell_numbers_in_range(start, end)
@@ -1441,8 +1410,8 @@ def set_continuous_3d_parameter_values_in_zone_region(
             "Input array with values has different dimensions than the grid model:\n"
             f"Grid model nx: {nx}  Input array nx: {nx_in}\n"
             f"Grid model ny: {ny}  Input array ny: {ny_in}\n"
-            f"Grid model nLayers for zone {zone_number} is: "
-            f"{num_layers}    Input array nz: {nz_in}"
+            f"Grid model nLayers for zone {zone_name} is: {num_layers}\n"
+            f"Input array nz: {nz_in}"
         )
     use_regions = False
     if region_parameter_name is None or len(region_parameter_name) == 0 or fmu_mode:
@@ -1458,14 +1427,21 @@ def set_continuous_3d_parameter_values_in_zone_region(
 
     else:
         # Get region parameter values
+        region_param_values = None
+        zone_region_cell_numbers = None
         if region_parameter_name in grid_model.properties:
             p = grid_model.properties[region_parameter_name]
             if not p.is_empty(realisation_number):
                 region_param_values = p.get_values(realisation_number)
+            else:
+                raise ValueError(
+                    f"Parameter {region_parameter_name} "
+                    f"is empty in grid model {grid_model.name}."
+                )
         else:
             raise ValueError(
                 f"Parameter {region_parameter_name} "
-                f"does not exist or is empty in grid model {grid_model.name}."
+                f"does not exist in grid model {grid_model.name}."
             )
         region_param_values_in_zone = region_param_values[zone_cell_numbers]
         zone_region_cell_numbers = zone_cell_numbers[
@@ -1533,21 +1509,34 @@ def set_continuous_3d_parameter_values_in_zone_region(
             ]
 
         property_param.set_values(current_values, realisation_number)
-
+        if debug_level >= DEBUG_VERY_VERBOSE:
+            print(f"--- Updated zone: {zone_name} for parameter: {parameter_name}")
     return True
 
 
 def get_conformity(
     grid_model_name: str,
     zone_numbers: list[int],
+    zone_mapping: ZoneMapping,
+    debug_level: int = DEBUG_OFF,
 ) -> dict[int, str]:
-    """Function to get conformity from the grid.
+    """
+    Function to get conformity from the grid.
+    Input:
+    Name of grid model
+    List of zone numbers.
+    An object defining the mapping between zone index and zone_number.
+
+    Note that zone numbers refer to the values the zone has
+    in the zone parameter, in other words in the code_names dict
+    from zone parameter and not to the order of the zone in the grid.
+
     Restrictions:
-    - All horizons used are specified to be honored and not sampled.
-    - The zones must be defined with Horizon as reference for both
-      top and base and no Surface is used to define grid layout.
-    - If the two above mentioned criteria is satisfied, it is possible
-      to use the 'ConformalMode' list from rmsapi to get conformity status.
+    All horizons used are specified to be honored and not sampled.
+    The zones must be defined with Horizon as reference for both
+    top and base and no Surface is used to define grid layout.
+    If the two above mentioned criteria is satisfied, it is possible
+    to use the 'ConformalMode' list from rmsapi to get conformity status.
 
     If restrictions above are not satisfied, the conformity will be 'Undefined'
     """
@@ -1557,8 +1546,12 @@ def get_conformity(
 
     conformity_dict: dict[int, str] = {}
     for zone_number in zone_numbers:
+        zone_name = zone_mapping.get_zone_name_for_zone_number(zone_number)
         conform_zone_dict = get_conformity_per_zone(
-            grid_model_name, zone_number, rms_grid_job_name
+            grid_model_name,
+            zone_name,
+            rms_grid_job_name,
+            debug_level=debug_level,
         )
         conformity_dict[zone_number] = conform_zone_dict["conformity"]
     return conformity_dict
@@ -1566,22 +1559,35 @@ def get_conformity(
 
 def get_conformity_per_zone(
     grid_model_name: str,
-    zone_number: int,
+    zone_name: str,
     rms_grid_job_name: str,
+    debug_level: int = DEBUG_OFF,
 ) -> dict[str, str]:
     assert grid_model_name
     assert rms_grid_job_name
-    assert zone_number > 0
     arguments = get_grid_building_job_arguments(grid_model_name, rms_grid_job_name)
+
+    # Zones in grid where zone_index refer to the zone ordered from top and downward
     conformal_mode_list = arguments["ConformalMode"]
     zone_names = arguments["ZoneNames"]
+    index = None
+    for i, name in enumerate(zone_names):
+        if name == zone_name:
+            index = i
+            break
+    if index is None:
+        raise ValueError(
+            f"Unknown zone name: {zone_name} in grid job name: {rms_grid_job_name}"
+        )
     use_base_surface = arguments["UseBottomSurface"]
     use_top_surface = arguments["UseTopSurface"]
-
-    # zone_number starts at 1
-    conform_mode = conformal_mode_list[zone_number - 1]
-    use_top_surf = use_top_surface[zone_number - 1]
-    use_base_surf = use_base_surface[zone_number - 1]
+    if debug_level >= DEBUG_VERY_VERBOSE:
+        print(f"--- conformal mode list: {conformal_mode_list}")
+        print(f"--- zone names list: {zone_names}")
+    # zone_index starts at 0
+    conform_mode = conformal_mode_list[index]
+    use_top_surf = use_top_surface[index]
+    use_base_surf = use_base_surface[index]
 
     assert conform_mode in [0, 1, 2]
     if conform_mode == 0:
@@ -1595,7 +1601,7 @@ def get_conformity_per_zone(
         conform = "Undefined"
 
     return {
-        "zone_name": zone_names[zone_number - 1],
+        "zone_name": zone_names[index],
         "conformity": conform,
     }
 
@@ -1683,7 +1689,7 @@ def check_and_get_grid_job_name(
 
 def check_grid_layout(
     grid_model_name: str,
-    zone_number: int,
+    zone_name: str,
     grid_layout: Union[None, str] = None,
     aps_job_name: Union[None, str] = None,
     return_grid_layout: bool = False,
@@ -1706,7 +1712,10 @@ def check_grid_layout(
         return None
 
     zone_conformity_dict = get_conformity_per_zone(
-        grid_model_name, zone_number, rms_grid_job_name
+        grid_model_name,
+        zone_name,
+        rms_grid_job_name,
+        debug_level=debug_level,
     )
 
     zone_name = zone_conformity_dict["zone_name"]
@@ -1735,7 +1744,7 @@ def check_grid_layout(
         if debug_level >= DEBUG_VERY_VERBOSE:
             print(
                 "--- Use grid conformity from the grid model for zone "
-                f"{zone_number}: {conformity}"
+                f"{zone_name}: {conformity}"
             )
         return conformity
 
@@ -1748,8 +1757,7 @@ def check_grid_layout(
             aps_job_string = ""
         raise ValueError(
             "\n"
-            f"Specified zone conformity for zone '{zone_name}' with zone number "
-            f"{zone_number} is '{grid_layout}'.\n"
+            f"Specified zone conformity for zone '{zone_name}' is '{grid_layout}'.\n"
             f"Grid model '{grid_model_name}' has different zone conformity: "
             f"{conformity}.\n"
             f"Change conformity setting {aps_job_string} to match the correct "
@@ -1764,13 +1772,17 @@ def check_grid_layout(
 
 
 def check_grid_conformity(
-    grid_model_name: str, zone_numbers: list[int], debug_level: int = DEBUG_OFF
+    grid_model_name: str,
+    zone_numbers: list[int],
+    zone_mapping: ZoneMapping,
+    debug_level: int = DEBUG_OFF,
 ) -> bool:
     ok = True
     for zone_number in zone_numbers:
+        zone_name = zone_mapping.get_zone_name_for_zone_number(zone_number)
         conformity = check_grid_layout(
             grid_model_name,
-            zone_number,
+            zone_name,
             return_grid_layout=True,
             debug_level=debug_level,
         )
@@ -1781,6 +1793,7 @@ def check_grid_conformity(
 
 def assign_conformity(
     params: dict,
+    zone_mapping: ZoneMapping,
     debug_level: int = DEBUG_OFF,
 ) -> dict[int, str]:
     """This function assumes that grid conformity is already checked
@@ -1811,7 +1824,9 @@ def assign_conformity(
                     f"{grid_model_name}."
                 )
 
-        conformity_dict = get_conformity(grid_model_name, zone_numbers)
+        conformity_dict = get_conformity(
+            grid_model_name, zone_numbers, zone_mapping, debug_level=debug_level
+        )
         assert conformity_dict
     return conformity_dict
 
