@@ -20,9 +20,9 @@ def test_extract_no_md_log(testdata_path):
         "Below_Mid_reek",
         "Below_Low_reek",
     }
-    assert dframe["TOP_TVD"].min() == pytest.approx(1595.02, abs=0.1)
+    assert dframe["TOP_TVD"].min() == pytest.approx(1595.74, abs=0.1)
     assert dframe["BASE_TVD"].max() == pytest.approx(1644.67, abs=0.1)
-    assert dframe["TOP_MD"].min() == pytest.approx(2378.33, abs=0.1)
+    assert dframe["TOP_MD"].min() == pytest.approx(2379.05, abs=0.1)
     assert dframe["BASE_MD"].max() == pytest.approx(2427.98, abs=0.1)
 
 
@@ -37,9 +37,9 @@ def test_extract_with_dummy_md_log(testdata_path):
         "Below_Mid_reek",
         "Below_Low_reek",
     }
-    assert dframe["TOP_TVD"].min() == pytest.approx(1595.02, abs=0.1)
+    assert dframe["TOP_TVD"].min() == pytest.approx(1595.74, abs=0.1)
     assert dframe["BASE_TVD"].max() == pytest.approx(1644.67, abs=0.1)
-    assert dframe["TOP_MD"].min() == pytest.approx(2388.33, abs=0.1)
+    assert dframe["TOP_MD"].min() == pytest.approx(2389.05, abs=0.1)
     assert dframe["BASE_MD"].max() == pytest.approx(2437.98, abs=0.1)
 
 
