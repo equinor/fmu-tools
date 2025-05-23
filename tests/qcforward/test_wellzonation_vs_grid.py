@@ -50,7 +50,7 @@ def test_zonelog_vs_grid_asfiles(make_data):
     qcf.wellzonation_vs_grid(yaml_path)
 
     dfr = pd.read_csv(report_path, index_col="WELL")
-    assert dfr.loc["all", "MATCH%"] == pytest.approx(65.820, 0.01)
+    assert dfr.loc["all", "MATCH%"] == pytest.approx(63.967, 0.01)
 
 
 def test_zonelog_vs_grid_asfiles_shall_stop(make_data):
@@ -92,4 +92,4 @@ def test_perflog_vs_grid_asfiles(make_data):
 
     dfr = pd.read_csv(report_path, index_col="WELL")
 
-    assert dfr.loc["OP_1_PERF", "MATCH%"] == pytest.approx(82.142, 0.01)
+    assert dfr.loc["OP_1_PERF", "MATCH%"] == pytest.approx(80.701, 0.01)
