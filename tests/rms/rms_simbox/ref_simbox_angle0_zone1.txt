@@ -1,0 +1,15 @@
+name: ZoneB
+origin:
+- 10000.0
+- 20000.0
+rotation: 0.0
+size:
+- 2500.0
+- 3500.0
+- 175.0
+dimensions:
+- 50
+- 70
+- 35
+handedness: left
+
