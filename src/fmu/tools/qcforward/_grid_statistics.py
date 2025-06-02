@@ -55,15 +55,14 @@ class GridStatistics(QCForward):
         # TO-DO:
         # self._validate_input(self._data)
 
-        data = self._data
-        QCC.verbosity = data.get("verbosity", 0)
+        QCC.verbosity = self._data.get("verbosity", 0)
 
         # parse data that are special for this check
         QCC.print_info("Parsing additional data...")
         self.ldata = _LocalData()
-        self.ldata.parse_data(data)
+        self.ldata.parse_data(self._data)
 
-        dfr = self.check_gridstatistics(project, data)
+        dfr = self.check_gridstatistics(project, self._data)
         QCC.print_debug(f"Results: \n{dfr}")
 
         self.evaluate_qcreport(dfr, "grid statistics")
