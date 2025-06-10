@@ -763,7 +763,7 @@ def assign_undefined_constant(
     ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
     value: float,
     debug_level: int = DEBUG_OFF,
-) -> np.ma.MaskedArray:
+) -> np.ndarray:
     if debug_level >= DEBUG_VERY_VERBOSE:
         print(f"--- All inactive values set to:{value}")
     return ertbox_values_3d_masked.filled(value)
@@ -807,7 +807,7 @@ def assign_undefined_vertical(
     nz_ertbox: int,
     ertbox_values_3d_masked: np.ma.MaskedArray[Any, Any],
     fill_value: float,
-) -> np.ma.MaskedArray[Any, Any]:
+) -> np.ndarray:
     k_indices = np.arange(nz_ertbox)
     for i in range(nx):
         for j in range(ny):
@@ -981,11 +981,11 @@ def extrapolate_values_for_zone(
 
 
 def add_noise_to_undefined_grid_cell_values(
-    ertbox_values_3d: np.ma.MaskedArray[Any, Any],
+    ertbox_values_3d: np.ndarray,
     undefined_grid_cells: np.ndarray,
     seed: int,
     max_relative_noise: float = 0.05,
-) -> np.ma.MaskedArray[Any, Any]:
+) -> np.ndarray:
     mean = np.mean(ertbox_values_3d)
     low = 0.0
     high = math.fabs(mean) * max_relative_noise
