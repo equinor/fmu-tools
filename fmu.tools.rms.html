@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.21.1.dev2+g7f82932 documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.21.1.dev3+g3959519 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=f352128f"></script>
+      <script src="_static/documentation_options.js?v=83361ed2"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -285,7 +285,7 @@ specified geogrid conformity and the layer interval.</p>
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">assign_undefined_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#assign_undefined_constant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_constant" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaskedArray</span></code></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -305,7 +305,7 @@ specified geogrid conformity and the layer interval.</p>
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">assign_undefined_vertical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_ertbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d_masked</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#assign_undefined_vertical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.assign_undefined_vertical" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaskedArray</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -338,7 +338,7 @@ some chosen extrapolation method. Returns a flatten 1D array</p>
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.rms.copy_rms_param_to_ertbox_grid.</span></span><span class="sig-name descname"><span class="pre">add_noise_to_undefined_grid_cell_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ertbox_values_3d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined_grid_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_relative_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/rms/copy_rms_param_to_ertbox_grid.html#add_noise_to_undefined_grid_cell_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.rms.copy_rms_param_to_ertbox_grid.add_noise_to_undefined_grid_cell_values" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaskedArray</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
