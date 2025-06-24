@@ -6,6 +6,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
@@ -28,15 +32,15 @@ jobs:
 
       - name: Update pip
         run: pip install pip --upgrade
-        
+
       - name: Install build dependencies
         run: pip install build --upgrade
-        
+
       - name: Build package
         run: python -m build
-        
+
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           skip-existing: true
           verbose: true
-       
+
