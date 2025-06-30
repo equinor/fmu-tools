@@ -1,19 +1,16 @@
 """Testing qcforward method gridquality"""
 
-import pathlib
+from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pytest
 
 import fmu.tools.qcforward as qcf
 
-PATH = pathlib.Path(".").resolve().as_posix()
-REPORT = "/tmp/somefile_gridquality.csv"
-SOMEYAML = "/tmp/somefile.yml"
-
 
 @pytest.fixture()
-def gridfile_data(testdata_path):
+def gridfile_data(tmp_path: Path, testdata_path: Path) -> dict[str, Any]:
     gridfile = str(testdata_path / "3dgrids/reek/reek_sim_grid.roff")
 
     ACTIONS = {
@@ -27,26 +24,23 @@ def gridfile_data(testdata_path):
     return {
         "nametag": "MYDATA1",
         "verbosity": "info",
-        "path": PATH,
+        "path": str(Path.cwd()),
         "grid": gridfile,
         "actions": ACTIONS,
-        "report": {"file": REPORT, "mode": "write"},
-        "dump_yaml": SOMEYAML,
+        "report": {"file": str(tmp_path / "somefile_gradquality.csv"), "mode": "write"},
+        "dump_yaml": str(tmp_path / "somefile.yml"),
     }
 
 
-def test_gridquality_asfiles(gridfile_data):
+def test_gridquality_asfiles(gridfile_data: dict[str, Any]) -> None:
     """Testing grid quality using files."""
     qcf.grid_quality(gridfile_data)
 
-    dfr = pd.read_csv(REPORT)
+    dfr = pd.read_csv(gridfile_data["report"]["file"])
     assert dfr.loc[0, "WARN%"] == pytest.approx(2.715, 0.01)
 
-    pathlib.Path(REPORT).unlink()
-    pathlib.Path(SOMEYAML).unlink()
 
-
-def test_gridquality_asfiles_shall_stop(gridfile_data):
+def test_gridquality_asfiles_shall_stop(gridfile_data: dict[str, Any]) -> None:
     """Testing gridquality using files which should trigger a stop.
 
     Here. also abbrevation "all" should here work as "allcells".
@@ -56,6 +50,3 @@ def test_gridquality_asfiles_shall_stop(gridfile_data):
 
     with pytest.raises(SystemExit):
         qcf.grid_quality(newdata)
-
-    pathlib.Path(REPORT).unlink()
-    pathlib.Path(SOMEYAML).unlink()
