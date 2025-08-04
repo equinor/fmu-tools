@@ -42,6 +42,54 @@ def test_swj_simple(avalue, bvalue, ffl, direct, cellmethod, expected_mean):
     assert sw.values.mean() == pytest.approx(expected_mean, rel=0.01)
 
 
+def test_swj_simple_x_zero():
+    """Test that masked cells are properly treated"""
+
+    grid1 = xtgeo.create_box_grid((2, 3, 1), increment=(1, 1, 1), origin=(0, 0, 0))
+    poro = 0.3
+    perm = 300
+
+    xvalues = math.sqrt(perm / poro)
+
+    xprop = xtgeo.GridProperty(grid1, values=xvalues)
+    xprop.values[0, 0, 0] = 0.0  # Set one value to zero
+
+    sw_obj = SwFunction(
+        grid=grid1,
+        a=1,
+        b=-2,
+        x=xprop,
+        ffl=12.5,
+        invert=True,
+        method="cell_center_above_ffl",
+    )
+    sw = sw_obj.compute("integrated")
+    assert not sw.values.mask[0, 0, 0]
+
+    # now make a grid with masked cells
+    grid2 = grid1.copy()
+    act = grid2.get_actnum()
+    act.values[0, 0, 0] = 0
+    grid2.set_actnum(act)
+
+    assert grid2.get_actnum().values[0, 0, 0] == 0
+
+    xprop = xtgeo.GridProperty(grid2, values=xvalues)
+    xprop.values[0, 0, 0] = 1000.0
+
+    sw_obj = SwFunction(
+        grid=grid2,
+        a=1,
+        b=-2,
+        x=xprop,
+        ffl=12.5,
+        invert=True,
+        method="cell_center_above_ffl",
+    )
+    sw = sw_obj.compute("integrated")
+    assert sw.values.mask[0, 0, 0]
+
+
 def test_swj_simple_threshold_2grids():
     """Test a simple SwJ setup, expected mean are checked with RMS Sw job.
 
