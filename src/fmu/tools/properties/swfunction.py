@@ -76,7 +76,7 @@ class SwFunction:
 
     grid: xtgeo.Grid
     # all input are constants or xtgeo grid or gridproperty
-    x: float | xtgeo.GridProperty = 0.0
+    x: float | xtgeo.GridProperty = 1e-6  # default to avoid division by zero
     a: float | xtgeo.GridProperty = 1.0
     b: float | xtgeo.GridProperty = -1.0
     ffl: float | xtgeo.GridProperty = 999.0
@@ -162,6 +162,9 @@ class SwFunction:
                 new_a,
                 new_b,
             )
+
+        # ensure that self.x is not zero, as this will cause division by zero
+        self.x.values = np.ma.where(self.x.values == 0.0, 1e-6, self.x.values)
 
     def _compute_htop_hbot(self) -> None:
         """Setting geometries for 'bottom' and 'top' cell.
@@ -320,5 +323,12 @@ class SwFunction:
             self._compute_integrated()
         else:
             self._compute_direct()
+
+        # ensure that the result's mask is not inconcistent with the grid
+        actnum = self.grid.get_actnum()
+        grid_mask = np.ma.masked_where(actnum.values == 0, actnum.values)
+        assert np.array_equal(grid_mask.mask, self._sw.values.mask), (
+            "Bug: Grid mask and Sw mask are not equal, contact developer!"
+        )
 
         return self._sw
