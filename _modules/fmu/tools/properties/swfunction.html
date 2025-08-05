@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.22.1.dev2+ge91db27 documentation</title>
+  <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.22.1.dev3+gd7363de documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=ae73660c"></script>
+      <script src="../../../../_static/documentation_options.js?v=56b49628"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -168,7 +168,7 @@
 
     <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span>
     <span class="c1"># all input are constants or xtgeo grid or gridproperty</span>
-    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># default to avoid division by zero</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
     <span class="n">ffl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span> <span class="o">=</span> <span class="mf">999.0</span>
@@ -254,6 +254,9 @@
                 <span class="n">new_a</span><span class="p">,</span>
                 <span class="n">new_b</span><span class="p">,</span>
             <span class="p">)</span>
+
+        <span class="c1"># ensure that self.x is not zero, as this will cause division by zero</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute_htop_hbot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setting geometries for &#39;bottom&#39; and &#39;top&#39; cell.</span>
@@ -414,6 +417,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_compute_integrated</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_compute_direct</span><span class="p">()</span>
+
+        <span class="c1"># ensure that the result&#39;s mask is not inconcistent with the grid</span>
+        <span class="n">actnum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span>
+        <span class="n">grid_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">actnum</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">actnum</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">grid_mask</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">mask</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;Bug: Grid mask and Sw mask are not equal, contact developer!&quot;</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sw</span></div>
 </div>
