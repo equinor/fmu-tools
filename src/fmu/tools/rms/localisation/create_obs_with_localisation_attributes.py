@@ -86,19 +86,21 @@ def read_ert_summary_obs_file(filename: str) -> list[dict]:
                 raise ValueError(
                     f"Format error in file: {filename} for line number: {line_number}\n"
                 )
-            obs_attribute_key = attribute_item[0].strip()
+            obs_attribute_key = attribute_item[0].strip().lower()
             obs_attribute_value = attribute_item[1].strip()
             obs_dict[obs_attribute_key] = obs_attribute_value
 
         # Get obs_type and wellname
-        ecl_key = obs_dict["KEY"]
-        obs_type, well_name = ecl_key.split(":")
+        summary_vector = obs_dict["key"]
+        obs_type, well_name = summary_vector.split(":")
 
         # Add additional info to obs
         obs_dict["ert_id"] = ert_id.strip()
         obs_dict["wellname"] = well_name.strip()
         obs_dict["obs_type"] = obs_type.strip()
+        obs_dict["summary_vector"] = obs_dict["key"]
         obs_list.append(obs_dict)
+#        print(f"{obs_dict=}")
         if len(obs_list) == 0:
             raise ValueError(f"No summary observations found in file: {filename}")
     return obs_list
@@ -577,8 +579,7 @@ def write_result_summary_obs(
 ) -> None:
     """
     Write csv file with following columns:
-    - wellname
-    - obs_type(vector)
+    - summary_vector
     - date
     - obs_value
     - obs_error
@@ -593,35 +594,28 @@ def write_result_summary_obs(
         )
     print(f"Write file:  {filename}")
 
-    rms_well_name_header = "RMS_WELLNAME"
-    obs_type_header = "OBS_TYPE"
+    summary_vector_header = "SUMMARY_KEY"
     date_header = "DATE"
     value_header = "VALUE"
     error_header = "ERROR"
     min_error_header = "MIN_ERROR"
     max_error_header = "MAX_ERROR"
 
-    max_obs_type_length = 8
-    max_well_name_length = 12
+    max_summary_vector_length = 12
     for key, obs_dict in all_obs_dict.items():
         (zone_name, ert_id) = key
-        obs_type = obs_dict["obs_type"]
-        wellname = obs_dict["wellname"]
-        if max_obs_type_length < len(obs_type):
-            max_obs_type_length = len(obs_type)
-        if max_well_name_length < len(wellname):
-            max_well_name_length = len(wellname)
+        summary_vector = obs_dict["summary_vector"]
+        if max_summary_vector_length < len(summary_vector):
+            max_summary_vector_length = len(summary_vector)
 
-    max_well_name_length += 2
-    max_obs_type_length += 2
+    max_summary_vector_length += 2
 
     max_dates_length = 12
     max_value_length = 12
     with open(filename, "w") as file:
         # Heading
         content = ""
-        content += f"{rms_well_name_header:<{max_well_name_length}}"
-        content += f"{obs_type_header:<{max_obs_type_length}}"
+        content += f"{summary_vector_header:<{max_summary_vector_length}}"
         content += f"{date_header:<{max_dates_length}}"
         content += f"{value_header:>{max_value_length}}"
         content += f"{error_header:>{max_value_length}}"
@@ -632,16 +626,19 @@ def write_result_summary_obs(
 
         for key, obs_dict in all_obs_dict.items():
             (zone_name, ert_id) = key
-            obs_type = obs_dict["obs_type"]
-            wellname = obs_dict["wellname"]
-            value = float(obs_dict["VALUE"])
-            error = float(obs_dict["ERROR"])
-            date = obs_dict["DATE"]
+#            print(f"obs_dict: {obs_dict=}")
+#            obs_type = obs_dict["obs_type"]
+#            wellname = obs_dict["wellname"]
+            summary_vector = obs_dict["summary_vector"]
+            value = float(obs_dict["value"])
+            error = float(obs_dict["error"])
+            date = obs_dict["date"]
             min_error = 0.5 * error
             max_error = 1.5 * error
             content = ""
-            content += f"{wellname:<{max_well_name_length}}"
-            content += f"{obs_type:<{max_obs_type_length}}"
+#            content += f"{wellname:<{max_well_name_length}}"
+#            content += f"{obs_type:<{max_obs_type_length}}"
+            content += f"{summary_vector:<{max_summary_vector_length}}"
             content += f"{date:<{max_dates_length}}"
             content += f"{value:{max_value_length}.2f}"
             content += f"{error:{max_value_length}.2f}"
@@ -656,8 +653,7 @@ def write_localisation_obs_attributes(
 ) -> None:
     """
     Write csv file with following columns:
-    - wellname
-    - obs_type(vector)
+    - summary_vector
     - xpos
     - ypos
     - range1
@@ -674,8 +670,9 @@ def write_localisation_obs_attributes(
         )
     print(f"Write file:  {filename}")
 
-    rms_well_name_header = "RMS_WELLNAME"
-    obs_type_header = "OBS_TYPE"
+    #rms_well_name_header = "RMS_WELLNAME"
+    #obs_type_header = "OBS_TYPE"
+    summary_vector_header ="SUMMARY_KEY"
     zone_name_header = "ZONE"
     xpos_header = "XPOS"
     ypos_header = "YPOS"
@@ -683,31 +680,35 @@ def write_localisation_obs_attributes(
     perp_range_header = "PERP_RANGE"
     rotation_angle_header = "AZIMUTH"
 
-    max_obs_type_length = 8
-    max_well_name_length = 12
+#    max_obs_type_length = 8
+#    max_well_name_length = 12
+    max_summary_vector_length = 12
     max_zone_name_length = 12
     max_range_length = 12
     max_angle_length = 12
     for key, obs_dict in all_obs_dict.items():
         (zone_name, ert_id) = key
-        obs_type = obs_dict["obs_type"]
-        wellname = obs_dict["wellname"]
+#        obs_type = obs_dict["obs_type"]
+#        wellname = obs_dict["wellname"]
+        summary_vector_header = obs_dict["summary_vector"]
         if max_zone_name_length < len(zone_name):
             max_zone_name_length = len(zone_name)
-        if max_obs_type_length < len(obs_type):
-            max_obs_type_length = len(obs_type)
-        if max_well_name_length < len(wellname):
-            max_well_name_length = len(wellname)
+#        if max_obs_type_length < len(obs_type):
+#            max_obs_type_length = len(obs_type)
+#        if max_well_name_length < len(wellname):
+#            max_well_name_length = len(wellname)
 
-    max_well_name_length += 2
-    max_obs_type_length += 2
+#    max_well_name_length += 2
+#    max_obs_type_length += 2
+    max_summary_vector_length += 2
     max_zone_name_length += 2
     max_value_length = 12
     with open(filename, "w") as file:
         # Heading
         content = ""
-        content += f"{rms_well_name_header:<{max_well_name_length}}"
-        content += f"{obs_type_header:<{max_obs_type_length}}"
+#        content += f"{rms_well_name_header:<{max_well_name_length}}"
+#        content += f"{obs_type_header:<{max_obs_type_length}}"
+        content += f"{summary_vector_header:<{max_summary_vector_length}}"
         content += f"{xpos_header:>{max_value_length}}"
         content += f"{ypos_header:>{max_value_length}}"
         content += f"{main_range_header:>{max_range_length}}"
@@ -720,10 +721,10 @@ def write_localisation_obs_attributes(
         localisation_param_written = {}
         for key, obs_dict in all_obs_dict.items():
             (zone_name, ert_id) = key
-            obs_type = obs_dict["obs_type"]
-            wellname = obs_dict["wellname"]
-
-            key_written = (zone_name, wellname, obs_type)
+#            obs_type = obs_dict["obs_type"]
+#            wellname = obs_dict["wellname"]
+            summary_vector = obs_dict["summary_vector"]
+            key_written = (zone_name, summary_vector)
             if key_written in localisation_param_written:
                 continue
 
@@ -733,8 +734,9 @@ def write_localisation_obs_attributes(
             perp_range = float(obs_dict["perp_range"])
             rotation_angle = float(obs_dict["anisotropy_angle"])
             content = ""
-            content += f"{wellname:<{max_well_name_length}}"
-            content += f"{obs_type:<{max_obs_type_length}}"
+#            content += f"{wellname:<{max_well_name_length}}"
+#            content += f"{obs_type:<{max_obs_type_length}}"
+            content += f"{summary_vector:<{max_summary_vector_length}}"
             content += f"{xpos:{max_value_length}.1f}"
             content += f"{ypos:{max_value_length}.1f}"
             content += f"{main_range:{max_range_length}.1f}"
@@ -821,7 +823,7 @@ def create_obs_local(project, config_file):
             obs_localisation_dict["main_range"] = default_ranges[0]
             obs_localisation_dict["perp_range"] = default_ranges[1]
             obs_localisation_dict["anisotropy_angle"] = default_ranges[2]
-            obs_localisation_dict["summary_key"] = obs_dict["KEY"]
+            obs_localisation_dict["summary_vector"] = obs_dict["summary_vector"]
             if obs_localisation_dict["hlength"] > min_range_hwell:
                 well_path_angle = obs_localisation_dict["well_path_angle"]
                 obs_localisation_dict["anisotropy_angle"] = well_path_angle
@@ -889,7 +891,6 @@ def create_obs_local(project, config_file):
             )
 
             for zone_name in zone_names:
-                #                print(f"Field name: {field_name}")
                 for obs_dict in new_obs_dict_list:
                     if (
                         obs_dict["obs_type"] in obs_types
@@ -904,7 +905,7 @@ def create_obs_local(project, config_file):
                             obs_localisation_dict["main_range"] = ranges[0]
                             obs_localisation_dict["perp_range"] = ranges[1]
                             obs_localisation_dict["anisotropy_angle"] = ranges[2]
-                            obs_localisation_dict["summary_key"] = obs_dict["KEY"]
+                            obs_localisation_dict["summary_vector"] = obs_dict["summary_vector"]
                             output_dict[result_id] = obs_localisation_dict
 
     # All observations not specified under field_settings is
@@ -918,3 +919,10 @@ def create_obs_local(project, config_file):
     write_localisation_obs_attributes(
         result_localisation_obs_file, output_dict, allow_overwrite=True
     )
+
+if __name__ == "__main__":
+    config_file = (
+    "/private/olia/fmu-tools-olia/tests/rms/localisation/input_files/example_config.yml"
+)
+    create_obs_local(project, config_file)
+    print("Finished")
