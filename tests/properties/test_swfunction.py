@@ -39,7 +39,7 @@ def test_swj_simple(avalue, bvalue, ffl, direct, cellmethod, expected_mean):
         invert=True,
         method=cellmethod,
     )
-    sw = sw_obj.compute("direct" if direct else "integrated")
+    sw = sw_obj.compute("direct" if direct else "integrated")[0]
     assert sw.values.mean() == pytest.approx(expected_mean, rel=0.01)
 
 
@@ -64,7 +64,8 @@ def test_swj_simple_x_zero():
         invert=True,
         method="cell_center_above_ffl",
     )
-    sw = sw_obj.compute("integrated")
+
+    sw = sw_obj.compute("integrated")[0]
     assert not sw.values.mask[0, 0, 0]
 
     # now make a grid with masked cells
@@ -87,7 +88,7 @@ def test_swj_simple_x_zero():
         invert=True,
         method="cell_center_above_ffl",
     )
-    sw = sw_obj.compute("integrated")
+    sw = sw_obj.compute("integrated")[0]
     assert sw.values.mask[0, 0, 0]
 
 
@@ -120,7 +121,7 @@ def test_swj_simple_threshold_2grids():
         invert=True,
         method=cellmethod,
     )
-    sw = sw_obj.compute("integrated")
+    sw = sw_obj.compute("integrated")[0]
     assert sw.values.mean() == pytest.approx(0.9689, rel=0.01)
 
     sw_obj = SwFunction(
@@ -132,7 +133,7 @@ def test_swj_simple_threshold_2grids():
         invert=True,
         method=cellmethod,
     )
-    sw = sw_obj.compute("integrated")
+    sw = sw_obj.compute("integrated")[0]
 
     assert sw.values.mean() == pytest.approx(0.9689, rel=0.01)
     assert float(sw.values[0, 0, 70]) == pytest.approx(1, rel=0.0001)
@@ -144,6 +145,8 @@ def test_swj_simple_threshold_2grids():
         (True, "cell_center_above_ffl", 0.7057, 0.046719),  # n/a vs RMS
         (False, "cell_center_above_ffl", 0.70736, 0.046724),  # n/a vs RMS
         (False, "cell_corners_above_ffl", 0.674485, 0.046791),  # n/a vs RMS
+        (True, "truncated_cell_corners_above_ffl", 0.67737, 0.046719),  # n/a vs RMS
+        (False, "truncated_cell_corners_above_ffl", 0.67931, 0.046724),  # n/a vs RMS
     ],
 )
 def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1, testdata_path):
@@ -175,7 +178,7 @@ def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1, testdata_
         method=cellmethod,
     )
 
-    sw = sw_obj.compute("direct" if direct else "integrated")
+    sw = sw_obj.compute("direct" if direct else "integrated")[0]
 
     assert sw.values.mean() == pytest.approx(expected_mean, rel=0.01)
 
@@ -253,9 +256,8 @@ def test_sw_bvw():
         x=xvalue,
         ffl=ffl,
         method="cell_center_above_ffl",
-        debug=False,
     )
-    sw = sw_obj.compute("direct")
+    sw = sw_obj.compute("direct")[0]
 
     sw10 = float(sw.values[:, :, 20])  # 10 meter above contact
     assert sw10 == pytest.approx(manual10)
@@ -263,7 +265,7 @@ def test_sw_bvw():
     sw20 = float(sw.values[:, :, 10])  # 20 meter above contact
     assert sw20 == pytest.approx(0.13755086)
 
-    sw = sw_obj.compute("integrated")
+    sw = sw_obj.compute("integrated")[0]
     sw10_i = float(sw.values[:, :, 20])
     assert sw10_i == pytest.approx(sw10, abs=0.0001)
 
@@ -333,9 +335,8 @@ def test_sw_brooks_corey():
         x=xvalue,
         ffl=ffl,
         method="cell_center_above_ffl",
-        debug=False,
     )
-    sw = sw_obj.compute("direct")
+    sw = sw_obj.compute("direct")[0]
 
     sw10 = float(sw.values[:, :, 20])  # 10 meter above contact
     assert sw10 == pytest.approx(0.40303321)
@@ -345,6 +346,6 @@ def test_sw_brooks_corey():
     sw20 = float(sw.values[:, :, 10])  # 20 meter above contact
     assert sw20 == pytest.approx(0.28731234)
 
-    sw = sw_obj.compute("integrated")
+    sw = sw_obj.compute("integrated")[0]
     sw10_i = float(sw.values[:, :, 20])
     assert sw10_i == pytest.approx(sw10, abs=0.001)
