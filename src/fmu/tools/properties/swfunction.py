@@ -25,9 +25,9 @@ import xtgeo
 logger = logging.getLogger(__name__)
 
 ALLOWED_METHODS = [
-    "cell_center",
     "cell_center_above_ffl",
     "cell_corners_above_ffl",
+    "truncated_cell_corners_above_ffl",
 ]
 
 
