@@ -293,9 +293,7 @@ class SwFunction:
 
     def compute(
         self, compute_method: str = "integrated"
-    ) -> tuple[
-        xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty
-    ]:
+    ) -> dict[str, xtgeo.GridProperty]:
         """Common compute function for saturation, and returns the Sw property"""
         if compute_method == "integrated":
             self._compute_integrated()
@@ -316,4 +314,4 @@ class SwFunction:
             assert isinstance(prop, xtgeo.GridProperty)
             prop.name = self.tag + prop_name
 
-        return tuple(output_props)
+        return dict(zip(output_props_name, output_props))
