@@ -69,7 +69,7 @@ factors are constant numbers:
             invert=True,
             method=METHOD,
         )
-        sw = sw_func.compute(CALC)
+        sw = sw_func.compute(CALC)["SW"]
         sw.values[poro.values < 0.05] = 1.0  # 100% water when low porosity
         sw.to_roxar(project, GRIDNAME, SW_RESULT)
 

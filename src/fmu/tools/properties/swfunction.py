@@ -25,9 +25,9 @@ import xtgeo
 logger = logging.getLogger(__name__)
 
 ALLOWED_METHODS = [
-    "cell_center",
     "cell_center_above_ffl",
     "cell_corners_above_ffl",
+    "truncated_cell_corners_above_ffl",
 ]
 
 
@@ -67,8 +67,6 @@ class SwFunction:
             is called several time for the same grid.
         hbot: Optional. May speed up computation if provided, in case the function
             is called several time for the same grid.
-        debug: If True, several "check parameters" will we given, either as grid
-            properties (if working in RMS) or as ROFF files (if working outside RMS).
         tag: Optional string to identify debug parameters.
 
 
@@ -92,13 +90,12 @@ class SwFunction:
     invert: bool = False  # if the SwJ function is on "reverse" form
 
     # if None they will be computed here; otherwise they can be given explicitly:
-    hcenter: xtgeo.GridProperty = None
-    htop: xtgeo.GridProperty = None
-    hbot: xtgeo.GridProperty = None
+    hcenter: xtgeo.GridProperty | None = None
+    htop: xtgeo.GridProperty | None = None
+    hbot: xtgeo.GridProperty | None = None
 
     # debug flag for additional parameters. Given in RMS if project is given; otherwise
     # as files on your working folder
-    debug: bool = False
     tag: str = ""  # identification tag to add to debug params
 
     # derived and internal
@@ -117,12 +114,6 @@ class SwFunction:
             logger.info("Essential geometries are pre-computed")
         else:
             self._compute_htop_hbot()
-
-        if self.debug:
-            if self.project:
-                self.grid.to_roxar(self.project, "DEBUG_" + self.gridname)
-            else:
-                self.grid.to_file("debug_grid.roff")
 
     def _process_input(self) -> None:
         """Work with a, b, x, ie. inversing and convert from float."""
@@ -181,20 +172,6 @@ class SwFunction:
         self.hcenter = hmid
         logger.info("Use method %s", self.method)
 
-        if self.debug:
-            htop.name = "TOP_SW" + self.tag
-            hbot.name = "BOT_SW" + self.tag
-            hmid.name = "CENTER_SW" + self.tag
-            if self.project:
-                logger.debug("TAG is ", self.tag)
-                htop.to_roxar(self.project, self.gridname, "HTOP" + self.tag)
-                hbot.to_roxar(self.project, self.gridname, "HBOT" + self.tag)
-                hmid.to_roxar(self.project, self.gridname, "HCENTER" + self.tag)
-            else:
-                htop.to_file(f"debug_htop{self.tag}.roff")
-                hbot.to_file(f"debug_hbot{self.tag}.roff")
-                hmid.to_file(f"debug_hcenter{self.tag}.roff")
-
     def _sw_function_direct(self) -> None:
         """Use function on form Sw = A*(M + X*h)^B; generic function!"""
         assert isinstance(self.a, xtgeo.GridProperty)  # mypy
@@ -203,6 +180,7 @@ class SwFunction:
         assert isinstance(self.m, xtgeo.GridProperty)  # mypy
         assert isinstance(self.swira, xtgeo.GridProperty)  # mypy
         assert isinstance(self.swmax, xtgeo.GridProperty)  # mypy
+        assert isinstance(self.hcenter, xtgeo.GridProperty)
 
         # the direct function is mostly used to compare with integrated approach, as QC
         height = self.hcenter.values
@@ -237,19 +215,15 @@ class SwFunction:
         assert isinstance(self.m, xtgeo.GridProperty)  # mypy
         assert isinstance(self.swira, xtgeo.GridProperty)  # mypy
         assert isinstance(self.swmax, xtgeo.GridProperty)  # mypy
+        assert isinstance(self.htop, xtgeo.GridProperty)  # mypy
+        assert isinstance(self.hbot, xtgeo.GridProperty)  # mypy
+
         ht = (
             ((1.0 / self.a.values) ** (1.0 / self.b.values)) - self.m.values
         ) / self.x.values  # threshold height
 
         h2 = self.htop.values.copy()  # h_top or H2 in integration
         h1 = self.hbot.values.copy()  # h_bot or H1 in integration
-
-        if self.debug:
-            tmp = xtgeo.GridProperty(self.grid, values=ht, name="HT" + self.tag)
-            if self.project:
-                tmp.to_roxar(self.project, self.gridname, "THRESHOLD HEIGHT" + self.tag)
-            else:
-                tmp.to_file(f"debug_ht{self.tag}.roff")
 
         water = h2 * 0.0
         water = np.ma.where(h2 < ht, 1.0, water)
@@ -317,7 +291,9 @@ class SwFunction:
         if self._sw.values.min() < 0.0:
             raise RuntimeError(f"SW min out of range: {self._sw.values.min()}")
 
-    def compute(self, compute_method: str = "integrated") -> xtgeo.GridProperty:
+    def compute(
+        self, compute_method: str = "integrated"
+    ) -> dict[str, xtgeo.GridProperty]:
         """Common compute function for saturation, and returns the Sw property"""
         if compute_method == "integrated":
             self._compute_integrated()
@@ -331,4 +307,11 @@ class SwFunction:
             "Bug: Grid mask and Sw mask are not equal, contact developer!"
         )
 
-        return self._sw
+        output_props = [self._sw, self.htop, self.hbot, self.hcenter]
+        output_props_name = ["SW", "HTOP", "HBOT", "HCENTER"]
+
+        for prop, prop_name in zip(output_props, output_props_name):
+            assert isinstance(prop, xtgeo.GridProperty)
+            prop.name = self.tag + prop_name
+
+        return dict(zip(output_props_name, output_props))
