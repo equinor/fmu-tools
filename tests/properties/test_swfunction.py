@@ -17,6 +17,7 @@ from fmu.tools.properties import SwFunction
         (1, -2, 13, False, "cell_center_above_ffl", 0.412536),
         (0.3, -5, 12.5, True, "cell_center_above_ffl", 0.547251),
         (0.3, -5, 12.5, False, "cell_center_above_ffl", 0.549613),
+        (0.3, -5, 12.5, False, "cell_corners_above_ffl", 0.549613),
         (1, -2, 13, True, "truncated_cell_corners_above_ffl", 0.408742),
         (1, -2, 13, False, "truncated_cell_corners_above_ffl", 0.412536),
     ],
