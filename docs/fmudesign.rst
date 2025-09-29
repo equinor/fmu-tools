@@ -6,37 +6,35 @@ FMU design matrix
 Usage
 -----
 
-fmu-tools is designed for use in several scenarios:
+fmu-tools is designed to be used in several scenarios:
 
-* Part of an ERT workflow, typically as a pre or postprocessing
+* Part of an ERT workflow, typically as a pre- or postprocessing
   workflow used by HOOK_WORKFLOW PRE_SIMULATION (preprocessing) or
   POST_SIMULATION (postprocessing)
 * Part of other scripts or utilities, either for analysis or
-  preparations for visualization such as webviz.
+  preparation for visualization such as webviz.
 * It can also be used interactively, e.g. in the (i)python interpreter
   or a Jupyter notebook.
 
-The current functionality is:
+The functionality is:
 
 \1. Automatic generation of design matrices to be run with DESIGN2PARAMS and
-DESIGN_KW in ERT. Generation of a design matrix can be run with a script::
+DESIGN_KW in ERT. You may generate a design matrix by running ``fmudesign``::
 
     fmudesign <design_input.xlsx> <output_matrix.xlsx>
 
-where <design_input.xlsx> is the path to the input for generating the design matrix
-and <output_matrix.xlsx> is the path to the output design matrix.
-Study the examples for how to configure the input for the design matrix
+where ``<design_input.xlsx>`` is the path to the input for generating the design matrix
+and ``<output_matrix.xlsx>`` is the path to the output design matrix.
+
+To see more verbose information (descriptive statistics, plots, etc), run with ``--verbose``::
+
+    fmudesign <design_input.xlsx> <output_matrix.xlsx> --verbose
+
+Use ``fmudesign --help`` to see all available options.
+Study the examples for how to configure the input for the design matrix.
 
 2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities. 
 Study the examples to learn how to use it.
-
-
-----------------------
-Examples to learn from
-----------------------
-
-.. Notice that YAML files included are also input to testing
-   and this secures consistency, except excel spreadsheet which are images.
 
 -------------------------------------------------
 Create design matrix for one by one sensitivities
@@ -48,13 +46,13 @@ which can be generated from an excel workbook. The excel workbook must
 be set up using a specific format. These examples explain how to set
 up the workbook.
 
-What are the types of sensitivities that can be set up
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+What types of sensitivities can be set up
+"""""""""""""""""""""""""""""""""""""""""
 The functionallity so far is covering set-ups for running single sensitivities (one by one sensitivities), but with some options for more advanced set-ups.
 The types of sensitivities that are covered are:
 
 seed
-    This is normally the reference sensitivity to which all the others are compared to. All the parameters will be at their default values taken from the defaultvalues sheet. Only the RMS_SEED will be varying.
+    This is normally the reference sensitivity other sensitivities are compared to. All parameters will be at their default values taken from the defaultvalues sheet. Only the RMS_SEED will vary.
 
     Some additional possibilities:
 
@@ -62,22 +60,25 @@ seed
     * possible to set one or several parameters to another constant value than the default value by filling in parameter names, dist_name = const and dist_param1 = <value> in addition, see examples
 
 scenario
-    This is a sensitivity where the parameter(s) are set to a constant values (high/low values). One or two scenario cases can exist for each sensitivity. Each of the two cases must be given a name.
+    This is a sensitivity where parameter(s) are set to a constant values (high/low values). One or two scenario cases can exist for each sensitivity. Each of the two cases must be given a name.
 
 dist
-    This is a monte carlo sensitivity where one or several parameters are sampled from the specified distribution(s). The distribution name and distribution parameters are given as input. Currently these distributions are implemented:
+    A monte carlo sensitivity where parameters are sampled from specified distribution. The distribution name and distribution parameters are given as input. These distributions are implemented:
 
-    * **normal (mean, std dev)**
-    * **normal (mean, std dev, min, max)**  which is a truncated gaussian distribution
-    * **uniform (min,max)**
-    * **loguniform (min,max)** A stochastic variable is log uniformly distributed if its natural logarithm is uniformly distributed. Arguments are the minimum and maximum of the *output* variable
-    * **triangular (min, mode, max)**
-    * **pert (min, mode, max)**
-    * **discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))**  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.
+    * **normal (mean, stddev)** A normal (Gaussian) distribution.
+    * **normal (mean, stddev, min, max)** A truncated Gaussian distribution.
+    * **uniform (min, max)** A uniform distribution.
+    * **loguniform (min, max)** A stochastic variable is log uniformly distributed if its natural logarithm is uniformly distributed. Arguments are the minimum and maximum of the *output* variable.
+    * **triangular (min, mode, max)** A triangular distribution parametrized by minimum value, mode and maximum value.
+    * **pert (min, mode, max, scale=4)** A PERT distribution, which is a re-parametrized Beta distribution. If a fourth parameter is given, it is the scale parameter (default is 4).
+    * **discrete ((value1, value2, ..., value_n), (weight1, weight2, ..., weight_n))** which is a discrete distribution with weights. If no weights are given, a discrete uniform distribution will be used (all weights are equal).
     * **lognormal (mu, sigma)** A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the *logarithm* of the variable.
     * **const (value)** Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of type *seed*.
-
-    Use the whole name for the distributions in the *dist_name* column, or alternatively the short version names: norm, unif, logunif, triang, pert, disc, logn, const. Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above.
+    
+    The names are matched on case-insensitive prefixes ``norm``, ``unif``, ``logunif``, ``triang``, ``pert``, ``disc``, ``logn`` and ``const``.
+    For instance, ``norm``, ``normal``, ``normal``, and ``NORMAL_DISTRIBUTION`` will all match to a normal distribution.
+    Use the whole name for the distributions in the *dist_name* column, or alternatively the short version names above.
+    Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above.
 
 ref
     This creates a **single** realisation with parameter values set to default values. Typically used if no seed variation or background distributions are used, but a realisation with default values is needed as a reference for tornado calculations. Note that this realisation will **not** itself be plotted as a sensitivity in the tornadoplot. This is flagged by SENSCASE set to 'ref' in the output design matrix.
