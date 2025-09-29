@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FMU design matrix &mdash; fmu-tools 1.24.1.dev1+gab84ff872 documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 1.24.1.dev2+g7a862365d documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0d783eae"></script>
+      <script src="_static/documentation_options.js?v=3e3d34c2"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -47,9 +47,8 @@
 <li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">FMU design matrix</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-to-learn-from">Examples to learn from</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-design-matrix-for-one-by-one-sensitivities">Create design matrix for one by one sensitivities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#what-are-the-types-of-sensitivities-that-can-be-set-up">What are the types of sensitivities that can be set up</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-types-of-sensitivities-can-be-set-up">What types of sensitivities can be set up</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#input-configuration-format">Input configuration format</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example1-excel-file-for-one-by-one-sensitivities-with-repeating-rms-seeds">Example1: Excel file for one by one sensitivities with repeating RMS seeds</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-2-excel-input-for-sensitivities-with-group-of-correlated-parameters-sampled-from-distributions">Example 2: Excel input for sensitivities with group of (correlated) parameters sampled from distributions</a></li>
@@ -114,30 +113,32 @@
 <h1>FMU design matrix<a class="headerlink" href="#fmu-design-matrix" title="Link to this heading"></a></h1>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<p>fmu-tools is designed for use in several scenarios:</p>
+<p>fmu-tools is designed to be used in several scenarios:</p>
 <ul class="simple">
-<li><p>Part of an ERT workflow, typically as a pre or postprocessing
+<li><p>Part of an ERT workflow, typically as a pre- or postprocessing
 workflow used by HOOK_WORKFLOW PRE_SIMULATION (preprocessing) or
 POST_SIMULATION (postprocessing)</p></li>
 <li><p>Part of other scripts or utilities, either for analysis or
-preparations for visualization such as webviz.</p></li>
+preparation for visualization such as webviz.</p></li>
 <li><p>It can also be used interactively, e.g. in the (i)python interpreter
 or a Jupyter notebook.</p></li>
 </ul>
-<p>The current functionality is:</p>
+<p>The functionality is:</p>
 <p>1. Automatic generation of design matrices to be run with DESIGN2PARAMS and
-DESIGN_KW in ERT. Generation of a design matrix can be run with a script:</p>
+DESIGN_KW in ERT. You may generate a design matrix by running <code class="docutils literal notranslate"><span class="pre">fmudesign</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fmudesign</span> <span class="o">&lt;</span><span class="n">design_input</span><span class="o">.</span><span class="n">xlsx</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_matrix</span><span class="o">.</span><span class="n">xlsx</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>where &lt;design_input.xlsx&gt; is the path to the input for generating the design matrix
-and &lt;output_matrix.xlsx&gt; is the path to the output design matrix.
-Study the examples for how to configure the input for the design matrix</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;design_input.xlsx&gt;</span></code> is the path to the input for generating the design matrix
+and <code class="docutils literal notranslate"><span class="pre">&lt;output_matrix.xlsx&gt;</span></code> is the path to the output design matrix.</p>
+<p>To see more verbose information (descriptive statistics, plots, etc), run with <code class="docutils literal notranslate"><span class="pre">--verbose</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fmudesign</span> <span class="o">&lt;</span><span class="n">design_input</span><span class="o">.</span><span class="n">xlsx</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output_matrix</span><span class="o">.</span><span class="n">xlsx</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">verbose</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">fmudesign</span> <span class="pre">--help</span></code> to see all available options.
+Study the examples for how to configure the input for the design matrix.</p>
 <p>2. Post processing of onebyone sensitivities. This can be run from a python script using fmu.tools.sensitivities.
 Study the examples to learn how to use it.</p>
-</section>
-<section id="examples-to-learn-from">
-<h2>Examples to learn from<a class="headerlink" href="#examples-to-learn-from" title="Link to this heading"></a></h2>
 </section>
 <section id="create-design-matrix-for-one-by-one-sensitivities">
 <h2>Create design matrix for one by one sensitivities<a class="headerlink" href="#create-design-matrix-for-one-by-one-sensitivities" title="Link to this heading"></a></h2>
@@ -146,33 +147,36 @@ generate design matrices automatically. Input is given as a dictionary
 which can be generated from an excel workbook. The excel workbook must
 be set up using a specific format. These examples explain how to set
 up the workbook.</p>
-<section id="what-are-the-types-of-sensitivities-that-can-be-set-up">
-<h3>What are the types of sensitivities that can be set up<a class="headerlink" href="#what-are-the-types-of-sensitivities-that-can-be-set-up" title="Link to this heading"></a></h3>
+<section id="what-types-of-sensitivities-can-be-set-up">
+<h3>What types of sensitivities can be set up<a class="headerlink" href="#what-types-of-sensitivities-can-be-set-up" title="Link to this heading"></a></h3>
 <p>The functionallity so far is covering set-ups for running single sensitivities (one by one sensitivities), but with some options for more advanced set-ups.
 The types of sensitivities that are covered are:</p>
 <dl>
-<dt>seed</dt><dd><p>This is normally the reference sensitivity to which all the others are compared to. All the parameters will be at their default values taken from the defaultvalues sheet. Only the RMS_SEED will be varying.</p>
+<dt>seed</dt><dd><p>This is normally the reference sensitivity other sensitivities are compared to. All parameters will be at their default values taken from the defaultvalues sheet. Only the RMS_SEED will vary.</p>
 <p>Some additional possibilities:</p>
 <ul class="simple">
 <li><p>possible to have several sensitivities of type ‘seed’ in a set up, for instance looking at how RMS_SEED variation affects structure, how it affects facies or how it affects petrophysical modelling, see examples.</p></li>
 <li><p>possible to set one or several parameters to another constant value than the default value by filling in parameter names, dist_name = const and dist_param1 = &lt;value&gt; in addition, see examples</p></li>
 </ul>
 </dd>
-<dt>scenario</dt><dd><p>This is a sensitivity where the parameter(s) are set to a constant values (high/low values). One or two scenario cases can exist for each sensitivity. Each of the two cases must be given a name.</p>
+<dt>scenario</dt><dd><p>This is a sensitivity where parameter(s) are set to a constant values (high/low values). One or two scenario cases can exist for each sensitivity. Each of the two cases must be given a name.</p>
 </dd>
-<dt>dist</dt><dd><p>This is a monte carlo sensitivity where one or several parameters are sampled from the specified distribution(s). The distribution name and distribution parameters are given as input. Currently these distributions are implemented:</p>
+<dt>dist</dt><dd><p>A monte carlo sensitivity where parameters are sampled from specified distribution. The distribution name and distribution parameters are given as input. These distributions are implemented:</p>
 <ul class="simple">
-<li><p><strong>normal (mean, std dev)</strong></p></li>
-<li><p><strong>normal (mean, std dev, min, max)</strong>  which is a truncated gaussian distribution</p></li>
-<li><p><strong>uniform (min,max)</strong></p></li>
-<li><p><strong>loguniform (min,max)</strong> A stochastic variable is log uniformly distributed if its natural logarithm is uniformly distributed. Arguments are the minimum and maximum of the <em>output</em> variable</p></li>
-<li><p><strong>triangular (min, mode, max)</strong></p></li>
-<li><p><strong>pert (min, mode, max)</strong></p></li>
-<li><p><strong>discrete ((value1, value2, .. value_n),(weight1, weight2, .. weight_n))</strong>  which is a  discrete distribution with weights. If no weights are given a discrete uniform distribution will be used.</p></li>
+<li><p><strong>normal (mean, stddev)</strong> A normal (Gaussian) distribution.</p></li>
+<li><p><strong>normal (mean, stddev, min, max)</strong> A truncated Gaussian distribution.</p></li>
+<li><p><strong>uniform (min, max)</strong> A uniform distribution.</p></li>
+<li><p><strong>loguniform (min, max)</strong> A stochastic variable is log uniformly distributed if its natural logarithm is uniformly distributed. Arguments are the minimum and maximum of the <em>output</em> variable.</p></li>
+<li><p><strong>triangular (min, mode, max)</strong> A triangular distribution parametrized by minimum value, mode and maximum value.</p></li>
+<li><p><strong>pert (min, mode, max, scale=4)</strong> A PERT distribution, which is a re-parametrized Beta distribution. If a fourth parameter is given, it is the scale parameter (default is 4).</p></li>
+<li><p><strong>discrete ((value1, value2, …, value_n), (weight1, weight2, …, weight_n))</strong> which is a discrete distribution with weights. If no weights are given, a discrete uniform distribution will be used (all weights are equal).</p></li>
 <li><p><strong>lognormal (mu, sigma)</strong> A stochastic variable is log normally distributed if the natural logarithm of the variable is normally distributed. If a variable X is normally distributed, then Y = exp(X) is log normally distributed. Note that the arguments are mu (mean) and sigma (standard deviation) of the <em>logarithm</em> of the variable.</p></li>
 <li><p><strong>const (value)</strong> Can be used to set a parameter to a constant value to override the default value. This can be used also for sensitivities of type <em>seed</em>.</p></li>
 </ul>
-<p>Use the whole name for the distributions in the <em>dist_name</em> column, or alternatively the short version names: norm, unif, logunif, triang, pert, disc, logn, const. Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above.</p>
+<p>The names are matched on case-insensitive prefixes <code class="docutils literal notranslate"><span class="pre">norm</span></code>, <code class="docutils literal notranslate"><span class="pre">unif</span></code>, <code class="docutils literal notranslate"><span class="pre">logunif</span></code>, <code class="docutils literal notranslate"><span class="pre">triang</span></code>, <code class="docutils literal notranslate"><span class="pre">pert</span></code>, <code class="docutils literal notranslate"><span class="pre">disc</span></code>, <code class="docutils literal notranslate"><span class="pre">logn</span></code> and <code class="docutils literal notranslate"><span class="pre">const</span></code>.
+For instance, <code class="docutils literal notranslate"><span class="pre">norm</span></code>, <code class="docutils literal notranslate"><span class="pre">normal</span></code>, <code class="docutils literal notranslate"><span class="pre">normal</span></code>, and <code class="docutils literal notranslate"><span class="pre">NORMAL_DISTRIBUTION</span></code> will all match to a normal distribution.
+Use the whole name for the distributions in the <em>dist_name</em> column, or alternatively the short version names above.
+Distribution parameters are filled in into the dist_param1, dist_param2 .. columns in the same order as above.</p>
 </dd>
 <dt>ref</dt><dd><p>This creates a <strong>single</strong> realisation with parameter values set to default values. Typically used if no seed variation or background distributions are used, but a realisation with default values is needed as a reference for tornado calculations. Note that this realisation will <strong>not</strong> itself be plotted as a sensitivity in the tornadoplot. This is flagged by SENSCASE set to ‘ref’ in the output design matrix.</p>
 </dd>
