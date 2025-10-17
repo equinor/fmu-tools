@@ -92,7 +92,6 @@ def create_bw_per_facies(
             bw_name,
             well.name,
             lognames=new_log_names,
-            update_option="overwrite",
         )
 
     print("New logs: ")
