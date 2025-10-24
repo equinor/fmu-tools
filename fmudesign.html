@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FMU design matrix &mdash; fmu-tools 1.25.1.dev1+g82dab87ec documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 1.25.1.dev2+g63fd1eaea documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=b5749dbe"></script>
+      <script src="_static/documentation_options.js?v=bb2a1eef"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -60,7 +60,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#example-8-full-monte-carlo-sensitivity">Example 8: Full monte carlo sensitivity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-9-adding-dependent-discrete-parameters-to-monte-carlo-designs">Example 9: Adding dependent discrete parameters to monte carlo designs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-summary-of-design-matrix">Example: summary of design matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-calculating-one-tornadotable">Example: calculating one tornadotable</a></li>
 </ul>
 </li>
 </ul>
@@ -295,43 +294,6 @@ monte carlo sensitivities.</p>
 
 <span class="c1"># designtable is a pandas DataFrame with summary of the design in the designmatrix,</span>
 <span class="c1"># i.e. it will contain realisation number, senstype and senscase for each sensitivity</span>
-</pre></div>
-</div>
-</section>
-<section id="example-calculating-one-tornadotable">
-<h3>Example: calculating one tornadotable<a class="headerlink" href="#example-calculating-one-tornadotable" title="Link to this heading"></a></h3>
-<p>Using calc_tornadoplot with a ‘designsummary’ and a resultfile as
-input, and calculating statistics to visualize in a tornado plot for a
-given choice of SELECTOR (e.g. ZONE:’Nansen’) and RESPONSE
-(e.g. STOIIP_OIL). The reference is usually the mean of the
-realizations in the “seed sensitivity”, but it can also be specified
-as a single realisation number, e.g. if you have a reference case in
-realization 0. Statistics showing the difference to the reference can
-be calculated as absolute values, or as percentages. You could also
-choose to exclude from the plot, sensitivities that are smaller than
-the seed sensitivity P10/P90.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.sensitivities</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_tornadoplot</span>
-
-<span class="n">designtable</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;designsummary.csv&#39;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;resultfile.csv&#39;</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="s1">&#39;STOIIP_OIL&#39;</span>
-<span class="n">selectors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ZONE&#39;</span><span class="p">,</span> <span class="s1">&#39;REGION&#39;</span><span class="p">]</span> <span class="c1"># One or several in a list</span>
-<span class="c1"># One or several in a list of lists</span>
-<span class="n">selection</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;Nansen&#39;</span><span class="p">,</span><span class="s1">&#39;Larsson&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;SegmentA&#39;</span><span class="p">]]</span> <span class="c1"># Will sum Nansen and Larsson volumes first</span>
-<span class="n">reference</span> <span class="o">=</span> <span class="s1">&#39;seed&#39;</span> <span class="c1"># Alternatively a single realisation number</span>
-<span class="n">scale</span> <span class="o">=</span> <span class="s1">&#39;percentage&#39;</span> <span class="c1"># Alterntively &#39;absolute&#39;</span>
-
-<span class="p">(</span><span class="n">tornadotable</span><span class="p">,</span> <span class="n">ref_value</span><span class="p">)</span> <span class="o">=</span> <span class="n">calc_tornadoinput</span><span class="p">(</span>
-    <span class="n">designtable</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span>
-    <span class="n">selection</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
-
-<span class="c1"># Other options: specify cutbyseed = True and sortsens = False (see documentation).</span>
-<span class="c1"># tornadotable is a pandas DataFrame for visualisation of tornadoplots in other tools.</span>
-<span class="c1"># ref_value is the average of the reference,</span>
 </pre></div>
 </div>
 </section>
