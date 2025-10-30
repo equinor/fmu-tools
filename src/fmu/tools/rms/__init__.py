@@ -3,6 +3,7 @@ Initialize modules for use in RMS
 """
 
 from .copy_rms_param_to_ertbox_grid import copy_rms_param
+from .create_fluid_contacts_from_grid import create_fluid_contacts_from_grid
 from .generate_bw_per_facies import create_bw_per_facies
 from .generate_petro_jobs_for_field_update import (
     main as generate_petro_jobs,
@@ -24,4 +25,5 @@ __all__ = [
     "import_updated_field_parameters",
     "export_initial_field_parameters",
     "copy_rms_param",
+    "create_fluid_contacts_from_grid",
 ]
