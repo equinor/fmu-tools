@@ -34,7 +34,7 @@ Run ``fmudesign --help`` to see all available options.
 
 **From Python.**
 Instead of using the CLI, you can call the functions from Python directly.
-The best approach is to read the `source code <https://github.com/equinor/semeio>`_.
+The best approach is to read the `code <https://github.com/equinor/semeio>`_.
 
 -------------------------------------------------
 Create design matrix for one by one sensitivities
