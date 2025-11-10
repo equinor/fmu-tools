@@ -8,7 +8,6 @@ the decorator "roxapilicense"
 
 """
 
-import contextlib
 import shutil
 from os.path import isdir
 from pathlib import Path
@@ -18,8 +17,7 @@ import pandas as pd
 import pytest
 import xtgeo
 
-with contextlib.suppress(ImportError):
-    import roxar
+roxar = pytest.importorskip("roxar")
 
 
 # ======================================================================================
@@ -41,7 +39,6 @@ ZONENAME1 = "Zone"
 WELLS1 = ["OP1_perf.w", "OP_2.w", "OP_6.w", "XP_with_repeat.w"]
 
 
-@pytest.mark.skipunlessroxar
 @pytest.fixture(name="create_project", scope="module", autouse=True)
 def fixture_create_project(testdata_path):
     """Create a tmp RMS project for testing, populate with basic data.
