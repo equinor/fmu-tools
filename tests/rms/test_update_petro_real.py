@@ -7,7 +7,6 @@ This requires a RMSAPI license, and to be ran in a "roxenvbash" environment
 
 """
 
-import contextlib
 import shutil
 from os.path import isdir
 from pathlib import Path
@@ -17,15 +16,13 @@ import numpy as np
 import pytest
 import xtgeo
 
-with contextlib.suppress(ImportError):
-    import rmsapi
-
-
 from fmu.tools.rms import (
     export_initial_field_parameters,
     import_updated_field_parameters,
     update_petro_parameters,
 )
+
+rmsapi = pytest.importorskip("rmsapi")
 
 # ======================================================================================
 # settings to create RMS project!
@@ -242,7 +239,6 @@ def get_petro_variable_names() -> List[str]:
     return petro_names
 
 
-@pytest.mark.skipunlessroxar
 @pytest.fixture(scope="module", autouse=True, name="project")
 def create_project():
     """Create a tmp RMS project for testing, populate with basic data."""
