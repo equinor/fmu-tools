@@ -85,6 +85,7 @@ jobs:
           matrix.python-version == '3.11'
         run: |
           cp -R ./build/docs/html ../html
+          git checkout -- uv.lock
           git config --local user.email "fmu-tools-github-action"
           git config --local user.name "fmu-tools-github-action"
           git fetch origin gh-pages
