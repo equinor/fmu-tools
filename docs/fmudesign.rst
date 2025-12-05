@@ -83,11 +83,28 @@ dist
          a beta variable. use either 2 parameters or 4 parameters for a more general version
       * ``discrete(value1, value2, ..., value_n), (weight1, weight2, ..., weight_n))``
          a weighted discrete distribution. If no weights are given, a discrete uniform distribution is used.
-      * ``lognormal(mu, sigma)``
+      * ``lognormal(mu, sigma, min=0, max=inf)``
          a variable whose logarithm has a normal distribution. arguments mu and sigma and the mean and stddev of the *logarithm* of the variable.
+         If 4 parameters are given instead of 2, a truncated version is used. 
+         The truncation limits min and max do NOT refer to the logarithm of the variable, but to the observed values.
       * ``const(value)``
          a constant variable. Used to set a parameter to a constant value to override the default value.
          Can be used also for sensitivities of type *seed*.
+
+    The following P10 and P90 distributions are also implemented.
+    With these distributions, the user provides P10 and P90 values instead of the typical arguments:
+
+      * ``normal_p10_p90(p10, p90, min=-inf, max=inf)``
+         a Gaussian variable. The user provides P10 and P90, and the mean and stddev are computed automatically.
+         For instance, if a user provides P10=-2 and P90=3, then mean=0.5 and stddev=1.951 are computed.
+         If 4 parameters are given, the final two are truncation parameters.
+      * ``uniform_p10_p90(p10, p90)``
+         a uniform variable, parametrized by P10 and P90.
+      * ``triangular_p10_p90(p10, mode, p90)``
+         a triangular variable parametrized by P10, mode and P90.
+      * ``pert_p10_p90(p10, mode, p90, scale=4)``
+         a PERT distribution with parametrized by P10, mode and P90.
+         If a fourth parameter is given, it is the scale parameter (default is 4).
     
     The names are matched on case-insensitive prefixes: ``norm``, ``unif``, ``logunif``, ``triang``, ``pert``, ``beta``, ``disc``, ``logn`` and ``const``.
     For instance, ``norm``, ``normal``, ``normal``, and ``NORMAL_DISTRIBUTION`` will all match to a normal distribution.
