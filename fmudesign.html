@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FMU design matrix &mdash; fmu-tools 1.25.2.dev4+gcc3581b44.d20251205 documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 1.25.2.dev5+gf0c6da99e documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=9a23b697"></script>
+      <script src="_static/documentation_options.js?v=bd9f70bf"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -204,13 +204,44 @@ The following are implemented:</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">lognormal(mu,</span> <span class="pre">sigma)</span></code></dt><dd><p>a variable whose logarithm has a normal distribution. arguments mu and sigma and the mean and stddev of the <em>logarithm</em> of the variable.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">lognormal(mu,</span> <span class="pre">sigma,</span> <span class="pre">min=0,</span> <span class="pre">max=inf)</span></code></dt><dd><p>a variable whose logarithm has a normal distribution. arguments mu and sigma and the mean and stddev of the <em>logarithm</em> of the variable.
+If 4 parameters are given instead of 2, a truncated version is used.
+The truncation limits min and max do NOT refer to the logarithm of the variable, but to the observed values.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">const(value)</span></code></dt><dd><p>a constant variable. Used to set a parameter to a constant value to override the default value.
 Can be used also for sensitivities of type <em>seed</em>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>The following P10 and P90 distributions are also implemented.
+With these distributions, the user provides P10 and P90 values instead of the typical arguments:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">normal_p10_p90(p10,</span> <span class="pre">p90,</span> <span class="pre">min=-inf,</span> <span class="pre">max=inf)</span></code></dt><dd><p>a Gaussian variable. The user provides P10 and P90, and the mean and stddev are computed automatically.
+For instance, if a user provides P10=-2 and P90=3, then mean=0.5 and stddev=1.951 are computed.
+If 4 parameters are given, the final two are truncation parameters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">uniform_p10_p90(p10,</span> <span class="pre">p90)</span></code></dt><dd><p>a uniform variable, parametrized by P10 and P90.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">triangular_p10_p90(p10,</span> <span class="pre">mode,</span> <span class="pre">p90)</span></code></dt><dd><p>a triangular variable parametrized by P10, mode and P90.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">pert_p10_p90(p10,</span> <span class="pre">mode,</span> <span class="pre">p90,</span> <span class="pre">scale=4)</span></code></dt><dd><p>a PERT distribution with parametrized by P10, mode and P90.
+If a fourth parameter is given, it is the scale parameter (default is 4).</p>
 </dd>
 </dl>
 </li>
