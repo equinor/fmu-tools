@@ -51,15 +51,14 @@ class SwFunction:
             Defaults to zero.
         swmax: The maximum applied as asymptote in the equation.
             Defaults to 1.
-        method: How to look at cell geometry. There are three options: 'cell_center',
-            'cell_center-above_ffl' and 'cell_corners_above_ffl'.
+        method: How to look at cell geometry. There are three options:
+            'cell_center_above_ffl', 'cell_corners_above_ffl' and
+            'truncated_cell_corners_above_ffl'.
         gridname: Optional - only needed when debug keyword is True.
         project: Optional. Must be included when working in RMS.
         invert: Optional, will in case invert ``a`` and ``b`` in case the J function
             (or similar) is formulated as Sw = (J/A)^(1/B). This is the case in e.g.
             RMS
-        zdepth: Optional. May speed up computation if provided, in case the function
-            is called several time for the same grid.
         hcenter: Optional. May speed up computation if provided, in case the function
             is called several time for the same grid, or hcenter is pre-computed in a
             special way. The hcenter will work with direct method only, not integration.
@@ -294,7 +293,8 @@ class SwFunction:
     def compute(
         self, compute_method: str = "integrated"
     ) -> dict[str, xtgeo.GridProperty]:
-        """Common compute function for saturation, and returns the Sw property"""
+        """Common compute function for saturation, and returns the Sw property,
+        compute_method options: 'integrated' or 'direct'"""
         if compute_method == "integrated":
             self._compute_integrated()
         else:
