@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.25.2.dev5+gf0c6da99e.d20251219 documentation</title>
+  <title>fmu.tools.properties.swfunction &mdash; fmu-tools 1.25.2.dev6+g18cd0b722 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=16304890"></script>
+      <script src="../../../../_static/documentation_options.js?v=15f6e7ba"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -143,15 +143,14 @@
 <span class="sd">            Defaults to zero.</span>
 <span class="sd">        swmax: The maximum applied as asymptote in the equation.</span>
 <span class="sd">            Defaults to 1.</span>
-<span class="sd">        method: How to look at cell geometry. There are three options: &#39;cell_center&#39;,</span>
-<span class="sd">            &#39;cell_center-above_ffl&#39; and &#39;cell_corners_above_ffl&#39;.</span>
+<span class="sd">        method: How to look at cell geometry. There are three options:</span>
+<span class="sd">            &#39;cell_center_above_ffl&#39;, &#39;cell_corners_above_ffl&#39; and</span>
+<span class="sd">            &#39;truncated_cell_corners_above_ffl&#39;.</span>
 <span class="sd">        gridname: Optional - only needed when debug keyword is True.</span>
 <span class="sd">        project: Optional. Must be included when working in RMS.</span>
 <span class="sd">        invert: Optional, will in case invert ``a`` and ``b`` in case the J function</span>
 <span class="sd">            (or similar) is formulated as Sw = (J/A)^(1/B). This is the case in e.g.</span>
 <span class="sd">            RMS</span>
-<span class="sd">        zdepth: Optional. May speed up computation if provided, in case the function</span>
-<span class="sd">            is called several time for the same grid.</span>
 <span class="sd">        hcenter: Optional. May speed up computation if provided, in case the function</span>
 <span class="sd">            is called several time for the same grid, or hcenter is pre-computed in a</span>
 <span class="sd">            special way. The hcenter will work with direct method only, not integration.</span>
@@ -388,7 +387,8 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">compute_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;integrated&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Common compute function for saturation, and returns the Sw property&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Common compute function for saturation, and returns the Sw property,</span>
+<span class="sd">        compute_method options: &#39;integrated&#39; or &#39;direct&#39;&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">compute_method</span> <span class="o">==</span> <span class="s2">&quot;integrated&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_compute_integrated</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>

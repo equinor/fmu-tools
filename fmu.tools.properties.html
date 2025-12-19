@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.properties package &mdash; fmu-tools 1.25.2.dev5+gf0c6da99e.d20251219 documentation</title>
+  <title>fmu.tools.properties package &mdash; fmu-tools 1.25.2.dev6+g18cd0b722 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=16304890"></script>
+      <script src="_static/documentation_options.js?v=15f6e7ba"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -139,15 +139,14 @@ gridproperty object. Defaults to zero.</p></li>
 Defaults to zero.</p></li>
 <li><p><strong>swmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code></span>) – The maximum applied as asymptote in the equation.
 Defaults to 1.</p></li>
-<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – How to look at cell geometry. There are three options: ‘cell_center’,
-‘cell_center-above_ffl’ and ‘cell_corners_above_ffl’.</p></li>
+<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – How to look at cell geometry. There are three options:
+‘cell_center_above_ffl’, ‘cell_corners_above_ffl’ and
+‘truncated_cell_corners_above_ffl’.</p></li>
 <li><p><strong>gridname</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Optional - only needed when debug keyword is True.</p></li>
 <li><p><strong>project</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional. Must be included when working in RMS.</p></li>
 <li><p><strong>invert</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Optional, will in case invert <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> in case the J function
 (or similar) is formulated as Sw = (J/A)^(1/B). This is the case in e.g.
 RMS</p></li>
-<li><p><strong>zdepth</strong> – Optional. May speed up computation if provided, in case the function
-is called several time for the same grid.</p></li>
 <li><p><strong>hcenter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional. May speed up computation if provided, in case the function
 is called several time for the same grid, or hcenter is pre-computed in a
 special way. The hcenter will work with direct method only, not integration.</p></li>
@@ -242,7 +241,8 @@ is called several time for the same grid.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.properties.swfunction.SwFunction.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compute_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'integrated'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/properties/swfunction.html#SwFunction.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.properties.swfunction.SwFunction.compute" title="Link to this definition"></a></dt>
-<dd><p>Common compute function for saturation, and returns the Sw property</p>
+<dd><p>Common compute function for saturation, and returns the Sw property,
+compute_method options: ‘integrated’ or ‘direct’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>]</span></p>
@@ -277,15 +277,14 @@ gridproperty object. Defaults to zero.</p></li>
 Defaults to zero.</p></li>
 <li><p><strong>swmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code></span>) – The maximum applied as asymptote in the equation.
 Defaults to 1.</p></li>
-<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – How to look at cell geometry. There are three options: ‘cell_center’,
-‘cell_center-above_ffl’ and ‘cell_corners_above_ffl’.</p></li>
+<li><p><strong>method</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – How to look at cell geometry. There are three options:
+‘cell_center_above_ffl’, ‘cell_corners_above_ffl’ and
+‘truncated_cell_corners_above_ffl’.</p></li>
 <li><p><strong>gridname</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Optional - only needed when debug keyword is True.</p></li>
 <li><p><strong>project</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional. Must be included when working in RMS.</p></li>
 <li><p><strong>invert</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Optional, will in case invert <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> in case the J function
 (or similar) is formulated as Sw = (J/A)^(1/B). This is the case in e.g.
 RMS</p></li>
-<li><p><strong>zdepth</strong> – Optional. May speed up computation if provided, in case the function
-is called several time for the same grid.</p></li>
 <li><p><strong>hcenter</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Optional. May speed up computation if provided, in case the function
 is called several time for the same grid, or hcenter is pre-computed in a
 special way. The hcenter will work with direct method only, not integration.</p></li>
@@ -380,7 +379,8 @@ is called several time for the same grid.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmu.tools.properties.SwFunction.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compute_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'integrated'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/properties/swfunction.html#SwFunction.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.properties.SwFunction.compute" title="Link to this definition"></a></dt>
-<dd><p>Common compute function for saturation, and returns the Sw property</p>
+<dd><p>Common compute function for saturation, and returns the Sw property,
+compute_method options: ‘integrated’ or ‘direct’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>]</span></p>
