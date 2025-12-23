@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.copy_rms_param_to_ertbox_grid &mdash; fmu-tools 1.25.2.dev6+g18cd0b722.d20251220 documentation</title>
+  <title>fmu.tools.rms.copy_rms_param_to_ertbox_grid &mdash; fmu-tools 1.25.2.dev7+g39b6acdaa documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=cfb64d60"></script>
+      <script src="../../../../_static/documentation_options.js?v=3ca0eb44"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -964,10 +964,10 @@
                 <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;extend&quot;</span><span class="p">,</span> <span class="s2">&quot;extend_layer_mean&quot;</span><span class="p">]:</span>
                     <span class="n">column_values_masked</span><span class="p">[</span><span class="n">undefined_k_indices_top</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_value</span>
                     <span class="n">column_values_masked</span><span class="p">[</span><span class="n">undefined_k_indices_bottom</span><span class="p">]</span> <span class="o">=</span> <span class="n">bottom_value</span>
-                    <span class="n">column_values_masked</span> <span class="o">=</span> <span class="n">fill_remaining_masked_values_within_colum</span><span class="p">(</span>
+                    <span class="n">column_values_unmasked</span> <span class="o">=</span> <span class="n">fill_remaining_masked_values_within_colum</span><span class="p">(</span>
                         <span class="n">column_values_masked</span><span class="p">,</span> <span class="n">nz_ertbox</span>
                     <span class="p">)</span>
-                    <span class="n">ertbox_values_3d_masked</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">column_values_masked</span>
+                    <span class="n">ertbox_values_3d_masked</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">column_values_unmasked</span>
 
                 <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;repeat&quot;</span><span class="p">,</span> <span class="s2">&quot;repeat_layer_mean&quot;</span><span class="p">]:</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">undefined_k_indices_top</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1021,10 +1021,10 @@
                             <span class="n">reverse_values_for_undefined</span>
                         <span class="p">)</span>
 
-                    <span class="n">column_values_masked</span> <span class="o">=</span> <span class="n">fill_remaining_masked_values_within_colum</span><span class="p">(</span>
+                    <span class="n">column_values_unmasked</span> <span class="o">=</span> <span class="n">fill_remaining_masked_values_within_colum</span><span class="p">(</span>
                         <span class="n">column_values_masked</span><span class="p">,</span> <span class="n">nz_ertbox</span>
                     <span class="p">)</span>
-                    <span class="n">ertbox_values_3d_masked</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">column_values_masked</span>
+                    <span class="n">ertbox_values_3d_masked</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">column_values_unmasked</span>
 
     <span class="k">return</span> <span class="n">ertbox_values_3d_masked</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span></div>
 
