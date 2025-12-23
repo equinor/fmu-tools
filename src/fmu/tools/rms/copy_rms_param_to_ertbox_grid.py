@@ -824,10 +824,10 @@ def assign_undefined_vertical(
                 if method in ["extend", "extend_layer_mean"]:
                     column_values_masked[undefined_k_indices_top] = top_value
                     column_values_masked[undefined_k_indices_bottom] = bottom_value
-                    column_values_masked = fill_remaining_masked_values_within_colum(
+                    column_values_unmasked = fill_remaining_masked_values_within_colum(
                         column_values_masked, nz_ertbox
                     )
-                    ertbox_values_3d_masked[i, j, :] = column_values_masked
+                    ertbox_values_3d_masked[i, j, :] = column_values_unmasked
 
                 elif method in ["repeat", "repeat_layer_mean"]:
                     if len(undefined_k_indices_top) > 0:
@@ -881,10 +881,10 @@ def assign_undefined_vertical(
                             reverse_values_for_undefined
                         )
 
-                    column_values_masked = fill_remaining_masked_values_within_colum(
+                    column_values_unmasked = fill_remaining_masked_values_within_colum(
                         column_values_masked, nz_ertbox
                     )
-                    ertbox_values_3d_masked[i, j, :] = column_values_masked
+                    ertbox_values_3d_masked[i, j, :] = column_values_unmasked
 
     return ertbox_values_3d_masked.filled(fill_value)
 
