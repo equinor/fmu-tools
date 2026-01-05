@@ -37,6 +37,6 @@ jobs:
           uv run pytest -n auto tests --disable-warnings --cov-report=xml:fmu-tools.xml;
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: fmu-tools.xml
