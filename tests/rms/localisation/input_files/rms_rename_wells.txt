@@ -1,0 +1,5 @@
+RSS_RENAMEDATA RMS12
+SETNAMES rms   eclipse
+55_33-A-1          A1
+55_33-A-2          A2
+55_33-A-3          A3

@@ -1,0 +1,15 @@
+-- Seismic data
+GENERAL_OBSERVATION  AMP_2020_2018_TOP  { DATA = AMP_2020_2018_TOP ;  RESTART=1; OBS_FILE=./seismic/topvolantis_amplitude_mean_20200701_20180101_1.txt; };
+--
+-- PLT data
+SUMMARY_OBSERVATION   A3_WOPR_VALYSAR_01_08_2019 {VALUE = 266;  ERROR = 100; DATE = 2019-08-01; KEY = WOPRL__1:A3;};
+
+-- Tracer data
+GENERAL_OBSERVATION  TRACER_OBS { DATA = TRACER_SIM  ;  RESTART=1; OBS_FILE=./tracer/drogon_tracer.obs; };
+--
+-- RFT data
+GENERAL_OBSERVATION  R_A2_OBS { DATA = R_A2_SIM  ;  RESTART = 1; OBS_FILE =./rft/R_A2_1.obs; };
+
+--
+-- BHP (shut-in) data
+SUMMARY_OBSERVATION   A2_WBHP_05_05_2019  { VALUE = 266.8;   ERROR = 10;  DATE = 2019-05-05;  KEY = WBHP:A2; };

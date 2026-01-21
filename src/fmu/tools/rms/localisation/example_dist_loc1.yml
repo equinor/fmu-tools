@@ -1,0 +1,35 @@
+localisation:
+  # Result file format (for summary observations) can be a csv file with columns:
+  # field_name  ert-id  xpos, ypos  xrange yrange rotation  tapering_function_name
+  result_file: params_dist_localisation.dat
+  rms_settings:
+    use_well_head_position: False
+    grid_model: "Geogrid_Valysar"
+    blocked_well_set: "BW"
+    trajectory: "Drilled trajectory"
+
+  input_files:
+    well_renaming_table: ../input/well_modelling/well_info/rms_eclipse.renaming_table
+    ert_summary_obs_file: ../../ert/input/observations/drogon_wbhp_rft_wct_gor_tracer_4d.obs
+    ert_general_obs_file: ../../ert/input/observations/drogon_wbhp_rft_wct_gor_tracer_4d.obs
+    rms_field_correlation_file: ../input/config/aps/correlation_ranges.txt # Not yet used
+    ert_config_field_param_file: ../../ert/input/config/ahm_field_aps.ert
+
+  # Simplest specification (all fields, all summary obs_types, all wells) use the same influence ellipse range and orientation
+  # If field_settings keyword is used, this will override the default settings for the fields specified in field_settings
+  default_field_settings:
+    ranges: [2000.0,  1000.0, 45.0] # (main_range, perpendicular_range, rotation)
+  
+  # Alternative tapering functions (scaling by distance functions). Optional
+  tapering: "gauss"  
+  
+  # Alternative way to define one common settings
+  # The name: 'all' means the same as wildcard settings '*'
+  # In this case all combinations (field_name, ert_id) will get a range setting
+  # and no combination will get default value for range setting
+  field_settings:
+    - field_name: [all]
+      obs_type: [all]
+      well_names: [all]
+      ranges: [3000.0,  2500.0, 15.0] # (main_range, perpendicular_range, rotation)
+
