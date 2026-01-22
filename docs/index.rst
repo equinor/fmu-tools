@@ -21,6 +21,7 @@ Contents:
    update_petro_real
    export_and_import_fields
    copy_rms_param_to_ertbox_grid
+   get_rms_simbox
    utilities
    rmsvolumetrics2csv
    ensembles
