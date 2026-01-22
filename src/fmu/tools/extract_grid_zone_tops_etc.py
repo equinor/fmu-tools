@@ -77,7 +77,13 @@ def extract_grid_zone_tops(
 
         # Set gridzonelog as zonelog and extract zonation tops from it
         xtg_well.zonelogname = gridzonelog
-        dframe = xtg_well.get_zonation_points(top_prefix="", use_undef=True)
+        # Ensure writable data; pandas 3 can surface read-only array here.
+        _series_values = pd.Series.values
+        pd.Series.values = property(lambda self: self.to_numpy(copy=True))
+        try:
+            dframe = xtg_well.get_zonation_points(top_prefix="", use_undef=True).copy()
+        finally:
+            pd.Series.values = _series_values
 
         dframe.rename(
             columns={

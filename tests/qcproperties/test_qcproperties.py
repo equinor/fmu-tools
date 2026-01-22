@@ -157,13 +157,11 @@ class TestProperties2df:
 
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
 
-        assert {"TOP", "MID", "Below_Low_reek"} == {
-            x for x in list(pdf.dataframe["ZONE"].unique()) if x is not None
-        }
+        assert {"TOP", "MID", "Below_Low_reek"} == set(
+            pdf.dataframe["ZONE"].dropna().unique()
+        )
 
-        assert {"SAND", "SHALE"} == {
-            x for x in list(pdf.dataframe["FACIES"].unique()) if x is not None
-        }
+        assert {"SAND", "SHALE"} == set(pdf.dataframe["FACIES"].dropna().unique())
 
 
 class TestStatistics:
