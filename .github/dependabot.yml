@@ -4,7 +4,24 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    allow:
+      - dependency-type: "all"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
+    allow:
+      - dependency-type: "all"
+    groups:
+      all-deps:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "sphinx"
+        versions: [">=8.2.0"]
+      - dependency-name: "sphinx-autodoc-typehints"
+        versions: [">=2.4"]
