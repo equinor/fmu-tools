@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.rename_rms_scripts &mdash; fmu-tools 1.26.1.dev8+gb3bedb2f0.d20260203 documentation</title>
+  <title>fmu.tools.rms.rename_rms_scripts &mdash; fmu-tools 1.26.1.dev9+g6af73b857 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=51ad5787"></script>
+      <script src="../../../../_static/documentation_options.js?v=780ca9ff"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -401,8 +401,10 @@
 <span class="sd">        the RMS name does not match the name of the file on disk.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f</span> <span class="o">=</span> <span class="p">(</span>  <span class="c1"># noqa</span>
-            <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span>
-            <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;standalonefilename&quot;</span><span class="p">]</span>
+            <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span>
+                <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;standalonefilename&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
