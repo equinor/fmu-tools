@@ -70,9 +70,11 @@ class PropertyAggregation:
             ("Count", "count"),
             (
                 "Sum_Weight",
-                lambda x: np.sum(x)
-                if x.name in list(self._controls["weights"].values())
-                else np.nan,
+                lambda x: (
+                    np.sum(x)
+                    if x.name in list(self._controls["weights"].values())
+                    else np.nan
+                ),
             ),
         ]
 
@@ -87,14 +89,16 @@ class PropertyAggregation:
             ("Max", np.max),
             (
                 "Avg_Weighted",
-                lambda x: np.average(
-                    x.dropna(),
-                    weights=dframe.loc[
-                        x.dropna().index, self._controls["weights"][x.name]
-                    ],
-                )
-                if x.name in self._controls["weights"]
-                else np.nan,
+                lambda x: (
+                    np.average(
+                        x.dropna(),
+                        weights=dframe.loc[
+                            x.dropna().index, self._controls["weights"][x.name]
+                        ],
+                    )
+                    if x.name in self._controls["weights"]
+                    else np.nan
+                ),
             ),
             ("Count", "count"),
         ]
