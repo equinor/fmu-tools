@@ -307,8 +307,10 @@ class PythonCompMaster:
         the RMS name does not match the name of the file on disk.
         """
         f = (  # noqa
-            lambda k: self._entries[k]["instance_name"]
-            != self._entries[k]["standalonefilename"]
+            lambda k: (
+                self._entries[k]["instance_name"]
+                != self._entries[k]["standalonefilename"]
+            )
         )
         return list(filter(f, self._entries.keys()))
 
