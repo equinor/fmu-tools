@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmu-tools 1.26.1.dev12+gae4ed02f0.d20260301 documentation</title>
+  <title>Index &mdash; fmu-tools 1.26.1.dev13+gc1f3a8f61 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c49b78e"></script>
+      <script src="_static/documentation_options.js?v=9a645126"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_fluid_contacts_from_grid.html">rms.create_fluid_contacts_from_grid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
@@ -230,10 +231,10 @@
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies">combine_petro_real_from_multiple_facies() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.compare_bw_props">compare_bw_props() (fmu.tools.qcforward.BlockedWellsVsGridProperties method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.compute">compute() (fmu.tools.properties.SwFunction method)</a>
 
       <ul>
@@ -266,6 +267,12 @@
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_copy_of_job">create_copy_of_job() (in module fmu.tools.rms.generate_petro_jobs_for_field_update)</a>
 </li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_fluid_contacts_from_grid">create_fluid_contacts_from_grid() (in module fmu.tools.rms)</a>
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.create_fluid_contacts_from_grid">(in module fmu.tools.rms.fluid_contacts_from_grid)</a>
+</li>
+      </ul></li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.generate_petro_jobs_for_field_update.create_new_petro_job_per_facies">create_new_petro_job_per_facies() (in module fmu.tools.rms.generate_petro_jobs_for_field_update)</a>
 </li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.cumlenreport">cumlenreport (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps attribute)</a>
@@ -391,6 +398,8 @@
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.fipnums_in_set">fipnums_in_set() (in module fmu.tools.fipmapper.fipmapper)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.rename_rms_scripts.PythonCompMaster.fix_standalone_filenames">fix_standalone_filenames() (fmu.tools.rms.rename_rms_scripts.PythonCompMaster method)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact">FluidContact (class in fmu.tools.rms.fluid_contacts_from_grid)</a>
 </li>
       <li>
     fmu
@@ -518,6 +527,13 @@
 
       <ul>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmu.tools.rms.fluid_contacts_from_grid
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.fluid_contacts_from_grid">module</a>
 </li>
       </ul></li>
       <li>
@@ -863,6 +879,8 @@
         <li><a href="fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.method">(fmu.tools.properties.swfunction.SwFunction attribute)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact.model_config">model_config (fmu.tools.rms.fluid_contacts_from_grid.FluidContact attribute)</a>
+</li>
       <li>
     module
 
@@ -903,6 +921,8 @@
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.create_rft_ertobs">fmu.tools.rms.create_rft_ertobs</a>
 </li>
+        <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.fluid_contacts_from_grid">fmu.tools.rms.fluid_contacts_from_grid</a>
+</li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.generate_bw_per_facies">fmu.tools.rms.generate_bw_per_facies</a>
 </li>
         <li><a href="fmu.tools.rms.html#module-fmu.tools.rms.generate_petro_jobs_for_field_update">fmu.tools.rms.generate_petro_jobs_for_field_update</a>
@@ -937,7 +957,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.name">name (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+
+      <ul>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact.name">(fmu.tools.rms.fluid_contacts_from_grid.FluidContact attribute)</a>
 </li>
+      </ul></li>
       <li><a href="fmu.tools.html#fmu.tools.DomainConversion.names">names (fmu.tools.DomainConversion attribute)</a>
 
       <ul>
@@ -1237,6 +1261,8 @@
       <li><a href="fmu.tools.html#fmu.tools.QCProperties.to_csv">to_csv() (fmu.tools.QCProperties method)</a>
 </li>
       <li><a href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Position.TOP">TOP (fmu.tools.utilities.sample_attributes.Position attribute)</a>
+</li>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact.type">type (fmu.tools.rms.fluid_contacts_from_grid.FluidContact attribute)</a>
 </li>
   </ul></td>
 </tr></table>

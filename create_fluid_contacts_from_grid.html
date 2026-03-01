@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rms.create_fluid_contacts_from_grid &mdash; fmu-tools 1.26.1.dev13+gc1f3a8f61 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a645126"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rms.rename_rms_scripts" href="rename_rms_scripts.html" />
+    <link rel="prev" title="create_rft_ertobs" href="create_rft_ertobs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fmu-tools
+              <img src="_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">rms.create_fluid_contacts_from_grid</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage-and-examples">Usage and examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copy_rms_param_to_ertbox_grid.html">rms.copy_rms_param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">rms.create_fluid_contacts_from_grid</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/create_fluid_contacts_from_grid.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rms-create-fluid-contacts-from-grid">
+<h1>rms.create_fluid_contacts_from_grid<a class="headerlink" href="#rms-create-fluid-contacts-from-grid" title="Link to this heading"></a></h1>
+<p>Function to create fluid contacts surfaces and outlines from grid contact
+parameters. Output will be stored inside RMS under General 2D data in folders
+<code class="docutils literal notranslate"><span class="pre">fluid_contact_surfaces</span></code> and <code class="docutils literal notranslate"><span class="pre">fluid_contact_outlines</span></code>.</p>
+<p>By default, the function creates a contact surface and outline for each zone
+defined in the grid. To instead create contacts for groups of zones that share
+a contact, a custom zone property can be provided.</p>
+<p>The contact surface will be created by finding the closest contact cell in each
+grid pillar, and gridding them with nearest-node. The contact outline will be
+extracted as the boundary polygon of cells whose centers lie above the contact.</p>
+<p>The function will check for supported contact types in the project and create output
+for the ones available. The supported contact types are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FWL</span></code> (Free water level)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GOC</span></code> (Gas-oil contact)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GWC</span></code> (Gas-water contact)</p></li>
+</ul>
+<p>A value filter can be applied to remove values below a certain threshold via the
+<code class="docutils literal notranslate"><span class="pre">min_value_filter</span></code> argument. This is useful for removing contact values in
+surrounding areas where the value is often set to a low number.</p>
+<p>By default, output surfaces have the same resolution as the input grid. To increase
+resolution, the grid can be refined before processing using the <code class="docutils literal notranslate"><span class="pre">grid_refinement</span></code>
+argument. It is also possible to match a specific geometry by providing a template
+surface via <code class="docutils literal notranslate"><span class="pre">template_surf</span></code> - the contact surface will be resampled
+to this template as a final step.</p>
+<section id="usage-and-examples">
+<h2>Usage and examples<a class="headerlink" href="#usage-and-examples" title="Link to this heading"></a></h2>
+<p><strong>Available arguments</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">project</span></code>:  The magic <code class="docutils literal notranslate"><span class="pre">project</span></code> variable from RMS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid_name</span> <span class="pre">(str)</span></code>:  The name of the grid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwl_name</span> <span class="pre">(str)</span></code>:  The name of the free water level property. Default is <code class="docutils literal notranslate"><span class="pre">FWL</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">goc_name</span> <span class="pre">(str)</span></code>:  The name of the gas-oil contact property. Default is <code class="docutils literal notranslate"><span class="pre">GOC</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gwc_name</span> <span class="pre">(str)</span></code>:  The name of the gas-water contact property. Default is <code class="docutils literal notranslate"><span class="pre">GWC</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zone_name</span> <span class="pre">(str)</span></code>:  Optional name of the zone property to use for creating contacts
+for coarse zones.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_value_filter</span> <span class="pre">(float)</span></code>:  Minimum value filter, surface values below this will be
+set to undefined. Default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template_surf</span> <span class="pre">(xtgeo.RegularSurface)</span></code>:  Optional template surface to resample the
+contact surface to as a final step. If not provided, the contact surface will have the
+same dimension as the grid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">grid_refinement</span> <span class="pre">(int)</span></code> :  Optional refinement factor to refine the grid before
+processing to increase resolution of the output. Be aware that a high refinement factor
+will reduce performance. Note, this does not affect the grid in RMS.</p></li>
+</ul>
+<p><strong>Examples</strong></p>
+<p>Use a Python job in RMS to call the function with appropriate arguments.
+By default, the function will look for contact properties named <cite>FWL</cite>, <cite>GOC</cite> and <cite>GWC</cite>.
+If your project uses different names, you can specify them as arguments to the function.
+If you have a custom zone property that you want to use for creating contacts for coarse zones,
+you can specify its name as well.</p>
+<p>Example below shows a minimum configuration 👇</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
+
+<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example below shows how to use contact properties that does not follow the default naming convention 👇</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
+
+<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
+    <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">fwl_name</span><span class="o">=</span><span class="s2">&quot;FWL_prop&quot;</span><span class="p">,</span>
+    <span class="n">goc_name</span><span class="o">=</span><span class="s2">&quot;GOC_prop&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Example using a coarser zone parameter and a filter to remove areas with contacts values less than 1000 👇</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
+
+<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
+    <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">zone_name</span><span class="o">=</span><span class="s2">&quot;Contact_zones&quot;</span><span class="p">,</span>
+    <span class="n">min_value_filter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Example with the use of a template surface and grid refinement by 2 to enhance resolution 👇</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
+
+<span class="n">template_surf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surfaces_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;template_surface&quot;</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span><span class="p">)</span>
+
+<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
+    <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">grid_refinement</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">template_surf</span><span class="o">=</span><span class="n">template_surf</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="create_rft_ertobs.html" class="btn btn-neutral float-left" title="create_rft_ertobs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rename_rms_scripts.html" class="btn btn-neutral float-right" title="rms.rename_rms_scripts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>
