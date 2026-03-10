@@ -39,6 +39,7 @@ dependencies = [
     "numpy>=1.23.5",
     "openpyxl>=2.6",
     "pandas>=0.21",
+    "pydantic",
     "pyyaml>=5.3",
     "scipy>=1.2",
     "xlrd>=1.2",
