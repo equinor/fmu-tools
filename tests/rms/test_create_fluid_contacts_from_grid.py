@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock, patch
 
+import numpy as np
 import pandas as pd
 import pytest
 import xtgeo
@@ -7,6 +8,7 @@ import xtgeo
 from fmu.tools.rms.fluid_contacts_from_grid import (
     FluidContact,
     _create_contact_surface,
+    _create_fluid_contact_outline,
     _filter_to_closest_contact_cell_in_pillars,
     _filter_to_deepest_cell_above_contact_in_pillars,
     _GridDataAssembler,
@@ -144,6 +146,62 @@ def test_filter_to_deepest_cell_above_contact_in_pillars():
     assert list(filtered_df["KZ"]) == [4]
 
 
+def test_create_fluid_contact_outline(grid_data_assembler):
+    """Test the creation of a contact outline from the grid."""
+    df = grid_data_assembler.get_dataframe()
+
+    # Adjust the contact values for testing
+    df["fwl"] = 1000
+    df.loc[df["IX"] == 1, "fwl"] = 3000
+    df.loc[df["IX"] == 2, "fwl"] = 4000
+
+    # Create the contact outline
+    outline = _create_fluid_contact_outline(df, "fwl", 0)
+
+    assert outline is not None
+    assert isinstance(outline, xtgeo.Polygons)
+
+    poly_df = outline.get_dataframe()
+
+    assert len(poly_df) == 11
+
+    # should have the same tvd value as the contact
+    assert set(poly_df["Z_TVDSS"].unique()) == {3000.0, 4000.0}
+    assert poly_df["POLY_ID"].nunique() == 1
+
+
+@pytest.mark.parametrize(
+    "rescale_distance, expected_points", [(10, 101), (50, 21), (100, 11)]
+)
+def test_create_fluid_contact_outline_rescale(
+    grid_data_assembler, rescale_distance, expected_points
+):
+    """Test the creation of a contact outline from the grid with rescaling."""
+    df = grid_data_assembler.get_dataframe()
+
+    # Adjust the contact values for testing
+    df["fwl"] = 1000
+    df.loc[df["IX"] == 1, "fwl"] = 3000
+    df.loc[df["IX"] == 2, "fwl"] = 4000
+
+    # Create the contact outline
+    outline = _create_fluid_contact_outline(df, "fwl", 0, rescale_distance)
+
+    assert outline is not None
+    assert isinstance(outline, xtgeo.Polygons)
+
+    poly_df = outline.get_dataframe()
+
+    assert len(poly_df) == expected_points
+
+    # check that point spacing is approximately the rescale distance
+    x_diff = poly_df["X_UTME"].diff()
+    y_diff = poly_df["Y_UTMN"].diff()
+    segment_lengths = np.hypot(x_diff, y_diff).dropna()
+
+    assert np.allclose(segment_lengths, rescale_distance, atol=1)
+
+
 def test_create_contact_surface(grid_data_assembler):
     """Test the creation of a contact surface from the grid."""
     df = grid_data_assembler.get_dataframe()
@@ -151,16 +209,16 @@ def test_create_contact_surface(grid_data_assembler):
 
     # Adjust the contact values for testing
     # pretend each col is a different region
-    df.loc[df["IX"] == 1, "FWL"] = 1000
-    df.loc[df["IX"] == 2, "FWL"] = 2000
-    df.loc[df["IX"] == 3, "FWL"] = 3000
-    df.loc[df["IX"] == 4, "FWL"] = 4000
-    df.loc[df["IX"] == 5, "FWL"] = 5000
+    df.loc[df["IX"] == 1, "fwl"] = 1000
+    df.loc[df["IX"] == 2, "fwl"] = 2000
+    df.loc[df["IX"] == 3, "fwl"] = 3000
+    df.loc[df["IX"] == 4, "fwl"] = 4000
+    df.loc[df["IX"] == 5, "fwl"] = 5000
 
     surf_from_grid = grid_data_assembler.get_surface_with_grid_dimensions()
 
     # Create the contact surface
-    surface = _create_contact_surface(df, "FWL", 0, surf_from_grid)
+    surface = _create_contact_surface(df, "fwl", 0, surf_from_grid)
 
     assert surface is not None
     assert isinstance(surface, xtgeo.RegularSurface)
