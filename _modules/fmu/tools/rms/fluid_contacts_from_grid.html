@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.28.1.dev2+gcb78fec58 documentation</title>
+  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.28.1.dev3+g2166d72f8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=841cb68d"></script>
+      <script src="../../../../_static/documentation_options.js?v=188a4f12"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -263,7 +263,10 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_create_fluid_contact_outline</span><span class="p">(</span>
-    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">contact</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">rescale_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Polygons</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a fluid contact outline by filtering the input dataframe to cells</span>
@@ -275,7 +278,12 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="n">points</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Points</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">zname</span><span class="o">=</span><span class="n">contact</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Polygons</span><span class="o">.</span><span class="n">boundary_from_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">alpha_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">outline</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Polygons</span><span class="o">.</span><span class="n">boundary_from_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">alpha_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">rescale_distance</span><span class="p">:</span>
+        <span class="n">outline</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">rescale_distance</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">outline</span>
 
 
 <div class="viewcode-block" id="create_fluid_contacts_from_grid">
@@ -290,6 +298,7 @@
     <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">template_surf</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">grid_refinement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rescale_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to create fluid contacts surfaces and outlines from grid contact</span>
@@ -319,6 +328,10 @@
 <span class="sd">    a template surface via ``template_surf`` - the contact surface will be resampled</span>
 <span class="sd">    to this template as a final step.</span>
 
+<span class="sd">    The ``rescale_distance`` argument can be used to resample contact outlines to</span>
+<span class="sd">    a specified point increment. As polygons extracted from a grid can look jagged,</span>
+<span class="sd">    rescaling can help reduce artifacts and produce smoother outlines.</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        project: The magic ``project`` variable from RMS.</span>
 <span class="sd">        grid_name: The name of the grid.</span>
@@ -334,6 +347,7 @@
 <span class="sd">        grid_refinement: Optional refinement factor to refine the grid before processing</span>
 <span class="sd">          to increase resolution of the output. Be aware that a high refinement factor</span>
 <span class="sd">          will reduce performance. Note, this does not affect the grid in RMS.</span>
+<span class="sd">        rescale_distance: Optional target spacing used to resample contact outlines.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">loader</span> <span class="o">=</span> <span class="n">_RMSDataLoader</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
     <span class="n">contacts</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">find_available_contact_properties</span><span class="p">(</span><span class="n">fwl_name</span><span class="p">,</span> <span class="n">goc_name</span><span class="p">,</span> <span class="n">gwc_name</span><span class="p">)</span>
@@ -376,6 +390,7 @@
                 <span class="n">zonedf</span><span class="p">,</span>
                 <span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
                 <span class="n">min_value_filter</span><span class="p">,</span>
+                <span class="n">rescale_distance</span><span class="p">,</span>
             <span class="p">):</span>
                 <span class="n">outline</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>

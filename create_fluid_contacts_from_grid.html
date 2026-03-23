@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.create_fluid_contacts_from_grid &mdash; fmu-tools 1.28.1.dev2+gcb78fec58 documentation</title>
+  <title>rms.create_fluid_contacts_from_grid &mdash; fmu-tools 1.28.1.dev3+g2166d72f8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=841cb68d"></script>
+      <script src="_static/documentation_options.js?v=188a4f12"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -97,7 +97,7 @@
   <section id="rms-create-fluid-contacts-from-grid">
 <h1>rms.create_fluid_contacts_from_grid<a class="headerlink" href="#rms-create-fluid-contacts-from-grid" title="Link to this heading"></a></h1>
 <p>Function to create fluid contacts surfaces and outlines from grid contact
-parameters. Output will be stored inside RMS under General 2D data in folders
+parameters. Output will be stored under the General 2D data folder, in folders
 <code class="docutils literal notranslate"><span class="pre">fluid_contact_surfaces</span></code> and <code class="docutils literal notranslate"><span class="pre">fluid_contact_outlines</span></code>.</p>
 <p>By default, the function creates a contact surface and outline for each zone
 defined in the grid. To instead create contacts for groups of zones that share
@@ -118,8 +118,10 @@ surrounding areas where the value is often set to a low number.</p>
 <p>By default, output surfaces have the same resolution as the input grid. To increase
 resolution, the grid can be refined before processing using the <code class="docutils literal notranslate"><span class="pre">grid_refinement</span></code>
 argument. It is also possible to match a specific geometry by providing a template
-surface via <code class="docutils literal notranslate"><span class="pre">template_surf</span></code> - the contact surface will be resampled
-to this template as a final step.</p>
+surface via <code class="docutils literal notranslate"><span class="pre">template_surf</span></code>; the contact surface will be resampled
+to this template as a final step. For outlines, the <code class="docutils literal notranslate"><span class="pre">rescale_distance</span></code> argument
+can be used to resample polygon vertices to a target spacing. This can help reduce
+jagged grid artifacts and produce smoother boundaries.</p>
 <section id="usage-and-examples">
 <h2>Usage and examples<a class="headerlink" href="#usage-and-examples" title="Link to this heading"></a></h2>
 <p><strong>Available arguments</strong></p>
@@ -139,10 +141,11 @@ same dimension as the grid.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">grid_refinement</span> <span class="pre">(int)</span></code> :  Optional refinement factor to refine the grid before
 processing to increase resolution of the output. Be aware that a high refinement factor
 will reduce performance. Note, this does not affect the grid in RMS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rescale_distance</span> <span class="pre">(float)</span></code>: Optional target spacing used to resample contact outlines.</p></li>
 </ul>
 <p><strong>Examples</strong></p>
 <p>Use a Python job in RMS to call the function with appropriate arguments.
-By default, the function will look for contact properties named <cite>FWL</cite>, <cite>GOC</cite> and <cite>GWC</cite>.
+By default, the function will look for contact properties named <code class="docutils literal notranslate"><span class="pre">FWL</span></code>, <code class="docutils literal notranslate"><span class="pre">GOC</span></code> and <code class="docutils literal notranslate"><span class="pre">GWC</span></code>.
 If your project uses different names, you can specify them as arguments to the function.
 If you have a custom zone property that you want to use for creating contacts for coarse zones,
 you can specify its name as well.</p>
@@ -152,23 +155,23 @@ you can specify its name as well.</p>
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Example below shows how to use contact properties that does not follow the default naming convention 👇</p>
+<p>Example below shows how to use contact properties that do not follow the default naming convention 👇</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
     <span class="n">fwl_name</span><span class="o">=</span><span class="s2">&quot;FWL_prop&quot;</span><span class="p">,</span>
     <span class="n">goc_name</span><span class="o">=</span><span class="s2">&quot;GOC_prop&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Example using a coarser zone parameter and a filter to remove areas with contacts values less than 1000 👇</p>
+<p>Example using a coarse zone property and a filter to remove areas with contact values less than 1000 👇</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
     <span class="n">zone_name</span><span class="o">=</span><span class="s2">&quot;Contact_zones&quot;</span><span class="p">,</span>
     <span class="n">min_value_filter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">)</span>
@@ -178,11 +181,11 @@ you can specify its name as well.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
 
-<span class="n">template_surf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surfaces_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;template_surface&quot;</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span><span class="p">)</span>
+<span class="n">template_surf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;template_surface&quot;</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span><span class="p">)</span>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
     <span class="n">grid_refinement</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">template_surf</span><span class="o">=</span><span class="n">template_surf</span><span class="p">,</span>
 <span class="p">)</span>
