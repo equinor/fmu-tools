@@ -2,7 +2,7 @@ rms.create_fluid_contacts_from_grid
 ===================================
 
 Function to create fluid contacts surfaces and outlines from grid contact
-parameters. Output will be stored inside RMS under General 2D data in folders
+parameters. Output will be stored under the General 2D data folder, in folders
 ``fluid_contact_surfaces`` and ``fluid_contact_outlines``.
 
 By default, the function creates a contact surface and outline for each zone
@@ -28,8 +28,11 @@ surrounding areas where the value is often set to a low number.
 By default, output surfaces have the same resolution as the input grid. To increase
 resolution, the grid can be refined before processing using the ``grid_refinement``
 argument. It is also possible to match a specific geometry by providing a template
-surface via ``template_surf`` - the contact surface will be resampled
-to this template as a final step.
+surface via ``template_surf``; the contact surface will be resampled
+to this template as a final step. For outlines, the ``rescale_distance`` argument
+can be used to resample polygon vertices to a target spacing. This can help reduce
+jagged grid artifacts and produce smoother boundaries.
+
 
 Usage and examples
 ^^^^^^^^^^^^^^^^^^
@@ -51,11 +54,12 @@ Usage and examples
 - ``grid_refinement (int)`` :  Optional refinement factor to refine the grid before
   processing to increase resolution of the output. Be aware that a high refinement factor
   will reduce performance. Note, this does not affect the grid in RMS.
+- ``rescale_distance (float)``: Optional target spacing used to resample contact outlines.
 
 **Examples**
 
 Use a Python job in RMS to call the function with appropriate arguments. 
-By default, the function will look for contact properties named `FWL`, `GOC` and `GWC`.
+By default, the function will look for contact properties named ``FWL``, ``GOC`` and ``GWC``.
 If your project uses different names, you can specify them as arguments to the function. 
 If you have a custom zone property that you want to use for creating contacts for coarse zones,
 you can specify its name as well.
@@ -69,7 +73,7 @@ Example below shows a minimum configuration 👇
     create_fluid_contacts_from_grid(project=project, gridname="MyGrid")
 
 
-Example below shows how to use contact properties that does not follow the default naming convention 👇
+Example below shows how to use contact properties that do not follow the default naming convention 👇
 
 .. code-block:: python
 
@@ -77,13 +81,13 @@ Example below shows how to use contact properties that does not follow the defau
 
     create_fluid_contacts_from_grid(
         project=project,
-        gridname="MyGrid",
+        grid_name="MyGrid",
         fwl_name="FWL_prop",
         goc_name="GOC_prop",
     )
 
 
-Example using a coarser zone parameter and a filter to remove areas with contacts values less than 1000 👇
+Example using a coarse zone property and a filter to remove areas with contact values less than 1000 👇
 
 .. code-block:: python
 
@@ -91,7 +95,7 @@ Example using a coarser zone parameter and a filter to remove areas with contact
 
     create_fluid_contacts_from_grid(
         project=project,
-        gridname="MyGrid",
+        grid_name="MyGrid",
         zone_name="Contact_zones",
         min_value_filter=1000,
     )
@@ -104,11 +108,11 @@ Example with the use of a template surface and grid refinement by 2 to enhance r
     import xtgeo
     from fmu.tools.rms import create_fluid_contacts_from_grid
 
-    template_surf = xtgeo.surfaces_from_roxar(project, "template_surface", "templates", stype="clipboard")
+    template_surf = xtgeo.surface_from_roxar(project, "template_surface", "templates", stype="clipboard")
 
     create_fluid_contacts_from_grid(
         project=project,
-        gridname="MyGrid",
+        grid_name="MyGrid",
         grid_refinement=2,
         template_surf=template_surf,
     )

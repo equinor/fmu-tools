@@ -169,7 +169,10 @@ def _create_contact_surface(
 
 
 def _create_fluid_contact_outline(
-    df: pd.DataFrame, contact: str, min_value_filter: float
+    df: pd.DataFrame,
+    contact: str,
+    min_value_filter: float,
+    rescale_distance: float | None = None,
 ) -> xtgeo.Polygons | None:
     """
     Create a fluid contact outline by filtering the input dataframe to cells
@@ -181,7 +184,12 @@ def _create_fluid_contact_outline(
         return None
 
     points = xtgeo.Points(df, zname=contact)
-    return xtgeo.Polygons.boundary_from_points(points, alpha_factor=1)
+    outline = xtgeo.Polygons.boundary_from_points(points, alpha_factor=1)
+
+    if rescale_distance:
+        outline.rescale(rescale_distance)
+
+    return outline
 
 
 def create_fluid_contacts_from_grid(
@@ -194,6 +202,7 @@ def create_fluid_contacts_from_grid(
     min_value_filter: float = 0,
     template_surf: xtgeo.RegularSurface | None = None,
     grid_refinement: int | None = None,
+    rescale_distance: float | None = None,
 ) -> None:
     """
     Function to create fluid contacts surfaces and outlines from grid contact
@@ -223,6 +232,10 @@ def create_fluid_contacts_from_grid(
     a template surface via ``template_surf`` - the contact surface will be resampled
     to this template as a final step.
 
+    The ``rescale_distance`` argument can be used to resample contact outlines to
+    a specified point increment. As polygons extracted from a grid can look jagged,
+    rescaling can help reduce artifacts and produce smoother outlines.
+
     Args:
         project: The magic ``project`` variable from RMS.
         grid_name: The name of the grid.
@@ -238,6 +251,7 @@ def create_fluid_contacts_from_grid(
         grid_refinement: Optional refinement factor to refine the grid before processing
           to increase resolution of the output. Be aware that a high refinement factor
           will reduce performance. Note, this does not affect the grid in RMS.
+        rescale_distance: Optional target spacing used to resample contact outlines.
     """
     loader = _RMSDataLoader(project, grid_name)
     contacts = loader.find_available_contact_properties(fwl_name, goc_name, gwc_name)
@@ -280,6 +294,7 @@ def create_fluid_contacts_from_grid(
                 zonedf,
                 contact.type,
                 min_value_filter,
+                rescale_distance,
             ):
                 outline.to_roxar(
                     project,
