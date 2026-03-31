@@ -28,11 +28,11 @@ from fmu.tools.fipmapper import fipmapper
         ),
     ],
 )
-def test_invert_map(input_dict, expected_inverse):
+def test_invert_map(input_dict: dict, expected_inverse: dict) -> None:
     assert fipmapper.invert_map(input_dict) == expected_inverse
 
 
-def test_invert_map_skipstring():
+def test_invert_map_skipstring() -> None:
     input_dict = {"foo": [1, 2], "bar": [3, 4], "Totals": [1, 2, 3, 4]}
     assert fipmapper.invert_map(input_dict, skipstring="Totals") == {
         1: ["foo"],
@@ -42,7 +42,7 @@ def test_invert_map_skipstring():
     }
 
 
-def test_fipmapper_empty():
+def test_fipmapper_empty() -> None:
     mapper = fipmapper.FipMapper()
     assert mapper.has_region2fip is False
     assert mapper.has_zone2fip is False
@@ -50,7 +50,7 @@ def test_fipmapper_empty():
     assert mapper.has_fip2zone is False
 
 
-def test_fipmapper():
+def test_fipmapper() -> None:
     mapper = fipmapper.FipMapper(
         mapdata={"fipnum2region": {1: "West-Brent", 2: "East-Sognefjord"}}
     )
@@ -62,7 +62,7 @@ def test_fipmapper():
     assert mapper._regions2fips(["West-Brent", "East-Sognefjord"]) == [[1], [2]]
 
 
-def test_fipmapper_zones():
+def test_fipmapper_zones() -> None:
     mapper = fipmapper.FipMapper(
         mapdata={"fipnum2zone": {1: "Upper", 2: "Middle", 3: "Middle"}}
     )
@@ -73,7 +73,7 @@ def test_fipmapper_zones():
     assert mapper.zone2fip("Middle") == [2, 3]
 
 
-def test_integer_regions():
+def test_integer_regions() -> None:
     """Regions are sometimes integer, and then they will
     typically be returned as integers from the yaml parsing"""
     mapper = fipmapper.FipMapper(mapdata={"fipnum2region": {1: 1, 2: 2}})
@@ -83,7 +83,7 @@ def test_integer_regions():
     assert mapper.region2fip(2) == [2]
 
 
-def test_integer_zones():
+def test_integer_zones() -> None:
     """Should also allow using integers for zones. Maybe
     the integer is actually the k index"""
     mapper = fipmapper.FipMapper(mapdata={"fipnum2zone": {1: 1, 2: 2}})
@@ -93,7 +93,7 @@ def test_integer_zones():
     assert mapper.zone2fip(2) == [2]
 
 
-def test_mixed_datatypes():
+def test_mixed_datatypes() -> None:
     """Mixed ints/strs in regions and zones"""
     mapper = fipmapper.FipMapper(
         mapdata={"fipnum2region": {1: 1, 2: "B"}, "fipnum2zone": {1: 1, 2: "L"}}
@@ -109,7 +109,7 @@ def test_mixed_datatypes():
     assert mapper.zone2fip("L") == [2]
 
 
-def test_fipmapper_regzone2fip():
+def test_fipmapper_regzone2fip() -> None:
     mapper = fipmapper.FipMapper(
         mapdata={
             "fipnum2zone": {1: "Upper", 2: "Middle", 3: "Upper", 4: "Middle"},
@@ -187,8 +187,8 @@ def test_fipmapper_regzone2fip():
     ],
 )
 def test_get_regions_zones_fipnums(
-    map_data, expected_regions, expected_zones, expected_fipnums
-):
+    map_data: dict, expected_regions: list, expected_zones: list, expected_fipnums: list
+) -> None:
     """Test the three functions get_regions, get_zones and get_fipnums"""
     mapper = fipmapper.FipMapper(mapdata=map_data)
     assert mapper.get_regions() == expected_regions
@@ -226,6 +226,6 @@ def test_get_regions_zones_fipnums(
         ),
     ],
 )
-def test_webviz_to_prtvol2csv(input_dict, expected_dict):
+def test_webviz_to_prtvol2csv(input_dict: dict, expected_dict: dict) -> None:
     print(fipmapper.webviz_to_prtvol2csv(input_dict))
     assert fipmapper.webviz_to_prtvol2csv(input_dict) == expected_dict
