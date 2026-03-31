@@ -217,7 +217,7 @@ from fmu.tools.fipmapper import fipmapper
         ),
     ],
 )
-def test_disjointsets(mapdata, expected_disjointsets):
+def test_disjointsets(mapdata: dict, expected_disjointsets: list[dict]) -> None:
     expected_dframe = pd.DataFrame(expected_disjointsets)
     cols = list(expected_dframe.columns)
     mapper = fipmapper.FipMapper(mapdata=mapdata)
@@ -300,12 +300,12 @@ def test_disjointsets(mapdata, expected_disjointsets):
     ],
 )
 def test_set_lookups(
-    dframe_records,
-    expected_regions,
-    expected_zones,
-    expected_fipnums,
-    expected_regzonefips,
-):
+    dframe_records: list[dict],
+    expected_regions: dict,
+    expected_zones: dict,
+    expected_fipnums: dict,
+    expected_regzonefips: dict,
+) -> None:
     dframe = pd.DataFrame(dframe_records)
     assert fipmapper.regions_in_set(dframe) == expected_regions
     assert fipmapper.zones_in_set(dframe) == expected_zones
