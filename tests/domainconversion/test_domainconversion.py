@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any
 
 import numpy as np
 import pytest
@@ -10,7 +11,9 @@ from fmu.tools.domainconversion import DomainConversion
 logger = logging.getLogger(__name__)
 
 
-def plot_section(cube, simplesurfs, title="", limits_from=None):
+def plot_section(
+    cube: Any, simplesurfs: Any, title: str = "", limits_from: Any = None
+) -> None:
     """Simple plotting, while testing interactive"""
     if "PLOT" not in os.environ:
         return
@@ -31,12 +34,12 @@ def plot_section(cube, simplesurfs, title="", limits_from=None):
     _cube = limits_from if limits_from else cube
 
     # Set the x-axis (trace) limits
-    ax.set_xlim([_cube.xori, _cube.xori + (_cube.ncol - 1) * _cube.xinc])
+    ax.set_xlim((_cube.xori, _cube.xori + (_cube.ncol - 1) * _cube.xinc))
 
     # Set the y-axis (depth) limits
-    ax.set_ylim([_cube.zori, _cube.zori + (_cube.nlay - 1) * _cube.zinc])
+    ax.set_ylim((_cube.zori, _cube.zori + (_cube.nlay - 1) * _cube.zinc))
 
-    use_extent = [-0.5, 2.5, 100.5, -0.5]
+    use_extent = (-0.5, 2.5, 100.5, -0.5)
     im = ax.imshow(
         data.T, cmap="seismic", extent=use_extent, aspect="auto", interpolation=None
     )
@@ -65,7 +68,7 @@ def plot_section(cube, simplesurfs, title="", limits_from=None):
 
 
 @pytest.fixture(name="smallcube")
-def fixture_smallcube():
+def fixture_smallcube() -> xtgeo.Cube:
     """Fixture for making a small synthetic test cube"""
     cube_values = np.zeros((3, 4, 101))
     cube_values[:, :, 44:50] = 2.0
@@ -90,7 +93,9 @@ def fixture_smallcube():
 
 
 @pytest.fixture(name="simplesurfs")
-def fixture_simple_surfaces(smallcube):
+def fixture_simple_surfaces(
+    smallcube: xtgeo.Cube,
+) -> tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]]:
     """Generate a few simple flat surfaces (time/depth pairs)."""
 
     surface_template = xtgeo.surface_from_cube(smallcube, value=0)
@@ -111,7 +116,10 @@ def fixture_simple_surfaces(smallcube):
     return [d0, d1, d2], [t0, t1, t2]
 
 
-def test_domainconversion_deprecated_arg_order(smallcube, simplesurfs):
+def test_domainconversion_deprecated_arg_order(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Test deprecated argument order."""
 
     dlist, tlist = simplesurfs
@@ -119,7 +127,9 @@ def test_domainconversion_deprecated_arg_order(smallcube, simplesurfs):
         DomainConversion(smallcube, dlist, tlist)
 
 
-def test_generate_simple_dconvert_model(simplesurfs):
+def test_generate_simple_dconvert_model(
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Test creating a simple domain_conversion model."""
 
     dlist, tlist = simplesurfs
@@ -140,7 +150,9 @@ def test_generate_simple_dconvert_model(simplesurfs):
     assert tlist[2].values.mean() == pytest.approx(new_tlist[2].values.mean(), rel=0.01)
 
 
-def test_domainconvert_surfaces_outside(simplesurfs):
+def test_domainconvert_surfaces_outside(
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Convert the cube back and forth in time and depth."""
 
     dc = DomainConversion(*simplesurfs)
@@ -153,7 +165,10 @@ def test_domainconvert_surfaces_outside(simplesurfs):
         dc.depth_convert_surfaces([another_surf])
 
 
-def test_generate_simple_velocube(smallcube, simplesurfs):
+def test_generate_simple_velocube(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Test creating a simple velocity cube."""
 
     plot_section(smallcube, simplesurfs, title="Time domain")
@@ -186,7 +201,12 @@ def test_generate_simple_velocube(smallcube, simplesurfs):
         [(0.1, 20.0, 100), (0.1, 20, 100.0)],
     ],
 )
-def test_proposing_zinc_etc_depthconvert(smallcube, simplesurfs, input, expected):
+def test_proposing_zinc_etc_depthconvert(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+    input: tuple[float, float, float],
+    expected: tuple[float, float, float],
+) -> None:
     """Test various proposal of zinc, zmax, zmin."""
 
     dc = DomainConversion(*simplesurfs)
@@ -217,7 +237,12 @@ def test_proposing_zinc_etc_depthconvert(smallcube, simplesurfs, input, expected
         [(0.1, 20.0, 100), (0.1, 20, 100.0)],
     ],
 )
-def test_proposing_zinc_etc_timeconvert(smallcube, simplesurfs, input, expected):
+def test_proposing_zinc_etc_timeconvert(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+    input: tuple[float, float, float],
+    expected: tuple[float, float, float],
+) -> None:
     """Test various proposal of tinc, tmax, tmin."""
 
     dc = DomainConversion(*simplesurfs)
@@ -234,7 +259,10 @@ def test_proposing_zinc_etc_timeconvert(smallcube, simplesurfs, input, expected)
     assert max == pytest.approx(expected_tmax)
 
 
-def test_domainconvert_back_and_forth(smallcube, simplesurfs):
+def test_domainconvert_back_and_forth(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Convert the cube back and forth in time and depth."""
 
     dlist, tlist = simplesurfs
@@ -253,7 +281,10 @@ def test_domainconvert_back_and_forth(smallcube, simplesurfs):
     assert abs((smallcube.values - new_time_cube.values).mean()) < 0.01
 
 
-def test_domainconvert_cube_outside(smallcube, simplesurfs):
+def test_domainconvert_cube_outside(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
     """Convert the cube back and forth in time and depth."""
 
     dc = DomainConversion(*simplesurfs)
