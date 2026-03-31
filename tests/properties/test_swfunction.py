@@ -2,6 +2,7 @@
 
 # for tests vs RMS cf /private/jriv/work/testing/swfunc/test_swfunc.rms13.1.2
 import math
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -22,7 +23,14 @@ from fmu.tools.properties import SwFunction
         (1, -2, 13, False, "truncated_cell_corners_above_ffl", 0.412536),
     ],
 )
-def test_swj_simple(avalue, bvalue, ffl, direct, cellmethod, expected_mean):
+def test_swj_simple(
+    avalue: float,
+    bvalue: float,
+    ffl: float,
+    direct: bool,
+    cellmethod: str,
+    expected_mean: float,
+) -> None:
     """Test a simple SwJ setup, expected mean are checked with RMS Sw job"""
 
     grid1 = xtgeo.create_box_grid((10, 10, 20), increment=(1, 1, 1), origin=(0, 0, 0))
@@ -44,7 +52,7 @@ def test_swj_simple(avalue, bvalue, ffl, direct, cellmethod, expected_mean):
     assert sw.values.mean() == pytest.approx(expected_mean, rel=0.01)
 
 
-def test_swj_simple_x_zero():
+def test_swj_simple_x_zero() -> None:
     """Test that masked cells are properly treated"""
 
     grid1 = xtgeo.create_box_grid((2, 3, 1), increment=(1, 1, 1), origin=(0, 0, 0))
@@ -93,7 +101,7 @@ def test_swj_simple_x_zero():
     assert sw.values.mask[0, 0, 0]
 
 
-def test_swj_simple_threshold_2grids():
+def test_swj_simple_threshold_2grids() -> None:
     """Test a simple SwJ setup, expected mean are checked with RMS Sw job.
 
     In this case, the threshold height will be approx 5.42 meters. Values for assertion
@@ -150,7 +158,13 @@ def test_swj_simple_threshold_2grids():
         (False, "truncated_cell_corners_above_ffl", 0.67931, 0.046724),  # n/a vs RMS
     ],
 )
-def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1, testdata_path):
+def test_swj_simple_reek(
+    direct: bool,
+    cellmethod: str,
+    expected_mean: float,
+    exp_cell1: float,
+    testdata_path: Path,
+) -> None:
     """Test a simple SwJ setup, expected mean are checked with RMS Sw job"""
 
     griddata1 = testdata_path / "3dgrids/reek/reek_sim_grid.roff"
@@ -186,7 +200,7 @@ def test_swj_simple_reek(direct, cellmethod, expected_mean, exp_cell1, testdata_
     assert float(sw.values[32, 35, 6]) == pytest.approx(exp_cell1, abs=0.0001)
 
 
-def test_sw_bvw():
+def test_sw_bvw() -> None:
     """Test a simple BVW setup, expected values are checked from spreadsheet.
 
     In BVW, the Sw = A * P^B * poro^C
@@ -271,7 +285,7 @@ def test_sw_bvw():
     assert sw10_i == pytest.approx(sw10, abs=0.0001)
 
 
-def test_sw_brooks_corey():
+def test_sw_brooks_corey() -> None:
     """Test a simple Brooks-Corey setup, expected values are checked from spreadsheet.
 
     In BVW, the Sw = (PCNe / Pcn)^(1/N)
