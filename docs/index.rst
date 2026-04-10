@@ -14,6 +14,7 @@ Contents:
    generate_petro_jobs_for_field_update
    properties
    domain_conversion
+   nestedhybridgrid
    create_rft_ertobs
    create_fluid_contacts_from_grid
    rename_rms_scripts

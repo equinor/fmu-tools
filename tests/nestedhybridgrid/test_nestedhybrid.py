@@ -1,0 +1,441 @@
+"""Tests for fmu.tools.nestedhybridgrid.nestedhybrid."""
+
+import numpy as np
+import pandas as pd
+import pytest
+import xtgeo
+
+from fmu.tools.nestedhybridgrid import (
+    create_nested_hybrid_grid,
+    nnc_to_flowsimulator_input,
+    nnc_to_gridproperty,
+)
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _make_box_grid_with_region(
+    dimension=(6, 6, 3),
+    increment=(50.0, 50.0, 10.0),
+    target_region_id=2,
+):
+    """Create a simple box grid with a region property.
+
+    The grid is split into two regions along the I-axis:
+      - region 1: columns 0 .. ncol//2 - 1
+      - region 2: columns ncol//2 .. ncol - 1
+
+    Returns (grid, region, target_region_id).
+    """
+    grid = xtgeo.create_box_grid(dimension, increment=increment)
+    ncol, nrow, nlay = dimension
+
+    region_values = np.ones((ncol, nrow, nlay), dtype=np.int32)
+    half = ncol // 2
+    region_values[half:, :, :] = target_region_id
+
+    region = xtgeo.GridProperty(
+        grid, name="REGION", discrete=True, values=region_values
+    )
+    return grid, region, target_region_id
+
+
+def _make_constant_property(grid, name, value):
+    """Create a continuous GridProperty with a constant value."""
+    vals = np.full(grid.dimensions, value, dtype=np.float64)
+    return xtgeo.GridProperty(grid, name=name, values=vals)
+
+
+# ---------------------------------------------------------------------------
+# Tests for create_nested_hybrid_grid
+# ---------------------------------------------------------------------------
+
+
+class TestCreateNestedHybridGrid:
+    """Tests for the create_nested_hybrid_grid function."""
+
+    def test_returns_grid(self):
+        """Function must return an xtgeo.Grid."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        merged, nnc_table = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(1, 1, 1)
+        )
+        assert isinstance(merged, xtgeo.Grid)
+        assert isinstance(nnc_table, pd.DataFrame)
+
+    def test_basic_merge_dimensions(self):
+        """Merged grid should have expected dimensions."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+
+        # grid_merge places grid2 with a 1-column gap:
+        # ncol = grid1.ncol + 1 + grid2.ncol
+        assert merged.ncol > grid.ncol
+        assert merged.nrow >= grid.nrow
+        assert merged.nlay >= grid.nlay
+
+    def test_nest_id_property_attached(self):
+        """The merged grid must have a NEST_ID property."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+
+        nest_id = merged.get_prop_by_name("NEST_ID")
+        assert nest_id is not None
+        unique_vals = set(np.unique(np.ma.filled(nest_id.values, fill_value=0)))
+        # Must contain at least mother (1) and refined (2) cells
+        assert 1 in unique_vals
+        assert 2 in unique_vals
+
+    def test_nest_id_values_consistent(self):
+        """Active cells should only have NEST_ID in {1, 2}."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+
+        nest_id = merged.get_prop_by_name("NEST_ID")
+        actnum = merged.get_actnum()
+
+        active_mask = actnum.values == 1
+        nest_active = np.ma.filled(nest_id.values, fill_value=0)[active_mask]
+        assert set(np.unique(nest_active)).issubset({1, 2})
+
+    def test_refinement_increases_cells(self):
+        """Refinement > 1 should produce a merged grid with more total cells."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        merged_1x, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(1, 1, 1)
+        )
+        merged_2x, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+        assert merged_2x.ntotal > merged_1x.ntotal
+
+    def test_invalid_refinement_raises(self):
+        """Refinement factors < 1 should raise ValueError."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        with pytest.raises(ValueError, match="Refinement factors must be >= 1"):
+            create_nested_hybrid_grid(grid, region, rid, refinement=(0, 1, 1))
+
+    def test_original_grid_not_mutated(self):
+        """The caller's grid and region should not be modified."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+
+        orig_ncol = grid.ncol
+        orig_nactive = grid.nactive
+        orig_region_sum = int(np.ma.filled(region.values, 0).sum())
+
+        _ = create_nested_hybrid_grid(grid, region, rid, refinement=(2, 2, 1))
+
+        assert grid.ncol == orig_ncol
+        assert grid.nactive == orig_nactive
+        assert int(np.ma.filled(region.values, 0).sum()) == orig_region_sum
+
+
+# ---------------------------------------------------------------------------
+# Tests for get_transmissibilities with nested hybrid NNCs
+# ---------------------------------------------------------------------------
+
+
+class TestTransmissibilitiesOnMergedGrid:
+    """Test calling get_transmissibilities on the merged grid with NEST_ID."""
+
+    @staticmethod
+    def _build_merged_with_props(dimension=(6, 6, 2), refinement=(1, 1, 1)):
+        """Helper: build merged grid and attach constant perm/ntg properties."""
+        grid, region, rid = _make_box_grid_with_region(dimension=dimension)
+        merged, nnc_table = create_nested_hybrid_grid(
+            grid, region, rid, refinement=refinement
+        )
+
+        permx = _make_constant_property(merged, "PERMX", 100.0)
+        permy = _make_constant_property(merged, "PERMY", 100.0)
+        permz = _make_constant_property(merged, "PERMZ", 10.0)
+        ntg = _make_constant_property(merged, "NTG", 1.0)
+        return merged, nnc_table, permx, permy, permz, ntg
+
+    def test_transmissibilities_return_types(self):
+        """get_transmissibilities should return the expected types."""
+        merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
+
+        tranx, trany, tranz, nnc, nnc_nh, rbnd = merged.get_transmissibilities(
+            permx=permx,
+            permy=permy,
+            permz=permz,
+            ntg=ntg,
+            nnc_table=nnc_table,
+        )
+        assert isinstance(tranx, xtgeo.GridProperty)
+        assert isinstance(trany, xtgeo.GridProperty)
+        assert isinstance(tranz, xtgeo.GridProperty)
+        assert isinstance(nnc, pd.DataFrame)
+        assert nnc_nh is None or isinstance(nnc_nh, pd.DataFrame)
+        assert rbnd is None or isinstance(rbnd, xtgeo.GridProperty)
+
+    def test_transmissibilities_positive(self):
+        """Transmissibility values should be non-negative for a uniform grid."""
+        merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
+
+        tranx, trany, tranz, *_ = merged.get_transmissibilities(
+            permx=permx,
+            permy=permy,
+            permz=permz,
+            ntg=ntg,
+            nnc_table=nnc_table,
+        )
+        for tprop in (tranx, trany, tranz):
+            vals = np.ma.filled(tprop.values, fill_value=0.0)
+            assert np.all(vals >= 0.0)
+
+    def test_nnc_dataframe_has_expected_columns(self):
+        """The NNC DataFrame should have the standard columns."""
+        merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
+
+        _, _, _, nnc, *_ = merged.get_transmissibilities(
+            permx=permx,
+            permy=permy,
+            permz=permz,
+            ntg=ntg,
+            nnc_table=nnc_table,
+        )
+        expected = {"I1", "J1", "K1", "I2", "J2", "K2", "T", "TYPE"}
+        assert expected.issubset(set(nnc.columns))
+
+    def test_without_nnc_table(self):
+        """get_transmissibilities without nnc_table should still work."""
+        merged, _, permx, permy, permz, ntg = self._build_merged_with_props()
+
+        tranx, trany, tranz, nnc, nnc_nh, rbnd = merged.get_transmissibilities(
+            permx=permx,
+            permy=permy,
+            permz=permz,
+            ntg=ntg,
+        )
+        assert isinstance(tranx, xtgeo.GridProperty)
+        assert nnc_nh is None
+        assert rbnd is None
+
+
+# ---------------------------------------------------------------------------
+# Tests for nnc_to_gridproperty
+# ---------------------------------------------------------------------------
+
+
+def _sample_nnc_df():
+    """A small NNC DataFrame for testing utility functions."""
+    return pd.DataFrame(
+        {
+            "I1": [1, 1, 1],
+            "J1": [1, 1, 1],
+            "K1": [1, 1, 1],
+            "I2": [3, 3, 3],
+            "J2": [1, 1, 1],
+            "K2": [1, 1, 1],
+            "T": [5.0, 7.0, 2.0],
+            "TYPE": ["NestedHybrid", "NestedHybrid", "NestedHybrid"],
+            "DIRECTION": ["I+", "J-", "K+"],
+        }
+    )
+
+
+class TestNncToGridproperty:
+    """Tests for nnc_to_gridproperty."""
+
+    def test_returns_three_gridproperties(self):
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        tx, ty, tz = nnc_to_gridproperty(grid, _sample_nnc_df())
+        assert isinstance(tx, xtgeo.GridProperty)
+        assert isinstance(ty, xtgeo.GridProperty)
+        assert isinstance(tz, xtgeo.GridProperty)
+
+    def test_property_names(self):
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        tx, ty, tz = nnc_to_gridproperty(grid, _sample_nnc_df())
+        assert tx.name == "TRANX_NNC"
+        assert ty.name == "TRANY_NNC"
+        assert tz.name == "TRANZ_NNC"
+
+    def test_plus_direction_maps_to_i1j1k1(self):
+        """I+ row should place T at cell (I1, J1, K1) in TRANX_NNC."""
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        df = pd.DataFrame(
+            {
+                "I1": [2],
+                "J1": [1],
+                "K1": [1],
+                "I2": [4],
+                "J2": [1],
+                "K2": [1],
+                "T": [10.0],
+                "DIRECTION": ["I+"],
+            }
+        )
+        tx, _, _ = nnc_to_gridproperty(grid, df)
+        # 1-based (2,1,1) -> 0-based (1,0,0)
+        assert tx.values[1, 0, 0] == pytest.approx(10.0)
+
+    def test_minus_direction_maps_to_i2j2k2(self):
+        """J- row should place T at cell (I2, J2, K2) in TRANY_NNC."""
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        df = pd.DataFrame(
+            {
+                "I1": [1],
+                "J1": [1],
+                "K1": [1],
+                "I2": [3],
+                "J2": [2],
+                "K2": [1],
+                "T": [8.0],
+                "DIRECTION": ["J-"],
+            }
+        )
+        _, ty, _ = nnc_to_gridproperty(grid, df)
+        # 1-based (3,2,1) -> 0-based (2,1,0)
+        assert ty.values[2, 1, 0] == pytest.approx(8.0)
+
+    def test_untouched_cells_are_fill(self):
+        """Cells without an NNC should have value -1."""
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        df = pd.DataFrame(
+            {
+                "I1": [1],
+                "J1": [1],
+                "K1": [1],
+                "I2": [3],
+                "J2": [1],
+                "K2": [1],
+                "T": [5.0],
+                "DIRECTION": ["I+"],
+            }
+        )
+        tx, _, _ = nnc_to_gridproperty(grid, df)
+        # cell (0,0,0) has value 5.0; cell (0,0,1) should be -1
+        assert tx.values[0, 0, 1] == pytest.approx(-1.0)
+
+    def test_summing_parallel_paths(self):
+        """Two rows mapping to the same cell should sum."""
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        df = pd.DataFrame(
+            {
+                "I1": [2, 2],
+                "J1": [1, 1],
+                "K1": [1, 1],
+                "I2": [4, 4],
+                "J2": [1, 1],
+                "K2": [1, 1],
+                "T": [3.0, 7.0],
+                "DIRECTION": ["I+", "I+"],
+            }
+        )
+        tx, _, _ = nnc_to_gridproperty(grid, df)
+        assert tx.values[1, 0, 0] == pytest.approx(10.0)
+
+    def test_missing_columns_raises(self):
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        bad_df = pd.DataFrame({"I1": [1], "J1": [1]})
+        with pytest.raises(ValueError, match="Missing required columns"):
+            nnc_to_gridproperty(grid, bad_df)
+
+    def test_empty_dataframe(self):
+        """Empty nnc_df should return properties filled with -1."""
+        grid = xtgeo.create_box_grid((4, 4, 2))
+        df = pd.DataFrame(
+            columns=["I1", "J1", "K1", "I2", "J2", "K2", "T", "DIRECTION"]
+        )
+        tx, ty, tz = nnc_to_gridproperty(grid, df)
+        assert np.all(tx.values == pytest.approx(-1.0))
+        assert np.all(ty.values == pytest.approx(-1.0))
+        assert np.all(tz.values == pytest.approx(-1.0))
+
+
+# ---------------------------------------------------------------------------
+# Tests for nnc_to_flowsimulator_input
+# ---------------------------------------------------------------------------
+
+
+class TestNncToFlowsimulatorInput:
+    """Tests for nnc_to_flowsimulator_input."""
+
+    def test_writes_file(self, tmp_path):
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(_sample_nnc_df(), out)
+        assert out.exists()
+
+    def test_file_starts_with_nnc_keyword(self, tmp_path):
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(_sample_nnc_df(), out)
+        lines = out.read_text().splitlines()
+        assert lines[0] == "NNC"
+
+    def test_file_ends_with_slash(self, tmp_path):
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(_sample_nnc_df(), out)
+        lines = out.read_text().splitlines()
+        assert lines[-1] == "/"
+
+    def test_correct_number_of_data_lines(self, tmp_path):
+        """One data line per row between NNC header and closing /."""
+        df = _sample_nnc_df()
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(df, out)
+        lines = out.read_text().splitlines()
+        # header + N data lines + closing /
+        assert len(lines) == len(df) + 2
+
+    def test_data_line_contains_indices_and_t(self, tmp_path):
+        df = pd.DataFrame(
+            {
+                "I1": [2],
+                "J1": [3],
+                "K1": [4],
+                "I2": [5],
+                "J2": [6],
+                "K2": [7],
+                "T": [1.234567],
+                "TYPE": ["NestedHybrid"],
+                "DIRECTION": ["I+"],
+            }
+        )
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(df, out)
+        content = out.read_text()
+        assert "2" in content and "3" in content and "4" in content
+        assert "5" in content and "6" in content and "7" in content
+        assert "1.234567" in content
+
+    def test_comments_with_type_and_direction(self, tmp_path):
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(_sample_nnc_df(), out)
+        content = out.read_text()
+        assert "-- NestedHybrid I+" in content
+
+    def test_no_comments_without_optional_columns(self, tmp_path):
+        df = pd.DataFrame(
+            {
+                "I1": [1],
+                "J1": [1],
+                "K1": [1],
+                "I2": [2],
+                "J2": [1],
+                "K2": [1],
+                "T": [1.0],
+            }
+        )
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(df, out)
+        content = out.read_text()
+        assert "--" not in content
+
+    def test_missing_columns_raises(self, tmp_path):
+        out = tmp_path / "nnc.inc"
+        bad_df = pd.DataFrame({"I1": [1], "T": [1.0]})
+        with pytest.raises(ValueError, match="Missing required columns"):
+            nnc_to_flowsimulator_input(bad_df, out)
+
+    def test_empty_dataframe_writes_skeleton(self, tmp_path):
+        """Empty nnc_df should produce just NNC header and closing /."""
+        df = pd.DataFrame(columns=["I1", "J1", "K1", "I2", "J2", "K2", "T"])
+        out = tmp_path / "nnc.inc"
+        nnc_to_flowsimulator_input(df, out)
+        lines = out.read_text().splitlines()
+        assert lines == ["NNC", "/"]
