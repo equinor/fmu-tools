@@ -27,6 +27,9 @@ from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
 from fmu.tools.qcproperties.qcproperties import QCProperties  # noqa
 from fmu.tools.domainconversion.dconvert import DomainConversion  # noqa
 from fmu.tools.utilities.sample_attributes import sample_attributes_for_sim2seis  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import create_nested_hybrid_grid  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_flowsimulator_input  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_gridproperty  # noqa
 
 __all__ = [
     "extract_grid_zone_tops",
@@ -34,6 +37,9 @@ __all__ = [
     "QCProperties",
     "DomainConversion",
     "sample_attributes_for_sim2seis",
+    "create_nested_hybrid_grid",
+    "nnc_to_flowsimulator_input",
+    "nnc_to_gridproperty",
 ]
 
 if not ROXAR:
