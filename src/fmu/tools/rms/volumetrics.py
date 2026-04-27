@@ -68,7 +68,6 @@ def rmsvolumetrics_txt2df(
     regionrenamer: Optional[Callable[[str], str]] = None,
     zonerenamer: Optional[Callable[[str], str]] = None,
 ) -> pd.DataFrame:
-    # pylint: disable=too-many-arguments
     """Parse the volumetrics txt file from RMS as Pandas dataframe
 
     Columns will be renamed according to FMU standard,

@@ -16,9 +16,6 @@ from fmu.tools.rms.create_rft_ertobs import check_and_parse_config
 
 logging.basicConfig(level=logging.INFO)
 
-# Pylint exceptions for the mocked RMS object:
-# pylint: disable=too-few-public-methods,no-self-use
-
 
 class SurveyPointSeries:
     """Object representing all wellpaths in a gridmodel"""
@@ -445,7 +442,6 @@ def test_configparsing(tmpdir, caplog):
     gives correct error messages, and returns a dict with defaults filled in"""
 
     with pytest.raises(TypeError):
-        # pylint: disable=no-value-for-parameter
         check_and_parse_config()
     with pytest.raises(AssertionError):
         check_and_parse_config({})
@@ -531,7 +527,6 @@ def test_parse_alias_config(tmpdir):
     alias_dframe = pd.DataFrame(data=[["NO 33/44 A-1", "A-1"], ["NO 33/44 A-2", "A-2"]])
     alias_dframe.to_csv("alias.csv", index=False)
     with pytest.raises(ValueError):
-        # pylint: disable=expression-not-assigned
         check_and_parse_config({**minimal_config, "alias_file": "alias.csv"})["alias"]
 
     # Use default header names
