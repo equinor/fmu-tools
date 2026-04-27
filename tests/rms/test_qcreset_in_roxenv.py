@@ -117,7 +117,6 @@ def fixture_create_project(testdata_path):
 def test_qcreset():
     """Test qcreset metod in roxapi."""
     # ==================================================================================
-    # pylint: disable=invalid-name
     from fmu.tools.rms import qcreset  # noqa
 
     rox = xtgeo.RoxUtils(project=PRJ)

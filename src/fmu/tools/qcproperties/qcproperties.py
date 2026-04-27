@@ -139,7 +139,6 @@ class QCProperties:
 
         self._proptypes_all.append(statistics.controls["property_type"])
 
-    # pylint: disable = no-self-argument, not-callable
     def _check_multiple_filters(method: Any):
         """Decorator function for extracting statistics with different filters"""
 

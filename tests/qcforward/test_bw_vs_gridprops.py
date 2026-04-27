@@ -42,7 +42,7 @@ def test_bw_vs_gridprops_asfiles(datainput):
 
     rep = pd.read_csv(datainput["report"])
     rep.sort_values(by=["WELL", "COMPARE(BW:MODEL)"], inplace=True, ignore_index=True)
-    # pylint: disable=no-member, unsubscriptable-object
+
     assert rep.iloc[3].at["MATCH%"] == 85.0
     assert rep.iloc[3].at["STATUS"] == "OK"
 
@@ -69,7 +69,6 @@ def test_bw_vs_gridprops_asfiles_shall_stop(tmp_path, datainput):
         job.run(data)
     assert "STOP criteria is found" in str(err)
     rep = pd.read_csv(data["report"])
-    # pylint: disable=no-member, unsubscriptable-object
     rep.sort_values(by=["WELL", "COMPARE(BW:MODEL)"], inplace=True, ignore_index=True)
     assert rep.iloc[3].at["MATCH%"] == 85.0
     assert rep.iloc[3].at["STATUS"] == "STOP"
@@ -91,7 +90,6 @@ def test_bw_vs_gridprops_asfiles_change_tolerance(tmp_path, datainput):
         job.run(data)
     assert "STOP criteria is found" in str(err)
     rep = pd.read_csv(data["report"])
-    # pylint: disable=no-member, unsubscriptable-object
     rep.sort_values(by=["WELL", "COMPARE(BW:MODEL)"], inplace=True, ignore_index=True)
     assert rep.iloc[3].at["MATCH%"] == 85.0
     assert rep.iloc[3].at["STATUS"] == "STOP"

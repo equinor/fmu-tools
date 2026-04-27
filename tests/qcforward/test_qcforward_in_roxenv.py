@@ -116,7 +116,6 @@ def test_qcforward_wzonation_vs_grid_stops(tmp_path):
     """Test wzonation vs grid inside RMS, and here it will STOP."""
     # ==================================================================================
     # qcforward well vs grid (mimic python inside RMS input!)
-    # pylint: disable=invalid-name
     from fmu.tools import qcforward
 
     PRJ1 = PRJ
@@ -162,7 +161,6 @@ def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path):
     """Test wzonation vs grid inside RMS, and here it will run OK."""
     # ==================================================================================
     # qcforward well vs grid (mimic python inside RMS input!)
-    # pylint: disable=invalid-name
     from fmu.tools import qcforward
 
     PRJ1 = PRJ
@@ -211,7 +209,6 @@ def test_qcforward_gridquality_ok(tmp_path):
     """Test qcforward gridquality parameters that runs ok."""
     # ==================================================================================
     # qcforward grid quality (mimic python inside RMS input!)
-    # pylint: disable=invalid-name
     from fmu.tools import qcforward
 
     PRJ1 = PRJ
@@ -252,7 +249,6 @@ def test_qcforward_gridquality_fail(tmp_path):
     """Test qcforward gridquality parameters that shall fail on faulted."""
     # ==================================================================================
     # qcforward grid quality (mimic python inside RMS input!)
-    # pylint: disable=invalid-name
     from fmu.tools import qcforward
 
     PRJ1 = PRJ
