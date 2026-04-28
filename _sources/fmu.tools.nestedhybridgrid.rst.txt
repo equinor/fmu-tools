@@ -1,0 +1,21 @@
+fmu.tools.nestedhybridgrid package
+==================================
+
+Submodules
+----------
+
+fmu.tools.nestedhybridgrid.nestedhybrid module
+----------------------------------------------
+
+.. automodule:: fmu.tools.nestedhybridgrid.nestedhybrid
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: fmu.tools.nestedhybridgrid
+   :members:
+   :undoc-members:
+   :show-inheritance:

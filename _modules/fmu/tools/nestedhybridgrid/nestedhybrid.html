@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.29.1.dev6+gad6291991 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=3fa44bb3"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            fmu-tools
+              <img src="../../../../_static/equinor-logo2.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">fmu-tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../fmudesign.html">FMU design matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcforward.html">The qcforward functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcproperties.html">The qcproperties class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../qcreset.html">The qcreset module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../properties.html">The properties package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../nestedhybridgrid.html">Nested Hybrid Grids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_rft_ertobs.html">create_rft_ertobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../create_fluid_contacts_from_grid.html">rms.create_fluid_contacts_from_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rms_import_localmodule.html">rms.import_localmodule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../generate_bw_per_facies.html">rms.create_bw_per_facies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../update_petro_real.html">rms.update_petro_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../export_and_import_fields.html">rms.export_and_import_field_parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../copy_rms_param_to_ertbox_grid.html">rms.copy_rms_param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utilities.html">The fmu-tools utilities package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rmsvolumetrics2csv.html">rmsvolumetrics2csv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ensembles.html">Ensembles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API for fmu.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmu-tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fmu.tools.nestedhybridgrid.nestedhybrid</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fmu.tools.nestedhybridgrid.nestedhybrid</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Nested hybrid grid creation.</span>
+
+<span class="sd">Create a merged grid where one region is refined (subdivided) and stitched</span>
+<span class="sd">back into the original grid via Non-Neighbour Connections (NNCs).</span>
+
+<span class="sd">Public API</span>
+<span class="sd">----------</span>
+<span class="sd">create_nested_hybrid_grid : function</span>
+<span class="sd">    Build a nested hybrid grid from a coarse grid, a region property,</span>
+<span class="sd">    and a refinement specification.</span>
+<span class="sd">nnc_to_gridproperty : function</span>
+<span class="sd">    Convert NNC transmissibility DataFrames to GridProperty instances.</span>
+<span class="sd">nnc_to_flowsimulator_input : function</span>
+<span class="sd">    Write NNC transmissibilities to a flow-simulator input file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Internal helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crop_for_region</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+    <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+    <span class="n">region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop *grid* to the bounding box of *region_id*.</span>
+
+<span class="sd">    Returns (cropped_grid, crop_origin) where *crop_origin* is the 0-based</span>
+<span class="sd">    (i, j, k) offset of the crop start inside the original grid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">region_values</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">region_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">region_values</span> <span class="o">==</span> <span class="n">region_id</span><span class="p">)</span>
+
+    <span class="n">imin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">imax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">jmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">jmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">kmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">kmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Region </span><span class="si">%d</span><span class="s2"> bounding box (1-based): i=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">, j=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">, k=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">region_id</span><span class="p">,</span>
+        <span class="n">imin</span><span class="p">,</span>
+        <span class="n">imax</span><span class="p">,</span>
+        <span class="n">jmin</span><span class="p">,</span>
+        <span class="n">jmax</span><span class="p">,</span>
+        <span class="n">kmin</span><span class="p">,</span>
+        <span class="n">kmax</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">cropped_grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">cropped_grid</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">imin</span><span class="p">,</span> <span class="n">imax</span><span class="p">),</span> <span class="p">(</span><span class="n">jmin</span><span class="p">,</span> <span class="n">jmax</span><span class="p">),</span> <span class="p">(</span><span class="n">kmin</span><span class="p">,</span> <span class="n">kmax</span><span class="p">),</span> <span class="n">props</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Cropped grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cropped_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cropped_grid</span><span class="p">,</span> <span class="p">(</span><span class="n">imin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jmin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_boundary_faces</span><span class="p">(</span>
+    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+    <span class="n">target_region</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find cell faces on the boundary between *target_region* and other active regions.</span>
+
+<span class="sd">    Returns a list of ``(outside_ijk, inside_ijk, face_dir)`` where indices</span>
+<span class="sd">    are 0-based and *face_dir* is one of ``&#39;i+&#39;, &#39;i-&#39;, &#39;j+&#39;, &#39;j-&#39;, &#39;k+&#39;, &#39;k-&#39;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">region_prop</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">,</span> <span class="n">nk</span> <span class="o">=</span> <span class="n">filled</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">in_target</span> <span class="o">=</span> <span class="n">filled</span> <span class="o">==</span> <span class="n">target_region</span>
+    <span class="n">outside_active</span> <span class="o">=</span> <span class="p">(</span><span class="n">filled</span> <span class="o">!=</span> <span class="n">target_region</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filled</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">faces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># i+</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:</span> <span class="n">ni</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;i+&quot;</span><span class="p">))</span>
+
+    <span class="c1"># i-</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:</span> <span class="n">ni</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;i-&quot;</span><span class="p">))</span>
+
+    <span class="c1"># j+</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">nj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nj</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;j+&quot;</span><span class="p">))</span>
+
+    <span class="c1"># j-</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nj</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">nj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">jdx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;j-&quot;</span><span class="p">))</span>
+
+    <span class="c1"># k+</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nk</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;k+&quot;</span><span class="p">))</span>
+
+    <span class="c1"># k-</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nk</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">kdx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="s2">&quot;k-&quot;</span><span class="p">))</span>
+
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> boundary faces for region </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">),</span> <span class="n">target_region</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">faces</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_nnc_table</span><span class="p">(</span>
+    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+    <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">crop_origin</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">coarse_ncol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute NNC cell-pair mapping between mother and refined cells.</span>
+
+<span class="sd">    For each boundary face between the target region and the surrounding mother</span>
+<span class="sd">    cells, this function determines which refined sub-cells in the merged grid</span>
+<span class="sd">    connect to which mother cell, and through which face direction.</span>
+
+<span class="sd">    The mapping is purely topological (index-based) — no geometric computation</span>
+<span class="sd">    is performed here.  The resulting table is intended to be passed to</span>
+<span class="sd">    :meth:`xtgeo.Grid.get_transmissibilities` so that it can compute the</span>
+<span class="sd">    actual transmissibility for each cell pair.</span>
+
+<span class="sd">    Convention:</span>
+<span class="sd">        - ``I1, J1, K1`` is always the **mother** cell (1-based, merged grid).</span>
+<span class="sd">        - ``I2, J2, K2`` is always the **refined** cell (1-based, merged grid).</span>
+<span class="sd">        - ``DIRECTION`` is from the mother cell&#39;s perspective (e.g. ``&quot;I+&quot;``</span>
+<span class="sd">          means looking in the positive I-direction from the mother cell</span>
+<span class="sd">          you reach the refined cell).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        region_prop: Region property on the original (unmodified) grid.</span>
+<span class="sd">        target_region_id: Region value that was refined.</span>
+<span class="sd">        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.</span>
+<span class="sd">        refinement: ``(rcol, rrow, rlay)`` refinement factors.</span>
+<span class="sd">        coarse_ncol: Number of columns in the coarse grid (grid1 in the merge).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">_find_boundary_faces</span><span class="p">(</span><span class="n">region_prop</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
+
+    <span class="n">rcol</span><span class="p">,</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span>
+    <span class="n">i0</span><span class="p">,</span> <span class="n">j0</span><span class="p">,</span> <span class="n">k0</span> <span class="o">=</span> <span class="n">crop_origin</span>
+    <span class="c1"># In the merged grid, grid2 (refined) starts after a 1-column gap:</span>
+    <span class="n">i_offset</span> <span class="o">=</span> <span class="n">coarse_ncol</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">outside_ijk</span><span class="p">,</span> <span class="n">inside_ijk</span><span class="p">,</span> <span class="n">face_dir</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+        <span class="c1"># outside_ijk = mother cell (0-based in original/merged grid)</span>
+        <span class="n">mi</span><span class="p">,</span> <span class="n">mj</span><span class="p">,</span> <span class="n">mk</span> <span class="o">=</span> <span class="n">outside_ijk</span>
+
+        <span class="c1"># inside_ijk = target cell (0-based in original grid) → cropped coords</span>
+        <span class="n">ci</span> <span class="o">=</span> <span class="n">inside_ijk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">i0</span>
+        <span class="n">cj</span> <span class="o">=</span> <span class="n">inside_ijk</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">j0</span>
+        <span class="n">ck</span> <span class="o">=</span> <span class="n">inside_ijk</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">k0</span>
+
+        <span class="c1"># Determine direction from mother and which refined cells lie on the face.</span>
+        <span class="c1"># face_dir is from the *inside* (target) cell&#39;s perspective;</span>
+        <span class="c1"># the mother&#39;s perspective is the opposite sign.</span>
+        <span class="c1">#</span>
+        <span class="c1"># For I-faces: the varying refined indices are J and K  (rrow × rlay cells)</span>
+        <span class="c1"># For J-faces: the varying refined indices are I and K  (rcol × rlay cells)</span>
+        <span class="c1"># For K-faces: the varying refined indices are I and J  (rcol × rrow cells)</span>
+        <span class="n">ref_is</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+        <span class="n">ref_js</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+        <span class="n">ref_ks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;i-&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at higher I than mother → mother&#39;s I+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;I+&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="p">[</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">]</span>  <span class="c1"># first i-column of refined block (I- face)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;i+&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at lower I than mother → mother&#39;s I- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;I-&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="p">[</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last i-column (I+ face)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;j-&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at higher J than mother → mother&#39;s J+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;J+&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="p">[</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">]</span>  <span class="c1"># first j-row (J- face)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;j+&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at lower J than mother → mother&#39;s J- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;J-&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="p">[</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last j-row (J+ face)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;k-&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at higher K than mother → mother&#39;s K+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;K+&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">]</span>  <span class="c1"># first k-layer (K- face)</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;k+&quot;</span><span class="p">:</span>
+            <span class="c1"># Target at lower K than mother → mother&#39;s K- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;K-&quot;</span>
+            <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
+            <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
+            <span class="n">ref_ks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last k-layer (K+ face)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected face direction: </span><span class="si">{</span><span class="n">face_dir</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ri</span> <span class="ow">in</span> <span class="n">ref_is</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">rj</span> <span class="ow">in</span> <span class="n">ref_js</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="n">ref_ks</span><span class="p">:</span>
+                    <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;I1&quot;</span><span class="p">:</span> <span class="n">mi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;J1&quot;</span><span class="p">:</span> <span class="n">mj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;K1&quot;</span><span class="p">:</span> <span class="n">mk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;I2&quot;</span><span class="p">:</span> <span class="n">ri</span> <span class="o">+</span> <span class="n">i_offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;J2&quot;</span><span class="p">:</span> <span class="n">rj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;K2&quot;</span><span class="p">:</span> <span class="n">rk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;DIRECTION&quot;</span><span class="p">:</span> <span class="n">direction</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;NNC table: </span><span class="si">%d</span><span class="s2"> cell pairs from </span><span class="si">%d</span><span class="s2"> boundary faces&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;DIRECTION&quot;</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_set_actnum_by_region</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+    <span class="n">target_region</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">invert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deactivate cells based on region membership.&quot;&quot;&quot;</span>
+    <span class="n">actnum</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span>
+    <span class="n">region_values</span> <span class="o">=</span> <span class="n">region_prop</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">region_values</span> <span class="o">!=</span> <span class="n">target_region</span> <span class="k">if</span> <span class="n">invert</span> <span class="k">else</span> <span class="n">region_values</span> <span class="o">==</span> <span class="n">target_region</span>
+
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Deactivating </span><span class="si">%d</span><span class="s2"> cells (region </span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
+        <span class="s2">&quot;!=&quot;</span> <span class="k">if</span> <span class="n">invert</span> <span class="k">else</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span>
+        <span class="n">target_region</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">actnum</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">set_actnum</span><span class="p">(</span><span class="n">actnum</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Public API</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="create_nested_hybrid_grid">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.create_nested_hybrid_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_nested_hybrid_grid</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+    <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+    <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a nested hybrid grid by refining one region and merging it back.</span>
+
+<span class="sd">    The cells belonging to *target_region_id* are replaced by a refined</span>
+<span class="sd">    (subdivided) version of the same region.  A ``NEST_ID`` discrete property</span>
+<span class="sd">    is attached to the merged grid, encoding the nested hybrid structure:</span>
+
+<span class="sd">    - ``NEST_ID == 1``: coarse (mother) grid cells.</span>
+<span class="sd">    - ``NEST_ID == 2``: refined grid cells.</span>
+
+<span class="sd">    In addition, a **NNC mapping table** is returned that lists every</span>
+<span class="sd">    mother ↔ refined cell pair that should be connected by a Non-Neighbour</span>
+<span class="sd">    Connection (NNC).  The table is derived from the topological knowledge</span>
+<span class="sd">    available at merge time (which original cell was refined and how its</span>
+<span class="sd">    sub-cells map into the merged grid).</span>
+
+<span class="sd">    The table columns are:</span>
+
+<span class="sd">    - ``I1, J1, K1``: mother cell indices (1-based) in the merged grid.</span>
+<span class="sd">    - ``I2, J2, K2``: refined cell indices (1-based) in the merged grid.</span>
+<span class="sd">    - ``DIRECTION``: face direction from the mother cell&#39;s perspective</span>
+<span class="sd">      (``I+``, ``I-``, ``J+``, ``J-``, ``K+``, ``K-``).</span>
+
+<span class="sd">    This table can be passed to</span>
+<span class="sd">    :meth:`xtgeo.Grid.get_transmissibilities` to compute NNC</span>
+<span class="sd">    transmissibilities for the specified cell pairs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        grid: The original coarse grid.</span>
+<span class="sd">        region: A :class:`xtgeo.GridProperty` whose values identify the</span>
+<span class="sd">            regions (e.g. an integer region parameter).</span>
+<span class="sd">        target_region_id: The region value to refine.</span>
+<span class="sd">        refinement: ``(ncol, nrow, nlay)`` refinement factors.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple ``(merged_grid, nnc_table)`` where *merged_grid* is a new</span>
+<span class="sd">        :class:`xtgeo.Grid` with the refined region stitched back into the</span>
+<span class="sd">        coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping</span>
+<span class="sd">        mother cells to their connected refined cells.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">refinement</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Refinement factors must be &gt;= 1, got </span><span class="si">{</span><span class="n">refinement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Region property dimensions </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2"> do not match &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;grid dimensions </span><span class="si">{</span><span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Make working copies so the caller&#39;s objects are not mutated.</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Attach the region property to the grid.</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+
+    <span class="c1"># 1. Crop to the bounding box of the target region.</span>
+    <span class="n">cropped</span><span class="p">,</span> <span class="n">crop_origin</span> <span class="o">=</span> <span class="n">_crop_for_region</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
+
+    <span class="c1"># 2. Refine the cropped grid.</span>
+    <span class="n">refined</span> <span class="o">=</span> <span class="n">cropped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">rcol</span><span class="p">,</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span>
+    <span class="n">refined</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">refine_col</span><span class="o">=</span><span class="n">rcol</span><span class="p">,</span> <span class="n">refine_row</span><span class="o">=</span><span class="n">rrow</span><span class="p">,</span> <span class="n">refine_layer</span><span class="o">=</span><span class="n">rlay</span><span class="p">)</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Refined cropped grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">refined</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+
+    <span class="c1"># 3. Compute the NNC mapping table *before* deactivation mutates anything.</span>
+    <span class="c1">#    This uses the original region property to find boundary faces and</span>
+    <span class="c1">#    maps them through the crop → refine → merge index chain.</span>
+    <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">_compute_nnc_table</span><span class="p">(</span>
+        <span class="n">region_prop</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
+        <span class="n">target_region_id</span><span class="o">=</span><span class="n">target_region_id</span><span class="p">,</span>
+        <span class="n">crop_origin</span><span class="o">=</span><span class="n">crop_origin</span><span class="p">,</span>
+        <span class="n">refinement</span><span class="o">=</span><span class="n">refinement</span><span class="p">,</span>
+        <span class="n">coarse_ncol</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 4. Deactivate the target region in the coarse grid (will be replaced).</span>
+    <span class="n">coarse_region</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">_set_actnum_by_region</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coarse_region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># 5. In the refined grid keep only target-region cells active.</span>
+    <span class="n">refined_region</span> <span class="o">=</span> <span class="n">refined</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">_set_actnum_by_region</span><span class="p">(</span><span class="n">refined</span><span class="p">,</span> <span class="n">refined_region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 6. Create NEST_ID properties before merging (1=mother, 2=refined).</span>
+    <span class="n">nest_id_coarse</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span>
+        <span class="n">grid</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NEST_ID&quot;</span><span class="p">,</span>
+        <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+        <span class="n">codes</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;inactive&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;mother&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;refined&quot;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">nest_id_coarse</span><span class="p">)</span>
+
+    <span class="n">nest_id_refined</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span>
+        <span class="n">refined</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NEST_ID&quot;</span><span class="p">,</span>
+        <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">refined</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+        <span class="n">codes</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;inactive&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;mother&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;refined&quot;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">refined</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">nest_id_refined</span><span class="p">)</span>
+
+    <span class="c1"># 7. Merge the two grids.</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_merge</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refined</span><span class="p">)</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Merged grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">merged</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">merged</span><span class="p">,</span> <span class="n">nnc_table</span></div>
+
+
+
+<div class="viewcode-block" id="nnc_to_gridproperty">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.nnc_to_gridproperty">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nnc_to_gridproperty</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+    <span class="n">nnc_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert NNC transmissibility data to three GridProperty instances.</span>
+
+<span class="sd">    Takes the NNC DataFrame produced by :meth:`xtgeo.Grid.get_transmissibilities`</span>
+<span class="sd">    and maps transmissibility values onto grid cells, producing one property per</span>
+<span class="sd">    direction (I, J, K).</span>
+
+<span class="sd">    For rows where DIRECTION contains ``&quot;+&quot;``, the transmissibility value is</span>
+<span class="sd">    placed in cell ``(I1, J1, K1)``.  For rows where DIRECTION contains</span>
+<span class="sd">    ``&quot;-&quot;``, the value is placed in cell ``(I2, J2, K2)``.  Index columns</span>
+<span class="sd">    (I1, J1, K1, I2, J2, K2) are expected to be **1-based**.</span>
+
+<span class="sd">    If multiple rows map to the same cell and direction, the transmissibility</span>
+<span class="sd">    values are summed (parallel flow paths are additive).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        grid: The xtgeo Grid that defines the geometry.</span>
+<span class="sd">        nnc_df: A DataFrame with at least columns</span>
+<span class="sd">            ``I1, J1, K1, I2, J2, K2, T, DIRECTION``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple ``(tranx_nnc, trany_nnc, tranz_nnc)`` of</span>
+<span class="sd">        :class:`xtgeo.GridProperty` instances named ``&quot;TRANX_NNC&quot;``,</span>
+<span class="sd">        ``&quot;TRANY_NNC&quot;``, and ``&quot;TRANZ_NNC&quot;`` respectively.</span>
+<span class="sd">        Cells without an NNC value are set to ``-1.0``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;DIRECTION&quot;</span><span class="p">}</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">nlay</span>
+    <span class="n">fill</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+    <span class="n">arrays</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+        <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">touched</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="n">direction_col</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="p">[</span><span class="s2">&quot;DIRECTION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">is_plus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\+&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">is_minus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="n">prefix_col</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">):</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">arrays</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
+        <span class="n">tch</span> <span class="o">=</span> <span class="n">touched</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
+        <span class="n">mask_prefix</span> <span class="o">=</span> <span class="n">prefix_col</span> <span class="o">==</span> <span class="n">prefix</span>
+
+        <span class="c1"># &quot;+&quot; rows → use (I1, J1, K1)</span>
+        <span class="n">sel_plus</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_prefix</span> <span class="o">&amp;</span> <span class="n">is_plus</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sel_plus</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;I1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;J1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;K1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">ii</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ncol</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&lt;</span> <span class="n">nrow</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">kk</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">kk</span> <span class="o">&lt;</span> <span class="n">nlay</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">(</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]),</span> <span class="n">tt</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+            <span class="n">tch</span><span class="p">[</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># &quot;-&quot; rows → use (I2, J2, K2)</span>
+        <span class="n">sel_minus</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_prefix</span> <span class="o">&amp;</span> <span class="n">is_minus</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sel_minus</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;I2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;J2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;K2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">ii</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ncol</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&lt;</span> <span class="n">nrow</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">kk</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">kk</span> <span class="o">&lt;</span> <span class="n">nlay</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">(</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]),</span> <span class="n">tt</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+            <span class="n">tch</span><span class="p">[</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Set untouched cells to fill value</span>
+        <span class="n">arr</span><span class="p">[</span><span class="o">~</span><span class="n">tch</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+
+    <span class="n">prop_names</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANX_NNC&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANY_NNC&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANZ_NNC&quot;</span><span class="p">}</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">):</span>
+        <span class="n">props</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span>
+            <span class="n">grid</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">prop_names</span><span class="p">[</span><span class="n">prefix</span><span class="p">],</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arrays</span><span class="p">[</span><span class="n">prefix</span><span class="p">]),</span>
+            <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;J&quot;</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="nnc_to_flowsimulator_input">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.nnc_to_flowsimulator_input">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nnc_to_flowsimulator_input</span><span class="p">(</span>
+    <span class="n">nnc_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write NNC transmissibilities to a flow-simulator input file.</span>
+
+<span class="sd">    Produces a file with the ``NNC`` keyword suitable for reservoir</span>
+<span class="sd">    simulators that use Eclipse-style input decks, such as Eclipse and</span>
+<span class="sd">    OPM Flow.  The file can be included in the deck via ``INCLUDE``.</span>
+<span class="sd">    Each row of *nnc_df* becomes one NNC record with the six cell</span>
+<span class="sd">    indices and the transmissibility value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        nnc_df: A DataFrame with at least columns</span>
+<span class="sd">            ``I1, J1, K1, I2, J2, K2, T``.  Optional columns ``TYPE``</span>
+<span class="sd">            and ``DIRECTION`` are written as end-of-line comments.</span>
+<span class="sd">        filepath: Path to the output file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">}</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">has_type</span> <span class="o">=</span> <span class="s2">&quot;TYPE&quot;</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">has_dir</span> <span class="o">=</span> <span class="s2">&quot;DIRECTION&quot;</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;NNC</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;I1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;J1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;K1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;I2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;J2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;K2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">  /&quot;</span>
+            <span class="p">)</span>
+            <span class="n">comment_parts</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">has_type</span><span class="p">:</span>
+                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;TYPE&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">has_dir</span><span class="p">:</span>
+                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;DIRECTION&quot;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">comment_parts</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;  -- &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comment_parts</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;/</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;NNC keyword written to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Equinor.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #ff1243;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #474747;
+    }
+    .wy-side-nav-search > div.version {
+      color: white;
+    }
+  </style>
+
+
+</body>
+</html>

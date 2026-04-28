@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.29.1.dev4+ga0a249a08.d20260428 documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.29.1.dev6+gad6291991 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=808488e2"></script>
+      <script src="_static/documentation_options.js?v=3fa44bb3"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generate_petro_jobs_for_field_update.html">rms.generate_petro_jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="properties.html">The properties package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="domain_conversion.html">Domain conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nestedhybridgrid.html">Nested Hybrid Grids</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_rft_ertobs.html">create_rft_ertobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_fluid_contacts_from_grid.html">rms.create_fluid_contacts_from_grid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rename_rms_scripts.html">rms.rename_rms_scripts</a></li>
@@ -246,6 +247,23 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmu.tools.fipmapper.html#module-fmu.tools.fipmapper">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html">fmu.tools.nestedhybridgrid package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#module-fmu.tools.nestedhybridgrid.nestedhybrid">fmu.tools.nestedhybridgrid.nestedhybrid module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#public-api">Public API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.create_nested_hybrid_grid"><code class="docutils literal notranslate"><span class="pre">create_nested_hybrid_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.nnc_to_gridproperty"><code class="docutils literal notranslate"><span class="pre">nnc_to_gridproperty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.nnc_to_flowsimulator_input"><code class="docutils literal notranslate"><span class="pre">nnc_to_flowsimulator_input()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#module-fmu.tools.nestedhybridgrid">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.create_nested_hybrid_grid"><code class="docutils literal notranslate"><span class="pre">create_nested_hybrid_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nnc_to_flowsimulator_input"><code class="docutils literal notranslate"><span class="pre">nnc_to_flowsimulator_input()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nnc_to_gridproperty"><code class="docutils literal notranslate"><span class="pre">nnc_to_gridproperty()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fmu.tools.properties.html">fmu.tools.properties package</a><ul>
@@ -938,6 +956,111 @@ the full grid interval will be applied to determine the layer.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.create_nested_hybrid_grid">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">create_nested_hybrid_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_region_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refinement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#create_nested_hybrid_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.create_nested_hybrid_grid" title="Link to this definition"></a></dt>
+<dd><p>Create a nested hybrid grid by refining one region and merging it back.</p>
+<p>The cells belonging to <em>target_region_id</em> are replaced by a refined
+(subdivided) version of the same region.  A <code class="docutils literal notranslate"><span class="pre">NEST_ID</span></code> discrete property
+is attached to the merged grid, encoding the nested hybrid structure:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NEST_ID</span> <span class="pre">==</span> <span class="pre">1</span></code>: coarse (mother) grid cells.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NEST_ID</span> <span class="pre">==</span> <span class="pre">2</span></code>: refined grid cells.</p></li>
+</ul>
+<p>In addition, a <strong>NNC mapping table</strong> is returned that lists every
+mother ↔ refined cell pair that should be connected by a Non-Neighbour
+Connection (NNC).  The table is derived from the topological knowledge
+available at merge time (which original cell was refined and how its
+sub-cells map into the merged grid).</p>
+<p>The table columns are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">I1,</span> <span class="pre">J1,</span> <span class="pre">K1</span></code>: mother cell indices (1-based) in the merged grid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">I2,</span> <span class="pre">J2,</span> <span class="pre">K2</span></code>: refined cell indices (1-based) in the merged grid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DIRECTION</span></code>: face direction from the mother cell’s perspective
+(<code class="docutils literal notranslate"><span class="pre">I+</span></code>, <code class="docutils literal notranslate"><span class="pre">I-</span></code>, <code class="docutils literal notranslate"><span class="pre">J+</span></code>, <code class="docutils literal notranslate"><span class="pre">J-</span></code>, <code class="docutils literal notranslate"><span class="pre">K+</span></code>, <code class="docutils literal notranslate"><span class="pre">K-</span></code>).</p></li>
+</ul>
+<p>This table can be passed to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">xtgeo.Grid.get_transmissibilities()</span></code> to compute NNC
+transmissibilities for the specified cell pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></span>) – The original coarse grid.</p></li>
+<li><p><strong>region</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code></span>) – A <code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.GridProperty</span></code> whose values identify the
+regions (e.g. an integer region parameter).</p></li>
+<li><p><strong>target_region_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – The region value to refine.</p></li>
+<li><p><strong>refinement</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span>) – <code class="docutils literal notranslate"><span class="pre">(ncol,</span> <span class="pre">nrow,</span> <span class="pre">nlay)</span></code> refinement factors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(merged_grid,</span> <span class="pre">nnc_table)</span></code> where <em>merged_grid</em> is a new
+<code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.Grid</span></code> with the refined region stitched back into the
+coarse grid and <em>nnc_table</em> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> mapping
+mother cells to their connected refined cells.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.nnc_to_flowsimulator_input">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">nnc_to_flowsimulator_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nnc_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#nnc_to_flowsimulator_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nnc_to_flowsimulator_input" title="Link to this definition"></a></dt>
+<dd><p>Write NNC transmissibilities to a flow-simulator input file.</p>
+<p>Produces a file with the <code class="docutils literal notranslate"><span class="pre">NNC</span></code> keyword suitable for reservoir
+simulators that use Eclipse-style input decks, such as Eclipse and
+OPM Flow.  The file can be included in the deck via <code class="docutils literal notranslate"><span class="pre">INCLUDE</span></code>.
+Each row of <em>nnc_df</em> becomes one NNC record with the six cell
+indices and the transmissibility value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nnc_df</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – A DataFrame with at least columns
+<code class="docutils literal notranslate"><span class="pre">I1,</span> <span class="pre">J1,</span> <span class="pre">K1,</span> <span class="pre">I2,</span> <span class="pre">J2,</span> <span class="pre">K2,</span> <span class="pre">T</span></code>.  Optional columns <code class="docutils literal notranslate"><span class="pre">TYPE</span></code>
+and <code class="docutils literal notranslate"><span class="pre">DIRECTION</span></code> are written as end-of-line comments.</p></li>
+<li><p><strong>filepath</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Path to the output file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmu.tools.nnc_to_gridproperty">
+<span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">nnc_to_gridproperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nnc_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#nnc_to_gridproperty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nnc_to_gridproperty" title="Link to this definition"></a></dt>
+<dd><p>Convert NNC transmissibility data to three GridProperty instances.</p>
+<p>Takes the NNC DataFrame produced by <code class="xref py py-meth docutils literal notranslate"><span class="pre">xtgeo.Grid.get_transmissibilities()</span></code>
+and maps transmissibility values onto grid cells, producing one property per
+direction (I, J, K).</p>
+<p>For rows where DIRECTION contains <code class="docutils literal notranslate"><span class="pre">&quot;+&quot;</span></code>, the transmissibility value is
+placed in cell <code class="docutils literal notranslate"><span class="pre">(I1,</span> <span class="pre">J1,</span> <span class="pre">K1)</span></code>.  For rows where DIRECTION contains
+<code class="docutils literal notranslate"><span class="pre">&quot;-&quot;</span></code>, the value is placed in cell <code class="docutils literal notranslate"><span class="pre">(I2,</span> <span class="pre">J2,</span> <span class="pre">K2)</span></code>.  Index columns
+(I1, J1, K1, I2, J2, K2) are expected to be <strong>1-based</strong>.</p>
+<p>If multiple rows map to the same cell and direction, the transmissibility
+values are summed (parallel flow paths are additive).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></span>) – The xtgeo Grid that defines the geometry.</p></li>
+<li><p><strong>nnc_df</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – A DataFrame with at least columns
+<code class="docutils literal notranslate"><span class="pre">I1,</span> <span class="pre">J1,</span> <span class="pre">K1,</span> <span class="pre">I2,</span> <span class="pre">J2,</span> <span class="pre">K2,</span> <span class="pre">T,</span> <span class="pre">DIRECTION</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(tranx_nnc,</span> <span class="pre">trany_nnc,</span> <span class="pre">tranz_nnc)</span></code> of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.GridProperty</span></code> instances named <code class="docutils literal notranslate"><span class="pre">&quot;TRANX_NNC&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;TRANY_NNC&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;TRANZ_NNC&quot;</span></code> respectively.
+Cells without an NNC value are set to <code class="docutils literal notranslate"><span class="pre">-1.0</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>

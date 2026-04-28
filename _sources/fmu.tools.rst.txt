@@ -10,6 +10,7 @@ Subpackages
    fmu.tools.domainconversion
    fmu.tools.ensembles
    fmu.tools.fipmapper
+   fmu.tools.nestedhybridgrid
    fmu.tools.properties
    fmu.tools.qcdata
    fmu.tools.qcforward
