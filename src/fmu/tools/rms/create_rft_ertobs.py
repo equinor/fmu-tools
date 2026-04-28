@@ -350,7 +350,7 @@ def ertobs_df_to_files(
     exportdir: str = ".",
     welldatefile: str = "well_date_rft.txt",
     filename: str = "rft_ertobs.csv",
-) -> None:
+) -> pd.DataFrame:
     """
     Exports data from a dataframe into ERT observations files.
     The input here is essentially the input dataframe, but where all "holes" in

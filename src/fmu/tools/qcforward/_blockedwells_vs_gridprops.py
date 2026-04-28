@@ -67,7 +67,6 @@ from jsonschema import validate
 
 import fmu.tools
 from fmu.tools._common import _QCCommon
-from fmu.tools.qcdata import QCData
 from fmu.tools.qcforward._qcforward import ActionsParser, QCForward, actions_validator
 
 QCC = _QCCommon()
@@ -146,10 +145,7 @@ class BlockedWellsVsGridProperties(QCForward):
             # inside RMS, get gridprops implicitly from compare values
             self._data["gridprops"] = list(self.ldata.compare.values())
 
-        if not isinstance(self.gdata, QCData):
-            self.gdata = QCData()
-
-        self.gdata.parse(
+        self._gdata.parse(
             data=self._data, reuse=reuse, project=project, wells_settings=wsettings
         )
 
@@ -204,7 +200,7 @@ class BlockedWellsVsGridProperties(QCForward):
         """Given data, do a comparison of blcked wells cells vs props, via XTGeo."""
 
         # dataframe for the blocked wells
-        dfbw = self.gdata.bwells.get_dataframe()
+        dfbw = self._gdata.bwells.get_dataframe()
         if self._gdata.project is not None:
             # when parsing blocked wells from RMS, cell indices starts from 0, not  1
             dfbw["I_INDEX"] += 1
@@ -225,7 +221,7 @@ class BlockedWellsVsGridProperties(QCForward):
                 )
 
         # dataframe for the properties, need some processing (column names)
-        dfprops = self.gdata.gridprops.get_dataframe(ijk=True, grid=self.gdata.grid)
+        dfprops = self._gdata.gridprops.get_dataframe(ijk=True, grid=self._gdata.grid)
         dfprops = dfprops.rename(
             columns={"IX": "I_INDEX", "JY": "J_INDEX", "KZ": "K_INDEX"}
         )

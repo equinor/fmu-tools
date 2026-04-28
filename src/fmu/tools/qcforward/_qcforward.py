@@ -31,6 +31,8 @@ class QCForward:
 
     """
 
+    _gdata: QCData
+
     def __init__(self):
         self._method = None
         self._data = None  # input data dictionary
