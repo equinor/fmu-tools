@@ -1,6 +1,7 @@
 """Testing qcforward method wellzonation vs grid"""
 
 from os.path import abspath
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -13,7 +14,7 @@ PERFLOGNAME = "PERF"
 
 
 @pytest.fixture
-def make_data(tmp_path, testdata_path):
+def make_data(tmp_path: Path, testdata_path: Path) -> tuple[dict, str, str]:
     report_path = str(tmp_path / "somefile.csv")
     yaml_path = str(tmp_path / "somefile.yml")
     gridfile = abspath(testdata_path / "3dgrids/reek/reek_sim_grid.roff")
@@ -41,7 +42,7 @@ def make_data(tmp_path, testdata_path):
     return data, report_path, yaml_path
 
 
-def test_zonelog_vs_grid_asfiles(make_data):
+def test_zonelog_vs_grid_asfiles(make_data: tuple[dict, str, str]) -> None:
     """Testing the zonelog vs grid functionality using files"""
     data, report_path, yaml_path = make_data
     qcf.wellzonation_vs_grid(data)
@@ -53,7 +54,7 @@ def test_zonelog_vs_grid_asfiles(make_data):
     assert dfr.loc["all", "MATCH%"] == pytest.approx(65.820, 0.01)
 
 
-def test_zonelog_vs_grid_asfiles_shall_stop(make_data):
+def test_zonelog_vs_grid_asfiles_shall_stop(make_data: tuple[dict, str, str]) -> None:
     """Testing the zonelog vs grid functionality using files"""
     data, *_ = make_data
     data["actions"] = [{"warn": "any < 90%", "stop": "any < 80%"}]
@@ -62,7 +63,9 @@ def test_zonelog_vs_grid_asfiles_shall_stop(make_data):
         qcf.wellzonation_vs_grid(data)
 
 
-def test_zonelog_vs_grid_asfiles_reuse_instance(make_data):
+def test_zonelog_vs_grid_asfiles_reuse_instance(
+    make_data: tuple[dict, str, str],
+) -> None:
     """Testing reusing the instance"""
     data, *_ = make_data
     newdata = data.copy()
@@ -74,7 +77,7 @@ def test_zonelog_vs_grid_asfiles_reuse_instance(make_data):
     job.run(newdata, reuse=True)
 
 
-def test_perflog_vs_grid_asfiles(make_data):
+def test_perflog_vs_grid_asfiles(make_data: tuple[dict, str, str]) -> None:
     """
     Testing the perforation log as zonelog filter vs grid functionality using files.
 
