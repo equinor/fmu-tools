@@ -11,6 +11,7 @@ the decorator "roxapilicense"
 import shutil
 from os.path import isdir
 from pathlib import Path
+from typing import Generator
 
 import numpy as np
 import pandas as pd
@@ -40,7 +41,7 @@ WELLS1 = ["OP1_perf.w", "OP_2.w", "OP_6.w", "XP_with_repeat.w"]
 
 
 @pytest.fixture(name="create_project", scope="module", autouse=True)
-def fixture_create_project(testdata_path):
+def fixture_create_project(testdata_path: Path) -> Generator[None, None, None]:
     """Create a tmp RMS project for testing, populate with basic data.
 
     After the yield command, the teardown phase will remove the tmp RMS project.
@@ -112,7 +113,7 @@ def fixture_create_project(testdata_path):
 
 
 @pytest.mark.skipunlessroxar
-def test_qcforward_wzonation_vs_grid_stops(tmp_path):
+def test_qcforward_wzonation_vs_grid_stops(tmp_path: Path) -> None:
     """Test wzonation vs grid inside RMS, and here it will STOP."""
     # ==================================================================================
     # qcforward well vs grid (mimic python inside RMS input!)
@@ -157,7 +158,7 @@ def test_qcforward_wzonation_vs_grid_stops(tmp_path):
 
 
 @pytest.mark.skipunlessroxar
-def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path):
+def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path: Path) -> None:
     """Test wzonation vs grid inside RMS, and here it will run OK."""
     # ==================================================================================
     # qcforward well vs grid (mimic python inside RMS input!)
@@ -205,7 +206,7 @@ def test_qcforward_wzonation_vs_grid_runs_ok(tmp_path):
 
 
 @pytest.mark.skipunlessroxar
-def test_qcforward_gridquality_ok(tmp_path):
+def test_qcforward_gridquality_ok(tmp_path: Path) -> None:
     """Test qcforward gridquality parameters that runs ok."""
     # ==================================================================================
     # qcforward grid quality (mimic python inside RMS input!)
@@ -245,7 +246,7 @@ def test_qcforward_gridquality_ok(tmp_path):
 
 
 @pytest.mark.skipunlessroxar
-def test_qcforward_gridquality_fail(tmp_path):
+def test_qcforward_gridquality_fail(tmp_path: Path) -> None:
     """Test qcforward gridquality parameters that shall fail on faulted."""
     # ==================================================================================
     # qcforward grid quality (mimic python inside RMS input!)
