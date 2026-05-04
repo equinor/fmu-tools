@@ -213,10 +213,10 @@ class ZoneMappingMock:
         self.number_of_grid_zones = number_of_grid_zones
         self.zone_dict = zone_dict
 
-    def get_zone_name_for_zone_number(self, zone_number: int) -> Any:
+    def get_zone_name_for_zone_number(self, zone_number: int) -> str:
         return self.zone_dict[zone_number]["zone_name"]
 
-    def get_zone_index_for_zone_number(self, zone_number: int) -> Any:
+    def get_zone_index_for_zone_number(self, zone_number: int) -> int:
         return self.zone_dict[zone_number]["zone_index"]
 
     def get_start_end_layer_for_zone_number(self, zone_number: int) -> tuple[int, int]:
@@ -224,7 +224,7 @@ class ZoneMappingMock:
             "end"
         ]
 
-    def number_of_layers_for_zone_number(self, zone_number: int) -> Any:
+    def number_of_layers_for_zone_number(self, zone_number: int) -> int:
         return self.zone_dict[zone_number]["nlayers"]
 
     def get_number_of_zones_in_grid(self) -> int:
