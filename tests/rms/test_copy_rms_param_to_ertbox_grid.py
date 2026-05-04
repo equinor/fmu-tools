@@ -213,21 +213,21 @@ class ZoneMappingMock:
         self.number_of_grid_zones = number_of_grid_zones
         self.zone_dict = zone_dict
 
-    def get_zone_name_for_zone_number(self, zone_number: int):
+    def get_zone_name_for_zone_number(self, zone_number: int) -> Any:
         return self.zone_dict[zone_number]["zone_name"]
 
-    def get_zone_index_for_zone_number(self, zone_number: int):
+    def get_zone_index_for_zone_number(self, zone_number: int) -> Any:
         return self.zone_dict[zone_number]["zone_index"]
 
-    def get_start_end_layer_for_zone_number(self, zone_number: int):
+    def get_start_end_layer_for_zone_number(self, zone_number: int) -> tuple[int, int]:
         return self.zone_dict[zone_number]["start"], self.zone_dict_list[zone_number][
             "end"
         ]
 
-    def number_of_layers_for_zone_number(self, zone_number: int):
+    def number_of_layers_for_zone_number(self, zone_number: int) -> Any:
         return self.zone_dict[zone_number]["nlayers"]
 
-    def get_number_of_zones_in_grid(self):
+    def get_number_of_zones_in_grid(self) -> int:
         return self.number_of_grid_zones
 
 
@@ -491,7 +491,7 @@ def test_check_grid_layout(
                 assert conformity == grid_layout
 
 
-def create_grids(project: Any):
+def create_grids(project: Any) -> None:
     nx = NX
     ny = NY
     nz_zoneA = NZ_ZONEA
@@ -539,7 +539,7 @@ def create_grids(project: Any):
     ertboxgrid.to_roxar(project, GRID_MODEL_ERTBOX)
 
 
-def compare_results_with_reference(project: Any, test=1):
+def compare_results_with_reference(project: Any, test=1) -> None:
     # Compare with reference
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
@@ -560,7 +560,7 @@ def compare_results_with_reference(project: Any, test=1):
         assert np.allclose(values1, values2)
 
 
-def import_petro_params(project: Any, file_name_for_zone_param: str):
+def import_petro_params(project: Any, file_name_for_zone_param: str) -> None:
     for i in range(len(PETROPARAMS_REFERENCE)):
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         filename = Path(REFERENCE_DIR) / Path(petro_name_reference + ".roff")
@@ -572,7 +572,7 @@ def import_petro_params(project: Any, file_name_for_zone_param: str):
 
 
 @pytest.mark.skipunlessroxar
-def test_copy_between_geo_and_ertbox_grids():
+def test_copy_between_geo_and_ertbox_grids() -> None:
     """Create a tmp RMS project for testing, populate with basic data."""
     prj1 = str(PRJ)
 
