@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 from os.path import abspath
+from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pytest
@@ -14,7 +16,7 @@ COMPARE = {"Facies": "FACIES", "PHIT": "PHIT"}
 
 
 @pytest.fixture(name="datainput")
-def fixture_datainput(tmp_path, testdata_path):
+def fixture_datainput(tmp_path: Path, testdata_path: Path) -> dict[str, Any]:
     gridfile = str(testdata_path / "3dgrids/drogon/3/valysar.roff")
     bwellfiles = [str(testdata_path / "wells/drogon/3/valysar*.bw")]
     return {
@@ -34,7 +36,7 @@ def fixture_datainput(tmp_path, testdata_path):
     }
 
 
-def test_bw_vs_gridprops_asfiles(datainput):
+def test_bw_vs_gridprops_asfiles(datainput: dict[str, Any]) -> None:
     """Testing the zonelog vs grid functionality using files"""
 
     job = qcf.BlockedWellsVsGridProperties()
@@ -54,7 +56,9 @@ def test_bw_vs_gridprops_asfiles(datainput):
     assert ser[0] == 100.0
 
 
-def test_bw_vs_gridprops_asfiles_shall_stop(tmp_path, datainput):
+def test_bw_vs_gridprops_asfiles_shall_stop(
+    tmp_path: Path, datainput: dict[str, Any]
+) -> None:
     """Testing the zonelog vs grid functionality using files, shall stop."""
 
     job = qcf.BlockedWellsVsGridProperties()
@@ -74,7 +78,9 @@ def test_bw_vs_gridprops_asfiles_shall_stop(tmp_path, datainput):
     assert rep.iloc[3].at["STATUS"] == "STOP"
 
 
-def test_bw_vs_gridprops_asfiles_change_tolerance(tmp_path, datainput):
+def test_bw_vs_gridprops_asfiles_change_tolerance(
+    tmp_path: Path, datainput: dict[str, Any]
+) -> None:
     """Testing the zonelog vs grid functionality using files, iterate tolerance."""
 
     job = qcf.BlockedWellsVsGridProperties()
