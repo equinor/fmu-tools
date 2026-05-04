@@ -1,4 +1,5 @@
 from os.path import abspath
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -7,7 +8,7 @@ from fmu.tools import qcforward as qcf
 
 
 @pytest.fixture
-def make_data(tmp_path, testdata_path):
+def make_data(tmp_path: Path, testdata_path: Path) -> tuple[dict, str, str]:
     report_path = str(tmp_path / "somefile.csv")
     yaml_path = str(tmp_path / "somefile.yml")
     data = {
@@ -19,7 +20,7 @@ def make_data(tmp_path, testdata_path):
     return data, report_path, yaml_path
 
 
-def test_simple_action(make_data):
+def test_simple_action(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -41,7 +42,7 @@ def test_simple_action(make_data):
     )
 
 
-def test_action_with_disc_and_cont_props(make_data):
+def test_action_with_disc_and_cont_props(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -81,7 +82,7 @@ def test_action_with_disc_and_cont_props(make_data):
     ].iloc[0]["VALUE"] == pytest.approx(0.585, abs=0.001)
 
 
-def test_multiple_actions(make_data):
+def test_multiple_actions(make_data: tuple[dict, str, str]) -> None:
     zones_stop = [
         ["Below_Top_reek", [0.1, 0.3]],
         ["Below_Mid_reek", [0.1, 0.25]],
@@ -106,7 +107,7 @@ def test_multiple_actions(make_data):
     _ = pd.read_csv(report_path)
 
 
-def test_action_with_selectors(make_data):
+def test_action_with_selectors(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -128,7 +129,7 @@ def test_action_with_selectors(make_data):
     )
 
 
-def test_action_with_filters(make_data):
+def test_action_with_filters(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -155,7 +156,7 @@ def test_action_with_filters(make_data):
     )
 
 
-def test_action_with_filters_and_selectors(make_data):
+def test_action_with_filters_and_selectors(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -182,7 +183,7 @@ def test_action_with_filters_and_selectors(make_data):
     )
 
 
-def test_actions_shall_stop(make_data):
+def test_actions_shall_stop(make_data: tuple[dict, str, str]) -> None:
     data, *_ = make_data
     data["actions"] = [
         {
@@ -197,7 +198,7 @@ def test_actions_shall_stop(make_data):
         qcjob.run(data)
 
 
-def test_actions_shall_stop_no_warnlimits(make_data):
+def test_actions_shall_stop_no_warnlimits(make_data: tuple[dict, str, str]) -> None:
     data, *_ = make_data
     data["actions"] = [
         {
@@ -211,7 +212,7 @@ def test_actions_shall_stop_no_warnlimits(make_data):
         qcjob.run(data)
 
 
-def test_actions_with_selectors(make_data):
+def test_actions_with_selectors(make_data: tuple[dict, str, str]) -> None:
     data, report_path, _ = make_data
     data["actions"] = [
         {
@@ -237,7 +238,7 @@ def test_actions_with_selectors(make_data):
     )
 
 
-def test_yaml_dump(make_data):
+def test_yaml_dump(make_data: tuple[dict, str, str]) -> None:
     data, report_path, yaml_path = make_data
     data["actions"] = [
         {
