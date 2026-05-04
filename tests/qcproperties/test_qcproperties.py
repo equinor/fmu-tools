@@ -13,14 +13,18 @@ from fmu.tools.qcproperties.qcproperties import QCProperties
 class TestProperties2df:
     """Tests related to generation of dataframe from properties"""
 
-    def test_wells(self, data_wells):
+    def test_wells(
+        self, data_wells: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test creating property dataframe from wells"""
         pdf = WellLogs2df(data=data_wells, project=None, xtgdata=QCData())
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.1539, abs=0.001)
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3661, abs=0.001)
         assert set(pdf.dataframe.columns) == {"PORO", "PERM", "ZONE", "FACIES"}
 
-    def test_blockedwells(self, data_bwells):
+    def test_blockedwells(
+        self, data_bwells: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test creating property dataframe from blocked wells"""
         pdf = WellLogs2df(
             data=data_bwells, project=None, xtgdata=QCData(), blockedwells=True
@@ -29,14 +33,18 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3640, abs=0.001)
         assert set(pdf.dataframe.columns) == {"PORO", "FACIES"}
 
-    def test_gridprops(self, data_grid):
+    def test_gridprops(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test creating property dataframe from grid properties"""
         pdf = GridProps2df(data=data_grid, project=None, xtgdata=QCData())
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.1677, abs=0.001)
         assert pdf.dataframe["PORO"].max() == pytest.approx(0.3613, abs=0.001)
         assert set(pdf.dataframe.columns) == {"PORO", "PERM", "ZONE", "FACIES"}
 
-    def test_props_and_selectors_as_list(self, data_grid):
+    def test_props_and_selectors_as_list(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test"""
         data_grid["properties"] = ["reek_sim_poro.roff", "reek_sim_permx.roff"]
         data_grid["selectors"] = ["reek_sim_zone.roff", "reek_sim_facies2.roff"]
@@ -55,7 +63,9 @@ class TestProperties2df:
             "reek_sim_facies2.roff",
         }
 
-    def test_filters(self, data_grid):
+    def test_filters(
+        self, data_grid: dict[str, str | dict[str, dict[str, str]]]
+    ) -> None:
         """Test filters as argument"""
         data_grid["filters"] = {
             "reek_sim_facies2.roff": {
@@ -86,7 +96,9 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].min() > 0.15
         assert pdf.dataframe["PORO"].max() < 0.25
 
-    def test_selector_filters(self, data_grid):
+    def test_selector_filters(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test filters on selector"""
         data_grid["selectors"] = {
             "FACIES": {"name": "reek_sim_facies2.roff", "include": "FINESAND"},
@@ -107,7 +119,9 @@ class TestProperties2df:
         assert "FINESAND" not in list(pdf.dataframe["FACIES"].unique())
         assert "SHALE" not in list(pdf.dataframe["FACIES"].unique())
 
-    def test_filters_and_selector_filters(self, data_grid):
+    def test_filters_and_selector_filters(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """
         Test filters on both selector and as separate argument
         Wanted behaviour is to ignore the filter on the selector
@@ -125,7 +139,9 @@ class TestProperties2df:
         assert list(pdf.dataframe["FACIES"].unique()) == ["FINESAND", "COARSESAND"]
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.2374, abs=0.001)
 
-    def test_filters_and_property_filters(self, data_grid):
+    def test_filters_and_property_filters(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """
         Test filters on both properties and as separate argument.
         Wanted behaviour is to ignore the filter on the property
@@ -144,7 +160,9 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].min() > 0.15
         assert pdf.dataframe["PORO"].max() < 0.25
 
-    def test_codenames(self, data_grid):
+    def test_codenames(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test modifying codenames on selectors"""
 
         data_grid["selectors"] = {
@@ -167,7 +185,9 @@ class TestProperties2df:
 class TestStatistics:
     """Tests for extracting statistics with QCProperties"""
 
-    def test_gridprops(self, data_grid):
+    def test_gridprops(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics from grid properties"""
 
         qcp = QCProperties()
@@ -183,7 +203,9 @@ class TestStatistics:
         assert row["Avg"].values == pytest.approx(0.1677, abs=0.001)
         assert row["Max"].values == pytest.approx(0.3613, abs=0.001)
 
-    def test_wells(self, data_wells):
+    def test_wells(
+        self, data_wells: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics from well logs"""
         qcp = QCProperties()
         qcp.get_well_statistics(data_wells)
@@ -206,7 +228,9 @@ class TestStatistics:
         assert row["Avg"].values == pytest.approx(0.1539, abs=0.001)
         assert row["Max"].values == pytest.approx(0.3661, abs=0.001)
 
-    def test_blockedwells(self, data_bwells):
+    def test_blockedwells(
+        self, data_bwells: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics from blocked well logs"""
         qcp = QCProperties()
         qcp.get_bwell_statistics(data_bwells)
@@ -219,7 +243,9 @@ class TestStatistics:
         assert row["Avg"].values == pytest.approx(0.1709, abs=0.001)
         assert row["Max"].values == pytest.approx(0.3640, abs=0.001)
 
-    def test_continous_properties(self, data_grid):
+    def test_continous_properties(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics on continous properties"""
         qcp = QCProperties()
         qcp.get_grid_statistics(data_grid)
@@ -241,7 +267,9 @@ class TestStatistics:
         }
         assert qcp._proptypes_all[0] == "CONT"
 
-    def test_discrete_properties(self, data_grid):
+    def test_discrete_properties(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics on discrete properties"""
         data_grid["properties"] = {
             "FACIES": {"name": "reek_sim_facies2.roff"},
@@ -275,7 +303,9 @@ class TestStatistics:
         ]
         assert row["Avg"].values == pytest.approx(0.4024, abs=0.001)
 
-    def test_set_id(self, data_grid):
+    def test_set_id(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test extracting statsitics on continous properties"""
         data_grid["name"] = "Test_case"
 
@@ -286,7 +316,9 @@ class TestStatistics:
         qcp.get_grid_statistics(data_grid)
         assert qcp.dataframe["ID"].unique().tolist() == ["Test_case", "Test_case(1)"]
 
-    def test_no_selectors(self, data_grid):
+    def test_no_selectors(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test running without selectors"""
         data_grid.pop("selectors", None)
 
@@ -298,7 +330,9 @@ class TestStatistics:
             "Avg"
         ].values == pytest.approx(0.1677, abs=0.001)
 
-    def test_no_selector_combos(self, data_grid):
+    def test_no_selector_combos(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test running without selector_combos"""
         data_grid["selector_combos"] = False
 
@@ -309,7 +343,9 @@ class TestStatistics:
             qcp.dataframe[qcp.dataframe["ZONE"] == "Total"]["FACIES"].unique()
         ) == ["Total"]
 
-    def test_multiple_filters(self, data_grid):
+    def test_multiple_filters(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test running two statistics extractions using multiple_filters"""
         data_grid.pop("selectors", None)
         data_grid["multiple_filters"] = {
@@ -332,7 +368,9 @@ class TestStatistics:
             (qcp.dataframe["PROPERTY"] == "PORO") & (qcp.dataframe["ID"] == "test1")
         ]["Avg"].values == pytest.approx(0.1183, abs=0.001)
 
-    def test_read_eclipse_init(self, data_grid):
+    def test_read_eclipse_init(
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+    ) -> None:
         """Test reading property from INIT-file"""
         data_grid["grid"] = "REEK.EGRID"
         data_grid["properties"] = {
@@ -355,7 +393,12 @@ class TestStatistics:
 class TestStatisticsMultipleSources:
     """Tests for extracting statistics from different sources"""
 
-    def test_auto_combination(self, data_grid, data_wells, data_bwells):
+    def test_auto_combination(
+        self,
+        data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]],
+        data_wells: dict[str, str | list[str] | dict[str, dict[str, str]]],
+        data_bwells: dict[str, str | list[str] | dict[str, dict[str, str]]],
+    ) -> None:
         """Tests combining statistic"""
         qcp = QCProperties()
 
@@ -368,7 +411,7 @@ class TestStatisticsMultipleSources:
         qcp.get_bwell_statistics(data_bwells)
         assert len(qcp.dataframe["ID"].unique()) == 3
 
-    def test_from_yaml(self, testdata_path, tmp_path):
+    def test_from_yaml(self, testdata_path: Path, tmp_path: Path) -> None:
         """Tests extracting statistics from yaml-file"""
         qcp = QCProperties()
         yaml_input = Path(__file__).parent / "data/propstat.yml"
