@@ -11,7 +11,7 @@ the decorator "roxapilicense"
 import shutil
 from os.path import isdir
 from pathlib import Path
-from typing import Generator
+from typing import Any, Generator
 
 import numpy as np
 import pandas as pd
@@ -41,7 +41,7 @@ WELLS1 = ["OP1_perf.w", "OP_2.w", "OP_6.w", "XP_with_repeat.w"]
 
 
 @pytest.fixture(name="create_project", scope="module", autouse=True)
-def fixture_create_project(testdata_path: Path) -> Generator[None, None, None]:
+def fixture_create_project(testdata_path: Path) -> Generator[Any, None, None]:
     """Create a tmp RMS project for testing, populate with basic data.
 
     After the yield command, the teardown phase will remove the tmp RMS project.
