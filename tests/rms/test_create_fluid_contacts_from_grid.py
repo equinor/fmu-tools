@@ -23,7 +23,7 @@ SUBGRIDS = {
 
 
 @pytest.fixture
-def grid():
+def grid() -> xtgeo.Grid:
     grid = xtgeo.create_box_grid(
         (5, 5, 5), origin=(0, 0, 2000), increment=(100, 100, 10)
     )
@@ -32,12 +32,12 @@ def grid():
 
 
 @pytest.fixture
-def contact_property():
+def contact_property() -> xtgeo.GridProperty:
     return xtgeo.GridProperty(ncol=5, nrow=5, nlay=5, name="FWL", values=3000)
 
 
 @pytest.fixture
-def zone_property():
+def zone_property() -> xtgeo.GridProperty:
     zone_prop = xtgeo.GridProperty(ncol=5, nrow=5, nlay=5, name="Zone", values=1)
     zone_prop.values[:, :, 3:] = 2  # different zone in two upper layers
     zone_prop.codes = {1: "ZONE1", 2: "ZONE2"}
@@ -45,14 +45,19 @@ def zone_property():
 
 
 @pytest.fixture
-def mock_project():
+def mock_project() -> MagicMock:
     mock_project = MagicMock()
     mock_project.grid_models = {"mygrid": MagicMock(properties=["FWL", "Zone"])}
     return mock_project
 
 
 @pytest.fixture
-def mock_loader(mock_project, grid, contact_property, zone_property):
+def mock_loader(
+    mock_project: MagicMock,
+    grid: xtgeo.Grid,
+    contact_property: xtgeo.GridProperty,
+    zone_property: xtgeo.GridProperty,
+) -> _RMSDataLoader:
     """Create a mock RMS data loader."""
     loader = _RMSDataLoader(mock_project, "mygrid")
     loader.load_grid = MagicMock(return_value=grid)
@@ -63,7 +68,7 @@ def mock_loader(mock_project, grid, contact_property, zone_property):
 
 
 @pytest.fixture
-def grid_data_assembler(mock_loader):
+def grid_data_assembler(mock_loader: _RMSDataLoader) -> _GridDataAssembler:
     """Create a GridDataAssembler instance for testing."""
     contacts = [FluidContact(name="FWL", type="fwl")]
     return _GridDataAssembler(
@@ -73,7 +78,9 @@ def grid_data_assembler(mock_loader):
     )
 
 
-def test_get_grid_dataframe_includes_properties(grid_data_assembler):
+def test_get_grid_dataframe_includes_properties(
+    grid_data_assembler: _GridDataAssembler,
+) -> None:
     """Test the creation of a dataframe from the grid."""
     df = grid_data_assembler.get_dataframe()
     assert not df.empty
@@ -82,7 +89,9 @@ def test_get_grid_dataframe_includes_properties(grid_data_assembler):
     assert "Zone" in df.columns
 
 
-def test_grid_data_assembler_get_surface(grid_data_assembler):
+def test_grid_data_assembler_get_surface(
+    grid_data_assembler: _GridDataAssembler,
+) -> None:
     """Test the retrieval of a surface from the grid."""
     surf = grid_data_assembler.get_surface_with_grid_dimensions()
     assert isinstance(surf, xtgeo.RegularSurface)
@@ -94,13 +103,15 @@ def test_grid_data_assembler_get_surface(grid_data_assembler):
     assert surf.get_rotation() == grid_geometrics["avg_rotation"]
 
 
-def test_grid_data_assembler_zone_codenames(grid_data_assembler):
+def test_grid_data_assembler_zone_codenames(
+    grid_data_assembler: _GridDataAssembler,
+) -> None:
     """Test getting zone codenames from GridDataAssembler."""
     zone_codenames = grid_data_assembler.zone_codenames
     assert zone_codenames == {1: "ZONE1", 2: "ZONE2"}
 
 
-def test_filter_to_closest_contact_cell_in_pillars():
+def test_filter_to_closest_contact_cell_in_pillars() -> None:
     """Test the filtering of the closest contact cell in each pillar."""
     df = pd.DataFrame(
         {
@@ -117,7 +128,7 @@ def test_filter_to_closest_contact_cell_in_pillars():
     assert list(filtered_df["abs_diff"]) == [100, 10]
 
 
-def test_filter_to_deepest_cell_above_contact_in_pillars():
+def test_filter_to_deepest_cell_above_contact_in_pillars() -> None:
     """Test the filtering of the deepest cell above the contact in each pillar."""
     df = pd.DataFrame(
         {
@@ -146,7 +157,7 @@ def test_filter_to_deepest_cell_above_contact_in_pillars():
     assert list(filtered_df["KZ"]) == [4]
 
 
-def test_create_fluid_contact_outline(grid_data_assembler):
+def test_create_fluid_contact_outline(grid_data_assembler: _GridDataAssembler) -> None:
     """Test the creation of a contact outline from the grid."""
     df = grid_data_assembler.get_dataframe()
 
@@ -174,8 +185,8 @@ def test_create_fluid_contact_outline(grid_data_assembler):
     "rescale_distance, expected_points", [(10, 101), (50, 21), (100, 11)]
 )
 def test_create_fluid_contact_outline_rescale(
-    grid_data_assembler, rescale_distance, expected_points
-):
+    grid_data_assembler: _GridDataAssembler, rescale_distance: int, expected_points: int
+) -> None:
     """Test the creation of a contact outline from the grid with rescaling."""
     df = grid_data_assembler.get_dataframe()
 
@@ -202,7 +213,7 @@ def test_create_fluid_contact_outline_rescale(
     assert np.allclose(segment_lengths, rescale_distance, atol=1)
 
 
-def test_create_contact_surface(grid_data_assembler):
+def test_create_contact_surface(grid_data_assembler: _GridDataAssembler) -> None:
     """Test the creation of a contact surface from the grid."""
     df = grid_data_assembler.get_dataframe()
     df = df[df["Zone"] == 1]
@@ -234,7 +245,9 @@ def test_create_contact_surface(grid_data_assembler):
     assert surface.get_rotation() == surf_from_grid.get_rotation()
 
 
-def test_rms_data_loader_find_available_contact_properties(mock_loader):
+def test_rms_data_loader_find_available_contact_properties(
+    mock_loader: _RMSDataLoader,
+) -> None:
     """Test finding available contact properties using RMSDataLoader."""
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
 
@@ -247,7 +260,9 @@ def test_rms_data_loader_find_available_contact_properties(mock_loader):
     assert contacts[1].type == "gwc"
 
 
-def test_rms_data_loader_raises_error_when_no_contacts_found(mock_loader):
+def test_rms_data_loader_raises_error_when_no_contacts_found(
+    mock_loader: _RMSDataLoader,
+) -> None:
     """Test that RMSDataLoader raises error when no contacts are found."""
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
 
@@ -255,7 +270,7 @@ def test_rms_data_loader_raises_error_when_no_contacts_found(mock_loader):
         mock_loader.find_available_contact_properties("OWC", "GOC", "GWC")
 
 
-def test_create_fluid_contacts_from_grid(mock_loader):
+def test_create_fluid_contacts_from_grid(mock_loader: _RMSDataLoader) -> None:
     """Test the creation of fluid contacts from grid."""
     with (
         patch(
