@@ -1,16 +1,15 @@
 import os
 import pathlib
 from pathlib import Path
-from typing import Any
 
 import pytest
-from pytest import FixtureRequest
+from pytest import Config, FixtureRequest, Item, Parser
 
 # Capture the initial working directory at the start of the test session
 initial_pwd = pathlib.Path.cwd()
 
 
-def pytest_runtest_setup(item: Any) -> None:
+def pytest_runtest_setup(item: Item) -> None:
     """Called for each test, see also pytest section in setup.cfg."""
 
     markers = [value.name for value in item.iter_markers()]
@@ -24,7 +23,7 @@ def pytest_runtest_setup(item: Any) -> None:
         pytest.skip("Skip test if outside ROXENV (env variable ROXENV is present)")
 
 
-def pytest_configure(config: Any) -> None:
+def pytest_configure(config: Config) -> None:
     # Ensure xtgeo-testdata is present where expected before running
     testdatapath = os.environ.get("XTG_TESTPATH", config.getoption("--testdatapath"))
     xtg_testdata = pathlib.Path(testdatapath)
@@ -36,7 +35,7 @@ def pytest_configure(config: Any) -> None:
         )
 
 
-def pytest_addoption(parser: Any) -> None:
+def pytest_addoption(parser: Parser) -> None:
     parser.addoption(
         "--testdatapath",
         help="Relative path to xtgeo-testdata, defaults to ../xtgeo-testdata"
