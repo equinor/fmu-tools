@@ -3,6 +3,8 @@
 import os
 import pathlib
 from copy import deepcopy
+from pathlib import Path
+from typing import Any
 
 import pytest
 import xtgeo
@@ -27,7 +29,7 @@ FACIESFILE1 = RPATH0 / "grids" / "geogrid--facies.roff"
 
 
 @pytest.fixture(name="configdata")
-def fixture_configdata():
+def fixture_configdata() -> dict[str, dict[str, Any]]:
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
     return {
         "ensemble": {
@@ -73,7 +75,7 @@ def fixture_configdata():
 
 
 @pytest.fixture(name="configdata2")
-def fixture_configdata2():
+def fixture_configdata2() -> dict[str, dict[str, Any]]:
     root = str(SOURCE / "tests/data/ensembles/01_drogon_ahm")
     return {
         "ensemble": {
@@ -122,7 +124,7 @@ def fixture_configdata2():
 
 
 @preserve_cwd
-def test_dump_example(tmp_path):
+def test_dump_example(tmp_path: Path) -> None:
     """Test the dump of example YAML file."""
     os.chdir(tmp_path)
     ensemble_well_props.dump_example_config()
@@ -140,7 +142,7 @@ def test_dump_example(tmp_path):
         )
 
 
-def test_wellcase_class():
+def test_wellcase_class() -> None:
     """Test WellCase data class."""
     well = ensemble_well_props.WellCase(
         xtgeo.well_from_file(WELLNAME1),
@@ -168,7 +170,7 @@ def test_wellcase_class():
     assert wobj.nrow == 35
 
 
-def test_config_data(configdata):
+def test_config_data(configdata: dict[str, dict[str, Any]]) -> None:
     """Test the ConfigData class."""
 
     cfg = ensemble_well_props.ConfigData(configdata)
@@ -177,7 +179,7 @@ def test_config_data(configdata):
     assert cfg.proplist[0].name == "Facies"
 
 
-def test_loop_for_compute_dryrun(configdata):
+def test_loop_for_compute_dryrun(configdata: dict[str, dict[str, Any]]) -> None:
     """Test the loop compute."""
 
     sinfo = ensemble_well_props.ScreenInfo()
@@ -188,7 +190,7 @@ def test_loop_for_compute_dryrun(configdata):
     ensemble_well_props.loop_for_compute(configdata, sinfo, _dryrun=True)
 
 
-def test_compute_some_props(configdata):
+def test_compute_some_props(configdata: dict[str, dict[str, Any]]) -> None:
     """Test the actual compute of one well on one realization."""
 
     cfg = ensemble_well_props.ConfigData(configdata)
@@ -210,7 +212,7 @@ def test_compute_some_props(configdata):
     assert wcase.well.dataframe["PHIT_r0"].mean() == pytest.approx(0.171533, abs=0.001)
 
 
-def test_loop_for_compute(configdata):
+def test_loop_for_compute(configdata: dict[str, dict[str, Any]]) -> None:
     """Test the loop compute with actual run."""
 
     newcfg = deepcopy(configdata)
@@ -226,7 +228,7 @@ def test_loop_for_compute(configdata):
     print(ensprops.well.dataframe)
 
 
-def test_main(configdata):
+def test_main(configdata: dict[str, dict[str, Any]]) -> None:
     newcfg = deepcopy(configdata)
     newcfg["well"]["file"] = WELLNAME3
     newcfg["well"]["lognames"] = "all"
@@ -238,7 +240,7 @@ def test_main(configdata):
 
 
 @preserve_cwd
-def test_script(tmp_path, configdata):
+def test_script(tmp_path: Path, configdata: dict[str, dict[str, Any]]) -> None:
     """Test the command line script end point."""
 
     newcfg = deepcopy(configdata)
@@ -270,7 +272,13 @@ def test_script(tmp_path, configdata):
         ([6], [0.0, 0.5], 0.45000),
     ],
 )
-def test_script_config2(tmp_path, configdata2, faciescodes, poro_interval, expected):
+def test_script_config2(
+    tmp_path: Path,
+    configdata2: dict[str, dict[str, Any]],
+    faciescodes: list[int],
+    poro_interval: list[float],
+    expected: float,
+) -> None:
     """Test the command line script end point."""
 
     newcfg = deepcopy(configdata2)
