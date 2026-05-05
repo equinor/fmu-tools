@@ -1,4 +1,5 @@
 from os.path import abspath
+from pathlib import Path
 
 import pytest
 
@@ -9,7 +10,7 @@ GRIDPROP_PATH = "3dgrids/reek/reek_sim_zone.roff"
 WELLS = [abspath("tests/data/zone_tops_from_grid/OP_1.w")]
 
 
-def test_extract_no_md_log(testdata_path):
+def test_extract_no_md_log(testdata_path: Path) -> None:
     grid_path = abspath(testdata_path / GRID_PATH)
     gridprop_path = abspath(testdata_path / GRIDPROP_PATH)
     dframe = extract_grid_zone_tops(
@@ -26,7 +27,7 @@ def test_extract_no_md_log(testdata_path):
     assert dframe["BASE_MD"].max() == pytest.approx(2427.98, abs=0.1)
 
 
-def test_extract_with_dummy_md_log(testdata_path):
+def test_extract_with_dummy_md_log(testdata_path: Path) -> None:
     grid_path = abspath(testdata_path / GRID_PATH)
     gridprop_path = abspath(testdata_path / GRIDPROP_PATH)
     dframe = extract_grid_zone_tops(
@@ -43,7 +44,7 @@ def test_extract_with_dummy_md_log(testdata_path):
     assert dframe["BASE_MD"].max() == pytest.approx(2437.98, abs=0.1)
 
 
-def test_extract_grid_zone_log():
+def test_extract_grid_zone_log(testdata_path: Path) -> None:
     dframe = extract_grid_zone_tops(well_list=WELLS, gridzonelog="grid_zones")
     assert set(dframe["ZONE"].unique()) == {
         "Below_Top_reek",
