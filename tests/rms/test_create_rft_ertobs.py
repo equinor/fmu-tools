@@ -5,10 +5,14 @@ import logging
 import math
 import os
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
 import pytest
+from _pytest.compat import LEGACY_PATH
+from _pytest.logging import LogCaptureFixture
+from numpy.typing import NDArray
 
 from fmu.tools._common import preserve_cwd
 from fmu.tools.rms import create_rft_ertobs
@@ -20,10 +24,10 @@ logging.basicConfig(level=logging.INFO)
 class SurveyPointSeries:
     """Object representing all wellpaths in a gridmodel"""
 
-    def __init__(self, wellname):
+    def __init__(self, wellname: Any) -> None:
         self.wellname = wellname
 
-    def get_measured_depths_and_points(self):
+    def get_measured_depths_and_points(self) -> NDArray[Any] | None:
         """Return numpy array with coordinates/trajectory for individual wells.
 
         This mocked function can return some simple predefined wellname, and
@@ -52,7 +56,7 @@ class SurveyPointSeries:
 class Trajectory:
     """Representing one trajectory for one well"""
 
-    def __init__(self, wellname):
+    def __init__(self, wellname: Any) -> None:
         self.wellname = wellname
         self.survey_point_series = SurveyPointSeries(wellname)
 
@@ -60,7 +64,7 @@ class Trajectory:
 class Wellbore:
     """Represent "all" trajectories for one well"""
 
-    def __init__(self, wellname):
+    def __init__(self, wellname: Any) -> None:
         self.wellname = wellname
         self.trajectories = {
             # Add two trajectory name pointing to the same trajectories,
@@ -73,7 +77,7 @@ class Wellbore:
 class Well:
     """Represents a well, with multiple wellbores"""
 
-    def __init__(self, wellname):
+    def __init__(self, wellname: Any) -> None:
         self.wellname = wellname
         self.wellbore = Wellbore(wellname)
 
@@ -81,10 +85,10 @@ class Well:
 class Grid:
     """Represents the grid (geometry) in an RMS model"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def get_cells_at_points(self, xyz):
+    def get_cells_at_points(self, xyz: list) -> int | float:
         """Returns a cell index integer
 
         Args:
@@ -110,10 +114,10 @@ class Property:
     """Represents a specific property for cells, here only zone
     values and names are mocked"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.code_names = {1: "Valysar", 2: "Therys", 3: "Volon"}
 
-    def get_values(self):
+    def get_values(self) -> dict[int, int]:
         """Return a map from cell_index to zone_val"""
         # The mock assumes we have three grid cells, mapped to each zone.
         return {1000: 1, 2000: 2, 3000: 3}
@@ -122,10 +126,10 @@ class Property:
 class GridModel:
     """Represents a Gridmodel, that can associated to one grid."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.properties = {"Zone": Property()}
 
-    def get_grid(self):
+    def get_grid(self) -> Grid:
         """Get the associated grid"""
         return Grid()
 
@@ -133,7 +137,7 @@ class GridModel:
 class RMSMockedProject:
     """Represent the RMS/roxapi "project" magic variable"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.wells = {
             "R_A2": Well("R_A2"),
             "R_A3": Well("R_A3"),
@@ -155,7 +159,7 @@ class RMSMockedProject:
         self.grid_models = {"Simgrid": GridModel()}
 
 
-def test_get_well_coords():
+def test_get_well_coords() -> None:
     """Reliance on this test depends on whether the mocked
     RMS project resembles the real ROXAPI.
     """
@@ -190,12 +194,12 @@ def test_get_well_coords():
         (np.array([[0, 0, 0, 0], [1, 0, 0, 1], [1.001, 0, 0, 0.999]]), False),
     ],
 )
-def test_strictly_downward(coords, expected):
+def test_strictly_downward(coords: np.ndarray, expected: bool) -> None:
     """Test that we can determine if wells go strictly downwards"""
     assert create_rft_ertobs.strictly_downward(coords) == expected
 
 
-def test_interp_from_md():
+def test_interp_from_md() -> None:
     """Test interpolation along a wellpath from MD to XYZ"""
     coords = np.array([[0, 0, 0, 0], [1, 0, 0, 1]])
     assert create_rft_ertobs.interp_from_md(0.5, coords, interpolation="linear") == (
@@ -210,7 +214,7 @@ def test_interp_from_md():
     )
 
 
-def test_interp_from_xyz():
+def test_interp_from_xyz() -> None:
     """Test interpolation along a wellpath from XYZ to MD"""
     coords = np.array([[0, 0, 0, 0], [1, 0, 0, 1]])
     assert create_rft_ertobs.interp_from_xyz((0, 0, 0.5), coords) == 0.5
@@ -230,7 +234,7 @@ def test_interp_from_xyz():
 
 
 @preserve_cwd
-def test_ertobs_df_to_files_1(tmpdir):
+def test_ertobs_df_to_files_1(tmpdir: LEGACY_PATH) -> None:
     """Test the writing of obs and txt files to disk, from a dataframe"""
     tmpdir.chdir()
     ertobs_df = pd.DataFrame(
@@ -262,7 +266,7 @@ def test_ertobs_df_to_files_1(tmpdir):
 
 
 @preserve_cwd
-def test_main_mock_drogon(tmpdir):
+def test_main_mock_drogon(tmpdir: LEGACY_PATH) -> None:
     """Check that the code when executed on the Drogon case provides a
     predefined set of files (that has been manually verified)"""
     tmpdir.chdir()
@@ -307,7 +311,7 @@ def test_main_mock_drogon(tmpdir):
 
 
 @preserve_cwd
-def test_alternative_trajectory_name(tmpdir):
+def test_alternative_trajectory_name(tmpdir: LEGACY_PATH) -> None:
     """Test that we can use a different trajectory in RMS, but it has to be
     the same for all wells"""
     tmpdir.chdir()
@@ -330,7 +334,7 @@ def test_alternative_trajectory_name(tmpdir):
 
 
 @preserve_cwd
-def test_main_no_rms(tmpdir):
+def test_main_no_rms(tmpdir: LEGACY_PATH) -> None:
     """Test that if we have a full CSV file with all values we don't need
     the RMS project"""
     tmpdir.chdir()
@@ -373,7 +377,9 @@ def test_main_no_rms(tmpdir):
         ({"ERROR": ""}, "ERROR not provided"),
     ],
 )
-def test_missing_dframe_data(data, expected_error, tmpdir):
+def test_missing_dframe_data(
+    data: dict[str, str | float], expected_error: str, tmpdir: LEGACY_PATH
+) -> None:
     """Test error message when something is missing in the input dataframe"""
     tmpdir.chdir()
     dframe_dict = {
@@ -392,7 +398,7 @@ def test_missing_dframe_data(data, expected_error, tmpdir):
 
 
 @preserve_cwd
-def test_absolute_error(tmpdir):
+def test_absolute_error(tmpdir: LEGACY_PATH) -> None:
     """Test that we can specify absolute_error in the config"""
     tmpdir.chdir()
     dframe_dict = {
@@ -414,7 +420,7 @@ def test_absolute_error(tmpdir):
 
 
 @preserve_cwd
-def test_absolute_error_ignored(tmpdir):
+def test_absolute_error_ignored(tmpdir: LEGACY_PATH) -> None:
     """Test that we can absolute_error in the config is ignored if ERROR is specified"""
     tmpdir.chdir()
     dframe_dict = {
@@ -437,7 +443,7 @@ def test_absolute_error_ignored(tmpdir):
 
 
 @preserve_cwd
-def test_configparsing(tmpdir, caplog):
+def test_configparsing(tmpdir: LEGACY_PATH, caplog: LogCaptureFixture) -> None:
     """Test that the function that validates and parses the config dictionary
     gives correct error messages, and returns a dict with defaults filled in"""
 
@@ -486,7 +492,7 @@ def test_configparsing(tmpdir, caplog):
 
 
 @preserve_cwd
-def test_date_parsing(tmpdir):
+def test_date_parsing(tmpdir: LEGACY_PATH) -> None:
     """Check that the ambiguous "DD MM YYYY" date format
     can be parsed "correctly" in input CSV files."""
     tmpdir.chdir()
@@ -503,7 +509,7 @@ def test_date_parsing(tmpdir):
 
 
 @preserve_cwd
-def test_parse_alias_config(tmpdir):
+def test_parse_alias_config(tmpdir: LEGACY_PATH) -> None:
     """Test that alias files can be parsed"""
     tmpdir.chdir()
     minimal_config = {
@@ -563,7 +569,7 @@ def test_parse_alias_config(tmpdir):
 
 @preserve_cwd
 @pytest.mark.parametrize("rftzone", [("Volon"), ("Nansen")])
-def test_zones(rftzone, tmpdir, caplog):
+def test_zones(rftzone, tmpdir: LEGACY_PATH, caplog: LogCaptureFixture) -> None:
     """Test that a warning is emitted for RFT observations that in the RMS grid
     has ended up in a different zone than the one requested in the input"""
     tmpdir.chdir()
@@ -594,7 +600,7 @@ def test_zones(rftzone, tmpdir, caplog):
 
 
 @preserve_cwd
-def test_rft_outside_grid(tmp_path, caplog):
+def test_rft_outside_grid(tmp_path: Path, caplog: LogCaptureFixture) -> None:
     """Test behaviour when points are outside the grid."""
     os.chdir(tmp_path)
     dframe_dict = {
@@ -621,7 +627,7 @@ def test_rft_outside_grid(tmp_path, caplog):
 
 
 @preserve_cwd
-def test_rft_outside_grid_with_zone(tmp_path, caplog):
+def test_rft_outside_grid_with_zone(tmp_path: Path, caplog: LogCaptureFixture) -> None:
     """Test behaviour when points are outside the grid and we try
     to match with a zone (which can't be done when the point is outside the grid).
     """
@@ -659,7 +665,7 @@ def test_rft_outside_grid_with_zone(tmp_path, caplog):
 
 
 @preserve_cwd
-def test_report_step_same_xyz(tmpdir):
+def test_report_step_same_xyz(tmpdir: LEGACY_PATH) -> None:
     """For wells with RFT observations at multiple dates, the REPORT_STEP
     parameter must be set to something unique, the current code enumerates it
     from 1 and up. This test is with a measurement repeated in the same point"""
@@ -708,7 +714,7 @@ def test_report_step_same_xyz(tmpdir):
 
 
 @preserve_cwd
-def test_report_step_different_xyz(tmpdir):
+def test_report_step_different_xyz(tmpdir: LEGACY_PATH) -> None:
     """Multiple dates for a well at different xyz.
 
     This requires a setup compatible with GENDATA_RFT in semeio and GEN_DATA in ERT.
