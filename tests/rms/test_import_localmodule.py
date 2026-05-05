@@ -2,6 +2,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -28,7 +29,9 @@ def say_hello(name):
         ("invalid_name", False, True),
     ],
 )
-def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
+def test_rms_import_localmodule(
+    tmp_path: Path, modulename: str, shall_warn: bool, shall_fail: bool
+) -> None:
     """Test import of a module via rms.import_localmodule."""
     pycomp = tmp_path / "myproject" / "pythoncomp"
     pycomp.mkdir(parents=True)
@@ -60,7 +63,7 @@ def test_rms_import_localmodule(tmp_path, modulename, shall_warn, shall_fail):
 
 
 @preserve_cwd
-def test_rms_import_invalid_name(tmp_path):
+def test_rms_import_invalid_name(tmp_path: Path) -> None:
     """Test import of a module that is invalid."""
 
     pycomp = tmp_path / "myproject" / "pythoncomp"
@@ -77,7 +80,7 @@ def test_rms_import_invalid_name(tmp_path):
 
 
 @preserve_cwd
-def test_rms_import_ex1_localmodule_external_single(tmp_path):
+def test_rms_import_ex1_localmodule_external_single(tmp_path: Path) -> None:
     """Test import of a external (file) module via rms.import_localmodule."""
 
     myproj = tmp_path / "ex1" / "myproject1"
@@ -100,7 +103,7 @@ def test_rms_import_ex1_localmodule_external_single(tmp_path):
 
 
 @preserve_cwd
-def test_rms_import_ex2_localmodule_external_package(tmp_path):
+def test_rms_import_ex2_localmodule_external_package(tmp_path: Path) -> None:
     """Test import of a external (package) module via rms.import_localmodule."""
 
     myproj = tmp_path / "ex2" / "myproject2"
