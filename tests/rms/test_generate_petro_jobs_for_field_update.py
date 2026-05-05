@@ -15,7 +15,7 @@ import filecmp
 import shutil
 from os.path import isdir
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import pytest
 import xtgeo  # type: ignore
@@ -269,7 +269,7 @@ def rename_subgrids(xtgeo_grd: xtgeo.Grid) -> None:
 
 # Here the temporary RMS project is created. It contains a grid,
 # a facies parameter and an original petrophysical job
-def create_project():
+def create_project() -> Any:
     """Create a tmp RMS project for testing, populate with basic data.
 
     After the yield command, the teardown phase will remove the tmp RMS project.
