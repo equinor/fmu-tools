@@ -9,6 +9,7 @@ the decorator "roxapilicense"
 """
 
 import shutil
+from collections.abc import Generator
 from os.path import isdir
 from pathlib import Path
 
@@ -39,7 +40,7 @@ WELLS1 = ["OP1_perf.w", "OP_2.w", "OP_6.w", "XP_with_repeat.w"]
 
 
 @pytest.fixture(name="create_project", scope="module", autouse=True)
-def fixture_create_project(testdata_path):
+def fixture_create_project(testdata_path: Path) -> Generator[None, None, None]:
     """Create a tmp RMS project for testing, populate with basic data.
 
     After the yield command, the teardown phase will remove the tmp RMS project.
@@ -114,7 +115,7 @@ def fixture_create_project(testdata_path):
 
 
 @pytest.mark.skipunlessroxar
-def test_qcreset():
+def test_qcreset() -> None:
     """Test qcreset metod in roxapi."""
     # ==================================================================================
     from fmu.tools.rms import qcreset  # noqa
