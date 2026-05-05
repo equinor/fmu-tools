@@ -4,6 +4,7 @@ from os import chdir, listdir
 from pathlib import Path
 from shutil import copytree
 from textwrap import dedent
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -19,11 +20,11 @@ EXPECTED = TESTDIR / "expected.snakeoil.rms13.0.3"
 
 
 @pytest.fixture()
-def project():
+def project() -> PythonCompMaster:
     return PythonCompMaster(TESTPROJ)
 
 
-def test_invalid_project(tmp_path):
+def test_invalid_project(tmp_path: Path) -> None:
     """Raise if we can't be sure the project dir is an RMS project"""
     with pytest.raises(
         expected_exception=FileNotFoundError,
@@ -32,7 +33,7 @@ def test_invalid_project(tmp_path):
         PythonCompMaster(tmp_path)
 
 
-def test_missing_master(tmp_path):
+def test_missing_master(tmp_path: Path) -> None:
     """Raise when pythoncomp/ has no .master to parse"""
     root_master = tmp_path / ".master"
     root_master.write_text("")
@@ -46,7 +47,7 @@ def test_missing_master(tmp_path):
         PythonCompMaster(tmp_path)
 
 
-def test_lock_file(tmp_path):
+def test_lock_file(tmp_path: Path) -> None:
     """Raise if an RMS lock files exists and it's not safe to make
     changes
     """
@@ -90,7 +91,7 @@ End parameter"""
         ),
     ],
 )
-def test_invalid_master(tmp_path, content):
+def test_invalid_master(tmp_path: Path, content: str) -> None:
     """Some light (and probably unnecessary) checks that the PythonComp
     .master file is valid
     """
@@ -108,7 +109,7 @@ def test_invalid_master(tmp_path, content):
         PythonCompMaster(tmp_path)
 
 
-def test_header_parse(project):
+def test_header_parse(project: PythonCompMaster) -> None:
     """Non-exhaustive checks that we parse the GEOMATIC header
     correctly.
     """
@@ -119,17 +120,17 @@ def test_header_parse(project):
     assert project.header["fileversion"] == "2021.0000"
 
 
-def test_prop_parent(project):
+def test_prop_parent(project: PythonCompMaster) -> None:
     """Parent prop is correct"""
     assert project.parent == str(TESTPROJ / "pythoncomp")
 
 
-def test_prop_path(project):
+def test_prop_path(project: PythonCompMaster) -> None:
     """Path prop is correct"""
     assert project.path == str(TESTPROJ / "pythoncomp" / ".master")
 
 
-def test_get_inconsistent_entries(project):
+def test_get_inconsistent_entries(project: PythonCompMaster) -> None:
     """Entries with inconsistent instance_names and standalonefilenames are
     correctly found.
     """
@@ -142,7 +143,7 @@ def test_get_inconsistent_entries(project):
     assert "f" in entries
 
 
-def test_get_invalid_extensions(project):
+def test_get_invalid_extensions(project: PythonCompMaster) -> None:
     """Entries with non-.py file extensions are correctly found."""
     entries = project.get_invalid_extensions()
     assert len(entries) == 4
@@ -152,7 +153,7 @@ def test_get_invalid_extensions(project):
     assert "f" in entries
 
 
-def test_get_invalid_instance_names(project):
+def test_get_invalid_instance_names(project: PythonCompMaster) -> None:
     """Entries with a non-.py extension in their instance_name are
     found.
     """
@@ -161,13 +162,13 @@ def test_get_invalid_instance_names(project):
     assert "f" in entries
 
 
-def test_get_nonexistent_standalonefilenames(project):
+def test_get_nonexistent_standalonefilenames(project: PythonCompMaster) -> None:
     """Entries in the .master file, but which do not exist on disk."""
     entries = project.get_nonexistent_standalonefilenames()
     assert len(entries) == 0
 
 
-def test_get_pep8_noncompliant(project):
+def test_get_pep8_noncompliant(project: PythonCompMaster) -> None:
     """Entries with a filename that contains a capital letter, a hyphen, or
     begin with a number.
     """
@@ -176,7 +177,7 @@ def test_get_pep8_noncompliant(project):
     assert "PEP8.py" in entries
 
 
-def test_get_unused_scripts(project):
+def test_get_unused_scripts(project: PythonCompMaster) -> None:
     """Entries that are in the the pythoncomp/.master file but not use in a
     workflow.
     """
@@ -185,7 +186,7 @@ def test_get_unused_scripts(project):
     assert "c.py" in entries
 
 
-def test_get_entry(project):
+def test_get_entry(project: PythonCompMaster) -> None:
     """Get the full dictionary representing a PSJParam entry."""
     with pytest.raises(expected_exception=KeyError):
         project.get_entry("fail.py")
@@ -194,7 +195,7 @@ def test_get_entry(project):
     assert entry["standalonefilename"] == "a.py"
 
 
-def test_fix_standalone_filenames(tmp_path):
+def test_fix_standalone_filenames(tmp_path: Path) -> None:
     """Fix the project and check the results."""
     project_path = tmp_path / "snakeoil.rms13.0.3"
     copytree(TESTPROJ, project_path)
@@ -220,7 +221,7 @@ def test_fix_standalone_filenames(tmp_path):
     assert "f" in unfixed
 
 
-def test_no_write_master_file(tmp_path):
+def test_no_write_master_file(tmp_path: Path) -> None:
     """Make sure no changes are written when we pass write=False"""
     project_path = tmp_path / "snakeoil.rms13.0.3"
     copytree(TESTPROJ, project_path)
@@ -235,7 +236,7 @@ def test_no_write_master_file(tmp_path):
     assert set(listdir(orig_py)) == set(listdir(project.parent))
 
 
-def test_write_master_file(tmp_path):
+def test_write_master_file(tmp_path: Path) -> None:
     """Make sure we output a correct .master file, and compare all other
     files with the expected test data.
     """
@@ -252,7 +253,7 @@ def test_write_master_file(tmp_path):
     assert set(listdir(exp_py)) == set(listdir(project.parent))
 
 
-def test_cmdline_main(tmp_path, mocker):
+def test_cmdline_main(tmp_path: Path, mocker: MagicMock) -> None:
     """Test the cmndline utility runs without errors. Both with and
     without test-run option.
     """
@@ -267,7 +268,7 @@ def test_cmdline_main(tmp_path, mocker):
 
 
 @preserve_cwd
-def test_cmdline_main_backup(tmp_path, mocker):
+def test_cmdline_main_backup(tmp_path: Path, mocker: MagicMock) -> None:
     """Test the backup of the pythoncomp through the cmndline."""
     project_path = tmp_path / "snakeoil.rms13.0.3"
     copytree(TESTPROJ, project_path)
