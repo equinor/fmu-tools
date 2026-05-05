@@ -8,9 +8,10 @@ This requires a RMSAPI license, and to be ran in a "roxenvbash" environment
 """
 
 import shutil
+from collections.abc import Generator
 from os.path import isdir
 from pathlib import Path
-from typing import List, Tuple
+from typing import Any, List, Tuple
 
 import numpy as np
 import pytest
@@ -126,7 +127,7 @@ ZONE_FACIES_PETRO_VALUES = {
 }
 
 
-def make_facies_param_multizone(dimensions: Tuple[int, int, int]):
+def make_facies_param_multizone(dimensions: Tuple[int, int, int]) -> np.ndarray:
     values = np.zeros(dimensions, dtype=np.uint8)
     sum_layer = 0
     nfacies = len(FACIES_CODE_NAMES)
@@ -145,7 +146,7 @@ def make_facies_param_multizone(dimensions: Tuple[int, int, int]):
     return values
 
 
-def make_facies_param_singlezone(dimensions: Tuple[int, int, int]):
+def make_facies_param_singlezone(dimensions: Tuple[int, int, int]) -> np.ndarray:
     values = np.zeros(dimensions, dtype=np.uint8)
     for k in range(dimensions[2]):
         facies_for_layer = (k % 2) + 1
@@ -153,7 +154,7 @@ def make_facies_param_singlezone(dimensions: Tuple[int, int, int]):
     return values
 
 
-def make_zone_param(dimensions: Tuple[int, int, int]):
+def make_zone_param(dimensions: Tuple[int, int, int]) -> np.ndarray:
     values = np.zeros(dimensions, dtype=np.uint8)
     sum_layer = 0
     for zone_name, nlayers in SUBGRID_DICT.items():
@@ -164,15 +165,18 @@ def make_zone_param(dimensions: Tuple[int, int, int]):
     return values
 
 
-def make_petro_param(dimensions: Tuple[int, int, int], value: float):
+def make_petro_param(dimensions: Tuple[int, int, int], value: float) -> np.ndarray:
     values = np.zeros(dimensions, dtype=np.float32)
     values[:, :, :] = value
     return values
 
 
 def make_reference_petro_param(
-    dimensions: Tuple[int, int, int], petro_name: str, facies_values, zone_values
-):
+    dimensions: Tuple[int, int, int],
+    petro_name: str,
+    facies_values: np.ndarray,
+    zone_values: np.ndarray,
+) -> np.ndarray:
     (nx, ny, nz) = dimensions
     values = np.zeros(dimensions, dtype=np.float32)
     # Assign only values for the grid cells containing wanted facies and zone code
@@ -212,9 +216,9 @@ def get_facies_code(facies_name: str) -> None:
 
 def make_petro_param_per_zone(
     dimensions: Tuple[int, int, int],
-    input_values,
+    input_values: np.ndarray,
     zone_name: str,
-    zone_values,
+    zone_values: np.ndarray,
     constant_value: float,
 ):
     # Will modify input_values and return updated values
@@ -240,7 +244,7 @@ def get_petro_variable_names() -> List[str]:
 
 
 @pytest.fixture(scope="module", autouse=True, name="project")
-def create_project():
+def create_project() -> Generator[Any, None, None]:
     """Create a tmp RMS project for testing, populate with basic data."""
     prj1 = str(PRJ)
 
