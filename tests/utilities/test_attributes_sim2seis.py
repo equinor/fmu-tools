@@ -1,4 +1,6 @@
 import logging
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -11,7 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.fixture(scope="module", name="local_testdata")
-def fixture_testdata(testdata_path):
+def fixture_testdata(
+    testdata_path: Path,
+) -> tuple[xtgeo.grid3d, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface]:
     """Read test data from file as fixture."""
     gpath = testdata_path / "3dgrids/drogon/4/simgrid_with_region_zone_attr.roff"
 
@@ -42,7 +46,11 @@ def fixture_testdata(testdata_path):
         (("", "base"), 32),
     ],
 )
-def test_getlayer_function(local_testdata, where, expected):
+def test_getlayer_function(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, Any],
+    where: tuple[str, str],
+    expected: int,
+) -> None:
     """Test the internal _get_layer() function (where layer number has base 1)."""
 
     grid, _, zone, _ = local_testdata
@@ -50,7 +58,9 @@ def test_getlayer_function(local_testdata, where, expected):
     assert _get_layer(where, grid, zone) == expected
 
 
-def test_attr_maps_sim2seis(local_testdata):
+def test_attr_maps_sim2seis(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
+) -> None:
     """Test a basic case."""
 
     grid, region, zone, attr_surface = local_testdata
@@ -74,7 +84,9 @@ def test_attr_maps_sim2seis(local_testdata):
     assert df.REGION.max() == 7.0
 
 
-def test_attr_maps_sim2seis_error_notabsolute(local_testdata):
+def test_attr_maps_sim2seis_error_notabsolute(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
+) -> None:
     """Test a case where user do not give error map as absolute."""
 
     grid, region, zone, attr_surface = local_testdata
@@ -94,7 +106,9 @@ def test_attr_maps_sim2seis_error_notabsolute(local_testdata):
         )
 
 
-def test_attr_maps_sim2seis_set_min_error(local_testdata):
+def test_attr_maps_sim2seis_set_min_error(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
+) -> None:
     """Test a case where user sets a minimum error value."""
 
     grid, region, zone, attr_surface = local_testdata
@@ -119,7 +133,9 @@ def test_attr_maps_sim2seis_set_min_error(local_testdata):
     assert df.OBS_ERROR.min() >= 0.01
 
 
-def test_attr_maps_sim2seis_no_region(local_testdata):
+def test_attr_maps_sim2seis_no_region(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
+) -> None:
     """Test a case where there is no region, and attribute error as float."""
 
     grid, _, zone, attr_surface = local_testdata
