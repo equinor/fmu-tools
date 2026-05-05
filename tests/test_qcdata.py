@@ -1,6 +1,7 @@
 """Testing qcdata loading of XTGeo data"""
 
 from os.path import abspath
+from pathlib import Path
 
 import pytest
 import xtgeo
@@ -15,7 +16,7 @@ PERFLOGNAME = "Perflog"
 REPORT = abspath("./somefile.csv")
 
 
-def test_qcdata(testdata_path):
+def test_qcdata(testdata_path: Path) -> None:
     """Testing getting data with _QCForwardData class"""
 
     gridfile = str(testdata_path / "3dgrids/reek/reek_sim_grid.roff")
