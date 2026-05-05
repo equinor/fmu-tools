@@ -12,7 +12,7 @@ import filecmp
 import shutil
 from os.path import isdir
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import numpy as np
 import pytest
@@ -66,12 +66,12 @@ ZONE_CODE_NAMES = {
 }
 
 
-def create_grid(project) -> None:
+def create_grid(project: Any) -> None:
     grid = xtgeo.create_box_grid(GRID_DIM, origin=ORIGIN, increment=INCREMENT)
     grid.to_roxar(project, GRIDNAME)
 
 
-def create_wells(project) -> List[str]:
+def create_wells(project: Any) -> List[str]:
     well_list = []
     well_names = []
     for i in range(NWELLS):
@@ -157,7 +157,7 @@ def create_bw_job(
     job_name: str,
     well_names: List[str],
     debug_print: bool = False,
-):
+) -> Any:
     bw_job = rmsapi.jobs.Job.create(owner=owner_strings, type=job_type, name=job_name)
 
     params = {
@@ -211,7 +211,7 @@ def create_bw_job(
     return bw_job
 
 
-def create_project():
+def create_project() -> Any:
     """Create a tmp RMS project for testing, populate with basic data."""
 
     prj1 = str(PRJ)
@@ -272,7 +272,7 @@ def test_generate_bw() -> None:
             shutil.rmtree(RESULTDIR)
 
 
-def write_bw_to_files(project) -> List[str]:
+def write_bw_to_files(project: Any) -> List[str]:
     xtgeo_bw = xtgeo.blockedwells_from_roxar(
         project, GRIDNAME, BLOCKED_WELL_SET, lognames="all"
     )
