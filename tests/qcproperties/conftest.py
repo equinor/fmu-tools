@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.fixture()
-def data_grid(testdata_path: Path) -> dict[str, str | dict[str, dict[str, str]]]:
+def data_grid(testdata_path: Path) -> dict[str, str | dict[str, dict[str, str]] | int]:
     return {
         "path": abspath(testdata_path / "3dgrids/reek/"),
         "grid": "reek_sim_grid.roff",
@@ -24,7 +24,7 @@ def data_grid(testdata_path: Path) -> dict[str, str | dict[str, dict[str, str]]]
 @pytest.fixture()
 def data_wells(
     testdata_path: Path,
-) -> dict[str, str | list[str] | dict[str, dict[str, str]]]:
+) -> dict[str, str | list[str] | dict[str, dict[str, str]] | int]:
     return {
         "path": abspath(testdata_path / "wells/reek/1/"),
         "wells": ["OP_*.w"],
@@ -43,7 +43,7 @@ def data_wells(
 @pytest.fixture()
 def data_bwells(
     testdata_path: Path,
-) -> dict[str, str | list[str] | dict[str, dict[str, str]]]:
+) -> dict[str, str | list[str] | dict[str, dict[str, str]] | int]:
     return {
         "path": abspath(testdata_path / "wells/reek/1/"),
         "wells": ["OP_1.bw"],
