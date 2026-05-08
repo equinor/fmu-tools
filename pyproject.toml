@@ -116,3 +116,11 @@ markers = [
     "integration: marks a test as an integration test",
     "skipunlessroxar: skip this test unless Roxar license",
 ]
+
+[tool.uv]
+exclude-newer = "1 week"
+# Exclude specific package(s) we maintain for quick iteration
+
+[tool.uv.exclude-newer-package]
+"xtgeo" = false
+
