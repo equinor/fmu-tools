@@ -19,7 +19,7 @@ class FipMapper:
         self,
         *,
         yamlfile: Optional[Union[str, Path]] = None,
-        mapdata: Optional[Dict[str, str]] = None,
+        mapdata: Optional[Dict[str, Any]] = None,
         skipstring: Optional[Union[List[str], str]] = None,
     ):
         """Represent mappings between region/zones to FIPxxx.
