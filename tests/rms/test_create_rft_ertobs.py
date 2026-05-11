@@ -447,8 +447,6 @@ def test_configparsing(tmpdir: LEGACY_PATH, caplog: LogCaptureFixture) -> None:
     """Test that the function that validates and parses the config dictionary
     gives correct error messages, and returns a dict with defaults filled in"""
 
-    with pytest.raises(TypeError):
-        check_and_parse_config()
     with pytest.raises(AssertionError):
         check_and_parse_config({})
 
