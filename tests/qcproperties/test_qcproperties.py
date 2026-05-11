@@ -64,7 +64,7 @@ class TestProperties2df:
         }
 
     def test_filters(
-        self, data_grid: dict[str, str | dict[str, dict[str, str]]]
+        self, data_grid: dict[str, str | dict[str, dict[str, object]]]
     ) -> None:
         """Test filters as argument"""
         data_grid["filters"] = {
@@ -97,7 +97,8 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].max() < 0.25
 
     def test_selector_filters(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self,
+        data_grid: dict[str, str | list[str] | dict[str, dict[str, str | list[str]]]],
     ) -> None:
         """Test filters on selector"""
         data_grid["selectors"] = {
@@ -120,7 +121,8 @@ class TestProperties2df:
         assert "SHALE" not in list(pdf.dataframe["FACIES"].unique())
 
     def test_filters_and_selector_filters(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self,
+        data_grid: dict[str, str | list[str] | dict[str, dict[str, str | list[str]]]],
     ) -> None:
         """
         Test filters on both selector and as separate argument
@@ -140,7 +142,8 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].mean() == pytest.approx(0.2374, abs=0.001)
 
     def test_filters_and_property_filters(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self,
+        data_grid: dict[str, str | list[str] | dict[str, dict[str, str | list[float]]]],
     ) -> None:
         """
         Test filters on both properties and as separate argument.
@@ -161,7 +164,10 @@ class TestProperties2df:
         assert pdf.dataframe["PORO"].max() < 0.25
 
     def test_codenames(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self,
+        data_grid: dict[
+            str, str | list[str] | dict[str, dict[str, str | dict[int, str]]]
+        ],
     ) -> None:
         """Test modifying codenames on selectors"""
 
@@ -331,7 +337,7 @@ class TestStatistics:
         ].values == pytest.approx(0.1677, abs=0.001)
 
     def test_no_selector_combos(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]] | bool]
     ) -> None:
         """Test running without selector_combos"""
         data_grid["selector_combos"] = False
@@ -344,7 +350,8 @@ class TestStatistics:
         ) == ["Total"]
 
     def test_multiple_filters(
-        self, data_grid: dict[str, str | list[str] | dict[str, dict[str, str]]]
+        self,
+        data_grid: dict[str, str | list[str] | dict[str, object]],
     ) -> None:
         """Test running two statistics extractions using multiple_filters"""
         data_grid.pop("selectors", None)
@@ -416,7 +423,7 @@ class TestStatisticsMultipleSources:
         qcp = QCProperties()
         yaml_input = Path(__file__).parent / "data/propstat.yml"
         try:
-            qcp.from_yaml(yaml_input)
+            qcp.from_yaml(str(yaml_input))
         except IOError:
             # xtgeo-testdata could be placed at a custom path set in
             # 'XTG_TESTPATH' environment variable or pytest --testdatapath"
@@ -454,4 +461,4 @@ class TestStatisticsMultipleSources:
 
             os.chdir(run_pwd)
 
-            qcp.from_yaml(yaml_tmp_path)
+            qcp.from_yaml(str(yaml_tmp_path))
