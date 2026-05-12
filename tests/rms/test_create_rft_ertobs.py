@@ -450,7 +450,7 @@ def test_configparsing(tmpdir: LEGACY_PATH, caplog: LogCaptureFixture) -> None:
     with pytest.raises(TypeError):
         check_and_parse_config()
     with pytest.raises(AssertionError):
-        check_and_parse_config({})
+        check_and_parse_config()
 
     with pytest.raises(ValueError, match="Missing columns"):
         check_and_parse_config({"input_dframe": pd.DataFrame()})
