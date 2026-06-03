@@ -130,6 +130,8 @@ def _compute_nnc_table(
     crop_origin: tuple[int, int, int],
     refinement: tuple[int, int, int],
     coarse_ncol: int,
+    lmap1: np.ndarray,
+    lmap2: np.ndarray,
 ) -> pd.DataFrame:
     """Compute NNC cell-pair mapping between mother and refined cells.
 
@@ -155,6 +157,9 @@ def _compute_nnc_table(
         crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.
         refinement: ``(rcol, rrow, rlay)`` refinement factors.
         coarse_ncol: Number of columns in the coarse grid (grid1 in the merge).
+        lmap1: Numpy array with layer_mapping (input k -> output k) for grid1
+        lmap2: Numpy array with layer_mapping (input k -> output k) for grid2
+
 
     Returns:
         A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.
@@ -163,6 +168,7 @@ def _compute_nnc_table(
 
     rcol, rrow, rlay = refinement
     i0, j0, k0 = crop_origin
+
     # In the merged grid, grid2 (refined) starts after a 1-column gap:
     i_offset = coarse_ncol + 1
 
@@ -234,10 +240,10 @@ def _compute_nnc_table(
                         {
                             "I1": mi + 1,
                             "J1": mj + 1,
-                            "K1": mk + 1,
+                            "K1": lmap1[mk] + 1,
                             "I2": ri + i_offset + 1,
                             "J2": rj + 1,
-                            "K2": rk + 1,
+                            "K2": lmap2[rk] + 1,
                             "DIRECTION": direction,
                         }
                     )
@@ -271,6 +277,38 @@ def _set_actnum_by_region(
     grid.set_actnum(actnum)
 
 
+def _generate_layer_mappings(
+    coarse_nlay: int,
+    refined_nlay: int,
+    refinement: tuple[int, int, int],
+    crop_origin: tuple[int, int, int],
+) -> tuple[np.ndarray, np.ndarray]:
+    """Generate mappings from old to new layer number.
+    Args:
+        coarse_nlay: Number of layers in the coarse grid (grid1 in the merge).
+        refined_nlay: Number of layers in the refined grid (grid2 in the merge).
+        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.
+        refinement: ``(rcol, rrow, rlay)`` refinement factors.
+
+    Returns:
+        lmap1: Numpy array with layer_mapping (input k -> output k) for grid1
+        lmap2: Numpy array with layer_mapping (input k -> output k) for grid2
+    """
+
+    _, _, rlay = refinement
+    _, _, k0 = crop_origin
+
+    lmap1 = np.arange(coarse_nlay, dtype=np.int32)
+    lmap1 = lmap1 + np.where(
+        lmap1 < k0,
+        0,
+        (rlay - 1) * np.minimum(int(refined_nlay / rlay), lmap1 - k0),
+    )
+    lmap2 = np.arange(refined_nlay, dtype=np.int32) + k0
+
+    return (lmap1, lmap2)
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -281,17 +319,16 @@ def create_nested_hybrid_grid(
     region: xtgeo.GridProperty,
     target_region_id: int,
     refinement: tuple[int, int, int],
-) -> tuple[xtgeo.Grid, pd.DataFrame]:
+) -> tuple[
+    xtgeo.Grid,
+    pd.DataFrame,
+]:
     """Create a nested hybrid grid by refining one region and merging it back.
 
     The cells belonging to *target_region_id* are replaced by a refined
-    (subdivided) version of the same region.  A ``NEST_ID`` discrete property
-    is attached to the merged grid, encoding the nested hybrid structure:
+    (subdivided) version of the same region.
 
-    - ``NEST_ID == 1``: coarse (mother) grid cells.
-    - ``NEST_ID == 2``: refined grid cells.
-
-    In addition, a **NNC mapping table** is returned that lists every
+    A **NNC mapping table** is returned that lists every
     mother ↔ refined cell pair that should be connected by a Non-Neighbour
     Connection (NNC).  The table is derived from the topological knowledge
     available at merge time (which original cell was refined and how its
@@ -316,9 +353,9 @@ def create_nested_hybrid_grid(
         refinement: ``(ncol, nrow, nlay)`` refinement factors.
 
     Returns:
-        A tuple ``(merged_grid, nnc_table)`` where *merged_grid* is a new
-        :class:`xtgeo.Grid` with the refined region stitched back into the
-        coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping
+        A tuple ``(merged_grid, nnc_table)`` where *merged_grid*
+        is a new :class:`xtgeo.Grid` with the refined region stitched back into
+        the coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping
         mother cells to their connected refined cells.
     """
     if any(r < 1 for r in refinement):
@@ -343,10 +380,19 @@ def create_nested_hybrid_grid(
     # 2. Refine the cropped grid.
     refined = cropped.copy()
     rcol, rrow, rlay = refinement
+    _, _, olay = crop_origin
     refined.refine(refine_col=rcol, refine_row=rrow, refine_layer=rlay)
     _logger.info("Refined cropped grid dimensions: %s", refined.dimensions)
 
-    # 3. Compute the NNC mapping table *before* deactivation mutates anything.
+    # 3. Generate layer mappings
+    lmap1, lmap2 = _generate_layer_mappings(
+        coarse_nlay=grid.nlay,
+        refined_nlay=refined.nlay,
+        crop_origin=crop_origin,
+        refinement=refinement,
+    )
+
+    # 4. Compute the NNC mapping table *before* deactivation mutates anything.
     #    This uses the original region property to find boundary faces and
     #    maps them through the crop → refine → merge index chain.
     nnc_table = _compute_nnc_table(
@@ -355,37 +401,20 @@ def create_nested_hybrid_grid(
         crop_origin=crop_origin,
         refinement=refinement,
         coarse_ncol=grid.ncol,
+        lmap1=lmap1,
+        lmap2=lmap2,
     )
 
-    # 4. Deactivate the target region in the coarse grid (will be replaced).
+    # 5. Deactivate the target region in the coarse grid (will be replaced).
     coarse_region = grid.get_prop_by_name(region.name)
     _set_actnum_by_region(grid, coarse_region, target_region_id, invert=False)
 
-    # 5. In the refined grid keep only target-region cells active.
+    # 6. In the refined grid keep only target-region cells active.
     refined_region = refined.get_prop_by_name(region.name)
     _set_actnum_by_region(refined, refined_region, target_region_id, invert=True)
 
-    # 6. Create NEST_ID properties before merging (1=mother, 2=refined).
-    nest_id_coarse = xtgeo.GridProperty(
-        grid,
-        name="NEST_ID",
-        discrete=True,
-        values=np.where(grid.get_actnum().values == 1, 1, 0).astype(np.int32),
-        codes={0: "inactive", 1: "mother", 2: "refined"},
-    )
-    grid.append_prop(nest_id_coarse)
-
-    nest_id_refined = xtgeo.GridProperty(
-        refined,
-        name="NEST_ID",
-        discrete=True,
-        values=np.where(refined.get_actnum().values == 1, 2, 0).astype(np.int32),
-        codes={0: "inactive", 1: "mother", 2: "refined"},
-    )
-    refined.append_prop(nest_id_refined)
-
     # 7. Merge the two grids.
-    merged = xtgeo.grid_merge(grid, refined)
+    merged = xtgeo.grid_merge(grid, refined, lmap1, lmap2)
     _logger.info("Merged grid dimensions: %s", merged.dimensions)
 
     return merged, nnc_table

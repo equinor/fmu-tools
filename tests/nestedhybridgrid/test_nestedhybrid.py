@@ -10,6 +10,9 @@ from fmu.tools.nestedhybridgrid import (
     nnc_to_flowsimulator_input,
     nnc_to_gridproperty,
 )
+from fmu.tools.nestedhybridgrid.nestedhybrid import (
+    _generate_layer_mappings,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -77,11 +80,11 @@ class TestCreateNestedHybridGrid:
         assert merged.nlay >= grid.nlay
 
     def test_nest_id_property_attached(self):
-        """The merged grid must have a NEST_ID property."""
+        """The merged grid must have a refinement region property."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
         merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
 
-        nest_id = merged.get_prop_by_name("NEST_ID")
+        nest_id = merged.get_prop_by_name(region.name)
         assert nest_id is not None
         unique_vals = set(np.unique(np.ma.filled(nest_id.values, fill_value=0)))
         # Must contain at least mother (1) and refined (2) cells
@@ -89,11 +92,11 @@ class TestCreateNestedHybridGrid:
         assert 2 in unique_vals
 
     def test_nest_id_values_consistent(self):
-        """Active cells should only have NEST_ID in {1, 2}."""
+        """Active cells should only have refinement region in {1, 2}."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
         merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
 
-        nest_id = merged.get_prop_by_name("NEST_ID")
+        nest_id = merged.get_prop_by_name(region.name)
         actnum = merged.get_actnum()
 
         active_mask = actnum.values == 1
@@ -125,11 +128,75 @@ class TestCreateNestedHybridGrid:
         orig_nactive = grid.nactive
         orig_region_sum = int(np.ma.filled(region.values, 0).sum())
 
-        _ = create_nested_hybrid_grid(grid, region, rid, refinement=(2, 2, 1))
+        _, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(2, 2, 1))
 
         assert grid.ncol == orig_ncol
         assert grid.nactive == orig_nactive
         assert int(np.ma.filled(region.values, 0).sum()) == orig_region_sum
+
+    def test_lmap_via_nnc(self):
+        """Test correct lmaps generated indirectly via nnc_table.
+        Cells in nnc_table for layer number completely controlled by lmap.
+        """
+        grid, region, rid = _make_box_grid_with_region(dimension=(3, 3, 3))
+
+        region.values = np.ones(region.values.shape)
+        region.values[1][1][1] = rid
+
+        _, nnc_table = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+        nnc_table1 = nnc_table[
+            (nnc_table["I1"] == 2)
+            & (nnc_table["J1"] == 1)
+            & (nnc_table["I2"] == 5)
+            & (nnc_table["J2"] == 1)
+        ]
+
+        assert nnc_table1[(nnc_table1["K1"] == 2) & (nnc_table1["K2"] == 2)].shape == (
+            1,
+            7,
+        )
+        assert nnc_table1[(nnc_table1["K1"] == 2) & (nnc_table1["K2"] == 3)].shape == (
+            1,
+            7,
+        )
+        assert nnc_table1[(nnc_table1["K1"] == 3) & (nnc_table1["K2"] == 2)].shape == (
+            0,
+            7,
+        )
+
+    def test_lmap_generation_simple(self):
+        """Tests that the correct layer mappings are generated"""
+
+        lmap1, lmap2 = _generate_layer_mappings(3, 2, (2, 2, 2), (1, 1, 1))
+
+        assert np.array_equal(lmap1, np.array([0, 1, 3]))
+        assert np.array_equal(lmap2, np.array([1, 2]))
+
+    def test_lmap_generation_no_offset(self):
+        """Tests that the correct layer mappings are generated"""
+
+        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 0))
+
+        assert np.array_equal(lmap1, np.array([0, 2, 4]))
+        assert np.array_equal(lmap2, np.array([0, 1, 2, 3]))
+
+    def test_lmap_generation_full_offset(self):
+        """Tests that the correct layer mappings are generated"""
+
+        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 3))
+
+        assert np.array_equal(lmap1, np.array([0, 1, 2]))
+        assert np.array_equal(lmap2, np.array([3, 4, 5, 6]))
+
+    def test_lmap_generation_ref10(self):
+        """Tests that the correct layer mappings are generated"""
+
+        lmap1, lmap2 = _generate_layer_mappings(3, 20, (2, 2, 10), (1, 1, 1))
+
+        assert np.array_equal(lmap1, np.array([0, 1, 11]))
+        assert np.array_equal(lmap2, np.arange(20) + 1)
 
 
 # ---------------------------------------------------------------------------
@@ -138,7 +205,7 @@ class TestCreateNestedHybridGrid:
 
 
 class TestTransmissibilitiesOnMergedGrid:
-    """Test calling get_transmissibilities on the merged grid with NEST_ID."""
+    """Test calling get_transmissibilities on the merged grid"""
 
     @staticmethod
     def _build_merged_with_props(dimension=(6, 6, 2), refinement=(1, 1, 1)):
