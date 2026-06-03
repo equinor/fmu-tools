@@ -41,6 +41,10 @@ The example here runs within RMS, but similar workflows can be created for file 
     # Load grid and region property
     grid = xtgeo.grid_from_roxar(project, "Simgrid")
     region = xtgeo.gridproperty_from_roxar(project, "Simgrid", "REGION")
+    
+    # Optionally load any other parameter you wish to preserve on grid
+    #zone = xtgeo.gridproperty_from_roxar(project, "Simgrid", "Zone")
+    #grid.append_prop(zone)
 
     # Create nested hybrid grid (e.g. refine region 2 by 2×2×1)
     merged, nnc_table = create_nested_hybrid_grid(
@@ -50,11 +54,12 @@ The example here runs within RMS, but similar workflows can be created for file 
     # store merged grid in RMS (or file)
     merged.to_roxar(project, "NestedHybrid")
 
-    merged.get_prop_by_name("NEST_ID")
-    nest_id.to_roxar(project, "NestedHybrid", nest_id.name)
+    # Optionally extract and store any necessary parameters from grid
+    region2 = merged.get_prop_by_name("REGION")
+    region2.to_roxar(project, "NestedHybrid", region2.name)
 
     # write the NNC pandas to disk; this will be applied for computing NNC's in the next script
-    nnc_table.write_csv("path_to_some_csv_file.csv", index=False)
+    nnc_table.to_csv("path_to_some_csv_file.csv", index=False)
 
 
 The next step is to do a rescaling from the original geogrid to the merged grid
@@ -64,6 +69,7 @@ Further, we need to create NNC transmissibilities and generate file for flow sim
 
 .. code-block:: python
 
+    import pandas as pd
     import xtgeo
     from fmu.tools.nestedhybridgrid import (
         nnc_to_flowsimulator_input,
@@ -74,7 +80,6 @@ Further, we need to create NNC transmissibilities and generate file for flow sim
 
     # Load grid and region property which may be stored in RMS
     nested = xtgeo.grid_from_roxar(project, GNAME)
-    region = nested.get_prop_by_name("NEST_ID")  # if needed for QC
 
     # load the NNC table
     nnc_table = pd.read_csv("path_to_some_nnc_file.csv")
@@ -88,7 +93,7 @@ Further, we need to create NNC transmissibilities and generate file for flow sim
 
     # compute transmissibilities. Note that flow simulators do this for the normal cells/faults
     # so strictly speaking, only nnc_hybrid is needed here.
-    tranx, trany, tranz, nnc_fault, nnc_hybrid, rbnd = merged.get_transmissibilities(
+    tranx, trany, tranz, nnc_fault, nnc_hybrid, rbnd = nested.get_transmissibilities(
         permx, permy, permz, ntg, nnc_table=nnc_table
     )
 
@@ -96,7 +101,7 @@ Further, we need to create NNC transmissibilities and generate file for flow sim
     nnc_to_flowsimulator_input(nnc_hybrid, "some_path/NNC_HYBRID.INC")
 
     # Or map NNCs onto grid properties for visualisation
-    tx_nnc, ty_nnc, tz_nnc = nnc_to_gridproperty(merged, nnc_hybrid)
+    tx_nnc, ty_nnc, tz_nnc = nnc_to_gridproperty(nested, nnc_hybrid)
     tx_nnc.to_roxar(project, GNAME, "TRANX_NNC_QC")  # etc
 
 Concepts
@@ -126,15 +131,6 @@ This table is passed to :meth:`xtgeo.Grid.get_transmissibilities` via the
 ``nnc_table`` parameter.  The transmissibility computation uses geometric
 face-overlap calculations (Sutherland–Hodgman algorithm) and two-point flux
 approximation (TPFA).
-
-NEST_ID property
-^^^^^^^^^^^^^^^^
-
-The merged grid carries a discrete property called ``NEST_ID``:
-
-- **0** — inactive hole cells (carved out to make room for the refined region)
-- **1** — mother (coarse) cells
-- **2** — refined cells
 
 Eclipse / OPM Flow export
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.30.1.dev34+g5ece28f49.d20260603 documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.30.1.dev35+g2a4c5f5dd documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=1609fa41"></script>
+      <script src="_static/documentation_options.js?v=da343c85"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -57,7 +57,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#quick-start-example">Quick-start example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#concepts">Concepts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#nnc-table">NNC table</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#nest-id-property">NEST_ID property</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#eclipse-opm-flow-export">Eclipse / OPM Flow export</a></li>
 </ul>
 </li>
@@ -112,8 +111,7 @@
 <li><p><a class="reference internal" href="#concepts" id="id3">Concepts</a></p>
 <ul>
 <li><p><a class="reference internal" href="#nnc-table" id="id4">NNC table</a></p></li>
-<li><p><a class="reference internal" href="#nest-id-property" id="id5">NEST_ID property</a></p></li>
-<li><p><a class="reference internal" href="#eclipse-opm-flow-export" id="id6">Eclipse / OPM Flow export</a></p></li>
+<li><p><a class="reference internal" href="#eclipse-opm-flow-export" id="id5">Eclipse / OPM Flow export</a></p></li>
 </ul>
 </li>
 </ul>
@@ -150,6 +148,10 @@ e.g. by using software like RMS.</p></li>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">)</span>
 <span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span> <span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
 
+<span class="c1"># Optionally load any other parameter you wish to preserve on grid</span>
+<span class="c1">#zone = xtgeo.gridproperty_from_roxar(project, &quot;Simgrid&quot;, &quot;Zone&quot;)</span>
+<span class="c1">#grid.append_prop(zone)</span>
+
 <span class="c1"># Create nested hybrid grid (e.g. refine region 2 by 2×2×1)</span>
 <span class="n">merged</span><span class="p">,</span> <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">create_nested_hybrid_grid</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">refinement</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -158,17 +160,19 @@ e.g. by using software like RMS.</p></li>
 <span class="c1"># store merged grid in RMS (or file)</span>
 <span class="n">merged</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">)</span>
 
-<span class="n">merged</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="s2">&quot;NEST_ID&quot;</span><span class="p">)</span>
-<span class="n">nest_id</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">,</span> <span class="n">nest_id</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="c1"># Optionally extract and store any necessary parameters from grid</span>
+<span class="n">region2</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
+<span class="n">region2</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">,</span> <span class="n">region2</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
 <span class="c1"># write the NNC pandas to disk; this will be applied for computing NNC&#39;s in the next script</span>
-<span class="n">nnc_table</span><span class="o">.</span><span class="n">write_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">nnc_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The next step is to do a rescaling from the original geogrid to the merged grid
 using e.g. the RMS tool.</p>
 <p>Further, we need to create NNC transmissibilities and generate file for flow simulator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.nestedhybridgrid</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">nnc_to_flowsimulator_input</span><span class="p">,</span>
     <span class="n">nnc_to_gridproperty</span><span class="p">,</span>
@@ -178,7 +182,6 @@ using e.g. the RMS tool.</p>
 
 <span class="c1"># Load grid and region property which may be stored in RMS</span>
 <span class="n">nested</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">)</span>
-<span class="n">region</span> <span class="o">=</span> <span class="n">nested</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="s2">&quot;NEST_ID&quot;</span><span class="p">)</span>  <span class="c1"># if needed for QC</span>
 
 <span class="c1"># load the NNC table</span>
 <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_nnc_file.csv&quot;</span><span class="p">)</span>
@@ -192,7 +195,7 @@ using e.g. the RMS tool.</p>
 
 <span class="c1"># compute transmissibilities. Note that flow simulators do this for the normal cells/faults</span>
 <span class="c1"># so strictly speaking, only nnc_hybrid is needed here.</span>
-<span class="n">tranx</span><span class="p">,</span> <span class="n">trany</span><span class="p">,</span> <span class="n">tranz</span><span class="p">,</span> <span class="n">nnc_fault</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">,</span> <span class="n">rbnd</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get_transmissibilities</span><span class="p">(</span>
+<span class="n">tranx</span><span class="p">,</span> <span class="n">trany</span><span class="p">,</span> <span class="n">tranz</span><span class="p">,</span> <span class="n">nnc_fault</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">,</span> <span class="n">rbnd</span> <span class="o">=</span> <span class="n">nested</span><span class="o">.</span><span class="n">get_transmissibilities</span><span class="p">(</span>
     <span class="n">permx</span><span class="p">,</span> <span class="n">permy</span><span class="p">,</span> <span class="n">permz</span><span class="p">,</span> <span class="n">ntg</span><span class="p">,</span> <span class="n">nnc_table</span><span class="o">=</span><span class="n">nnc_table</span>
 <span class="p">)</span>
 
@@ -200,7 +203,7 @@ using e.g. the RMS tool.</p>
 <span class="n">nnc_to_flowsimulator_input</span><span class="p">(</span><span class="n">nnc_hybrid</span><span class="p">,</span> <span class="s2">&quot;some_path/NNC_HYBRID.INC&quot;</span><span class="p">)</span>
 
 <span class="c1"># Or map NNCs onto grid properties for visualisation</span>
-<span class="n">tx_nnc</span><span class="p">,</span> <span class="n">ty_nnc</span><span class="p">,</span> <span class="n">tz_nnc</span> <span class="o">=</span> <span class="n">nnc_to_gridproperty</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">)</span>
+<span class="n">tx_nnc</span><span class="p">,</span> <span class="n">ty_nnc</span><span class="p">,</span> <span class="n">tz_nnc</span> <span class="o">=</span> <span class="n">nnc_to_gridproperty</span><span class="p">(</span><span class="n">nested</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">)</span>
 <span class="n">tx_nnc</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span> <span class="s2">&quot;TRANX_NNC_QC&quot;</span><span class="p">)</span>  <span class="c1"># etc</span>
 </pre></div>
 </div>
@@ -239,17 +242,8 @@ using e.g. the RMS tool.</p>
 face-overlap calculations (Sutherland–Hodgman algorithm) and two-point flux
 approximation (TPFA).</p>
 </section>
-<section id="nest-id-property">
-<h3><a class="toc-backref" href="#id5" role="doc-backlink">NEST_ID property</a><a class="headerlink" href="#nest-id-property" title="Link to this heading"></a></h3>
-<p>The merged grid carries a discrete property called <code class="docutils literal notranslate"><span class="pre">NEST_ID</span></code>:</p>
-<ul class="simple">
-<li><p><strong>0</strong> — inactive hole cells (carved out to make room for the refined region)</p></li>
-<li><p><strong>1</strong> — mother (coarse) cells</p></li>
-<li><p><strong>2</strong> — refined cells</p></li>
-</ul>
-</section>
 <section id="eclipse-opm-flow-export">
-<h3><a class="toc-backref" href="#id6" role="doc-backlink">Eclipse / OPM Flow export</a><a class="headerlink" href="#eclipse-opm-flow-export" title="Link to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Eclipse / OPM Flow export</a><a class="headerlink" href="#eclipse-opm-flow-export" title="Link to this heading"></a></h3>
 <p><a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nnc_to_flowsimulator_input" title="fmu.tools.nestedhybridgrid.nnc_to_flowsimulator_input"><code class="xref py py-func docutils literal notranslate"><span class="pre">nnc_to_flowsimulator_input()</span></code></a> writes the
 <code class="docutils literal notranslate"><span class="pre">NNC</span></code> keyword in Eclipse format.  The output file can be included in the
 simulator deck:</p>

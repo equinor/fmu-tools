@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools package &mdash; fmu-tools 1.30.1.dev34+g5ece28f49.d20260603 documentation</title>
+  <title>fmu.tools package &mdash; fmu-tools 1.30.1.dev35+g2a4c5f5dd documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=1609fa41"></script>
+      <script src="_static/documentation_options.js?v=da343c85"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -965,13 +965,8 @@ the full grid interval will be applied to determine the layer.</p></li>
 <span class="sig-prename descclassname"><span class="pre">fmu.tools.</span></span><span class="sig-name descname"><span class="pre">create_nested_hybrid_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_region_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refinement</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#create_nested_hybrid_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.create_nested_hybrid_grid" title="Link to this definition"></a></dt>
 <dd><p>Create a nested hybrid grid by refining one region and merging it back.</p>
 <p>The cells belonging to <em>target_region_id</em> are replaced by a refined
-(subdivided) version of the same region.  A <code class="docutils literal notranslate"><span class="pre">NEST_ID</span></code> discrete property
-is attached to the merged grid, encoding the nested hybrid structure:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">NEST_ID</span> <span class="pre">==</span> <span class="pre">1</span></code>: coarse (mother) grid cells.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NEST_ID</span> <span class="pre">==</span> <span class="pre">2</span></code>: refined grid cells.</p></li>
-</ul>
-<p>In addition, a <strong>NNC mapping table</strong> is returned that lists every
+(subdivided) version of the same region.</p>
+<p>A <strong>NNC mapping table</strong> is returned that lists every
 mother ↔ refined cell pair that should be connected by a Non-Neighbour
 Connection (NNC).  The table is derived from the topological knowledge
 available at merge time (which original cell was refined and how its
@@ -1000,9 +995,9 @@ regions (e.g. an integer region parameter).</p></li>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(merged_grid,</span> <span class="pre">nnc_table)</span></code> where <em>merged_grid</em> is a new
-<code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.Grid</span></code> with the refined region stitched back into the
-coarse grid and <em>nnc_table</em> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> mapping
+<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(merged_grid,</span> <span class="pre">nnc_table)</span></code> where <em>merged_grid</em>
+is a new <code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.Grid</span></code> with the refined region stitched back into
+the coarse grid and <em>nnc_table</em> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> mapping
 mother cells to their connected refined cells.</p>
 </dd>
 </dl>
