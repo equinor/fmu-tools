@@ -7,6 +7,15 @@ import warnings
 
 _logger = logging.getLogger(__name__)
 
+from fmu.tools.extract_grid_zone_tops_etc import extract_grid_zone_tops  # noqa
+from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
+from fmu.tools.qcproperties.qcproperties import QCProperties  # noqa
+from fmu.tools.domainconversion.dconvert import DomainConversion  # noqa
+from fmu.tools.utilities.sample_attributes import sample_attributes_for_sim2seis  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import create_nested_hybrid_grid  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_flowsimulator_input  # noqa
+from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_gridproperty  # noqa
+
 ROXAR = True
 try:
     import rmsapi  # type: ignore # noqa
@@ -21,15 +30,6 @@ except ImportError:
         ROXAR = False
 
 _logger.debug("Being inside RMS/RMSAPI: %s", ROXAR)
-
-from fmu.tools.extract_grid_zone_tops_etc import extract_grid_zone_tops  # noqa
-from fmu.tools.qcforward.qcforward import wellzonation_vs_grid  # noqa
-from fmu.tools.qcproperties.qcproperties import QCProperties  # noqa
-from fmu.tools.domainconversion.dconvert import DomainConversion  # noqa
-from fmu.tools.utilities.sample_attributes import sample_attributes_for_sim2seis  # noqa
-from fmu.tools.nestedhybridgrid.nestedhybrid import create_nested_hybrid_grid  # noqa
-from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_flowsimulator_input  # noqa
-from fmu.tools.nestedhybridgrid.nestedhybrid import nnc_to_gridproperty  # noqa
 
 __all__ = [
     "extract_grid_zone_tops",
