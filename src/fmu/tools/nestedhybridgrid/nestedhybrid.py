@@ -17,12 +17,12 @@ nnc_to_flowsimulator_input : function
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 import xtgeo
-import warnings
 
 if TYPE_CHECKING:
     import os
@@ -309,6 +309,7 @@ def _generate_layer_mappings(
 
     return (lmap1, lmap2)
 
+
 def _modify_upscaling_mapping(
     up: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
     region: xtgeo.GridProperty,
@@ -364,89 +365,84 @@ def _modify_upscaling_mapping(
         raise ValueError("Invalid input upscaling relationships")
 
     exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
-   
+
     # map region from input grid to geogrid
-    cn = np.ma.masked_where(exclude_mask,iv * jvm * kvm + jv * kvm + kv)
+    cn = np.ma.masked_where(exclude_mask, iv * jvm * kvm + jv * kvm + kv)
     # mask any inactive cells
     cn.mask[~cn.mask] = region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]
-    iv[cn.mask & (~exclude_mask)]=-1
-    jv[cn.mask & (~exclude_mask)]=-1
-    kv[cn.mask & (~exclude_mask)]=-1
+    iv[cn.mask & (~exclude_mask)] = -1
+    jv[cn.mask & (~exclude_mask)] = -1
+    kv[cn.mask & (~exclude_mask)] = -1
 
     region2 = np.ma.masked_array(np.zeros(len(cn)), mask=cn.mask)
     region2[~cn.mask] = region.values.reshape(-1)[cn[~cn.mask].astype(np.int32)]
-    
+
     # for cells that aren't refined only layer numbering updates
     kv[(~cn.mask) & (region2 != target_region_id)] = lmap[
         kv[(~cn.mask) & (region2 != target_region_id)].astype(np.int32)
     ]
 
     # for cells that are refined find the levels of refinement
-    cijk=np.argwhere(region.values == target_region_id)
-    cijk2=np.argwhere(region2.reshape(imap.values.shape) == target_region_id)
+    cijk = np.argwhere(region.values == target_region_id)
+    cijk2 = np.argwhere(region2.reshape(imap.values.shape) == target_region_id)
     cnr = cijk[:, 0] * jvm * kvm + cijk[:, 1] * kvm + cijk[:, 2]
 
     # find number of cells in refined region on geogrid and normal grid
-    ccnt = [len(np.unique(cijk[:,x])) for x in range(3)]    
-    ccnt2 = [len(np.unique(cijk2[:,x])) for x in range(3)]
+    ccnt = [len(np.unique(cijk[:, x])) for x in range(3)]
+    ccnt2 = [len(np.unique(cijk2[:, x])) for x in range(3)]
 
     if any(ccnt2[x] % ccnt[x] > 0 for x in range(3)):
-        warnings.warn("Unable to find a valid correspondence upscaling between geogrid and input grid")
+        warnings.warn(
+            "Unable to find a valid correspondence upscaling between geogrid and input"
+            " grid"
+        )
         return None
-    
+
     uri = int(ccnt2[0] / ccnt[0])
     urj = int(ccnt2[1] / ccnt[1])
     urk = int(ccnt2[2] / ccnt[2])
-    
-    # original index map of refined cells 
+
+    # original index map of refined cells
     il2 = (
-        np.repeat(
-            np.arange(int(di / ri), dtype=np.int32) + oi, ri * dj * dk
-        )
+        np.repeat(np.arange(int(di / ri), dtype=np.int32) + oi, ri * dj * dk)
     ).reshape((di, dj, dk))
     jl2 = np.swapaxes(
-        (
-            np.repeat(
-                np.arange(int(dj / rj), dtype=np.int32) + oj, rj * di * dk
-            )
-        ).reshape((dj, di, dk)),
+        (np.repeat(np.arange(int(dj / rj), dtype=np.int32) + oj, rj * di * dk)).reshape(
+            (dj, di, dk)
+        ),
         0,
         1,
     )
     kl2 = np.swapaxes(
-        (
-            np.repeat(
-                np.arange(int(dk / rk), dtype=np.int32) + ok, rk * di * dj
-            )
-        ).reshape((dk, dj, di)),
+        (np.repeat(np.arange(int(dk / rk), dtype=np.int32) + ok, rk * di * dj)).reshape(
+            (dk, dj, di)
+        ),
         0,
         2,
     )
-    # map the updated refined grid cells to geogrid 
+    # map the updated refined grid cells to geogrid
     cmap2 = np.arange(di, dtype=np.float32) + ivm + 1
     cmap2 = np.repeat(cmap2, dj * dk).reshape((di, dj, dk))
     rmap2 = np.arange(dj, dtype=np.float32)
-    rmap2 = np.swapaxes(
-        np.repeat(rmap2, di * dk).reshape((dj, di, dk)), 0, 1
-    )
+    rmap2 = np.swapaxes(np.repeat(rmap2, di * dk).reshape((dj, di, dk)), 0, 1)
     lmap2 = np.arange(dk, dtype=np.float32) + ok
     lmap2 = np.tile(lmap2, di * dj).reshape((di, dj, dk))
 
-    if uri>ri:
+    if uri > ri:
         il2 = np.repeat(il2, int(uri / ri), axis=0)
         jl2 = np.repeat(jl2, int(uri / ri), axis=0)
         kl2 = np.repeat(kl2, int(uri / ri), axis=0)
         cmap2 = np.repeat(cmap2, int(uri / ri), axis=0)
         rmap2 = np.repeat(rmap2, int(uri / ri), axis=0)
         lmap2 = np.repeat(lmap2, int(uri / ri), axis=0)
-    if urj>rj:
+    if urj > rj:
         il2 = np.repeat(il2, int(urj / rj), axis=1)
         jl2 = np.repeat(jl2, int(urj / rj), axis=1)
         kl2 = np.repeat(kl2, int(urj / rj), axis=1)
         cmap2 = np.repeat(cmap2, int(urj / rj), axis=1)
         rmap2 = np.repeat(rmap2, int(urj / rj), axis=1)
         lmap2 = np.repeat(lmap2, int(urj / rj), axis=1)
-    if urk>rk:
+    if urk > rk:
         il2 = np.repeat(il2, int(urk / rk), axis=2)
         jl2 = np.repeat(jl2, int(urk / rk), axis=2)
         kl2 = np.repeat(kl2, int(urk / rk), axis=2)
@@ -454,55 +450,50 @@ def _modify_upscaling_mapping(
         rmap2 = np.repeat(rmap2, int(urk / rk), axis=2)
         lmap2 = np.repeat(lmap2, int(urk / rk), axis=2)
 
-    il2=il2.reshape(-1)
-    jl2=jl2.reshape(-1)
-    kl2=kl2.reshape(-1)
-    cmap2=cmap2.reshape(-1)
-    rmap2=rmap2.reshape(-1)
-    lmap2=lmap2.reshape(-1)
+    il2 = il2.reshape(-1)
+    jl2 = jl2.reshape(-1)
+    kl2 = kl2.reshape(-1)
+    cmap2 = cmap2.reshape(-1)
+    rmap2 = rmap2.reshape(-1)
+    lmap2 = lmap2.reshape(-1)
 
     cl2 = il2 * jvm * kvm + jl2 * kvm + kl2
 
     # ensure only correct cells are updated
-    geomask = (region2 == target_region_id)
-    refmask = np.isin(cl2,cnr)
+    geomask = region2 == target_region_id
+    refmask = np.isin(cl2, cnr)
     iv[geomask] = cmap2[refmask]
     jv[geomask] = rmap2[refmask]
     kv[geomask] = lmap2[refmask]
-    
+
     imap.values = iv.reshape(imap.values.shape).astype(np.float32) + 1.0
     jmap.values = jv.reshape(imap.values.shape).astype(np.float32) + 1.0
     kmap.values = kv.reshape(imap.values.shape).astype(np.float32) + 1.0
 
     return (imap, jmap, kmap)
 
-def _set_zonation(
-    subgrid: dict,
-    lmap: np.ndarray,
-    nlay: int
-) -> dict:
+
+def _set_zonation(subgrid: dict, lmap: np.ndarray, nlay: int) -> dict:
     """Create an updated subgrid dictionary for the merged grid.
     Args:
         subgrid: subgrid dictionary from input grid
         lmap: layer mapping for grid1 - unrefined input grid
         nlay: total number of layers in merged grid
-    """ 
-    
-    updated_subgrid={}
-    
-    #sorted list of zones to add
-    zl=sorted(subgrid, key = lambda x: subgrid[x][0])
-    
+    """
+
+    updated_subgrid = {}
+
+    # sorted list of zones to add
+    zl = sorted(subgrid, key=lambda x: subgrid[x][0])
+
     for zi in range(len(zl)):
-      zn=zl[zi]
-      zmin=lmap[subgrid[zn][0]-1]+1
-      if zi==len(zl)-1:
-        zmax=nlay+1
-      else:
-        zmax=lmap[subgrid[zl[zi+1]][0]-1]+1
-      updated_subgrid[zn]=range(zmin,zmax)
+        zn = zl[zi]
+        zmin = lmap[subgrid[zn][0] - 1] + 1
+        zmax = nlay + 1 if zi == len(zl) - 1 else lmap[subgrid[zl[zi + 1]][0] - 1] + 1
+        updated_subgrid[zn] = range(zmin, zmax)
 
     return updated_subgrid
+
 
 # ---------------------------------------------------------------------------
 # Public API
@@ -514,7 +505,8 @@ def create_nested_hybrid_grid(
     region: xtgeo.GridProperty,
     target_region_id: int,
     refinement: tuple[int, int, int],
-    upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty] | None = None,
+    upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]
+    | None = None,
 ) -> tuple[
     xtgeo.Grid,
     pd.DataFrame,
@@ -550,7 +542,7 @@ def create_nested_hybrid_grid(
         refinement: ``(ncol, nrow, nlay)`` refinement factors.
         upscaling: Optional tuple of `xtgeo.GridProperty` for (I,J,K)
             Geogrid properties. These map from geogrid cell to input grid
-            The input values must be a valid mapping for upscaling from 
+            The input values must be a valid mapping for upscaling from
             the geogrid to the input grid give. A value of 0 can be used
             to exclude the geogrid cell from upscaling
 
@@ -624,11 +616,7 @@ def create_nested_hybrid_grid(
     merged = xtgeo.grid_merge(grid, refined, lmap1, lmap2)
     _logger.info("Merged grid dimensions: %s", merged.dimensions)
     if subgrid is not None:
-        merged.subgrids=_set_zonation(
-            subgrid=subgrid,
-            lmap=lmap1,
-            nlay=merged.nlay  
-        )
+        merged.subgrids = _set_zonation(subgrid=subgrid, lmap=lmap1, nlay=merged.nlay)
 
     # 8. Update upscaling map if needed
     if upscaling is not None:
