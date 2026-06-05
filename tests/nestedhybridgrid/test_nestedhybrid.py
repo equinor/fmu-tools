@@ -250,6 +250,17 @@ class TestCreateNestedHybridGrid:
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)
 
+    def test_upscaling_no_input(self):
+        """test upscaling output is None for no input"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        _, _, upscaled = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+
+        assert upscaled is None
+
     def test_upscaling_output(self):
         """test upscaling output mapping"""
 
