@@ -261,12 +261,21 @@ class TestCreateNestedHybridGrid:
 
         upi, upj, upk = upscaled
 
-        assert upi.values[0][0][0] == 1
-        assert upj.values[0][0][0] == 1
-        assert upk.values[0][0][0] == 1
-        assert upi.values[2][2][2] == 5
-        assert upk.values[2][2][2] == 2
-        assert upj.values[3][3][3] == 2
+        # test i,j,k==0 not modified
+        assert np.array_equal(upi.values[0, :, :], ui.values[0, :, :])
+        assert np.array_equal(upi.values[:, 0, :], ui.values[:, 0, :])
+        assert np.array_equal(upi.values[:, :, 0], ui.values[:, :, 0])
+        # test i,j,k==-1 not modified
+        assert np.array_equal(upi.values[-1, :, :], ui.values[-1, :, :])
+        assert np.array_equal(upi.values[:, -1, :], ui.values[:, -1, :])
+        assert np.array_equal(upi.values[:, :, -1], ui.values[:, :, -1])
+        # test modified area
+        ti = [[5.0, 5.0], [5.0, 5.0]], [[6.0, 6.0], [6.0, 6.0]]
+        tj = [[1.0, 1.0], [2.0, 2.0]], [[1.0, 1.0], [2.0, 2.0]]
+        tk = [[2.0, 3.0], [2.0, 3.0]], [[2.0, 3.0], [2.0, 3.0]]
+        assert np.array_equal(upi.values[2:4, 2:4, 2:4], np.array(ti))
+        assert np.array_equal(upj.values[2:4, 2:4, 2:4], np.array(tj))
+        assert np.array_equal(upk.values[2:4, 2:4, 2:4], np.array(tk))
 
     def test_upscaling_ranges_i_min(self):
         """test upscaling raises error if ui<0"""
