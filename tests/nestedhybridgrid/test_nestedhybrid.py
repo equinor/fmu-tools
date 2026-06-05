@@ -283,6 +283,18 @@ class TestCreateNestedHybridGrid:
                 upscaling=(ui, uj, uk),
             )
 
+    def test_zonation(self):
+        """Function must return an xtgeo.Grid."""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        grid.subgrids = {"ZONE1": [1], "ZONE2": [2]}
+        merged, nnc_table, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+        subgrids = merged.get_subgrids()
+
+        assert subgrids["ZONE1"] == 2
+        assert subgrids["ZONE2"] == 2
+
 
 # ---------------------------------------------------------------------------
 # Tests for get_transmissibilities with nested hybrid NNCs

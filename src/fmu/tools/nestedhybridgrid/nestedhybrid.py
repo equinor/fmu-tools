@@ -367,12 +367,14 @@ def _modify_upscaling_mapping(
     exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
 
     # map region from input grid to geogrid
+    # excluding any enteries for cells in geogrid that are excluded
     cn = np.ma.masked_where(exclude_mask, iv * jvm * kvm + jv * kvm + kv)
-    # mask any inactive cells
-    cn.mask[~cn.mask] = region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]
-    iv[cn.mask & (~exclude_mask)] = -1
-    jv[cn.mask & (~exclude_mask)] = -1
-    kv[cn.mask & (~exclude_mask)] = -1
+    # mask any inactive cells in the input grid that are mapped by geogrid
+    iv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    jv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    kv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
+    cn = np.ma.masked_where(exclude_mask, cn)
 
     region2 = np.ma.masked_array(np.zeros(len(cn)), mask=cn.mask)
     region2[~cn.mask] = region.values.reshape(-1)[cn[~cn.mask].astype(np.int32)]
@@ -450,21 +452,14 @@ def _modify_upscaling_mapping(
         rmap2 = np.repeat(rmap2, int(urk / rk), axis=2)
         lmap2 = np.repeat(lmap2, int(urk / rk), axis=2)
 
-    il2 = il2.reshape(-1)
-    jl2 = jl2.reshape(-1)
-    kl2 = kl2.reshape(-1)
-    cmap2 = cmap2.reshape(-1)
-    rmap2 = rmap2.reshape(-1)
-    lmap2 = lmap2.reshape(-1)
-
-    cl2 = il2 * jvm * kvm + jl2 * kvm + kl2
+    cl2 = il2.reshape(-1) * jvm * kvm + jl2.reshape(-1) * kvm + kl2.reshape(-1)
 
     # ensure only correct cells are updated
     geomask = region2 == target_region_id
     refmask = np.isin(cl2, cnr)
-    iv[geomask] = cmap2[refmask]
-    jv[geomask] = rmap2[refmask]
-    kv[geomask] = lmap2[refmask]
+    iv[geomask] = cmap2.reshape(-1)[refmask]
+    jv[geomask] = rmap2.reshape(-1)[refmask]
+    kv[geomask] = lmap2.reshape(-1)[refmask]
 
     imap.values = iv.reshape(imap.values.shape).astype(np.float32) + 1.0
     jmap.values = jv.reshape(imap.values.shape).astype(np.float32) + 1.0
