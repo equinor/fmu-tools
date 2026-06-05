@@ -266,6 +266,9 @@ class TestCreateNestedHybridGrid:
 
         (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
 
+        ui2 = ui.copy()
+        uj2 = uj.copy()
+
         _, _, upscaled = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2), upscaling=(ui, uj, uk)
         )
@@ -273,19 +276,19 @@ class TestCreateNestedHybridGrid:
         upi, upj, upk = upscaled
 
         # test i,j,k==0 not modified
-        assert np.array_equal(upi.values[0, :, :], ui.values[0, :, :])
-        assert np.array_equal(upi.values[:, 0, :], ui.values[:, 0, :])
-        assert np.array_equal(upi.values[:, :, 0], ui.values[:, :, 0])
-        assert np.array_equal(upk.values[0, :, :], uk.values[0, :, :])
-        assert np.array_equal(upk.values[:, 0, :], uk.values[:, 0, :])
-        assert np.array_equal(upk.values[:, :, 0], uk.values[:, :, 0])
+        assert np.array_equal(upi.values[0, :, :], ui2.values[0, :, :])
+        assert np.array_equal(upi.values[:, 0, :], ui2.values[:, 0, :])
+        assert np.array_equal(upi.values[:, :, 0], ui2.values[:, :, 0])
+        assert np.array_equal(upj.values[0, :, :], uj2.values[0, :, :])
+        assert np.array_equal(upj.values[:, 0, :], uj2.values[:, 0, :])
+        assert np.array_equal(upj.values[:, :, 0], uj2.values[:, :, 0])
         # test i,j,k==-1 not modified
-        assert np.array_equal(upi.values[-1, :, :], ui.values[-1, :, :])
-        assert np.array_equal(upi.values[:, -1, :], ui.values[:, -1, :])
-        assert np.array_equal(upi.values[:, :, -1], ui.values[:, :, -1])
-        assert np.array_equal(upj.values[-1, :, :], uj.values[-1, :, :])
-        assert np.array_equal(upj.values[:, -1, :], uj.values[:, -1, :])
-        assert np.array_equal(upj.values[:, :, -1], uj.values[:, :, -1])
+        assert np.array_equal(upi.values[-1, :, :], ui2.values[-1, :, :])
+        assert np.array_equal(upi.values[:, -1, :], ui2.values[:, -1, :])
+        assert np.array_equal(upi.values[:, :, -1], ui2.values[:, :, -1])
+        assert np.array_equal(upj.values[-1, :, :], uj2.values[-1, :, :])
+        assert np.array_equal(upj.values[:, -1, :], uj2.values[:, -1, :])
+        assert np.array_equal(upj.values[:, :, -1], uj2.values[:, :, -1])
         # test layer modified in unrefined area
         kt = [1.0, 1.0, 2.0, 2.0, 4.0, 4.0]
         assert np.array_equal(upk.values[0, 0, :], np.array(kt))
