@@ -250,8 +250,8 @@ class TestCreateNestedHybridGrid:
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)
 
-    def test_upscaling(self):
-        """test upscaling only modified in refined region"""
+    def test_upscaling_output(self):
+        """test upscaling output mapping"""
 
         (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
 
@@ -268,8 +268,8 @@ class TestCreateNestedHybridGrid:
         assert upk.values[2][2][2] == 2
         assert upj.values[3][3][3] == 2
 
-    def test_upscaling_ranges(self):
-        """test upscaling only modified in refined region"""
+    def test_upscaling_ranges_i_min(self):
+        """test upscaling raises error if ui<0"""
 
         (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
 
@@ -280,6 +280,132 @@ class TestCreateNestedHybridGrid:
                 region,
                 rid,
                 refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_i_max(self):
+        """test upscaling raises error if ui>grid.ncol"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        ui.values = ui.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_j_min(self):
+        """test upscaling raises error if uj<0"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uj.values = uj.values - 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_j_max(self):
+        """test upscaling raises error if uj>grid.nrow"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uj.values = uj.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_k_min(self):
+        """test upscaling raises error if uk<0"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uk.values = uk.values - 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_k_max(self):
+        """test upscaling raises error if uk>grid.nlay"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uk.values = uk.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_i(self):
+        """test upscaling for incompatible i ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(3, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_j(self):
+        """test upscaling for incompatible j ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 3, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_k(self):
+        """test upscaling for incompatible k ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 3),
                 upscaling=(ui, uj, uk),
             )
 

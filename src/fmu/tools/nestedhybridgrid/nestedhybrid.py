@@ -17,7 +17,6 @@ nnc_to_flowsimulator_input : function
 from __future__ import annotations
 
 import logging
-import warnings
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -393,16 +392,14 @@ def _modify_upscaling_mapping(
     ccnt = [len(np.unique(cijk[:, x])) for x in range(3)]
     ccnt2 = [len(np.unique(cijk2[:, x])) for x in range(3)]
 
-    if any(ccnt2[x] % ccnt[x] > 0 for x in range(3)):
-        warnings.warn(
-            "Unable to find a valid correspondence upscaling between geogrid and input"
-            " grid"
-        )
-        return None
+    uri = ccnt2[0] / ccnt[0]
+    urj = ccnt2[1] / ccnt[1]
+    urk = ccnt2[2] / ccnt[2]
 
-    uri = int(ccnt2[0] / ccnt[0])
-    urj = int(ccnt2[1] / ccnt[1])
-    urk = int(ccnt2[2] / ccnt[2])
+    if any(not x.is_integer() for x in [uri, uri / ri, urj, urj / rj, urk, urk / rk]):
+        raise ValueError(
+            "Invalid correspondence upscaling between geogrid and input grid"
+        )
 
     # original index map of refined cells
     il2 = (
