@@ -276,11 +276,21 @@ class TestCreateNestedHybridGrid:
         assert np.array_equal(upi.values[0, :, :], ui.values[0, :, :])
         assert np.array_equal(upi.values[:, 0, :], ui.values[:, 0, :])
         assert np.array_equal(upi.values[:, :, 0], ui.values[:, :, 0])
+        assert np.array_equal(upk.values[0, :, :], uk.values[0, :, :])
+        assert np.array_equal(upk.values[:, 0, :], uk.values[:, 0, :])
+        assert np.array_equal(upk.values[:, :, 0], uk.values[:, :, 0])
         # test i,j,k==-1 not modified
         assert np.array_equal(upi.values[-1, :, :], ui.values[-1, :, :])
         assert np.array_equal(upi.values[:, -1, :], ui.values[:, -1, :])
         assert np.array_equal(upi.values[:, :, -1], ui.values[:, :, -1])
-        # test modified area
+        assert np.array_equal(upj.values[-1, :, :], uj.values[-1, :, :])
+        assert np.array_equal(upj.values[:, -1, :], uj.values[:, -1, :])
+        assert np.array_equal(upj.values[:, :, -1], uj.values[:, :, -1])
+        # test layer modified in unrefined area
+        kt = [1.0, 1.0, 2.0, 2.0, 4.0, 4.0]
+        assert np.array_equal(upk.values[0, 0, :], np.array(kt))
+        assert np.array_equal(upk.values[-1, -1, :], np.array(kt))
+        # test refined area
         ti = [[5.0, 5.0], [5.0, 5.0]], [[6.0, 6.0], [6.0, 6.0]]
         tj = [[1.0, 1.0], [2.0, 2.0]], [[1.0, 1.0], [2.0, 2.0]]
         tk = [[2.0, 3.0], [2.0, 3.0]], [[2.0, 3.0], [2.0, 3.0]]
