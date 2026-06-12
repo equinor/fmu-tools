@@ -593,7 +593,7 @@ class DomainConversion:
         start = rcube.zori
         stop = zmax_actual + rcube.zinc
         num_steps = int((stop - start) / (rcube.zinc - np.finfo(np.float32).eps))
-        new_vertical_axis = np.linspace(start, stop, num_steps)
+        new_vertical_axis = np.linspace(start, zmax_actual, num_steps)
 
         seismic_attribute_result_cube = np.full(rcube.values.shape, undefined)
         # Perform the interpolation for each (x, y) location
