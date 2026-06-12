@@ -198,6 +198,37 @@ class TestCreateNestedHybridGrid:
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)
 
+    def test_zonation(self):
+        """Input grid with zonation returns a valid zonation"""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
+        grid.subgrids = {"ZONE1": [1], "ZONE2": [2]}
+        merged, nnc_table = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+        subgrids_nlay = merged.get_subgrids()
+        assert subgrids_nlay["ZONE1"] == 2
+        assert subgrids_nlay["ZONE2"] == 2
+
+        assert merged.subgrids["ZONE1"] == range(1, 3)
+        assert merged.subgrids["ZONE2"] == range(3, 5)
+
+    def test_zonation_with_layer_offset(self):
+        """Input grid with zonation returns a valid zonation with offset"""
+        grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 3))
+        grid.subgrids = {"ZONE1": [1], "ZONE2": [2, 3]}
+
+        region.values[:, :, 0] = 1  # set value in first layer to not be rid
+
+        merged, nnc_table = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+        subgrids_nlay = merged.get_subgrids()
+        assert subgrids_nlay["ZONE1"] == 1
+        assert subgrids_nlay["ZONE2"] == 4
+
+        assert merged.subgrids["ZONE1"] == range(1, 2)
+        assert merged.subgrids["ZONE2"] == range(2, 6)
+
 
 # ---------------------------------------------------------------------------
 # Tests for get_transmissibilities with nested hybrid NNCs
