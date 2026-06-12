@@ -17,6 +17,7 @@ nnc_to_flowsimulator_input : function
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -358,6 +359,11 @@ def create_nested_hybrid_grid(
         the coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping
         mother cells to their connected refined cells.
     """
+    warnings.warn(
+        "create_nested_hybrid_grid is is currently experimental. It may undergo "
+        "breaking changes in future versions without notice.",
+        FutureWarning,
+    )
     if any(r < 1 for r in refinement):
         raise ValueError(f"Refinement factors must be >= 1, got {refinement}")
 
