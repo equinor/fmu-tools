@@ -51,6 +51,52 @@ def _make_constant_property(grid, name, value):
     return xtgeo.GridProperty(grid, name=name, values=vals)
 
 
+def _upscale_test_setup():
+    """Create grids and properties to test upscaling."""
+
+    grid = xtgeo.create_box_grid((3, 3, 3), increment=(100.0, 100.0, 20.0))
+    geogrid = xtgeo.create_box_grid((6, 6, 6), increment=(50.0, 50.0, 10.0))
+
+    region = _make_constant_property(grid, "REGION", 1)
+    region.values[1][1][1] = 2
+
+    rid = 2
+
+    il2 = (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)) + 1
+    il2 = np.repeat(il2, 2, axis=0)
+    il2 = np.repeat(il2, 2, axis=1)
+    il2 = np.repeat(il2, 2, axis=2)
+    ui = xtgeo.GridProperty(geogrid, name="UI", values=il2.astype(np.float32))
+
+    jl2 = (
+        np.swapaxes(
+            (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)),
+            0,
+            1,
+        )
+        + 1
+    )
+    jl2 = np.repeat(jl2, 2, axis=0)
+    jl2 = np.repeat(jl2, 2, axis=1)
+    jl2 = np.repeat(jl2, 2, axis=2)
+    uj = xtgeo.GridProperty(geogrid, name="UJ", values=jl2.astype(np.float32))
+
+    kl2 = (
+        np.swapaxes(
+            (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)),
+            0,
+            2,
+        )
+        + 1
+    )
+    kl2 = np.repeat(kl2, 2, axis=0)
+    kl2 = np.repeat(kl2, 2, axis=1)
+    kl2 = np.repeat(kl2, 2, axis=2)
+    uk = xtgeo.GridProperty(geogrid, name="UK", values=kl2.astype(np.float32))
+
+    return (grid, region, rid, geogrid, ui, uj, uk)
+
+
 # ---------------------------------------------------------------------------
 # Tests for create_nested_hybrid_grid
 # ---------------------------------------------------------------------------
@@ -62,7 +108,7 @@ class TestCreateNestedHybridGrid:
     def test_returns_grid(self):
         """Function must return an xtgeo.Grid."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
-        merged, nnc_table = create_nested_hybrid_grid(
+        merged, nnc_table, _ = create_nested_hybrid_grid(
             grid, region, rid, refinement=(1, 1, 1)
         )
         assert isinstance(merged, xtgeo.Grid)
@@ -71,7 +117,9 @@ class TestCreateNestedHybridGrid:
     def test_basic_merge_dimensions(self):
         """Merged grid should have expected dimensions."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
-        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+        merged, _, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(1, 1, 1)
+        )
 
         # grid_merge places grid2 with a 1-column gap:
         # ncol = grid1.ncol + 1 + grid2.ncol
@@ -82,7 +130,9 @@ class TestCreateNestedHybridGrid:
     def test_nest_id_property_attached(self):
         """The merged grid must have a refinement region property."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
-        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+        merged, _, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(1, 1, 1)
+        )
 
         nest_id = merged.get_prop_by_name(region.name)
         assert nest_id is not None
@@ -94,7 +144,9 @@ class TestCreateNestedHybridGrid:
     def test_nest_id_values_consistent(self):
         """Active cells should only have refinement region in {1, 2}."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
-        merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
+        merged, _, _ = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(1, 1, 1)
+        )
 
         nest_id = merged.get_prop_by_name(region.name)
         actnum = merged.get_actnum()
@@ -106,10 +158,10 @@ class TestCreateNestedHybridGrid:
     def test_refinement_increases_cells(self):
         """Refinement > 1 should produce a merged grid with more total cells."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
-        merged_1x, _ = create_nested_hybrid_grid(
+        merged_1x, _, _ = create_nested_hybrid_grid(
             grid, region, rid, refinement=(1, 1, 1)
         )
-        merged_2x, _ = create_nested_hybrid_grid(
+        merged_2x, _, _ = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2)
         )
         assert merged_2x.ntotal > merged_1x.ntotal
@@ -128,7 +180,7 @@ class TestCreateNestedHybridGrid:
         orig_nactive = grid.nactive
         orig_region_sum = int(np.ma.filled(region.values, 0).sum())
 
-        _, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(2, 2, 1))
+        _, _, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(2, 2, 1))
 
         assert grid.ncol == orig_ncol
         assert grid.nactive == orig_nactive
@@ -143,7 +195,7 @@ class TestCreateNestedHybridGrid:
         region.values = np.ones(region.values.shape)
         region.values[1][1][1] = rid
 
-        _, nnc_table = create_nested_hybrid_grid(
+        _, nnc_table, _ = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2)
         )
         nnc_table1 = nnc_table[
@@ -198,6 +250,198 @@ class TestCreateNestedHybridGrid:
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)
 
+    def test_upscaling_no_input(self):
+        """test upscaling output is None for no input"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        _, _, upscaled = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2)
+        )
+
+        assert upscaled is None
+
+    def test_upscaling_output(self):
+        """test upscaling output mapping"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        ui2 = ui.copy()
+        uj2 = uj.copy()
+
+        _, _, upscaled = create_nested_hybrid_grid(
+            grid, region, rid, refinement=(2, 2, 2), upscaling=(ui, uj, uk)
+        )
+
+        upi, upj, upk = upscaled
+
+        # test i,j,k==0 not modified
+        assert np.array_equal(upi.values[0, :, :], ui2.values[0, :, :])
+        assert np.array_equal(upi.values[:, 0, :], ui2.values[:, 0, :])
+        assert np.array_equal(upi.values[:, :, 0], ui2.values[:, :, 0])
+        assert np.array_equal(upj.values[0, :, :], uj2.values[0, :, :])
+        assert np.array_equal(upj.values[:, 0, :], uj2.values[:, 0, :])
+        assert np.array_equal(upj.values[:, :, 0], uj2.values[:, :, 0])
+        # test i,j,k==-1 not modified
+        assert np.array_equal(upi.values[-1, :, :], ui2.values[-1, :, :])
+        assert np.array_equal(upi.values[:, -1, :], ui2.values[:, -1, :])
+        assert np.array_equal(upi.values[:, :, -1], ui2.values[:, :, -1])
+        assert np.array_equal(upj.values[-1, :, :], uj2.values[-1, :, :])
+        assert np.array_equal(upj.values[:, -1, :], uj2.values[:, -1, :])
+        assert np.array_equal(upj.values[:, :, -1], uj2.values[:, :, -1])
+        # test layer modified in unrefined area
+        kt = [1.0, 1.0, 2.0, 2.0, 4.0, 4.0]
+        assert np.array_equal(upk.values[0, 0, :], np.array(kt))
+        assert np.array_equal(upk.values[-1, -1, :], np.array(kt))
+        # test refined area
+        ti = [[5.0, 5.0], [5.0, 5.0]], [[6.0, 6.0], [6.0, 6.0]]
+        tj = [[1.0, 1.0], [2.0, 2.0]], [[1.0, 1.0], [2.0, 2.0]]
+        tk = [[2.0, 3.0], [2.0, 3.0]], [[2.0, 3.0], [2.0, 3.0]]
+        assert np.array_equal(upi.values[2:4, 2:4, 2:4], np.array(ti))
+        assert np.array_equal(upj.values[2:4, 2:4, 2:4], np.array(tj))
+        assert np.array_equal(upk.values[2:4, 2:4, 2:4], np.array(tk))
+
+    def test_upscaling_ranges_i_min(self):
+        """test upscaling raises error if ui<0"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        ui.values = ui.values - 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_i_max(self):
+        """test upscaling raises error if ui>grid.ncol"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        ui.values = ui.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_j_min(self):
+        """test upscaling raises error if uj<0"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uj.values = uj.values - 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_j_max(self):
+        """test upscaling raises error if uj>grid.nrow"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uj.values = uj.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_k_min(self):
+        """test upscaling raises error if uk<0"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uk.values = uk.values - 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ranges_k_max(self):
+        """test upscaling raises error if uk>grid.nlay"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        uk.values = uk.values + 2
+        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_i(self):
+        """test upscaling for incompatible i ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(3, 2, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_j(self):
+        """test upscaling for incompatible j ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 3, 2),
+                upscaling=(ui, uj, uk),
+            )
+
+    def test_upscaling_ratio_k(self):
+        """test upscaling for incompatible k ratio of geogrid to input grid"""
+
+        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+
+        with pytest.raises(
+            ValueError,
+            match="Invalid correspondence upscaling between geogrid and input grid",
+        ):
+            create_nested_hybrid_grid(
+                grid,
+                region,
+                rid,
+                refinement=(2, 2, 3),
+                upscaling=(ui, uj, uk),
+            )
+
 
 # ---------------------------------------------------------------------------
 # Tests for get_transmissibilities with nested hybrid NNCs
@@ -211,7 +455,7 @@ class TestTransmissibilitiesOnMergedGrid:
     def _build_merged_with_props(dimension=(6, 6, 2), refinement=(1, 1, 1)):
         """Helper: build merged grid and attach constant perm/ntg properties."""
         grid, region, rid = _make_box_grid_with_region(dimension=dimension)
-        merged, nnc_table = create_nested_hybrid_grid(
+        merged, nnc_table, _ = create_nested_hybrid_grid(
             grid, region, rid, refinement=refinement
         )
 

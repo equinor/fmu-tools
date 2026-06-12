@@ -53,9 +53,24 @@ The example here runs within RMS, but similar workflows can be created for file 
     #grid.append_prop(zone)
 
     # Create nested hybrid grid (e.g. refine region 2 by 2×2×1)
-    merged, nnc_table = create_nested_hybrid_grid(
+    merged, nnc_table, _ = create_nested_hybrid_grid(
         grid, region, target_region_id=2, refinement=(2, 2, 1)
     )
+
+    # Optionally send upscaling mappings from geogrid to be updated
+    # uip/ujp/ukp map Geogrid to Simgrid
+    # uip2/ujp2/ukp2 map Geogrid to NestedHybrid
+
+    #uip = xtgeo.gridproperty_from_roxar(project, "Geogrid", "C_upscale")
+    #ujp = xtgeo.gridproperty_from_roxar(project, "Geogrid", "R_upscale")
+    #ukp = xtgeo.gridproperty_from_roxar(project, "Geogrid", "L_upscale")
+    #merged, nnc_table, upscale = create_nested_hybrid_grid(
+    #    grid, region, target_region_id=2, refinement=(2, 2, 1), upscaling=(uip,ujp,ukp)
+    #)
+    #uip2, ujp2, ukp2 = upscale
+    #uip2.to_roxar(project, "Geogrid", "C_upscale")
+    #ujp2.to_roxar(project, "Geogrid", "R_upscale")
+    #ukp2.to_roxar(project, "Geogrid", "L_upscale")
 
     # store merged grid in RMS (or file)
     merged.to_roxar(project, "NestedHybrid")
