@@ -294,3 +294,22 @@ def test_domainconvert_cube_outside(
 
     with pytest.raises(ValueError, match="not fully inside the model area."):
         dc.depth_convert_cube(newcube)
+
+
+def test_depth_cube_values(smallcube: xtgeo.Cube) -> None:
+    """Test if depth and time cube values are equal with vconst = 2000 m/s."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 5
+    d1 = surface_template.copy()
+    d1.values = 100
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1.0, zmin=0, zmax=100)
+
+    assert abs((smallcube.values - new_depth_cube.values).mean()) < 0.0001
