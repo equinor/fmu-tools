@@ -310,6 +310,28 @@ def _generate_layer_mappings(
     return (lmap1, lmap2)
 
 
+def _set_zonation(subgrid: dict, lmap: np.ndarray, nlay: int) -> dict:
+    """Create an updated subgrid dictionary for the merged grid.
+    Args:
+        subgrid: subgrid dictionary from input grid
+        lmap: layer mapping for grid1 - unrefined input grid
+        nlay: total number of layers in merged grid
+    """
+
+    updated_subgrid = {}
+
+    # sorted list of zones to add
+    zl = sorted(subgrid, key=lambda x: subgrid[x][0])
+
+    for zi in range(len(zl)):
+        zn = zl[zi]
+        zmin = lmap[subgrid[zn][0] - 1] + 1
+        zmax = nlay + 1 if zi == len(zl) - 1 else lmap[subgrid[zl[zi + 1]][0] - 1] + 1
+        updated_subgrid[zn] = range(zmin, zmax)
+
+    return updated_subgrid
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -377,6 +399,9 @@ def create_nested_hybrid_grid(
     grid = grid.copy()
     region = region.copy()
 
+    # Save input zonation
+    subgrid = grid.subgrids
+
     # Attach the region property to the grid.
     grid.append_prop(region)
 
@@ -422,6 +447,8 @@ def create_nested_hybrid_grid(
     # 7. Merge the two grids.
     merged = xtgeo.grid_merge(grid, refined, lmap1, lmap2)
     _logger.info("Merged grid dimensions: %s", merged.dimensions)
+    if subgrid is not None:
+        merged.subgrids = _set_zonation(subgrid=subgrid, lmap=lmap1, nlay=merged.nlay)
 
     return merged, nnc_table
 
