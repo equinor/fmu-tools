@@ -360,7 +360,7 @@ def create_nested_hybrid_grid(
         mother cells to their connected refined cells.
     """
     warnings.warn(
-        "create_nested_hybrid_grid is is currently experimental. It may undergo "
+        "create_nested_hybrid_grid is currently experimental. It may undergo "
         "breaking changes in future versions without notice.",
         FutureWarning,
     )
