@@ -1,6 +1,12 @@
 Nested Hybrid Grids
 ====================
 
+.. admonition:: 🧪 Experimental Feature
+   :class: warning
+
+   This module is currently experimental. It may undergo breaking changes 
+   in future versions without notice.
+
 .. contents:: Table of Contents
    :local:
    :depth: 2
