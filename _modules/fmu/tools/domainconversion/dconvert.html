@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.31.1.dev3+g54f054bd4.d20260615 documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.31.1.dev4+g57998c437 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=dc5b3f37"></script>
+      <script src="../../../../_static/documentation_options.js?v=31edbe0a"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -690,7 +690,7 @@
         <span class="n">start</span> <span class="o">=</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zori</span>
         <span class="n">stop</span> <span class="o">=</span> <span class="n">zmax_actual</span> <span class="o">+</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span>
         <span class="n">num_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">))</span>
-        <span class="n">new_vertical_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">)</span>
+        <span class="n">new_vertical_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">zmax_actual</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">)</span>
 
         <span class="n">seismic_attribute_result_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">undefined</span><span class="p">)</span>
         <span class="c1"># Perform the interpolation for each (x, y) location</span>
