@@ -427,9 +427,9 @@ class DomainConversion:
                 )
 
                 if time2depth:
-                    speedcube_values[i, j, 1:] = y_arr[1:] / cube_arr[1:] * 2000
+                    speedcube_values[i, j, 1:] = y_arr[1:] / incube_arr[1:] * 2000
                 else:
-                    speedcube_values[i, j, 1:] = y_arr[1:] / cube_arr[1:] / 2000
+                    speedcube_values[i, j, 1:] = y_arr[1:] / incube_arr[1:] / 2000
 
         # Make sure first sample also gets a non-zero value
         speedcube_values[:, :, 0] = speedcube_values[:, :, 1]
