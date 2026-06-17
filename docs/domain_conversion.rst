@@ -1,14 +1,23 @@
 Domain conversion
 =================
 
-In RMS it is possible to do domain conversion using the menu option, but in
-some cases it convenient to be able to convert domains using a script. This
-module provides a method to convert domains in pure python.
+In RMS, domain conversion can be performed through the right-click menu or
+dedicated jobs. However, in some cases it is convenient to perform domain
+conversion from a script. This module provides pure Python implementations for
+converting cubes and surfaces between the time and depth domains.
 
-The functions are based on that we have matching pairs of surfaces for the two
-domains. The code will then interpolate the data from the source domain to
-the target domain. This will be based on *average* velocity or slowness, in constrast to
-the RMS domain conversion which is based on an *interval* velocity model.
+The functions are based on matching pairs of surfaces in the time and depth
+domains. Data is interpolated from the source domain to the target domain using
+*average* velocity or slowness. This differs from the RMS domain conversion,
+which uses an *interval* velocity model.
+
+For domain conversion of cubes, two trace interpolation methods are available:
+
+- **linear**: Quick, but not fully amplitude preserving. The degree of
+  amplitude loss depends on the sampling interval and frequency content. This
+  is currently the default method.  
+- **fft**: Amplitude preserving, but computationally more expensive. This
+  method is planned to become the default in a future release.
 
 Examples
 --------
@@ -16,7 +25,7 @@ Examples
 Example 1
 ^^^^^^^^^
 
-Depth convert a cube from time to depth domain.
+Convert a cube from the time domain to the depth domain.
 
 .. code-block:: python
 
@@ -32,8 +41,8 @@ Depth convert a cube from time to depth domain.
 
     dc = DomainConversion([depth1, depth2], [time1, time2])
 
-    # now depth convert cube
-    cube_in_depth = dc.depth_convert_cube(cube, zinc=2)
+    # now depth convert cube with fft method
+    cube_in_depth = dc.depth_convert_cube(cube, zinc=2, method="fft")
 
     cube_in_depth.to_file("path/to/output/cube_in_depth.segy")
 
@@ -41,7 +50,7 @@ Depth convert a cube from time to depth domain.
 Example 2
 ^^^^^^^^^
 
-Time convert a cube and a surface from depth to time domain.
+Convert a cube and a surface from the depth domain to the time domain.
 
 .. code-block:: python
 
@@ -64,14 +73,14 @@ Time convert a cube and a surface from depth to time domain.
 
     dc = DomainConversion(dlist, tlist)
 
-    time_cube = dc.time_convert_cube(cube, tinc=4)
+    time_cube = dc.time_convert_cube(cube, tinc=4, method="fft")
 
     time_other_aslist = dc.time_convert_surfaces([depth_other])
 
 Example 3
 ^^^^^^^^^
 
-A larger example with cubes and surfaces in RMS python environment.
+A larger example using cubes and surfaces in an RMS Python environment.
 
 .. code-block:: python
 
@@ -93,17 +102,18 @@ A larger example with cubes and surfaces in RMS python environment.
     TINC = 3
     MINTIME = 1500
     MAXTIME = 1900
+    METHOD = "fft"
 
     CLIP_CATALOG = "testing_dconv"
     PRJ = project
-    
+
 
     def load_input():
         """Load input data, such as cubes and surfaces."""
         amplcube = xtgeo.cube_from_roxar(PRJ, AMPL_TIME_CUBE)
         aicube = xtgeo.cube_from_roxar(PRJ, AI_TIME_CUBE)
         print(f"Loading cubes {AMPL_TIME_CUBE} and {AI_TIME_CUBE}... DONE")
-    
+
         depthsurfs = []
         timesurfs = []
         for ds in HORIZONS:
@@ -114,46 +124,46 @@ A larger example with cubes and surfaces in RMS python environment.
         for surf in HORIZONS:
             tsfr = xtgeo.surface_from_roxar(PRJ, surf, TIME_CATEGORY_OTHER)
             othertimesurfs.append(tsfr)
-    
+
         print("Loading surfaces... DONE")
         return amplcube, aicube, depthsurfs, timesurfs, othertimesurfs
-    
-    
+
+
     def create_domain_conversion_model(dsurfs, tsurfs):
         """Create a domain model from matching depth and time surfaces."""
         print("Create domain conversion (velocity/slowness) model...")
         dc = DomainConversion(depth_surfaces=dsurfs, time_surfaces=tsurfs)
         print("Create domain conversion model... DONE")
         return dc
-    
-    
+
+
     def _depth_convert_cube(dc, mycube):
-        """Depht convert a cube (generic)."""
+        """Depth convert a cube (generic)."""
         print("Depth convert cube...")
-        dcube = dc.depth_convert_cube(mycube, zinc=ZINC, zmin=MINDEPTH, zmax=MAXDEPTH)
+        dcube = dc.depth_convert_cube(mycube, zinc=ZINC, zmin=MINDEPTH, zmax=MAXDEPTH, method=METHOD)
         print("Depth convert cube... DONE")
         return dcube
-    
-    
+
+
     def _time_convert_cube(dc, dcube):
         """Time convert a cube using the slowness model (generic)."""
         print("Time convert cube...")
-        tcube = dc.time_convert_cube(dcube, tinc=TINC, tmin=MINTIME, tmax=MAXTIME)
+        tcube = dc.time_convert_cube(dcube, tinc=TINC, tmin=MINTIME, tmax=MAXTIME, method=METHOD)
         print("Time convert cube... DONE")
         return tcube
-    
-    
+
+
     def domain_convert_some_cube(dc, tcube, nickname="something"):
-        """Back and forth with some cube (here AI); demonstrate the conv. of cubes."""
+        """Convert a cube to depth and back again for demonstration."""
         dcube = _depth_convert_cube(dc, tcube)
         tcube_again = _time_convert_cube(dc, dcube)  # going back again, for demonstration
         dcube.to_roxar(PRJ, nickname + "_depth")
         tcube_again.to_roxar(PRJ, nickname + "_time_again")
         print(f"Save cubes in RMS... ({nickname}...) DONE")
-    
-    
+
+
     def domain_convert_surfaces(dc, othertimesurfs):
-        """Use domain model to depth and time convert some other surfaces."""
+        """Convert surfaces between time and depth domains."""
         print("Depth and time convert surfaces...")
         depthsurfaces = dc.depth_convert_surfaces(othertimesurfs)
         # store on clipboard
@@ -165,18 +175,18 @@ A larger example with cubes and surfaces in RMS python environment.
         for ts, name in zip(new_timesurfaces, HORIZONS):
             ts.to_roxar(PRJ, f"{name}_time", CLIP_CATALOG, stype="clipboard")
         print("Depth and time convert surfaces... DONE")
-    
-    
+
+
     # entry point for script
     if __name__ == "__main__":
         ampl, ai, ds, ts, other = load_input()
         dc = create_domain_conversion_model(ds, ts)
-    
+
         for nickname, cube in zip(["ampl_test", "ai_test"], [ampl, ai]):
             domain_convert_some_cube(dc, cube, nickname)
         domain_convert_surfaces(dc, other)
-    
+
         print("Done")
-    
-    
-    
+
+
+

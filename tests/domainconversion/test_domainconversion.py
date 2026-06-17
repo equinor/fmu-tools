@@ -289,13 +289,17 @@ def test_domainconvert_back_and_forth(
 
     dc = DomainConversion(dlist, tlist)
 
-    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1, zmax=100, zmin=0)
+    new_depth_cube = dc.depth_convert_cube(
+        smallcube, zinc=1, zmax=100, zmin=0, method="linear"
+    )
     plot_section(smallcube, simplesurfs, title="Input cube in time domain")
 
     plot_section(new_depth_cube, simplesurfs, title="Depth converted cube")
 
     # now timeconvert the newcube
-    new_time_cube = dc.time_convert_cube(new_depth_cube, tinc=1, tmax=100, tmin=0)
+    new_time_cube = dc.time_convert_cube(
+        new_depth_cube, tinc=1, tmax=100, tmin=0, method="linear"
+    )
     plot_section(new_time_cube, simplesurfs, title="Time domain output after d2t")
 
     assert abs((smallcube.values - new_time_cube.values).mean()) < 0.01
@@ -541,3 +545,84 @@ def test_speedcube_with_input_msl_and_default_zinc() -> None:
 
     assert np.isclose(result.zinc, 1.0)
     assert np.isclose(dc.average_velocity_cube_in_time.values[0, 0, 0], 2000.0)
+
+
+def test_trace_interpolation_methods(smallsinecube: xtgeo.Cube) -> None:
+    """Test trace interpolation with 'linear' and 'fft' methods."""
+
+    def downsample_cube(cube, shifted=False):
+        """Downsample cube by a factor of 2.
+
+        shifted : False means start from first sample, True from second
+        """
+        if shifted:
+            start, end = 1, None
+        else:
+            start, end = 0, -1
+
+        return xtgeo.Cube(
+            zori=cube.zori + shifted * cube.zinc,
+            ncol=cube.ncol,
+            nrow=cube.nrow,
+            nlay=cube.nlay // 2,
+            xinc=cube.xinc,
+            yinc=cube.yinc,
+            zinc=cube.zinc * 2,
+            values=cube.values[:, :, start:end:2],
+            ilines=cube.ilines,
+            xlines=cube.xlines,
+        )
+
+    # Tapering for FFT
+    hann_window = np.hanning(smallsinecube.nlay)
+    smallsinecube.values *= hann_window
+
+    smallsinecube_coarse = downsample_cube(smallsinecube)
+    smallsinecube_coarse_shifted = downsample_cube(smallsinecube, shifted=True)
+
+    surface_template = xtgeo.surface_from_cube(smallsinecube_coarse, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 10
+    d1 = surface_template.copy()
+    d1.values = 100
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    for method in ["linear", "fft"]:
+        new_depth_cube = dc.depth_convert_cube(
+            smallsinecube_coarse,
+            zinc=1.0,
+            zmin=0,
+            zmax=100,
+            method=method,
+        )
+        new_depth_cube_coarse = downsample_cube(new_depth_cube)
+        new_depth_cube_coarse_shifted = downsample_cube(new_depth_cube, shifted=True)
+
+        if method == "linear":
+            assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.37)
+            assert np.allclose(
+                smallsinecube_coarse.values, new_depth_cube_coarse.values, atol=5.6e-6
+            )
+            assert np.allclose(
+                smallsinecube_coarse_shifted.values,
+                new_depth_cube_coarse_shifted.values,
+                atol=0.37,
+            )
+        elif method == "fft":
+            assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=2.3e-3)
+            assert np.allclose(
+                smallsinecube_coarse.values, new_depth_cube_coarse.values, atol=6.7e-6
+            )
+            assert np.allclose(
+                smallsinecube_coarse_shifted.values,
+                new_depth_cube_coarse_shifted.values,
+                atol=1.8e-4,
+            )
+        else:
+            raise ValueError(
+                "The trace interpolation method must be either 'linear' or 'fft'."
+            )
