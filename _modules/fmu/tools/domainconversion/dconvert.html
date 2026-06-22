@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.31.1.dev8+gfea0d7e4b documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.31.1.dev9+ge3a2a0ca3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=2bf8e95e"></script>
+      <script src="../../../../_static/documentation_options.js?v=1fe63fb9"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -448,6 +448,23 @@
         <span class="k">return</span> <span class="n">cube</span><span class="o">.</span><span class="n">zori</span> <span class="o">+</span> <span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">nlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cube</span><span class="o">.</span><span class="n">zinc</span></div>
 
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_same_cube_geometry</span><span class="p">(</span><span class="n">cube1</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">cube2</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if two cubes have the same geometry.&quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;xori&quot;</span><span class="p">,</span> <span class="s2">&quot;yori&quot;</span><span class="p">,</span> <span class="s2">&quot;zori&quot;</span><span class="p">,</span> <span class="s2">&quot;xinc&quot;</span><span class="p">,</span> <span class="s2">&quot;yinc&quot;</span><span class="p">,</span> <span class="s2">&quot;zinc&quot;</span><span class="p">,</span> <span class="s2">&quot;rotation&quot;</span><span class="p">,</span> <span class="s2">&quot;yflip&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cube1</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="n">cube2</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">atol</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;xori&quot;</span><span class="p">,</span> <span class="s2">&quot;yori&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mf">1e-06</span>
+
+            <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cube1</span><span class="p">,</span> <span class="n">k</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cube2</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_extend_incube_create_speed_cube_average</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">incube</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">,</span> <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -459,6 +476,24 @@
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Incube dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">incube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="n">cube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recreate_cube_from_msl</span><span class="p">(</span><span class="n">incube</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Incube extended to MSL dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="c1"># Check if we can reuse existing speedcube or need to create a new one</span>
+        <span class="k">if</span> <span class="n">time2depth</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_same_cube_geometry</span><span class="p">(</span>
+                <span class="n">cube</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vcube_t</span>
+            <span class="p">):</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Reuse velocity cube for time-&gt;depth conversion&quot;</span><span class="p">)</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Update internal time cube&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_time_cube</span> <span class="o">=</span> <span class="n">cube</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_same_cube_geometry</span><span class="p">(</span>
+                <span class="n">cube</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scube_d</span>
+            <span class="p">):</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Reuse slowness cube for depth-&gt;time conversion&quot;</span><span class="p">)</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Update internal depth cube&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_depth_cube</span> <span class="o">=</span> <span class="n">cube</span>
+                <span class="k">return</span>
 
         <span class="n">result_description</span> <span class="o">=</span> <span class="s2">&quot;velocity&quot;</span> <span class="k">if</span> <span class="n">time2depth</span> <span class="k">else</span> <span class="s2">&quot;slowness&quot;</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create average </span><span class="si">%s</span><span class="s2"> cube&quot;</span><span class="p">,</span> <span class="n">result_description</span><span class="p">)</span>
