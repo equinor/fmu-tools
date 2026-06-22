@@ -351,6 +351,23 @@ class DomainConversion:
         """Calculate the maximum depth for a cube."""
         return cube.zori + (cube.nlay - 1) * cube.zinc
 
+    @staticmethod
+    def _same_cube_geometry(cube1: xtgeo.Cube, cube2: xtgeo.Cube) -> bool:
+        """Check if two cubes have the same geometry."""
+        keys = ("xori", "yori", "zori", "xinc", "yinc", "zinc", "rotation", "yflip")
+
+        if cube1.dimensions != cube2.dimensions:
+            return False
+
+        for k in keys:
+            atol = 0.01 if k in ["xori", "yori"] else 1e-06
+
+            v1, v2 = float(getattr(cube1, k)), float(getattr(cube2, k))
+            if not np.isclose(v1, v2, atol=atol):
+                return False
+
+        return True
+
     def _extend_incube_create_speed_cube_average(
         self, incube: xtgeo.Cube, time2depth: bool = True
     ) -> None:
@@ -362,6 +379,24 @@ class DomainConversion:
         _logger.debug("Incube dimensions: %s", incube.values.shape)
         cube = self._recreate_cube_from_msl(incube, resample=True)
         _logger.debug("Incube extended to MSL dimensions: %s", cube.values.shape)
+
+        # Check if we can reuse existing speedcube or need to create a new one
+        if time2depth:
+            if self._vcube_t is not None and self._same_cube_geometry(
+                cube, self._vcube_t
+            ):
+                _logger.debug("Reuse velocity cube for time->depth conversion")
+                _logger.debug("Update internal time cube")
+                self._time_cube = cube
+                return
+        else:
+            if self._scube_d is not None and self._same_cube_geometry(
+                cube, self._scube_d
+            ):
+                _logger.debug("Reuse slowness cube for depth->time conversion")
+                _logger.debug("Update internal depth cube")
+                self._depth_cube = cube
+                return
 
         result_description = "velocity" if time2depth else "slowness"
         _logger.debug("Create average %s cube", result_description)

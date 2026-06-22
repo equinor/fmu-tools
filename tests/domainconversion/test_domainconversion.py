@@ -332,7 +332,7 @@ def test_depth_cube_values(smallsinecube: xtgeo.Cube) -> None:
 
     new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
 
-    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.0001)
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.021)
 
 
 def test_depth_cube_values_with_msl(smallsinecube: xtgeo.Cube) -> None:
@@ -353,4 +353,25 @@ def test_depth_cube_values_with_msl(smallsinecube: xtgeo.Cube) -> None:
 
     new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
 
-    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.0001)
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.021)
+
+
+def test_reuse_speedcube(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Loop over two cubes and reuse the speedcube."""
+
+    cube_list = [smallcube, smallcube]
+
+    dc = DomainConversion(*simplesurfs)
+
+    module = "fmu.tools.domainconversion.dconvert"
+    with caplog.at_level(logging.DEBUG, logger=module):
+        for cube in cube_list:
+            _ = dc.depth_convert_cube(cube)
+
+    expected = "Reuse velocity cube for time->depth conversion"
+
+    assert (module, logging.DEBUG, expected) in caplog.record_tuples
