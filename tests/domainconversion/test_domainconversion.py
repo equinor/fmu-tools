@@ -92,6 +92,26 @@ def fixture_smallcube() -> xtgeo.Cube:
     )
 
 
+@pytest.fixture(name="smallsinecube")
+def fixture_smallsinecube() -> xtgeo.Cube:
+    """Fixture for making a small synthetic test cube with sine wave"""
+    cube_values = np.zeros((3, 4, 101))
+    sine_wave = 3.0 * np.sin(0.5 * np.arange(cube_values.shape[2]))
+    cube_values[:, :, :] = sine_wave
+
+    return xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=101,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        values=cube_values,
+        ilines=[3, 6, 9],
+        xlines=[42, 40, 38, 36],
+    )
+
+
 @pytest.fixture(name="simplesurfs")
 def fixture_simple_surfaces(
     smallcube: xtgeo.Cube,
@@ -193,7 +213,7 @@ def test_generate_simple_velocube(
 @pytest.mark.parametrize(
     "input, expected",
     [
-        # [(None, None, None), (1.1, 0, 82.5)],  # TODO: Take a look at this
+        [(None, None, None), (1.1, 0, 82.5)],
         [(1.1, 0.0, 100), (1.1, 0.0, 99.0)],
         [(1.5, 0.0, 100), (1.5, 0.0, 99.0)],
         [(1.5, 20.0, 100), (1.5, 19.5, 99.0)],
@@ -296,13 +316,13 @@ def test_domainconvert_cube_outside(
         dc.depth_convert_cube(newcube)
 
 
-def test_depth_cube_values(smallcube: xtgeo.Cube) -> None:
+def test_depth_cube_values(smallsinecube: xtgeo.Cube) -> None:
     """Test if depth and time cube values are equal with vconst = 2000 m/s."""
 
-    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+    surface_template = xtgeo.surface_from_cube(smallsinecube, value=0)
 
     d0 = surface_template.copy()
-    d0.values = 5
+    d0.values = 10
     d1 = surface_template.copy()
     d1.values = 100
 
@@ -310,6 +330,27 @@ def test_depth_cube_values(smallcube: xtgeo.Cube) -> None:
     tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
     dc = DomainConversion(dlist, tlist)
 
-    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1.0, zmin=0, zmax=100)
+    new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
 
-    assert np.allclose(smallcube.values, new_depth_cube.values, atol=0.0001)
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.0001)
+
+
+def test_depth_cube_values_with_msl(smallsinecube: xtgeo.Cube) -> None:
+    """With MSL, test if depth and time cube values are equal with vconst = 2000 m/s."""
+
+    surface_template = xtgeo.surface_from_cube(smallsinecube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0
+    d1 = surface_template.copy()
+    d1.values = 10
+    d2 = surface_template.copy()
+    d2.values = 100
+
+    dlist = [d0, d1, d2]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
+
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.0001)
