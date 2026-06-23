@@ -375,3 +375,65 @@ def test_reuse_speedcube(
     expected = "Reuse velocity cube for time->depth conversion"
 
     assert (module, logging.DEBUG, expected) in caplog.record_tuples
+
+
+def test_same_cube_geometry(
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
+    """Compare cubes with different geometries."""
+
+    cube1 = xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    cube2 = xtgeo.Cube(
+        ncol=2,
+        nrow=4,
+        nlay=101,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    cube3 = xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        yflip=-1,
+    )
+
+    cube4 = xtgeo.Cube(
+        xori=10,
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    dlist = [xtgeo.surface_from_cube(cube1, value=50)]
+    dc = DomainConversion(depth_surfaces=dlist, time_surfaces=dlist)
+
+    # Same cubes
+    assert dc._same_cube_geometry(cube1, cube1)
+
+    # cube2 has different geometry than surfaces to build dc object
+    assert dc._same_cube_geometry(cube2, cube2)
+
+    # Cubes have different dimensions
+    assert not dc._same_cube_geometry(cube1, cube2)
+
+    # Cubes have different attributes, high atol (here: yflip)
+    assert not dc._same_cube_geometry(cube1, cube3)
+
+    # Cubes have different attributes, low atol (here: xori)
+    assert not dc._same_cube_geometry(cube1, cube4)
