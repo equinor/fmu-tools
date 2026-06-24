@@ -437,3 +437,54 @@ def test_same_cube_geometry(
 
     # Cubes have different attributes, low atol (here: xori)
     assert not dc._same_cube_geometry(cube1, cube4)
+
+
+def test_speedcube_interpolation(smallcube: xtgeo.Cube) -> None:
+    """Check that speedcube inter- and extrapolation is correct."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    # Input surfaces in between cube zmin and zmax, thus extrapolation required
+    d0 = surface_template.copy()
+    d0.values = 10
+    d1 = surface_template.copy()
+    d1.values = 50
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus v = 2000 m/s everywhere
+    dc = DomainConversion(dlist, tlist)
+
+    # Domain convert forward and backward to populate dc._vcube_t and dc._scube_d
+    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1.0, zmin=0, zmax=100)
+    _ = dc.time_convert_cube(new_depth_cube, tinc=1.0, tmin=0, tmax=100)
+
+    velocity_trace = dc._vcube_t.values[0, 0, :]
+    slowness_trace = dc._scube_d.values[0, 0, :]
+
+    assert np.allclose(velocity_trace, 2000.0)
+    assert np.allclose(slowness_trace, 1 / 2000.0)
+
+
+def test_speedcube_with_input_msl_and_default_zinc() -> None:
+    """Check zinc and topmost sample of velocity cube if msl is given."""
+    cube = xtgeo.Cube(
+        ncol=1,
+        nrow=1,
+        nlay=2,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        values=np.zeros((1, 1, 2)),
+    )
+    surface_template = xtgeo.surface_from_cube(cube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0.0
+    d1 = surface_template.copy()
+    d1.values = 10.0
+
+    dc = DomainConversion([d0, d1], [d0, d1])
+    result = dc.depth_convert_cube(cube, zmin=0, zmax=10)  # zinc omitted on purpose
+
+    assert np.isclose(result.zinc, 1.0)
+    assert np.isclose(dc.average_velocity_cube_in_time.values[0, 0, 0], 2000.0)
