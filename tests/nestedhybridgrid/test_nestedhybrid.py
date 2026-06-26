@@ -6,12 +6,10 @@ import pytest
 import xtgeo
 
 from fmu.tools.nestedhybridgrid import (
+    NestedHybridGrid,
     create_nested_hybrid_grid,
     nnc_to_flowsimulator_input,
     nnc_to_gridproperty,
-)
-from fmu.tools.nestedhybridgrid.nestedhybrid import (
-    _generate_layer_mappings,
 )
 
 # ---------------------------------------------------------------------------
@@ -141,7 +139,7 @@ class TestCreateNestedHybridGrid:
         grid, region, rid = _make_box_grid_with_region(dimension=(3, 3, 3))
 
         region.values = np.ones(region.values.shape)
-        region.values[1][1][1] = rid
+        region.values[1, 1, 1] = rid
 
         _, nnc_table = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2)
@@ -168,8 +166,18 @@ class TestCreateNestedHybridGrid:
 
     def test_lmap_generation_simple(self):
         """Tests that the correct layer mappings are generated"""
+        dimension = (4, 4, 3)
+        target_layer_ids = [1]
 
-        lmap1, lmap2 = _generate_layer_mappings(3, 2, (2, 2, 2), (1, 1, 1))
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(grid=grid, region=region, refinement=(2, 2, 2))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
 
         assert np.array_equal(lmap1, np.array([0, 1, 3]))
         assert np.array_equal(lmap2, np.array([1, 2]))
@@ -177,23 +185,55 @@ class TestCreateNestedHybridGrid:
     def test_lmap_generation_no_offset(self):
         """Tests that the correct layer mappings are generated"""
 
-        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 0))
+        dimension = (4, 4, 3)
+        target_layer_ids = [0, 1]
+
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(grid=grid, region=region, refinement=(2, 2, 2))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
 
         assert np.array_equal(lmap1, np.array([0, 2, 4]))
         assert np.array_equal(lmap2, np.array([0, 1, 2, 3]))
 
     def test_lmap_generation_full_offset(self):
-        """Tests that the correct layer mappings are generated"""
+        """Tests a fully offset refinement window near the last coarse layer."""
 
-        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 3))
+        dimension = (4, 4, 5)
+        target_layer_ids = [3, 4]
 
-        assert np.array_equal(lmap1, np.array([0, 1, 2]))
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(grid=grid, region=region, refinement=(2, 2, 2))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
+
+        assert np.array_equal(lmap1, np.array([0, 1, 2, 3, 5]))
         assert np.array_equal(lmap2, np.array([3, 4, 5, 6]))
 
     def test_lmap_generation_ref10(self):
         """Tests that the correct layer mappings are generated"""
+        dimension = (2, 2, 3)
+        target_layer_ids = [1, 2]
 
-        lmap1, lmap2 = _generate_layer_mappings(3, 20, (2, 2, 10), (1, 1, 1))
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[0, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(grid=grid, region=region, refinement=(1, 1, 10))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
 
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)

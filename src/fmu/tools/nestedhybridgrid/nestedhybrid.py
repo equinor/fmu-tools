@@ -18,11 +18,12 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 import numpy as np
 import pandas as pd
 import xtgeo
+from pydantic import BaseModel, Field, ValidationError
 
 if TYPE_CHECKING:
     import os
@@ -36,58 +37,76 @@ _logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 
-def _crop_for_region(
-    grid: xtgeo.Grid,
-    region: xtgeo.GridProperty,
-    region_id: int,
-) -> tuple[xtgeo.Grid, tuple[int, int, int]]:
-    """Crop *grid* to the bounding box of *region_id*.
+class BoundingBox(BaseModel):
+    imin: int
+    imax: int
+    jmin: int
+    jmax: int
+    kmin: int
+    kmax: int
 
-    Returns (cropped_grid, crop_origin) where *crop_origin* is the 0-based
-    (i, j, k) offset of the crop start inside the original grid.
-    """
-    region_values = region.values
-    region_indices = np.where(region_values == region_id)
+    @classmethod
+    def from_condition(cls, condition: np.ma.MaskedArray) -> Self:
+        """Get the ijk bounding box from a 3D boolean mask."""
+        region_indices = condition.nonzero()
 
-    imin = int(region_indices[0].min() + 1)
-    imax = int(region_indices[0].max() + 1)
-    jmin = int(region_indices[1].min() + 1)
-    jmax = int(region_indices[1].max() + 1)
-    kmin = int(region_indices[2].min() + 1)
-    kmax = int(region_indices[2].max() + 1)
+        return cls(
+            imin=region_indices[0].min() + 1,
+            imax=region_indices[0].max() + 1,
+            jmin=region_indices[1].min() + 1,
+            jmax=region_indices[1].max() + 1,
+            kmin=region_indices[2].min() + 1,
+            kmax=region_indices[2].max() + 1,
+        )
 
-    _logger.info(
-        "Region %d bounding box (1-based): i=%d-%d, j=%d-%d, k=%d-%d",
-        region_id,
-        imin,
-        imax,
-        jmin,
-        jmax,
-        kmin,
-        kmax,
-    )
+
+class Refinement(BaseModel):
+    col: int = Field(ge=1)
+    row: int = Field(ge=1)
+    lay: int = Field(ge=1)
+
+    @classmethod
+    def from_tuple(cls, refinement: tuple[int, int, int]) -> Self:
+        """Create a validated refinement model from a 3-tuple."""
+        try:
+            col, row, lay = refinement
+            return cls(col=col, row=row, lay=lay)
+        except ValidationError:
+            raise ValueError("Refinement factors must be >= 1")
+
+
+def _crop_for_region(grid: xtgeo.Grid, refinement_bbox: BoundingBox) -> xtgeo.Grid:
+    """Crop grid to the bounding box of the refinement region."""
 
     cropped_grid = grid.copy()
-    cropped_grid.crop((imin, imax), (jmin, jmax), (kmin, kmax), props="all")
+
+    irange = (refinement_bbox.imin, refinement_bbox.imax)
+    jrange = (refinement_bbox.jmin, refinement_bbox.jmax)
+    krange = (refinement_bbox.kmin, refinement_bbox.kmax)
+
+    cropped_grid.crop(irange, jrange, krange, props="all")
     _logger.info("Cropped grid dimensions: %s", cropped_grid.dimensions)
 
-    return cropped_grid, (imin - 1, jmin - 1, kmin - 1)
+    return cropped_grid
 
 
 def _find_boundary_faces(
-    region_prop: xtgeo.GridProperty,
-    target_region: int,
+    refinement_area: np.ma.MaskedArray,
 ) -> list[tuple[tuple[int, int, int], tuple[int, int, int], str]]:
-    """Find cell faces on the boundary between *target_region* and other active regions.
+    """Find cell faces on the boundary of a refinement area.
 
-    Returns a list of ``(outside_ijk, inside_ijk, face_dir)`` where indices
-    are 0-based and *face_dir* is one of ``'i+', 'i-', 'j+', 'j-', 'k+', 'k-'``.
+    Args:
+        refinement_area: 3D boolean array where ``True`` marks cells to refine.
+
+    Returns:
+        A list of ``(outside_ijk, inside_ijk, face_dir)`` where indices are
+        0-based and *face_dir* is one of ``'i+', 'i-', 'j+', 'j-', 'k+', 'k-'``.
     """
-    filled = np.ma.filled(region_prop.values, fill_value=-1).astype(int)
-    ni, nj, nk = filled.shape
+    ni, nj, nk = refinement_area.shape
+    active = ~refinement_area.mask
 
-    in_target = filled == target_region
-    outside_active = (filled != target_region) & (filled != -1)
+    in_target = refinement_area & active
+    outside_active = ~refinement_area & active
 
     faces: list[tuple[tuple[int, int, int], tuple[int, int, int], str]] = []
 
@@ -121,15 +140,13 @@ def _find_boundary_faces(
     for i, j, kdx in np.argwhere(mask):
         faces.append(((int(i), int(j), int(kdx)), (int(i), int(j), int(kdx + 1)), "k-"))
 
-    _logger.info("Found %d boundary faces for region %d", len(faces), target_region)
+    _logger.info("Found %d boundary faces for refinement area", len(faces))
     return faces
 
 
 def _compute_nnc_table(
-    region_prop: xtgeo.GridProperty,
-    target_region_id: int,
-    crop_origin: tuple[int, int, int],
-    refinement: tuple[int, int, int],
+    refinement_area: np.ma.MaskedArray,
+    refinement: Refinement,
     coarse_ncol: int,
     lmap1: np.ndarray,
     lmap2: np.ndarray,
@@ -153,9 +170,7 @@ def _compute_nnc_table(
           you reach the refined cell).
 
     Args:
-        region_prop: Region property on the original (unmodified) grid.
-        target_region_id: Region value that was refined.
-        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.
+        refinement_area: 3D boolean array where ``True`` marks cells to refine.
         refinement: ``(rcol, rrow, rlay)`` refinement factors.
         coarse_ncol: Number of columns in the coarse grid (grid1 in the merge).
         lmap1: Numpy array with layer_mapping (input k -> output k) for grid1
@@ -165,10 +180,13 @@ def _compute_nnc_table(
     Returns:
         A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.
     """
-    faces = _find_boundary_faces(region_prop, target_region_id)
+    faces = _find_boundary_faces(refinement_area)
+    bbox = BoundingBox.from_condition(refinement_area)
 
-    rcol, rrow, rlay = refinement
-    i0, j0, k0 = crop_origin
+    rcol, rrow, rlay = refinement.col, refinement.row, refinement.lay
+    i0 = bbox.imin - 1
+    j0 = bbox.jmin - 1
+    k0 = bbox.kmin - 1
 
     # In the merged grid, grid2 (refined) starts after a 1-column gap:
     i_offset = coarse_ncol + 1
@@ -255,86 +273,178 @@ def _compute_nnc_table(
     return pd.DataFrame(rows, columns=["I1", "J1", "K1", "I2", "J2", "K2", "DIRECTION"])
 
 
-def _set_actnum_by_region(
-    grid: xtgeo.Grid,
-    region_prop: xtgeo.GridProperty,
-    target_region: int,
-    *,
-    invert: bool = False,
-) -> None:
-    """Deactivate cells based on region membership."""
+def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
+    """Deactivate cells based on condition."""
     actnum = grid.get_actnum()
-    region_values = region_prop.values
-
-    mask = region_values != target_region if invert else region_values == target_region
-
-    _logger.info(
-        "Deactivating %d cells (region %s %d)",
-        np.sum(mask),
-        "!=" if invert else "==",
-        target_region,
-    )
-    actnum.values[mask] = 0
+    actnum.values[~active_mask] = 0
     grid.set_actnum(actnum)
-
-
-def _generate_layer_mappings(
-    coarse_nlay: int,
-    refined_nlay: int,
-    refinement: tuple[int, int, int],
-    crop_origin: tuple[int, int, int],
-) -> tuple[np.ndarray, np.ndarray]:
-    """Generate mappings from old to new layer number.
-    Args:
-        coarse_nlay: Number of layers in the coarse grid (grid1 in the merge).
-        refined_nlay: Number of layers in the refined grid (grid2 in the merge).
-        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.
-        refinement: ``(rcol, rrow, rlay)`` refinement factors.
-
-    Returns:
-        lmap1: Numpy array with layer_mapping (input k -> output k) for grid1
-        lmap2: Numpy array with layer_mapping (input k -> output k) for grid2
-    """
-
-    _, _, rlay = refinement
-    _, _, k0 = crop_origin
-
-    lmap1 = np.arange(coarse_nlay, dtype=np.int32)
-    lmap1 = lmap1 + np.where(
-        lmap1 < k0,
-        0,
-        (rlay - 1) * np.minimum(int(refined_nlay / rlay), lmap1 - k0),
-    )
-    lmap2 = np.arange(refined_nlay, dtype=np.int32) + k0
-
-    return (lmap1, lmap2)
-
-
-def _set_zonation(subgrid: dict, lmap: np.ndarray, nlay: int) -> dict:
-    """Create an updated subgrid dictionary for the merged grid.
-    Args:
-        subgrid: subgrid dictionary from input grid
-        lmap: layer mapping for grid1 - unrefined input grid
-        nlay: total number of layers in merged grid
-    """
-
-    updated_subgrid = {}
-
-    # sorted list of zones to add
-    zl = sorted(subgrid, key=lambda x: subgrid[x][0])
-
-    for zi in range(len(zl)):
-        zn = zl[zi]
-        zmin = lmap[subgrid[zn][0] - 1] + 1
-        zmax = nlay + 1 if zi == len(zl) - 1 else lmap[subgrid[zl[zi + 1]][0] - 1] + 1
-        updated_subgrid[zn] = range(zmin, zmax)
-
-    return updated_subgrid
 
 
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
+
+
+class NestedHybridGrid:
+    def __init__(
+        self,
+        grid: xtgeo.Grid,
+        region: xtgeo.GridProperty,
+        refinement: tuple[int, int, int],
+        target_region_id: int = 1,
+    ) -> None:
+        """Create a NestedHybridGrid instance."""
+
+        self._validate_inputs(grid, region, refinement, target_region_id)
+
+        self._nnc_table: pd.DataFrame | None = None
+        self._grid: xtgeo.Grid | None = None
+
+        self._original_grid = grid
+        self._original_dimensions = grid.dimensions
+        self._original_subgrids = grid.subgrids
+
+        self._region = region
+        self._target_region_id = target_region_id
+        self._refinement_area = self._region.values == target_region_id
+        self._refinement = Refinement.from_tuple(refinement)
+        self._refined_bbox = BoundingBox.from_condition(self._refinement_area)
+        self._refined_nlay = self._get_num_refined_layers()
+
+        self._layer_map_coarse = self._generate_layer_map_coarse()
+        self._layer_map_refined = self._generate_layer_map_refined()
+
+    @staticmethod
+    def _validate_inputs(
+        grid: xtgeo.Grid,
+        region: xtgeo.GridProperty,
+        refinement: tuple[int, int, int],
+        target_region_id: int,
+    ) -> None:
+        """Validate input arguments."""
+        if region.dimensions != grid.dimensions:
+            raise ValueError(
+                f"Region property dimensions {region.dimensions} do not match "
+                f"grid dimensions {grid.dimensions}"
+            )
+
+        if not (region.values == target_region_id).any():
+            raise ValueError(
+                f"No cells found for target_region_id={target_region_id} "
+                f"in region property {region.name}"
+            )
+
+        if not isinstance(refinement, tuple) or len(refinement) != 3:
+            raise ValueError(
+                "Refinement must be a tuple of three integers: (rcol, rrow, rlay)"
+            )
+
+    def _build_grid(self) -> xtgeo.Grid:
+        """Build the nested hybrid grid."""
+        coarse_grid = self._original_grid.copy()
+        coarse_grid.append_prop(self._region)
+
+        # Get the refined grid, i.e. crop and refine.
+        refined_grid = _crop_for_region(coarse_grid, self._refined_bbox)
+        refined_grid.refine(
+            self._refinement.col, self._refinement.row, self._refinement.lay
+        )
+
+        # Deactivate the target region in the coarse grid and
+        coarse_region = coarse_grid.get_prop_by_name(self._region.name)
+        active_area = coarse_region.values != self._target_region_id
+        _set_actnum_in_grid(coarse_grid, active_area)
+
+        # Deactivate outside target region in the refined grid
+        refined_region = refined_grid.get_prop_by_name(self._region.name)
+        active_area = refined_region.values == self._target_region_id
+        _set_actnum_in_grid(refined_grid, active_area)
+
+        grid = xtgeo.grid_merge(
+            grid1=coarse_grid,
+            grid2=refined_grid,
+            layer_map1=self._layer_map_coarse,
+            layer_map2=self._layer_map_refined,
+        )
+        _logger.info("Merged grid dimensions: %s", grid.dimensions)
+
+        grid.subgrids = self._set_zonation(grid.nlay)
+        return grid
+
+    @property
+    def grid(self) -> xtgeo.Grid:
+        """The final nested hybrid grid."""
+        if self._grid is None:
+            self._grid = self._build_grid()
+        return self._grid
+
+    @property
+    def properties(self) -> xtgeo.Grid:
+        """The final nested hybrid grid properties."""
+        return self.grid.props
+
+    @property
+    def nnc_table(self) -> pd.DataFrame:
+        """Non-Neighbour Connection (NNC) mapping table."""
+        if self._nnc_table is None:
+            self._nnc_table = self._compute_nnc_table()
+        return self._nnc_table
+
+    def _compute_nnc_table(self) -> pd.DataFrame:
+        """Compute the NNC mapping table."""
+        return _compute_nnc_table(
+            refinement_area=self._refinement_area,
+            refinement=self._refinement,
+            coarse_ncol=self._original_dimensions.ncol,
+            lmap1=self._layer_map_coarse,
+            lmap2=self._layer_map_refined,
+        )
+
+    def _generate_layer_map_coarse(self) -> np.ndarray:
+        """Generate mappings from old to new layer number for the coarse grid."""
+        rlay = self._refinement.lay
+        k0 = self._refined_bbox.kmin - 1
+        coarse_nlay = self._original_dimensions.nlay
+
+        lmap = np.arange(coarse_nlay, dtype=np.int32)
+        return lmap + np.where(
+            lmap < k0,
+            0,
+            (rlay - 1) * np.minimum(int(self._refined_nlay / rlay), lmap - k0),
+        )
+
+    def _generate_layer_map_refined(self) -> np.ndarray:
+        """Generate mappings from old to new layer number for the refined grid."""
+        lmap = np.arange(self._refined_nlay, dtype=np.int32)
+        return lmap + self._refined_bbox.kmin - 1
+
+    def _get_num_refined_layers(self) -> int:
+        """Get the number of layers of the refined grid."""
+        bbox = self._refined_bbox
+        return (bbox.kmax - bbox.kmin + 1) * self._refinement.lay
+
+    def _set_zonation(self, nlay: int) -> dict | None:
+        """Create an updated subgrid dictionary for the merged grid."""
+        subgrid = self._original_subgrids
+        if subgrid is None:
+            return None
+
+        lmap = self._layer_map_coarse
+
+        updated_subgrid = {}
+
+        # sorted list of zones to add
+        zl = sorted(subgrid, key=lambda x: subgrid[x][0])
+
+        for zi in range(len(zl)):
+            zn = zl[zi]
+            zmin = lmap[subgrid[zn][0] - 1] + 1
+            zmax = (
+                nlay + 1 if zi == len(zl) - 1 else lmap[subgrid[zl[zi + 1]][0] - 1] + 1
+            )
+            updated_subgrid[zn] = range(zmin, zmax)
+
+        return updated_subgrid
 
 
 def create_nested_hybrid_grid(
@@ -386,71 +496,15 @@ def create_nested_hybrid_grid(
         "breaking changes in future versions without notice.",
         FutureWarning,
     )
-    if any(r < 1 for r in refinement):
-        raise ValueError(f"Refinement factors must be >= 1, got {refinement}")
 
-    if region.dimensions != grid.dimensions:
-        raise ValueError(
-            f"Region property dimensions {region.dimensions} do not match "
-            f"grid dimensions {grid.dimensions}"
-        )
-
-    # Make working copies so the caller's objects are not mutated.
-    grid = grid.copy()
-    region = region.copy()
-
-    # Save input zonation
-    subgrid = grid.subgrids
-
-    # Attach the region property to the grid.
-    grid.append_prop(region)
-
-    # 1. Crop to the bounding box of the target region.
-    cropped, crop_origin = _crop_for_region(grid, region, target_region_id)
-
-    # 2. Refine the cropped grid.
-    refined = cropped.copy()
-    rcol, rrow, rlay = refinement
-    _, _, olay = crop_origin
-    refined.refine(refine_col=rcol, refine_row=rrow, refine_layer=rlay)
-    _logger.info("Refined cropped grid dimensions: %s", refined.dimensions)
-
-    # 3. Generate layer mappings
-    lmap1, lmap2 = _generate_layer_mappings(
-        coarse_nlay=grid.nlay,
-        refined_nlay=refined.nlay,
-        crop_origin=crop_origin,
+    nhg = NestedHybridGrid(
+        grid=grid,
+        region=region,
         refinement=refinement,
-    )
-
-    # 4. Compute the NNC mapping table *before* deactivation mutates anything.
-    #    This uses the original region property to find boundary faces and
-    #    maps them through the crop → refine → merge index chain.
-    nnc_table = _compute_nnc_table(
-        region_prop=region,
         target_region_id=target_region_id,
-        crop_origin=crop_origin,
-        refinement=refinement,
-        coarse_ncol=grid.ncol,
-        lmap1=lmap1,
-        lmap2=lmap2,
     )
 
-    # 5. Deactivate the target region in the coarse grid (will be replaced).
-    coarse_region = grid.get_prop_by_name(region.name)
-    _set_actnum_by_region(grid, coarse_region, target_region_id, invert=False)
-
-    # 6. In the refined grid keep only target-region cells active.
-    refined_region = refined.get_prop_by_name(region.name)
-    _set_actnum_by_region(refined, refined_region, target_region_id, invert=True)
-
-    # 7. Merge the two grids.
-    merged = xtgeo.grid_merge(grid, refined, lmap1, lmap2)
-    _logger.info("Merged grid dimensions: %s", merged.dimensions)
-    if subgrid is not None:
-        merged.subgrids = _set_zonation(subgrid=subgrid, lmap=lmap1, nlay=merged.nlay)
-
-    return merged, nnc_table
+    return nhg.grid, nhg.nnc_table
 
 
 def nnc_to_gridproperty(
