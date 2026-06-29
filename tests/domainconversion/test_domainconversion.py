@@ -437,3 +437,56 @@ def test_same_cube_geometry(
 
     # Cubes have different attributes, low atol (here: xori)
     assert not dc._same_cube_geometry(cube1, cube4)
+
+
+def test_interval_velocity_maps(smallcube: xtgeo.Cube) -> None:
+    """Check values of interval velocity maps."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 20
+    d1 = surface_template.copy()
+    d1.values = 65
+    t0 = surface_template.copy()
+    t0.values = 20
+    t1 = surface_template.copy()
+    t1.values = 50
+
+    dlist = [d0, d1]
+    tlist = [t0, t1]
+    dc = DomainConversion(dlist, tlist)
+
+    vint_maps = [vi for vi in dc.vint_surfaces()]
+    assert np.ma.allclose(vint_maps[0].values, 2000.0)
+    assert np.ma.allclose(vint_maps[1].values, 2000.0)
+    assert np.ma.allclose(vint_maps[2].values, 3000.0)
+
+
+def test_interval_velocity_maps_with_msl(smallcube: xtgeo.Cube) -> None:
+    """Check values of interval velocity maps if MSL is input."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0
+    d1 = surface_template.copy()
+    d1.values = 20
+    d2 = surface_template.copy()
+    d2.values = 65
+    t0 = surface_template.copy()
+    t0.values = 0
+    t1 = surface_template.copy()
+    t1.values = 20
+    t2 = surface_template.copy()
+    t2.values = 50
+
+    dlist = [d0, d1, d2]
+    tlist = [t0, t1, t2]
+    dc = DomainConversion(dlist, tlist)
+
+    vint_maps = [vi for vi in dc.vint_surfaces()]
+    assert np.ma.allclose(vint_maps[0].values, 2000.0)
+    assert np.ma.allclose(vint_maps[1].values, 2000.0)
+    assert np.ma.allclose(vint_maps[2].values, 2000.0)
+    assert np.ma.allclose(vint_maps[3].values, 3000.0)
