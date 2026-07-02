@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import logging
+import os
+import warnings
 from dataclasses import dataclass, field
-from typing import Generator
+from typing import Generator, Literal
 
 import numpy as np
 import xtgeo
+from scipy.fft import irfft, next_fast_len, rfft
 
 _logger = logging.getLogger(__name__)
 
@@ -617,6 +620,7 @@ class DomainConversion:
         zmax_proposed: float | None = None,
         undefined: float = -999.25,
         time2depth: bool = True,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Generic domain conversion of a cube.
 
@@ -643,15 +647,19 @@ class DomainConversion:
 
         delta = xcube.zinc / 2000 if time2depth else xcube.zinc * 2000
         vertical = xcube.copy()  # "vertical" is "times" if time2depth is True
-        varr = [0 + n * delta for n in range(xcube.values.shape[2])]
-        vertical.values[:, :, :] = varr
+        n = xcube.values.shape[2]
+        vertical.values[:, :, :] = np.arange(n, dtype=vertical.values.dtype) * delta
         result_values = scube.values * vertical.values
 
         rcube = self._depth_cube if time2depth else self._time_cube
 
         zmax_actual = self.max_depth_for_cube(rcube)
 
-        _logger.debug("Zmax for depth cube is %s", zmax_actual)
+        _logger.debug(
+            "Zmax for domain converted cube is %s (time2depth: %s)",
+            zmax_actual,
+            time2depth,
+        )
 
         start = rcube.zori
         stop = zmax_actual + rcube.zinc
@@ -659,17 +667,129 @@ class DomainConversion:
         new_vertical_axis = np.linspace(start, zmax_actual, num_steps)
 
         seismic_attribute_result_cube = np.full(rcube.values.shape, undefined)
-        # Perform the interpolation for each (x, y) location
-        for i in range(xcube.values.shape[0]):
-            for j in range(xcube.values.shape[1]):
-                result_trace = result_values[i, j, :]
-                seismic_trace = xcube.values[i, j, :]
 
-                seismic_attribute_result_cube[i, j, :] = np.interp(
-                    new_vertical_axis,
-                    result_trace,
-                    seismic_trace,
-                )
+        # Local function
+        def _fft_resample_block(traces_block, m, workers):
+            """Resample block of traces with FFT."""
+            B, n0 = traces_block.shape
+            X = rfft(traces_block, axis=1, workers=workers)
+            Y = irfft(X, n=m, axis=1, workers=workers)
+            Y *= m / n0  # Amplitude scaling
+            return Y.astype(np.float32, copy=False)
+
+        _logger.info(
+            "Resampling traces with method '%s' (time2depth: %s)...",
+            method,
+            time2depth,
+        )
+
+        if method == "fft":
+            # Resample traces with FFT followed by linear interpolation
+            # preserves amplitudes. Optimized with processing of blocks of
+            # traces and workers for parallel computation.
+
+            # Increment 1.0 (ms or m) is good for normal seismic frequencies
+            # with negligable amplitude loss.
+            zinc_fine_target = min(1.0, xcube.zinc / 2)
+
+            # Block_size is the number of traces processed in batch.
+            # Tested on linux server with 42 MB cache and 4 workers.
+            block_size = 512
+
+            # If running on the lsf cluster, use the number of CPUs allocated
+            ncpu_env = os.environ.get("OMP_NUM_THREADS")
+            if ncpu_env:
+                workers = int(ncpu_env)
+            else:
+                # If running locally use half of available CPUs
+                ncpu = os.cpu_count()
+                workers = max(1, ncpu // 2) if ncpu else 1
+
+            vert_trace = np.arange(n) * xcube.zinc
+            trace_length = n * xcube.zinc
+
+            # Choose m with next_fast_len to optimize speed
+            m = next_fast_len(int(np.round(trace_length / zinc_fine_target)))
+            zinc_fine = trace_length / m
+            vert_trace_fine = np.arange(m) * zinc_fine
+
+            n_traces = xcube.ncol * xcube.nrow
+            seismic_traces = xcube.values.reshape(n_traces, n)
+            result_traces = result_values.reshape(n_traces, n)
+
+            k = new_vertical_axis.size
+            result_trace_fine = np.empty(k, dtype=np.float32)
+            out_traces = seismic_attribute_result_cube.reshape(n_traces, k)
+
+            _logger.info(
+                "FFT resampling with a block size of %s traces using %s workers",
+                block_size,
+                workers,
+            )
+            _logger.info(
+                "FFT resampling from %s samples (zinc=%s) to %s samples (zinc=%.4f)",
+                n,
+                xcube.zinc,
+                m,
+                zinc_fine,
+            )
+            _logger.info(
+                "Linear interpolation to new vertical axis with %s samples (zinc=%s)",
+                new_vertical_axis.size,
+                rcube.zinc,
+            )
+
+            for start in range(0, n_traces, block_size):
+                # Batched FFT resample
+                stop = min(start + block_size, n_traces)
+                block = seismic_traces[start:stop, :].astype(np.float32, copy=False)
+                block_fine = _fft_resample_block(block, m, workers=workers)
+
+                for b in range(block_fine.shape[0]):
+                    seismic_trace_fine = block_fine[b]
+                    result_trace = result_traces[start + b].astype(
+                        np.float32, copy=False
+                    )
+
+                    # Compute z-axis of resampled trace
+                    result_trace_fine = np.interp(
+                        vert_trace_fine, vert_trace, result_trace
+                    )
+
+                    # Extrapolate right end linearly in time-depth domain
+                    right_slope = (result_trace[-1] - result_trace[-2]) / xcube.zinc
+                    result_trace_fine = np.where(
+                        vert_trace_fine > vert_trace[-1],
+                        result_trace[-1]
+                        + right_slope * (vert_trace_fine - vert_trace[-1]),
+                        result_trace_fine,
+                    )
+
+                    # Linear interpolate fine trace to new vertical axis
+                    out_traces[start + b] = np.interp(
+                        new_vertical_axis, result_trace_fine, seismic_trace_fine
+                    )
+                    # Note out_traces is a view of seismic_attribute_result_cube,
+                    # thus the latter is updated.
+
+        elif method == "linear":
+            # Linear interpolation is fast, but does not preserve amplitudes.
+            # Perform the interpolation for each (x, y) location
+            for i in range(xcube.values.shape[0]):
+                for j in range(xcube.values.shape[1]):
+                    result_trace = result_values[i, j, :]
+                    seismic_trace = xcube.values[i, j, :]
+
+                    seismic_attribute_result_cube[i, j, :] = np.interp(
+                        new_vertical_axis,
+                        result_trace,
+                        seismic_trace,
+                    )
+
+        else:
+            raise ValueError(
+                "The trace interpolation method must be either 'linear' or 'fft'."
+            )
 
         if np.isnan(seismic_attribute_result_cube.sum()):
             _logger.warning(
@@ -742,6 +862,7 @@ class DomainConversion:
         zmin: float | None = None,
         zmax: float | None = None,
         undefined: float = -999.25,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Depth convert a cube (time to depth).
 
@@ -751,6 +872,7 @@ class DomainConversion:
             zmin: Proposed z minimum for the output cube.
             zmax: Proposed z maximum for the output cube.
             undefined: Value to use for undefined values in the output cube.
+            method: Trace interpolation method. Must be either 'linear' or 'fft'.
 
         Note:
             The proposed zinc, zmin, zmax are optional and will be calculated from the
@@ -759,6 +881,14 @@ class DomainConversion:
             for technical reasons.
 
         """
+        warnings.warn(
+            "Default trace interpolation method will be set to 'fft' in the near "
+            "future. Explicitely set method='linear' to keep the same results: "
+            "vm.depth_convert_cube(incube, zinc, zmin, zmax, method='linear').",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+
         return self._domain_convert_cube(
             incube,
             zinc_proposed=zinc,
@@ -766,6 +896,7 @@ class DomainConversion:
             zmax_proposed=zmax,
             undefined=undefined,
             time2depth=True,
+            method=method,
         )
 
     def time_convert_cube(
@@ -775,6 +906,7 @@ class DomainConversion:
         tmin: float | None = None,
         tmax: float | None = None,
         undefined: float = -999.25,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Time convert a cube (depth to time).
 
@@ -784,13 +916,23 @@ class DomainConversion:
             tmin: Proposed time minimum for the output cube.
             tmax: Proposed time maximum for the output cube.
             undefined: Value to use for undefined values in the output cube.
+            method: Trace interpolation method. Must be either 'linear' or 'fft'.
 
         Note:
             The proposed tinc, tmin, tmax are optional and will be calculated from the
             existing input surfaces (making the velocity/slowness model) if not
             provided. If given, the values may be adjusted for technical
             reasons.
+
         """
+        warnings.warn(
+            "Default trace interpolation method will be set to 'fft' in the near "
+            "future. Explicitely set method='linear' to keep the same results: "
+            "vm.time_convert_cube(incube, tinc, tmin, tmax, method='linear').",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+
         return self._domain_convert_cube(
             incube,
             zinc_proposed=tinc,
@@ -798,4 +940,5 @@ class DomainConversion:
             zmax_proposed=tmax,
             undefined=undefined,
             time2depth=False,
+            method=method,
         )
