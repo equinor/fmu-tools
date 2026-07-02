@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.1.dev1+g79dcf8305 documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.2.dev1+g858860831 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=ac42e60e"></script>
+      <script src="../../../../_static/documentation_options.js?v=aa3c8e2d"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -154,6 +154,7 @@
     <span class="n">_scube_d</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># avg slowness cube in depth</span>
 
     <span class="n">_v_surfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_vi_surfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_s_surfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_d_surfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_t_surfaces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -215,6 +216,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">time_surfaces</span><span class="p">,</span> <span class="n">template_surf</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ensure_consistency</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_surfaces_has_msl</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_interval_velocity_surfaces</span><span class="p">()</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Check and fix surfaces... DONE&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
@@ -320,6 +322,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">msl</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;__MSL&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_names</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;__MSL&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_interval_velocity_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate interval velocity surfaces.&quot;&quot;&quot;</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Calculate interval velocity surfaces&quot;</span><span class="p">)</span>
+
+        <span class="n">vel</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">)):</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+            <span class="n">d0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
+
+            <span class="n">vint</span> <span class="o">=</span> <span class="n">d1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">tdiff</span> <span class="o">=</span> <span class="n">t1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">t0</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">tdiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tdiff</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-06</span><span class="p">,</span> <span class="n">tdiff</span><span class="p">)</span>
+            <span class="n">vint</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">((</span><span class="n">d1</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">d0</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">tdiff</span><span class="p">)</span>
+            <span class="n">vint</span><span class="o">.</span><span class="n">values</span> <span class="o">*=</span> <span class="mi">2000</span>
+            <span class="n">vel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vint</span><span class="p">)</span>
+
+        <span class="n">d1_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d_surfaces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">t1_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_surfaces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">d1_values</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">t1_values</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">vel</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vi_surfaces</span> <span class="o">=</span> <span class="n">vel</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_velo_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average velocities from MSL to surface N&quot;&quot;&quot;</span>
@@ -809,6 +837,14 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">slowness_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of slowness surfaces.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">surf</span></div>
+
+
+<div class="viewcode-block" id="DomainConversion.vint_surfaces">
+<a class="viewcode-back" href="../../../../fmu.tools.domainconversion.html#fmu.tools.DomainConversion.vint_surfaces">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vint_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a generator of interval velocity surfaces.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vi_surfaces</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">surf</span></div>
 
 
