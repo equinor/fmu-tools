@@ -60,6 +60,7 @@ class DomainConversion:
     _scube_d: xtgeo.Cube = field(default=None, init=False)  # avg slowness cube in depth
 
     _v_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
+    _vi_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _s_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _d_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _t_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
@@ -121,6 +122,7 @@ class DomainConversion:
             self.time_surfaces, template_surf, fill=True, ensure_consistency=True
         )
         self._ensure_surfaces_has_msl()
+        self._calculate_interval_velocity_surfaces()
         _logger.debug("Check and fix surfaces... DONE")
 
     @staticmethod
@@ -226,6 +228,32 @@ class DomainConversion:
         self._t_surfaces.insert(0, msl)
         if self._names[0] != "__MSL":
             self._names.insert(0, "__MSL")
+
+    def _calculate_interval_velocity_surfaces(self) -> None:
+        """Calculate interval velocity surfaces."""
+        _logger.debug("Calculate interval velocity surfaces")
+
+        vel = []
+        for no in range(1, len(self._d_surfaces)):
+            t0 = self._t_surfaces[no - 1]
+            t1 = self._t_surfaces[no]
+            d0 = self._d_surfaces[no - 1]
+            d1 = self._d_surfaces[no]
+
+            vint = d1.copy()
+            tdiff = t1.values - t0.values
+            tdiff = np.where(tdiff == 0.0, 1e-06, tdiff)
+            vint.values = np.divide((d1.values - d0.values), tdiff)
+            vint.values *= 2000
+            vel.append(vint)
+
+        d1_values = self._d_surfaces[1].values
+        t1_values = self._t_surfaces[1].values
+        if np.allclose(d1_values, 0.0) and np.allclose(t1_values, 0.0):
+            vel[0] = vel[1]
+
+        vel.insert(0, vel[0])
+        self._vi_surfaces = vel
 
     def _velo_maps_average(self) -> None:
         """Create average velocities from MSL to surface N"""
@@ -704,6 +732,11 @@ class DomainConversion:
     def slowness_surfaces(self) -> Generator[xtgeo.RegularSurface]:
         """Return a generator of slowness surfaces."""
         for surf in self._s_surfaces:
+            yield surf
+
+    def vint_surfaces(self) -> Generator[xtgeo.RegularSurface]:
+        """Return a generator of interval velocity surfaces."""
+        for surf in self._vi_surfaces:
             yield surf
 
     @property
