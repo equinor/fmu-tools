@@ -184,7 +184,7 @@ class DomainConversion:
         def _ensure_consistency(
             slist: list[xtgeo.RegularSurface],
         ) -> list[xtgeo.RegularSurface]:
-            """Ensure consistensy and check order for depth or time surfaces"""
+            """Ensure consistency and check order for depth or time surfaces."""
             for inum in range(1, len(slist)):
                 s0 = slist[inum - 1]
                 s1 = slist[inum]
@@ -283,7 +283,7 @@ class DomainConversion:
 
         vel.insert(0, vel[0])
         self._v_surfaces = vel
-        _logger.debug("Create velocity maps for average velocities from MSL...  DONE")
+        _logger.debug("Create velocity maps for average velocities from MSL... DONE")
 
     def _slow_maps_average(self) -> None:
         """Create average slowness from MSL to surface N"""
@@ -310,7 +310,7 @@ class DomainConversion:
 
         slow.insert(0, slow[0])
         self._s_surfaces = slow
-        _logger.debug("Create slowness maps for average from MSL...  DONE")
+        _logger.debug("Create slowness maps for average from MSL... DONE")
 
     def _check_surfaces_are_inside_area(
         self, insurfs: list[xtgeo.RegularSurface]
@@ -545,7 +545,7 @@ class DomainConversion:
         zmin_estimated = compare_surfs[1].values.min()
         zmax_estimated = compare_surfs[-1].values.max()
         _logger.debug(
-            "Zmin and zmax for relevant surfaces is %s %s (time2deph: %s)",
+            "Zmin and zmax for relevant surfaces is %s %s (time2depth: %s)",
             zmin_estimated,
             zmax_estimated,
             time2depth,
