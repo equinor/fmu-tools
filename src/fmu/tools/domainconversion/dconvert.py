@@ -430,9 +430,12 @@ class DomainConversion:
         _logger.debug("Create average %s cube", result_description)
         speedcube = cube.copy()
 
-        cube_arr = [cube.zori + n * cube.zinc for n in range(cube.values.shape[2])]
-
-        speedcube_values = np.zeros_like(cube.values)
+        # Use float32 where possible to increase speed
+        ni, nj, n = cube.values.shape
+        z0 = np.float32(cube.zori)
+        zinc = np.float32(cube.zinc)
+        cube_arr = z0 + zinc * np.arange(n, dtype=np.float32)
+        speedcube_values = np.zeros_like(cube.values, dtype=np.float32)
 
         # Resample surfaces to match the input cube
         x_surfaces, y_surfaces = self._resample_surfaces_to_cube(cube, time2depth)
@@ -440,24 +443,71 @@ class DomainConversion:
         if len(x_surfaces) != len(y_surfaces):
             raise ValueError("x_surfaces and y_surfaces must have the same length")
 
-        for i in range(speedcube_values.shape[0]):
-            for j in range(speedcube_values.shape[1]):
-                xmap = [surf.values[i, j] for surf in x_surfaces]
-                ymap = [surf.values[i, j] for surf in y_surfaces]
+        # Stack horizon maps into arrays: X is the 'xmap' (e.g. time) and Y
+        # is 'ymap' (e.g. depth). X and Y have shape (H, ni, nj).
+        X = np.stack([s.values for s in x_surfaces]).astype(np.float32, copy=False)
+        Y = np.stack([s.values for s in y_surfaces]).astype(np.float32, copy=False)
+        H = X.shape[0]
 
-                # Linear interpolation and extrapolation of time-depth function
-                y_arr = np.interp(cube_arr, xmap, ymap)
-                right_slope = (ymap[-1] - ymap[-2]) / (xmap[-1] - xmap[-2])
-                y_arr = np.where(
-                    cube_arr > xmap[-1],
-                    ymap[-1] + right_slope * (cube_arr - xmap[-1]),
-                    y_arr,
-                )
+        # Slope in first interval where the top is MSL which is 0 everywhere
+        X1, Y1 = X[1], Y[1]
+        S0 = np.divide(Y1, X1, out=np.zeros_like(Y1), where=(X1 != 0))
 
-                if time2depth:
-                    speedcube_values[i, j, 1:] = y_arr[1:] / cube_arr[1:] * 2000
-                else:
-                    speedcube_values[i, j, 1:] = y_arr[1:] / cube_arr[1:] / 2000
+        # Per-interval slopes S[h] between horizons h and h+1
+        dX = X[1:] - X[:-1]
+        dY = Y[1:] - Y[:-1]
+        S = np.divide(dY, dX, out=np.zeros_like(dY), where=dX != 0)
+        S_last = S[-1]  # Slope for right-end extrapolation
+
+        # Convenience views that align with interval indices h in 0..H-2
+        X0_all = X[:-1]
+        Y0_all = Y[:-1]
+
+        # Work buffer for the current 2D slice
+        y2d = np.empty((ni, nj), dtype=np.float32)
+
+        # Fast assigment of constant speed between first and second horizon.
+        # Compute shallowest second surface sample index globally
+        k1_min = int(
+            np.clip(np.searchsorted(cube_arr, np.nanmin(X1), side="left"), 1, n)
+        )
+
+        if time2depth:
+            speedcube_values[:, :, :k1_min] = S0[:, :, None] * 2000.0
+        else:
+            speedcube_values[:, :, :k1_min] = S0[:, :, None] / 2000.0
+
+        # Loop for k >= k1_min treating deeper layers and right-side extrapolation
+        for k in range(k1_min, n):
+            x0 = cube_arr[k]
+
+            # Find interval index h: X[h] <= x0 < X[h+1]
+            h_idx = (x0 >= X).sum(axis=0) - 1  # (ni, nj), can be -1..H-1
+            h_clip = h_idx.clip(0, H - 2)  # (ni, nj), clipped to 0..H-2
+
+            # Gather X[h], Y[h], S[h] for each (i, j)
+            sel = h_clip[None, ...]  # Shape (1, ni, nj) for take_along_axis
+            Xh = np.take_along_axis(X0_all, sel, axis=0)[0]
+            Yh = np.take_along_axis(Y0_all, sel, axis=0)[0]
+            Sh = np.take_along_axis(S, sel, axis=0)[0]
+
+            # Linear interpolation inside [X[h], X[h+1]] interval
+            np.subtract(x0, Xh, out=y2d)
+            np.multiply(Sh, y2d, out=y2d)
+            np.add(y2d, Yh, out=y2d)
+
+            # Right side (x0 > X[-1]): linear extrapolation using last slope
+            mask_right = x0 > X[-1]
+            if mask_right.any():
+                yh_last = Y[-1][mask_right]
+                xh_last = X[-1][mask_right]
+                sl_last = S_last[mask_right]
+                y2d[mask_right] = yh_last + sl_last * (x0 - xh_last)
+
+            if time2depth:
+                speedcube_values[:, :, k] = (y2d / x0) * 2000.0
+            else:
+                speedcube_values[:, :, k] = (y2d / x0) / 2000.0
 
         # Make sure first sample also gets a non-zero value
         speedcube_values[:, :, 0] = speedcube_values[:, :, 1]
