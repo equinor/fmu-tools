@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Domain conversion &mdash; fmu-tools 1.32.2.dev2+g1e13f4a01 documentation</title>
+  <title>Domain conversion &mdash; fmu-tools 1.32.2.dev3+geef830d6a documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=12cfb423"></script>
+      <script src="_static/documentation_options.js?v=c51e756a"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -102,18 +102,27 @@
              
   <section id="domain-conversion">
 <h1>Domain conversion<a class="headerlink" href="#domain-conversion" title="Link to this heading"></a></h1>
-<p>In RMS it is possible to do domain conversion using the menu option, but in
-some cases it convenient to be able to convert domains using a script. This
-module provides a method to convert domains in pure python.</p>
-<p>The functions are based on that we have matching pairs of surfaces for the two
-domains. The code will then interpolate the data from the source domain to
-the target domain. This will be based on <em>average</em> velocity or slowness, in constrast to
-the RMS domain conversion which is based on an <em>interval</em> velocity model.</p>
+<p>In RMS, domain conversion can be performed through the right-click menu or
+dedicated jobs. However, in some cases it is convenient to perform domain
+conversion from a script. This module provides pure Python implementations for
+converting cubes and surfaces between the time and depth domains.</p>
+<p>The functions are based on matching pairs of surfaces in the time and depth
+domains. Data is interpolated from the source domain to the target domain using
+<em>average</em> velocity or slowness. This differs from the RMS domain conversion,
+which uses an <em>interval</em> velocity model.</p>
+<p>For domain conversion of cubes, two trace interpolation methods are available:</p>
+<ul class="simple">
+<li><p><strong>linear</strong>: Quick, but not fully amplitude preserving. The degree of
+amplitude loss depends on the sampling interval and frequency content. This
+is currently the default method.</p></li>
+<li><p><strong>fft</strong>: Amplitude preserving, but computationally more expensive. This
+method is planned to become the default in a future release.</p></li>
+</ul>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <section id="example-1">
 <h3>Example 1<a class="headerlink" href="#example-1" title="Link to this heading"></a></h3>
-<p>Depth convert a cube from time to depth domain.</p>
+<p>Convert a cube from the time domain to the depth domain.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>
 
@@ -126,8 +135,8 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 
 <span class="n">dc</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">([</span><span class="n">depth1</span><span class="p">,</span> <span class="n">depth2</span><span class="p">],</span> <span class="p">[</span><span class="n">time1</span><span class="p">,</span> <span class="n">time2</span><span class="p">])</span>
 
-<span class="c1"># now depth convert cube</span>
-<span class="n">cube_in_depth</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># now depth convert cube with fft method</span>
+<span class="n">cube_in_depth</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="n">cube_in_depth</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s2">&quot;path/to/output/cube_in_depth.segy&quot;</span><span class="p">)</span>
 </pre></div>
@@ -135,7 +144,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 </section>
 <section id="example-2">
 <h3>Example 2<a class="headerlink" href="#example-2" title="Link to this heading"></a></h3>
-<p>Time convert a cube and a surface from depth to time domain.</p>
+<p>Convert a cube and a surface from the depth domain to the time domain.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>
 
@@ -155,7 +164,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 
 <span class="n">dc</span> <span class="o">=</span> <span class="n">DomainConversion</span><span class="p">(</span><span class="n">dlist</span><span class="p">,</span> <span class="n">tlist</span><span class="p">)</span>
 
-<span class="n">time_cube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">tinc</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">time_cube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">tinc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;fft&quot;</span><span class="p">)</span>
 
 <span class="n">time_other_aslist</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_surfaces</span><span class="p">([</span><span class="n">depth_other</span><span class="p">])</span>
 </pre></div>
@@ -163,7 +172,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 </section>
 <section id="example-3">
 <h3>Example 3<a class="headerlink" href="#example-3" title="Link to this heading"></a></h3>
-<p>A larger example with cubes and surfaces in RMS python environment.</p>
+<p>A larger example using cubes and surfaces in an RMS Python environment.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">DomainConversion</span>
 
@@ -182,6 +191,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 <span class="n">TINC</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">MINTIME</span> <span class="o">=</span> <span class="mi">1500</span>
 <span class="n">MAXTIME</span> <span class="o">=</span> <span class="mi">1900</span>
+<span class="n">METHOD</span> <span class="o">=</span> <span class="s2">&quot;fft&quot;</span>
 
 <span class="n">CLIP_CATALOG</span> <span class="o">=</span> <span class="s2">&quot;testing_dconv&quot;</span>
 <span class="n">PRJ</span> <span class="o">=</span> <span class="n">project</span>
@@ -217,9 +227,9 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_depth_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">mycube</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Depht convert a cube (generic).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Depth convert a cube (generic).&quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth convert cube...&quot;</span><span class="p">)</span>
-    <span class="n">dcube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">mycube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="n">ZINC</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">MINDEPTH</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="n">MAXDEPTH</span><span class="p">)</span>
+    <span class="n">dcube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_cube</span><span class="p">(</span><span class="n">mycube</span><span class="p">,</span> <span class="n">zinc</span><span class="o">=</span><span class="n">ZINC</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="n">MINDEPTH</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="n">MAXDEPTH</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">METHOD</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth convert cube... DONE&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dcube</span>
 
@@ -227,13 +237,13 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 <span class="k">def</span><span class="w"> </span><span class="nf">_time_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dcube</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Time convert a cube using the slowness model (generic).&quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time convert cube...&quot;</span><span class="p">)</span>
-    <span class="n">tcube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">dcube</span><span class="p">,</span> <span class="n">tinc</span><span class="o">=</span><span class="n">TINC</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">MINTIME</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">MAXTIME</span><span class="p">)</span>
+    <span class="n">tcube</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_cube</span><span class="p">(</span><span class="n">dcube</span><span class="p">,</span> <span class="n">tinc</span><span class="o">=</span><span class="n">TINC</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">MINTIME</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">MAXTIME</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">METHOD</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time convert cube... DONE&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">tcube</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">domain_convert_some_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">tcube</span><span class="p">,</span> <span class="n">nickname</span><span class="o">=</span><span class="s2">&quot;something&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Back and forth with some cube (here AI); demonstrate the conv. of cubes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a cube to depth and back again for demonstration.&quot;&quot;&quot;</span>
     <span class="n">dcube</span> <span class="o">=</span> <span class="n">_depth_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">tcube</span><span class="p">)</span>
     <span class="n">tcube_again</span> <span class="o">=</span> <span class="n">_time_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dcube</span><span class="p">)</span>  <span class="c1"># going back again, for demonstration</span>
     <span class="n">dcube</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">nickname</span> <span class="o">+</span> <span class="s2">&quot;_depth&quot;</span><span class="p">)</span>
@@ -242,7 +252,7 @@ the RMS domain conversion which is based on an <em>interval</em> velocity model.
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">domain_convert_surfaces</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">othertimesurfs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use domain model to depth and time convert some other surfaces.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert surfaces between time and depth domains.&quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth and time convert surfaces...&quot;</span><span class="p">)</span>
     <span class="n">depthsurfaces</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_surfaces</span><span class="p">(</span><span class="n">othertimesurfs</span><span class="p">)</span>
     <span class="c1"># store on clipboard</span>

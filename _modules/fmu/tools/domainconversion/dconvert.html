@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.2.dev2+g1e13f4a01 documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.2.dev3+geef830d6a documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=12cfb423"></script>
+      <script src="../../../../_static/documentation_options.js?v=c51e756a"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -93,11 +93,14 @@
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.fft</span><span class="w"> </span><span class="kn">import</span> <span class="n">irfft</span><span class="p">,</span> <span class="n">next_fast_len</span><span class="p">,</span> <span class="n">rfft</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -792,6 +795,7 @@
         <span class="n">zmax_proposed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">undefined</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999.25</span><span class="p">,</span>
         <span class="n">time2depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generic domain conversion of a cube.</span>
 
@@ -818,15 +822,19 @@
 
         <span class="n">delta</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">/</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">time2depth</span> <span class="k">else</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">*</span> <span class="mi">2000</span>
         <span class="n">vertical</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># &quot;vertical&quot; is &quot;times&quot; if time2depth is True</span>
-        <span class="n">varr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">delta</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
-        <span class="n">vertical</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">varr</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">vertical</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">vertical</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta</span>
         <span class="n">result_values</span> <span class="o">=</span> <span class="n">scube</span><span class="o">.</span><span class="n">values</span> <span class="o">*</span> <span class="n">vertical</span><span class="o">.</span><span class="n">values</span>
 
         <span class="n">rcube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_depth_cube</span> <span class="k">if</span> <span class="n">time2depth</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_cube</span>
 
         <span class="n">zmax_actual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_depth_for_cube</span><span class="p">(</span><span class="n">rcube</span><span class="p">)</span>
 
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Zmax for depth cube is </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">zmax_actual</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Zmax for domain converted cube is </span><span class="si">%s</span><span class="s2"> (time2depth: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="n">zmax_actual</span><span class="p">,</span>
+            <span class="n">time2depth</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">start</span> <span class="o">=</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zori</span>
         <span class="n">stop</span> <span class="o">=</span> <span class="n">zmax_actual</span> <span class="o">+</span> <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span>
@@ -834,17 +842,129 @@
         <span class="n">new_vertical_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">zmax_actual</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">)</span>
 
         <span class="n">seismic_attribute_result_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">rcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">undefined</span><span class="p">)</span>
-        <span class="c1"># Perform the interpolation for each (x, y) location</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="n">result_trace</span> <span class="o">=</span> <span class="n">result_values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
-                <span class="n">seismic_trace</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
 
-                <span class="n">seismic_attribute_result_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
-                    <span class="n">new_vertical_axis</span><span class="p">,</span>
-                    <span class="n">result_trace</span><span class="p">,</span>
-                    <span class="n">seismic_trace</span><span class="p">,</span>
-                <span class="p">)</span>
+        <span class="c1"># Local function</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_fft_resample_block</span><span class="p">(</span><span class="n">traces_block</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">workers</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Resample block of traces with FFT.&quot;&quot;&quot;</span>
+            <span class="n">B</span><span class="p">,</span> <span class="n">n0</span> <span class="o">=</span> <span class="n">traces_block</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">rfft</span><span class="p">(</span><span class="n">traces_block</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+            <span class="n">Y</span> <span class="o">=</span> <span class="n">irfft</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+            <span class="n">Y</span> <span class="o">*=</span> <span class="n">m</span> <span class="o">/</span> <span class="n">n0</span>  <span class="c1"># Amplitude scaling</span>
+            <span class="k">return</span> <span class="n">Y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Resampling traces with method &#39;</span><span class="si">%s</span><span class="s2">&#39; (time2depth: </span><span class="si">%s</span><span class="s2">)...&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">,</span>
+            <span class="n">time2depth</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;fft&quot;</span><span class="p">:</span>
+            <span class="c1"># Resample traces with FFT followed by linear interpolation</span>
+            <span class="c1"># preserves amplitudes. Optimized with processing of blocks of</span>
+            <span class="c1"># traces and workers for parallel computation.</span>
+
+            <span class="c1"># Increment 1.0 (ms or m) is good for normal seismic frequencies</span>
+            <span class="c1"># with negligable amplitude loss.</span>
+            <span class="n">zinc_fine_target</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Block_size is the number of traces processed in batch.</span>
+            <span class="c1"># Tested on linux server with 42 MB cache and 4 workers.</span>
+            <span class="n">block_size</span> <span class="o">=</span> <span class="mi">512</span>
+
+            <span class="c1"># If running on the lsf cluster, use the number of CPUs allocated</span>
+            <span class="n">ncpu_env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ncpu_env</span><span class="p">:</span>
+                <span class="n">workers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ncpu_env</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If running locally use half of available CPUs</span>
+                <span class="n">ncpu</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+                <span class="n">workers</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncpu</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">ncpu</span> <span class="k">else</span> <span class="mi">1</span>
+
+            <span class="n">vert_trace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span>
+            <span class="n">trace_length</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span>
+
+            <span class="c1"># Choose m with next_fast_len to optimize speed</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">next_fast_len</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">trace_length</span> <span class="o">/</span> <span class="n">zinc_fine_target</span><span class="p">)))</span>
+            <span class="n">zinc_fine</span> <span class="o">=</span> <span class="n">trace_length</span> <span class="o">/</span> <span class="n">m</span>
+            <span class="n">vert_trace_fine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">*</span> <span class="n">zinc_fine</span>
+
+            <span class="n">n_traces</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">ncol</span> <span class="o">*</span> <span class="n">xcube</span><span class="o">.</span><span class="n">nrow</span>
+            <span class="n">seismic_traces</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_traces</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">result_traces</span> <span class="o">=</span> <span class="n">result_values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_traces</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+            <span class="n">k</span> <span class="o">=</span> <span class="n">new_vertical_axis</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">result_trace_fine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">out_traces</span> <span class="o">=</span> <span class="n">seismic_attribute_result_cube</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_traces</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;FFT resampling with a block size of </span><span class="si">%s</span><span class="s2"> traces using </span><span class="si">%s</span><span class="s2"> workers&quot;</span><span class="p">,</span>
+                <span class="n">block_size</span><span class="p">,</span>
+                <span class="n">workers</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;FFT resampling from </span><span class="si">%s</span><span class="s2"> samples (zinc=</span><span class="si">%s</span><span class="s2">) to </span><span class="si">%s</span><span class="s2"> samples (zinc=</span><span class="si">%.4f</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">n</span><span class="p">,</span>
+                <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span><span class="p">,</span>
+                <span class="n">m</span><span class="p">,</span>
+                <span class="n">zinc_fine</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Linear interpolation to new vertical axis with </span><span class="si">%s</span><span class="s2"> samples (zinc=</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">new_vertical_axis</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                <span class="n">rcube</span><span class="o">.</span><span class="n">zinc</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">,</span> <span class="n">block_size</span><span class="p">):</span>
+                <span class="c1"># Batched FFT resample</span>
+                <span class="n">stop</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">n_traces</span><span class="p">)</span>
+                <span class="n">block</span> <span class="o">=</span> <span class="n">seismic_traces</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">block_fine</span> <span class="o">=</span> <span class="n">_fft_resample_block</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">block_fine</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">seismic_trace_fine</span> <span class="o">=</span> <span class="n">block_fine</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+                    <span class="n">result_trace</span> <span class="o">=</span> <span class="n">result_traces</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># Compute z-axis of resampled trace</span>
+                    <span class="n">result_trace_fine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                        <span class="n">vert_trace_fine</span><span class="p">,</span> <span class="n">vert_trace</span><span class="p">,</span> <span class="n">result_trace</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># Extrapolate right end linearly in time-depth domain</span>
+                    <span class="n">right_slope</span> <span class="o">=</span> <span class="p">(</span><span class="n">result_trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">result_trace</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">xcube</span><span class="o">.</span><span class="n">zinc</span>
+                    <span class="n">result_trace_fine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                        <span class="n">vert_trace_fine</span> <span class="o">&gt;</span> <span class="n">vert_trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">result_trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="n">right_slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">vert_trace_fine</span> <span class="o">-</span> <span class="n">vert_trace</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                        <span class="n">result_trace_fine</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># Linear interpolate fine trace to new vertical axis</span>
+                    <span class="n">out_traces</span><span class="p">[</span><span class="n">start</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                        <span class="n">new_vertical_axis</span><span class="p">,</span> <span class="n">result_trace_fine</span><span class="p">,</span> <span class="n">seismic_trace_fine</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Note out_traces is a view of seismic_attribute_result_cube,</span>
+                    <span class="c1"># thus the latter is updated.</span>
+
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+            <span class="c1"># Linear interpolation is fast, but does not preserve amplitudes.</span>
+            <span class="c1"># Perform the interpolation for each (x, y) location</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">result_trace</span> <span class="o">=</span> <span class="n">result_values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                    <span class="n">seismic_trace</span> <span class="o">=</span> <span class="n">xcube</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+
+                    <span class="n">seismic_attribute_result_cube</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                        <span class="n">new_vertical_axis</span><span class="p">,</span>
+                        <span class="n">result_trace</span><span class="p">,</span>
+                        <span class="n">seismic_trace</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The trace interpolation method must be either &#39;linear&#39; or &#39;fft&#39;.&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">seismic_attribute_result_cube</span><span class="o">.</span><span class="n">sum</span><span class="p">()):</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
@@ -942,6 +1062,7 @@
         <span class="n">zmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">zmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">undefined</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999.25</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Depth convert a cube (time to depth).</span>
 
@@ -951,6 +1072,7 @@
 <span class="sd">            zmin: Proposed z minimum for the output cube.</span>
 <span class="sd">            zmax: Proposed z maximum for the output cube.</span>
 <span class="sd">            undefined: Value to use for undefined values in the output cube.</span>
+<span class="sd">            method: Trace interpolation method. Must be either &#39;linear&#39; or &#39;fft&#39;.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            The proposed zinc, zmin, zmax are optional and will be calculated from the</span>
@@ -959,6 +1081,14 @@
 <span class="sd">            for technical reasons.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Default trace interpolation method will be set to &#39;fft&#39; in the near &quot;</span>
+            <span class="s2">&quot;future. Explicitely set method=&#39;linear&#39; to keep the same results: &quot;</span>
+            <span class="s2">&quot;vm.depth_convert_cube(incube, zinc, zmin, zmax, method=&#39;linear&#39;).&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_cube</span><span class="p">(</span>
             <span class="n">incube</span><span class="p">,</span>
             <span class="n">zinc_proposed</span><span class="o">=</span><span class="n">zinc</span><span class="p">,</span>
@@ -966,6 +1096,7 @@
             <span class="n">zmax_proposed</span><span class="o">=</span><span class="n">zmax</span><span class="p">,</span>
             <span class="n">undefined</span><span class="o">=</span><span class="n">undefined</span><span class="p">,</span>
             <span class="n">time2depth</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -978,6 +1109,7 @@
         <span class="n">tmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">tmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">undefined</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999.25</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fft&quot;</span><span class="p">,</span> <span class="s2">&quot;linear&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Cube</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Time convert a cube (depth to time).</span>
 
@@ -987,13 +1119,23 @@
 <span class="sd">            tmin: Proposed time minimum for the output cube.</span>
 <span class="sd">            tmax: Proposed time maximum for the output cube.</span>
 <span class="sd">            undefined: Value to use for undefined values in the output cube.</span>
+<span class="sd">            method: Trace interpolation method. Must be either &#39;linear&#39; or &#39;fft&#39;.</span>
 
 <span class="sd">        Note:</span>
 <span class="sd">            The proposed tinc, tmin, tmax are optional and will be calculated from the</span>
 <span class="sd">            existing input surfaces (making the velocity/slowness model) if not</span>
 <span class="sd">            provided. If given, the values may be adjusted for technical</span>
 <span class="sd">            reasons.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Default trace interpolation method will be set to &#39;fft&#39; in the near &quot;</span>
+            <span class="s2">&quot;future. Explicitely set method=&#39;linear&#39; to keep the same results: &quot;</span>
+            <span class="s2">&quot;vm.time_convert_cube(incube, tinc, tmin, tmax, method=&#39;linear&#39;).&quot;</span><span class="p">,</span>
+            <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain_convert_cube</span><span class="p">(</span>
             <span class="n">incube</span><span class="p">,</span>
             <span class="n">zinc_proposed</span><span class="o">=</span><span class="n">tinc</span><span class="p">,</span>
@@ -1001,6 +1143,7 @@
             <span class="n">zmax_proposed</span><span class="o">=</span><span class="n">tmax</span><span class="p">,</span>
             <span class="n">undefined</span><span class="o">=</span><span class="n">undefined</span><span class="p">,</span>
             <span class="n">time2depth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="p">)</span></div>
 </div>
 
