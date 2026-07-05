@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.32.2.dev5+g1ba2fd88a.d20260705 documentation</title>
+  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.32.2.dev6+g6e4936c24 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=fc9cf6bc"></script>
+      <script src="../../../../_static/documentation_options.js?v=5e8ef1ec"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -110,11 +110,12 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Self</span><span class="p">,</span> <span class="n">TypeAlias</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">ValidationError</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -127,61 +128,93 @@
 <span class="c1"># Internal helpers</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
+<span class="n">FaceDirection</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;i+&quot;</span><span class="p">,</span> <span class="s2">&quot;i-&quot;</span><span class="p">,</span> <span class="s2">&quot;j+&quot;</span><span class="p">,</span> <span class="s2">&quot;j-&quot;</span><span class="p">,</span> <span class="s2">&quot;k+&quot;</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">]</span>
+<span class="n">IJKIndex</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<span class="n">BoundaryCellFace</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">IJKIndex</span><span class="p">,</span> <span class="n">IJKIndex</span><span class="p">,</span> <span class="n">FaceDirection</span><span class="p">]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_crop_for_region</span><span class="p">(</span>
-    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
-    <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
-    <span class="n">region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop *grid* to the bounding box of *region_id*.</span>
 
-<span class="sd">    Returns (cropped_grid, crop_origin) where *crop_origin* is the 0-based</span>
-<span class="sd">    (i, j, k) offset of the crop start inside the original grid.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">region_values</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">region_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">region_values</span> <span class="o">==</span> <span class="n">region_id</span><span class="p">)</span>
+<div class="viewcode-block" id="BoundingBox">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.BoundingBox">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundingBox</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">imin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">imax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">jmin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">jmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">kmin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">kmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">imin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">imax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">jmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">jmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">kmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">kmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<div class="viewcode-block" id="BoundingBox.from_condition">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.BoundingBox.from_condition">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">condition</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ijk bounding box from a 3D boolean mask.&quot;&quot;&quot;</span>
+        <span class="n">region_indices</span> <span class="o">=</span> <span class="n">condition</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
 
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;Region </span><span class="si">%d</span><span class="s2"> bounding box (1-based): i=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">, j=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">, k=</span><span class="si">%d</span><span class="s2">-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">region_id</span><span class="p">,</span>
-        <span class="n">imin</span><span class="p">,</span>
-        <span class="n">imax</span><span class="p">,</span>
-        <span class="n">jmin</span><span class="p">,</span>
-        <span class="n">jmax</span><span class="p">,</span>
-        <span class="n">kmin</span><span class="p">,</span>
-        <span class="n">kmax</span><span class="p">,</span>
-    <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">imin</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">imax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">jmin</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">jmax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">kmin</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">kmax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">region_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Refinement">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.Refinement">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Refinement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">col</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">row</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Refinement.from_tuple">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.Refinement.from_tuple">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_tuple</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a refinement model from a 3-tuple.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">lay</span> <span class="o">=</span> <span class="n">refinement</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span><span class="n">lay</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Refinement factors must be &gt;= 1&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_crop_for_region</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="p">:</span> <span class="n">BoundingBox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop grid to the bounding box of the refinement region.&quot;&quot;&quot;</span>
 
     <span class="n">cropped_grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">cropped_grid</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">imin</span><span class="p">,</span> <span class="n">imax</span><span class="p">),</span> <span class="p">(</span><span class="n">jmin</span><span class="p">,</span> <span class="n">jmax</span><span class="p">),</span> <span class="p">(</span><span class="n">kmin</span><span class="p">,</span> <span class="n">kmax</span><span class="p">),</span> <span class="n">props</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+
+    <span class="n">irange</span> <span class="o">=</span> <span class="p">(</span><span class="n">refinement_bbox</span><span class="o">.</span><span class="n">imin</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="o">.</span><span class="n">imax</span><span class="p">)</span>
+    <span class="n">jrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">refinement_bbox</span><span class="o">.</span><span class="n">jmin</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="o">.</span><span class="n">jmax</span><span class="p">)</span>
+    <span class="n">krange</span> <span class="o">=</span> <span class="p">(</span><span class="n">refinement_bbox</span><span class="o">.</span><span class="n">kmin</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="o">.</span><span class="n">kmax</span><span class="p">)</span>
+
+    <span class="n">cropped_grid</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">irange</span><span class="p">,</span> <span class="n">jrange</span><span class="p">,</span> <span class="n">krange</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
     <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Cropped grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cropped_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">cropped_grid</span><span class="p">,</span> <span class="p">(</span><span class="n">imin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">jmin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cropped_grid</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_find_boundary_faces</span><span class="p">(</span>
-    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
-    <span class="n">target_region</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find cell faces on the boundary between *target_region* and other active regions.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_boundary_faces</span><span class="p">(</span><span class="n">refined_area</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">BoundaryCellFace</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find cell faces on the boundary of a refinement area.</span>
 
-<span class="sd">    Returns a list of ``(outside_ijk, inside_ijk, face_dir)`` where indices</span>
-<span class="sd">    are 0-based and *face_dir* is one of ``&#39;i+&#39;, &#39;i-&#39;, &#39;j+&#39;, &#39;j-&#39;, &#39;k+&#39;, &#39;k-&#39;``.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        refined_area: 3D boolean array where ``True`` marks cells to refine.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of ``(outside_ijk, inside_ijk, face_dir)`` where indices are</span>
+<span class="sd">        0-based and *face_dir* is one of ``&#39;i+&#39;, &#39;i-&#39;, &#39;j+&#39;, &#39;j-&#39;, &#39;k+&#39;, &#39;k-&#39;``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">region_prop</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">,</span> <span class="n">nk</span> <span class="o">=</span> <span class="n">filled</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">,</span> <span class="n">nk</span> <span class="o">=</span> <span class="n">refined_area</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="o">~</span><span class="n">refined_area</span><span class="o">.</span><span class="n">mask</span>
 
-    <span class="n">in_target</span> <span class="o">=</span> <span class="n">filled</span> <span class="o">==</span> <span class="n">target_region</span>
-    <span class="n">outside_active</span> <span class="o">=</span> <span class="p">(</span><span class="n">filled</span> <span class="o">!=</span> <span class="n">target_region</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">filled</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">in_target</span> <span class="o">=</span> <span class="n">refined_area</span> <span class="o">&amp;</span> <span class="n">active</span>
+    <span class="n">outside_active</span> <span class="o">=</span> <span class="o">~</span><span class="n">refined_area</span> <span class="o">&amp;</span> <span class="n">active</span>
 
-    <span class="n">faces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">faces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">BoundaryCellFace</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># i+</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:</span> <span class="n">ni</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
@@ -213,15 +246,13 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">kdx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
         <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="s2">&quot;k-&quot;</span><span class="p">))</span>
 
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> boundary faces for region </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">),</span> <span class="n">target_region</span><span class="p">)</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> boundary faces for refinement area&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">faces</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_compute_nnc_table</span><span class="p">(</span>
-    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
-    <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">crop_origin</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
-    <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">refined_area</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">,</span>
+    <span class="n">refinement</span><span class="p">:</span> <span class="n">Refinement</span><span class="p">,</span>
     <span class="n">coarse_ncol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">lmap1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">lmap2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -245,9 +276,7 @@
 <span class="sd">          you reach the refined cell).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        region_prop: Region property on the original (unmodified) grid.</span>
-<span class="sd">        target_region_id: Region value that was refined.</span>
-<span class="sd">        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.</span>
+<span class="sd">        refined_area: 3D boolean array where ``True`` marks cells to refine.</span>
 <span class="sd">        refinement: ``(rcol, rrow, rlay)`` refinement factors.</span>
 <span class="sd">        coarse_ncol: Number of columns in the coarse grid (grid1 in the merge).</span>
 <span class="sd">        lmap1: Numpy array with layer_mapping (input k -&gt; output k) for grid1</span>
@@ -257,10 +286,13 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">faces</span> <span class="o">=</span> <span class="n">_find_boundary_faces</span><span class="p">(</span><span class="n">region_prop</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
+    <span class="n">faces</span> <span class="o">=</span> <span class="n">_find_boundary_faces</span><span class="p">(</span><span class="n">refined_area</span><span class="p">)</span>
+    <span class="n">bbox</span> <span class="o">=</span> <span class="n">BoundingBox</span><span class="o">.</span><span class="n">from_condition</span><span class="p">(</span><span class="n">refined_area</span><span class="p">)</span>
 
-    <span class="n">rcol</span><span class="p">,</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span>
-    <span class="n">i0</span><span class="p">,</span> <span class="n">j0</span><span class="p">,</span> <span class="n">k0</span> <span class="o">=</span> <span class="n">crop_origin</span>
+    <span class="n">rcol</span><span class="p">,</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="n">refinement</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="n">refinement</span><span class="o">.</span><span class="n">lay</span>
+    <span class="n">i0</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">imin</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">j0</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">jmin</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">k0</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="c1"># In the merged grid, grid2 (refined) starts after a 1-column gap:</span>
     <span class="n">i_offset</span> <span class="o">=</span> <span class="n">coarse_ncol</span> <span class="o">+</span> <span class="mi">1</span>
@@ -347,86 +379,200 @@
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;DIRECTION&quot;</span><span class="p">])</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_set_actnum_by_region</span><span class="p">(</span>
-    <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
-    <span class="n">region_prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
-    <span class="n">target_region</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">invert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deactivate cells based on region membership.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_set_actnum_in_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">active_mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deactivate cells where active_mask is False.&quot;&quot;&quot;</span>
     <span class="n">actnum</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span>
-    <span class="n">region_values</span> <span class="o">=</span> <span class="n">region_prop</span><span class="o">.</span><span class="n">values</span>
-
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">region_values</span> <span class="o">!=</span> <span class="n">target_region</span> <span class="k">if</span> <span class="n">invert</span> <span class="k">else</span> <span class="n">region_values</span> <span class="o">==</span> <span class="n">target_region</span>
-
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;Deactivating </span><span class="si">%d</span><span class="s2"> cells (region </span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
-        <span class="s2">&quot;!=&quot;</span> <span class="k">if</span> <span class="n">invert</span> <span class="k">else</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span>
-        <span class="n">target_region</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">actnum</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">actnum</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">active_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">grid</span><span class="o">.</span><span class="n">set_actnum</span><span class="p">(</span><span class="n">actnum</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_generate_layer_mappings</span><span class="p">(</span>
-    <span class="n">coarse_nlay</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">refined_nlay</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
-    <span class="n">crop_origin</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate mappings from old to new layer number.</span>
-<span class="sd">    Args:</span>
-<span class="sd">        coarse_nlay: Number of layers in the coarse grid (grid1 in the merge).</span>
-<span class="sd">        refined_nlay: Number of layers in the refined grid (grid2 in the merge).</span>
-<span class="sd">        crop_origin: 0-based ``(i0, j0, k0)`` origin of the crop box.</span>
-<span class="sd">        refinement: ``(rcol, rrow, rlay)`` refinement factors.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        lmap1: Numpy array with layer_mapping (input k -&gt; output k) for grid1</span>
-<span class="sd">        lmap2: Numpy array with layer_mapping (input k -&gt; output k) for grid2</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">k0</span> <span class="o">=</span> <span class="n">crop_origin</span>
-
-    <span class="n">lmap1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coarse_nlay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-    <span class="n">lmap1</span> <span class="o">=</span> <span class="n">lmap1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">lmap1</span> <span class="o">&lt;</span> <span class="n">k0</span><span class="p">,</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">rlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">refined_nlay</span> <span class="o">/</span> <span class="n">rlay</span><span class="p">),</span> <span class="n">lmap1</span> <span class="o">-</span> <span class="n">k0</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">lmap2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">refined_nlay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">+</span> <span class="n">k0</span>
-
-    <span class="k">return</span> <span class="p">(</span><span class="n">lmap1</span><span class="p">,</span> <span class="n">lmap2</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_set_zonation</span><span class="p">(</span><span class="n">subgrid</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">lmap</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">nlay</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an updated subgrid dictionary for the merged grid.</span>
-<span class="sd">    Args:</span>
-<span class="sd">        subgrid: subgrid dictionary from input grid</span>
-<span class="sd">        lmap: layer mapping for grid1 - unrefined input grid</span>
-<span class="sd">        nlay: total number of layers in merged grid</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">updated_subgrid</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="c1"># sorted list of zones to add</span>
-    <span class="n">zl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subgrid</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="k">for</span> <span class="n">zi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zl</span><span class="p">)):</span>
-        <span class="n">zn</span> <span class="o">=</span> <span class="n">zl</span><span class="p">[</span><span class="n">zi</span><span class="p">]</span>
-        <span class="n">zmin</span> <span class="o">=</span> <span class="n">lmap</span><span class="p">[</span><span class="n">subgrid</span><span class="p">[</span><span class="n">zn</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">zmax</span> <span class="o">=</span> <span class="n">nlay</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">zi</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">zl</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">lmap</span><span class="p">[</span><span class="n">subgrid</span><span class="p">[</span><span class="n">zl</span><span class="p">[</span><span class="n">zi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">updated_subgrid</span><span class="p">[</span><span class="n">zn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">updated_subgrid</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># Public API</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="NestedHybridGrid">
+<a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.NestedHybridGrid">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NestedHybridGrid</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to build a nested hybrid grid with a refined target region.</span>
+
+<span class="sd">    The target region is refined and merged back into the coarse grid.</span>
+<span class="sd">    A **NNC mapping table** is computed that lists every coarse ↔ refined cell</span>
+<span class="sd">    pair that should be connected by a Non-Neighbour Connection (NNC).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">coarse_grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+        <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+        <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a NestedHybridGrid instance.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_inputs</span><span class="p">(</span><span class="n">coarse_grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">refinement</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_grid</span> <span class="o">=</span> <span class="n">coarse_grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_dimensions</span> <span class="o">=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_subgrids</span> <span class="o">=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">subgrids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_region</span> <span class="o">=</span> <span class="n">region</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target_region_id</span> <span class="o">=</span> <span class="n">target_region_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span> <span class="o">=</span> <span class="n">Refinement</span><span class="o">.</span><span class="n">from_tuple</span><span class="p">(</span><span class="n">refinement</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refined_area</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">target_region_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span> <span class="o">=</span> <span class="n">BoundingBox</span><span class="o">.</span><span class="n">from_condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_area</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refined_nlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_num_refined_layers</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_coarse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_layer_map_coarse</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_refined</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_layer_map_refined</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_inputs</span><span class="p">(</span>
+        <span class="n">coarse_grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
+        <span class="n">region</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span>
+        <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate input arguments.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Region property dimensions </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2"> do not match &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;input grid dimensions </span><span class="si">{</span><span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">target_region_id</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No cells found for target_region_id=</span><span class="si">{</span><span class="n">target_region_id</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;in region property </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">refinement</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">refinement</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Refinement must be a tuple of three integers: (rcol, rrow, rlay)&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_nested_hybrid_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the nested hybrid grid.&quot;&quot;&quot;</span>
+
+        <span class="n">coarse_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">coarse_grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_region</span><span class="p">)</span>
+
+        <span class="n">region_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_region</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c1"># Create the refined grid, i.e. crop and refine.</span>
+        <span class="n">refined_grid</span> <span class="o">=</span> <span class="n">_crop_for_region</span><span class="p">(</span><span class="n">coarse_grid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span><span class="p">)</span>
+        <span class="n">refined_grid</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">lay</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Deactivate outside the target region in the refined grid</span>
+        <span class="n">refined_region</span> <span class="o">=</span> <span class="n">refined_grid</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region_name</span><span class="p">)</span>
+        <span class="n">active_area</span> <span class="o">=</span> <span class="n">refined_region</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_region_id</span>
+        <span class="n">_set_actnum_in_grid</span><span class="p">(</span><span class="n">refined_grid</span><span class="p">,</span> <span class="n">active_area</span><span class="p">)</span>
+
+        <span class="c1"># Deactivate the target region in the coarse grid</span>
+        <span class="n">coarse_region</span> <span class="o">=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region_name</span><span class="p">)</span>
+        <span class="n">active_area</span> <span class="o">=</span> <span class="n">coarse_region</span><span class="o">.</span><span class="n">values</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_region_id</span>
+        <span class="n">_set_actnum_in_grid</span><span class="p">(</span><span class="n">coarse_grid</span><span class="p">,</span> <span class="n">active_area</span><span class="p">)</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_merge</span><span class="p">(</span>
+            <span class="n">grid1</span><span class="o">=</span><span class="n">coarse_grid</span><span class="p">,</span>
+            <span class="n">grid2</span><span class="o">=</span><span class="n">refined_grid</span><span class="p">,</span>
+            <span class="n">layer_map1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_coarse</span><span class="p">,</span>
+            <span class="n">layer_map2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_refined</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Merged grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+
+        <span class="n">grid</span><span class="o">.</span><span class="n">subgrids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_zonation</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">nlay</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">grid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The final nested hybrid grid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_nested_hybrid_grid</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The final nested hybrid grid properties.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">props</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">nnc_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Non-Neighbour Connection (NNC) mapping table.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_nnc_table</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_nnc_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the NNC mapping table.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_compute_nnc_table</span><span class="p">(</span>
+            <span class="n">refined_area</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_area</span><span class="p">,</span>
+            <span class="n">refinement</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="p">,</span>
+            <span class="n">coarse_ncol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_original_dimensions</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
+            <span class="n">lmap1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_coarse</span><span class="p">,</span>
+            <span class="n">lmap2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_refined</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_layer_map_coarse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map original coarse-layer indices to indices in the final merged grid.</span>
+
+<span class="sd">        Layers below the refined K-window are unchanged; layers at/above the window are</span>
+<span class="sd">        shifted to account for extra layers introduced by K-refinement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">lay</span>
+        <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">coarse_nlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_dimensions</span><span class="o">.</span><span class="n">nlay</span>
+
+        <span class="n">lmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coarse_nlay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lmap</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">lmap</span> <span class="o">&lt;</span> <span class="n">k0</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">rlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_nlay</span> <span class="o">/</span> <span class="n">rlay</span><span class="p">),</span> <span class="n">lmap</span> <span class="o">-</span> <span class="n">k0</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_layer_map_refined</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map original refined grid layer indices to indices in the final merged grid.</span>
+
+<span class="sd">        Refined layers are offset by the first layer index of the refined</span>
+<span class="sd">        K-window in the original coarse grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_nlay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lmap</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_num_refined_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the number of layers of the refined grid.&quot;&quot;&quot;</span>
+        <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">kmax</span> <span class="o">-</span> <span class="n">bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">lay</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_zonation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlay</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an updated subgrid dictionary for the merged grid.&quot;&quot;&quot;</span>
+        <span class="n">subgrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_subgrids</span>
+        <span class="k">if</span> <span class="n">subgrid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">lmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_coarse</span>
+
+        <span class="n">updated_subgrid</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># sorted list of zones to add</span>
+        <span class="n">zl</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subgrid</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">subgrid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">zi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zl</span><span class="p">)):</span>
+            <span class="n">zn</span> <span class="o">=</span> <span class="n">zl</span><span class="p">[</span><span class="n">zi</span><span class="p">]</span>
+            <span class="n">zmin</span> <span class="o">=</span> <span class="n">lmap</span><span class="p">[</span><span class="n">subgrid</span><span class="p">[</span><span class="n">zn</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">nlay</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">zi</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">zl</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">lmap</span><span class="p">[</span><span class="n">subgrid</span><span class="p">[</span><span class="n">zl</span><span class="p">[</span><span class="n">zi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">updated_subgrid</span><span class="p">[</span><span class="n">zn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">updated_subgrid</span></div>
+
 
 
 <div class="viewcode-block" id="create_nested_hybrid_grid">
@@ -480,71 +626,15 @@
         <span class="s2">&quot;breaking changes in future versions without notice.&quot;</span><span class="p">,</span>
         <span class="ne">FutureWarning</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">refinement</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Refinement factors must be &gt;= 1, got </span><span class="si">{</span><span class="n">refinement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Region property dimensions </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2"> do not match &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;grid dimensions </span><span class="si">{</span><span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-
-    <span class="c1"># Make working copies so the caller&#39;s objects are not mutated.</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">region</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-    <span class="c1"># Save input zonation</span>
-    <span class="n">subgrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">subgrids</span>
-
-    <span class="c1"># Attach the region property to the grid.</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
-
-    <span class="c1"># 1. Crop to the bounding box of the target region.</span>
-    <span class="n">cropped</span><span class="p">,</span> <span class="n">crop_origin</span> <span class="o">=</span> <span class="n">_crop_for_region</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
-
-    <span class="c1"># 2. Refine the cropped grid.</span>
-    <span class="n">refined</span> <span class="o">=</span> <span class="n">cropped</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">rcol</span><span class="p">,</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">rlay</span> <span class="o">=</span> <span class="n">refinement</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">olay</span> <span class="o">=</span> <span class="n">crop_origin</span>
-    <span class="n">refined</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">refine_col</span><span class="o">=</span><span class="n">rcol</span><span class="p">,</span> <span class="n">refine_row</span><span class="o">=</span><span class="n">rrow</span><span class="p">,</span> <span class="n">refine_layer</span><span class="o">=</span><span class="n">rlay</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Refined cropped grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">refined</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
-
-    <span class="c1"># 3. Generate layer mappings</span>
-    <span class="n">lmap1</span><span class="p">,</span> <span class="n">lmap2</span> <span class="o">=</span> <span class="n">_generate_layer_mappings</span><span class="p">(</span>
-        <span class="n">coarse_nlay</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">nlay</span><span class="p">,</span>
-        <span class="n">refined_nlay</span><span class="o">=</span><span class="n">refined</span><span class="o">.</span><span class="n">nlay</span><span class="p">,</span>
-        <span class="n">crop_origin</span><span class="o">=</span><span class="n">crop_origin</span><span class="p">,</span>
+    <span class="n">nhg</span> <span class="o">=</span> <span class="n">NestedHybridGrid</span><span class="p">(</span>
+        <span class="n">coarse_grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span>
+        <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
         <span class="n">refinement</span><span class="o">=</span><span class="n">refinement</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># 4. Compute the NNC mapping table *before* deactivation mutates anything.</span>
-    <span class="c1">#    This uses the original region property to find boundary faces and</span>
-    <span class="c1">#    maps them through the crop → refine → merge index chain.</span>
-    <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">_compute_nnc_table</span><span class="p">(</span>
-        <span class="n">region_prop</span><span class="o">=</span><span class="n">region</span><span class="p">,</span>
         <span class="n">target_region_id</span><span class="o">=</span><span class="n">target_region_id</span><span class="p">,</span>
-        <span class="n">crop_origin</span><span class="o">=</span><span class="n">crop_origin</span><span class="p">,</span>
-        <span class="n">refinement</span><span class="o">=</span><span class="n">refinement</span><span class="p">,</span>
-        <span class="n">coarse_ncol</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span>
-        <span class="n">lmap1</span><span class="o">=</span><span class="n">lmap1</span><span class="p">,</span>
-        <span class="n">lmap2</span><span class="o">=</span><span class="n">lmap2</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># 5. Deactivate the target region in the coarse grid (will be replaced).</span>
-    <span class="n">coarse_region</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">_set_actnum_by_region</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coarse_region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># 6. In the refined grid keep only target-region cells active.</span>
-    <span class="n">refined_region</span> <span class="o">=</span> <span class="n">refined</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="n">_set_actnum_by_region</span><span class="p">(</span><span class="n">refined</span><span class="p">,</span> <span class="n">refined_region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># 7. Merge the two grids.</span>
-    <span class="n">merged</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_merge</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refined</span><span class="p">,</span> <span class="n">lmap1</span><span class="p">,</span> <span class="n">lmap2</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Merged grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">merged</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">subgrid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">merged</span><span class="o">.</span><span class="n">subgrids</span> <span class="o">=</span> <span class="n">_set_zonation</span><span class="p">(</span><span class="n">subgrid</span><span class="o">=</span><span class="n">subgrid</span><span class="p">,</span> <span class="n">lmap</span><span class="o">=</span><span class="n">lmap1</span><span class="p">,</span> <span class="n">nlay</span><span class="o">=</span><span class="n">merged</span><span class="o">.</span><span class="n">nlay</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">merged</span><span class="p">,</span> <span class="n">nnc_table</span></div>
+    <span class="k">return</span> <span class="n">nhg</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">nhg</span><span class="o">.</span><span class="n">nnc_table</span></div>
 
 
 

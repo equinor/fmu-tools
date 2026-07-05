@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmu-tools 1.32.2.dev5+g1ba2fd88a.d20260705 documentation</title>
+  <title>Index &mdash; fmu-tools 1.32.2.dev6+g6e4936c24 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=fc9cf6bc"></script>
+      <script src="_static/documentation_options.js?v=5e8ef1ec"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -101,6 +101,8 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -186,6 +188,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties">BlockedWellsVsGridProperties (class in fmu.tools.qcforward)</a>
 </li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox">BoundingBox (class in fmu.tools.nestedhybridgrid.nestedhybrid)</a>
+</li>
       <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.bwells">bwells (fmu.tools.qcdata.QCData property)</a>
 
       <ul>
@@ -229,6 +233,8 @@
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.code_per_name">code_per_name() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.codes">codes (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
+</li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement.col">col (fmu.tools.nestedhybridgrid.nestedhybrid.Refinement attribute)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.update_petro_real.combine_petro_real_from_multiple_facies">combine_petro_real_from_multiple_facies() (in module fmu.tools.rms.update_petro_real)</a>
 </li>
@@ -508,8 +514,6 @@
         <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcdata.qcdata
 
@@ -517,6 +521,8 @@
         <li><a href="fmu.tools.qcdata.html#module-fmu.tools.qcdata.qcdata">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmu.tools.qcforward
 
@@ -636,9 +642,13 @@
         <li><a href="fmu.tools.html#module-fmu.tools.version">module</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.from_condition">from_condition() (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox class method)</a>
+</li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_ertbox_to_geogrid">from_ertbox_to_geogrid() (in module fmu.tools.rms.copy_rms_param_to_ertbox_grid)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.from_geogrid_to_ertbox">from_geogrid_to_ertbox() (in module fmu.tools.rms.copy_rms_param_to_ertbox_grid)</a>
+</li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement.from_tuple">from_tuple() (fmu.tools.nestedhybridgrid.nestedhybrid.Refinement class method)</a>
 </li>
       <li><a href="fmu.tools.html#fmu.tools.QCProperties.from_yaml">from_yaml() (fmu.tools.QCProperties method)</a>
 </li>
@@ -708,10 +718,10 @@
 </li>
       <li><a href="fmu.tools.html#fmu.tools.QCProperties.get_well_statistics">get_well_statistics() (fmu.tools.QCProperties method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_index_for_zone_number">get_zone_index_for_zone_number() (fmu.tools.rms.zone_mapping.ZoneMapping method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.zone_mapping.get_zone_mapping">get_zone_mapping() (in module fmu.tools.rms.zone_mapping)</a>
 </li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.zone_mapping.ZoneMapping.get_zone_name_for_zone_index">get_zone_name_for_zone_index() (fmu.tools.rms.zone_mapping.ZoneMapping method)</a>
@@ -736,9 +746,13 @@
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.get_zones">get_zones() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
 </li>
-      <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.grid">grid (fmu.tools.properties.SwFunction attribute)</a>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.grid">grid (fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid property)</a>
 
       <ul>
+        <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid.grid">(fmu.tools.nestedhybridgrid.NestedHybridGrid property)</a>
+</li>
+        <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.grid">(fmu.tools.properties.SwFunction attribute)</a>
+</li>
         <li><a href="fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.grid">(fmu.tools.properties.swfunction.SwFunction attribute)</a>
 </li>
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.grid">(fmu.tools.qcdata.QCData property)</a>
@@ -814,6 +828,10 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.imax">imax (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+</li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.imin">imin (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+</li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.import_localmodule">import_localmodule() (in module fmu.tools.rms)</a>
 
       <ul>
@@ -828,10 +846,10 @@
       </ul></li>
       <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">interp_from_md() (in module fmu.tools.rms.create_rft_ertobs)</a>
 </li>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_xyz">interp_from_xyz() (in module fmu.tools.rms.create_rft_ertobs)</a>
+</li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData.interval">interval (fmu.tools.ensembles.ensemble_well_props.PropsData attribute)</a>
 </li>
       <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.invert">invert (fmu.tools.properties.SwFunction attribute)</a>
@@ -849,13 +867,39 @@
   </ul></td>
 </tr></table>
 
-<h2 id="L">L</h2>
+<h2 id="J">J</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.log_warning">log_warning() (in module fmu.tools.rms.copy_rms_param_to_ertbox_grid)</a>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.jmax">jmax (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.jmin">jmin (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.kmax">kmax (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.kmin">kmin (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement.lay">lay (fmu.tools.nestedhybridgrid.nestedhybrid.Refinement attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="fmu.tools.rms.html#fmu.tools.rms.copy_rms_param_to_ertbox_grid.log_warning">log_warning() (in module fmu.tools.rms.copy_rms_param_to_ertbox_grid)</a>
+</li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.loop_for_compute">loop_for_compute() (in module fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
   </ul></td>
@@ -902,8 +946,14 @@
         <li><a href="fmu.tools.properties.html#fmu.tools.properties.swfunction.SwFunction.method">(fmu.tools.properties.swfunction.SwFunction attribute)</a>
 </li>
       </ul></li>
-      <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact.model_config">model_config (fmu.tools.rms.fluid_contacts_from_grid.FluidContact attribute)</a>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox.model_config">model_config (fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox attribute)</a>
+
+      <ul>
+        <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement.model_config">(fmu.tools.nestedhybridgrid.nestedhybrid.Refinement attribute)</a>
 </li>
+        <li><a href="fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact.model_config">(fmu.tools.rms.fluid_contacts_from_grid.FluidContact attribute)</a>
+</li>
+      </ul></li>
       <li>
     module
 
@@ -997,6 +1047,20 @@
         <li><a href="fmu.tools.domainconversion.html#fmu.tools.domainconversion.DomainConversion.names">(fmu.tools.domainconversion.DomainConversion attribute)</a>
 </li>
       </ul></li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid">NestedHybridGrid (class in fmu.tools.nestedhybridgrid)</a>
+
+      <ul>
+        <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid">(class in fmu.tools.nestedhybridgrid.nestedhybrid)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.nnc_table">nnc_table (fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid.nnc_table">(fmu.tools.nestedhybridgrid.NestedHybridGrid property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.html#fmu.tools.nnc_to_flowsimulator_input">nnc_to_flowsimulator_input() (in module fmu.tools)</a>
 
       <ul>
@@ -1005,8 +1069,6 @@
         <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.nnc_to_flowsimulator_input">(in module fmu.tools.nestedhybridgrid.nestedhybrid)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.html#fmu.tools.nnc_to_gridproperty">nnc_to_gridproperty() (in module fmu.tools)</a>
 
       <ul>
@@ -1065,10 +1127,10 @@
 </li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.process_ensemble">process_ensemble() (in module fmu.tools.ensembles.ensemble_well_props)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs">process_ensemble_avglogs() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen">process_ensemble_cumlen() (fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps method)</a>
 </li>
       <li><a href="fmu.tools.properties.html#fmu.tools.properties.SwFunction.project">project (fmu.tools.properties.SwFunction attribute)</a>
@@ -1079,6 +1141,12 @@
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.QCData.project">(fmu.tools.qcdata.QCData property)</a>
 </li>
         <li><a href="fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.project">(fmu.tools.qcdata.qcdata.QCData property)</a>
+</li>
+      </ul></li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.properties">properties (fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid property)</a>
+
+      <ul>
+        <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid.properties">(fmu.tools.nestedhybridgrid.NestedHybridGrid property)</a>
 </li>
       </ul></li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.proplist">proplist (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
@@ -1135,6 +1203,8 @@
 </li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.reals">reals (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
 </li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement">Refinement (class in fmu.tools.nestedhybridgrid.nestedhybrid)</a>
+</li>
       <li><a href="fmu.tools.utilities.html#fmu.tools.utilities.sample_attributes.Attrs.REGION">REGION (fmu.tools.utilities.sample_attributes.Attrs attribute)</a>
 </li>
       <li><a href="fmu.tools.fipmapper.html#fmu.tools.fipmapper.fipmapper.FipMapper.region2fip">region2fip() (fmu.tools.fipmapper.fipmapper.FipMapper method)</a>
@@ -1166,6 +1236,8 @@
 </li>
       </ul></li>
       <li><a href="fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData.root">root (fmu.tools.ensembles.ensemble_well_props.ConfigData attribute)</a>
+</li>
+      <li><a href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.nestedhybrid.Refinement.row">row (fmu.tools.nestedhybridgrid.nestedhybrid.Refinement attribute)</a>
 </li>
       <li><a href="fmu.tools.qcforward.html#fmu.tools.qcforward.BlockedWellsVsGridProperties.run">run() (fmu.tools.qcforward.BlockedWellsVsGridProperties method)</a>
 
