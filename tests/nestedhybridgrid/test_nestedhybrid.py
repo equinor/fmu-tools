@@ -6,13 +6,12 @@ import pytest
 import xtgeo
 
 from fmu.tools.nestedhybridgrid import (
+    NestedHybridGrid,
     create_nested_hybrid_grid,
     nnc_to_flowsimulator_input,
     nnc_to_gridproperty,
 )
-from fmu.tools.nestedhybridgrid.nestedhybrid import (
-    _generate_layer_mappings,
-)
+from fmu.tools.nestedhybridgrid.nestedhybrid import BoundingBox, _set_actnum_in_grid
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -51,9 +50,99 @@ def _make_constant_property(grid, name, value):
     return xtgeo.GridProperty(grid, name=name, values=vals)
 
 
+def test_set_actnum_in_grid_deactivates_cells_where_mask_is_false():
+    """Cells with active_mask=False should have actnum set to 0."""
+    grid = xtgeo.create_box_grid((3, 3, 2))
+
+    active_mask = np.ones(grid.dimensions, dtype=bool)
+    active_mask[1, 1, 0] = False  # deactivate one cell
+
+    _set_actnum_in_grid(grid, active_mask)
+
+    actnum = grid.get_actnum()
+    assert actnum.values[1, 1, 0] == 0
+
+
+def test_set_actnum_in_grid_active_cells_remain_unchanged():
+    """Cells with active_mask=True should keep their actnum value."""
+    grid = xtgeo.create_box_grid((3, 3, 2))
+
+    active_mask = np.ones(grid.dimensions, dtype=bool)
+    active_mask[0, 0, 0] = False
+
+    _set_actnum_in_grid(grid, active_mask)
+
+    actnum = grid.get_actnum()
+    # All other cells should still be active
+    assert actnum.values[1, 1, 0] == 1
+    assert actnum.values[2, 2, 1] == 1
+
+
+def test_set_actnum_in_grid_all_cells_deactivated():
+    """A fully False mask should deactivate every cell."""
+    grid = xtgeo.create_box_grid((2, 2, 2))
+
+    active_mask = np.zeros(grid.dimensions, dtype=bool)
+
+    _set_actnum_in_grid(grid, active_mask)
+
+    assert grid.nactive == 0
+
+
+def test_set_actnum_in_grid_all_cells_activated():
+    """A fully True mask should leave all cells active."""
+    grid = xtgeo.create_box_grid((2, 2, 2))
+    nactive_before = grid.nactive
+
+    active_mask = np.ones(grid.dimensions, dtype=bool)
+
+    _set_actnum_in_grid(grid, active_mask)
+
+    assert grid.nactive == nactive_before
+
+
 # ---------------------------------------------------------------------------
 # Tests for create_nested_hybrid_grid
 # ---------------------------------------------------------------------------
+
+
+class TestBoundingBox:
+    """Tests for BoundingBox.from_condition."""
+
+    def test_from_condition_returns_expected_bounds(self):
+        """Bounding box should be 1-based and span all True cells."""
+        i_ids = np.array([1, 2])
+        j_ids = np.array([0, 1])
+        k_ids = np.array([2, 3])
+
+        condition = np.ma.masked_all((4, 4, 4))
+        condition[i_ids, j_ids, k_ids] = True
+
+        bbox = BoundingBox.from_condition(condition)
+
+        assert bbox.imin == i_ids.min() + 1
+        assert bbox.imax == i_ids.max() + 1
+        assert bbox.jmin == j_ids.min() + 1
+        assert bbox.jmax == j_ids.max() + 1
+        assert bbox.kmin == k_ids.min() + 1
+        assert bbox.kmax == k_ids.max() + 1
+
+    def test_from_condition_on_region_values(self):
+        """Bounding box should match the region property values."""
+
+        target_region_id = 2
+
+        region = xtgeo.GridProperty(ncol=10, nrow=10, nlay=10, discrete=True, values=1)
+        region.values[0:5, 0:5, :] = target_region_id
+
+        bbox = BoundingBox.from_condition(region.values == target_region_id)
+
+        assert bbox.imin == 1
+        assert bbox.imax == 5
+        assert bbox.jmin == 1
+        assert bbox.jmax == 5
+        assert bbox.kmin == 1
+        assert bbox.kmax == 10
 
 
 class TestCreateNestedHybridGrid:
@@ -87,7 +176,7 @@ class TestCreateNestedHybridGrid:
         nest_id = merged.get_prop_by_name(region.name)
         assert nest_id is not None
         unique_vals = set(np.unique(np.ma.filled(nest_id.values, fill_value=0)))
-        # Must contain at least mother (1) and refined (2) cells
+        # Must contain at least coarse (1) and refined (2) cells
         assert 1 in unique_vals
         assert 2 in unique_vals
 
@@ -141,7 +230,7 @@ class TestCreateNestedHybridGrid:
         grid, region, rid = _make_box_grid_with_region(dimension=(3, 3, 3))
 
         region.values = np.ones(region.values.shape)
-        region.values[1][1][1] = rid
+        region.values[1, 1, 1] = rid
 
         _, nnc_table = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2)
@@ -165,38 +254,6 @@ class TestCreateNestedHybridGrid:
             0,
             7,
         )
-
-    def test_lmap_generation_simple(self):
-        """Tests that the correct layer mappings are generated"""
-
-        lmap1, lmap2 = _generate_layer_mappings(3, 2, (2, 2, 2), (1, 1, 1))
-
-        assert np.array_equal(lmap1, np.array([0, 1, 3]))
-        assert np.array_equal(lmap2, np.array([1, 2]))
-
-    def test_lmap_generation_no_offset(self):
-        """Tests that the correct layer mappings are generated"""
-
-        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 0))
-
-        assert np.array_equal(lmap1, np.array([0, 2, 4]))
-        assert np.array_equal(lmap2, np.array([0, 1, 2, 3]))
-
-    def test_lmap_generation_full_offset(self):
-        """Tests that the correct layer mappings are generated"""
-
-        lmap1, lmap2 = _generate_layer_mappings(3, 4, (2, 2, 2), (1, 1, 3))
-
-        assert np.array_equal(lmap1, np.array([0, 1, 2]))
-        assert np.array_equal(lmap2, np.array([3, 4, 5, 6]))
-
-    def test_lmap_generation_ref10(self):
-        """Tests that the correct layer mappings are generated"""
-
-        lmap1, lmap2 = _generate_layer_mappings(3, 20, (2, 2, 10), (1, 1, 1))
-
-        assert np.array_equal(lmap1, np.array([0, 1, 11]))
-        assert np.array_equal(lmap2, np.arange(20) + 1)
 
     def test_zonation(self):
         """Input grid with zonation returns a valid zonation"""
@@ -228,6 +285,276 @@ class TestCreateNestedHybridGrid:
 
         assert merged.subgrids["ZONE1"] == range(1, 2)
         assert merged.subgrids["ZONE2"] == range(2, 6)
+
+
+class TestNestedHybridGridClass:
+    """Tests for class-specific behavior on NestedHybridGrid."""
+
+    def test_nestedhybridgrid_grid_as_expected(self):
+        """Test NestedHybridGrid produces a grid as expected."""
+
+        grid = xtgeo.create_box_grid((6, 5, 2))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[4:, 2:4, :] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        assert isinstance(nhg.grid, xtgeo.Grid)
+
+        assert nhg.grid.ncol == 11
+        assert nhg.grid.nrow == 5
+        assert nhg.grid.nlay == 4
+
+        assert nhg.grid.nactive == 116
+
+        # subgrids did not exist in the original grid, so should be None
+        assert nhg.grid.subgrids is None
+
+        # Check that the refined bounding box is set correct from input region
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == 1)
+        assert nhg._refined_bbox == BoundingBox(
+            imin=5, imax=6, jmin=3, jmax=4, kmin=1, kmax=2
+        )
+        assert nhg._refined_nlay == 4
+
+        # check that the two regions have expected indices in the merged grid
+        region_prop = nhg.grid.get_prop_by_name("REGION")
+
+        bbox_refined_area = BoundingBox.from_condition(region_prop.values == 1)
+        assert bbox_refined_area == BoundingBox(
+            imin=8, imax=11, jmin=1, jmax=4, kmin=1, kmax=4
+        )
+        bbox_coarse_area = BoundingBox.from_condition(region_prop.values == 0)
+        assert bbox_coarse_area == BoundingBox(
+            imin=1, imax=6, jmin=1, jmax=5, kmin=1, kmax=3
+        )
+
+    def test_nestedhybridgrid_properties_as_expected(self):
+        """Test NestedHybridGrid preserves appended gridproperties."""
+
+        grid = xtgeo.create_box_grid((6, 5, 2))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[4:, 2:4, :] = 1
+
+        custom_prop = xtgeo.GridProperty(grid, name="CUSTOM", discrete=True, values=0)
+        grid.append_prop(custom_prop)
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        # check that the region property is attached to the merged grid
+        assert len(nhg.properties) == 2
+
+        prop_names = [prop.name for prop in nhg.properties]
+        assert set(prop_names) == {"CUSTOM", "REGION"}
+
+        region_prop = nhg.properties[0]
+
+        assert isinstance(region_prop, xtgeo.GridProperty)
+        assert region_prop.name == "REGION"
+        assert region_prop.values.shape == nhg.grid.dimensions
+
+    def test_nestedhybridgrid_nnc_table_as_expected(self):
+        """Test NNC table contains one row per coarse-to-refined cell face."""
+
+        grid = xtgeo.create_box_grid((3, 3, 1))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        nnc_table = nhg.nnc_table
+
+        assert isinstance(nnc_table, pd.DataFrame)
+
+        assert set(nnc_table.columns) == {
+            "I1",
+            "J1",
+            "K1",
+            "I2",
+            "J2",
+            "K2",
+            "DIRECTION",
+        }
+
+        assert len(nnc_table) == 16
+
+        direction_counts = nnc_table["DIRECTION"].value_counts().to_dict()
+        assert direction_counts == {"I+": 4, "J+": 4, "J-": 4, "I-": 4}
+
+        def _has_single_row(i1, j1, k1, i2, j2, k2, direction):
+            """Return True if the NNC table contains the specified row."""
+            return (
+                nnc_table[
+                    (nnc_table["I1"] == i1)
+                    & (nnc_table["J1"] == j1)
+                    & (nnc_table["K1"] == k1)
+                    & (nnc_table["I2"] == i2)
+                    & (nnc_table["J2"] == j2)
+                    & (nnc_table["K2"] == k2)
+                    & (nnc_table["DIRECTION"] == direction)
+                ].shape[0]
+                == 1
+            )
+
+        # left neighbor of refined cell → connects to I- face of refined patch
+        assert _has_single_row(i1=1, j1=2, k1=1, i2=5, j2=1, k2=1, direction="I+")
+        # bottom neighbor → connects to J- face of refined patch
+        assert _has_single_row(i1=2, j1=1, k1=1, i2=6, j2=1, k2=1, direction="J+")
+        # top neighbor → connects to J+ face of refined patch
+        assert _has_single_row(i1=2, j1=3, k1=1, i2=5, j2=2, k2=1, direction="J-")
+        # right neighbor → connects to I+ face of refined patch
+        assert _has_single_row(i1=3, j1=2, k1=1, i2=6, j2=2, k2=1, direction="I-")
+
+    def test_inactive_neighbor_excluded_from_nnc(self):
+        """Inactive coarse neighbor cells should not appear in the NNC table.
+
+        Deactivating one of the four neighbors of the refinement cell removes
+        all NNC connections through that face. With (2,2,2) refinement each
+        I-face contributes 4 rows (2 J x 2 K), so deactivating the left
+        coarse neighbor drops 4 I+ rows from the expected total of 16.
+        """
+        grid = xtgeo.create_box_grid((3, 3, 1))
+
+        # Deactivate the left coarse neighbor of the refinement cell
+        actnum = grid.get_actnum()
+        actnum.values[0, 1, 0] = 0
+        grid.set_actnum(actnum)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        nnc_table = nhg.nnc_table
+
+        # I+ connections (from the deactivated left neighbor) must be absent
+        assert "I+" not in nnc_table["DIRECTION"].values
+        assert len(nnc_table) == 12  # 16 total − 4 I+ connections
+
+        direction_counts = nnc_table["DIRECTION"].value_counts().to_dict()
+        assert direction_counts == {"J+": 4, "J-": 4, "I-": 4}
+
+    def test_region_dimension_mismatch_raises(self):
+        """Region dimensions must match the input grid dimensions."""
+        grid = xtgeo.create_box_grid((1, 1, 1))
+        region = xtgeo.GridProperty(ncol=2, nrow=2, nlay=2, discrete=True, values=1)
+
+        with pytest.raises(ValueError, match="Region property dimensions"):
+            NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 1))
+
+    def test_invalid_refinement_tuple_shape_raises(self):
+        """Refinement must be a 3-tuple."""
+        grid, region, _rid = _make_box_grid_with_region(dimension=(4, 4, 2))
+
+        with pytest.raises(ValueError, match="Refinement must be a tuple"):
+            NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2))
+
+    def test_missing_target_region_raises(self):
+        """Missing target region id should raise a clear error."""
+        grid, region, _rid = _make_box_grid_with_region(dimension=(4, 4, 2))
+
+        with pytest.raises(ValueError, match="No cells found for target_region_id"):
+            NestedHybridGrid(
+                coarse_grid=grid,
+                region=region,
+                refinement=(2, 2, 1),
+                target_region_id=999,
+            )
+
+    def test_zonation_preserved(self):
+        """Merged grid should have expected updated zonation."""
+
+        grid = xtgeo.create_box_grid((3, 3, 3))
+
+        original_subgrids = {"ZONE_A": [1], "ZONE_B": [2], "ZONE_C": [3]}
+        grid.subgrids = original_subgrids
+
+        region = xtgeo.GridProperty(grid, discrete=True, values=0)
+        region.values[:, :, 1] = 1  # refinement in ZONE_B
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 10))
+
+        # Same zone names should exist in merged zonation.
+        assert set(nhg.grid.subgrids) == set(original_subgrids)
+
+        # Merged ranges should be contiguous, ordered, and cover all layers.
+        assert nhg.grid.subgrids["ZONE_A"] == range(1, 2)
+        assert nhg.grid.subgrids["ZONE_B"] == range(2, 12)  # refinement in ZONE_B
+        assert nhg.grid.subgrids["ZONE_C"] == range(12, 13)
+
+    def test_lmap_generation_simple(self):
+        """Tests that the correct layer mappings are generated"""
+        dimension = (4, 4, 3)
+        target_layer_ids = [1]
+
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
+
+        assert np.array_equal(lmap1, np.array([0, 1, 3]))
+        assert np.array_equal(lmap2, np.array([1, 2]))
+
+    def test_lmap_generation_no_offset(self):
+        """Tests that the correct layer mappings are generated"""
+
+        dimension = (3, 3, 3)
+        target_layer_ids = [0, 1]
+
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
+
+        assert np.array_equal(lmap1, np.array([0, 2, 4]))
+        assert np.array_equal(lmap2, np.array([0, 1, 2, 3]))
+
+    def test_lmap_generation_full_offset(self):
+        """Tests a fully offset refinement window near the last coarse layer."""
+        dimension = (3, 3, 3)
+        target_layer_ids = [2]
+
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, discrete=True, values=0)
+        region.values[:, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 4))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
+
+        assert np.array_equal(lmap1, np.array([0, 1, 2]))
+        assert np.array_equal(lmap2, np.array([2, 3, 4, 5]))
+
+    def test_lmap_generation_ref10(self):
+        """Tests that the correct layer mappings are generated"""
+        dimension = (3, 3, 3)
+        target_layer_ids = [1, 2]
+
+        grid = xtgeo.create_box_grid(dimension)
+
+        region = xtgeo.GridProperty(grid, discrete=True, values=0)
+        region.values[0, :, target_layer_ids] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(1, 1, 10))
+
+        lmap1 = nhg._layer_map_coarse
+        lmap2 = nhg._layer_map_refined
+
+        assert np.array_equal(lmap1, np.array([0, 1, 11]))
+        assert np.array_equal(lmap2, np.arange(20) + 1)
 
 
 # ---------------------------------------------------------------------------
