@@ -22,6 +22,31 @@ SUBGRIDS = {
 }
 
 
+class MockRMSDataLoader(_RMSDataLoader):
+    """RMS data loader test double with typed mock call assertions."""
+
+    def __init__(
+        self,
+        project: MagicMock,
+        grid: xtgeo.Grid,
+        contact_property: xtgeo.GridProperty,
+        zone_property: xtgeo.GridProperty,
+    ):
+        super().__init__(project, "mygrid")
+        self.load_grid_mock = MagicMock(return_value=grid)
+        self.load_property_mock = MagicMock(
+            side_effect=lambda name: (
+                contact_property if name == "FWL" else zone_property
+            )
+        )
+
+    def load_grid(self) -> xtgeo.Grid:
+        return self.load_grid_mock()
+
+    def load_property(self, property_name: str) -> xtgeo.GridProperty:
+        return self.load_property_mock(property_name)
+
+
 @pytest.fixture
 def grid() -> xtgeo.Grid:
     grid = xtgeo.create_box_grid(
@@ -57,18 +82,13 @@ def mock_loader(
     grid: xtgeo.Grid,
     contact_property: xtgeo.GridProperty,
     zone_property: xtgeo.GridProperty,
-) -> _RMSDataLoader:
+) -> MockRMSDataLoader:
     """Create a mock RMS data loader."""
-    loader = _RMSDataLoader(mock_project, "mygrid")
-    loader.load_grid = MagicMock(return_value=grid)
-    loader.load_property = MagicMock(
-        side_effect=lambda name: contact_property if name == "FWL" else zone_property
-    )
-    return loader
+    return MockRMSDataLoader(mock_project, grid, contact_property, zone_property)
 
 
 @pytest.fixture
-def grid_data_assembler(mock_loader: _RMSDataLoader) -> _GridDataAssembler:
+def grid_data_assembler(mock_loader: MockRMSDataLoader) -> _GridDataAssembler:
     """Create a GridDataAssembler instance for testing."""
     contacts = [FluidContact(name="FWL", type="fwl")]
     return _GridDataAssembler(
@@ -246,7 +266,7 @@ def test_create_contact_surface(grid_data_assembler: _GridDataAssembler) -> None
 
 
 def test_rms_data_loader_find_available_contact_properties(
-    mock_loader: _RMSDataLoader,
+    mock_loader: MockRMSDataLoader,
 ) -> None:
     """Test finding available contact properties using RMSDataLoader."""
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
@@ -261,7 +281,7 @@ def test_rms_data_loader_find_available_contact_properties(
 
 
 def test_rms_data_loader_raises_error_when_no_contacts_found(
-    mock_loader: _RMSDataLoader,
+    mock_loader: MockRMSDataLoader,
 ) -> None:
     """Test that RMSDataLoader raises error when no contacts are found."""
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
@@ -270,7 +290,7 @@ def test_rms_data_loader_raises_error_when_no_contacts_found(
         mock_loader.find_available_contact_properties("OWC", "GOC", "GWC")
 
 
-def test_create_fluid_contacts_from_grid(mock_loader: _RMSDataLoader) -> None:
+def test_create_fluid_contacts_from_grid(mock_loader: MockRMSDataLoader) -> None:
     """Test the creation of fluid contacts from grid."""
     with (
         patch(
@@ -288,9 +308,9 @@ def test_create_fluid_contacts_from_grid(mock_loader: _RMSDataLoader) -> None:
             grid_refinement=2,
         )
 
-    mock_loader.load_grid.assert_called_once()
-    mock_loader.load_property.assert_any_call("Zone")
-    mock_loader.load_property.assert_any_call("FWL")
+    mock_loader.load_grid_mock.assert_called_once()
+    mock_loader.load_property_mock.assert_any_call("Zone")
+    mock_loader.load_property_mock.assert_any_call("FWL")
 
     # check that surfaces was created for both zones
     mock_surface_to_roxar.assert_any_call(
