@@ -204,7 +204,7 @@ class GridJob:
         }
 
 
-class ZoneMappingMock:
+class ZoneMappingMock(ZoneMapping):
     def __init__(
         self,
         number_of_grid_zones: int,
@@ -220,9 +220,7 @@ class ZoneMappingMock:
         return self.zone_dict[zone_number]["zone_index"]
 
     def get_start_end_layer_for_zone_number(self, zone_number: int) -> tuple[int, int]:
-        return self.zone_dict[zone_number]["start"], self.zone_dict_list[zone_number][
-            "end"
-        ]
+        return self.zone_dict[zone_number]["start"], self.zone_dict[zone_number]["end"]
 
     def number_of_layers_for_zone_number(self, zone_number: int) -> int:
         return self.zone_dict[zone_number]["nlayers"]
@@ -592,7 +590,7 @@ def test_copy_between_geo_and_ertbox_grids() -> None:
 
     # Load zone and petro params from file into geogrid
     file_name_zone_param = Path(REFERENCE_DIR) / Path(ZONE_PARAM_FILE)
-    import_petro_params(project, file_name_zone_param)
+    import_petro_params(project, str(file_name_zone_param))
 
     # Test 1 with zone numbering is 1 and 2 in zone parameter
     # Copy to ertbox
@@ -608,7 +606,7 @@ def test_copy_between_geo_and_ertbox_grids() -> None:
 
     # Test 2 with zone numbering is 2 and 3 in zone parameter
     file_name_zone_param = Path(REFERENCE_DIR) / Path(ZONE_PARAM_FILE_2)
-    import_petro_params(project, file_name_zone_param)
+    import_petro_params(project, str(file_name_zone_param))
     # Copy to ertbox
     GEO_TO_ERTBOX_DICT_2["project"] = project
     copy_rms_param(GEO_TO_ERTBOX_DICT_2)

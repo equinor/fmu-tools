@@ -7,6 +7,7 @@ from unittest import mock
 
 import pandas as pd
 import pytest
+from _pytest.compat import LEGACY_PATH
 
 from fmu.tools.rms import volumetrics
 
@@ -133,7 +134,7 @@ TESTDIR = Path(__file__).parent / "volumetricsdata"
     ],
 )
 def test_rms_to_volumetrics(
-    multiline_str: str, filename: str, expected_df: pd.DataFrame, tmpdir: Path
+    multiline_str: str, filename: str, expected_df: pd.DataFrame, tmpdir: LEGACY_PATH
 ) -> None:
     tmpdir.chdir()
     Path(filename).write_text(multiline_str)
@@ -178,7 +179,7 @@ def test_volumetrics() -> None:
     assert "FAULTSEGMENT" in dframe.columns
 
 
-def test_merge_rms_volumetrics_explicit(tmpdir: Path) -> None:
+def test_merge_rms_volumetrics_explicit(tmpdir: LEGACY_PATH) -> None:
     """Test finding and merging of multiple RMS volumetrics files"""
     tmpdir.chdir()
     Path("test_oil_1.txt").write_text("Zone  Bulk\nUpper  1.0")
@@ -207,7 +208,7 @@ def test_merge_rms_volumetrics_explicit(tmpdir: Path) -> None:
         volumetrics.merge_rms_volumetrics("foo")
 
 
-def test_merge_rms_volumetrics_mixedcols(tmpdir: Path) -> None:
+def test_merge_rms_volumetrics_mixedcols(tmpdir: LEGACY_PATH) -> None:
     """Bulk in one file and Pore in another, just means we don't get all columns"""
     tmpdir.chdir()
     Path("test_oil_1.txt").write_text("Zone  Bulk\nUpper  1.0")
@@ -231,7 +232,7 @@ def test_commandlineclient_installed() -> None:
 
 
 @pytest.mark.integration
-def test_commandlineclient(tmpdir: Path) -> None:
+def test_commandlineclient(tmpdir: LEGACY_PATH) -> None:
     """Test endpoint"""
 
     tmpdir.chdir()

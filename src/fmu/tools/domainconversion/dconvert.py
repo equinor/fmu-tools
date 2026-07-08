@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import logging
+import os
+import warnings
 from dataclasses import dataclass, field
-from typing import Generator
+from typing import Generator, Literal
 
 import numpy as np
 import xtgeo
+from scipy.fft import irfft, next_fast_len, rfft
 
 _logger = logging.getLogger(__name__)
 
@@ -60,6 +63,7 @@ class DomainConversion:
     _scube_d: xtgeo.Cube = field(default=None, init=False)  # avg slowness cube in depth
 
     _v_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
+    _vi_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _s_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _d_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
     _t_surfaces: list[xtgeo.RegularSurface] = field(default_factory=list, init=False)
@@ -121,6 +125,7 @@ class DomainConversion:
             self.time_surfaces, template_surf, fill=True, ensure_consistency=True
         )
         self._ensure_surfaces_has_msl()
+        self._calculate_interval_velocity_surfaces()
         _logger.debug("Check and fix surfaces... DONE")
 
     @staticmethod
@@ -227,6 +232,32 @@ class DomainConversion:
         if self._names[0] != "__MSL":
             self._names.insert(0, "__MSL")
 
+    def _calculate_interval_velocity_surfaces(self) -> None:
+        """Calculate interval velocity surfaces."""
+        _logger.debug("Calculate interval velocity surfaces")
+
+        vel = []
+        for no in range(1, len(self._d_surfaces)):
+            t0 = self._t_surfaces[no - 1]
+            t1 = self._t_surfaces[no]
+            d0 = self._d_surfaces[no - 1]
+            d1 = self._d_surfaces[no]
+
+            vint = d1.copy()
+            tdiff = t1.values - t0.values
+            tdiff = np.where(tdiff == 0.0, 1e-06, tdiff)
+            vint.values = np.divide((d1.values - d0.values), tdiff)
+            vint.values *= 2000
+            vel.append(vint)
+
+        d1_values = self._d_surfaces[1].values
+        t1_values = self._t_surfaces[1].values
+        if np.allclose(d1_values, 0.0) and np.allclose(t1_values, 0.0):
+            vel[0] = vel[1]
+
+        vel.insert(0, vel[0])
+        self._vi_surfaces = vel
+
     def _velo_maps_average(self) -> None:
         """Create average velocities from MSL to surface N"""
 
@@ -244,6 +275,11 @@ class DomainConversion:
             vspeed.values = np.divide((d1.values - d0.values), tdiff)
             vspeed.values *= 2000
             vel.append(vspeed)
+
+        d1_values = self._d_surfaces[1].values
+        t1_values = self._t_surfaces[1].values
+        if np.allclose(d1_values, 0.0) and np.allclose(t1_values, 0.0):
+            vel[0] = vel[1]
 
         vel.insert(0, vel[0])
         self._v_surfaces = vel
@@ -266,6 +302,11 @@ class DomainConversion:
             vslow.values = np.divide((t1.values - t0.values), ddiff)
             vslow.values /= 2000
             slow.append(vslow)
+
+        d1_values = self._d_surfaces[1].values
+        t1_values = self._t_surfaces[1].values
+        if np.allclose(d1_values, 0.0) and np.allclose(t1_values, 0.0):
+            slow[0] = slow[1]
 
         slow.insert(0, slow[0])
         self._s_surfaces = slow
@@ -318,28 +359,45 @@ class DomainConversion:
     ) -> tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]]:
         """Resample surfaces to match the input cube.
 
-        The time and velocity surfaces do already exist, but they are not sampled the
+        The time and depth surfaces do already exist, but they are not sampled the
         actual cube, so we do that here.
         """
         _logger.debug("Resample surfaces to cube")
-        xsurfs = self._t_surfaces if time2depth else self._d_surfaces  # time or depth
-        ssurfs = self._v_surfaces if time2depth else self._s_surfaces  # "speed"
+        xsurfs = self._t_surfaces if time2depth else self._d_surfaces
+        ysurfs = self._d_surfaces if time2depth else self._t_surfaces
 
         incube_template = xtgeo.surface_from_cube(incube, value=0)
 
         x_surfaces = self._resample_check_surfaces(
             xsurfs, incube_template, fill=True, ensure_consistency=True
         )
-        s_surfaces = self._resample_check_surfaces(
-            ssurfs, incube_template, fill=True, ensure_consistency=False
-        )  # intended: do not ensure consistency of velocities
+        y_surfaces = self._resample_check_surfaces(
+            ysurfs, incube_template, fill=True, ensure_consistency=True
+        )
 
-        return x_surfaces, s_surfaces
+        return x_surfaces, y_surfaces
 
     @staticmethod
     def max_depth_for_cube(cube: xtgeo.Cube) -> float:
         """Calculate the maximum depth for a cube."""
         return cube.zori + (cube.nlay - 1) * cube.zinc
+
+    @staticmethod
+    def _same_cube_geometry(cube1: xtgeo.Cube, cube2: xtgeo.Cube) -> bool:
+        """Check if two cubes have the same geometry."""
+        keys = ("xori", "yori", "zori", "xinc", "yinc", "zinc", "rotation", "yflip")
+
+        if cube1.dimensions != cube2.dimensions:
+            return False
+
+        for k in keys:
+            atol = 0.01 if k in ["xori", "yori"] else 1e-06
+
+            v1, v2 = float(getattr(cube1, k)), float(getattr(cube2, k))
+            if not np.isclose(v1, v2, atol=atol):
+                return False
+
+        return True
 
     def _extend_incube_create_speed_cube_average(
         self, incube: xtgeo.Cube, time2depth: bool = True
@@ -350,50 +408,124 @@ class DomainConversion:
         """
 
         _logger.debug("Incube dimensions: %s", incube.values.shape)
+        cube = self._recreate_cube_from_msl(incube, resample=True)
+        _logger.debug("Incube extended to MSL dimensions: %s", cube.values.shape)
 
-        _incube = self._time_cube if time2depth else self._depth_cube
+        # Check if we can reuse existing speedcube or need to create a new one
+        if time2depth:
+            if self._vcube_t is not None and self._same_cube_geometry(
+                cube, self._vcube_t
+            ):
+                _logger.debug("Reuse velocity cube for time->depth conversion")
+                _logger.debug("Update internal time cube")
+                self._time_cube = cube
+                return
+        else:
+            if self._scube_d is not None and self._same_cube_geometry(
+                cube, self._scube_d
+            ):
+                _logger.debug("Reuse slowness cube for depth->time conversion")
+                _logger.debug("Update internal depth cube")
+                self._depth_cube = cube
+                return
+
         result_description = "velocity" if time2depth else "slowness"
-        _speed = self._vcube_t if time2depth else self._scube_d
-
-        _incube = self._recreate_cube_from_msl(incube, resample=True)
-
-        _logger.debug("Incube extended to MSL dimensions: %s", _incube.values.shape)
-
         _logger.debug("Create average %s cube", result_description)
-        _speed = _incube.copy()
+        speedcube = cube.copy()
 
-        incube_arr = [
-            _incube.zori + n * _incube.zinc for n in range(_incube.values.shape[2])
-        ]
+        # Use float32 where possible to increase speed
+        ni, nj, n = cube.values.shape
+        z0 = np.float32(cube.zori)
+        zinc = np.float32(cube.zinc)
+        cube_arr = z0 + zinc * np.arange(n, dtype=np.float32)
+        speedcube_values = np.zeros_like(cube.values, dtype=np.float32)
 
-        speedcube_values = np.zeros_like(_incube.values)
+        # Resample surfaces to match the input cube
+        x_surfaces, y_surfaces = self._resample_surfaces_to_cube(cube, time2depth)
 
-        # resample surfaces to match the input cube
-        x_surfaces, s_surfaces = self._resample_surfaces_to_cube(_incube, time2depth)
+        if len(x_surfaces) != len(y_surfaces):
+            raise ValueError("x_surfaces and y_surfaces must have the same length")
 
-        xlen = len(x_surfaces)
-        slen = len(s_surfaces)
+        # Stack horizon maps into arrays: X is the 'xmap' (e.g. time) and Y
+        # is 'ymap' (e.g. depth). X and Y have shape (H, ni, nj).
+        X = np.stack([s.values for s in x_surfaces]).astype(np.float32, copy=False)
+        Y = np.stack([s.values for s in y_surfaces]).astype(np.float32, copy=False)
+        H = X.shape[0]
 
-        assert xlen == slen
+        # Slope in first interval where the top is MSL which is 0 everywhere
+        X1, Y1 = X[1], Y[1]
+        S0 = np.divide(Y1, X1, out=np.zeros_like(Y1), where=(X1 != 0))
 
-        for i in range(speedcube_values.shape[0]):
-            for j in range(speedcube_values.shape[1]):
-                xmap = [x_surfaces[num].values[i, j] for num in range(xlen)]
-                smap = [s_surfaces[num].values[i, j] for num in range(slen)]
+        # Per-interval slopes S[h] between horizons h and h+1
+        dX = X[1:] - X[:-1]
+        dY = Y[1:] - Y[:-1]
+        S = np.divide(dY, dX, out=np.zeros_like(dY), where=dX != 0)
+        S_last = S[-1]  # Slope for right-end extrapolation
 
-                speedcube_values[i, j, :] = np.interp(incube_arr, xmap, smap)
+        # Convenience views that align with interval indices h in 0..H-2
+        X0_all = X[:-1]
+        Y0_all = Y[:-1]
 
-        _speed.values = speedcube_values
+        # Work buffer for the current 2D slice
+        y2d = np.empty((ni, nj), dtype=np.float32)
 
-        # update references
+        # Fast assigment of constant speed between first and second horizon.
+        # Compute shallowest second surface sample index globally
+        k1_min = int(
+            np.clip(np.searchsorted(cube_arr, np.nanmin(X1), side="left"), 1, n)
+        )
+
+        if time2depth:
+            speedcube_values[:, :, :k1_min] = S0[:, :, None] * 2000.0
+        else:
+            speedcube_values[:, :, :k1_min] = S0[:, :, None] / 2000.0
+
+        # Loop for k >= k1_min treating deeper layers and right-side extrapolation
+        for k in range(k1_min, n):
+            x0 = cube_arr[k]
+
+            # Find interval index h: X[h] <= x0 < X[h+1]
+            h_idx = (x0 >= X).sum(axis=0) - 1  # (ni, nj), can be -1..H-1
+            h_clip = h_idx.clip(0, H - 2)  # (ni, nj), clipped to 0..H-2
+
+            # Gather X[h], Y[h], S[h] for each (i, j)
+            sel = h_clip[None, ...]  # Shape (1, ni, nj) for take_along_axis
+            Xh = np.take_along_axis(X0_all, sel, axis=0)[0]
+            Yh = np.take_along_axis(Y0_all, sel, axis=0)[0]
+            Sh = np.take_along_axis(S, sel, axis=0)[0]
+
+            # Linear interpolation inside [X[h], X[h+1]] interval
+            np.subtract(x0, Xh, out=y2d)
+            np.multiply(Sh, y2d, out=y2d)
+            np.add(y2d, Yh, out=y2d)
+
+            # Right side (x0 > X[-1]): linear extrapolation using last slope
+            mask_right = x0 > X[-1]
+            if mask_right.any():
+                yh_last = Y[-1][mask_right]
+                xh_last = X[-1][mask_right]
+                sl_last = S_last[mask_right]
+                y2d[mask_right] = yh_last + sl_last * (x0 - xh_last)
+
+            if time2depth:
+                speedcube_values[:, :, k] = (y2d / x0) * 2000.0
+            else:
+                speedcube_values[:, :, k] = (y2d / x0) / 2000.0
+
+        # Make sure first sample also gets a non-zero value
+        speedcube_values[:, :, 0] = speedcube_values[:, :, 1]
+
+        speedcube.values = speedcube_values
+
+        # Update references
         if time2depth:
             _logger.debug("Update internal time cube and velocity cube")
-            self._time_cube = _incube
-            self._vcube_t = _speed
+            self._time_cube = cube
+            self._vcube_t = speedcube
         else:
             _logger.debug("Update internal depth cube and slowness cube")
-            self._depth_cube = _incube
-            self._scube_d = _speed
+            self._depth_cube = cube
+            self._scube_d = speedcube
 
     def _derive_result_cube_design(
         self,
@@ -420,10 +552,14 @@ class DomainConversion:
         )
 
         zdiff = zmax_estimated - zmin_estimated
-        zmin_new = zmin_proposed if zmin_proposed else zmin_estimated - zdiff * 0.1
+        zmin_new = (
+            zmin_proposed if zmin_proposed is not None else zmin_estimated - zdiff * 0.1
+        )
         zmin_new = 0.0 if zmin_new < 0.0 else zmin_new
 
-        zmax_new = zmax_proposed if zmax_proposed else zmax_estimated + zdiff * 0.1
+        zmax_new = (
+            zmax_proposed if zmax_proposed is not None else zmax_estimated + zdiff * 0.1
+        )
 
         if not zinc_proposed:
             # e.g. if time2depth:
@@ -447,7 +583,14 @@ class DomainConversion:
         nlay_above = int(zori / zinc_actual)
         # assure that zori is a whole number multiple of zinc_depth starting from 0.0
         zori = nlay_above * zinc_actual
-        nlay = int((zmax_new - zori) / zinc_actual) + 1 + nlay_above
+
+        # avoid floating-point errors
+        n = (zmax_new - zori) / zinc_actual
+        if np.isclose(n, np.rint(n), atol=5e-4):
+            n = int(np.rint(n))
+        else:
+            n = int(np.floor(n))
+        nlay = n + 1 + nlay_above
 
         zmax_new = zori + (nlay - 1) * zinc_actual
 
@@ -460,7 +603,7 @@ class DomainConversion:
 
         # now create the depth cube, but from 0, not zori
         # (to later be cropped with nlay_above)
-        xinv_cube = xtgeo.Cube(
+        cube = xtgeo.Cube(
             xori=incube.xori,
             yori=incube.yori,
             zori=0.0,
@@ -477,9 +620,9 @@ class DomainConversion:
             values=0.0,
         )
         if time2depth:
-            self._depth_cube = xinv_cube
+            self._depth_cube = cube
         else:
-            self._time_cube = xinv_cube
+            self._time_cube = cube
 
         self._nlay_cropper = (nlay_above, 0)
 
@@ -555,6 +698,7 @@ class DomainConversion:
         zmax_proposed: float | None = None,
         undefined: float = -999.25,
         time2depth: bool = True,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Generic domain conversion of a cube.
 
@@ -576,37 +720,154 @@ class DomainConversion:
         scube = self._vcube_t if time2depth else self._scube_d
 
         # do the actual depth conversion...
-        assert scube.values.shape == xcube.values.shape
+        if scube.values.shape != xcube.values.shape:
+            raise ValueError("scube and xcube must have the same shape")
 
         delta = xcube.zinc / 2000 if time2depth else xcube.zinc * 2000
         vertical = xcube.copy()  # "vertical" is "times" if time2depth is True
-        varr = [0 + n * delta for n in range(xcube.values.shape[2])]
-        vertical.values[:, :, :] = varr
+        n = xcube.values.shape[2]
+        vertical.values[:, :, :] = np.arange(n, dtype=vertical.values.dtype) * delta
         result_values = scube.values * vertical.values
 
         rcube = self._depth_cube if time2depth else self._time_cube
 
         zmax_actual = self.max_depth_for_cube(rcube)
 
-        _logger.debug("Zmax for depth cube is %s", zmax_actual)
+        _logger.debug(
+            "Zmax for domain converted cube is %s (time2depth: %s)",
+            zmax_actual,
+            time2depth,
+        )
 
         start = rcube.zori
         stop = zmax_actual + rcube.zinc
         num_steps = int((stop - start) / (rcube.zinc - np.finfo(np.float32).eps))
-        new_vertical_axis = np.linspace(start, stop, num_steps)
+        new_vertical_axis = np.linspace(start, zmax_actual, num_steps)
 
         seismic_attribute_result_cube = np.full(rcube.values.shape, undefined)
-        # Perform the interpolation for each (x, y) location
-        for i in range(xcube.values.shape[0]):
-            for j in range(xcube.values.shape[1]):
-                result_trace = result_values[i, j, :]
-                seismic_trace = xcube.values[i, j, :]
 
-                seismic_attribute_result_cube[i, j, :] = np.interp(
-                    new_vertical_axis,
-                    result_trace,
-                    seismic_trace,
-                )
+        # Local function
+        def _fft_resample_block(traces_block, m, workers):
+            """Resample block of traces with FFT."""
+            B, n0 = traces_block.shape
+            X = rfft(traces_block, axis=1, workers=workers)
+            Y = irfft(X, n=m, axis=1, workers=workers)
+            Y *= m / n0  # Amplitude scaling
+            return Y.astype(np.float32, copy=False)
+
+        _logger.info(
+            "Resampling traces with method '%s' (time2depth: %s)...",
+            method,
+            time2depth,
+        )
+
+        if method == "fft":
+            # Resample traces with FFT followed by linear interpolation
+            # preserves amplitudes. Optimized with processing of blocks of
+            # traces and workers for parallel computation.
+
+            # Increment 1.0 (ms or m) is good for normal seismic frequencies
+            # with negligable amplitude loss.
+            zinc_fine_target = min(1.0, xcube.zinc / 2)
+
+            # Block_size is the number of traces processed in batch.
+            # Tested on linux server with 42 MB cache and 4 workers.
+            block_size = 512
+
+            # If running on the lsf cluster, use the number of CPUs allocated
+            ncpu_env = os.environ.get("OMP_NUM_THREADS")
+            if ncpu_env:
+                workers = int(ncpu_env)
+            else:
+                # If running locally use half of available CPUs
+                ncpu = os.cpu_count()
+                workers = max(1, ncpu // 2) if ncpu else 1
+
+            vert_trace = np.arange(n) * xcube.zinc
+            trace_length = n * xcube.zinc
+
+            # Choose m with next_fast_len to optimize speed
+            m = next_fast_len(int(np.round(trace_length / zinc_fine_target)))
+            zinc_fine = trace_length / m
+            vert_trace_fine = np.arange(m) * zinc_fine
+
+            n_traces = xcube.ncol * xcube.nrow
+            seismic_traces = xcube.values.reshape(n_traces, n)
+            result_traces = result_values.reshape(n_traces, n)
+
+            k = new_vertical_axis.size
+            result_trace_fine = np.empty(k, dtype=np.float32)
+            out_traces = seismic_attribute_result_cube.reshape(n_traces, k)
+
+            _logger.info(
+                "FFT resampling with a block size of %s traces using %s workers",
+                block_size,
+                workers,
+            )
+            _logger.info(
+                "FFT resampling from %s samples (zinc=%s) to %s samples (zinc=%.4f)",
+                n,
+                xcube.zinc,
+                m,
+                zinc_fine,
+            )
+            _logger.info(
+                "Linear interpolation to new vertical axis with %s samples (zinc=%s)",
+                new_vertical_axis.size,
+                rcube.zinc,
+            )
+
+            for start in range(0, n_traces, block_size):
+                # Batched FFT resample
+                stop = min(start + block_size, n_traces)
+                block = seismic_traces[start:stop, :].astype(np.float32, copy=False)
+                block_fine = _fft_resample_block(block, m, workers=workers)
+
+                for b in range(block_fine.shape[0]):
+                    seismic_trace_fine = block_fine[b]
+                    result_trace = result_traces[start + b].astype(
+                        np.float32, copy=False
+                    )
+
+                    # Compute z-axis of resampled trace
+                    result_trace_fine = np.interp(
+                        vert_trace_fine, vert_trace, result_trace
+                    )
+
+                    # Extrapolate right end linearly in time-depth domain
+                    right_slope = (result_trace[-1] - result_trace[-2]) / xcube.zinc
+                    result_trace_fine = np.where(
+                        vert_trace_fine > vert_trace[-1],
+                        result_trace[-1]
+                        + right_slope * (vert_trace_fine - vert_trace[-1]),
+                        result_trace_fine,
+                    )
+
+                    # Linear interpolate fine trace to new vertical axis
+                    out_traces[start + b] = np.interp(
+                        new_vertical_axis, result_trace_fine, seismic_trace_fine
+                    )
+                    # Note out_traces is a view of seismic_attribute_result_cube,
+                    # thus the latter is updated.
+
+        elif method == "linear":
+            # Linear interpolation is fast, but does not preserve amplitudes.
+            # Perform the interpolation for each (x, y) location
+            for i in range(xcube.values.shape[0]):
+                for j in range(xcube.values.shape[1]):
+                    result_trace = result_values[i, j, :]
+                    seismic_trace = xcube.values[i, j, :]
+
+                    seismic_attribute_result_cube[i, j, :] = np.interp(
+                        new_vertical_axis,
+                        result_trace,
+                        seismic_trace,
+                    )
+
+        else:
+            raise ValueError(
+                "The trace interpolation method must be either 'linear' or 'fft'."
+            )
 
         if np.isnan(seismic_attribute_result_cube.sum()):
             _logger.warning(
@@ -641,6 +902,11 @@ class DomainConversion:
     def slowness_surfaces(self) -> Generator[xtgeo.RegularSurface]:
         """Return a generator of slowness surfaces."""
         for surf in self._s_surfaces:
+            yield surf
+
+    def vint_surfaces(self) -> Generator[xtgeo.RegularSurface]:
+        """Return a generator of interval velocity surfaces."""
+        for surf in self._vi_surfaces:
             yield surf
 
     @property
@@ -679,6 +945,7 @@ class DomainConversion:
         zmin: float | None = None,
         zmax: float | None = None,
         undefined: float = -999.25,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Depth convert a cube (time to depth).
 
@@ -688,6 +955,7 @@ class DomainConversion:
             zmin: Proposed z minimum for the output cube.
             zmax: Proposed z maximum for the output cube.
             undefined: Value to use for undefined values in the output cube.
+            method: Trace interpolation method. Must be either 'linear' or 'fft'.
 
         Note:
             The proposed zinc, zmin, zmax are optional and will be calculated from the
@@ -696,6 +964,14 @@ class DomainConversion:
             for technical reasons.
 
         """
+        warnings.warn(
+            "Default trace interpolation method will be set to 'fft' in the near "
+            "future. Explicitely set method='linear' to keep the same results: "
+            "vm.depth_convert_cube(incube, zinc, zmin, zmax, method='linear').",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+
         return self._domain_convert_cube(
             incube,
             zinc_proposed=zinc,
@@ -703,6 +979,7 @@ class DomainConversion:
             zmax_proposed=zmax,
             undefined=undefined,
             time2depth=True,
+            method=method,
         )
 
     def time_convert_cube(
@@ -712,6 +989,7 @@ class DomainConversion:
         tmin: float | None = None,
         tmax: float | None = None,
         undefined: float = -999.25,
+        method: Literal["fft", "linear"] = "linear",
     ) -> xtgeo.Cube:
         """Time convert a cube (depth to time).
 
@@ -721,13 +999,23 @@ class DomainConversion:
             tmin: Proposed time minimum for the output cube.
             tmax: Proposed time maximum for the output cube.
             undefined: Value to use for undefined values in the output cube.
+            method: Trace interpolation method. Must be either 'linear' or 'fft'.
 
         Note:
             The proposed tinc, tmin, tmax are optional and will be calculated from the
             existing input surfaces (making the velocity/slowness model) if not
             provided. If given, the values may be adjusted for technical
             reasons.
+
         """
+        warnings.warn(
+            "Default trace interpolation method will be set to 'fft' in the near "
+            "future. Explicitely set method='linear' to keep the same results: "
+            "vm.time_convert_cube(incube, tinc, tmin, tmax, method='linear').",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+
         return self._domain_convert_cube(
             incube,
             zinc_proposed=tinc,
@@ -735,4 +1023,5 @@ class DomainConversion:
             zmax_proposed=tmax,
             undefined=undefined,
             time2depth=False,
+            method=method,
         )

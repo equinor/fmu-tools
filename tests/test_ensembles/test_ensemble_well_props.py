@@ -176,6 +176,7 @@ def test_config_data(configdata: dict[str, dict[str, Any]]) -> None:
     cfg = ensemble_well_props.ConfigData(configdata)
     assert cfg.wellfile == str(WELLNAME2)
 
+    assert cfg.proplist is not None
     assert cfg.proplist[0].name == "Facies"
 
 
@@ -202,6 +203,9 @@ def test_compute_some_props(configdata: dict[str, dict[str, Any]]) -> None:
     wcase.well.make_ijk_from_grid(grd)
 
     myprops = [FACIESFILE1, POROFILE1]
+
+    assert cfg.proplist is not None
+
     for ncount, pcase in enumerate(myprops):
         prop = xtgeo.gridproperty_from_file(pcase)
         prop.geometry = grd

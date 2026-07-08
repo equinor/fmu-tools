@@ -1,7 +1,6 @@
 """Test code for rms local module function."""
 
 import os
-import sys
 from pathlib import Path
 
 import pytest
@@ -19,7 +18,6 @@ def say_hello(name):
 
 
 @preserve_cwd
-@pytest.mark.skipif(sys.version_info > (3, 11), reason="Fails in Python 3.12")
 @pytest.mark.parametrize(
     "modulename, shall_warn, shall_fail",
     [

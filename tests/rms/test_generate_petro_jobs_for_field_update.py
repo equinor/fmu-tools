@@ -291,7 +291,7 @@ def create_project() -> Any:
     # Read specification for original petrophysical job
     # using facies realization as input for single zone grid
     spec_original_dict = read_specification_file(
-        CONFIG_FILE_ORIGINAL_SINGLE_ZONE_JOB, check=False
+        str(CONFIG_FILE_ORIGINAL_SINGLE_ZONE_JOB), check=False
     )
     rms_grid_name = spec_original_dict["grid_name"]
     rms_facies_real_name = spec_original_dict["facies_real_name"]
@@ -316,7 +316,7 @@ def create_project() -> Any:
     # Read specification for original petrophysical job
     # using facies realization as input for multi zone grid
     spec_original_dict = read_specification_file(
-        CONFIG_FILE_ORIGINAL_MULTI_ZONE_JOB, check=False
+        str(CONFIG_FILE_ORIGINAL_MULTI_ZONE_JOB), check=False
     )
     rms_grid_name = spec_original_dict["grid_name"]
     rms_facies_real_name = spec_original_dict["facies_real_name"]
@@ -355,12 +355,14 @@ def test_generate_jobs() -> None:
     check_rms_project(project)
 
     # Now run script to generate one petro job per facies for single zone grid
-    spec_case = read_specification_file(CONFIG_FILE_SINGLE_ZONE)
+    spec_case = read_specification_file(str(CONFIG_FILE_SINGLE_ZONE))
     job_name_list = create_new_petro_job_per_facies(spec_case)
     for n, job_name in enumerate(job_name_list):
         filename = RESULTDIR / Path(job_name + "_single.txt")
         reference_filename = REFERENCE_FILES_SINGLE_ZONE_GRID[n]
-        write_petro_job_to_file(OWNER_STRING_SINGLE_ZONE, JOB_TYPE, job_name, filename)
+        write_petro_job_to_file(
+            OWNER_STRING_SINGLE_ZONE, JOB_TYPE, job_name, str(filename)
+        )
         # Compare text files with job parameters with reference for single zone jobs
         check = filecmp.cmp(filename, reference_filename)
         if check:
@@ -373,12 +375,14 @@ def test_generate_jobs() -> None:
         petro_job.execute()
 
     # Now run script to generate one petro job per facies for single zone grid
-    spec_case = read_specification_file(CONFIG_FILE_MULTI_ZONE)
+    spec_case = read_specification_file(str(CONFIG_FILE_MULTI_ZONE))
     job_name_list = create_new_petro_job_per_facies(spec_case)
     for n, job_name in enumerate(job_name_list):
         filename = RESULTDIR / Path(job_name + "_multi.txt")
         reference_filename = REFERENCE_FILES_MULTI_ZONE_GRID[n]
-        write_petro_job_to_file(OWNER_STRING_MULTI_ZONE, JOB_TYPE, job_name, filename)
+        write_petro_job_to_file(
+            OWNER_STRING_MULTI_ZONE, JOB_TYPE, job_name, str(filename)
+        )
         # Compare text files with job parameters with reference for single zone jobs
         check = filecmp.cmp(filename, reference_filename)
         if check:

@@ -44,7 +44,7 @@ dependencies = [
     "pyyaml>=5.3",
     "scipy>=1.2",
     "xlrd>=1.2",
-    "xtgeo>=4.21.0",
+    "xtgeo>=4.23.0",
 ]
 
 [project.optional-dependencies]

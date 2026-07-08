@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import pytest
@@ -78,6 +78,26 @@ def fixture_smallcube() -> xtgeo.Cube:
     cube_values[:, :, 63:66] = -2.0
     cube_values[:, :, 66:68] = -4.0
     cube_values[:, :, 68:70] = -1.0
+
+    return xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=101,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        values=cube_values,
+        ilines=[3, 6, 9],
+        xlines=[42, 40, 38, 36],
+    )
+
+
+@pytest.fixture(name="smallsinecube")
+def fixture_smallsinecube() -> xtgeo.Cube:
+    """Fixture for making a small synthetic test cube with sine wave"""
+    cube_values = np.zeros((3, 4, 101))
+    sine_wave = 3.0 * np.sin(0.5 * np.arange(cube_values.shape[2]))
+    cube_values[:, :, :] = sine_wave
 
     return xtgeo.Cube(
         ncol=3,
@@ -193,7 +213,7 @@ def test_generate_simple_velocube(
 @pytest.mark.parametrize(
     "input, expected",
     [
-        # [(None, None, None), (1.1, 0, 82.5)],  # TODO: Take a look at this
+        [(None, None, None), (1.1, 0, 82.5)],
         [(1.1, 0.0, 100), (1.1, 0.0, 99.0)],
         [(1.5, 0.0, 100), (1.5, 0.0, 99.0)],
         [(1.5, 20.0, 100), (1.5, 19.5, 99.0)],
@@ -269,13 +289,17 @@ def test_domainconvert_back_and_forth(
 
     dc = DomainConversion(dlist, tlist)
 
-    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1, zmax=100, zmin=0)
+    new_depth_cube = dc.depth_convert_cube(
+        smallcube, zinc=1, zmax=100, zmin=0, method="linear"
+    )
     plot_section(smallcube, simplesurfs, title="Input cube in time domain")
 
     plot_section(new_depth_cube, simplesurfs, title="Depth converted cube")
 
     # now timeconvert the newcube
-    new_time_cube = dc.time_convert_cube(new_depth_cube, tinc=1, tmax=100, tmin=0)
+    new_time_cube = dc.time_convert_cube(
+        new_depth_cube, tinc=1, tmax=100, tmin=0, method="linear"
+    )
     plot_section(new_time_cube, simplesurfs, title="Time domain output after d2t")
 
     assert abs((smallcube.values - new_time_cube.values).mean()) < 0.01
@@ -294,3 +318,313 @@ def test_domainconvert_cube_outside(
 
     with pytest.raises(ValueError, match="not fully inside the model area."):
         dc.depth_convert_cube(newcube)
+
+
+def test_depth_cube_values(smallsinecube: xtgeo.Cube) -> None:
+    """Test if depth and time cube values are equal with vconst = 2000 m/s."""
+
+    surface_template = xtgeo.surface_from_cube(smallsinecube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 10
+    d1 = surface_template.copy()
+    d1.values = 100
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
+
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.021)
+
+
+def test_depth_cube_values_with_msl(smallsinecube: xtgeo.Cube) -> None:
+    """With MSL, test if depth and time cube values are equal with vconst = 2000 m/s."""
+
+    surface_template = xtgeo.surface_from_cube(smallsinecube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0
+    d1 = surface_template.copy()
+    d1.values = 10
+    d2 = surface_template.copy()
+    d2.values = 100
+
+    dlist = [d0, d1, d2]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    new_depth_cube = dc.depth_convert_cube(smallsinecube, zinc=1.0, zmin=0, zmax=100)
+
+    assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.021)
+
+
+def test_reuse_speedcube(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Loop over two cubes and reuse the speedcube."""
+
+    cube_list = [smallcube, smallcube]
+
+    dc = DomainConversion(*simplesurfs)
+
+    module = "fmu.tools.domainconversion.dconvert"
+    with caplog.at_level(logging.DEBUG, logger=module):
+        for cube in cube_list:
+            _ = dc.depth_convert_cube(cube)
+
+    expected = "Reuse velocity cube for time->depth conversion"
+
+    assert (module, logging.DEBUG, expected) in caplog.record_tuples
+
+
+def test_same_cube_geometry(
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
+    """Compare cubes with different geometries."""
+
+    cube1 = xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    cube2 = xtgeo.Cube(
+        ncol=2,
+        nrow=4,
+        nlay=101,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    cube3 = xtgeo.Cube(
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        yflip=-1,
+    )
+
+    cube4 = xtgeo.Cube(
+        xori=10,
+        ncol=3,
+        nrow=4,
+        nlay=100,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+    )
+
+    dlist = [xtgeo.surface_from_cube(cube1, value=50)]
+    dc = DomainConversion(depth_surfaces=dlist, time_surfaces=dlist)
+
+    # Same cubes
+    assert dc._same_cube_geometry(cube1, cube1)
+
+    # cube2 has different geometry than surfaces to build dc object
+    assert dc._same_cube_geometry(cube2, cube2)
+
+    # Cubes have different dimensions
+    assert not dc._same_cube_geometry(cube1, cube2)
+
+    # Cubes have different attributes, high atol (here: yflip)
+    assert not dc._same_cube_geometry(cube1, cube3)
+
+    # Cubes have different attributes, low atol (here: xori)
+    assert not dc._same_cube_geometry(cube1, cube4)
+
+
+def test_interval_velocity_maps(smallcube: xtgeo.Cube) -> None:
+    """Check values of interval velocity maps."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 20
+    d1 = surface_template.copy()
+    d1.values = 65
+    t0 = surface_template.copy()
+    t0.values = 20
+    t1 = surface_template.copy()
+    t1.values = 50
+
+    dlist = [d0, d1]
+    tlist = [t0, t1]
+    dc = DomainConversion(dlist, tlist)
+
+    vint_maps = [vi for vi in dc.vint_surfaces()]
+    assert np.ma.allclose(vint_maps[0].values, 2000.0)
+    assert np.ma.allclose(vint_maps[1].values, 2000.0)
+    assert np.ma.allclose(vint_maps[2].values, 3000.0)
+
+
+def test_interval_velocity_maps_with_msl(smallcube: xtgeo.Cube) -> None:
+    """Check values of interval velocity maps if MSL is input."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0
+    d1 = surface_template.copy()
+    d1.values = 20
+    d2 = surface_template.copy()
+    d2.values = 65
+    t0 = surface_template.copy()
+    t0.values = 0
+    t1 = surface_template.copy()
+    t1.values = 20
+    t2 = surface_template.copy()
+    t2.values = 50
+
+    dlist = [d0, d1, d2]
+    tlist = [t0, t1, t2]
+    dc = DomainConversion(dlist, tlist)
+
+    vint_maps = [vi for vi in dc.vint_surfaces()]
+    assert np.ma.allclose(vint_maps[0].values, 2000.0)
+    assert np.ma.allclose(vint_maps[1].values, 2000.0)
+    assert np.ma.allclose(vint_maps[2].values, 2000.0)
+    assert np.ma.allclose(vint_maps[3].values, 3000.0)
+
+
+def test_speedcube_interpolation(smallcube: xtgeo.Cube) -> None:
+    """Check that speedcube inter- and extrapolation is correct."""
+
+    surface_template = xtgeo.surface_from_cube(smallcube, value=0)
+
+    # Input surfaces in between cube zmin and zmax, thus extrapolation required
+    d0 = surface_template.copy()
+    d0.values = 10
+    d1 = surface_template.copy()
+    d1.values = 50
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus v = 2000 m/s everywhere
+    dc = DomainConversion(dlist, tlist)
+
+    # Domain convert forward and backward to populate dc._vcube_t and dc._scube_d
+    new_depth_cube = dc.depth_convert_cube(smallcube, zinc=1.0, zmin=0, zmax=100)
+    _ = dc.time_convert_cube(new_depth_cube, tinc=1.0, tmin=0, tmax=100)
+
+    velocity_trace = dc._vcube_t.values[0, 0, :]
+    slowness_trace = dc._scube_d.values[0, 0, :]
+
+    assert np.allclose(velocity_trace, 2000.0)
+    assert np.allclose(slowness_trace, 1 / 2000.0)
+
+
+def test_speedcube_with_input_msl_and_default_zinc() -> None:
+    """Check zinc and topmost sample of velocity cube if msl is given."""
+    cube = xtgeo.Cube(
+        ncol=1,
+        nrow=1,
+        nlay=2,
+        xinc=1.0,
+        yinc=1.0,
+        zinc=1.0,
+        values=np.zeros((1, 1, 2)),
+    )
+    surface_template = xtgeo.surface_from_cube(cube, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 0.0
+    d1 = surface_template.copy()
+    d1.values = 10.0
+
+    dc = DomainConversion([d0, d1], [d0, d1])
+    result = dc.depth_convert_cube(cube, zmin=0, zmax=10)  # zinc omitted on purpose
+
+    assert np.isclose(result.zinc, 1.0)
+    assert dc.average_velocity_cube_in_time is not None
+    assert np.isclose(dc.average_velocity_cube_in_time.values[0, 0, 0], 2000.0)
+
+
+def test_trace_interpolation_methods(smallsinecube: xtgeo.Cube) -> None:
+    """Test trace interpolation with 'linear' and 'fft' methods."""
+
+    def downsample_cube(cube, shifted=False):
+        """Downsample cube by a factor of 2.
+
+        shifted : False means start from first sample, True from second
+        """
+        if shifted:
+            start, end = 1, None
+        else:
+            start, end = 0, -1
+
+        return xtgeo.Cube(
+            zori=cube.zori + shifted * cube.zinc,
+            ncol=cube.ncol,
+            nrow=cube.nrow,
+            nlay=cube.nlay // 2,
+            xinc=cube.xinc,
+            yinc=cube.yinc,
+            zinc=cube.zinc * 2,
+            values=cube.values[:, :, start:end:2],
+            ilines=cube.ilines,
+            xlines=cube.xlines,
+        )
+
+    # Tapering for FFT
+    hann_window = np.hanning(smallsinecube.nlay)
+    smallsinecube.values *= hann_window
+
+    smallsinecube_coarse = downsample_cube(smallsinecube)
+    smallsinecube_coarse_shifted = downsample_cube(smallsinecube, shifted=True)
+
+    surface_template = xtgeo.surface_from_cube(smallsinecube_coarse, value=0)
+
+    d0 = surface_template.copy()
+    d0.values = 10
+    d1 = surface_template.copy()
+    d1.values = 100
+
+    dlist = [d0, d1]
+    tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
+    dc = DomainConversion(dlist, tlist)
+
+    methods: tuple[Literal["linear"], Literal["fft"]] = ("linear", "fft")
+    for method in methods:
+        new_depth_cube = dc.depth_convert_cube(
+            smallsinecube_coarse,
+            zinc=1.0,
+            zmin=0,
+            zmax=100,
+            method=method,
+        )
+        new_depth_cube_coarse = downsample_cube(new_depth_cube)
+        new_depth_cube_coarse_shifted = downsample_cube(new_depth_cube, shifted=True)
+
+        if method == "linear":
+            assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=0.37)
+            assert np.allclose(
+                smallsinecube_coarse.values, new_depth_cube_coarse.values, atol=5.6e-6
+            )
+            assert np.allclose(
+                smallsinecube_coarse_shifted.values,
+                new_depth_cube_coarse_shifted.values,
+                atol=0.37,
+            )
+        elif method == "fft":
+            assert np.allclose(smallsinecube.values, new_depth_cube.values, atol=2.3e-3)
+            assert np.allclose(
+                smallsinecube_coarse.values, new_depth_cube_coarse.values, atol=6.7e-6
+            )
+            assert np.allclose(
+                smallsinecube_coarse_shifted.values,
+                new_depth_cube_coarse_shifted.values,
+                atol=1.8e-4,
+            )
+        else:
+            raise ValueError(
+                "The trace interpolation method must be either 'linear' or 'fft'."
+            )

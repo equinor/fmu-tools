@@ -7,7 +7,7 @@ import pytest
 import xtgeo
 
 from fmu.tools import sample_attributes_for_sim2seis
-from fmu.tools.utilities.sample_attributes import Attrs, _get_layer
+from fmu.tools.utilities.sample_attributes import Attrs, Position, _get_layer
 
 logger = logging.getLogger(__name__)
 
@@ -32,23 +32,23 @@ def fixture_testdata(
 @pytest.mark.parametrize(
     "where, expected",
     [
-        (("Valysar", "top"), 1),
-        (("Valysar", "center"), 6),
-        (("Valysar", "base"), 10),
-        (("Therys", "top"), 11),
-        (("Therys", "center"), 19),
-        (("Therys", "base"), 27),
-        (("Volon", "top"), 28),
-        (("Volon", "center"), 30),
-        (("Volon", "base"), 32),
-        (("", "top"), 1),
-        (("", "center"), 16),
-        (("", "base"), 32),
+        (("Valysar", Position.TOP), 1),
+        (("Valysar", Position.CENTER), 6),
+        (("Valysar", Position.BASE), 10),
+        (("Therys", Position.TOP), 11),
+        (("Therys", Position.CENTER), 19),
+        (("Therys", Position.BASE), 27),
+        (("Volon", Position.TOP), 28),
+        (("Volon", Position.CENTER), 30),
+        (("Volon", Position.BASE), 32),
+        (("", Position.TOP), 1),
+        (("", Position.CENTER), 16),
+        (("", Position.BASE), 32),
     ],
 )
 def test_getlayer_function(
     local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, Any],
-    where: tuple[str, str],
+    where: tuple[str, Position],
     expected: int,
 ) -> None:
     """Test the internal _get_layer() function (where layer number has base 1)."""
@@ -73,7 +73,7 @@ def test_attr_maps_sim2seis(
         attr_surface,
         attribute_error=attr_surface_error,
         region=region,
-        position=("Valysar", "top"),
+        position=("Valysar", Position.TOP),
         zone=zone,
         debug=False,  # this is a 'developer' kwargs to the function
     )
@@ -100,7 +100,7 @@ def test_attr_maps_sim2seis_error_notabsolute(
             attr_surface,
             attribute_error=attr_surface_error,
             region=region,
-            position=("Valysar", "top"),
+            position=("Valysar", Position.TOP),
             zone=zone,
             debug=False,  # this is a 'developer' kwargs to the function
         )
@@ -123,7 +123,7 @@ def test_attr_maps_sim2seis_set_min_error(
         attribute_error=attr_surface_error,
         attribute_error_minimum=0.01,
         region=region,
-        position=("Valysar", "top"),
+        position=("Valysar", Position.TOP),
         zone=zone,
     )
 
@@ -145,7 +145,7 @@ def test_attr_maps_sim2seis_no_region(
         attr_surface,
         attribute_error=0.3,
         region=None,
-        position=("Valysar", "top"),
+        position=("Valysar", Position.TOP),
         zone=zone,
     )
 
