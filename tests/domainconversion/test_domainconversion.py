@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import pytest
@@ -544,6 +544,7 @@ def test_speedcube_with_input_msl_and_default_zinc() -> None:
     result = dc.depth_convert_cube(cube, zmin=0, zmax=10)  # zinc omitted on purpose
 
     assert np.isclose(result.zinc, 1.0)
+    assert dc.average_velocity_cube_in_time is not None
     assert np.isclose(dc.average_velocity_cube_in_time.values[0, 0, 0], 2000.0)
 
 
@@ -591,7 +592,8 @@ def test_trace_interpolation_methods(smallsinecube: xtgeo.Cube) -> None:
     tlist = dlist  # thus vconst = 2000 m/s; depth equal to time seismic
     dc = DomainConversion(dlist, tlist)
 
-    for method in ["linear", "fft"]:
+    methods: tuple[Literal["linear"], Literal["fft"]] = ("linear", "fft")
+    for method in methods:
         new_depth_cube = dc.depth_convert_cube(
             smallsinecube_coarse,
             zinc=1.0,
