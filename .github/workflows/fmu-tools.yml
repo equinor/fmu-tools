@@ -61,7 +61,8 @@ jobs:
 
       - name: Enforce static typing
         if: ${{ always() }}
-        run: uv run mypy src/fmu/tools
+        run: uv run mypy src/fmu/tools tests --exclude 'tests/rms/rename_rms_scripts_data/'
+
 
       - name: Run tests
         if: ${{ always() }}
