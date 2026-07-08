@@ -200,14 +200,14 @@ def make_reference_petro_param(
     return values
 
 
-def get_zone_code(zone_name: str) -> None:
+def get_zone_code(zone_name: str) -> int:
     for zone_code, name in ZONE_CODE_NAMES.items():
         if name == zone_name:
             return zone_code
     raise ValueError(f"Can not find zone {zone_name} in 'ZONE_CODE_NAMES'")
 
 
-def get_facies_code(facies_name: str) -> None:
+def get_facies_code(facies_name: str) -> int:
     for facies_code, name in FACIES_CODE_NAMES.items():
         if name == facies_name:
             return facies_code
@@ -216,11 +216,11 @@ def get_facies_code(facies_name: str) -> None:
 
 def make_petro_param_per_zone(
     dimensions: Tuple[int, int, int],
-    input_values: np.ndarray,
+    input_values: np.ndarray | None,
     zone_name: str,
     zone_values: np.ndarray,
     constant_value: float,
-):
+) -> np.ndarray:
     # Will modify input_values and return updated values
     (nx, ny, nz) = dimensions
     if input_values is None:
@@ -408,9 +408,9 @@ def create_project() -> Generator[Any, None, None]:
 
     # make petro param per facies for multizone grid.
     # They are use as input when updating the petro params
-    values = None
+    values_per_zone: np.ndarray | None = None
     zone_values_multi = xtgeo_zone_param_multi.values
-    values_petro_param_dict = {}
+    values_petro_param_dict: dict[str, dict[str, np.ndarray]] = {}
     for zone_name, petro_per_facies_dict in USED_PETRO_DICT.items():
         for facies_name, petro_list in petro_per_facies_dict.items():
             if facies_name not in values_petro_param_dict:
@@ -418,17 +418,17 @@ def create_project() -> Generator[Any, None, None]:
             for petro_name in petro_list:
                 if petro_name not in values_petro_param_dict[facies_name]:
                     # Initialize all values to 0
-                    values = np.zeros((NX, NY, NZ), dtype=np.float32)
-                    values_petro_param_dict[facies_name][petro_name] = values
+                    values_per_zone = np.zeros((NX, NY, NZ), dtype=np.float32)
+                    values_petro_param_dict[facies_name][petro_name] = values_per_zone
                 else:
-                    values = values_petro_param_dict[facies_name][petro_name]
+                    values_per_zone = values_petro_param_dict[facies_name][petro_name]
 
                 # Update values for current zone, facies and petro_param
                 # with a constant value
                 values_petro_param_dict[facies_name][petro_name] = (
                     make_petro_param_per_zone(
                         (NX, NY, NZ),
-                        values,
+                        values_per_zone,
                         zone_name,
                         zone_values_multi,
                         ZONE_FACIES_PETRO_VALUES[zone_name][facies_name][petro_name],
@@ -458,7 +458,7 @@ def create_project() -> Generator[Any, None, None]:
 
     # make petro param per facies for single zone grid.
     # They are use as input when updating the petro params
-    values = None
+    values_per_zone = None
     zone_values_single = xtgeo_zone_param_single.values
     zone_name = ZONE_CODE_NAMES[1]
     petro_per_facies_dict = USED_PETRO_DICT[zone_name]
@@ -468,9 +468,9 @@ def create_project() -> Generator[Any, None, None]:
             # Constant value for all grid cells in each zone.
             # The input 'values' will initially be created here
             # and updated for each zone
-            values = make_petro_param_per_zone(
+            values_per_zone = make_petro_param_per_zone(
                 (NX, NY, NZ),
-                values,
+                values_per_zone,
                 zone_name,
                 zone_values_single,
                 ZONE_FACIES_PETRO_VALUES[zone_name][facies_name][petro_name],
@@ -482,7 +482,7 @@ def create_project() -> Generator[Any, None, None]:
                 name=new_petro_name,
                 grid=xtgeo_grid_single,
                 roxar_dtype=np.float32,
-                values=values,
+                values=values_per_zone,
             )
             xtgeo_petro_param.to_roxar(project, GRID_MODEL_GEO_SINGLE, new_petro_name)
 
@@ -530,7 +530,7 @@ def test_import_export_updated_field_parameters(
         used_petro_dict,
         grid_model_name=GRID_MODEL_ERTBOX,
         zone_name_for_single_zone_grid=zone_name_for_single_zone_grid,
-        export_path=EXPORT_PATH,
+        export_path=str(EXPORT_PATH),
         debug_print=DEBUG_PRINT,
     )
 
@@ -565,7 +565,7 @@ def test_import_export_updated_field_parameters(
         used_petro_dict,
         grid_model_name=GRID_MODEL_ERTBOX,
         zone_name_for_single_zone_grid=zone_name_for_single_zone_grid,
-        import_path=IMPORT_PATH,
+        import_path=str(IMPORT_PATH),
         debug_print=DEBUG_PRINT,
     )
 
