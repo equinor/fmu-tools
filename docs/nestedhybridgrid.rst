@@ -69,7 +69,11 @@ The example here runs within RMS, but similar workflows can be created for file 
 
 
 The next step is to do a rescaling from the original geogrid to the merged grid
-using e.g. the RMS tool.
+using e.g. the RMS tool. Optionally the create_nested_hybrid_grid_upscale job can be used
+instead to also update upscaling mappings. This takes an additional input upscaling as a
+tuple of valid :class:`~xtgeo.GridProperty` (i,j,k) that maps from the geogrid to the input
+grid. This also returns a third value; a tuple of :class:`~xtgeo.GridProperty` with the 
+updated mappings.
 
 Further, we need to create NNC transmissibilities and generate file for flow simulator:
 
