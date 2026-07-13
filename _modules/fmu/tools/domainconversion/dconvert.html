@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.2.dev15+g5d190017b documentation</title>
+  <title>fmu.tools.domainconversion.dconvert &mdash; fmu-tools 1.32.2.dev16+gf3261de59 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=4b94cac3"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e482933"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -278,7 +278,7 @@
         <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_consistency</span><span class="p">(</span>
             <span class="n">slist</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">],</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]:</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Ensure consistensy and check order for depth or time surfaces&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Ensure consistency and check order for depth or time surfaces.&quot;&quot;&quot;</span>
             <span class="k">for</span> <span class="n">inum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">slist</span><span class="p">)):</span>
                 <span class="n">s0</span> <span class="o">=</span> <span class="n">slist</span><span class="p">[</span><span class="n">inum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
                 <span class="n">s1</span> <span class="o">=</span> <span class="n">slist</span><span class="p">[</span><span class="n">inum</span><span class="p">]</span>
@@ -377,7 +377,7 @@
 
         <span class="n">vel</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_v_surfaces</span> <span class="o">=</span> <span class="n">vel</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL...  DONE&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create velocity maps for average velocities from MSL... DONE&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_slow_maps_average</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create average slowness from MSL to surface N&quot;&quot;&quot;</span>
@@ -404,7 +404,7 @@
 
         <span class="n">slow</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">slow</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_s_surfaces</span> <span class="o">=</span> <span class="n">slow</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps for average from MSL...  DONE&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Create slowness maps for average from MSL... DONE&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_surfaces_are_inside_area</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">insurfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">]</span>
@@ -642,7 +642,7 @@
         <span class="n">zmin_estimated</span> <span class="o">=</span> <span class="n">compare_surfs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="n">zmax_estimated</span> <span class="o">=</span> <span class="n">compare_surfs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;Zmin and zmax for relevant surfaces is </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> (time2deph: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Zmin and zmax for relevant surfaces is </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> (time2depth: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
             <span class="n">zmin_estimated</span><span class="p">,</span>
             <span class="n">zmax_estimated</span><span class="p">,</span>
             <span class="n">time2depth</span><span class="p">,</span>
