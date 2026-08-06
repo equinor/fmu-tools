@@ -1,0 +1,79 @@
+localisation:
+  # Result file format (for summary observations) can be a csv file with columns:
+  # field_name  ert-id  xpos, ypos  xrange yrange rotation  tapering_function_name
+  result_file: params_dist_localisation.dat
+  rms_settings:
+    use_well_head_position: False
+    grid_model: "Geogrid_Valysar"
+    blocked_well_set: "BW"
+    trajectory: "Drilled trajectory"
+
+  input_files:
+    well_renaming_table: ../input/well_modelling/well_info/rms_eclipse.renaming_table
+    ert_summary_obs_file: ../../ert/input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt.obs
+    ert_general_obs_file: ../../ert/input/observations/drogon_wbhp_rft_wct_gor_tracer_4d_plt.obs
+    rms_field_correlation_file: ../input/config/aps/correlation_ranges.txt # Not yet used
+    ert_config_field_param_file: ../../ert/input/config/ahm_field_aps.ert
+
+  default_field_settings:
+    ranges: [2000.0,  1000.0, 45.0] # (main_range, perpendicular_range, rotation)
+  
+  tapering: "gauss"
+
+  # Individual settings per field that is explicitly specified,
+  # but common settings for all obs_types, all wells found in summary observations.
+  # For fields not specified, use default settings.
+  # These settings will override the default_field_settings.
+
+  #Example below specify the following:
+  #   First item in the field_settings list: All field names, all obs_types and all wells matching the wildcard notation
+  #      will be assigned one common set of range values.
+  #   Second item in the field settings list: All field names, all obs_types and all wells matching the wildcard notation
+  #      will be assigned one common set of range values if the have not already be assigned a range in the previous
+  #      field settings item in the list.
+  #   Third item in the field settings list: All field names, all obs_types and all wells matching the wildcard notation
+  #      will be assigned one common set of range values if the have not already be assigned a range in the previous
+  #      field settings item in the list.
+  #
+  # For all combinations of (field_parameter, ert_id) not assigned here, the default set of range paramters will be used.
+  #
+  #
+  # Wildcard notation is possible in field_settings for:
+  #      - field_name
+  #      - obs_type
+  #      - well names
+  #
+  # NOTE: If there are overlapping specifications in keyword 'field_settings',
+  #       the field settings items previously in the list of field settings will be used!!
+  #       No warning or error message if overlapping
+  #       Specification in keyword 'field_settings' will always overwrite default settings.
+  field_settings:
+    - field_name: [aps_*_GRF1]
+      obs_type: ["WO*",WWCT]
+      well_names: ["55*"]
+      ranges: [300.0,  300.0, 0.0]
+    - field_name: [aps_Valysar_GRF1]
+      obs_type: ["*O*"]
+      well_names: ["*-A-*"]
+      ranges: [3000.0,  3000.0, 0.0]
+    - field_name: [aps_V*_GRF1]
+      obs_type: [WGOR]
+      well_names: [55_33-A-4]
+      ranges: [1000.0,  1000.0, 0.0]
+    - field_name: [aps_Valysar_GRF2]
+      obs_type: [all]
+      well_names: [all]
+      ranges: [300.0,  400.0, 25.0]
+
+  individual_obs_settings:
+    - field_name: aps_Volon_GRF1
+      ert_obs_id: A1_WBHP_05_05_2019
+      ranges: [1200, 1500, 30]
+    - field_name: aps_Therys_GRF2
+      ert_obs_id: A1_WBHP_02_11_2019
+      ranges: [1200, 1700, 30]
+
+  
+
+
+
