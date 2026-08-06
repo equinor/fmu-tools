@@ -79,6 +79,23 @@ class Refinement(BaseModel):
             raise ValueError("Refinement factors must be >= 1")
 
 
+class Upscale(BaseModel):
+    imap: xtgeo.GridProperty
+    jmap: xtgeo.GridProperty
+    kmap: xtgeo.GridProperty
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    @classmethod
+    def from_tuple(
+        cls,
+        upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
+    ) -> Self:
+        imap2, jmap2, kmap2 = upscaling
+        return cls(imap=imap2, jmap=jmap2, kmap=kmap2)
+
+
 def _crop_for_region(grid: xtgeo.Grid, refinement_bbox: BoundingBox) -> xtgeo.Grid:
     """Crop grid to the bounding box of the refinement region."""
 
@@ -282,6 +299,158 @@ def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
     grid.set_actnum(actnum)
 
 
+def _modify_upscaling_mapping(
+    up: Upscale,
+    region: xtgeo.GridProperty,
+    target_region_id: int,
+    refinement: Refinement,
+    offset: BoundingBox,
+    lmap: np.ndarray,
+) -> Upscale:
+    """
+    Generate an updated version of the upscaling mapping. Converting the input
+    mappings given to reflect the new final merged grid.
+    """
+
+    imapi = up.imap
+    jmapi = up.jmap
+    kmapi = up.kmap
+    oi = offset.imin - 1
+    oj = offset.jmin - 1
+    ok = offset.kmin - 1
+    ri = refinement.col
+    rj = refinement.row
+    rk = refinement.lay
+    di = (offset.imax - oi) * ri
+    dj = (offset.jmax - oj) * rj
+    dk = (offset.kmax - ok) * rk
+
+    imap = imapi.copy()
+    jmap = jmapi.copy()
+    kmap = kmapi.copy()
+
+    ivm = region.ncol
+    jvm = region.nrow
+    kvm = region.nlay
+
+    iv = imapi.values.reshape(-1) - 1
+    jv = jmapi.values.reshape(-1) - 1
+    kv = kmapi.values.reshape(-1) - 1
+
+    if (
+        iv.min() < -1
+        or jv.min() < -1
+        or kv.min() < -1
+        or iv.max() >= region.ncol
+        or jv.max() >= region.nrow
+        or kv.max() >= region.nlay
+    ):
+        raise ValueError("Invalid input upscaling relationships")
+
+    exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
+
+    # map region from input grid to geogrid
+    # excluding any enteries for cells in geogrid that are excluded
+    cn = np.ma.masked_where(exclude_mask, iv * jvm * kvm + jv * kvm + kv)
+    # mask any inactive cells in the input grid that are mapped by geogrid
+    iv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    jv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    kv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
+    exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
+    cn = np.ma.masked_where(exclude_mask, cn)
+
+    region2 = np.ma.MaskedArray(np.zeros(len(cn)), mask=cn.mask, dtype=np.int32)
+    region2[~cn.mask] = region.values.reshape(-1)[cn[~cn.mask].astype(np.int32)].astype(
+        np.int32
+    )
+
+    # for cells that aren't refined only layer numbering updates
+    kv[(~cn.mask) & (region2 != target_region_id)] = lmap[
+        kv[(~cn.mask) & (region2 != target_region_id)].astype(np.int32)
+    ]
+
+    # for cells that are refined find the levels of refinement
+    cijk = np.argwhere(region.values == target_region_id)
+    cijk2 = np.argwhere(region2.reshape(imap.values.shape) == target_region_id)
+    cnr = cijk[:, 0] * jvm * kvm + cijk[:, 1] * kvm + cijk[:, 2]
+
+    # find number of cells in refined region on geogrid and normal grid
+    ccnt = [len(np.unique(cijk[:, x])) for x in range(3)]
+    ccnt2 = [len(np.unique(cijk2[:, x])) for x in range(3)]
+
+    uri = ccnt2[0] / ccnt[0]
+    urj = ccnt2[1] / ccnt[1]
+    urk = ccnt2[2] / ccnt[2]
+
+    if any(not x.is_integer() for x in [uri, uri / ri, urj, urj / rj, urk, urk / rk]):
+        raise ValueError(
+            "Invalid correspondence upscaling between geogrid and input grid"
+        )
+
+    # original index map of refined cells
+    il2 = (
+        np.repeat(np.arange(int(di / ri), dtype=np.int32) + oi, ri * dj * dk)
+    ).reshape((di, dj, dk))
+    jl2 = np.swapaxes(
+        (np.repeat(np.arange(int(dj / rj), dtype=np.int32) + oj, rj * di * dk)).reshape(
+            (dj, di, dk)
+        ),
+        0,
+        1,
+    )
+    kl2 = np.swapaxes(
+        (np.repeat(np.arange(int(dk / rk), dtype=np.int32) + ok, rk * di * dj)).reshape(
+            (dk, dj, di)
+        ),
+        0,
+        2,
+    )
+    # map the updated refined grid cells to geogrid
+    cmap2 = np.arange(di, dtype=np.float32) + ivm + 1
+    cmap2 = np.repeat(cmap2, dj * dk).reshape((di, dj, dk))
+    rmap2 = np.arange(dj, dtype=np.float32)
+    rmap2 = np.swapaxes(np.repeat(rmap2, di * dk).reshape((dj, di, dk)), 0, 1)
+    lmap2 = np.arange(dk, dtype=np.float32) + ok
+    lmap2 = np.tile(lmap2, di * dj).reshape((di, dj, dk))
+
+    if uri > ri:
+        il2 = np.repeat(il2, int(uri / ri), axis=0)
+        jl2 = np.repeat(jl2, int(uri / ri), axis=0)
+        kl2 = np.repeat(kl2, int(uri / ri), axis=0)
+        cmap2 = np.repeat(cmap2, int(uri / ri), axis=0)
+        rmap2 = np.repeat(rmap2, int(uri / ri), axis=0)
+        lmap2 = np.repeat(lmap2, int(uri / ri), axis=0)
+    if urj > rj:
+        il2 = np.repeat(il2, int(urj / rj), axis=1)
+        jl2 = np.repeat(jl2, int(urj / rj), axis=1)
+        kl2 = np.repeat(kl2, int(urj / rj), axis=1)
+        cmap2 = np.repeat(cmap2, int(urj / rj), axis=1)
+        rmap2 = np.repeat(rmap2, int(urj / rj), axis=1)
+        lmap2 = np.repeat(lmap2, int(urj / rj), axis=1)
+    if urk > rk:
+        il2 = np.repeat(il2, int(urk / rk), axis=2)
+        jl2 = np.repeat(jl2, int(urk / rk), axis=2)
+        kl2 = np.repeat(kl2, int(urk / rk), axis=2)
+        cmap2 = np.repeat(cmap2, int(urk / rk), axis=2)
+        rmap2 = np.repeat(rmap2, int(urk / rk), axis=2)
+        lmap2 = np.repeat(lmap2, int(urk / rk), axis=2)
+
+    cl2 = il2.reshape(-1) * jvm * kvm + jl2.reshape(-1) * kvm + kl2.reshape(-1)
+
+    # ensure only correct cells are updated
+    geomask = region2 == target_region_id
+    refmask = np.isin(cl2, cnr)
+    iv[geomask] = cmap2.reshape(-1)[refmask]
+    jv[geomask] = rmap2.reshape(-1)[refmask]
+    kv[geomask] = lmap2.reshape(-1)[refmask]
+
+    imap.values = iv.reshape(imap.values.shape).astype(np.float32) + 1.0
+    jmap.values = jv.reshape(imap.values.shape).astype(np.float32) + 1.0
+    kmap.values = kv.reshape(imap.values.shape).astype(np.float32) + 1.0
+
+    return Upscale.from_tuple((imap, jmap, kmap))
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -301,6 +470,8 @@ class NestedHybridGrid:
         region: xtgeo.GridProperty,
         refinement: tuple[int, int, int],
         target_region_id: int = 1,
+        upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]
+        | None = None,
     ) -> None:
         """Create a NestedHybridGrid instance."""
 
@@ -308,6 +479,8 @@ class NestedHybridGrid:
 
         self._nnc_table: pd.DataFrame | None = None
         self._grid: xtgeo.Grid | None = None
+        self._upscale: Upscale | None = None
+        self._upscaled: Upscale | None = None
 
         self._original_grid = coarse_grid
         self._original_dimensions = coarse_grid.dimensions
@@ -323,6 +496,9 @@ class NestedHybridGrid:
 
         self._layer_map_coarse = self._generate_layer_map_coarse()
         self._layer_map_refined = self._generate_layer_map_refined()
+
+        if upscaling is not None:
+            self._upscale = Upscale.from_tuple(upscaling)
 
     @staticmethod
     def _validate_inputs(
@@ -403,6 +579,15 @@ class NestedHybridGrid:
             self._nnc_table = self._compute_nnc_table()
         return self._nnc_table
 
+    @property
+    def upscale_map(
+        self,
+    ) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
+        """updated upscaling mappings from geogrid to final merged grid."""
+        if self._upscaled is None:
+            self._upscaled = self._update_upscaling()
+        return (self._upscaled.imap, self._upscaled.jmap, self._upscaled.kmap)
+
     def _compute_nnc_table(self) -> pd.DataFrame:
         """Compute the NNC mapping table."""
         return _compute_nnc_table(
@@ -443,6 +628,21 @@ class NestedHybridGrid:
         """Get the number of layers of the refined grid."""
         bbox = self._refined_bbox
         return (bbox.kmax - bbox.kmin + 1) * self._refinement.lay
+
+    def _update_upscaling(
+        self,
+    ) -> Upscale:
+        """Update the upscaling mapping"""
+        if self._upscale is None:
+            raise ValueError("No input data given for upscaling.")
+        return _modify_upscaling_mapping(
+            self._upscale,
+            self._original_region,
+            self._target_region_id,
+            self._refinement,
+            self._refined_bbox,
+            self._layer_map_coarse,
+        )
 
     def _set_zonation(self, nlay: int) -> dict | None:
         """Create an updated subgrid dictionary for the merged grid."""
@@ -526,6 +726,76 @@ def create_nested_hybrid_grid(
     )
 
     return nhg.grid, nhg.nnc_table
+
+
+def create_nested_hybrid_grid_upscale(
+    grid: xtgeo.Grid,
+    region: xtgeo.GridProperty,
+    target_region_id: int,
+    refinement: tuple[int, int, int],
+    upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
+) -> tuple[
+    xtgeo.Grid,
+    pd.DataFrame,
+    tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
+]:
+    """Create a nested hybrid grid by refining one region and merging it back.
+
+    The cells belonging to *target_region_id* are replaced by a refined
+    (subdivided) version of the same region.
+
+    A **NNC mapping table** is returned that lists every
+    mother ↔ refined cell pair that should be connected by a Non-Neighbour
+    Connection (NNC).  The table is derived from the topological knowledge
+    available at merge time (which original cell was refined and how its
+    sub-cells map into the merged grid).
+
+    The table columns are:
+
+    - ``I1, J1, K1``: mother cell indices (1-based) in the merged grid.
+    - ``I2, J2, K2``: refined cell indices (1-based) in the merged grid.
+    - ``DIRECTION``: face direction from the mother cell's perspective
+      (``I+``, ``I-``, ``J+``, ``J-``, ``K+``, ``K-``).
+
+    This table can be passed to
+    :meth:`xtgeo.Grid.get_transmissibilities` to compute NNC
+    transmissibilities for the specified cell pairs.
+
+    Args:
+        grid: The original coarse grid.
+        region: A :class:`xtgeo.GridProperty` whose values identify the
+            regions (e.g. an integer region parameter).
+        target_region_id: The region value to refine.
+        refinement: ``(ncol, nrow, nlay)`` refinement factors.
+        upscaling: Optional tuple of `xtgeo.GridProperty` for (I,J,K)
+            Geogrid properties. These map from geogrid cell to input grid
+            The input values must be a valid mapping for upscaling from
+            the geogrid to the input grid give. A value of 0 can be used
+            to exclude the geogrid cell from upscaling
+
+    Returns:
+        A tuple ``(merged_grid, nnc_table)`` where *merged_grid*
+        is a new :class:`xtgeo.Grid` with the refined region stitched back into
+        the coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping
+        mother cells to their connected refined cells. Upscaling tuple is a tuple
+        with 3 :class:`xtgeo.GridProperty` (I, J, K) with the updated mapping
+        from geogrid to merged grid for upscaling.
+    """
+    warnings.warn(
+        "create_nested_hybrid_grid_upscale is currently experimental. It may "
+        " undergo breaking changes in future versions without notice.",
+        FutureWarning,
+    )
+
+    nhg = NestedHybridGrid(
+        coarse_grid=grid,
+        region=region,
+        refinement=refinement,
+        target_region_id=target_region_id,
+        upscaling=upscaling,
+    )
+
+    return nhg.grid, nhg.nnc_table, nhg.upscale_map
 
 
 def nnc_to_gridproperty(
