@@ -430,6 +430,10 @@ class NestedHybridGrid:
             self._nnc_table = self._compute_nnc_table()
         return self._nnc_table
 
+    def write_nnc_table(self, filename: str | os.PathLike[str]) -> None:
+        """Write the NNC mapping table to CSV."""
+        self.nnc_table.to_csv(filename, index=False)
+
     def _compute_nnc_table(self) -> pd.DataFrame:
         """Compute the NNC mapping table."""
         return _compute_nnc_table(
