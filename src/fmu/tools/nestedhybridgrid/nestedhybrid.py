@@ -39,6 +39,7 @@ _logger = logging.getLogger(__name__)
 FaceDirection: TypeAlias = Literal["i+", "i-", "j+", "j-", "k+", "k-"]
 IJKIndex: TypeAlias = tuple[int, int, int]
 BoundaryCellFace: TypeAlias = tuple[IJKIndex, IJKIndex, FaceDirection]
+ORIGINAL_IJK_PROPERTY_NAMES = ("I_orig", "J_orig", "K_orig")
 
 
 class BoundingBox(BaseModel):
@@ -354,6 +355,8 @@ class NestedHybridGrid:
 
         coarse_grid = self._original_grid.copy()
         coarse_grid.append_prop(self._original_region)
+        for prop in coarse_grid.get_ijk(names=ORIGINAL_IJK_PROPERTY_NAMES):
+            coarse_grid.append_prop(prop)
 
         region_name = self._original_region.name
 

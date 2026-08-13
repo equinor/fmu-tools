@@ -344,16 +344,32 @@ class TestNestedHybridGridClass:
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
 
         # check that the region property is attached to the merged grid
-        assert len(nhg.properties) == 2
+        assert len(nhg.properties) == 5
 
         prop_names = [prop.name for prop in nhg.properties]
-        assert set(prop_names) == {"CUSTOM", "REGION"}
+        assert set(prop_names) == {"CUSTOM", "REGION", "I_orig", "J_orig", "K_orig"}
 
-        region_prop = nhg.properties[0]
+        region_prop = nhg.grid.get_prop_by_name("REGION")
 
         assert isinstance(region_prop, xtgeo.GridProperty)
         assert region_prop.name == "REGION"
         assert region_prop.values.shape == nhg.grid.dimensions
+
+        i_orig = nhg.grid.get_prop_by_name("I_orig")
+        j_orig = nhg.grid.get_prop_by_name("J_orig")
+        k_orig = nhg.grid.get_prop_by_name("K_orig")
+
+        assert i_orig.values.shape == nhg.grid.dimensions
+        assert j_orig.values.shape == nhg.grid.dimensions
+        assert k_orig.values.shape == nhg.grid.dimensions
+
+        assert i_orig.values[0, 0, 0] == 1
+        assert j_orig.values[0, 0, 0] == 1
+        assert k_orig.values[0, 0, 0] == 1
+
+        assert set(np.unique(i_orig.values[7:11, 0:4, 0:4])) == {5, 6}
+        assert set(np.unique(j_orig.values[7:11, 0:4, 0:4])) == {3, 4}
+        assert set(np.unique(k_orig.values[7:11, 0:4, 0:4])) == {1, 2}
 
     def test_nestedhybridgrid_nnc_table_as_expected(self):
         """Test NNC table contains one row per coarse-to-refined cell face."""
