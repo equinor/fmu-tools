@@ -16,14 +16,14 @@ Overview
 
 The ``nestedhybridgrid`` module creates **nested hybrid grids** where a
 selected region of a coarse grid is replaced by a refined (subdivided)
-sub-grid.  The two grids are merged into a single grid and connected
+sub-grid. The two grids are merged into a single grid and connected
 through Non-Neighbour Connections (NNCs).
 
 The typical workflow is:
 
-1. Define a coarse grid and a region property that marks which cells to
-   refine.
-2. Call :func:`~fmu.tools.nestedhybridgrid.create_nested_hybrid_grid` to
+1. Define a coarse grid and a region property that marks cells to
+   refine with value 1.
+2. Use the :class:`~fmu.tools.nestedhybridgrid.NestedHybridGrid` to
    produce the merged grid and an NNC table. You may need to export the NNC file to csv
    at this stage.
 3. Do rescaling from the original gridmodel (e.g. a finer geogrid) to the merged grid,
@@ -39,33 +39,22 @@ The example here runs within RMS, but similar workflows can be created for file 
 
 .. code-block:: python
 
-    import xtgeo
-    from fmu.tools.nestedhybridgrid import (
-        create_nested_hybrid_grid,
+    from fmu.tools.nestedhybridgrid import NestedHybridGrid
+
+    # Create nested hybrid grid (refine region 1 by 2×2×1)
+    nhg = NestedHybridGrid.from_rms(
+        project,
+        grid_name="Simgrid",
+        region_name="Refinement_region",
+        refinement=(2, 2, 1),
+        properties=["Zone"],  # Optional list of properties to transfer to the output grid
     )
 
-    # Load grid and region property
-    grid = xtgeo.grid_from_roxar(project, "Simgrid")
-    region = xtgeo.gridproperty_from_roxar(project, "Simgrid", "REGION")
-    
-    # Optionally load any other parameter you wish to preserve on grid
-    #zone = xtgeo.gridproperty_from_roxar(project, "Simgrid", "Zone")
-    #grid.append_prop(zone)
-
-    # Create nested hybrid grid (e.g. refine region 2 by 2×2×1)
-    merged, nnc_table = create_nested_hybrid_grid(
-        grid, region, target_region_id=2, refinement=(2, 2, 1)
-    )
-
-    # store merged grid in RMS (or file)
-    merged.to_roxar(project, "NestedHybrid")
-
-    # Optionally extract and store any necessary parameters from grid
-    region2 = merged.get_prop_by_name("REGION")
-    region2.to_roxar(project, "NestedHybrid", region2.name)
+    # store nested grid with properties in RMS
+    nhg.to_rms(project, "NestedHybrid")
 
     # write the NNC pandas to disk; this will be applied for computing NNC's in the next script
-    nnc_table.to_csv("path_to_some_csv_file.csv", index=False)
+    nhg.nnc_table.to_csv("path_to_some_csv_file.csv", index=False)
 
 
 The next step is to do a rescaling from the original geogrid to the merged grid
@@ -116,8 +105,10 @@ Concepts
 NNC table
 ^^^^^^^^^
 
-The NNC table is a :class:`~pandas.DataFrame` returned by
-``create_nested_hybrid_grid`` with columns:
+The NNC table captures which coarse (mother) cells connect to which refined cells — information that 
+xtgeo needs to compute transmissibilities across the refinement boundary. It is accessed via the property 
+``nnc_table`` on the :class:`~fmu.tools.nestedhybridgrid.NestedHybridGrid` instance and is of type 
+:class:`~pandas.DataFrame` with columns:
 
 .. list-table::
    :header-rows: 1
