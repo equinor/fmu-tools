@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev1+g31d670618.d20260818 documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev2+g152512869 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=41707d94"></script>
+      <script src="_static/documentation_options.js?v=e948b068"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -125,13 +125,13 @@ in future versions without notice.</p>
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">nestedhybridgrid</span></code> module creates <strong>nested hybrid grids</strong> where a
 selected region of a coarse grid is replaced by a refined (subdivided)
-sub-grid.  The two grids are merged into a single grid and connected
+sub-grid. The two grids are merged into a single grid and connected
 through Non-Neighbour Connections (NNCs).</p>
 <p>The typical workflow is:</p>
 <ol class="arabic simple">
-<li><p>Define a coarse grid and a region property that marks which cells to
-refine.</p></li>
-<li><p>Call <a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.create_nested_hybrid_grid" title="fmu.tools.nestedhybridgrid.create_nested_hybrid_grid"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_nested_hybrid_grid()</span></code></a> to
+<li><p>Define a coarse grid and a region property that marks cells to
+refine with value 1.</p></li>
+<li><p>Use the <a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid" title="fmu.tools.nestedhybridgrid.NestedHybridGrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">NestedHybridGrid</span></code></a> to
 produce the merged grid and an NNC table. You may need to export the NNC file to csv
 at this stage.</p></li>
 <li><p>Do rescaling from the original gridmodel (e.g. a finer geogrid) to the merged grid,
@@ -144,33 +144,22 @@ e.g. by using software like RMS.</p></li>
 <section id="quick-start-example">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Quick-start example</a><a class="headerlink" href="#quick-start-example" title="Link to this heading"></a></h2>
 <p>The example here runs within RMS, but similar workflows can be created for file i/o.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.nestedhybridgrid</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">create_nested_hybrid_grid</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.nestedhybridgrid</span><span class="w"> </span><span class="kn">import</span> <span class="n">NestedHybridGrid</span>
+
+<span class="c1"># Create nested hybrid grid (refine region 1 by 2×2×1)</span>
+<span class="n">nhg</span> <span class="o">=</span> <span class="n">NestedHybridGrid</span><span class="o">.</span><span class="n">from_rms</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
+    <span class="n">region_name</span><span class="o">=</span><span class="s2">&quot;Refinement_region&quot;</span><span class="p">,</span>
+    <span class="n">refinement</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">],</span>  <span class="c1"># Optional list of properties to transfer to the output grid</span>
 <span class="p">)</span>
 
-<span class="c1"># Load grid and region property</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">)</span>
-<span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span> <span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
-
-<span class="c1"># Optionally load any other parameter you wish to preserve on grid</span>
-<span class="c1">#zone = xtgeo.gridproperty_from_roxar(project, &quot;Simgrid&quot;, &quot;Zone&quot;)</span>
-<span class="c1">#grid.append_prop(zone)</span>
-
-<span class="c1"># Create nested hybrid grid (e.g. refine region 2 by 2×2×1)</span>
-<span class="n">merged</span><span class="p">,</span> <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">create_nested_hybrid_grid</span><span class="p">(</span>
-    <span class="n">grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">target_region_id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">refinement</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="c1"># store merged grid in RMS (or file)</span>
-<span class="n">merged</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">)</span>
-
-<span class="c1"># Optionally extract and store any necessary parameters from grid</span>
-<span class="n">region2</span> <span class="o">=</span> <span class="n">merged</span><span class="o">.</span><span class="n">get_prop_by_name</span><span class="p">(</span><span class="s2">&quot;REGION&quot;</span><span class="p">)</span>
-<span class="n">region2</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">,</span> <span class="n">region2</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="c1"># store nested grid with properties in RMS</span>
+<span class="n">nhg</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">)</span>
 
 <span class="c1"># write the NNC pandas to disk; this will be applied for computing NNC&#39;s in the next script</span>
-<span class="n">nnc_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">nhg</span><span class="o">.</span><span class="n">nnc_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The next step is to do a rescaling from the original geogrid to the merged grid
@@ -217,8 +206,10 @@ using e.g. the RMS tool.</p>
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Concepts</a><a class="headerlink" href="#concepts" title="Link to this heading"></a></h2>
 <section id="nnc-table">
 <h3><a class="toc-backref" href="#id4" role="doc-backlink">NNC table</a><a class="headerlink" href="#nnc-table" title="Link to this heading"></a></h3>
-<p>The NNC table is a <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code> returned by
-<code class="docutils literal notranslate"><span class="pre">create_nested_hybrid_grid</span></code> with columns:</p>
+<p>The NNC table captures which coarse (mother) cells connect to which refined cells — information that
+xtgeo needs to compute transmissibilities across the refinement boundary. It is accessed via the property
+<code class="docutils literal notranslate"><span class="pre">nnc_table</span></code> on the <a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid" title="fmu.tools.nestedhybridgrid.NestedHybridGrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">NestedHybridGrid</span></code></a> instance and is of type
+<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code> with columns:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 20.0%" />

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.nestedhybridgrid package &mdash; fmu-tools 1.33.1.dev1+g31d670618.d20260818 documentation</title>
+  <title>fmu.tools.nestedhybridgrid package &mdash; fmu-tools 1.33.1.dev2+g152512869 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=41707d94"></script>
+      <script src="_static/documentation_options.js?v=e948b068"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -226,6 +226,28 @@ and a refinement specification.</p>
 <p>The target region is refined and merged back into the coarse grid.
 A <strong>NNC mapping table</strong> is computed that lists every coarse ↔ refined cell
 pair that should be connected by a Non-Neighbour Connection (NNC).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.from_rms">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refinement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.from_rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.from_rms" title="Link to this definition"></a></dt>
+<dd><p>Create a NestedHybridGrid instance from an RMS project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Self</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.to_rms">
+<span class="sig-name descname"><span class="pre">to_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.to_rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.to_rms" title="Link to this definition"></a></dt>
+<dd><p>Write the nested hybrid grid and its properties to an RMS project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.grid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Grid</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.grid" title="Link to this definition"></a></dt>
@@ -234,7 +256,7 @@ pair that should be connected by a Non-Neighbour Connection (NNC).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.properties">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Grid</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.properties" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">GridProperty</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.properties" title="Link to this definition"></a></dt>
 <dd><p>The final nested hybrid grid properties.</p>
 </dd></dl>
 
@@ -457,6 +479,28 @@ Cells without an NNC value are set to <code class="docutils literal notranslate"
 <p>The target region is refined and merged back into the coarse grid.
 A <strong>NNC mapping table</strong> is computed that lists every coarse ↔ refined cell
 pair that should be connected by a Non-Neighbour Connection (NNC).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.from_rms">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">region_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refinement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.from_rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.from_rms" title="Link to this definition"></a></dt>
+<dd><p>Create a NestedHybridGrid instance from an RMS project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Self</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.to_rms">
+<span class="sig-name descname"><span class="pre">to_rms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.to_rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.to_rms" title="Link to this definition"></a></dt>
+<dd><p>Write the nested hybrid grid and its properties to an RMS project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.grid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Grid</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.grid" title="Link to this definition"></a></dt>
@@ -465,7 +509,7 @@ pair that should be connected by a Non-Neighbour Connection (NNC).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.properties">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Grid</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.properties" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">GridProperty</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.properties" title="Link to this definition"></a></dt>
 <dd><p>The final nested hybrid grid properties.</p>
 </dd></dl>
 
