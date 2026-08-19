@@ -459,6 +459,18 @@ class TestNestedHybridGridClass:
         assert "Unnamed: 0" not in written.columns
         pd.testing.assert_frame_equal(written, nhg.nnc_table, check_dtype=False)
 
+    def test_write_nnc_table_creates_output_directories(self, tmp_path):
+        """Missing parent directories are created before writing the table."""
+        grid = xtgeo.create_box_grid((3, 3, 1))
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nested" / "output" / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        assert outfile.is_file()
+
     def test_inactive_neighbor_excluded_from_nnc(self):
         """Inactive coarse neighbor cells should not appear in the NNC table.
 

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias
 
 import numpy as np
@@ -430,9 +431,11 @@ class NestedHybridGrid:
             self._nnc_table = self._compute_nnc_table()
         return self._nnc_table
 
-    def write_nnc_table(self, filename: str | os.PathLike[str]) -> None:
+    def write_nnc_table(self, filename: str | Path) -> None:
         """Write the NNC mapping table to CSV."""
-        self.nnc_table.to_csv(filename, index=False)
+        output_path = Path(filename)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        self.nnc_table.to_csv(output_path, index=False)
 
     def _compute_nnc_table(self) -> pd.DataFrame:
         """Compute the NNC mapping table."""
