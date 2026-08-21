@@ -443,6 +443,28 @@ class TestNestedHybridGridClass:
         # right neighbor → connects to I+ face of refined patch
         assert _has_single_row(i1=3, j1=2, k1=1, i2=6, j2=2, k2=1, direction="I-")
 
+    def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
+        """NNC table can be written to CSV without the pandas index."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        written = pd.read_csv(outfile)
+        assert "Unnamed: 0" not in written.columns
+        pd.testing.assert_frame_equal(written, nhg.nnc_table, check_dtype=False)
+
+    def test_write_nnc_table_creates_output_directories(self, tmp_path):
+        """Missing parent directories are created before writing the table."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nested" / "output" / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        assert outfile.is_file()
+
     def test_inactive_neighbor_excluded_from_nnc(self):
         """Inactive coarse neighbor cells should not appear in the NNC table.
 
