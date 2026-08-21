@@ -445,11 +445,7 @@ class TestNestedHybridGridClass:
 
     def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
         """NNC table can be written to CSV without the pandas index."""
-        grid = xtgeo.create_box_grid((3, 3, 1))
-
-        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
-        region.values[1, 1, 0] = 1
-
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
         outfile = tmp_path / "nnc_table.csv"
 
@@ -461,9 +457,7 @@ class TestNestedHybridGridClass:
 
     def test_write_nnc_table_creates_output_directories(self, tmp_path):
         """Missing parent directories are created before writing the table."""
-        grid = xtgeo.create_box_grid((3, 3, 1))
-        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
-        region.values[1, 1, 0] = 1
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
         outfile = tmp_path / "nested" / "output" / "nnc_table.csv"
 
