@@ -53,8 +53,8 @@ The example here runs within RMS, but similar workflows can be created for file 
     # store nested grid with properties in RMS
     nhg.to_rms(project, "NestedHybrid")
 
-    # write the NNC pandas to disk; this will be applied for computing NNC's in the next script
-    nhg.nnc_table.to_csv("path_to_some_csv_file.csv", index=False)
+    # write the NNC table to disk; this will be applied for computing NNC's in the next script
+    nhg.write_nnc_table("path_to_some_csv_file.csv")
 
 
 The next step is to do a rescaling from the original geogrid to the merged grid

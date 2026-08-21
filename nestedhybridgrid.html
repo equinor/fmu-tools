@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev2+g152512869.d20260821 documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev3+g6798c0658 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=537e9fe3"></script>
+      <script src="_static/documentation_options.js?v=0ee6a943"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -158,8 +158,8 @@ e.g. by using software like RMS.</p></li>
 <span class="c1"># store nested grid with properties in RMS</span>
 <span class="n">nhg</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">)</span>
 
-<span class="c1"># write the NNC pandas to disk; this will be applied for computing NNC&#39;s in the next script</span>
-<span class="n">nhg</span><span class="o">.</span><span class="n">nnc_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># write the NNC table to disk; this will be applied for computing NNC&#39;s in the next script</span>
+<span class="n">nhg</span><span class="o">.</span><span class="n">write_nnc_table</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The next step is to do a rescaling from the original geogrid to the merged grid
