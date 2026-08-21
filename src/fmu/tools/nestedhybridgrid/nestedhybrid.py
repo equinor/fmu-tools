@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, Literal, Self, TypeAlias
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias
 
 import numpy as np
 import pandas as pd
@@ -325,6 +325,33 @@ class NestedHybridGrid:
         self._layer_map_coarse = self._generate_layer_map_coarse()
         self._layer_map_refined = self._generate_layer_map_refined()
 
+    @classmethod
+    def from_rms(
+        cls,
+        project: Any,
+        grid_name: str,
+        region_name: str,
+        refinement: tuple[int, int, int],
+        properties: list[str] | None = None,
+    ) -> Self:
+        """Create a NestedHybridGrid instance from an RMS project."""
+
+        coarse_grid = xtgeo.grid_from_roxar(project, grid_name)
+        region = xtgeo.gridproperty_from_roxar(project, grid_name, region_name)
+
+        for propname in properties or []:
+            prop = xtgeo.gridproperty_from_roxar(project, grid_name, propname)
+            coarse_grid.append_prop(prop)
+
+        return cls(coarse_grid, region, refinement)
+
+    def to_rms(self, project: Any, grid_name: str) -> None:
+        """Write the nested hybrid grid and its properties to an RMS project."""
+        self.grid.to_roxar(project, grid_name)
+
+        for prop in self.properties:
+            prop.to_roxar(project, grid_name, prop.name)
+
     @staticmethod
     def _validate_inputs(
         coarse_grid: xtgeo.Grid,
@@ -352,13 +379,13 @@ class NestedHybridGrid:
 
     def _build_nested_hybrid_grid(self) -> xtgeo.Grid:
         """Build the nested hybrid grid."""
-
         coarse_grid = self._original_grid.copy()
-        coarse_grid.append_prop(self._original_region)
-        for prop in coarse_grid.get_ijk(names=ORIGINAL_IJK_PROPERTY_NAMES):
-            coarse_grid.append_prop(prop)
 
         region_name = self._original_region.name
+        if region_name not in coarse_grid.propnames:
+            coarse_grid.append_prop(self._original_region)
+        for prop in coarse_grid.get_ijk(names=ORIGINAL_IJK_PROPERTY_NAMES):
+            coarse_grid.append_prop(prop)
 
         # Create the refined grid, i.e. crop and refine.
         refined_grid = _crop_for_region(coarse_grid, self._refined_bbox)
@@ -395,7 +422,7 @@ class NestedHybridGrid:
         return self._grid
 
     @property
-    def properties(self) -> xtgeo.Grid:
+    def properties(self) -> list[xtgeo.GridProperty]:
         """The final nested hybrid grid properties."""
         return self.grid.props
 
