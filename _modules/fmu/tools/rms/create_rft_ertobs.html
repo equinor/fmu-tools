@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.rms.create_rft_ertobs &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,7 +90,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.rms.create_rft_ertobs</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">create_rft_ertobs creates txt, obs and welldatefile for usage together</span>
 <span class="sd">with GENDATA in ERT assisted history match runs.</span>
 
@@ -115,14 +115,14 @@
 <span class="sd">* zonename: Name of zone parameter in RMS grid (if zone names should be</span>
 <span class="sd">  verified)</span>
 <span class="sd">* welldatefile: Name of welldatefile, written to exportdir.</span>
-<span class="sd">  Defaults to &quot;well_date_rft.txt&quot;</span>
+<span class="sd">  Defaults to "well_date_rft.txt"</span>
 
 <span class="sd">Result:</span>
 
 <span class="sd">* ``txt`` files written to ert/input/observations</span>
 <span class="sd">* ``obs`` files for each well written to ert/input/observations</span>
 <span class="sd">* ``well_date_rft.txt``</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -135,104 +135,104 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">SUPPORTED_OPTIONS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;absolute_error&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;alias&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;alias_file&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ecl_name&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;exportdir&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;gridname&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;input_dframe&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;input_file&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;loglevel&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;relative_error&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;rft_prefix&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;rms_name&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;trajectory_name&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;welldatefile&quot;</span><span class="p">,</span>  <span class="c1"># WELL_AND_TIME_FILE in semeio</span>
-    <span class="s2">&quot;zonename&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;clipboard_folder&quot;</span><span class="p">,</span>
+    <span class="s2">"absolute_error"</span><span class="p">,</span>
+    <span class="s2">"alias"</span><span class="p">,</span>
+    <span class="s2">"alias_file"</span><span class="p">,</span>
+    <span class="s2">"ecl_name"</span><span class="p">,</span>
+    <span class="s2">"exportdir"</span><span class="p">,</span>
+    <span class="s2">"gridname"</span><span class="p">,</span>
+    <span class="s2">"input_dframe"</span><span class="p">,</span>
+    <span class="s2">"input_file"</span><span class="p">,</span>
+    <span class="s2">"interpolation"</span><span class="p">,</span>
+    <span class="s2">"loglevel"</span><span class="p">,</span>
+    <span class="s2">"project"</span><span class="p">,</span>
+    <span class="s2">"relative_error"</span><span class="p">,</span>
+    <span class="s2">"rft_prefix"</span><span class="p">,</span>
+    <span class="s2">"rms_name"</span><span class="p">,</span>
+    <span class="s2">"trajectory_name"</span><span class="p">,</span>
+    <span class="s2">"verbose"</span><span class="p">,</span>
+    <span class="s2">"welldatefile"</span><span class="p">,</span>  <span class="c1"># WELL_AND_TIME_FILE in semeio</span>
+    <span class="s2">"zonename"</span><span class="p">,</span>
+    <span class="s2">"clipboard_folder"</span><span class="p">,</span>
 <span class="p">]</span>
 
 
 <div class="viewcode-block" id="check_and_parse_config">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.check_and_parse_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_and_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks config, and returns a validated and defaults-filled config</span>
-<span class="sd">    dictionary&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Checks config, and returns a validated and defaults-filled config</span>
+<span class="sd">    dictionary"""</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">unknown_options</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">SUPPORTED_OPTIONS</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">unknown_options</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unknown options ignored: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">unknown_options</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Unknown options ignored: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">unknown_options</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;loglevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"verbose"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"loglevel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;loglevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"loglevel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
 
-    <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;input_dframe&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;input_file&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">),</span> <span class="p">(</span>
-        <span class="s2">&quot;Specify either input_file or input_dframe&quot;</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">"input_dframe"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">"input_file"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">"Specify either input_file or input_dframe"</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;input_dframe&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;input_file&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Do not specify both input_dframe and input_file&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"input_dframe"</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">"input_file"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Do not specify both input_dframe and input_file"</span><span class="p">)</span>
 
-    <span class="n">required_input_dframe_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s2">&quot;input_dframe&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;input_file&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">input_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_file&quot;</span><span class="p">])</span>
-        <span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">input_dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">])</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_dframe</span>
+    <span class="n">required_input_dframe_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"MD"</span><span class="p">,</span> <span class="s2">"WELL_NAME"</span><span class="p">,</span> <span class="s2">"PRESSURE"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"input_dframe"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">"input_file"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">input_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"input_file"</span><span class="p">])</span>
+        <span class="n">input_dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">input_dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">])</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"input_dframe"</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_dframe</span>
     <span class="n">missing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_input_dframe_columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"input_dframe"</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
     <span class="p">)</span>
-    <span class="n">optional_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;EAST&quot;</span><span class="p">]</span>
+    <span class="n">optional_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"TVD"</span><span class="p">,</span> <span class="s2">"NORTH"</span><span class="p">,</span> <span class="s2">"EAST"</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">optional_columns</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]:</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">"input_dframe"</span><span class="p">]:</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">"input_dframe"</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="k">if</span> <span class="n">missing_columns</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing columns </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">missing_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> in input table&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing columns </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">missing_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> in input table"</span><span class="p">)</span>
 
-    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exportdir&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="s2">&quot;exportdir did not exist, create upfront&quot;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">"exportdir"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"exportdir"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"exportdir"</span><span class="p">])</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(),</span> <span class="s2">"exportdir did not exist, create upfront"</span>
 
-    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span> <span class="s2">&quot;cubic&quot;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="s2">&quot;linear&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
-    <span class="p">],</span> <span class="s2">&quot;Only linear and cubic interpolation is supported&quot;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">"interpolation"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"interpolation"</span><span class="p">,</span> <span class="s2">"cubic"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">config</span><span class="p">[</span><span class="s2">"interpolation"</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="s2">"linear"</span><span class="p">,</span>
+        <span class="s2">"cubic"</span><span class="p">,</span>
+    <span class="p">],</span> <span class="s2">"Only linear and cubic interpolation is supported"</span>
 
-    <span class="k">if</span> <span class="s2">&quot;alias_file&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="s2">&quot;alias&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">,</span> <span class="s2">&quot;Do not provide both alias and alias_file&quot;</span>
+    <span class="k">if</span> <span class="s2">"alias_file"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="s2">"alias"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">,</span> <span class="s2">"Do not provide both alias and alias_file"</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">alias_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias_file&quot;</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rms_name&quot;</span><span class="p">,</span> <span class="s2">&quot;RMS_WELL_NAME&quot;</span><span class="p">)</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">"alias_file"</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"rms_name"</span><span class="p">,</span> <span class="s2">"RMS_WELL_NAME"</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alias_dframe</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span>
-                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ecl_name&quot;</span><span class="p">,</span> <span class="s2">&quot;ECLIPSE_WELL_NAME&quot;</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">"alias"</span><span class="p">]</span> <span class="o">=</span> <span class="n">alias_dframe</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ecl_name"</span><span class="p">,</span> <span class="s2">"ECLIPSE_WELL_NAME"</span><span class="p">)</span>
             <span class="p">]</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Parsed RMS to Eclipse aliases from </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias_file&quot;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Parsed RMS to Eclipse aliases from </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">"alias_file"</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Could not load RMS-Eclipse well alias file. Check column names&quot;</span>
+                <span class="s2">"Could not load RMS-Eclipse well alias file. Check column names"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alias&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"alias"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"alias"</span><span class="p">,</span> <span class="p">{})</span>
 
-    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;welldatefile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;welldatefile&quot;</span><span class="p">,</span> <span class="s2">&quot;well_date_rft.txt&quot;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;welldatefile&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;welldatefile must be a string&quot;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">"welldatefile"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"welldatefile"</span><span class="p">,</span> <span class="s2">"well_date_rft.txt"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"welldatefile"</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">"welldatefile must be a string"</span>
 
-    <span class="k">if</span> <span class="s2">&quot;welldatefile&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;welldatefile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;well_date_rft.txt&quot;</span>
+    <span class="k">if</span> <span class="s2">"welldatefile"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">"welldatefile"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"well_date_rft.txt"</span>
 
-    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;rft_prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rft_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;rft_prefix&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;rft_prefix must be a string&quot;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">"rft_prefix"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"rft_prefix"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"rft_prefix"</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">"rft_prefix must be a string"</span>
 
-    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;trajectory_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;trajectory_name&quot;</span><span class="p">,</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;trajectory_name&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span>
-        <span class="s2">&quot;trajectory_name must be a string&quot;</span>
+    <span class="n">config</span><span class="p">[</span><span class="s2">"trajectory_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"trajectory_name"</span><span class="p">,</span> <span class="s2">"Drilled trajectory"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"trajectory_name"</span><span class="p">],</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">"trajectory_name must be a string"</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">config</span></div>
@@ -242,15 +242,15 @@
 <div class="viewcode-block" id="get_well_coords">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.get_well_coords">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_well_coords</span><span class="p">(</span>
-    <span class="n">project</span><span class="p">,</span> <span class="n">wellname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">trajectory_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span>
+    <span class="n">project</span><span class="p">,</span> <span class="n">wellname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">trajectory_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Drilled trajectory"</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts  well coordinates as a (wellpoints, 3) numpy array</span>
+<span class="w">    </span><span class="sd">"""Extracts  well coordinates as a (wellpoints, 3) numpy array</span>
 <span class="sd">    from a ROXAPI RMS project reference.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        project: Roxapi project reference.</span>
 <span class="sd">        wellname: Name of well as it exists in the RMS project</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">project</span><span class="o">.</span><span class="n">wells</span><span class="p">[</span><span class="n">wellname</span><span class="p">]</span>
         <span class="o">.</span><span class="n">wellbore</span><span class="o">.</span><span class="n">trajectories</span><span class="p">[</span><span class="n">trajectory_name</span><span class="p">]</span>
@@ -262,7 +262,7 @@
 <div class="viewcode-block" id="strictly_downward">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.strictly_downward">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a well trajectory has absolutely no horizontal sections</span>
+<span class="w">    </span><span class="sd">"""Check if a well trajectory has absolutely no horizontal sections</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        coords: n x 4 array of coordinates, only</span>
@@ -270,7 +270,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        True if there are no horizontals.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">coords</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">3</span><span class="p">]))</span></div>
 
 
@@ -278,9 +278,9 @@
 <div class="viewcode-block" id="interp_from_md">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.interp_from_md">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">interp_from_md</span><span class="p">(</span>
-    <span class="n">md_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+    <span class="n">md_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cubic"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Function to interpolate East, North, TVD values of a well point</span>
 <span class="sd">    defined by its name (wname) and its corresponding MD point (md_value).</span>
 
@@ -293,23 +293,23 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        x, y and z along the wellpath at requested measured depth value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">coords</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t interpolate with no well coordinates&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Interpolating (linear) East, North, TVD from MD&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Can't interpolate with no well coordinates"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"linear"</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Interpolating (linear) East, North, TVD from MD"</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])),</span>
             <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])),</span>
             <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">md_value</span><span class="p">,</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])),</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cubic&quot;</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Interpolating (cubic spline) East, North, TVD from MD&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"cubic"</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Interpolating (cubic spline) East, North, TVD from MD"</span><span class="p">)</span>
         <span class="n">cs_x</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># East</span>
         <span class="n">cs_y</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>  <span class="c1"># North</span>
         <span class="n">cs_z</span> <span class="o">=</span> <span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])</span>  <span class="c1"># TVD</span>
         <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">cs_x</span><span class="p">(</span><span class="n">md_value</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cs_y</span><span class="p">(</span><span class="n">md_value</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="n">cs_z</span><span class="p">(</span><span class="n">md_value</span><span class="p">)))</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-supported interpolation method: </span><span class="si">{</span><span class="n">interpolation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Non-supported interpolation method: </span><span class="si">{</span><span class="n">interpolation</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 
@@ -318,9 +318,9 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">interp_from_xyz</span><span class="p">(</span>
     <span class="n">xyz</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">coords</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cubic"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate MD value of a well point defined by its name (wellname)</span>
+<span class="w">    </span><span class="sd">"""Interpolate MD value of a well point defined by its name (wellname)</span>
 <span class="sd">    and its corresponding East, North, TVD values (xyz tuple)</span>
 
 <span class="sd">    The coords input array should consist of rows::</span>
@@ -338,31 +338,31 @@
 <span class="sd">    Args:</span>
 <span class="sd">        coords</span>
 <span class="sd">        xyz: x, y and z for the coordinate where MD is requested.</span>
-<span class="sd">        interpolation: Use either &quot;cubic&quot; (default) or &quot;linear&quot;</span>
+<span class="sd">        interpolation: Use either "cubic" (default) or "linear"</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Measured depth value at (x,y,z)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Interpolate to get corresponding MD</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Interpolating MD from East, North, TVD&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Interpolating MD from East, North, TVD"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">strictly_downward</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
         <span class="c1"># Interpolation from TVD survey can be used</span>
-        <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"linear"</span><span class="p">:</span>
             <span class="n">md_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">md_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">CubicSpline</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">coords</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])(</span><span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;MD estimated on strictly downward wellpath: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">md_value</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"MD estimated on strictly downward wellpath: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">md_value</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">md_value</span>
 
     <span class="c1"># When the well is not strictly downward MD must be used as a</span>
     <span class="c1"># parametrization of the trajectory coordinates (East, North, TVD)</span>
 
     <span class="c1"># RFT pressure point X0(x0,y0,z0) defined by:</span>
-    <span class="c1">#     x0 = obs[&#39;EAST&#39;]</span>
-    <span class="c1">#     y0 = obs[&#39;NORTH&#39;]</span>
-    <span class="c1">#     z0 = obs[&#39;TVD&#39;]</span>
+    <span class="c1">#     x0 = obs['EAST']</span>
+    <span class="c1">#     y0 = obs['NORTH']</span>
+    <span class="c1">#     z0 = obs['TVD']</span>
 
     <span class="c1"># distance of point X0 to any point X(x,y,z) of the well trajectory is:</span>
     <span class="c1">#     dist(X,X0)  = sqrt[ (x-x0)**2 + (y-y0)**2 + (z-z0)**2 ]</span>
@@ -375,11 +375,11 @@
     <span class="c1">#</span>
     <span class="c1">#     d dist(MD,X0) / d MD = 0</span>
     <span class="c1">#</span>
-    <span class="c1"># &lt;=&gt; 2[ (f1(MD)-x0)*f1&#39;(MD) + (f2(MD)-y0)*f2&#39;(MD) + (f3(MD)-z0)*f3&#39;(MD) ] = 0</span>
+    <span class="c1"># &lt;=&gt; 2[ (f1(MD)-x0)*f1'(MD) + (f2(MD)-y0)*f2'(MD) + (f3(MD)-z0)*f3'(MD) ] = 0</span>
     <span class="c1">#</span>
-    <span class="c1"># &lt;=&gt; (f1(MD)-x0)*f1&#39;(MD) + (f2(MD)-y0)*f2&#39;(MD) + (f3(MD)-z0)*f3&#39;(MD) = 0</span>
+    <span class="c1"># &lt;=&gt; (f1(MD)-x0)*f1'(MD) + (f2(MD)-y0)*f2'(MD) + (f3(MD)-z0)*f3'(MD) = 0</span>
     <span class="c1">#</span>
-    <span class="c1"># using the notation f&#39; for the derivative of function f</span>
+    <span class="c1"># using the notation f' for the derivative of function f</span>
     <span class="c1">#</span>
     <span class="c1"># This can be computed analytically when using polynomial interpolations for</span>
     <span class="c1"># f1, f2, f3 (having this function as a new polynom and finding its real roots),</span>
@@ -414,7 +414,7 @@
     <span class="k">if</span> <span class="n">closest_md</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">md_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">closest_md</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;MD estimated on undulating wellpath: </span><span class="si">{</span><span class="n">md_value</span><span class="si">}</span><span class="s2"> (mismatch = </span><span class="si">{</span><span class="n">dist_min</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> m)&quot;</span>
+        <span class="sa">f</span><span class="s2">"MD estimated on undulating wellpath: </span><span class="si">{</span><span class="n">md_value</span><span class="si">}</span><span class="s2"> (mismatch = </span><span class="si">{</span><span class="n">dist_min</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> m)"</span>
     <span class="p">)</span>
 
     <span class="c1"># Alternative using polynoms</span>
@@ -423,9 +423,9 @@
     <span class="c1"># poly_y = np.polyfit(coord[:, 0], coord[:, 2], degree) # y = f2(MD)</span>
     <span class="c1"># poly_z = np.polyfit(coord[:, 0], coord[:, 3], degree) # z = f3(MD)</span>
 
-    <span class="c1"># pder_x = np.polyder(poly_x)             # derivative, f1&#39;(MD)</span>
-    <span class="c1"># pder_y = np.polyder(poly_y)             # derivative, f2&#39;(MD)</span>
-    <span class="c1"># pder_z = np.polyder(poly_z)             # derivative, f3&#39;(MD)</span>
+    <span class="c1"># pder_x = np.polyder(poly_x)             # derivative, f1'(MD)</span>
+    <span class="c1"># pder_y = np.polyder(poly_y)             # derivative, f2'(MD)</span>
+    <span class="c1"># pder_z = np.polyder(poly_z)             # derivative, f3'(MD)</span>
 
     <span class="c1"># poly_x[-1] = poly_x[-1] - x0            # f1(MD) := f1(MD)-x0</span>
     <span class="c1"># poly_y[-1] = poly_y[-1] - y0            # f2(MD) := f2(MD)-y0</span>
@@ -441,12 +441,12 @@
     <span class="c1"># interp_md = roots[np.isreal(roots)].real</span>
 
     <span class="c1"># Only one root should be real</span>
-    <span class="c1"># assert len(interp_md) == 1, (&#39;0 or more than 1 point have been found ({}) to fit &#39;</span>
-    <span class="c1">#                              &#39;the well trajectory for this RFT data point!&#39;</span>
+    <span class="c1"># assert len(interp_md) == 1, ('0 or more than 1 point have been found ({}) to fit '</span>
+    <span class="c1">#                              'the well trajectory for this RFT data point!'</span>
     <span class="c1">#                              .format(len(interp_md)))</span>
 
     <span class="c1"># md_value = interp_md[0]</span>
-    <span class="c1"># print(&#39;   Methode 3: MD = {}&#39;.format(md_value))</span>
+    <span class="c1"># print('   Methode 3: MD = {}'.format(md_value))</span>
 
     <span class="k">return</span> <span class="n">md_value</span></div>
 
@@ -456,13 +456,13 @@
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.ertobs_df_to_files">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ertobs_df_to_files</span><span class="p">(</span>
     <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">exportdir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
-    <span class="n">welldatefile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;well_date_rft.txt&quot;</span><span class="p">,</span>
-    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rft_ertobs.csv&quot;</span><span class="p">,</span>
+    <span class="n">exportdir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"."</span><span class="p">,</span>
+    <span class="n">welldatefile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"well_date_rft.txt"</span><span class="p">,</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"rft_ertobs.csv"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Exports data from a dataframe into ERT observations files.</span>
-<span class="sd">    The input here is essentially the input dataframe, but where all &quot;holes&quot; in</span>
+<span class="sd">    The input here is essentially the input dataframe, but where all "holes" in</span>
 <span class="sd">    MD or XYZ have been filled.</span>
 
 <span class="sd">    If ZONE is included, it will be added to the output.</span>
@@ -498,59 +498,59 @@
 <span class="sd">            observations pr. row</span>
 <span class="sd">        exportdir: Path to directory where export is to happen. Must</span>
 <span class="sd">            exists.</span>
-<span class="sd">        welldatefile: Filename to write the &quot;index&quot; of observations to.</span>
+<span class="sd">        welldatefile: Filename to write the "index" of observations to.</span>
 <span class="sd">        filename: Filename for raw CSV data, for future use in GENDATA_RFT</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Dump directly to CSV, this is for future use:</span>
     <span class="n">dframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written CSV to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Written CSV to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Since we will modify it.</span>
 
-    <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">"ZONE"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
 
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">])</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">)[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span>
-        <span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;dense&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">])</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">"REPORT_STEP"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"WELL_NAME"</span><span class="p">)[</span><span class="s2">"DATE"</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">"dense"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">wellname</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">):</span>
-        <span class="n">traj_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">wellname</span><span class="p">,</span> <span class="n">wellframe</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"WELL_NAME"</span><span class="p">):</span>
+        <span class="n">traj_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">wellname</span> <span class="o">+</span> <span class="s2">".txt"</span><span class="p">)</span>
 
         <span class="n">well_trajectory</span> <span class="o">=</span> <span class="n">wellframe</span><span class="p">[</span>
-            <span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">,</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">]</span>
+            <span class="p">[</span><span class="s2">"EAST"</span><span class="p">,</span> <span class="s2">"NORTH"</span><span class="p">,</span> <span class="s2">"MD"</span><span class="p">,</span> <span class="s2">"TVD"</span><span class="p">,</span> <span class="s2">"ZONE"</span><span class="p">]</span>
         <span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
 
-        <span class="n">well_trajectory</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">traj_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written trajectory data to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">traj_filename</span><span class="p">)</span>
+        <span class="n">well_trajectory</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">traj_filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">" "</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Written trajectory data to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">traj_filename</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">wname_rep_step</span><span class="p">,</span> <span class="n">well_rep_step_frame</span> <span class="ow">in</span> <span class="n">wellframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">wname_rep_step</span><span class="p">,</span> <span class="n">well_rep_step_frame</span> <span class="ow">in</span> <span class="n">wellframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"REPORT_STEP"</span><span class="p">):</span>
             <span class="n">obs_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
-                <span class="n">wellname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.obs&quot;</span>
+                <span class="n">wellname</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wname_rep_step</span><span class="p">)</span> <span class="o">+</span> <span class="s2">".obs"</span>
             <span class="p">)</span>
 
             <span class="c1"># Left join with the well trajectory frame, to ensure we</span>
             <span class="c1"># can output -1 for RFT measurements for points that are only</span>
             <span class="c1"># active on a subset of the report steps (i.e. dates):</span>
-            <span class="n">obs_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">well_trajectory</span><span class="p">,</span> <span class="n">well_rep_step_frame</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
-            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">obs_frame</span><span class="p">[[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+            <span class="n">obs_frame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">well_trajectory</span><span class="p">,</span> <span class="n">well_rep_step_frame</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">"PRESSURE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">"PRESSURE"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_frame</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">obs_frame</span><span class="p">[[</span><span class="s2">"PRESSURE"</span><span class="p">,</span> <span class="s2">"ERROR"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
                 <span class="n">obs_filename</span><span class="p">,</span>
-                <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
+                <span class="n">sep</span><span class="o">=</span><span class="s2">" "</span><span class="p">,</span>
                 <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written obs file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Written obs file to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">obs_filename</span><span class="p">)</span>
 
-    <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">])[</span>
-        <span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;DATE&quot;</span><span class="p">,</span> <span class="s2">&quot;REPORT_STEP&quot;</span><span class="p">]</span>
-    <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Written welldata file to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span>
+    <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"WELL_NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">])[</span>
+        <span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"REPORT_STEP"</span><span class="p">]</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">" "</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Written welldata file to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">exportdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">welldatefile</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dframe</span></div>
 
 
@@ -560,9 +560,9 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">fill_missing_md_xyz</span><span class="p">(</span>
     <span class="n">dframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">coords_pr_well</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">,</span>
+    <span class="n">interpolation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cubic"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Fill missing MD or XYZ values in incoming dataframe, interpolating</span>
 <span class="sd">    in given well trajectories.</span>
 
@@ -570,36 +570,36 @@
 <span class="sd">        dframe: Must contain WELL_NAME, EAST, NORTH, MD, TVD</span>
 <span class="sd">        coords_pr_well: One key for each WELL_NAME, pointing to a n by 3</span>
 <span class="sd">            numpy matrix with well coordinates (as outputted by roxapi)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;MD&quot;</span><span class="p">]):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Both TVD and MD is missing for well </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"TVD"</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"MD"</span><span class="p">]):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Both TVD and MD is missing for well </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">xyz</span> <span class="o">=</span> <span class="n">interp_from_md</span><span class="p">(</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;MD&quot;</span><span class="p">],</span>
-                    <span class="n">coords_pr_well</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]],</span>
+                    <span class="n">row</span><span class="p">[</span><span class="s2">"MD"</span><span class="p">],</span>
+                    <span class="n">coords_pr_well</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]],</span>
                     <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">&quot;EAST&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;MD&quot;</span><span class="p">]):</span>
+                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">"EAST"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">"NORTH"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">"TVD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"MD"</span><span class="p">]):</span>
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">]),</span>
-                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;NORTH&quot;</span><span class="p">]),</span>
-                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]),</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"EAST"</span><span class="p">]),</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"NORTH"</span><span class="p">]),</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"TVD"</span><span class="p">]),</span>
                 <span class="p">)</span>
             <span class="p">):</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                    <span class="s2">&quot;EAST, NORTH and/or TVD is missing, can&#39;t compute MD for well </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">],</span>
+                    <span class="s2">"EAST, NORTH and/or TVD is missing, can't compute MD for well </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
+                    <span class="n">row</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">],</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">xyz</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;NORTH&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">])</span>
-                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">&quot;MD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp_from_xyz</span><span class="p">(</span>
-                    <span class="n">xyz</span><span class="p">,</span> <span class="n">coords_pr_well</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]],</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span>
+                <span class="n">xyz</span> <span class="o">=</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"EAST"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"NORTH"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"TVD"</span><span class="p">])</span>
+                <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_idx</span><span class="p">,</span> <span class="s2">"MD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp_from_xyz</span><span class="p">(</span>
+                    <span class="n">xyz</span><span class="p">,</span> <span class="n">coords_pr_well</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]],</span> <span class="n">interpolation</span><span class="o">=</span><span class="n">interpolation</span>
                 <span class="p">)</span>
     <span class="k">return</span> <span class="n">dframe</span></div>
 
@@ -608,34 +608,34 @@
 <div class="viewcode-block" id="store_rft_as_points_inside_project">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.store_rft_as_points_inside_project">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">store_rft_as_points_inside_project</span><span class="p">(</span><span class="n">dframe</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">clipboard_folder</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Store RFT observations for ERT as points in RMS under Clipboard.</span>
 <span class="sd">    The points will be stored per zone, well, and year and will include</span>
 <span class="sd">    useful attributes as pressure, wellname, date etc.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">dframe</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># create zone mismatch column to include as attribute</span>
-    <span class="k">if</span> <span class="s2">&quot;rms_cell_zone_str&quot;</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_MISMATCH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;rms_cell_zone_str&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s2">"rms_cell_zone_str"</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE_MISMATCH"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span> <span class="o">==</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"rms_cell_zone_str"</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
         <span class="p">)</span>
 
     <span class="c1"># create points and store in rms</span>
     <span class="n">create_clipboard_points_with_attributes</span><span class="p">(</span>
-        <span class="n">project</span><span class="p">,</span> <span class="s2">&quot;All_RFT_observations&quot;</span><span class="p">,</span> <span class="n">dframe</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">]</span>
+        <span class="n">project</span><span class="p">,</span> <span class="s2">"All_RFT_observations"</span><span class="p">,</span> <span class="n">dframe</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">]</span>
     <span class="p">)</span>
 
-    <span class="n">groupby</span> <span class="o">=</span> <span class="p">(</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;YEAR&quot;</span><span class="p">,</span> <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">)</span>
+    <span class="n">groupby</span> <span class="o">=</span> <span class="p">(</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"ZONE"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"WELL_NAME"</span><span class="p">)</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col</span><span class="p">):</span>
             <span class="n">create_clipboard_points_with_attributes</span><span class="p">(</span>
-                <span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;RFT points by </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                <span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="n">clipboard_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"RFT points by </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
             <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored RFT points under clipboard folder </span><span class="si">{</span><span class="n">clipboard_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stored RFT points under clipboard folder </span><span class="si">{</span><span class="n">clipboard_folder</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 
@@ -643,19 +643,19 @@
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.create_clipboard_points_with_attributes">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_clipboard_points_with_attributes</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
     <span class="n">attribute_dtypes</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;PRESSURE&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="s2">&quot;DATE&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="s2">&quot;WELL_NAME&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="s2">&quot;YEAR&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="s2">&quot;ZONE_MISMATCH&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="s2">"PRESSURE"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">"DATE"</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">"ZONE"</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">"WELL_NAME"</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">"ERROR"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="s2">"YEAR"</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="s2">"ZONE_MISMATCH"</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">points</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">clipboard</span><span class="o">.</span><span class="n">create_points</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">folder</span><span class="p">)</span>
 
     <span class="c1"># set XYZ for the points</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;EAST&quot;</span><span class="p">,</span> <span class="s2">&quot;NORTH&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+    <span class="n">points</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">"EAST"</span><span class="p">,</span> <span class="s2">"NORTH"</span><span class="p">,</span> <span class="s2">"TVD"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 
     <span class="c1"># set attributes for the points</span>
     <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">attribute_dtypes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -668,118 +668,118 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.create_rft_ertobs.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function to be called from a RMS client python script.</span>
+<span class="w">    </span><span class="sd">"""The main function to be called from a RMS client python script.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config (dict): configuration as a dictionary.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">check_and_parse_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Configuration is invalid&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Configuration is invalid"</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;loglevel&quot;</span><span class="p">])</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"loglevel"</span><span class="p">])</span>
 
-    <span class="n">welldatefile</span> <span class="o">=</span> <span class="s2">&quot;well_date_rft.txt&quot;</span>
+    <span class="n">welldatefile</span> <span class="o">=</span> <span class="s2">"well_date_rft.txt"</span>
 
-    <span class="n">dframe</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;input_dframe&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;rft_prefix&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span>
+    <span class="n">dframe</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"input_dframe"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"rft_prefix"</span><span class="p">]</span> <span class="o">+</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]</span>
 
-    <span class="n">no_value</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+    <span class="n">no_value</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"PRESSURE"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">no_value</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;PRESSURE missing for some rows:&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">no_value</span><span class="p">]))</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PRESSURE not provided&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"PRESSURE missing for some rows:"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">no_value</span><span class="p">]))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"PRESSURE not provided"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">grid_model</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;gridname&quot;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="s2">"project"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">grid_model</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"project"</span><span class="p">]</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">"gridname"</span><span class="p">]]</span>
         <span class="n">grid</span> <span class="o">=</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">get_grid</span><span class="p">()</span>
         <span class="n">coords_pr_well</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
             <span class="n">coords_pr_well</span><span class="p">[</span><span class="n">well</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_well_coords</span><span class="p">(</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">],</span> <span class="n">well</span><span class="p">,</span> <span class="n">trajectory_name</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;trajectory_name&quot;</span><span class="p">]</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">"project"</span><span class="p">],</span> <span class="n">well</span><span class="p">,</span> <span class="n">trajectory_name</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"trajectory_name"</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="n">dframe</span> <span class="o">=</span> <span class="n">fill_missing_md_xyz</span><span class="p">(</span><span class="n">dframe</span><span class="p">,</span> <span class="n">coords_pr_well</span><span class="p">)</span>
 
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;rms_cell_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_cells_at_points</span><span class="p">([</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EAST&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NORTH&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]]),</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"rms_cell_index"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_cells_at_points</span><span class="p">([</span><span class="n">df</span><span class="p">[</span><span class="s2">"EAST"</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">"NORTH"</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">"TVD"</span><span class="p">]]),</span>
             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;MD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TVD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="p">(</span>
-            <span class="s2">&quot;MD and TVD must be supplied for all points &quot;</span>
-            <span class="s2">&quot;when there is no RMS project available.&quot;</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"MD"</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"TVD"</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="p">(</span>
+            <span class="s2">"MD and TVD must be supplied for all points "</span>
+            <span class="s2">"when there is no RMS project available."</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;ERROR&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">no_error_rows</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
-    <span class="k">if</span> <span class="s2">&quot;absolute_error&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">no_error_rows</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;absolute_error&quot;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="s2">&quot;relative_error&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">no_error_rows</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;relative_error&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;PRESSURE&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"ERROR"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">no_error_rows</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"absolute_error"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">no_error_rows</span><span class="p">,</span> <span class="s2">"ERROR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">"absolute_error"</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s2">"relative_error"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">no_error_rows</span><span class="p">,</span> <span class="s2">"ERROR"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">"relative_error"</span><span class="p">]</span> <span class="o">*</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"PRESSURE"</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">no_error_rows</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No ERROR given for some or all points.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"No ERROR given for some or all points."</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                <span class="s2">&quot;Provide defaults or insert in data table input.</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"Provide defaults or insert in data table input.</span><span class="se">\n</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">no_error_rows</span><span class="p">]),</span>
             <span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR not provided&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"ERROR not provided"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">in</span> <span class="n">dframe</span> <span class="ow">and</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-        <span class="n">cells_outside_grid</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;rms_cell_index&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
-        <span class="c1"># WARNING: If there are nan&#39;s in the dataframe, the dtype of</span>
+    <span class="k">if</span> <span class="s2">"ZONE"</span> <span class="ow">in</span> <span class="n">dframe</span> <span class="ow">and</span> <span class="s2">"project"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">cells_outside_grid</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"rms_cell_index"</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+        <span class="c1"># WARNING: If there are nan's in the dataframe, the dtype of</span>
         <span class="c1"># these index columns changes to float</span>
 
         <span class="k">if</span> <span class="n">cells_outside_grid</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;RFT points outside the grid:&quot;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">cells_outside_grid</span><span class="p">]))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"RFT points outside the grid:"</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">cells_outside_grid</span><span class="p">]))</span>
 
-        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">&quot;rms_cell_zone_val&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-            <span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">&quot;rms_cell_index&quot;</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">"rms_cell_zone_val"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">"rms_cell_index"</span>
         <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">cell_index</span><span class="p">:</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;zonename&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()[</span>
+            <span class="k">lambda</span> <span class="n">cell_index</span><span class="p">:</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">"zonename"</span><span class="p">]]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()[</span>
                 <span class="nb">int</span><span class="p">(</span><span class="n">cell_index</span><span class="p">)</span>
             <span class="p">]</span>
         <span class="p">)</span>
         <span class="c1"># What happens when there is no code_names in the RMS project? Which</span>
         <span class="c1"># exception will RMS raise?</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">&quot;rms_cell_zone_str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-            <span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">&quot;rms_cell_zone_val&quot;</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">"rms_cell_zone_str"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="o">~</span><span class="n">cells_outside_grid</span><span class="p">,</span> <span class="s2">"rms_cell_zone_val"</span>
         <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">zone_value</span><span class="p">:</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;zonename&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">code_names</span><span class="p">[</span>
+            <span class="k">lambda</span> <span class="n">zone_value</span><span class="p">:</span> <span class="n">grid_model</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s2">"zonename"</span><span class="p">]]</span><span class="o">.</span><span class="n">code_names</span><span class="p">[</span>
                 <span class="nb">int</span><span class="p">(</span><span class="n">zone_value</span><span class="p">)</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
         <span class="c1"># Determine points that in the grid are not in the zone provided</span>
         <span class="c1"># in the input CSV:</span>
-        <span class="n">cells_in_wrong_zone</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;rms_cell_zone_str&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span>
+        <span class="n">cells_in_wrong_zone</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"rms_cell_zone_str"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">cells_in_wrong_zone</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Some points are in a different zone in the RMS grid:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"Some points are in a different zone in the RMS grid:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="n">cells_in_wrong_zone</span><span class="p">]),</span>
             <span class="p">)</span>
-    <span class="k">elif</span> <span class="s2">&quot;ZONE&quot;</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot verify zones when no RMS project is provided&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s2">"ZONE"</span> <span class="ow">in</span> <span class="n">dframe</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"Cannot verify zones when no RMS project is provided"</span><span class="p">)</span>
 
     <span class="c1"># Translate all well names according to alias:</span>
-    <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;WELL_NAME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">dframe</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"WELL_NAME"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">"alias"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
 
     <span class="c1"># Export *.obs, *.txt and well_date_rft.txt</span>
     <span class="n">dframe</span> <span class="o">=</span> <span class="n">ertobs_df_to_files</span><span class="p">(</span>
-        <span class="n">dframe</span><span class="p">,</span> <span class="n">exportdir</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;exportdir&quot;</span><span class="p">],</span> <span class="n">welldatefile</span><span class="o">=</span><span class="n">welldatefile</span>
+        <span class="n">dframe</span><span class="p">,</span> <span class="n">exportdir</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"exportdir"</span><span class="p">],</span> <span class="n">welldatefile</span><span class="o">=</span><span class="n">welldatefile</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="s2">&quot;project&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">&quot;clipboard_folder&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"project"</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="s2">"clipboard_folder"</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
         <span class="n">store_rft_as_points_inside_project</span><span class="p">(</span>
-            <span class="n">dframe</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;clipboard_folder&quot;</span><span class="p">]</span>
+            <span class="n">dframe</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">"project"</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">"clipboard_folder"</span><span class="p">]</span>
         <span class="p">)</span></div>
 
 </pre></div>

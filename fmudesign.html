@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FMU design matrix &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>FMU design matrix &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -413,10 +413,10 @@ This solution is only provided for 100% correlated discrete parameters.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">semeio.fmudesign</span><span class="w"> </span><span class="kn">import</span> <span class="n">summarize_design</span>
 
 <span class="c1"># Full or relative path to design matrix .xlsx or .csv format</span>
-<span class="n">designname</span> <span class="o">=</span> <span class="s1">&#39;../tests/data/sensitivities/distributions/design.xlsx&#39;</span>
+<span class="n">designname</span> <span class="o">=</span> <span class="s1">'../tests/data/sensitivities/distributions/design.xlsx'</span>
 
 <span class="c1"># Only include for excel files; name of sheet that contains design matrix</span>
-<span class="n">designsheet</span> <span class="o">=</span> <span class="s1">&#39;DesignSheet01&#39;</span>
+<span class="n">designsheet</span> <span class="o">=</span> <span class="s1">'DesignSheet01'</span>
 
 <span class="c1"># designtable is a pandas DataFrame with summary of the design in the designmatrix,</span>
 <span class="c1"># i.e. it will contain realisation number, senstype and senscase for each sensitivity</span>

@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,7 +90,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.rms.fluid_contacts_from_grid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Create fluid contact surfaces and outlines from grid contact parameters.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Create fluid contact surfaces and outlines from grid contact parameters."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 
@@ -104,35 +104,35 @@
     <span class="n">resample_surf_to_template</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">OUTPUT_FOLDER_SURFACES</span> <span class="o">=</span> <span class="s2">&quot;fluid_contact_surfaces&quot;</span>
-<span class="n">OUTPUT_FOLDER_OUTLINES</span> <span class="o">=</span> <span class="s2">&quot;fluid_contact_outlines&quot;</span>
+<span class="n">OUTPUT_FOLDER_SURFACES</span> <span class="o">=</span> <span class="s2">"fluid_contact_surfaces"</span>
+<span class="n">OUTPUT_FOLDER_OUTLINES</span> <span class="o">=</span> <span class="s2">"fluid_contact_outlines"</span>
 
-<span class="n">STYPE</span> <span class="o">=</span> <span class="s2">&quot;general2d_data&quot;</span>
+<span class="n">STYPE</span> <span class="o">=</span> <span class="s2">"general2d_data"</span>
 
 
 <div class="viewcode-block" id="FluidContact">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.fluid_contacts_from_grid.FluidContact">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FluidContact</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fluid contact class.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Fluid contact class."""</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fwl&quot;</span><span class="p">,</span> <span class="s2">&quot;goc&quot;</span><span class="p">,</span> <span class="s2">&quot;gwc&quot;</span><span class="p">]</span></div>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"fwl"</span><span class="p">,</span> <span class="s2">"goc"</span><span class="p">,</span> <span class="s2">"gwc"</span><span class="p">]</span></div>
 
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_RMSDataLoader</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper class for loading grid and properties from RMS/Roxar.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Helper class for loading grid and properties from RMS/Roxar."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">project</span> <span class="o">=</span> <span class="n">project</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span> <span class="o">=</span> <span class="n">grid_name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grid from RMS.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Load grid from RMS."""</span>
         <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">property_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load a property from RMS.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Load a property from RMS."""</span>
         <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">,</span> <span class="n">property_name</span>
         <span class="p">)</span>
@@ -140,26 +140,26 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">find_available_contact_properties</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fwl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">goc_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gwc_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">FluidContact</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return contact properties that are available in the project.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return contact properties that are available in the project."""</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span>
         <span class="n">contacts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">fwl_name</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
-            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">fwl_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;fwl&quot;</span><span class="p">))</span>
+            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">fwl_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">"fwl"</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">goc_name</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
-            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">goc_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;goc&quot;</span><span class="p">))</span>
+            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">goc_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">"goc"</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">gwc_name</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
-            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">gwc_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;gwc&quot;</span><span class="p">))</span>
+            <span class="n">contacts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">FluidContact</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">gwc_name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">"gwc"</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">contacts</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;None of the contact properties </span><span class="si">{</span><span class="n">fwl_name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">goc_name</span><span class="si">}</span><span class="s2">, or &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">gwc_name</span><span class="si">}</span><span class="s2"> were found in the project.&quot;</span>
+                <span class="sa">f</span><span class="s2">"None of the contact properties </span><span class="si">{</span><span class="n">fwl_name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">goc_name</span><span class="si">}</span><span class="s2">, or "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">gwc_name</span><span class="si">}</span><span class="s2"> were found in the project."</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">contacts</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_GridDataAssembler</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper class for assembling grid data with contact and zone properties.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Helper class for assembling grid data with contact and zone properties."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -177,7 +177,7 @@
 
         <span class="k">if</span> <span class="n">zone_name</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_zone_prop</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_property</span><span class="p">(</span><span class="n">zone_name</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_append_property_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_zone_prop</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Zone&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_append_property_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_zone_prop</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"Zone"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_zone_prop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_zoneprop_from_subgrids</span><span class="p">()</span>
 
@@ -190,24 +190,24 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the grid."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">zone_codenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the zone property codenames.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the zone property codenames."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zone_prop</span><span class="o">.</span><span class="n">codes</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get dataframe with active cells and all loaded properties.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get dataframe with active cells and all loaded properties."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_dataframe</span><span class="p">(</span><span class="n">activeonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_surface_with_grid_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get an xtgeo surface with the grid dimension.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_grid3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">,</span> <span class="s2">&quot;native&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Get an xtgeo surface with the grid dimension."""</span>
+        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_grid3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">,</span> <span class="s2">"native"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_append_property_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load and append a property to the grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Load and append a property to the grid."""</span>
         <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
 
@@ -215,28 +215,28 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_filter_to_closest_contact_cell_in_pillars</span><span class="p">(</span>
     <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Filter a grid dataframe to only include the cell in each grid</span>
-<span class="sd">    pillar (each &#39;IX&#39;/&#39;JY&#39;) that are closest to the contact.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    pillar (each 'IX'/'JY') that are closest to the contact.</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;abs_diff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">min_abs_diff</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;IX&quot;</span><span class="p">,</span> <span class="s2">&quot;JY&quot;</span><span class="p">])[</span><span class="s2">&quot;abs_diff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;abs_diff&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">min_abs_diff</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"abs_diff"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"Z_TVDSS"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">min_abs_diff</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"IX"</span><span class="p">,</span> <span class="s2">"JY"</span><span class="p">])[</span><span class="s2">"abs_diff"</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">"min"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"abs_diff"</span><span class="p">]</span> <span class="o">==</span> <span class="n">min_abs_diff</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_filter_to_deepest_cell_above_contact_in_pillars</span><span class="p">(</span>
     <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">contact</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Filter a grid dataframe to only include the cells that are above the contact</span>
 <span class="sd">    and deeper then the value filter, and return the deepest cell in each</span>
-<span class="sd">    grid pillar (each &#39;IX&#39;/&#39;JY&#39;).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_value_filter</span><span class="p">)]</span>
+<span class="sd">    grid pillar (each 'IX'/'JY').</span>
+<span class="sd">    """</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s2">"Z_TVDSS"</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">contact</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">min_value_filter</span><span class="p">)]</span>
 
-    <span class="n">deepest_cell</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;IX&quot;</span><span class="p">,</span> <span class="s2">&quot;JY&quot;</span><span class="p">])[</span><span class="s2">&quot;KZ&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;KZ&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">deepest_cell</span><span class="p">]</span>
+    <span class="n">deepest_cell</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"IX"</span><span class="p">,</span> <span class="s2">"JY"</span><span class="p">])[</span><span class="s2">"KZ"</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">"max"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"KZ"</span><span class="p">]</span> <span class="o">==</span> <span class="n">deepest_cell</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_create_contact_surface</span><span class="p">(</span>
@@ -245,13 +245,13 @@
     <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">template</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a contact surface for points in a dataframe.</span>
 <span class="sd">    The surface will be masked where the contact value is below the value filter,</span>
 <span class="sd">    and where nodes are further away than the maximum distance between the grid</span>
 <span class="sd">    cells in the x and y directions. If all values are masked after filtering,</span>
 <span class="sd">    None is returned.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">_filter_to_closest_contact_cell_in_pillars</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">contact</span><span class="p">)</span>
 
     <span class="n">surf</span> <span class="o">=</span> <span class="n">nearest_node_gridding</span><span class="p">(</span>
@@ -269,10 +269,10 @@
     <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">rescale_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Polygons</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a fluid contact outline by filtering the input dataframe to cells</span>
 <span class="sd">    above the contact and extracting the outline from it.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">_filter_to_deepest_cell_above_contact_in_pillars</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">contact</span><span class="p">,</span> <span class="n">min_value_filter</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
@@ -292,16 +292,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">fwl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;FWL&quot;</span><span class="p">,</span>
-    <span class="n">goc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GOC&quot;</span><span class="p">,</span>
-    <span class="n">gwc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GWC&quot;</span><span class="p">,</span>
+    <span class="n">fwl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"FWL"</span><span class="p">,</span>
+    <span class="n">goc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"GOC"</span><span class="p">,</span>
+    <span class="n">gwc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"GWC"</span><span class="p">,</span>
     <span class="n">zone_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">min_value_filter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">template_surf</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RegularSurface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">grid_refinement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">rescale_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Function to create fluid contacts surfaces and outlines from grid contact</span>
 <span class="sd">    parameters. Output will be stored inside RMS under General 2D data in folders</span>
 <span class="sd">    ``fluid_contact_surfaces`` and ``fluid_contact_outlines``.</span>
@@ -349,7 +349,7 @@
 <span class="sd">          to increase resolution of the output. Be aware that a high refinement factor</span>
 <span class="sd">          will reduce performance. Note, this does not affect the grid in RMS.</span>
 <span class="sd">        rescale_distance: Optional target spacing used to resample contact outlines.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">loader</span> <span class="o">=</span> <span class="n">_RMSDataLoader</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
     <span class="n">contacts</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">find_available_contact_properties</span><span class="p">(</span><span class="n">fwl_name</span><span class="p">,</span> <span class="n">goc_name</span><span class="p">,</span> <span class="n">gwc_name</span><span class="p">)</span>
 
@@ -364,10 +364,10 @@
     <span class="n">surface_from_grid</span> <span class="o">=</span> <span class="n">grid_data</span><span class="o">.</span><span class="n">get_surface_with_grid_dimensions</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">contact</span> <span class="ow">in</span> <span class="n">contacts</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Working on contact </span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2"> using parameter </span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Working on contact </span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2"> using parameter </span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">code</span><span class="p">,</span> <span class="n">zonename</span> <span class="ow">in</span> <span class="n">grid_data</span><span class="o">.</span><span class="n">zone_codenames</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - processing </span><span class="si">{</span><span class="n">zonename</span><span class="si">=}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="n">zonedf</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">code</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  - processing </span><span class="si">{</span><span class="n">zonename</span><span class="si">=}</span><span class="s2">."</span><span class="p">)</span>
+            <span class="n">zonedf</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"Zone"</span><span class="p">]</span> <span class="o">==</span> <span class="n">code</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">surf</span> <span class="o">:=</span> <span class="n">_create_contact_surface</span><span class="p">(</span>
                 <span class="n">zonedf</span><span class="p">,</span>
@@ -383,7 +383,7 @@
                 <span class="n">surf</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>
                     <span class="n">zonename</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_SURFACES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_SURFACES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                     <span class="n">stype</span><span class="o">=</span><span class="n">STYPE</span><span class="p">,</span>
                 <span class="p">)</span>
 
@@ -396,12 +396,12 @@
                 <span class="n">outline</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>
                     <span class="n">zonename</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_OUTLINES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_OUTLINES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                     <span class="n">stype</span><span class="o">=</span><span class="n">STYPE</span><span class="p">,</span>
                 <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fluid contacts stored in &#39;General 2D Data&#39; under folders &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_SURFACES</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">OUTPUT_FOLDER_OUTLINES</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="s2">"</span><span class="se">\n</span><span class="s2">Fluid contacts stored in 'General 2D Data' under folders "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_SURFACES</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">OUTPUT_FOLDER_OUTLINES</span><span class="si">}</span><span class="s2">'."</span>
     <span class="p">)</span></div>
 
 </pre></div>

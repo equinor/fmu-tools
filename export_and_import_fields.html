@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.export_and_import_field_parameters &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>rms.export_and_import_field_parameters &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -115,41 +115,41 @@ in YAML format that is also shared with the function <em>generate_petro_jobs</em
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms.generate_petro_jobs_for_field_update</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_specification_file</span>
 
 <span class="n">DEBUG_PRINT</span><span class="o">=</span><span class="kc">True</span>
-<span class="n">CONFIG_FILE_NAME_VALYSAR</span> <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_valysar.yml&quot;</span>
-<span class="n">CONFIG_FILE_NAME_THERYS</span> <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_therys.yml&quot;</span>
-<span class="n">CONFIG_FILE_NAME_VOLON</span> <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_volon.yml&quot;</span>
-<span class="n">ERTBOX_GRID</span> <span class="o">=</span> <span class="s2">&quot;ERTBOX&quot;</span>
+<span class="n">CONFIG_FILE_NAME_VALYSAR</span> <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_valysar.yml"</span>
+<span class="n">CONFIG_FILE_NAME_THERYS</span> <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_therys.yml"</span>
+<span class="n">CONFIG_FILE_NAME_VOLON</span> <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_volon.yml"</span>
+<span class="n">ERTBOX_GRID</span> <span class="o">=</span> <span class="s2">"ERTBOX"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">export_fields</span><span class="p">():</span>
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_VALYSAR</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">export_initial_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Valysar&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Valysar"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span> <span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_THERYS</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">export_initial_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Therys&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Therys"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span> <span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_VOLON</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">export_initial_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Volon&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Volon"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span> <span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">export_fields</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -162,40 +162,40 @@ in YAML format that is also shared with the function <em>generate_petro_jobs</em
 
 
 <span class="n">DEBUG_PRINT</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">CONFIG_FILE_NAME_VALYSAR</span> <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_valysar.yml&quot;</span>
-<span class="n">CONFIG_FILE_NAME_THERYS</span>  <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_therys.yml&quot;</span>
-<span class="n">CONFIG_FILE_NAME_VOLON</span>   <span class="o">=</span> <span class="s2">&quot;../input/config/field_update/generate_petro_jobs_volon.yml&quot;</span>
-<span class="n">ERTBOX_GRID</span> <span class="o">=</span> <span class="s2">&quot;ERTBOX&quot;</span>
+<span class="n">CONFIG_FILE_NAME_VALYSAR</span> <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_valysar.yml"</span>
+<span class="n">CONFIG_FILE_NAME_THERYS</span>  <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_therys.yml"</span>
+<span class="n">CONFIG_FILE_NAME_VOLON</span>   <span class="o">=</span> <span class="s2">"../input/config/field_update/generate_petro_jobs_volon.yml"</span>
+<span class="n">ERTBOX_GRID</span> <span class="o">=</span> <span class="s2">"ERTBOX"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">import_fields</span><span class="p">():</span>
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_VALYSAR</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">import_updated_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Valysar&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Valysar"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span><span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_THERYS</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">import_updated_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Therys&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Therys"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span><span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
     <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">CONFIG_FILE_NAME_VOLON</span><span class="p">)</span>
-    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
+    <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
     <span class="n">import_updated_field_parameters</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span>
         <span class="n">used_petro_dict</span><span class="p">,</span>
         <span class="n">grid_model_name</span><span class="o">=</span><span class="n">ERTBOX_GRID</span><span class="p">,</span>
-        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">&quot;Volon&quot;</span><span class="p">,</span>
+        <span class="n">zone_name_for_single_zone_grid</span><span class="o">=</span><span class="s2">"Volon"</span><span class="p">,</span>
         <span class="n">debug_print</span><span class="o">=</span><span class="n">DEBUG_PRINT</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">import_fields</span><span class="p">()</span>
 </pre></div>
 </div>

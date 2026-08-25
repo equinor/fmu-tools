@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcforward functions &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>The qcforward functions &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -252,24 +252,24 @@ one may encounter different results if another tool is applied.</p></li>
 <h3>Example when ran inside RMS<a class="headerlink" href="#example-when-ran-inside-rms" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
-<span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing &quot;A&quot;</span>
+<span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing "A"</span>
 <span class="c1"># Note that these are python regular expressions!</span>
-<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;33_10.*&quot;</span><span class="p">,</span> <span class="s2">&quot;34_11-.*A.*&quot;</span><span class="p">]</span>
+<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"33_10.*"</span><span class="p">,</span> <span class="s2">"34_11-.*A.*"</span><span class="p">]</span>
 
-<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">&quot;Zonelog&quot;</span>
-<span class="n">TRAJ</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span>
-<span class="n">LOGRUN</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span>
+<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">"Zonelog"</span>
+<span class="n">TRAJ</span> <span class="o">=</span> <span class="s2">"Drilled trajectory"</span>
+<span class="n">LOGRUN</span> <span class="o">=</span> <span class="s2">"log"</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
-<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SIMGRID"</span>
+<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="s2">"Zone"</span>
 <span class="n">DRANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2100</span><span class="p">,</span> <span class="mi">3200</span><span class="p">]</span>
 <span class="n">ZLOGRANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
 <span class="n">ZLOGSHIFT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="n">REPORTPATH</span> <span class="o">=</span> <span class="s2">&quot;/tmp/well_vs_grid.csv&quot;</span>
+<span class="n">REPORTPATH</span> <span class="o">=</span> <span class="s2">"/tmp/well_vs_grid.csv"</span>
 
 <span class="n">ACT</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 90&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 70&quot;</span><span class="p">},</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 80&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 90"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 70"</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 95"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 80"</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
@@ -277,19 +277,19 @@ one may encounter different results if another tool is applied.</p></li>
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span> <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
-        <span class="s2">&quot;zonelog&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="n">ZLOGRANGE</span><span class="p">,</span> <span class="s2">&quot;shift&quot;</span><span class="p">:</span> <span class="n">ZLOGSHIFT</span><span class="p">},</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;depthrange&quot;</span><span class="p">:</span> <span class="n">DRANGE</span><span class="p">,</span>
-        <span class="s2">&quot;gridprops&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACT</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH</span><span class="p">,</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONELOG&quot;</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"names"</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span> <span class="s2">"logrun"</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
+        <span class="s2">"zonelog"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">"range"</span><span class="p">:</span> <span class="n">ZLOGRANGE</span><span class="p">,</span> <span class="s2">"shift"</span><span class="p">:</span> <span class="n">ZLOGSHIFT</span><span class="p">},</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"depthrange"</span><span class="p">:</span> <span class="n">DRANGE</span><span class="p">,</span>
+        <span class="s2">"gridprops"</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACT</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORTPATH</span><span class="p">,</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"ZONELOG"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -298,31 +298,31 @@ one may encounter different results if another tool is applied.</p></li>
 <h3>Example when ran from python script in terminal:<a class="headerlink" href="#example-when-ran-from-python-script-in-terminal" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
-<span class="n">WPATH</span> <span class="o">=</span> <span class="s2">&quot;../output/wells/&quot;</span>
+<span class="n">WPATH</span> <span class="o">=</span> <span class="s2">"../output/wells/"</span>
 
-<span class="c1"># Here typical linux &quot;file globbing&quot; is used</span>
-<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="n">WPATH</span> <span class="o">+</span> <span class="s2">&quot;33_10*.rmswell&quot;</span><span class="p">,</span> <span class="n">WPATH</span> <span class="o">+</span> <span class="s2">&quot;34_11-*A*&quot;</span><span class="p">]</span>
-<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">&quot;Zonelog&quot;</span>
-<span class="n">PERFLOGNAME</span> <span class="o">=</span> <span class="s2">&quot;PERF&quot;</span>
+<span class="c1"># Here typical linux "file globbing" is used</span>
+<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="n">WPATH</span> <span class="o">+</span> <span class="s2">"33_10*.rmswell"</span><span class="p">,</span> <span class="n">WPATH</span> <span class="o">+</span> <span class="s2">"34_11-*A*"</span><span class="p">]</span>
+<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">"Zonelog"</span>
+<span class="n">PERFLOGNAME</span> <span class="o">=</span> <span class="s2">"PERF"</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;../output/checks/simgrid.roff&quot;</span>
-<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">,</span> <span class="s2">&quot;../output/checks/simgrid_zone.roff&quot;</span><span class="p">]</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"../output/checks/simgrid.roff"</span>
+<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zone"</span><span class="p">,</span> <span class="s2">"../output/checks/simgrid_zone.roff"</span><span class="p">]</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="s2">&quot;</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;gridprops&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACT</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="n">WELLS</span><span class="s2">"</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"gridprops"</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACT</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="s2">"../output/qc/well_vs_grid.csv"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -332,23 +332,23 @@ one may encounter different results if another tool is applied.</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/somefile.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"../input/qc/somefile.yml"</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="n">ACT</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 90&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 70&quot;</span><span class="p">},</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 80&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 90"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 70"</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 95"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 80"</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The YAML file may in case look like:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">actions</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&quot;warn&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;all</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">70&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;stop&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;all</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">60&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">"warn"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">"all</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">70"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"stop"</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">"all</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">60"</span><span class="p p-Indicator">}</span>
 <span class="nt">depthrange</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1300</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1900</span><span class="p p-Indicator">]</span>
 <span class="nt">grid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mothergrid</span>
 <span class="nt">gridprops</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Zone</span><span class="p p-Indicator">]</span>
@@ -374,31 +374,31 @@ one may encounter different results if another tool is applied.</p></li>
 than other wells.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools.qcforward</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qcf</span>
 
-<span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing &quot;A&quot;</span>
+<span class="c1"># will match all wells starting with 33_10 and all 34_11 wells containing "A"</span>
 <span class="c1"># Note that these are python regular expressions!</span>
-<span class="n">WELLS1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;33_10.*&quot;</span><span class="p">,</span> <span class="s2">&quot;34_11-.*A.*&quot;</span><span class="p">]</span>
-<span class="n">WELLS2</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_11-.*B.*&quot;</span><span class="p">]</span>
+<span class="n">WELLS1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"33_10.*"</span><span class="p">,</span> <span class="s2">"34_11-.*A.*"</span><span class="p">]</span>
+<span class="n">WELLS2</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"34_11-.*B.*"</span><span class="p">]</span>
 
 
-<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">&quot;Zonelog&quot;</span>
-<span class="n">TRAJ</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span>
-<span class="n">LOGRUN</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span>
+<span class="n">ZONELOGNAME</span> <span class="o">=</span> <span class="s2">"Zonelog"</span>
+<span class="n">TRAJ</span> <span class="o">=</span> <span class="s2">"Drilled trajectory"</span>
+<span class="n">LOGRUN</span> <span class="o">=</span> <span class="s2">"log"</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
-<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SIMGRID"</span>
+<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="s2">"Zone"</span>
 
 <span class="n">ACT1</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 90&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 70&quot;</span><span class="p">},</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 80&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 90"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 70"</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 95"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 80"</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="n">ACT2</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 80&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 70&quot;</span><span class="p">},</span>
-  <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 75&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 60&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 80"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 70"</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 75"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 60"</span><span class="p">},</span>
 <span class="p">]</span>
 
-<span class="n">ACT_EACH1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;warn&lt;&quot;</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">&quot;stop&lt;&quot;</span><span class="p">:</span> <span class="mi">70</span><span class="p">}</span>
-<span class="n">ACT_ALL1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;warn&lt;&quot;</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">&quot;stop&lt;&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">}</span>
+<span class="n">ACT_EACH1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"warn&lt;"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"stop&lt;"</span><span class="p">:</span> <span class="mi">70</span><span class="p">}</span>
+<span class="n">ACT_ALL1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"warn&lt;"</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">"stop&lt;"</span><span class="p">:</span> <span class="mi">80</span><span class="p">}</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcf</span><span class="o">.</span><span class="n">WellZonationVsGrid</span><span class="p">()</span>
 
@@ -406,27 +406,27 @@ than other wells.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata1</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">WELLS1</span><span class="p">,</span> <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
-        <span class="s2">&quot;zonelog&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s2">&quot;shift&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">},</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;gridzones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACT1</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;SET1&quot;</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"names"</span><span class="p">:</span> <span class="n">WELLS1</span><span class="p">,</span> <span class="s2">"logrun"</span><span class="p">:</span> <span class="n">LOGRUN</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">:</span> <span class="n">TRAJ</span><span class="p">},</span>
+        <span class="s2">"zonelog"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">ZONELOGNAME</span><span class="p">,</span> <span class="s2">"range"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="s2">"shift"</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">},</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"gridzones"</span><span class="p">:</span> <span class="p">[</span><span class="n">ZONEGRIDNAME</span><span class="p">],</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACT1</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"file"</span><span class="p">:</span> <span class="s2">"../output/qc/well_vs_grid.csv"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"write"</span><span class="p">},</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"SET1"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># make a copy and modify selected items</span>
     <span class="n">usedata2</span> <span class="o">=</span> <span class="n">usedata1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">][</span><span class="s2">&quot;names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">WELLS2</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;actions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ACT2</span><span class="p">,</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/well_vs_grid.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;append&quot;</span><span class="p">}</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;nametag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SET2&quot;</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"wells"</span><span class="p">][</span><span class="s2">"names"</span><span class="p">]</span> <span class="o">=</span> <span class="n">WELLS2</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"actions"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ACT2</span><span class="p">,</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"file"</span><span class="p">:</span> <span class="s2">"../output/qc/well_vs_grid.csv"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"append"</span><span class="p">}</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"nametag"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"SET2"</span>
 
-    <span class="c1"># note the &quot;reuse&quot; use to avoid duplicate loading of data like the grid</span>
+    <span class="c1"># note the "reuse" use to avoid duplicate loading of data like the grid</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">usedata1</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">usedata2</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -486,7 +486,7 @@ format. Later this YAML file can be edited and applied for a single line input</
 <section id="the-actions-field-explained">
 <h3>The actions field explained<a class="headerlink" href="#the-actions-field-explained" title="Link to this heading"></a></h3>
 <p>The action field in the examples below can be explained likes this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;minangle_topbase&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 1% when &lt; 80&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 1% when &lt; 50&quot;</span><span class="p">}]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">"minangle_topbase"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &gt; 1% when &lt; 80"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &gt; 1% when &lt; 50"</span><span class="p">}]</span>
 </pre></div>
 </div>
 <p>The first warning is triggered if the perecentage of cells which minimum angle is
@@ -528,16 +528,16 @@ is that a single word is present</p></li>
 <h3>Example when ran inside RMS<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SIMGRID&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SIMGRID"</span>
 
 <span class="n">ACTIONS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;minangle_topbase&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allcells &gt; 1% when &lt; 80&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;allcells &gt; 1% when &lt; 50&quot;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allcells &gt; 50% when &lt; 85&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 10% when &lt; 50&quot;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allcells &gt; 50% when &lt; 85&quot;</span><span class="p">},</span>
+    <span class="s2">"minangle_topbase"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"allcells &gt; 1% when &lt; 80"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"allcells &gt; 1% when &lt; 50"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"allcells &gt; 50% when &lt; 85"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &gt; 10% when &lt; 50"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"allcells &gt; 50% when &lt; 85"</span><span class="p">},</span>
     <span class="p">],</span>
-    <span class="s2">&quot;collapsed&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 20%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 50%&quot;</span><span class="p">}],</span>
-    <span class="s2">&quot;faulted&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 20%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &gt; 50%&quot;</span><span class="p">}],</span>
+    <span class="s2">"collapsed"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &gt; 20%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &gt; 50%"</span><span class="p">}],</span>
+    <span class="s2">"faulted"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &gt; 20%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &gt; 50%"</span><span class="p">}],</span>
 <span class="p">}</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">GridQuality</span><span class="p">()</span>
@@ -545,15 +545,15 @@ is that a single word is present</p></li>
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONELOG&quot;</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"file"</span><span class="p">:</span> <span class="s2">"../output/qc/gridquality.csv"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"write"</span><span class="p">},</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"ZONELOG"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -563,22 +563,22 @@ is that a single word is present</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span>
 
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;../output/checks/simgrid.roff&quot;</span>
-<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">,</span> <span class="s2">&quot;../output/checks/simgrid_zone.roff&quot;</span><span class="p">]</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"../output/checks/simgrid.roff"</span>
+<span class="n">ZONEGRIDNAME</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zone"</span><span class="p">,</span> <span class="s2">"../output/checks/simgrid_zone.roff"</span><span class="p">]</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">qcforward</span><span class="o">.</span><span class="n">GridQuality</span><span class="p">()</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;../output/qc/gridquality.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;write&quot;</span><span class="p">}</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"file"</span><span class="p">:</span> <span class="s2">"../output/qc/gridquality.csv"</span><span class="p">,</span> <span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"write"</span><span class="p">}</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usedata</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -588,12 +588,12 @@ is that a single word is present</p></li>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/gridquality.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"../input/qc/gridquality.yml"</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">wellzonation_vs_grid</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -622,9 +622,9 @@ well (any) or for the average (all), for example <code class="docutils literal n
 will trigger a stop in work flow. Note that <code class="docutils literal notranslate"><span class="pre">any</span></code> and <code class="docutils literal notranslate"><span class="pre">all</span></code> shall not be mixed in
 the same record (required). Also both lines are (currently) required.
 Finaly note that these are all equivalent:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt;30&quot;</span><span class="p">}</span>
-<span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allwells &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;allwells &lt;30&quot;</span><span class="p">}</span>
-<span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;allfoo &lt; 50&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;allfoo &lt;30&quot;</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 50"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt;30"</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"allwells &lt; 50"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"allwells &lt;30"</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"allfoo &lt; 50"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"allfoo &lt;30"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Hence it is the substrings <code class="docutils literal notranslate"><span class="pre">all</span></code> or <code class="docutils literal notranslate"><span class="pre">any</span></code> that matters.</p>
@@ -652,17 +652,17 @@ dataframe (table). This can be useful when investigating what wells that trigger
 a stop. Possible values are None (default, means no output), “yes” just to show all.
 However for a more fine-grained control, using a dict is recommended:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># show FAIL lines for wells that have status STOP:</span>
-<span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;stop&quot;</span><span class="p">}</span>
+<span class="s2">"show_data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lines"</span><span class="p">:</span> <span class="s2">"FAIL"</span><span class="p">,</span> <span class="s2">"wellstatus"</span><span class="p">:</span> <span class="s2">"stop"</span><span class="p">}</span>
 
 <span class="c1"># show FAIL lines for wells that have status WARN:</span>
-<span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;warn&quot;</span><span class="p">}</span>
+<span class="s2">"show_data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lines"</span><span class="p">:</span> <span class="s2">"FAIL"</span><span class="p">,</span> <span class="s2">"wellstatus"</span><span class="p">:</span> <span class="s2">"warn"</span><span class="p">}</span>
 </pre></div>
 </div>
 </dd>
 <dt>tvd_range</dt><dd><p>A list of two numbers can be applied to limit the vertical range of the comparison.
 The numbers shall represent minimum and maximum depth, and the range is inclusive,
 e.g.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;tvd_range&quot;</span> <span class="p">[</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">2300</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">"tvd_range"</span> <span class="p">[</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">2300</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Note that this setting can exclude whole wells from being evaluated.</p>
@@ -699,22 +699,22 @@ outside RMS but not needed when run inside RMS.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
 
-<span class="n">GNAME</span> <span class="o">=</span> <span class="s2">&quot;Geogrid_Valysar&quot;</span>
+<span class="n">GNAME</span> <span class="o">=</span> <span class="s2">"Geogrid_Valysar"</span>
 
-<span class="c1"># dict showing &quot;mappings&quot;, blocked well version first</span>
-<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Facies&quot;</span><span class="p">:</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">}</span>
+<span class="c1"># dict showing "mappings", blocked well version first</span>
+<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Facies"</span><span class="p">:</span> <span class="s2">"FACIES"</span><span class="p">,</span> <span class="s2">"PHIT"</span><span class="p">:</span> <span class="s2">"PHIT"</span><span class="p">}</span>
 
 <span class="n">BWDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;55.*&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
-    <span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span>
+    <span class="s2">"names"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"55.*"</span><span class="p">],</span>
+    <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
+    <span class="s2">"bwname"</span><span class="p">:</span> <span class="s2">"BW"</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/bw_vs_prop.csv&quot;</span>
+<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">"../output/qc/bw_vs_prop.csv"</span>
 
 <span class="n">ACTIONS1</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 80%&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 90%&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 95%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 80%"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 95%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 90%"</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
@@ -727,22 +727,22 @@ outside RMS but not needed when run inside RMS.</p>
     <span class="n">reportpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">usezonedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;bwells&quot;</span><span class="p">:</span> <span class="n">BWDATA</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
-        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
-        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;tolerance&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;BWCHECK&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lines&quot;</span><span class="p">:</span> <span class="s2">&quot;FAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;wellstatus&quot;</span><span class="p">:</span> <span class="s2">&quot;stop&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;tvd_range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2700</span><span class="p">],</span>
+        <span class="s2">"bwells"</span><span class="p">:</span> <span class="n">BWDATA</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GNAME</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
+        <span class="s2">"compare"</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
+        <span class="s2">"verbosity"</span><span class="p">:</span> <span class="s2">"info"</span><span class="p">,</span>
+        <span class="s2">"tolerance"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rel"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"BWCHECK"</span><span class="p">,</span>
+        <span class="s2">"show_data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lines"</span><span class="p">:</span> <span class="s2">"FAIL"</span><span class="p">,</span> <span class="s2">"wellstatus"</span><span class="p">:</span> <span class="s2">"stop"</span><span class="p">},</span>
+        <span class="s2">"tvd_range"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2700</span><span class="p">],</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usezonedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -752,19 +752,19 @@ outside RMS but not needed when run inside RMS.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span>
 
-<span class="n">GFILE</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/grid/geogrid_valysar.roff&quot;</span>  <span class="c1"># has both grid and props</span>
-<span class="n">BWELLFILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;../qc/output/wells/bw/valysar*.bw&quot;</span><span class="p">]</span>
+<span class="n">GFILE</span> <span class="o">=</span> <span class="s2">"../output/qc/grid/geogrid_valysar.roff"</span>  <span class="c1"># has both grid and props</span>
+<span class="n">BWELLFILES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"../qc/output/wells/bw/valysar*.bw"</span><span class="p">]</span>
 
-<span class="c1"># dict showing &quot;mappings&quot;, blocked well version first</span>
-<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Facies&quot;</span><span class="p">:</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">}</span>
+<span class="c1"># dict showing "mappings", blocked well version first</span>
+<span class="n">COMPARE1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Facies"</span><span class="p">:</span> <span class="s2">"FACIES"</span><span class="p">,</span> <span class="s2">"PHIT"</span><span class="p">:</span> <span class="s2">"PHIT"</span><span class="p">}</span>
 
-<span class="n">GPROPS</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;FACIES&quot;</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">]]</span>
+<span class="n">GPROPS</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">"FACIES"</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">],</span> <span class="p">[</span><span class="s2">"PHIT"</span><span class="p">,</span> <span class="n">GFILE</span><span class="p">]]</span>
 
-<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/bw_vs_prop.csv&quot;</span>
+<span class="n">REPORTPATH1</span> <span class="o">=</span> <span class="s2">"../output/qc/bw_vs_prop.csv"</span>
 
 <span class="n">ACTIONS1</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;any &lt; 80%&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 95%&quot;</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="s2">&quot;all &lt; 90%&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"any &lt; 95%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"any &lt; 80%"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"warn"</span><span class="p">:</span> <span class="s2">"all &lt; 95%"</span><span class="p">,</span> <span class="s2">"stop"</span><span class="p">:</span> <span class="s2">"all &lt; 90%"</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="n">QCJOB</span> <span class="o">=</span> <span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">qcforward</span><span class="o">.</span><span class="n">BlockedWellsVsGridProperties</span><span class="p">()</span>
@@ -776,22 +776,22 @@ outside RMS but not needed when run inside RMS.</p>
     <span class="n">reportpath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">usezonedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;bwells&quot;</span><span class="p">:</span> <span class="n">BWELLFILES</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GFILE</span><span class="p">,</span>
-        <span class="s2">&quot;gridprops&quot;</span><span class="p">:</span> <span class="n">GPROPS</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
-        <span class="s2">&quot;compare&quot;</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
-        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;tolerance&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;BWCHECK&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;show_data&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+        <span class="s2">"bwells"</span><span class="p">:</span> <span class="n">BWELLFILES</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GFILE</span><span class="p">,</span>
+        <span class="s2">"gridprops"</span><span class="p">:</span> <span class="n">GPROPS</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS1</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORTPATH1</span><span class="p">,</span>
+        <span class="s2">"compare"</span><span class="p">:</span> <span class="n">COMPARE1</span><span class="p">,</span>
+        <span class="s2">"verbosity"</span><span class="p">:</span> <span class="s2">"info"</span><span class="p">,</span>
+        <span class="s2">"tolerance"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rel"</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"BWCHECK"</span><span class="p">,</span>
+        <span class="s2">"show_data"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">QCJOB</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">usezonedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -875,31 +875,31 @@ Later this YAML file can be edited and applied for a single line input</p>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SimGrid&quot;</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;somefile.csv&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SimGrid"</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"somefile.csv"</span>
 <span class="n">ACTIONS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;PORO&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;warn_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
-        <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"PORO"</span><span class="p">,</span>
+        <span class="s2">"warn_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;PERM&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2000</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"PERM"</span><span class="p">,</span>
+        <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2000</span><span class="p">],</span>
     <span class="p">},</span>
 <span class="p">]</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -910,34 +910,34 @@ Later this YAML file can be edited and applied for a single line input</p>
 
 <span class="c1"># Check average grid statistics for porosity and permeability</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SimGrid&quot;</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;somefile.csv&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SimGrid"</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"somefile.csv"</span>
 <span class="n">ACTIONS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;codename&quot;</span><span class="p">:</span> <span class="s2">&quot;Sand&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;Top_Zone&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"Facies"</span><span class="p">,</span>
+        <span class="s2">"codename"</span><span class="p">:</span> <span class="s2">"Sand"</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Zone"</span><span class="p">:</span> <span class="s2">"Top_Zone"</span><span class="p">},</span>
+        <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;codename&quot;</span><span class="p">:</span> <span class="s2">&quot;Sand&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;Mid_Zone&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"Facies"</span><span class="p">,</span>
+        <span class="s2">"codename"</span><span class="p">:</span> <span class="s2">"Sand"</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Zone"</span><span class="p">:</span> <span class="s2">"Mid_Zone"</span><span class="p">},</span>
+        <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
     <span class="p">},</span>
 <span class="p">]</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">ACTIONS</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -949,13 +949,13 @@ Later this YAML file can be edited and applied for a single line input</p>
 <span class="c1"># Check average grid statistics for the porosity in HC-zone</span>
 <span class="c1"># Separate checks for the different zones</span>
 
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;SimGrid&quot;</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;somefile.csv&quot;</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"SimGrid"</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"somefile.csv"</span>
 
 <span class="n">ZONE_STOPS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;Top_Zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
-    <span class="s2">&quot;Mid_Zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
-    <span class="s2">&quot;Bottom_Zone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+    <span class="s2">"Top_Zone"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+    <span class="s2">"Mid_Zone"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+    <span class="s2">"Bottom_Zone"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
 <span class="p">}</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
@@ -964,23 +964,23 @@ Later this YAML file can be edited and applied for a single line input</p>
     <span class="k">for</span> <span class="n">zone</span><span class="p">,</span> <span class="n">limits</span> <span class="ow">in</span> <span class="n">ZONE_STOPS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;PORO&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="n">zone</span><span class="p">},</span>
-                <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;FLUID&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">,</span> <span class="s2">&quot;Oil&quot;</span><span class="p">]}},</span>
-                <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="n">limits</span><span class="p">,</span>
+                <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"PORO"</span><span class="p">,</span>
+                <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Zone"</span><span class="p">:</span> <span class="n">zone</span><span class="p">},</span>
+                <span class="s2">"filters"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"FLUID"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"include"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Gas"</span><span class="p">,</span> <span class="s2">"Oil"</span><span class="p">]}},</span>
+                <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="n">limits</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;nametag&quot;</span><span class="p">:</span> <span class="s2">&quot;MYDATA1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
-        <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
-        <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">actions</span><span class="p">,</span>
+        <span class="s2">"nametag"</span><span class="p">:</span> <span class="s2">"MYDATA1"</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRIDNAME</span><span class="p">,</span>
+        <span class="s2">"report"</span><span class="p">:</span> <span class="n">REPORT</span><span class="p">,</span>
+        <span class="s2">"actions"</span><span class="p">:</span> <span class="n">actions</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -991,16 +991,16 @@ Later this YAML file can be edited and applied for a single line input</p>
 
 <span class="c1"># Check average grid statistics for a porosity</span>
 
-<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../output/checks/&quot;</span>
-<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">&quot;simgrid.roff&quot;</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;somefile.csv&quot;</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">"../output/checks/"</span>
+<span class="n">GRIDNAME</span> <span class="o">=</span> <span class="s2">"simgrid.roff"</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"somefile.csv"</span>
 
 <span class="n">ACTIONS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
-        <span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;poro.roff&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;zone.roff&quot;</span><span class="p">:</span> <span class="s2">&quot;Top_Zone&quot;</span><span class="p">},</span>
-        <span class="s2">&quot;warn_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
-        <span class="s2">&quot;stop_outside&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="s2">"poro.roff"</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"zone.roff"</span><span class="p">:</span> <span class="s2">"Top_Zone"</span><span class="p">},</span>
+        <span class="s2">"warn_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s2">"stop_outside"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
     <span class="p">},</span>
 <span class="p">]</span>
 
@@ -1015,7 +1015,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">usedata</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1025,12 +1025,12 @@ Later this YAML file can be edited and applied for a single line input</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">qcforward</span> <span class="k">as</span> <span class="n">qcf</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../input/qc/somefile.yml&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+<span class="n">USEDATA</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"../input/qc/somefile.yml"</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
     <span class="n">qcf</span><span class="o">.</span><span class="n">grid_statistics</span><span class="p">(</span><span class="n">USEDATA</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">check</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1045,7 +1045,7 @@ Later this YAML file can be edited and applied for a single line input</p>
 <span class="w">    </span><span class="nt">Zone</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Top_Zone</span>
 <span class="w">  </span><span class="nt">filters</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">REGION</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Surroundings&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"Surroundings"</span><span class="p p-Indicator">]</span>
 <span class="w">  </span><span class="nt">stop_outside</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
 <span class="w">  </span><span class="nt">warn_outside</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.18</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.25</span><span class="p p-Indicator">]</span>
 <span class="nt">report</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">somefile.csv</span>

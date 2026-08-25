@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcreset module &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>The qcreset module &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -182,25 +182,25 @@ dictionary, the method will apply to all properties within these grid models.</p
 <span class="kn">import</span><span class="w"> </span><span class="nn">roxar</span>
 
 <span class="n">SETUP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;horizons&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;horizon_category_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span> <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;horizon_category_2&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_4&quot;</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"horizons"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"horizon_category_1"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"horizon_name_1"</span><span class="p">,</span> <span class="s2">"horizon_name_2"</span><span class="p">],</span>
+        <span class="s2">"horizon_category_2"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"horizon_name_1"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_2"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_3"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_4"</span>
         <span class="p">],</span>
-        <span class="s2">&quot;horizon_category_3&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+        <span class="s2">"horizon_category_3"</span><span class="p">:</span> <span class="s2">"all"</span>
     <span class="p">},</span>
-    <span class="s2">&quot;zones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;zone_category_1&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;property_2&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;Simgrid&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="s2">"zones"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"zone_category_1"</span><span class="p">],</span>
+    <span class="s2">"grid_models"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Geogrid"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"property_1"</span><span class="p">,</span> <span class="s2">"property_2"</span><span class="p">],</span>
+        <span class="s2">"Simgrid"</span><span class="p">:</span> <span class="s2">"all"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_empty</span><span class="p">(</span><span class="n">SETUP</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -268,26 +268,26 @@ dictionary, the method will apply to all properties within these grid models.</p
 <span class="kn">import</span><span class="w"> </span><span class="nn">roxar</span>
 
 <span class="n">SETUP</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;horizons&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;horizon_category_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span> <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;horizon_category_2&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;horizon_name_1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_2&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_3&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;horizon_name_4&quot;</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"horizons"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"horizon_category_1"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"horizon_name_1"</span><span class="p">,</span> <span class="s2">"horizon_name_2"</span><span class="p">],</span>
+        <span class="s2">"horizon_category_2"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"horizon_name_1"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_2"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_3"</span><span class="p">,</span>
+            <span class="s2">"horizon_name_4"</span>
         <span class="p">],</span>
-        <span class="s2">&quot;horizon_category_3&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+        <span class="s2">"horizon_category_3"</span><span class="p">:</span> <span class="s2">"all"</span>
     <span class="p">},</span>
-    <span class="s2">&quot;zones&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;zone_category_1&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;property_2&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;Simgrid&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span>
+    <span class="s2">"zones"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"zone_category_1"</span><span class="p">],</span>
+    <span class="s2">"grid_models"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Geogrid"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"property_1"</span><span class="p">,</span> <span class="s2">"property_2"</span><span class="p">],</span>
+        <span class="s2">"Simgrid"</span><span class="p">:</span> <span class="s2">"all"</span>
     <span class="p">},</span>
-    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span>
+    <span class="s2">"value"</span><span class="p">:</span> <span class="mf">0.0</span>
 <span class="p">}</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -301,22 +301,22 @@ dictionary, the method will apply to all properties within these grid models.</p
 <span class="c1"># values for different properties (continuous versus discrete)</span>
 
 <span class="n">SETUP1</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;continuous_property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;continuous_property_2&quot;</span><span class="p">]</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"grid_models"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Geogrid"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"continuous_property_1"</span><span class="p">,</span> <span class="s2">"continuous_property_2"</span><span class="p">]</span>
     <span class="p">},</span>
-    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">5.0</span>
+    <span class="s2">"value"</span><span class="p">:</span> <span class="o">-</span><span class="mf">5.0</span>
 <span class="p">}</span>
 
 <span class="n">SETUP2</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;grid_models&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;Geogrid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;discrete_property_1&quot;</span><span class="p">,</span> <span class="s2">&quot;discrete_property_2&quot;</span><span class="p">]</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"grid_models"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Geogrid"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"discrete_property_1"</span><span class="p">,</span> <span class="s2">"discrete_property_2"</span><span class="p">]</span>
     <span class="p">},</span>
-    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">999</span>
+    <span class="s2">"value"</span><span class="p">:</span> <span class="mi">999</span>
 <span class="p">}</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP1</span><span class="p">)</span>
     <span class="n">qcreset</span><span class="o">.</span><span class="n">set_data_constant</span><span class="p">(</span><span class="n">SETUP2</span><span class="p">)</span>
 </pre></div>

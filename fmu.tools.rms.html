@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms package &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.rms package &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -1222,12 +1222,12 @@ library in a much easier way:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>
 
 <span class="c1"># mylib.py is inside the RMS project</span>
-<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"mylib"</span><span class="p">)</span>
 
 <span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
 
 <span class="c1"># exlib.py is outside the RMS project e,g, at ../lib/exlib.py</span>
-<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;exlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"exlib"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">"../lib"</span><span class="p">)</span>
 
 <span class="n">elib</span><span class="o">.</span><span class="n">someotherfunction</span><span class="p">(</span><span class="n">some_other_arg</span><span class="p">)</span>
 </pre></div>
@@ -1728,7 +1728,7 @@ using pandas.Series.apply()</p></li>
 </dl>
 <p>The renamer functions could be defined like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myregionrenamer</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Equilibrium_region_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'Equilibrium_region_'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
@@ -2014,7 +2014,7 @@ using pandas.Series.apply()</p></li>
 </dl>
 <p>The renamer functions could be defined like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myregionrenamer</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Equilibrium_region_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'Equilibrium_region_'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or the same using a lambda expression.</p>
@@ -2041,12 +2041,12 @@ library in a much easier way:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tools</span>
 
 <span class="c1"># mylib.py is inside the RMS project</span>
-<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;mylib&quot;</span><span class="p">)</span>
+<span class="n">plib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"mylib"</span><span class="p">)</span>
 
 <span class="n">plib</span><span class="o">.</span><span class="n">somefunction</span><span class="p">(</span><span class="n">some_arg</span><span class="p">)</span>
 
 <span class="c1"># exlib.py is outside the RMS project e,g, at ../lib/exlib.py</span>
-<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;exlib&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;../lib&quot;</span><span class="p">)</span>
+<span class="n">elib</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">rms</span><span class="o">.</span><span class="n">import_localmodule</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"exlib"</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">"../lib"</span><span class="p">)</span>
 
 <span class="n">elib</span><span class="o">.</span><span class="n">someotherfunction</span><span class="p">(</span><span class="n">some_other_arg</span><span class="p">)</span>
 </pre></div>

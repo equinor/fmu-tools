@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.qcforward._wellzonation_vs_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,9 +90,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.qcforward._wellzonation_vs_grid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">This private module in qcforward is used to check wellzonation vs grid zonation</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -106,14 +106,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.qcforward._qcforward</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionsParser</span><span class="p">,</span> <span class="n">QCForward</span>
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
-<span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+<span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_LocalData</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Defining and hold data local for this routine"""</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="s2">&quot;Zonelog&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="s2">"Zonelog"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zonelogrange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">99</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zonelogshift</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">depthrange</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">999999.0</span><span class="p">]</span>
@@ -123,37 +123,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gridzone</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gridzonerange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9999</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wellresample</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">&quot;ZONELOG MATCH&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">"ZONELOG MATCH"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing the actual data&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Parsing the actual data"""</span>
 
         <span class="c1"># TODO: verify and qc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nametag&quot;</span><span class="p">,</span> <span class="s2">&quot;unset_nametag&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;report&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nametag"</span><span class="p">,</span> <span class="s2">"unset_nametag"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"report"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
-                <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"file"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;zonelog&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogrange</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;zonelog&quot;</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogshift</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;zonelog&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shift&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"zonelog"</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogrange</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"zonelog"</span><span class="p">][</span><span class="s2">"range"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zonelogshift</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"zonelog"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"shift"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">depthrange</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;depthrange&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">99999.0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depthrange</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"depthrange"</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">99999.0</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;actions&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"actions"</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="s2">&quot;perflog&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;perflog&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">perflogname</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;perflog&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">perflogrange</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;perflog&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9999</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">&quot;PERFLOG MATCH&quot;</span>
+        <span class="k">if</span> <span class="s2">"perflog"</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="s2">"perflog"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">perflogname</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"perflog"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">perflogrange</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"perflog"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"range"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9999</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">"PERFLOG MATCH"</span>
 
-        <span class="k">if</span> <span class="s2">&quot;well_resample&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wellresample</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;well_resample&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"well_resample"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wellresample</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"well_resample"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="WellZonationVsGrid">
@@ -162,56 +162,56 @@
 <div class="viewcode-block" id="WellZonationVsGrid.run">
 <a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.WellZonationVsGrid.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Main routine for evaulating well zonation match in 3D grids.</span>
+<span class="w">        </span><span class="sd">"""Main routine for evaulating well zonation match in 3D grids.</span>
 
 <span class="sd">        The routine depends on existing XTGeo functions for this purpose</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (dict or str): The input data either as a Python dictionary or</span>
 <span class="sd">                a path to a YAML file</span>
-<span class="sd">            reuse (bool or list): Reusing some &quot;timeconsuming to read&quot; data in the</span>
+<span class="sd">            reuse (bool or list): Reusing some "timeconsuming to read" data in the</span>
 <span class="sd">                instance. If True, then grid and gridprops will be reused as default.</span>
 <span class="sd">                Alternatively it can be a list for more fine grained control, e.g.</span>
-<span class="sd">                [&quot;grid&quot;, &quot;gridprops&quot;, &quot;wells&quot;]</span>
+<span class="sd">                ["grid", "gridprops", "wells"]</span>
 <span class="sd">            project (Union[object, str]): For usage inside RMS</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 
-        <span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbosity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"verbosity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># parse data that are special (local) for this check</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Parsing additional data...&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Parsing additional data..."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span> <span class="o">=</span> <span class="n">_LocalData</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># parsing data stored is self._xxx (general data like grid)</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Parsing local data...&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Parsing local data..."</span><span class="p">)</span>
         <span class="n">lognames</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogname</span><span class="p">:</span>
             <span class="n">lognames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogname</span><span class="p">)</span>
 
         <span class="n">wsettings</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;lognames&quot;</span><span class="p">:</span> <span class="n">lognames</span><span class="p">,</span>
-            <span class="s2">&quot;depthrange&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">depthrange</span><span class="p">,</span>
-            <span class="s2">&quot;rescale&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">wellresample</span><span class="p">,</span>
+            <span class="s2">"lognames"</span><span class="p">:</span> <span class="n">lognames</span><span class="p">,</span>
+            <span class="s2">"depthrange"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">depthrange</span><span class="p">,</span>
+            <span class="s2">"rescale"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">wellresample</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Parsing grid, gridprops, .... data...&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Parsing grid, gridprops, .... data..."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
             <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="n">reuse</span><span class="p">,</span> <span class="n">wells_settings</span><span class="o">=</span><span class="n">wsettings</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">gridzone</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">gridprops</span><span class="o">.</span><span class="n">props</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;actions&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"actions"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">actions</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No actions are defined or wrong data-input for actions&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No actions are defined or wrong data-input for actions"</span><span class="p">)</span>
 
-        <span class="c1"># need to evaluate once per well anyway, also of only &quot;all&quot;; this will fill</span>
+        <span class="c1"># need to evaluate once per well anyway, also of only "all"; this will fill</span>
         <span class="c1"># the MATCH% and WELL column in the dataframe given as an OrderedDict</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Each well find zonelog match&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Each well find zonelog match"</span><span class="p">)</span>
         <span class="n">wellmatches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_wells</span><span class="p">()</span>
 
         <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wellmatches</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
@@ -221,94 +221,94 @@
         <span class="c1"># dataframe in the end (most efficient; then turn into pandas at end)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="p">(</span><span class="s2">&quot;WELL&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;WARNRULE&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;STOPRULE&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;MATCH%&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;STATUS&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"WELL"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"WARNRULE"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"STOPRULE"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"MATCH%"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"STATUS"</span><span class="p">,</span> <span class="p">[]),</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">therule</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
             <span class="n">warnrule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
-                <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
+                <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"warn"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"warn"</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
             <span class="p">)</span>
             <span class="n">stoprule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
-                <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
+                <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"stop"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"stop"</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
             <span class="p">)</span>
 
-            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARN RULE </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;STOP RULE </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"WARN RULE </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"STOP RULE </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">well</span><span class="p">,</span> <span class="n">actualmatch</span> <span class="ow">in</span> <span class="n">wellmatches</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loop well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2"> which has match </span><span class="si">{</span><span class="n">actualmatch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loop well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2"> which has match </span><span class="si">{</span><span class="n">actualmatch</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">issue</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">warnrule</span><span class="p">,</span> <span class="n">stoprule</span><span class="p">]):</span>
                     <span class="c1"># both issues will be on same line</span>
-                    <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Issue no </span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Issue no </span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="n">well</span> <span class="o">!=</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">issue</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="n">well</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="n">well</span> <span class="o">!=</span> <span class="s2">"all"</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">issue</span><span class="o">.</span><span class="n">all</span> <span class="ow">and</span> <span class="n">well</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
                         <span class="k">continue</span>
 
                     <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="s2">"OK"</span>
 
                     <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;WELL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">well</span><span class="p">)</span>
-                        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;MATCH%&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actualmatch</span><span class="p">)</span>
+                        <span class="n">result</span><span class="p">[</span><span class="s2">"WELL"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">well</span><span class="p">)</span>
+                        <span class="n">result</span><span class="p">[</span><span class="s2">"MATCH%"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actualmatch</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;RULE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
-                        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"RULE"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="s2">"OK"</span>
                         <span class="k">continue</span>
 
-                    <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;RULE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span> <span class="ow">and</span> <span class="n">actualmatch</span> <span class="o">&gt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
-                        <span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span> <span class="ow">and</span> <span class="n">actualmatch</span> <span class="o">&lt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"RULE"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">"&gt;"</span> <span class="ow">and</span> <span class="n">actualmatch</span> <span class="o">&gt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                        <span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">"&lt;"</span> <span class="ow">and</span> <span class="n">actualmatch</span> <span class="o">&lt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span>
                     <span class="p">):</span>
                         <span class="n">status</span> <span class="o">=</span> <span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
                 <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s2">"STATUS"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 
         <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span><span class="p">(</span>
             <span class="n">result</span><span class="p">,</span> <span class="n">reportfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">reportfile</span><span class="p">,</span> <span class="n">nametag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">nametag</span>
         <span class="p">)</span>
-        <span class="n">dfr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;WELL&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">&quot;well zonation vs grid&quot;</span><span class="p">)</span></div>
+        <span class="n">dfr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"WELL"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">"well zonation vs grid"</span><span class="p">)</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate data against JSON schemas. TODO complete JSON files&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validate data against JSON schemas. TODO complete JSON files"""</span>
 
-        <span class="n">spath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;qcforward&quot;</span> <span class="o">/</span> <span class="s2">&quot;_schemas&quot;</span>
+        <span class="n">spath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"qcforward"</span> <span class="o">/</span> <span class="s2">"_schemas"</span>
 
-        <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;wellzonation_vs_grid_asfile.json&quot;</span>
+        <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">"wellzonation_vs_grid_asfile.json"</span>
 
         <span class="k">if</span> <span class="n">project</span><span class="p">:</span>
-            <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;wellzonation_vs_grid_asroxapi.json&quot;</span>
+            <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">"wellzonation_vs_grid_asroxapi.json"</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">spath</span> <span class="o">/</span> <span class="n">schemafile</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thisschema</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">spath</span> <span class="o">/</span> <span class="n">schemafile</span><span class="p">),</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">thisschema</span><span class="p">:</span>
             <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">thisschema</span><span class="p">)</span>
 
         <span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do a check per well and the sum; return an Ordered Dict&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Do a check per well and the sum; return an Ordered Dict"""</span>
 
         <span class="n">wells</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">wll</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">wells</span><span class="o">.</span><span class="n">wells</span><span class="p">:</span>
-            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Working with well </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Working with well </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">dfr</span> <span class="o">=</span> <span class="n">wll</span><span class="o">.</span><span class="n">dataframe</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">zonelogname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dfr</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;Well </span><span class="si">{}</span><span class="s2"> have no requested zonelog &lt;</span><span class="si">{}</span><span class="s2">&gt; and will be skipped&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Well </span><span class="si">{}</span><span class="s2"> have no requested zonelog &lt;</span><span class="si">{}</span><span class="s2">&gt; and will be skipped"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">,</span>
                     <span class="p">)</span>
@@ -317,14 +317,14 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogname</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dfr</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;Well </span><span class="si">{}</span><span class="s2"> have no requested perflog &lt;</span><span class="si">{}</span><span class="s2">&gt; and will be skipped&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Well </span><span class="si">{}</span><span class="s2"> have no requested perflog &lt;</span><span class="si">{}</span><span class="s2">&gt; and will be skipped"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogname</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">continue</span>
 
-            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;XTGeo work for </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"XTGeo work for </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
             <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">report_zone_mismatch</span><span class="p">(</span>
                 <span class="n">well</span><span class="o">=</span><span class="n">wll</span><span class="p">,</span>
                 <span class="n">zonelogname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">,</span>
@@ -336,20 +336,20 @@
                 <span class="n">perflogrange</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">perflogrange</span><span class="p">,</span>
                 <span class="n">resultformat</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;XTGeo work for </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">... done&quot;</span><span class="p">)</span>
+            <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"XTGeo work for </span><span class="si">{</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">... done"</span><span class="p">)</span>
 
             <span class="n">wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">res</span><span class="p">:</span>
-                <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;MATCH2&quot;</span><span class="p">])</span>
+                <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">"MATCH2"</span><span class="p">])</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
 
-        <span class="c1"># finally averages, for &quot;all&quot; results</span>
+        <span class="c1"># finally averages, for "all" results</span>
         <span class="n">match_allv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
         <span class="n">mmean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">match_allv</span><span class="p">)</span>
-        <span class="n">wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="n">wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"all"</span><span class="p">)</span>
         <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mmean</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">wells</span><span class="p">,</span> <span class="n">matches</span><span class="p">))</span></div>

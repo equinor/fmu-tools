@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.rms.volumetrics &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,7 +90,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.rms.volumetrics</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for handling volumetrics text files from RMS&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Module for handling volumetrics text files from RMS"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -106,8 +106,8 @@
 
 <div class="viewcode-block" id="merge_rms_volumetrics">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.merge_rms_volumetrics">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">merge_rms_volumetrics</span><span class="p">(</span><span class="n">filebase</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rmsrealsuffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_1&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Locate, parse and merge multiple volumetrics output files from RMS</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_rms_volumetrics</span><span class="p">(</span><span class="n">filebase</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rmsrealsuffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"_1"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Locate, parse and merge multiple volumetrics output files from RMS</span>
 
 <span class="sd">    Columns in parsed files will be renamed according to the hydrocarbon phase,</span>
 <span class="sd">    which will be deduced from the filenames. Columns will be merged</span>
@@ -116,10 +116,10 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        filebase: Filename base, with absolute or relative path included,</span>
-<span class="sd">            &quot;&lt;filebase&gt;_oil_1.txt&quot;, &quot;&lt;filebase&gt;_gas_1.txt&quot;, etc will be looked for.</span>
+<span class="sd">            "&lt;filebase&gt;_oil_1.txt", "&lt;filebase&gt;_gas_1.txt", etc will be looked for.</span>
 <span class="sd">        rmsrealsuffix: String that will be used when searching for files. In a</span>
-<span class="sd">            normal FMU context, this should always be kept as the default &quot;_1&quot;.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            normal FMU context, this should always be kept as the default "_1".</span>
+<span class="sd">    """</span>
     <span class="n">volframes</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">rmsvolumetrics_txt2df</span><span class="p">(</span><span class="n">volfile</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">volfile</span> <span class="ow">in</span> <span class="n">_find_volumetrics_files</span><span class="p">(</span><span class="n">filebase</span><span class="p">,</span> <span class="n">rmsrealsuffix</span><span class="p">)</span>
@@ -132,25 +132,25 @@
     <span class="c1"># Merge all frames on the commmon columns:</span>
     <span class="n">merged_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">common_columns</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">volframes</span><span class="p">:</span>
-        <span class="n">merged_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">merged_dframe</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">common_columns</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">)</span>
+        <span class="n">merged_dframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">merged_dframe</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">common_columns</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"outer"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">merged_dframe</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_volumetrics_files</span><span class="p">(</span><span class="n">filebase</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rmsrealsuffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find files on disk that potentially are volumetrics files given a filebase.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Find files on disk that potentially are volumetrics files given a filebase."""</span>
 
-    <span class="n">phases_to_look_for</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;oil&quot;</span><span class="p">,</span> <span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">]</span>
+    <span class="n">phases_to_look_for</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"oil"</span><span class="p">,</span> <span class="s2">"gas"</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">]</span>
 
     <span class="n">filesfound</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">phase</span> <span class="ow">in</span> <span class="n">phases_to_look_for</span><span class="p">:</span>
-        <span class="n">filecandidate</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filebase</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">phase</span> <span class="o">+</span> <span class="n">rmsrealsuffix</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">)</span>
+        <span class="n">filecandidate</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filebase</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">phase</span> <span class="o">+</span> <span class="n">rmsrealsuffix</span> <span class="o">+</span> <span class="s2">".txt"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filecandidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">filesfound</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filecandidate</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filesfound</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No volumetrics files found for filebase </span><span class="si">{</span><span class="n">filebase</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No volumetrics files found for filebase </span><span class="si">{</span><span class="n">filebase</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">filesfound</span>
 
@@ -165,7 +165,7 @@
     <span class="n">regionrenamer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">zonerenamer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the volumetrics txt file from RMS as Pandas dataframe</span>
+<span class="w">    </span><span class="sd">"""Parse the volumetrics txt file from RMS as Pandas dataframe</span>
 
 <span class="sd">    Columns will be renamed according to FMU standard,</span>
 <span class="sd">    https://wiki.equinor.com/wiki/index.php/FMU_standards</span>
@@ -176,7 +176,7 @@
 <span class="sd">        columnrenamer: dictionary for renaming column. Will be merged</span>
 <span class="sd">            with a default renaming dictionary (anything specified here will</span>
 <span class="sd">            override any defaults)</span>
-<span class="sd">        phase: stating typically &#39;GAS&#39;, &#39;OIL&#39; or &#39;TOTAL&#39;, signifying</span>
+<span class="sd">        phase: stating typically 'GAS', 'OIL' or 'TOTAL', signifying</span>
 <span class="sd">            what kind of data is in the file. Will be appended to column names,</span>
 <span class="sd">            and is guessed from filename if not provided.</span>
 <span class="sd">        outfile: filename to write CSV data to.</span>
@@ -189,42 +189,42 @@
 <span class="sd">    The renamer functions could be defined like this::</span>
 
 <span class="sd">        def myregionrenamer(s):</span>
-<span class="sd">            return s.replace(&#39;Equilibrium_region_&#39;, &#39;&#39;)</span>
+<span class="sd">            return s.replace('Equilibrium_region_', '')</span>
 
 <span class="sd">    or the same using a lambda expression.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># First find out which row the data starts at:</span>
     <span class="n">headerline</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 0 is the first line</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">txtfile</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
-        <span class="k">if</span> <span class="s2">&quot;Zone&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;Region&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;Facies&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"Zone"</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">"Region"</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">"Facies"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">break</span>
         <span class="n">headerline</span> <span class="o">=</span> <span class="n">headerline</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">vol_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">txtfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\s\s+&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="n">headerline</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
+    <span class="n">vol_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">txtfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s2">"\s\s+"</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="n">headerline</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"python"</span><span class="p">)</span>
 
     <span class="c1"># Enforce FMU standard:</span>
     <span class="c1"># https://wiki.statoil.no/wiki/index.php/FMU_standards</span>
     <span class="c1"># on column names</span>
 
     <span class="c1"># The Real column from RMS is not real.. Ignore it.</span>
-    <span class="k">if</span> <span class="s2">&quot;Real&quot;</span> <span class="ow">in</span> <span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">vol_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"Real"</span> <span class="ow">in</span> <span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">vol_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"Real"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">guess_phase</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">txtfile</span><span class="p">))</span>
 
     <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONE&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Region index&quot;</span><span class="p">:</span> <span class="s2">&quot;REGION&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Facies&quot;</span><span class="p">:</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;License boundaries&quot;</span><span class="p">:</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Bulk&quot;</span><span class="p">:</span> <span class="s2">&quot;BULK_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Net&quot;</span><span class="p">:</span> <span class="s2">&quot;NET_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Hcpv&quot;</span><span class="p">:</span> <span class="s2">&quot;HCPV_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Pore&quot;</span><span class="p">:</span> <span class="s2">&quot;PORV_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Stoiip&quot;</span><span class="p">:</span> <span class="s2">&quot;STOIIP_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Giip&quot;</span><span class="p">:</span> <span class="s2">&quot;GIIP_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Assoc.Liquid&quot;</span><span class="p">:</span> <span class="s2">&quot;ASSOCIATEDOIL_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
-        <span class="s2">&quot;Assoc.Gas&quot;</span><span class="p">:</span> <span class="s2">&quot;ASSOCIATEDGAS_&quot;</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Zone"</span><span class="p">:</span> <span class="s2">"ZONE"</span><span class="p">,</span>
+        <span class="s2">"Region index"</span><span class="p">:</span> <span class="s2">"REGION"</span><span class="p">,</span>
+        <span class="s2">"Facies"</span><span class="p">:</span> <span class="s2">"FACIES"</span><span class="p">,</span>
+        <span class="s2">"License boundaries"</span><span class="p">:</span> <span class="s2">"LICENSE"</span><span class="p">,</span>
+        <span class="s2">"Bulk"</span><span class="p">:</span> <span class="s2">"BULK_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Net"</span><span class="p">:</span> <span class="s2">"NET_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Hcpv"</span><span class="p">:</span> <span class="s2">"HCPV_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Pore"</span><span class="p">:</span> <span class="s2">"PORV_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Stoiip"</span><span class="p">:</span> <span class="s2">"STOIIP_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Giip"</span><span class="p">:</span> <span class="s2">"GIIP_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Assoc.Liquid"</span><span class="p">:</span> <span class="s2">"ASSOCIATEDOIL_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
+        <span class="s2">"Assoc.Gas"</span><span class="p">:</span> <span class="s2">"ASSOCIATEDGAS_"</span> <span class="o">+</span> <span class="n">phase</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">columnrenamer</span><span class="p">:</span>
         <span class="c1"># Overwrite with user supplied column conversion</span>
@@ -233,21 +233,21 @@
 
     <span class="c1"># Work on the data itself:</span>
     <span class="k">if</span> <span class="n">regionrenamer</span><span class="p">:</span>
-        <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;REGION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">regionrenamer</span><span class="p">)</span>
+        <span class="n">vol_df</span><span class="p">[</span><span class="s2">"REGION"</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="s2">"REGION"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">regionrenamer</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zonerenamer</span><span class="p">:</span>
-        <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zonerenamer</span><span class="p">)</span>
+        <span class="n">vol_df</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zonerenamer</span><span class="p">)</span>
 
-    <span class="n">index_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">,</span> <span class="s2">&quot;REGION&quot;</span><span class="p">,</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">,</span> <span class="s2">&quot;FACIES&quot;</span><span class="p">]</span>
+    <span class="n">index_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ZONE"</span><span class="p">,</span> <span class="s2">"REGION"</span><span class="p">,</span> <span class="s2">"LICENSE"</span><span class="p">,</span> <span class="s2">"FACIES"</span><span class="p">]</span>
     <span class="n">present_index_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">index_columns</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">vol_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
 
     <span class="c1"># Index columns should always be of string datatype:</span>
     <span class="n">vol_df</span><span class="p">[</span><span class="n">present_index_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="n">present_index_columns</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="c1"># Remove the Totals rows in case they are present, signified by the</span>
-    <span class="c1"># magic value &quot;Totals&quot; in any of the index columns:</span>
+    <span class="c1"># magic value "Totals" in any of the index columns:</span>
     <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">vol_df</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">present_index_columns</span><span class="p">:</span>
-        <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">totalsrows</span> <span class="o">|</span> <span class="p">(</span><span class="n">vol_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Totals&quot;</span><span class="p">)</span>
+        <span class="n">totalsrows</span> <span class="o">=</span> <span class="n">totalsrows</span> <span class="o">|</span> <span class="p">(</span><span class="n">vol_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Totals"</span><span class="p">)</span>
     <span class="n">vol_df</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">[</span><span class="o">~</span><span class="n">totalsrows</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">outfile</span><span class="p">:</span>
@@ -261,55 +261,55 @@
 <div class="viewcode-block" id="guess_phase">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.guess_phase">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">guess_phase</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;From a text-file, guess which phase the text file</span>
-<span class="sd">    concerns, oil, gas or the &quot;total&quot; phase.</span>
+<span class="w">    </span><span class="sd">"""From a text-file, guess which phase the text file</span>
+<span class="sd">    concerns, oil, gas or the "total" phase.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text (str): Multiline</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        str: &quot;OIL&quot;, &quot;GAS&quot; or &quot;TOTAL&quot;</span>
+<span class="sd">        str: "OIL", "GAS" or "TOTAL"</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError if guessing fails.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;oil&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s2">&quot;OIL&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;gas&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s2">&quot;GAS&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;total&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s2">&quot;TOTAL&quot;</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not able to guess phase&quot;</span><span class="p">)</span></div>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"oil"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">"OIL"</span>
+    <span class="k">if</span> <span class="s2">"gas"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">"GAS"</span>
+    <span class="k">if</span> <span class="s2">"total"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">"TOTAL"</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Not able to guess phase"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="get_parser">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.get_parser">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up parser for command line utility&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Set up parser for command line utility"""</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Convert single RMS volumetrics files to CSV&quot;</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Convert single RMS volumetrics files to CSV"</span>
     <span class="p">)</span>
 
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;rmsvolumetricsfile&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"rmsvolumetricsfile"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--phase&quot;</span><span class="p">,</span>
+        <span class="s2">"--phase"</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Set typically to &#39;GAS&#39;, &#39;OIL&#39; or &#39;TOTAL&#39;. &quot;</span>
-            <span class="s2">&quot;Will be appended to column headers. &quot;</span>
-            <span class="s2">&quot;If not given, it will be guessed from the filename&quot;</span>
+            <span class="s2">"Set typically to 'GAS', 'OIL' or 'TOTAL'. "</span>
+            <span class="s2">"Will be appended to column headers. "</span>
+            <span class="s2">"If not given, it will be guessed from the filename"</span>
         <span class="p">),</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;--output&quot;</span><span class="p">,</span>
+        <span class="s2">"-o"</span><span class="p">,</span>
+        <span class="s2">"--output"</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of output CSV file. Use &#39;-&#39; for stdout (default)&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">"Name of output CSV file. Use '-' for stdout (default)"</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Be verbose&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"-v"</span><span class="p">,</span> <span class="s2">"--verbose"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Be verbose"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">parser</span></div>
 
 
@@ -317,7 +317,7 @@
 <div class="viewcode-block" id="rmsvolumetrics2csv_main">
 <a class="viewcode-back" href="../../../../fmu.tools.rms.html#fmu.tools.rms.volumetrics.rmsvolumetrics2csv_main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rmsvolumetrics2csv_main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Endpoint for command line utility for converting one file at a time&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Endpoint for command line utility for converting one file at a time"""</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">get_parser</span><span class="p">()</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
@@ -328,14 +328,14 @@
 
     <span class="n">vol_df</span> <span class="o">=</span> <span class="n">rmsvolumetrics_txt2df</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">rmsvolumetricsfile</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">phase</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
         <span class="c1"># Ignore pipe errors when writing to stdout.</span>
         <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGPIPE</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_DFL</span><span class="p">)</span>
         <span class="n">vol_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">vol_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wrote to &quot;</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Wrote to "</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcdata.qcdata &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.qcdata.qcdata &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,12 +90,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.qcdata.qcdata</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">This private module in qcforward is used to parse data on a general level.</span>
 
 <span class="sd">The resulting data will be stored as class instance attributes, e.g. self._grid</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
@@ -111,7 +111,7 @@
 <div class="viewcode-block" id="QCData">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">QCData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This is a class which parse/reads and stores some common data</span>
 <span class="sd">    like 3D grids, maps etc.</span>
 
@@ -121,12 +121,12 @@
 <span class="sd">    By having it as a class one can store different datasets and compare them later</span>
 <span class="sd">    if needed. E.g. if one need to compare two grid models, they will be members</span>
 <span class="sd">    of two different instances of the QCData()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reuse</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># All XTGeo data, to be reused</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>  <span class="c1"># usually not needed to set explisit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="s2">"."</span>  <span class="c1"># usually not needed to set explisit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># pointing to  RMS project ID if any</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A XTGeo Grid()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># XTGeo GridProperties() for multiple props</span>
@@ -141,42 +141,42 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Project attribute as Roxar project instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Project attribute as Roxar project instance"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Grid attribute as XTGeo Grid() instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Grid attribute as XTGeo Grid() instance"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;GridProperties attribute as XTGeo GridProperties() instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""GridProperties attribute as XTGeo GridProperties() instance"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">wells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wells attribute as XTGeo Wells() instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wells attribute as XTGeo Wells() instance"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wells</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">bwells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wells attribute as XTGeo BlockedWells() instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Wells attribute as XTGeo BlockedWells() instance"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bwells</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">xtgdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;All xtgeo based data as a dictionay&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""All xtgeo based data as a dictionay"""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span>
 
     <span class="c1"># Class methods:</span>
     <span class="c1"># ==================================================================================</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_xtgdata_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;bwells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"wells"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"bwells"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="QCData.parse">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse">[docs]</a>
@@ -187,11 +187,11 @@
         <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">wells_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the actual data, such as grids, gridprops etc.</span>
+<span class="w">        </span><span class="sd">"""Parse the actual data, such as grids, gridprops etc.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (dict): The input data dictionary</span>
-<span class="sd">                fine grained control, e.g. [&quot;grid&quot;, &quot;gridprops&quot;, &quot;wells&quot;]</span>
+<span class="sd">                fine grained control, e.g. ["grid", "gridprops", "wells"]</span>
 <span class="sd">            project (obj or str): For usage inside RMS</span>
 <span class="sd">            reuse (bool or list): If True, do not reread grid and gridprops. Can also be</span>
 <span class="sd">                a list referring to key names.</span>
@@ -199,23 +199,23 @@
 <span class="sd">                up reading and/or execution. If set, this is a dictionary with keys</span>
 <span class="sd">                ``lognames``, ``depthrange``, ``resample``</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbosity&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"verbosity"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reuse</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="n">reuse</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="s2">&quot;gridprops&quot;</span><span class="p">,</span> <span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">reuse</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">reuse</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"grid"</span><span class="p">,</span> <span class="s2">"gridprops"</span><span class="p">,</span> <span class="s2">"wells"</span><span class="p">]</span> <span class="k">if</span> <span class="n">reuse</span> <span class="k">else</span> <span class="p">[]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_path</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"path"</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parse_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">],</span> <span class="n">reuse</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"grid"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">],</span> <span class="n">reuse</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;gridprops&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">read_gridprops</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grid&quot;</span><span class="p">),</span> <span class="n">reuse</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"gridprops"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_gridprops</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"grid"</span><span class="p">),</span> <span class="n">reuse</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">welltype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">,</span> <span class="s2">&quot;bwells&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">welltype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"wells"</span><span class="p">,</span> <span class="s2">"bwells"</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">welltype</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">read_wells</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">welltype</span><span class="p">],</span> <span class="n">welltype</span><span class="p">,</span> <span class="n">wells_settings</span><span class="p">,</span> <span class="n">reuse</span><span class="p">)</span></div>
 
@@ -223,14 +223,14 @@
 <div class="viewcode-block" id="QCData.set_path">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.set_path">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;General path prefix settings&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""General path prefix settings"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span></div>
 
 
 <div class="viewcode-block" id="QCData.parse_project">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.parse_project">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the RoxarAPI project magics&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the RoxarAPI project magics"""</span>
 
         <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rox</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">RoxUtils</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
@@ -242,35 +242,35 @@
 <div class="viewcode-block" id="QCData.read_grid">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_grid">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">reuse</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read 3D grid (which is required), from file or RMS&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Read 3D grid (which is required), from file or RMS"""</span>
 
         <span class="n">gridname</span> <span class="o">=</span> <span class="n">gridname</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GRIDNAME: </span><span class="si">{</span><span class="n">gridname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"GRIDNAME: </span><span class="si">{</span><span class="n">gridname</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Reading grid geometry...&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;grid&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">gridname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]):</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Reading grid geometry..."</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">"grid"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">gridname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="n">gridname</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="kc">None</span>
                 <span class="k">else</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reusing grid </span><span class="si">{</span><span class="n">gridname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span></div>
+            <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reusing grid </span><span class="si">{</span><span class="n">gridname</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="QCData.read_gridprops">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_gridprops">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read 3D grid props, from file or RMS.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Read 3D grid props, from file or RMS."""</span>
 
         <span class="n">gridname</span> <span class="o">=</span> <span class="n">gridname</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Reading grid properties...&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Reading grid properties..."</span><span class="p">)</span>
         <span class="n">gprops</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="s2">&quot;gridprops&quot;</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"gridprops"</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">:</span>
             <span class="n">reused_gprops</span><span class="p">,</span> <span class="n">gridprops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reuse_gridprops</span><span class="p">(</span><span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="p">)</span>
             <span class="n">gprops</span> <span class="o">=</span> <span class="n">reused_gprops</span>
 
@@ -290,9 +290,9 @@
                 <span class="n">xtg_gprop</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">pname</span> <span class="k">if</span> <span class="n">pname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">pfile</span>
                 <span class="n">gprops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtg_gprop</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gprop</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="nb">tuple</span><span class="p">(</span><span class="n">gprop</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="nb">tuple</span><span class="p">(</span><span class="n">gprop</span><span class="p">)]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="n">gprop</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="n">gprop</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># read from RMS/ROXAPI</span>
             <span class="k">for</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">gridprops</span><span class="p">:</span>
@@ -300,63 +300,63 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="p">,</span> <span class="n">gridname</span><span class="p">,</span> <span class="n">pname</span>
                 <span class="p">)</span>
                 <span class="n">gprops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtg_gprop</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">][</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtg_gprop</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperties</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gridprops</span><span class="o">.</span><span class="n">append_props</span><span class="p">(</span><span class="n">gprops</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_well_preparations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Account for wildcards and regex in wellist&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Account for wildcards and regex in wellist"""</span>
 
         <span class="n">input_wells</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">welldata</span> <span class="ow">in</span> <span class="n">wells</span><span class="p">:</span>
-                <span class="c1"># fields may contain wildcards for &quot;globbing&quot;</span>
+                <span class="c1"># fields may contain wildcards for "globbing"</span>
                 <span class="k">for</span> <span class="n">wellentry</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">welldata</span><span class="p">)):</span>
                     <span class="n">input_wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wellentry</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># roxar API input:</span>
-            <span class="n">wnames</span> <span class="o">=</span> <span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;.*$&quot;</span><span class="p">])</span>
+            <span class="n">wnames</span> <span class="o">=</span> <span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"names"</span><span class="p">,</span> <span class="p">[</span><span class="s2">".*$"</span><span class="p">])</span>
             <span class="n">rmswells</span> <span class="o">=</span> <span class="p">[</span><span class="n">wll</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">wll</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="o">.</span><span class="n">wells</span><span class="p">]</span>
 
-            <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All RMS wells: </span><span class="si">{</span><span class="n">rmswells</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data wells to match: </span><span class="si">{</span><span class="n">wnames</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"All RMS wells: </span><span class="si">{</span><span class="n">rmswells</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Data wells to match: </span><span class="si">{</span><span class="n">wnames</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">rmswell</span> <span class="ow">in</span> <span class="n">rmswells</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">wreg</span> <span class="o">+</span> <span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="n">rmswell</span><span class="p">)</span> <span class="k">for</span> <span class="n">wreg</span> <span class="ow">in</span> <span class="n">wnames</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">wreg</span> <span class="o">+</span> <span class="s2">"$"</span><span class="p">,</span> <span class="n">rmswell</span><span class="p">)</span> <span class="k">for</span> <span class="n">wreg</span> <span class="ow">in</span> <span class="n">wnames</span><span class="p">):</span>
                     <span class="n">input_wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rmswell</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">input_wells</span>
 
 <div class="viewcode-block" id="QCData.read_wells">
 <a class="viewcode-back" href="../../../../fmu.tools.qcdata.html#fmu.tools.qcdata.qcdata.QCData.read_wells">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">read_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="o">=</span><span class="s2">&quot;wells&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reading wells&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="o">=</span><span class="s2">"wells"</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Reading wells"""</span>
 
         <span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span> <span class="k">if</span> <span class="n">settings</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">wellist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_well_preparations</span><span class="p">(</span><span class="n">wells</span><span class="p">)</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Reading wells...&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Reading wells..."</span><span class="p">)</span>
         <span class="n">xtg_wells</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="s2">&quot;wells&quot;</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"wells"</span> <span class="ow">in</span> <span class="n">reuse</span><span class="p">:</span>
             <span class="n">reused_wells</span><span class="p">,</span> <span class="n">wellist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reuse_wells</span><span class="p">(</span><span class="n">wellist</span><span class="p">,</span> <span class="n">welltype</span><span class="p">)</span>
             <span class="n">xtg_wells</span> <span class="o">=</span> <span class="n">reused_wells</span>
 
         <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">wellist</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">welltype</span> <span class="o">==</span> <span class="s2">&quot;wells&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">welltype</span> <span class="o">==</span> <span class="s2">"wells"</span><span class="p">:</span>
                     <span class="n">mywell</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_file</span><span class="p">(</span>
-                            <span class="n">well</span><span class="p">,</span> <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lognames&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
+                            <span class="n">well</span><span class="p">,</span> <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"lognames"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">)</span>
                         <span class="p">)</span>
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="kc">None</span>
                         <span class="k">else</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_roxar</span><span class="p">(</span>
                             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="p">,</span>
                             <span class="n">name</span><span class="o">=</span><span class="n">well</span><span class="p">,</span>
-                            <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lognames&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">),</span>
-                            <span class="n">logrun</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;logrun&quot;</span><span class="p">,</span> <span class="s2">&quot;log&quot;</span><span class="p">),</span>
-                            <span class="n">trajectory</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;trajectory&quot;</span><span class="p">,</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">),</span>
+                            <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"lognames"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">),</span>
+                            <span class="n">logrun</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"logrun"</span><span class="p">,</span> <span class="s2">"log"</span><span class="p">),</span>
+                            <span class="n">trajectory</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"trajectory"</span><span class="p">,</span> <span class="s2">"Drilled trajectory"</span><span class="p">),</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -365,74 +365,74 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span> <span class="ow">is</span> <span class="kc">None</span>
                         <span class="k">else</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">blockedwell_from_roxar</span><span class="p">(</span>
                             <span class="n">project</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="p">,</span>
-                            <span class="n">gname</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">),</span>
-                            <span class="n">bwname</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bwname&quot;</span><span class="p">,</span> <span class="s2">&quot;BW&quot;</span><span class="p">),</span>
+                            <span class="n">gname</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"grid"</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">),</span>
+                            <span class="n">bwname</span><span class="o">=</span><span class="n">wells</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"bwname"</span><span class="p">,</span> <span class="s2">"BW"</span><span class="p">),</span>
                             <span class="n">wname</span><span class="o">=</span><span class="n">well</span><span class="p">,</span>
-                            <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lognames&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">),</span>
+                            <span class="n">lognames</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"lognames"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">),</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="n">xtg_wells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mywell</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="n">welltype</span><span class="p">][</span><span class="n">well</span><span class="p">]</span> <span class="o">=</span> <span class="n">mywell</span>
 
             <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">verr</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not read well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">verr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not read well </span><span class="si">{</span><span class="n">well</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">verr</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All valid welldata: </span><span class="si">{</span><span class="n">xtg_wells</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"All valid welldata: </span><span class="si">{</span><span class="n">xtg_wells</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">mywell</span> <span class="ow">in</span> <span class="n">xtg_wells</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;depthrange&quot;</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">and</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;depthrange&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;depthrange&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"depthrange"</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">and</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"depthrange"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"depthrange"</span><span class="p">]</span>
                 <span class="n">mywell</span><span class="o">.</span><span class="n">limit_tvd</span><span class="p">(</span><span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">&quot;rescale&quot;</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">and</span> <span class="n">settings</span><span class="p">[</span><span class="s2">&quot;rescale&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">mywell</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;rescale&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s2">"rescale"</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">and</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"rescale"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">mywell</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"rescale"</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">xtg_wells</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">welltype</span> <span class="o">==</span> <span class="s2">&quot;wells&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">welltype</span> <span class="o">==</span> <span class="s2">"wells"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_wells</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Wells</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_wells</span><span class="o">.</span><span class="n">wells</span> <span class="o">=</span> <span class="n">xtg_wells</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_bwells</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">BlockedWells</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_bwells</span><span class="o">.</span><span class="n">wells</span> <span class="o">=</span> <span class="n">xtg_wells</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No wells read, wrong settings?&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"No wells read, wrong settings?"</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_reuse_gridprops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gridprops</span><span class="p">,</span> <span class="n">gridname</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Identify which gridprops are available for reusing, reusable</span>
 <span class="sd">        gridprops and new gridprops are returned in separate lists</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">new_gprops</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">reused_gprops</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">gridprops</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]:</span>
                     <span class="n">new_gprops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
                 <span class="n">reused_gprops</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">value</span>
-                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                     <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="ow">in</span> <span class="n">gridprops</span>
                 <span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">elem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">elem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]:</span>
                     <span class="n">new_gprops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
                 <span class="n">reused_gprops</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">value</span>
-                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">&quot;gridprops&quot;</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="s2">"gridprops"</span><span class="p">][</span><span class="n">gridname</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">gridprops</span>
                 <span class="p">]</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reusing gridprops: </span><span class="si">{</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reused_gprops</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New gridprops: </span><span class="si">{</span><span class="n">new_gprops</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reusing gridprops: </span><span class="si">{</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reused_gprops</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"New gridprops: </span><span class="si">{</span><span class="n">new_gprops</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">reused_gprops</span><span class="p">,</span> <span class="n">new_gprops</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_reuse_wells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wells</span><span class="p">,</span> <span class="n">welltype</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Identify which wells are available for reusing, reusable</span>
 <span class="sd">        wells and new wells are returned in separate lists</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">new_wells</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">reused_wells</span> <span class="o">=</span> <span class="p">[]</span>
@@ -444,8 +444,8 @@
             <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xtgdata</span><span class="p">[</span><span class="n">welltype</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wells</span>
         <span class="p">]</span>
 
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reused wells: </span><span class="si">{</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reused_wells</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New wells: </span><span class="si">{</span><span class="n">new_wells</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Reused wells: </span><span class="si">{</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reused_wells</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">CMN</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"New wells: </span><span class="si">{</span><span class="n">new_wells</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">reused_wells</span><span class="p">,</span> <span class="n">new_wells</span></div>
 

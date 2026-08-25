@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.extract_grid_zone_tops_etc &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.extract_grid_zone_tops_etc &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -90,7 +90,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.extract_grid_zone_tops_etc</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Extract grid zone tops from wells.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Extract grid zone tops from wells."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
@@ -105,17 +105,17 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_grid_zone_tops</span><span class="p">(</span>
     <span class="n">project</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">well_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">logrun</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
-    <span class="n">trajectory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
+    <span class="n">logrun</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"log"</span><span class="p">,</span>
+    <span class="n">trajectory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Drilled trajectory"</span><span class="p">,</span>
     <span class="n">gridzonelog</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">mdlogname</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">grid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">zone_param</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">alias_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RMS_WELL_NAME&quot;</span><span class="p">,</span>
-    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE_WELL_NAME&quot;</span><span class="p">,</span>
+    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"RMS_WELL_NAME"</span><span class="p">,</span>
+    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ECLIPSE_WELL_NAME"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Function for extracting top and base from gridzones, both in TVD and MD.</span>
 <span class="sd">    A pandas dataframe will be returned.</span>
 
@@ -124,7 +124,7 @@
 
 <span class="sd">    The function works both inside RMS and outside with file input. If input from files,</span>
 <span class="sd">    and a MD log is not present in the well a quasi md log will be computed and used.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">use_gridzonelog</span> <span class="o">=</span> <span class="n">gridzonelog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_gridzonelog</span><span class="p">:</span>
@@ -135,9 +135,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
                 <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="n">zone_param</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">mygrid</span><span class="p">)</span>
-            <span class="n">gridzones</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Zone&quot;</span>
+            <span class="n">gridzones</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"Zone"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Specify either &#39;gridzonelog&#39; or &#39;grid&#39; and &#39;zone_param&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Specify either 'gridzonelog' or 'grid' and 'zone_param"</span><span class="p">)</span>
 
     <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -164,48 +164,48 @@
         <span class="c1"># if no gridzonelog create one from the zone parameter</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">use_gridzonelog</span><span class="p">:</span>
             <span class="n">xtg_well</span><span class="o">.</span><span class="n">get_gridproperties</span><span class="p">(</span><span class="n">gridzones</span><span class="p">,</span> <span class="n">mygrid</span><span class="p">)</span>
-            <span class="n">gridzonelog</span> <span class="o">=</span> <span class="s2">&quot;Zone_model&quot;</span>
+            <span class="n">gridzonelog</span> <span class="o">=</span> <span class="s2">"Zone_model"</span>
 
         <span class="k">if</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">gridzonelog</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
             <span class="k">continue</span>
 
         <span class="c1"># Set gridzonelog as zonelog and extract zonation tops from it</span>
         <span class="n">xtg_well</span><span class="o">.</span><span class="n">zonelogname</span> <span class="o">=</span> <span class="n">gridzonelog</span>
-        <span class="n">dframe</span> <span class="o">=</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">get_zonation_points</span><span class="p">(</span><span class="n">top_prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">use_undef</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dframe</span> <span class="o">=</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">get_zonation_points</span><span class="p">(</span><span class="n">top_prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">use_undef</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">dframe</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">:</span> <span class="s2">&quot;TOP_TVD&quot;</span><span class="p">,</span>
-                <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">:</span> <span class="s2">&quot;TOP_MD&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Zone&quot;</span><span class="p">:</span> <span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;WellName&quot;</span><span class="p">:</span> <span class="s2">&quot;WELL&quot;</span><span class="p">,</span>
+                <span class="s2">"Z_TVDSS"</span><span class="p">:</span> <span class="s2">"TOP_TVD"</span><span class="p">,</span>
+                <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">:</span> <span class="s2">"TOP_MD"</span><span class="p">,</span>
+                <span class="s2">"Zone"</span><span class="p">:</span> <span class="s2">"ZONE_CODE"</span><span class="p">,</span>
+                <span class="s2">"WellName"</span><span class="p">:</span> <span class="s2">"WELL"</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="c1"># find deepest point in well while in grid</span>
         <span class="n">df_max</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">xtg_well</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[[</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">,</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">,</span> <span class="n">gridzonelog</span><span class="p">]]</span>
+            <span class="n">xtg_well</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[[</span><span class="s2">"Z_TVDSS"</span><span class="p">,</span> <span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">,</span> <span class="n">gridzonelog</span><span class="p">]]</span>
             <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
             <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="c1"># create base picks also</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;BASE_TVD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TOP_TVD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;BASE_MD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;TOP_MD&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;BASE_TVD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;Z_TVDSS&quot;</span><span class="p">]</span>
-        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;BASE_MD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">]</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"BASE_TVD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"TOP_TVD"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"BASE_MD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dframe</span><span class="p">[</span><span class="s2">"TOP_MD"</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"BASE_TVD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">"Z_TVDSS"</span><span class="p">]</span>
+        <span class="n">dframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dframe</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"BASE_MD"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_max</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">mdlogname</span><span class="p">]</span>
         <span class="c1"># adjust zone values to get correct zone information</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shift_zone_values</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-        <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">dframe</span><span class="p">[</span><span class="s2">&quot;ZONE_CODE&quot;</span><span class="p">]</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE_CODE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">shift_zone_values</span><span class="p">(</span><span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE_CODE"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dframe</span><span class="p">[</span><span class="s2">"ZONE_CODE"</span><span class="p">]</span>
             <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">get_logrecord</span><span class="p">(</span><span class="n">xtg_well</span><span class="o">.</span><span class="n">zonelogname</span><span class="p">))</span>
-            <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;Outside&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">"Outside"</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TopName&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_INCL&quot;</span><span class="p">,</span> <span class="s2">&quot;Q_AZI&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">))</span>
+        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dframe</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"TopName"</span><span class="p">,</span> <span class="s2">"Q_INCL"</span><span class="p">,</span> <span class="s2">"Q_AZI"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">))</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">alias_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">well_dict</span> <span class="o">=</span> <span class="n">make_alias_dict</span><span class="p">(</span><span class="n">alias_file</span><span class="p">,</span> <span class="n">rms_name</span><span class="p">,</span> <span class="n">ecl_name</span><span class="p">)</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;WELL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;WELL&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">well_dict</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">"WELL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"WELL"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">well_dict</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
@@ -226,13 +226,13 @@
 <a class="viewcode-back" href="../../../fmu.tools.html#fmu.tools.extract_grid_zone_tops_etc.make_alias_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_alias_dict</span><span class="p">(</span>
     <span class="n">alias_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
-    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;RMS_WELL_NAME&quot;</span><span class="p">,</span>
-    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE_WELL_NAME&quot;</span><span class="p">,</span>
+    <span class="n">rms_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"RMS_WELL_NAME"</span><span class="p">,</span>
+    <span class="n">ecl_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ECLIPSE_WELL_NAME"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a correspondance dictionary so that well_dict[ &lt;RMS wellname&gt; ]</span>
 <span class="sd">    = &lt;Eclipse wellname&gt;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">alias_file</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">rms_name</span><span class="p">)</span>
     <span class="n">well_dict</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">well_dict</span><span class="p">[</span><span class="n">ecl_name</span><span class="p">]</span></div>

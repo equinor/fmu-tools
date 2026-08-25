@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.create_fluid_contacts_from_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>rms.create_fluid_contacts_from_grid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -153,7 +153,7 @@ you can specify its name as well.</p>
 <p>Example below shows a minimum configuration 👇</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
 
-<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">)</span>
+<span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">gridname</span><span class="o">=</span><span class="s2">"MyGrid"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Example below shows how to use contact properties that do not follow the default naming convention 👇</p>
@@ -161,9 +161,9 @@ you can specify its name as well.</p>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
-    <span class="n">fwl_name</span><span class="o">=</span><span class="s2">&quot;FWL_prop&quot;</span><span class="p">,</span>
-    <span class="n">goc_name</span><span class="o">=</span><span class="s2">&quot;GOC_prop&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">"MyGrid"</span><span class="p">,</span>
+    <span class="n">fwl_name</span><span class="o">=</span><span class="s2">"FWL_prop"</span><span class="p">,</span>
+    <span class="n">goc_name</span><span class="o">=</span><span class="s2">"GOC_prop"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -172,8 +172,8 @@ you can specify its name as well.</p>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
-    <span class="n">zone_name</span><span class="o">=</span><span class="s2">&quot;Contact_zones&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">"MyGrid"</span><span class="p">,</span>
+    <span class="n">zone_name</span><span class="o">=</span><span class="s2">"Contact_zones"</span><span class="p">,</span>
     <span class="n">min_value_filter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -182,11 +182,11 @@ you can specify its name as well.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fluid_contacts_from_grid</span>
 
-<span class="n">template_surf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;template_surface&quot;</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;clipboard&quot;</span><span class="p">)</span>
+<span class="n">template_surf</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"template_surface"</span><span class="p">,</span> <span class="s2">"templates"</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">"clipboard"</span><span class="p">)</span>
 
 <span class="n">create_fluid_contacts_from_grid</span><span class="p">(</span>
     <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;MyGrid&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">"MyGrid"</span><span class="p">,</span>
     <span class="n">grid_refinement</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">template_surf</span><span class="o">=</span><span class="n">template_surf</span><span class="p">,</span>
 <span class="p">)</span>

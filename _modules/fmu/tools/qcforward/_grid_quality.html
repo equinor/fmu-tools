@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.qcforward._grid_quality &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.qcforward._grid_quality &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,9 +90,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.qcforward._grid_quality</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">This private module in qcforward is used to check grid quality</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
@@ -108,33 +108,33 @@
 
 <span class="n">QCC</span> <span class="o">=</span> <span class="n">_QCCommon</span><span class="p">()</span>
 
-<span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+<span class="n">UNDEF</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_LocalData</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Defining and hold data local for this routine&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Defining and hold data local for this routine"""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">&quot;GRID QUALITY&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infotext</span> <span class="o">=</span> <span class="s2">"GRID QUALITY"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">writeicon</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parsing the actual data&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Parsing the actual data"""</span>
 
         <span class="c1"># TODO: verify and qc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nametag&quot;</span><span class="p">,</span> <span class="s2">&quot;unset_nametag&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;report&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nametag</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nametag"</span><span class="p">,</span> <span class="s2">"unset_nametag"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"report"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reportfile</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
-                <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"file"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;actions&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">writeicon</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;writeicon&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"actions"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writeicon</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"writeicon"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="GridQuality">
@@ -143,27 +143,27 @@
 <div class="viewcode-block" id="GridQuality.run">
 <a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Main routine for evaluating grid quality and stop/warn if too bad</span>
+<span class="w">        </span><span class="sd">"""Main routine for evaluating grid quality and stop/warn if too bad</span>
 
 <span class="sd">        The routine depends on existing XTGeo functions for this purpose.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            data (dict or str): The input data either as a Python dictionary or</span>
 <span class="sd">                a path to a YAML file</span>
-<span class="sd">            reuse (bool or list): Reusing some &quot;timeconsuming to read&quot; data in the</span>
+<span class="sd">            reuse (bool or list): Reusing some "timeconsuming to read" data in the</span>
 <span class="sd">                instance. If True, then grid and gridprops will be reused as default.</span>
 <span class="sd">                Alternatively it can be a list for more fine grained control, e.g.</span>
-<span class="sd">                [&quot;grid&quot;, &quot;gridprops&quot;, &quot;wells&quot;]</span>
+<span class="sd">                ["grid", "gridprops", "wells"]</span>
 <span class="sd">            project (Union[object, str]): For usage inside RMS, None if running files</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 
-        <span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbosity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"verbosity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># parse data that are special for this check</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">&quot;Parsing additional data...&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="s2">"Parsing additional data..."</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span> <span class="o">=</span> <span class="n">_LocalData</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
@@ -174,15 +174,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
         <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_gridquality</span><span class="p">()</span>
-        <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Results: </span><span class="se">\n</span><span class="si">{</span><span class="n">dfr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Results: </span><span class="se">\n</span><span class="si">{</span><span class="n">dfr</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">&quot;grid quality&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_qcreport</span><span class="p">(</span><span class="n">dfr</span><span class="p">,</span> <span class="s2">"grid quality"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GridQuality.check_gridquality">
 <a class="viewcode-back" href="../../../../fmu.tools.qcforward.html#fmu.tools.qcforward.GridQuality.check_gridquality">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_gridquality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Given data, do check of gridquality via XTGeo</span>
 
 <span class="sd">        Final result will be a table like this::</span>
@@ -191,23 +191,23 @@
 <span class="sd">          GRIDQUALITY</span>
 <span class="sd">          minangle_top_base[0]  all&gt;10%ifx&lt;60  13.44  all&gt;0%ifx&lt;40  2.32   WARN</span>
 <span class="sd">          collapsed[0]          all&gt;15%        12.25  allcells&gt;30%  0.0    OK</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># get properties via XTGeo method get_gridquality_properties()</span>
         <span class="n">gqc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gdata</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">get_gridquality_properties</span><span class="p">()</span>
 
         <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">actions</span>
         <span class="k">if</span> <span class="n">actions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No actions are defined for grid quality&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No actions are defined for grid quality"</span><span class="p">)</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="p">(</span><span class="s2">&quot;GRIDQUALITY&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;WARNRULE&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;WARN%&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;STOPRULE&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;STOP%&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-                <span class="p">(</span><span class="s2">&quot;STATUS&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"GRIDQUALITY"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"WARNRULE"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"WARN%"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"STOPRULE"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"STOP%"</span><span class="p">,</span> <span class="p">[]),</span>
+                <span class="p">(</span><span class="s2">"STATUS"</span><span class="p">,</span> <span class="p">[]),</span>
             <span class="p">]</span>
         <span class="p">)</span>
 
@@ -217,73 +217,73 @@
 
             <span class="n">therules</span> <span class="o">=</span> <span class="n">actions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">writeicon</span> <span class="ow">and</span> <span class="n">therules</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Write icon in RMS for </span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">prop</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;project&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">],</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"project"</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">writeicon</span> <span class="ow">and</span> <span class="n">therules</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">QCC</span><span class="o">.</span><span class="n">print_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Write icon in RMS for </span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">prop</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"project"</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">],</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">therules</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">continue</span>
 
             <span class="k">for</span> <span class="n">numrule</span><span class="p">,</span> <span class="n">therule</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">therules</span><span class="p">):</span>
                 <span class="n">warnrule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
-                    <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
+                    <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"warn"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"warn"</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
                 <span class="p">)</span>
                 <span class="n">stoprule</span> <span class="o">=</span> <span class="n">ActionsParser</span><span class="p">(</span>
-                    <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
+                    <span class="n">therule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"stop"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"stop"</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">QCC</span><span class="o">.</span><span class="n">verbosity</span>
                 <span class="p">)</span>
 
-                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARN RULE </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;STOP RULE </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"WARN RULE </span><span class="si">{</span><span class="n">warnrule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">QCC</span><span class="o">.</span><span class="n">print_debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"STOP RULE </span><span class="si">{</span><span class="n">stoprule</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="c1"># if stoprule is None or warnrule is None:</span>
-                <span class="c1">#     raise ValueError(&quot;Rules for both warn and stop must be defined&quot;)</span>
+                <span class="c1">#     raise ValueError("Rules for both warn and stop must be defined")</span>
 
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;GRIDQUALITY&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">numrule</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">"GRIDQUALITY"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">numrule</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span>
 
-                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="s2">"OK"</span>
                 <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="p">[</span><span class="n">warnrule</span><span class="p">,</span> <span class="n">stoprule</span><span class="p">]:</span>
                     <span class="n">status</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_allcells</span><span class="p">(</span>
                         <span class="n">issue</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">status</span>
                     <span class="p">)</span>
 
-                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;STATUS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">"STATUS"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 
         <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span><span class="p">(</span>
             <span class="n">result</span><span class="p">,</span> <span class="n">reportfile</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">reportfile</span><span class="p">,</span> <span class="n">nametag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ldata</span><span class="o">.</span><span class="n">nametag</span>
         <span class="p">)</span>
-        <span class="n">dfr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;GRIDQUALITY&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dfr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"GRIDQUALITY"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dfr</span></div>
 
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_allcells</span><span class="p">(</span><span class="n">issue</span><span class="p">,</span> <span class="n">inresult</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">instatus</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluation of all cells per issue (warn or stop) given the criteria.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Evaluation of all cells per issue (warn or stop) given the criteria."""</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">inresult</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">status</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;RULE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
-            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;OK&quot;</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"%"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"RULE"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UNDEF</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">"OK"</span>
             <span class="k">return</span> <span class="n">status</span><span class="p">,</span> <span class="n">result</span>
 
         <span class="n">ncell</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">given</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">given</span> <span class="o">==</span> <span class="s2">"&lt;"</span><span class="p">:</span>
             <span class="n">nbyrule</span> <span class="o">=</span> <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">criteria</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">issue</span><span class="o">.</span><span class="n">given</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">issue</span><span class="o">.</span><span class="n">given</span> <span class="o">==</span> <span class="s2">"&gt;"</span><span class="p">:</span>
             <span class="n">nbyrule</span> <span class="o">=</span> <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">criteria</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># e.g. discrete qual parameters such as &#39;faulted&#39; have only 0 or 1 values</span>
+            <span class="c1"># e.g. discrete qual parameters such as 'faulted' have only 0 or 1 values</span>
             <span class="n">nbyrule</span> <span class="o">=</span> <span class="p">(</span><span class="n">prop</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
         <span class="n">actualpercent</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">nbyrule</span> <span class="o">/</span> <span class="n">ncell</span>
 
-        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actualpercent</span><span class="p">)</span>
-        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;RULE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"%"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actualpercent</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"RULE"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span> <span class="ow">and</span> <span class="n">actualpercent</span> <span class="o">&gt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
-            <span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span> <span class="ow">and</span> <span class="n">actualpercent</span> <span class="o">&lt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">"&gt;"</span> <span class="ow">and</span> <span class="n">actualpercent</span> <span class="o">&gt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">issue</span><span class="o">.</span><span class="n">compare</span> <span class="o">==</span> <span class="s2">"&lt;"</span> <span class="ow">and</span> <span class="n">actualpercent</span> <span class="o">&lt;</span> <span class="n">issue</span><span class="o">.</span><span class="n">limit</span>
         <span class="p">):</span>
             <span class="n">status</span> <span class="o">=</span> <span class="n">issue</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -293,16 +293,16 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_input</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate data against JSON schemas, TODO complete schemas&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validate data against JSON schemas, TODO complete schemas"""</span>
 
-        <span class="n">spath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;qcforward&quot;</span> <span class="o">/</span> <span class="s2">&quot;_schemas&quot;</span>
+        <span class="n">spath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmu</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"qcforward"</span> <span class="o">/</span> <span class="s2">"_schemas"</span>
 
-        <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;gridquality_asfile.json&quot;</span>
+        <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">"gridquality_asfile.json"</span>
 
         <span class="k">if</span> <span class="n">project</span><span class="p">:</span>
-            <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">&quot;gridquality_asroxapi.json&quot;</span>
+            <span class="n">schemafile</span> <span class="o">=</span> <span class="s2">"gridquality_asroxapi.json"</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">spath</span> <span class="o">/</span> <span class="n">schemafile</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thisschema</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">((</span><span class="n">spath</span> <span class="o">/</span> <span class="n">schemafile</span><span class="p">),</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">thisschema</span><span class="p">:</span>
             <span class="n">schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">thisschema</span><span class="p">)</span>
 
         <span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span></div>

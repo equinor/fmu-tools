@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.update_petro_real &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.rms.update_petro_real &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,10 +90,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.rms.update_petro_real</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Merge petrophysical realizations created individually per facies</span>
 <span class="sd">into one realization using facies realization as filter</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
@@ -111,17 +111,17 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">update_petro_real</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">facies_code_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-    <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">facies_real_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">facies_real_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">used_petro_dict</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{},</span>
-    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">zone_code_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
-    <span class="n">zone_param_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">zone_param_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">ignore_missing_parameters</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine multiple petrophysical realizations (one per facies) into one parameter</span>
+<span class="w">    </span><span class="sd">"""Combine multiple petrophysical realizations (one per facies) into one parameter</span>
 <span class="sd">    using facies realization as filter.</span>
 
 <span class="sd">    Description:</span>
@@ -143,36 +143,36 @@
 <span class="sd">        Updated version of petrophysical realizations</span>
 <span class="sd">        for the specified petrophysical variables.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">config_file</span><span class="p">:</span>
         <span class="n">spec_dict</span> <span class="o">=</span> <span class="n">read_specification_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
-        <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;used_petro_var&quot;</span><span class="p">]</span>
-        <span class="n">grid_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;grid_name&quot;</span><span class="p">]</span>
-        <span class="n">original_job_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">&quot;original_job_name&quot;</span><span class="p">]</span>
+        <span class="n">used_petro_dict</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"used_petro_var"</span><span class="p">]</span>
+        <span class="n">grid_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"grid_name"</span><span class="p">]</span>
+        <span class="n">original_job_name</span> <span class="o">=</span> <span class="n">spec_dict</span><span class="p">[</span><span class="s2">"original_job_name"</span><span class="p">]</span>
 
         <span class="c1"># Get facies param name from the job settings</span>
-        <span class="n">owner_string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Grid models&quot;</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="s2">&quot;Grid&quot;</span><span class="p">]</span>
-        <span class="n">job_type</span> <span class="o">=</span> <span class="s2">&quot;Petrophysical Modeling&quot;</span>
+        <span class="n">owner_string_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Grid models"</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="s2">"Grid"</span><span class="p">]</span>
+        <span class="n">job_type</span> <span class="o">=</span> <span class="s2">"Petrophysical Modeling"</span>
         <span class="n">petro_job_param</span> <span class="o">=</span> <span class="n">get_original_job_settings</span><span class="p">(</span>
             <span class="n">owner_string_list</span><span class="p">,</span> <span class="n">job_type</span><span class="p">,</span> <span class="n">original_job_name</span>
         <span class="p">)</span>
         <span class="c1"># Get facies realization name from the original petrophysics job</span>
-        <span class="n">facies_real_name</span> <span class="o">=</span> <span class="n">petro_job_param</span><span class="p">[</span><span class="s2">&quot;InputFaciesProperty&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">facies_real_name</span> <span class="o">=</span> <span class="n">petro_job_param</span><span class="p">[</span><span class="s2">"InputFaciesProperty"</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Check that necessary parameters are specified</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">grid_name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify grid name when config file is not specified.&quot;</span>
+                <span class="s2">"Need to specify grid name when config file is not specified."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">used_petro_dict</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify the dict used_petro_dict when &quot;</span>
-                <span class="s2">&quot;config file is not specified.&quot;</span>
+                <span class="s2">"Need to specify the dict used_petro_dict when "</span>
+                <span class="s2">"config file is not specified."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">facies_real_name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify the facies realization name when &quot;</span>
-                <span class="s2">&quot;config file is not specified.&quot;</span>
+                <span class="s2">"Need to specify the facies realization name when "</span>
+                <span class="s2">"config file is not specified."</span>
             <span class="p">)</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
     <span class="n">subgrids</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">subgrids</span>
@@ -181,22 +181,22 @@
         <span class="c1"># Multi zone grid is found</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">zone_code_names</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify the &#39;zone_code_names&#39; when using multi zone grids.&quot;</span>
+                <span class="s2">"Need to specify the 'zone_code_names' when using multi zone grids."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">zone_param_name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify the &#39;zone_param_name&#39; when using multi zone grids.&quot;</span>
+                <span class="s2">"Need to specify the 'zone_param_name' when using multi zone grids."</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;For multi zone grids </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2"> the variable &quot;</span>
-                <span class="s2">&quot;&#39;zone_name_for_single_zone_grid&#39; should not be used&quot;</span>
+                <span class="sa">f</span><span class="s2">"For multi zone grids </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2"> the variable "</span>
+                <span class="s2">"'zone_name_for_single_zone_grid' should not be used"</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Need to specify &#39;zone_name_for_single_zone_grid&#39; &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;since input </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2"> is a single zone grid.&quot;</span>
+                <span class="s2">"Need to specify 'zone_name_for_single_zone_grid' "</span>
+                <span class="sa">f</span><span class="s2">"since input </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2"> is a single zone grid."</span>
             <span class="p">)</span>
 
     <span class="n">combine_petro_real_from_multiple_facies</span><span class="p">(</span>
@@ -219,18 +219,18 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">import_updated_field_parameters</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">used_petro_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
-    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">import_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;../..&quot;</span><span class="p">,</span>
+    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ERTBOX"</span><span class="p">,</span>
+    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">import_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"../.."</span><span class="p">,</span>
     <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import ROFF files with field parameters updated by ERT.</span>
+<span class="w">    </span><span class="sd">"""Import ROFF files with field parameters updated by ERT.</span>
 
 <span class="sd">    Description:</span>
 <span class="sd">        This function will import ROFF format files generated by ERT when using</span>
 <span class="sd">        the FIELD keyword in ERT to update petrophysical field parameters.</span>
 <span class="sd">        The naming convention is files with the name of the form:</span>
-<span class="sd">        zonename_faciesname_petrovarname with suffix &quot;.roff&quot;</span>
+<span class="sd">        zonename_faciesname_petrovarname with suffix ".roff"</span>
 <span class="sd">        The files are assumed to be located at the top directory level</span>
 <span class="sd">        where updated fields are written by ERT.</span>
 
@@ -243,25 +243,25 @@
 
 <span class="sd">    The result will be new petrophysical parameters in ERTBOX grid.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">petro_per_facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_petro_dict</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># Single zone grid, use specified zone name</span>
             <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_name_for_single_zone_grid</span>
         <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone name:  </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Zone name:  </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">petro_list</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Facies name:  </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Facies name:  </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">petro_list</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Petro variable:  </span><span class="si">{</span><span class="n">petro_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">property_name</span> <span class="o">=</span> <span class="n">zone_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">petro_name</span>
-                <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">import_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">property_name</span> <span class="o">+</span> <span class="s2">&quot;.roff&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Import file: </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Petro variable:  </span><span class="si">{</span><span class="n">petro_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">property_name</span> <span class="o">=</span> <span class="n">zone_name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">petro_name</span>
+                <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">import_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">property_name</span> <span class="o">+</span> <span class="s2">".roff"</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Import file: </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="n">xtgeo_prop</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span>
-                    <span class="n">file_name</span><span class="p">,</span> <span class="n">fformat</span><span class="o">=</span><span class="s2">&quot;roff&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">property_name</span>
+                    <span class="n">file_name</span><span class="p">,</span> <span class="n">fformat</span><span class="o">=</span><span class="s2">"roff"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">property_name</span>
                 <span class="p">)</span>
                 <span class="n">xtgeo_prop</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">property_name</span><span class="p">)</span></div>
 
@@ -272,19 +272,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">export_initial_field_parameters</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">used_petro_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
-    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">export_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;../../rms/output/aps&quot;</span><span class="p">,</span>
+    <span class="n">grid_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ERTBOX"</span><span class="p">,</span>
+    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">export_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"../../rms/output/aps"</span><span class="p">,</span>
     <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export ROFF files with field parameters simulated by RMS to files to be</span>
+<span class="w">    </span><span class="sd">"""Export ROFF files with field parameters simulated by RMS to files to be</span>
 <span class="sd">       read by ERT and used as field parameters.</span>
 
 <span class="sd">    Description:</span>
 <span class="sd">        This function will export ROFF format files generated by RMS in workflows</span>
 <span class="sd">        where field parameters are updated by ERT.</span>
 <span class="sd">        The parameter names will be in the format: zonename_faciesname_petroname</span>
-<span class="sd">        and the file names will have extension &quot;.roff&quot;.</span>
+<span class="sd">        and the file names will have extension ".roff".</span>
 <span class="sd">        The files are assumed to be located in the directory:  rms/output/aps</span>
 <span class="sd">        together with field parameters used by the facies modelling method APS.</span>
 
@@ -299,27 +299,27 @@
 <span class="sd">    The result will be files with petrophysical parameters per zone per facies with</span>
 <span class="sd">    size equal to the ERTBOX grid.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">for</span> <span class="n">zone_name</span><span class="p">,</span> <span class="n">petro_per_facies_dict</span> <span class="ow">in</span> <span class="n">used_petro_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_petro_dict</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># Single zone grid, use specified zone name</span>
             <span class="n">zone_name</span> <span class="o">=</span> <span class="n">zone_name_for_single_zone_grid</span>
         <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zone name:  </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Zone name:  </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">petro_list</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Facies name:  </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Facies name:  </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">petro_name</span> <span class="ow">in</span> <span class="n">petro_list</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Petro variable:  </span><span class="si">{</span><span class="n">petro_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">property_name</span> <span class="o">=</span> <span class="n">zone_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">petro_name</span>
-                <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">export_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">property_name</span> <span class="o">+</span> <span class="s2">&quot;.roff&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Export file: </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Petro variable:  </span><span class="si">{</span><span class="n">petro_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">property_name</span> <span class="o">=</span> <span class="n">zone_name</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">petro_name</span>
+                <span class="n">file_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">export_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">property_name</span> <span class="o">+</span> <span class="s2">".roff"</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Export file: </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="n">grid_model_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="n">xtgeo_prop</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span> <span class="n">grid_model_name</span><span class="p">,</span> <span class="n">property_name</span>
                 <span class="p">)</span>
-                <span class="n">xtgeo_prop</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">fformat</span><span class="o">=</span><span class="s2">&quot;roff&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">property_name</span><span class="p">)</span></div>
+                <span class="n">xtgeo_prop</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">fformat</span><span class="o">=</span><span class="s2">"roff"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">property_name</span><span class="p">)</span></div>
 
 
 
@@ -331,8 +331,8 @@
     <span class="n">facies_real_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">used_petro_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span>
     <span class="n">facies_code_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">zone_param_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">zone_name_for_single_zone_grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">zone_param_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">zone_code_names</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="n">debug_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">ignore_missing_parameters</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -344,7 +344,7 @@
     <span class="c1"># Find all defined 3D grid parameters using rmsapi</span>
     <span class="n">properties</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">grid_models</span><span class="p">[</span><span class="n">grid_name</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span>
     <span class="n">property_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">]</span>
-    <span class="c1">#    print(f&quot;Gridname:  {grid_name}  Properties: {property_names}&quot;)</span>
+    <span class="c1">#    print(f"Gridname:  {grid_name}  Properties: {property_names}")</span>
 
     <span class="c1"># Find all petro var names to use in any zone</span>
     <span class="n">petro_var_list</span> <span class="o">=</span> <span class="n">get_petro_var</span><span class="p">(</span><span class="n">used_petro_dict</span><span class="p">)</span>
@@ -381,13 +381,13 @@
             <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">petro_per_facies_dict</span><span class="p">:</span>
                 <span class="n">petro_list_for_this_facies</span> <span class="o">=</span> <span class="n">petro_per_facies_dict</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">pname</span> <span class="ow">in</span> <span class="n">petro_list_for_this_facies</span><span class="p">:</span>
-                    <span class="n">petro_name_per_facies</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">petro_name_per_facies</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2">"</span>
 
                     <span class="c1"># Get petro realization for this facies and this petro variable</span>
                     <span class="k">if</span> <span class="n">petro_name_per_facies</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">property_names</span><span class="p">:</span>
                         <span class="n">err_msg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="s2">&quot;Skip non-existing petro realization: &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">petro_name_per_facies</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="s2">"Skip non-existing petro realization: "</span>
+                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">petro_name_per_facies</span><span class="si">}</span><span class="s2">"</span>
                         <span class="p">)</span>
                         <span class="k">continue</span>
                     <span class="k">if</span> <span class="p">(</span>
@@ -396,7 +396,7 @@
                         <span class="o">.</span><span class="n">is_empty</span><span class="p">()</span>
                     <span class="p">):</span>
                         <span class="n">err_msg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Skip empty petro realization: </span><span class="si">{</span><span class="n">petro_name_per_facies</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Skip empty petro realization: </span><span class="si">{</span><span class="n">petro_name_per_facies</span><span class="si">}</span><span class="s2">"</span>
                         <span class="p">)</span>
                         <span class="k">continue</span>
 
@@ -411,9 +411,9 @@
                         <span class="c1"># Multi zone grid</span>
                         <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;Update values for </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;in existing parameter for facies </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="sa">f</span><span class="s2">"Update values for </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> "</span>
+                                <span class="sa">f</span><span class="s2">"in existing parameter for facies </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> "</span>
+                                <span class="sa">f</span><span class="s2">"for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2">"</span>
                             <span class="p">)</span>
                         <span class="n">cells_selected</span> <span class="o">=</span> <span class="p">(</span><span class="n">prop_facies_values</span> <span class="o">==</span> <span class="n">facies_code</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
                             <span class="n">prop_zone_values</span> <span class="o">==</span> <span class="n">zone_code</span>
@@ -421,8 +421,8 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;Update values for </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;in existing parameter for facies </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="sa">f</span><span class="s2">"Update values for </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> "</span>
+                                <span class="sa">f</span><span class="s2">"in existing parameter for facies </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">"</span>
                             <span class="p">)</span>
                         <span class="n">cells_selected</span> <span class="o">=</span> <span class="n">prop_facies_values</span> <span class="o">==</span> <span class="n">facies_code</span>
                     <span class="n">is_updated</span> <span class="o">=</span> <span class="kc">True</span>
@@ -434,26 +434,26 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">single_zone_grid</span><span class="p">:</span>
                     <span class="c1"># Multi zone grid</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Write updated petro param </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> to grid model </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Write updated petro param </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> "</span>
+                        <span class="sa">f</span><span class="s2">"for zone </span><span class="si">{</span><span class="n">zone_name</span><span class="si">}</span><span class="s2"> to grid model </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Write updated petro param </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> for grid model </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"Write updated petro param </span><span class="si">{</span><span class="n">pname</span><span class="si">}</span><span class="s2"> for grid model </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
             <span class="n">prop_petro_original</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">pname</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_missing_parameters</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Missing or empty petrophysical 3D parameters for grid model: </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">:&quot;</span>
+            <span class="sa">f</span><span class="s2">"Missing or empty petrophysical 3D parameters for grid model: </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">:"</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">err_msg</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing or empty petrophysical parameters.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished updating properties for grid model: </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Missing or empty petrophysical parameters."</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Finished updating properties for grid model: </span><span class="si">{</span><span class="n">grid_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Warning: Some petrophysical parameters were not updated. Is that correct?&quot;</span>
+            <span class="s2">"Warning: Some petrophysical parameters were not updated. Is that correct?"</span>
         <span class="p">)</span></div>
 
 

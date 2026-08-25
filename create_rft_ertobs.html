@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>create_rft_ertobs &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>create_rft_ertobs &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -202,14 +202,14 @@ well, but padded with -1 at dates (report steps) where there is no data.</p>
 
 <span class="c1"># Paths are relative to rms/model</span>
 <span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;input_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../input/well_modelling/rft_observations.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;alias_file&quot;</span><span class="p">:</span> <span class="s2">&quot;../../config/rms_eclipse_alias.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;exportdir&quot;</span><span class="p">:</span> <span class="s2">&quot;../../ert/input/observations/rft&quot;</span><span class="p">,</span>  <span class="c1"># Must exist</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>  <span class="c1"># The Python object representing your RMS project</span>
-    <span class="s2">&quot;gridname&quot;</span><span class="p">:</span> <span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;zonename&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;clipboard_folder&quot;</span><span class="p">:</span> <span class="s2">&quot;RFT_ERT_observations&quot;</span><span class="p">,</span> <span class="c1"># Optional folder for storage in RMS</span>
+    <span class="s2">"input_file"</span><span class="p">:</span> <span class="s2">"../input/well_modelling/rft_observations.csv"</span><span class="p">,</span>
+    <span class="s2">"alias_file"</span><span class="p">:</span> <span class="s2">"../../config/rms_eclipse_alias.csv"</span><span class="p">,</span>
+    <span class="s2">"exportdir"</span><span class="p">:</span> <span class="s2">"../../ert/input/observations/rft"</span><span class="p">,</span>  <span class="c1"># Must exist</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>  <span class="c1"># The Python object representing your RMS project</span>
+    <span class="s2">"gridname"</span><span class="p">:</span> <span class="s2">"Simgrid"</span><span class="p">,</span>
+    <span class="s2">"zonename"</span><span class="p">:</span> <span class="s2">"Zone"</span><span class="p">,</span>
+    <span class="s2">"verbose"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">"clipboard_folder"</span><span class="p">:</span> <span class="s2">"RFT_ERT_observations"</span><span class="p">,</span> <span class="c1"># Optional folder for storage in RMS</span>
 <span class="p">}</span>
 
 <span class="n">create_rft_ertobs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">CONFIG</span><span class="p">)</span>

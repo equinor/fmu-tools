@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The qcproperties class &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>The qcproperties class &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -287,27 +287,27 @@ to the source string.</p>
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">]</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies&quot;</span><span class="p">]</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">"GeoGrid"</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Poro"</span><span class="p">,</span> <span class="s2">"Perm"</span><span class="p">]</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zone"</span><span class="p">,</span> <span class="s2">"Facies"</span><span class="p">]</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">"verbosity"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Done"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example in RMS (continous properties - more settings):</strong></p>
@@ -318,22 +318,22 @@ Both properties are weighted on a Total_bulk parameter.
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">"GeoGrid"</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;PORO&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PHIT&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_bulk&quot;</span><span class="p">},</span>
+    <span class="s2">"PORO"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"PHIT"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">:</span> <span class="s2">"Total_bulk"</span><span class="p">},</span>
 <span class="p">}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;REGION&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Regions&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Surroundings&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;codes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;NS&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;NS&quot;</span><span class="p">,},</span>
+    <span class="s2">"REGION"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Regions"</span><span class="p">,</span>
+        <span class="s2">"exclude"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Surroundings"</span><span class="p">],</span>
+        <span class="s2">"codes"</span><span class="p">:</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">"NS"</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s2">"NS"</span><span class="p">,},</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/continous_stats.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/continous_stats.csv"</span>
 
 <span class="n">FLUID_FILTERS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;HC_zone&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Fluid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;oil&quot;</span><span class="p">,</span> <span class="s2">&quot;gas&quot;</span><span class="p">]}},</span>
-    <span class="s2">&quot;Water_zone&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Fluid&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;water&quot;</span><span class="p">]}},</span>
+    <span class="s2">"HC_zone"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Fluid"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"include"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"oil"</span><span class="p">,</span> <span class="s2">"gas"</span><span class="p">]}},</span>
+    <span class="s2">"Water_zone"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Fluid"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"include"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"water"</span><span class="p">]}},</span>
 <span class="p">}</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
@@ -341,19 +341,19 @@ Result is written to csv.</p>
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-        <span class="s2">&quot;multiple_filters&quot;</span><span class="p">:</span> <span class="n">FLUID_FILTERS</span><span class="p">,</span>
-        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">"multiple_filters"</span><span class="p">:</span> <span class="n">FLUID_FILTERS</span><span class="p">,</span>
+        <span class="s2">"verbosity"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Done"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -368,99 +368,99 @@ The facies parameter are weighted on a Total_bulk parameter.</p>
 <p>The result is written out to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;GeoGrid&quot;</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">"GeoGrid"</span>
 <span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Facies&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;Total_bulk&quot;</span><span class="p">},</span>
+    <span class="s2">"FACIES"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Facies"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">:</span> <span class="s2">"Total_bulk"</span><span class="p">},</span>
 <span class="p">}</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Regions&quot;</span><span class="p">]</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Regions"</span><span class="p">]</span>
 
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/discrete_stats.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/discrete_stats.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-        <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">"verbosity"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Done"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
-<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;grid.roff&quot;</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PORO&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;poro.roff&quot;</span><span class="p">}}</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">"../input/qc/"</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">"grid.roff"</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"PORO"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"poro.roff"</span><span class="p">}}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;zone.roff&quot;</span><span class="p">,</span>
+    <span class="s2">"ZONE"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"zone.roff"</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="s2">&quot;FACIES&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;facies.roff&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Carbonate&quot;</span><span class="p">],</span>
+    <span class="s2">"FACIES"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"facies.roff"</span><span class="p">,</span>
+        <span class="s2">"exclude"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Carbonate"</span><span class="p">],</span>
     <span class="p">},</span>
 <span class="p">}</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;MYDATA&quot;</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"path"</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"MYDATA"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from file using Eclipse INIT-file as input:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
-<span class="n">GRID</span> <span class="o">=</span> <span class="s2">&quot;ECLIPSE.EGRID&quot;</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERMX&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PERMX&quot;</span><span class="p">,</span> <span class="s2">&quot;pfile&quot;</span><span class="p">:</span> <span class="s2">&quot;ECLIPSE.INIT&quot;</span><span class="p">}}</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">"../input/qc/"</span>
+<span class="n">GRID</span> <span class="o">=</span> <span class="s2">"ECLIPSE.EGRID"</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"PERMX"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"PERMX"</span><span class="p">,</span> <span class="s2">"pfile"</span><span class="p">:</span> <span class="s2">"ECLIPSE.INIT"</span><span class="p">}}</span>
 <span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;FIPNUM&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FIPNUM&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;pfile&quot;</span><span class="p">:</span> <span class="s2">&quot;ECLIPSE.INIT&quot;</span>
+    <span class="s2">"FIPNUM"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"FIPNUM"</span><span class="p">,</span>
+        <span class="s2">"pfile"</span><span class="p">:</span> <span class="s2">"ECLIPSE.INIT"</span>
     <span class="p">},</span>
 <span class="p">}</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
-        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;from_eclipse&quot;</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"path"</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">"grid"</span><span class="p">:</span> <span class="n">GRID</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"from_eclipse"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -475,30 +475,30 @@ Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;33_10.*&quot;</span><span class="p">,</span> <span class="s2">&quot;34_11-.*A.*&quot;</span><span class="p">],</span>
-  <span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">,</span>
+  <span class="s2">"names"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"33_10.*"</span><span class="p">,</span> <span class="s2">"34_11-.*A.*"</span><span class="p">],</span>
+  <span class="s2">"logrun"</span><span class="p">:</span> <span class="s2">"log"</span><span class="p">,</span>
+  <span class="s2">"trajectory"</span><span class="p">:</span> <span class="s2">"Drilled trajectory"</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERM&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">}}</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"PERM"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Klogh"</span><span class="p">}}</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zonelog"</span><span class="p">,</span> <span class="s2">"Facies_log"</span><span class="p">]</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_well_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Done"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
@@ -508,35 +508,35 @@ starting with “34_10-B” in a subsequent run.
 Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-A.*&quot;</span><span class="p">]</span>
-<span class="n">PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/&quot;</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Phit&quot;</span><span class="p">,</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">]</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">WELLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"34_10-A.*"</span><span class="p">]</span>
+<span class="n">PATH</span> <span class="o">=</span> <span class="s2">"../input/qc/"</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Phit"</span><span class="p">,</span> <span class="s2">"Klogh"</span><span class="p">]</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zonelog"</span><span class="p">,</span> <span class="s2">"Facies_log"</span><span class="p">]</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
-        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;A-wells&quot;</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+        <span class="s2">"path"</span><span class="p">:</span> <span class="n">PATH</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"A-wells"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_well_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">)</span>
 
     <span class="n">usedata2</span> <span class="o">=</span> <span class="n">usedata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;34_10-B.*&quot;</span><span class="p">]</span>
-    <span class="n">usedata2</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;B-wells&quot;</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"wells"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"34_10-B.*"</span><span class="p">]</span>
+    <span class="n">usedata2</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"B-wells"</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_grid_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata2</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -550,29 +550,29 @@ Result is written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
 <span class="n">WELLS</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;GeoGrid&quot;</span><span class="p">,</span>
+  <span class="s2">"bwname"</span><span class="p">:</span> <span class="s2">"BW"</span><span class="p">,</span>
+  <span class="s2">"grid"</span><span class="p">:</span> <span class="s2">"GeoGrid"</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PERM&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">}}</span>
-<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;Facies_log&quot;</span><span class="p">]</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"PERM"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Klogh"</span><span class="p">}}</span>
+<span class="n">SELECTORS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Zonelog"</span><span class="p">,</span> <span class="s2">"Facies_log"</span><span class="p">]</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
 
     <span class="n">usedata</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
-        <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
-        <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="n">PROPERTIES</span><span class="p">,</span>
+        <span class="s2">"selectors"</span><span class="p">:</span> <span class="n">SELECTORS</span><span class="p">,</span>
+        <span class="s2">"wells"</span><span class="p">:</span> <span class="n">WELLS</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">get_bwell_statistics</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">usedata</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Done"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Example when executed from files:</strong></p>
@@ -610,26 +610,26 @@ the codes are updated and redundant codes are excluded.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="n">GEOGRIDDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Poro&quot;</span><span class="p">,</span> <span class="s2">&quot;Perm&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zone&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;GeoGrid&quot;</span><span class="p">,</span>
+    <span class="s2">"properties"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Poro"</span><span class="p">,</span> <span class="s2">"Perm"</span><span class="p">],</span>
+    <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"ZONE"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"Zone"</span><span class="p">}},</span>
+    <span class="s2">"grid"</span><span class="p">:</span> <span class="s2">"GeoGrid"</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">SIMGRIDDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Poro&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PORO&quot;</span><span class="p">},</span> <span class="s2">&quot;Perm&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;PERMX&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="s2">&quot;Zone&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;SimGrid&quot;</span><span class="p">,</span>
+    <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Poro"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"PORO"</span><span class="p">},</span> <span class="s2">"Perm"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"PERMX"</span><span class="p">}},</span>
+    <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"ZONE"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span><span class="s2">"Zone"</span><span class="p">}},</span>
+    <span class="s2">"grid"</span><span class="p">:</span> <span class="s2">"SimGrid"</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">BWDATA</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;Poro&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Phit&quot;</span><span class="p">},</span> <span class="s2">&quot;Perm&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Klogh&quot;</span><span class="p">}},</span>
-    <span class="s2">&quot;selectors&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ZONE&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Zonelog&quot;</span><span class="p">,</span> <span class="s2">&quot;codes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;UpperReek&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s2">&quot;MidReek&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s2">&quot;LowerReek&quot;</span><span class="p">},</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Above_TopUpperReek&quot;</span><span class="p">,</span> <span class="s2">&quot;Below_BaseLowerReek&quot;</span><span class="p">]}},</span>
-    <span class="s2">&quot;wells&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;bwname&quot;</span><span class="p">:</span> <span class="s2">&quot;BW&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">},</span>
+    <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Poro"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Phit"</span><span class="p">},</span> <span class="s2">"Perm"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Klogh"</span><span class="p">}},</span>
+    <span class="s2">"selectors"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"ZONE"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Zonelog"</span><span class="p">,</span> <span class="s2">"codes"</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">"UpperReek"</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s2">"MidReek"</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s2">"LowerReek"</span><span class="p">},</span> <span class="s2">"exclude"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Above_TopUpperReek"</span><span class="p">,</span> <span class="s2">"Below_BaseLowerReek"</span><span class="p">]}},</span>
+    <span class="s2">"wells"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"bwname"</span><span class="p">:</span> <span class="s2">"BW"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">:</span> <span class="s2">"Geogrid"</span><span class="p">},</span>
 <span class="p">}</span>
 
 <span class="n">WDATA</span> <span class="o">=</span> <span class="n">BWDATA</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">WDATA</span><span class="p">[</span><span class="s2">&quot;wells&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;logrun&quot;</span><span class="p">:</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;Drilled trajectory&quot;</span><span class="p">}</span>
+<span class="n">WDATA</span><span class="p">[</span><span class="s2">"wells"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"logrun"</span><span class="p">:</span> <span class="s2">"log"</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">:</span> <span class="s2">"Drilled trajectory"</span><span class="p">}</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
 
@@ -642,7 +642,7 @@ the codes are updated and redundant codes are excluded.</p></li>
 
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -673,15 +673,15 @@ four data sources (geogrid, simgrid, wells and blocked wells). The resulting com
 dataframe are written to csv.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCProperties</span>
 
-<span class="n">YAML_PATH</span> <span class="o">=</span> <span class="s2">&quot;../input/qc/somefile.yml&quot;</span>
-<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">&quot;../output/qc/somefile.csv&quot;</span>
+<span class="n">YAML_PATH</span> <span class="o">=</span> <span class="s2">"../input/qc/somefile.yml"</span>
+<span class="n">REPORT</span> <span class="o">=</span> <span class="s2">"../output/qc/somefile.csv"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">extract_statistics</span><span class="p">():</span>
     <span class="n">qcp</span> <span class="o">=</span> <span class="n">QCProperties</span><span class="p">()</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">YAML_PATH</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
     <span class="n">qcp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">REPORT</span><span class="p">)</span>
 
-<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span>  <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">extract_statistics</span><span class="p">()</span>
 </pre></div>
 </div>

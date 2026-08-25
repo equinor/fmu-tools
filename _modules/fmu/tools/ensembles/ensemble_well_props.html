@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.ensembles.ensemble_well_props &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.ensembles.ensemble_well_props &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,12 +90,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.ensembles.ensemble_well_props</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Compute well properties/stats along a (planned) well path based on ensemble data.</span>
+<span></span><span class="sd">"""Compute well properties/stats along a (planned) well path based on ensemble data.</span>
 
 <span class="sd">The implementation is through a console script, which reads a YAML config file.</span>
 
 <span class="sd">Output will be RMS well file and/or CSV files, in addition to screen info.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -107,7 +107,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">GCELLNAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ICELL&quot;</span><span class="p">,</span> <span class="s2">&quot;JCELL&quot;</span><span class="p">,</span> <span class="s2">&quot;KCELL&quot;</span><span class="p">]</span>
+<span class="n">GCELLNAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ICELL"</span><span class="p">,</span> <span class="s2">"JCELL"</span><span class="p">,</span> <span class="s2">"KCELL"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="ScreenInfo">
@@ -120,25 +120,25 @@
 <div class="viewcode-block" id="ScreenInfo.oprint">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.oprint">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">oprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ordinary print info for users.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Ordinary print info for users."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;&gt;"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ScreenInfo.cprint">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.cprint">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">cprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ordinary but clean print withou leading &gt;&gt;, useful for e.g. dataframes.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Ordinary but clean print withou leading &gt;&gt;, useful for e.g. dataframes."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ScreenInfo.xprint">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ScreenInfo.xprint">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">xprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extra print if more verbose output is asked for.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Extra print if more verbose output is asked for."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">quiet</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">moreverbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;x&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"&gt;x"</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 </div>
 
 
@@ -146,23 +146,23 @@
 <div class="viewcode-block" id="get_parser_args">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.get_parser_args">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_parser_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up parser for command line end point.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Set up parser for command line end point."""</span>
     <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Compute ensemble properties along a given well.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Compute ensemble properties along a given well."</span><span class="p">,</span>
         <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--config&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Config file in YAML format.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--config"</span><span class="p">,</span> <span class="s2">"-c"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Config file in YAML format."</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--example&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Dump example config file as template&quot;</span>
+        <span class="s2">"--example"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Dump example config file as template"</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Be more verbose to screen&quot;</span>
+        <span class="s2">"--verbose"</span><span class="p">,</span> <span class="s2">"-v"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Be more verbose to screen"</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span> <span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Silence all screen messages&quot;</span>
+        <span class="s2">"--quiet"</span><span class="p">,</span> <span class="s2">"-q"</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Silence all screen messages"</span>
     <span class="p">)</span>
 
     <span class="n">myargs</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
@@ -178,9 +178,9 @@
 <div class="viewcode-block" id="dump_example_config">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.dump_example_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dump_example_config</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dump an example config file as example.yml.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Dump an example config file as example.yml."""</span>
 
-    <span class="n">example</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+    <span class="n">example</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">    ensemble:</span>
 <span class="s2">      # root to FMU run/case</span>
 <span class="s2">      root: /scratch/fmu/nn/01_drogon_ahm</span>
@@ -188,15 +188,15 @@
 <span class="s2">        # spesify as range (both ends incuded) OR as entries</span>
 <span class="s2">        range: 0-30</span>
 <span class="s2">        # entries: [0, 4, 5, 7, 13]</span>
-<span class="s2">      # full name of iteration folder, e.g. &#39;iter-2&#39; or &#39;pred&#39;</span>
+<span class="s2">      # full name of iteration folder, e.g. 'iter-2' or 'pred'</span>
 <span class="s2">      iteration: iter-0</span>
 
 <span class="s2">    well:</span>
 <span class="s2">      # path (full or relative) to well (which must be in RMS ascii well format)</span>
 <span class="s2">      file: /some/path/to/mywell.w</span>
-<span class="s2">      # lognames to import (optional, to speed up, default is &quot;all&quot; which can be slow)</span>
+<span class="s2">      # lognames to import (optional, to speed up, default is "all" which can be slow)</span>
 <span class="s2">      # a recommendation is to ONLY include the required MD log</span>
-<span class="s2">      lognames: [&quot;PHIT&quot;, &quot;MD&quot;]</span>
+<span class="s2">      lognames: ["PHIT", "MD"]</span>
 <span class="s2">      # name of MDepth log in file (a measured depth log is required)</span>
 <span class="s2">      mdlog: MD</span>
 <span class="s2">      # delta = sampling rate, default is 2 (if metric units: means 2 meters)</span>
@@ -207,7 +207,7 @@
 
 <span class="s2">    gridproperties:</span>
 <span class="s2">      grid:</span>
-<span class="s2">        # filestub is path after &#39;root / &quot;realization-N&quot; / iteration&#39;</span>
+<span class="s2">        # filestub is path after 'root / "realization-N" / iteration'</span>
 <span class="s2">        filestub: share/results/grids/geogrid.roff</span>
 <span class="s2">        # if grid is without structural uncertainty =&gt; reuse: True</span>
 <span class="s2">        reuse: false</span>
@@ -228,7 +228,7 @@
 <span class="s2">      average_logs:</span>
 <span class="s2">        fileroot: some</span>
 <span class="s2">      # report cumulative length statistics on CSV format, note that multiple criteria</span>
-<span class="s2">      # is possible and the result will be a &quot;AND&quot; combination</span>
+<span class="s2">      # is possible and the result will be a "AND" combination</span>
 <span class="s2">      cumulative_lengths:</span>
 <span class="s2">        # output will be one file for reals, and one file for statistics e.g.</span>
 <span class="s2">        # cumlen.csv and cumlen_summary.csv</span>
@@ -244,27 +244,27 @@
 <span class="s2">      keep_intermediate_logs: false</span>
 <span class="s2">      show_in_terminal: true</span>
 
-<span class="s2">    &quot;&quot;&quot;</span>
+<span class="s2">    """</span>
 
-    <span class="n">example</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">example</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;example.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"example.yml"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">example</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;See example.yml, and use this as template for your case!&quot;</span><span class="p">)</span></div>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"See example.yml, and use this as template for your case!"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="parse_config">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.parse_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_config</span><span class="p">(</span><span class="n">configfile</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse YAML file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Parse YAML file."""</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">configfile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">configfile</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not read file: </span><span class="si">{</span><span class="n">configfile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not read file: </span><span class="si">{</span><span class="n">configfile</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">raise</span>
 
     <span class="k">return</span> <span class="n">config</span></div>
@@ -275,7 +275,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.PropsData">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PropsData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Holding property data and criteria&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Holding property data and criteria"""</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">filestub</span><span class="p">:</span> <span class="nb">str</span>
@@ -289,7 +289,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.ConfigData">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConfigData</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Other class data than config are evaluated from config in post_init.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Other class data than config are evaluated from config in post_init."""</span>
 
     <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span>
     <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -310,78 +310,78 @@
     <span class="n">report_show_in_terminal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Derive input data from config.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Derive input data from config."""</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;root&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"root"</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="s2">&quot;range&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;realizations&quot;</span><span class="p">]:</span>
-            <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;realizations&quot;</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"range"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"realizations"</span><span class="p">]:</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"realizations"</span><span class="p">][</span><span class="s2">"range"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="s2">&quot;entries&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;realizations&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">reals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;realizations&quot;</span><span class="p">][</span><span class="s2">&quot;entries&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">"entries"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"realizations"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"realizations"</span><span class="p">][</span><span class="s2">"entries"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;For &#39;realizations&#39;: &#39;range&#39; or &#39;entries&#39; is missing&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"For 'realizations': 'range' or 'entries' is missing"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">itera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;ensemble&quot;</span><span class="p">][</span><span class="s2">&quot;iteration&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">itera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"ensemble"</span><span class="p">][</span><span class="s2">"iteration"</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">wellfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;well&quot;</span><span class="p">][</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lognames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;well&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lognames&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mdlog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;well&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mdlog&quot;</span><span class="p">,</span> <span class="s2">&quot;MDepth&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mdranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_mdranges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;well&quot;</span><span class="p">][</span><span class="s2">&quot;mdranges&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">welldelta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;well&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;delta&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wellfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"well"</span><span class="p">][</span><span class="s2">"file"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lognames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"well"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"lognames"</span><span class="p">,</span> <span class="s2">"all"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdlog</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"well"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"mdlog"</span><span class="p">,</span> <span class="s2">"MDepth"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_mdranges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"well"</span><span class="p">][</span><span class="s2">"mdranges"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">welldelta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"well"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"delta"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">cfgprop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;gridproperties&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridfilestub</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfgprop</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">][</span><span class="s2">&quot;filestub&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gridreuse</span> <span class="o">=</span> <span class="n">cfgprop</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reuse&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">cfgprop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"gridproperties"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gridfilestub</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cfgprop</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">][</span><span class="s2">"filestub"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gridreuse</span> <span class="o">=</span> <span class="n">cfgprop</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"reuse"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">proplist</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">props</span> <span class="o">=</span> <span class="n">cfgprop</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="n">cfgprop</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">prop</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-            <span class="n">filestub</span> <span class="o">=</span> <span class="n">prop</span><span class="p">[</span><span class="s2">&quot;filestub&quot;</span><span class="p">]</span>
-            <span class="n">discrete</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discrete&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">prop</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+            <span class="n">filestub</span> <span class="o">=</span> <span class="n">prop</span><span class="p">[</span><span class="s2">"filestub"</span><span class="p">]</span>
+            <span class="n">discrete</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"discrete"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
             <span class="n">propcase</span> <span class="o">=</span> <span class="n">PropsData</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">filestub</span><span class="p">,</span> <span class="n">discrete</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">proplist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">propcase</span><span class="p">)</span>
 
-        <span class="n">rpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;average_logs&quot;</span> <span class="ow">in</span> <span class="n">rpt</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">report_avg_file</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">&quot;average_logs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fileroot&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">rpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"report"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"average_logs"</span> <span class="ow">in</span> <span class="n">rpt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report_avg_file</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">"average_logs"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fileroot"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_avg_file</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">report_avg_file</span> <span class="o">+=</span> <span class="s2">&quot;.rmswell&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report_avg_file</span> <span class="o">+=</span> <span class="s2">".rmswell"</span>
 
-        <span class="k">if</span> <span class="s2">&quot;cumulative_lengths&quot;</span> <span class="ow">in</span> <span class="n">rpt</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">&quot;cumulative_lengths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fileroot&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">crit</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">&quot;cumulative_lengths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;criteria&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"cumulative_lengths"</span> <span class="ow">in</span> <span class="n">rpt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">"cumulative_lengths"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fileroot"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">crit</span> <span class="o">=</span> <span class="n">rpt</span><span class="p">[</span><span class="s2">"cumulative_lengths"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"criteria"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">crit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Criteria is missing for &#39;cumulative_length&#39; option&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Criteria is missing for 'cumulative_length' option"</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">propcase</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proplist</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">crit</span> <span class="ow">and</span> <span class="n">propcase</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">crit</span><span class="p">:</span>
-                    <span class="n">codes</span> <span class="o">=</span> <span class="n">crit</span><span class="p">[</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;codes&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="n">interval</span> <span class="o">=</span> <span class="n">crit</span><span class="p">[</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">codes</span> <span class="o">=</span> <span class="n">crit</span><span class="p">[</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"codes"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">interval</span> <span class="o">=</span> <span class="n">crit</span><span class="p">[</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"interval"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">codes</span> <span class="ow">and</span> <span class="n">propcase</span><span class="o">.</span><span class="n">discrete</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Discrete property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> must have &quot;</span>
-                            <span class="s2">&quot;&#39;codes&#39; as criteria&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Discrete property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> must have "</span>
+                            <span class="s2">"'codes' as criteria"</span>
                         <span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">interval</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">propcase</span><span class="o">.</span><span class="n">discrete</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Continuous property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> must have &quot;</span>
-                            <span class="s2">&quot;&#39;interval&#39; as criteria&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Continuous property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> must have "</span>
+                            <span class="s2">"'interval' as criteria"</span>
                         <span class="p">)</span>
 
                     <span class="n">propcase</span><span class="o">.</span><span class="n">codes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_codes</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
                     <span class="n">propcase</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_interval</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">report_keep_intermediate</span> <span class="o">=</span> <span class="n">rpt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keep_intermediate_logs&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report_show_in_terminal</span> <span class="o">=</span> <span class="n">rpt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;show_in_terminal&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_keep_intermediate</span> <span class="o">=</span> <span class="n">rpt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"keep_intermediate_logs"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_show_in_terminal</span> <span class="o">=</span> <span class="n">rpt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"show_in_terminal"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_mdranges</span><span class="p">(</span><span class="n">mdranges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that mdranges are on proper form and that intervals do not overlap&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check that mdranges are on proper form and that intervals do not overlap"""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">mdranges</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mandatory input &#39;mdranges&#39; is not set!&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Mandatory input 'mdranges' is not set!"</span><span class="p">)</span>
 
         <span class="n">previous_stop</span> <span class="o">=</span> <span class="o">-</span><span class="mf">999999.0</span>
         <span class="k">for</span> <span class="n">mdsubset</span> <span class="ow">in</span> <span class="n">mdranges</span><span class="p">:</span>
@@ -389,14 +389,14 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">stop</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
             <span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Values in mdranges must be numbers&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Values in mdranges must be numbers"</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">stop</span> <span class="o">&lt;=</span> <span class="n">start</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Stop value in mdranges ranges is less than start: </span><span class="si">{</span><span class="n">mdsubset</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Stop value in mdranges ranges is less than start: </span><span class="si">{</span><span class="n">mdsubset</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">previous_stop</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ranges cannot be overlapping: </span><span class="si">{</span><span class="n">mdranges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ranges cannot be overlapping: </span><span class="si">{</span><span class="n">mdranges</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">previous_stop</span> <span class="o">=</span> <span class="n">stop</span>
 
@@ -404,44 +404,44 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_codes</span><span class="p">(</span><span class="n">codes</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that codes input looks sane.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check that codes input looks sane."""</span>
         <span class="k">if</span> <span class="n">codes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Code is not integer: </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">codes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Code is not integer: </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">codes</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The &#39;codes&#39; input is not a list&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The 'codes' input is not a list"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">codes</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate_interval</span><span class="p">(</span><span class="n">interval</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that interval input looks sane.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check that interval input looks sane."""</span>
         <span class="k">if</span> <span class="n">interval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Interval list input must be 2 items exactly: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Interval list input must be 2 items exactly: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="n">imin</span><span class="p">,</span> <span class="n">imax</span> <span class="o">=</span> <span class="n">interval</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imin</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;First number in interval (minimum) is not a number: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"First number in interval (minimum) is not a number: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imax</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Second number in interval (maximum) is not a number: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Second number in interval (maximum) is not a number: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="n">imin</span> <span class="o">&gt;=</span> <span class="n">imax</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Minimum cannot be &gt;= than maximum: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Minimum cannot be &gt;= than maximum: </span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The &#39;interval&#39; is not a list&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The 'interval' is not a list"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">interval</span></div>
 
@@ -457,7 +457,7 @@
     <span class="n">delta</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Various post init operations.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Various post init operations."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
 
         <span class="n">dflist</span> <span class="o">=</span> <span class="p">[]</span>
@@ -476,7 +476,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">EnsembleWellProps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ensemble well props is use for post loop analysis.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The ensemble well props is use for post loop analysis."""</span>
 
     <span class="n">well</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Well</span>
     <span class="n">realizations</span><span class="p">:</span> <span class="nb">list</span>
@@ -493,7 +493,7 @@
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">proplist</span><span class="p">:</span>
             <span class="n">plist</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">real</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">realizations</span><span class="p">:</span>
-                <span class="n">plist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">plist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">allprops</span><span class="p">[</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">plist</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">added_logs</span> <span class="o">=</span> <span class="n">allprops</span>
 
@@ -501,7 +501,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_avglogs">[docs]</a>
     <span class="nd">@no_type_check</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble_avglogs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make ensemble mean or mode (most-of) logs.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Make ensemble mean or mode (most-of) logs."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_avg_file</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
@@ -510,17 +510,17 @@
             <span class="n">pplist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">added_logs</span><span class="p">[</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">prop</span><span class="o">.</span><span class="n">discrete</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">create_log</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">,</span>
-                    <span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;CONT&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mean"</span><span class="p">,</span>
+                    <span class="n">logtype</span><span class="o">=</span><span class="s2">"CONT"</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">dfr</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[</span><span class="n">pplist</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">dfr</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mean"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[</span><span class="n">pplist</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">create_log</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mode&quot;</span><span class="p">,</span>
-                    <span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;DISC&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mode"</span><span class="p">,</span>
+                    <span class="n">logtype</span><span class="o">=</span><span class="s2">"DISC"</span><span class="p">,</span>
                     <span class="n">logrecord</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">get_logrecord</span><span class="p">(</span><span class="n">pplist</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                 <span class="p">)</span>
-                <span class="n">dfr</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[</span><span class="n">pplist</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># most of</span>
+                <span class="n">dfr</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_mode"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[</span><span class="n">pplist</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># most of</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -528,7 +528,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.EnsembleWellProps.process_ensemble_cumlen">[docs]</a>
     <span class="nd">@no_type_check</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble_cumlen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provide cumulative length statistics.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Provide cumulative length statistics."""</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -547,14 +547,14 @@
         <span class="n">myreport</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">added_flag_logs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">real</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">realizations</span><span class="p">:</span>
-            <span class="n">cname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_COMB_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">cname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"_COMB_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">dfr</span><span class="p">[</span><span class="n">cname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">added_flag_logs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cname</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">proplist</span><span class="p">:</span>
-                <span class="n">idn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">idn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span>
                 <span class="n">pidn</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">idn</span>
-                <span class="n">pidx</span> <span class="o">=</span> <span class="s2">&quot;q&quot;</span> <span class="o">+</span> <span class="n">pidn</span>
+                <span class="n">pidx</span> <span class="o">=</span> <span class="s2">"q"</span> <span class="o">+</span> <span class="n">pidn</span>
                 <span class="k">if</span> <span class="n">prop</span><span class="o">.</span><span class="n">codes</span><span class="p">:</span>
                     <span class="n">dfr</span><span class="p">[</span><span class="n">pidx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">prop</span><span class="o">.</span><span class="n">codes</span><span class="p">:</span>
@@ -590,18 +590,18 @@
         <span class="n">dfr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumlenreport</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="n">myreport</span><span class="p">,</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
-                <span class="s2">&quot;REAL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;WELLNAME&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NSEGMENTS&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;GOODFRACTION&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;GOODCUMLENGTH&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;TOTALLENGTH_ACTIVE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;TOTALLENGTH_ALL&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MDSTART&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MDEND&quot;</span><span class="p">,</span>
+                <span class="s2">"REAL"</span><span class="p">,</span>
+                <span class="s2">"WELLNAME"</span><span class="p">,</span>
+                <span class="s2">"NSEGMENTS"</span><span class="p">,</span>
+                <span class="s2">"GOODFRACTION"</span><span class="p">,</span>
+                <span class="s2">"GOODCUMLENGTH"</span><span class="p">,</span>
+                <span class="s2">"TOTALLENGTH_ACTIVE"</span><span class="p">,</span>
+                <span class="s2">"TOTALLENGTH_ALL"</span><span class="p">,</span>
+                <span class="s2">"MDSTART"</span><span class="p">,</span>
+                <span class="s2">"MDEND"</span><span class="p">,</span>
             <span class="p">],</span>
         <span class="p">)</span>
-        <span class="n">newdfr</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[[</span><span class="s2">&quot;GOODFRACTION&quot;</span><span class="p">,</span> <span class="s2">&quot;GOODCUMLENGTH&quot;</span><span class="p">]]</span>
+        <span class="n">newdfr</span> <span class="o">=</span> <span class="n">dfr</span><span class="p">[[</span><span class="s2">"GOODFRACTION"</span><span class="p">,</span> <span class="s2">"GOODCUMLENGTH"</span><span class="p">]]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cumlenreport_summary</span> <span class="o">=</span> <span class="n">newdfr</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
 
@@ -635,13 +635,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">loop_for_compute</span><span class="p">(</span>
     <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">sinfo</span><span class="p">:</span> <span class="n">ScreenInfo</span><span class="p">,</span> <span class="n">_dryrun</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnsembleWellProps</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collect for computing the ensemble statistics.</span>
+<span class="w">    </span><span class="sd">"""Collect for computing the ensemble statistics.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config: The input configuration dictonary</span>
 <span class="sd">        sinfo: Messages to screen instance</span>
 <span class="sd">        _dryrun: For testing, skipping computation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigData</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="n">wcase</span> <span class="o">=</span> <span class="n">WellCase</span><span class="p">(</span>
         <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_file</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">wellfile</span><span class="p">,</span> <span class="n">lognames</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">lognames</span><span class="p">),</span>
@@ -652,34 +652,34 @@
 
     <span class="n">grd</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="s2">&quot;Loop data over realizations...&quot;</span><span class="p">)</span>
+    <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="s2">"Loop data over realizations..."</span><span class="p">)</span>
     <span class="n">used_realizations</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">real</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">reals</span><span class="p">:</span>
-        <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Realization no. </span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">realiterpath</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;realization-</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">/</span> <span class="n">cfg</span><span class="o">.</span><span class="n">itera</span>
+        <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Realization no. </span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">realiterpath</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"realization-</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span> <span class="o">/</span> <span class="n">cfg</span><span class="o">.</span><span class="n">itera</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grd</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">gridreuse</span><span class="p">:</span>
             <span class="c1"># one may choose to reuse grid if not structural uncertainty</span>
-            <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Read grid geometry for realization </span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Read grid geometry for realization </span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">gpath</span> <span class="o">=</span> <span class="n">realiterpath</span> <span class="o">/</span> <span class="n">cfg</span><span class="o">.</span><span class="n">gridfilestub</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">grd</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="n">gpath</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-                <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not able to read grid </span><span class="si">{</span><span class="n">gpath</span><span class="si">}</span><span class="s2">, skip realization...&quot;</span><span class="p">)</span>
+                <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Not able to read grid </span><span class="si">{</span><span class="n">gpath</span><span class="si">}</span><span class="s2">, skip realization..."</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">delete_logs</span><span class="p">(</span><span class="n">GCELLNAMES</span><span class="p">)</span>
             <span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">make_ijk_from_grid</span><span class="p">(</span><span class="n">grd</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">propcase</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">proplist</span><span class="p">:</span>
             <span class="n">proppath</span> <span class="o">=</span> <span class="n">realiterpath</span> <span class="o">/</span> <span class="n">propcase</span><span class="o">.</span><span class="n">filestub</span>
-            <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Read: </span><span class="si">{</span><span class="n">proppath</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+            <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Read: </span><span class="si">{</span><span class="n">proppath</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">theprop</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="n">proppath</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
                 <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Not able to read property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">proppath</span><span class="si">}</span><span class="s2">, &quot;</span>
-                    <span class="s2">&quot;skip realization...&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Not able to read property </span><span class="si">{</span><span class="n">propcase</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">proppath</span><span class="si">}</span><span class="s2">, "</span>
+                    <span class="s2">"skip realization..."</span>
                 <span class="p">)</span>
                 <span class="k">continue</span>
             <span class="n">theprop</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">grd</span>
@@ -688,7 +688,7 @@
                 <span class="n">run_compute</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="p">,</span> <span class="n">propcase</span><span class="p">,</span> <span class="n">theprop</span><span class="p">)</span>
         <span class="n">used_realizations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
 
-    <span class="n">sinfo</span><span class="o">.</span><span class="n">xprint</span><span class="p">(</span><span class="s2">&quot;Delete logs referring to cells...&quot;</span><span class="p">)</span>
+    <span class="n">sinfo</span><span class="o">.</span><span class="n">xprint</span><span class="p">(</span><span class="s2">"Delete logs referring to cells..."</span><span class="p">)</span>
     <span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">delete_logs</span><span class="p">(</span><span class="n">GCELLNAMES</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">EnsembleWellProps</span><span class="p">(</span><span class="n">wcase</span><span class="o">.</span><span class="n">well</span><span class="p">,</span> <span class="n">used_realizations</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">sinfo</span><span class="p">)</span></div>
 
@@ -697,12 +697,12 @@
 <div class="viewcode-block" id="run_compute">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.run_compute">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">run_compute</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">well</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">theprop</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute well props sampled from gridproperties for one propert and realization.</span>
+<span class="w">    </span><span class="sd">"""Compute well props sampled from gridproperties for one propert and realization.</span>
 
 <span class="sd">    The well.dataframe is updated in-place with new column(s)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">idn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">idn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"_r</span><span class="si">{</span><span class="n">real</span><span class="si">}</span><span class="s2">"</span>
     <span class="n">theprop</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span>
 
     <span class="n">well</span><span class="o">.</span><span class="n">get_gridproperties</span><span class="p">(</span><span class="n">theprop</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">GCELLNAMES</span><span class="p">),</span> <span class="n">prop_id</span><span class="o">=</span><span class="n">idn</span><span class="p">)</span></div>
@@ -713,37 +713,37 @@
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.process_ensemble">[docs]</a>
 <span class="nd">@no_type_check</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">process_ensemble</span><span class="p">(</span><span class="n">ens</span><span class="p">:</span> <span class="n">EnsembleWellProps</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process the ensemble (seen in well) according to client &#39;report&#39; requirements.</span>
+<span class="w">    </span><span class="sd">"""Process the ensemble (seen in well) according to client 'report' requirements.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        ens: Instance of EnsembleWellProps which holds all relevant data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">avgstatus</span> <span class="o">=</span> <span class="n">ens</span><span class="o">.</span><span class="n">process_ensemble_avglogs</span><span class="p">()</span>
 
     <span class="n">cumstatus</span> <span class="o">=</span> <span class="n">ens</span><span class="o">.</span><span class="n">process_ensemble_cumlen</span><span class="p">()</span>
     <span class="n">sinfo</span> <span class="o">=</span> <span class="n">ens</span><span class="o">.</span><span class="n">sinfo</span>
-    <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="s2">&quot;Process ensemble data for well...&quot;</span><span class="p">)</span>
-    <span class="n">sinfo</span><span class="o">.</span><span class="n">xprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The avgstatus is </span><span class="si">{</span><span class="n">avgstatus</span><span class="si">}</span><span class="s2"> and cumstatus is </span><span class="si">{</span><span class="n">cumstatus</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="s2">"Process ensemble data for well..."</span><span class="p">)</span>
+    <span class="n">sinfo</span><span class="o">.</span><span class="n">xprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The avgstatus is </span><span class="si">{</span><span class="n">avgstatus</span><span class="si">}</span><span class="s2"> and cumstatus is </span><span class="si">{</span><span class="n">cumstatus</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">avgstatus</span><span class="p">:</span>
         <span class="n">ens</span><span class="o">.</span><span class="n">optionally_delete_logs</span><span class="p">()</span>
         <span class="n">ens</span><span class="o">.</span><span class="n">optionally_delete_flag_logs</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_show_in_terminal</span><span class="p">:</span>
-            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Well data:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save to RMS well data file: </span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_avg_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Well data:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Save to RMS well data file: </span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_avg_file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">ens</span><span class="o">.</span><span class="n">well</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_avg_file</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cumstatus</span><span class="p">:</span>
         <span class="n">ens</span><span class="o">.</span><span class="n">optionally_delete_logs</span><span class="p">()</span>
         <span class="n">ens</span><span class="o">.</span><span class="n">optionally_delete_flag_logs</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_show_in_terminal</span><span class="p">:</span>
-            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Per realization:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Summary:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport_summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Per realization:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">sinfo</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Summary:</span><span class="se">\n</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport_summary</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
-        <span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">+</span> <span class="s2">&quot;_summary.csv&quot;</span><span class="p">)</span>
+        <span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">+</span> <span class="s2">".csv"</span><span class="p">)</span>
+        <span class="n">ens</span><span class="o">.</span><span class="n">cumlenreport_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span> <span class="o">+</span> <span class="s2">"_summary.csv"</span><span class="p">)</span>
         <span class="n">sinfo</span><span class="o">.</span><span class="n">oprint</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Wrote summary to </span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="si">}</span><span class="s2">.csv and &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="si">}</span><span class="s2">_summary.csv&quot;</span>
+            <span class="sa">f</span><span class="s2">"Wrote summary to </span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="si">}</span><span class="s2">.csv and "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ens</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">report_cum_file</span><span class="si">}</span><span class="s2">_summary.csv"</span>
         <span class="p">)</span></div>
 
 
@@ -751,11 +751,11 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../../fmu.tools.ensembles.html#fmu.tools.ensembles.ensemble_well_props.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main routine for ensemble_well_props.</span>
+<span class="w">    </span><span class="sd">"""Main routine for ensemble_well_props.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        args: Input config; if missing the command line is parsed for YAML file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">screeninfo</span> <span class="o">=</span> <span class="n">ScreenInfo</span><span class="p">()</span>
@@ -776,7 +776,7 @@
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 

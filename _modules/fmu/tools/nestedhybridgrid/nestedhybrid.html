@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=e9332e24"></script>
+      <script src="../../../../_static/documentation_options.js?v=d8e47600"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -90,7 +90,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for fmu.tools.nestedhybridgrid.nestedhybrid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Nested hybrid grid creation.</span>
+<span></span><span class="sd">"""Nested hybrid grid creation.</span>
 
 <span class="sd">Create a merged grid where one region is refined (subdivided) and stitched</span>
 <span class="sd">back into the original grid via Non-Neighbour Connections (NNCs).</span>
@@ -104,7 +104,7 @@
 <span class="sd">    Convert NNC transmissibility DataFrames to GridProperty instances.</span>
 <span class="sd">nnc_to_flowsimulator_input : function</span>
 <span class="sd">    Write NNC transmissibilities to a flow-simulator input file.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -129,7 +129,7 @@
 <span class="c1"># Internal helpers</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
-<span class="n">FaceDirection</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;i+&quot;</span><span class="p">,</span> <span class="s2">&quot;i-&quot;</span><span class="p">,</span> <span class="s2">&quot;j+&quot;</span><span class="p">,</span> <span class="s2">&quot;j-&quot;</span><span class="p">,</span> <span class="s2">&quot;k+&quot;</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">]</span>
+<span class="n">FaceDirection</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"i+"</span><span class="p">,</span> <span class="s2">"i-"</span><span class="p">,</span> <span class="s2">"j+"</span><span class="p">,</span> <span class="s2">"j-"</span><span class="p">,</span> <span class="s2">"k+"</span><span class="p">,</span> <span class="s2">"k-"</span><span class="p">]</span>
 <span class="n">IJKIndex</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 <span class="n">BoundaryCellFace</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">IJKIndex</span><span class="p">,</span> <span class="n">IJKIndex</span><span class="p">,</span> <span class="n">FaceDirection</span><span class="p">]</span>
 
@@ -148,7 +148,7 @@
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.BoundingBox.from_condition">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">condition</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ijk bounding box from a 3D boolean mask.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the ijk bounding box from a 3D boolean mask."""</span>
         <span class="n">region_indices</span> <span class="o">=</span> <span class="n">condition</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
@@ -174,18 +174,18 @@
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.Refinement.from_tuple">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_tuple</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a refinement model from a 3-tuple.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a refinement model from a 3-tuple."""</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">lay</span> <span class="o">=</span> <span class="n">refinement</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">lay</span><span class="o">=</span><span class="n">lay</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Refinement factors must be &gt;= 1&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Refinement factors must be &gt;= 1"</span><span class="p">)</span></div>
 </div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_crop_for_region</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="p">:</span> <span class="n">BoundingBox</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Crop grid to the bounding box of the refinement region.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Crop grid to the bounding box of the refinement region."""</span>
 
     <span class="n">cropped_grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -193,22 +193,22 @@
     <span class="n">jrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">refinement_bbox</span><span class="o">.</span><span class="n">jmin</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="o">.</span><span class="n">jmax</span><span class="p">)</span>
     <span class="n">krange</span> <span class="o">=</span> <span class="p">(</span><span class="n">refinement_bbox</span><span class="o">.</span><span class="n">kmin</span><span class="p">,</span> <span class="n">refinement_bbox</span><span class="o">.</span><span class="n">kmax</span><span class="p">)</span>
 
-    <span class="n">cropped_grid</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">irange</span><span class="p">,</span> <span class="n">jrange</span><span class="p">,</span> <span class="n">krange</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Cropped grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cropped_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+    <span class="n">cropped_grid</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">irange</span><span class="p">,</span> <span class="n">jrange</span><span class="p">,</span> <span class="n">krange</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="s2">"all"</span><span class="p">)</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Cropped grid dimensions: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">cropped_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cropped_grid</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_boundary_faces</span><span class="p">(</span><span class="n">refined_area</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">BoundaryCellFace</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find cell faces on the boundary of a refinement area.</span>
+<span class="w">    </span><span class="sd">"""Find cell faces on the boundary of a refinement area.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        refined_area: 3D boolean array where ``True`` marks cells to refine.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A list of ``(outside_ijk, inside_ijk, face_dir)`` where indices are</span>
-<span class="sd">        0-based and *face_dir* is one of ``&#39;i+&#39;, &#39;i-&#39;, &#39;j+&#39;, &#39;j-&#39;, &#39;k+&#39;, &#39;k-&#39;``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        0-based and *face_dir* is one of ``'i+', 'i-', 'j+', 'j-', 'k+', 'k-'``.</span>
+<span class="sd">    """</span>
     <span class="n">ni</span><span class="p">,</span> <span class="n">nj</span><span class="p">,</span> <span class="n">nk</span> <span class="o">=</span> <span class="n">refined_area</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">active</span> <span class="o">=</span> <span class="o">~</span><span class="n">refined_area</span><span class="o">.</span><span class="n">mask</span>
 
@@ -220,34 +220,34 @@
     <span class="c1"># i+</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:</span> <span class="n">ni</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;i+&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">"i+"</span><span class="p">))</span>
 
     <span class="c1"># i-</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="n">ni</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:</span> <span class="n">ni</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;i-&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">"i-"</span><span class="p">))</span>
 
     <span class="c1"># j+</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">nj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nj</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;j+&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">"j+"</span><span class="p">))</span>
 
     <span class="c1"># j-</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nj</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">nj</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">jdx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;j-&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">jdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">"j-"</span><span class="p">))</span>
 
     <span class="c1"># k+</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nk</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">&quot;k+&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="s2">"k+"</span><span class="p">))</span>
 
     <span class="c1"># k-</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">in_target</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nk</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">outside_active</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span> <span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">kdx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
-        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="s2">&quot;k-&quot;</span><span class="p">))</span>
+        <span class="n">faces</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span><span class="p">)),</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">kdx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span> <span class="s2">"k-"</span><span class="p">))</span>
 
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> boundary faces for refinement area&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">))</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Found </span><span class="si">%d</span><span class="s2"> boundary faces for refinement area"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">faces</span>
 
 
@@ -258,7 +258,7 @@
     <span class="n">lmap1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">lmap2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute NNC cell-pair mapping between mother and refined cells.</span>
+<span class="w">    </span><span class="sd">"""Compute NNC cell-pair mapping between mother and refined cells.</span>
 
 <span class="sd">    For each boundary face between the target region and the surrounding mother</span>
 <span class="sd">    cells, this function determines which refined sub-cells in the merged grid</span>
@@ -272,7 +272,7 @@
 <span class="sd">    Convention:</span>
 <span class="sd">        - ``I1, J1, K1`` is always the **mother** cell (1-based, merged grid).</span>
 <span class="sd">        - ``I2, J2, K2`` is always the **refined** cell (1-based, merged grid).</span>
-<span class="sd">        - ``DIRECTION`` is from the mother cell&#39;s perspective (e.g. ``&quot;I+&quot;``</span>
+<span class="sd">        - ``DIRECTION`` is from the mother cell's perspective (e.g. ``"I+"``</span>
 <span class="sd">          means looking in the positive I-direction from the mother cell</span>
 <span class="sd">          you reach the refined cell).</span>
 
@@ -286,7 +286,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">faces</span> <span class="o">=</span> <span class="n">_find_boundary_faces</span><span class="p">(</span><span class="n">refined_area</span><span class="p">)</span>
     <span class="n">bbox</span> <span class="o">=</span> <span class="n">BoundingBox</span><span class="o">.</span><span class="n">from_condition</span><span class="p">(</span><span class="n">refined_area</span><span class="p">)</span>
 
@@ -310,8 +310,8 @@
         <span class="n">ck</span> <span class="o">=</span> <span class="n">inside_ijk</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">k0</span>
 
         <span class="c1"># Determine direction from mother and which refined cells lie on the face.</span>
-        <span class="c1"># face_dir is from the *inside* (target) cell&#39;s perspective;</span>
-        <span class="c1"># the mother&#39;s perspective is the opposite sign.</span>
+        <span class="c1"># face_dir is from the *inside* (target) cell's perspective;</span>
+        <span class="c1"># the mother's perspective is the opposite sign.</span>
         <span class="c1">#</span>
         <span class="c1"># For I-faces: the varying refined indices are J and K  (rrow × rlay cells)</span>
         <span class="c1"># For J-faces: the varying refined indices are I and K  (rcol × rlay cells)</span>
@@ -320,68 +320,68 @@
         <span class="n">ref_js</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
         <span class="n">ref_ks</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;i-&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at higher I than mother → mother&#39;s I+ face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;I+&quot;</span>
+        <span class="k">if</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"i-"</span><span class="p">:</span>
+            <span class="c1"># Target at higher I than mother → mother's I+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"I+"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="p">[</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">]</span>  <span class="c1"># first i-column of refined block (I- face)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;i+&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at lower I than mother → mother&#39;s I- face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;I-&quot;</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"i+"</span><span class="p">:</span>
+            <span class="c1"># Target at lower I than mother → mother's I- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"I-"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="p">[</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last i-column (I+ face)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;j-&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at higher J than mother → mother&#39;s J+ face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;J+&quot;</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"j-"</span><span class="p">:</span>
+            <span class="c1"># Target at higher J than mother → mother's J+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"J+"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="p">[</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">]</span>  <span class="c1"># first j-row (J- face)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;j+&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at lower J than mother → mother&#39;s J- face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;J-&quot;</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"j+"</span><span class="p">:</span>
+            <span class="c1"># Target at lower J than mother → mother's J- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"J-"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="p">[</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last j-row (J+ face)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">,</span> <span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;k-&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at higher K than mother → mother&#39;s K+ face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;K+&quot;</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"k-"</span><span class="p">:</span>
+            <span class="c1"># Target at higher K than mother → mother's K+ face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"K+"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span><span class="p">]</span>  <span class="c1"># first k-layer (K- face)</span>
-        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">&quot;k+&quot;</span><span class="p">:</span>
-            <span class="c1"># Target at lower K than mother → mother&#39;s K- face</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;K-&quot;</span>
+        <span class="k">elif</span> <span class="n">face_dir</span> <span class="o">==</span> <span class="s2">"k+"</span><span class="p">:</span>
+            <span class="c1"># Target at lower K than mother → mother's K- face</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">"K-"</span>
             <span class="n">ref_is</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span><span class="p">,</span> <span class="n">ci</span> <span class="o">*</span> <span class="n">rcol</span> <span class="o">+</span> <span class="n">rcol</span><span class="p">)</span>
             <span class="n">ref_js</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span><span class="p">,</span> <span class="n">cj</span> <span class="o">*</span> <span class="n">rrow</span> <span class="o">+</span> <span class="n">rrow</span><span class="p">)</span>
             <span class="n">ref_ks</span> <span class="o">=</span> <span class="p">[</span><span class="n">ck</span> <span class="o">*</span> <span class="n">rlay</span> <span class="o">+</span> <span class="n">rlay</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># last k-layer (K+ face)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected face direction: </span><span class="si">{</span><span class="n">face_dir</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unexpected face direction: </span><span class="si">{</span><span class="n">face_dir</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ri</span> <span class="ow">in</span> <span class="n">ref_is</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">rj</span> <span class="ow">in</span> <span class="n">ref_js</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="n">ref_ks</span><span class="p">:</span>
                     <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="p">{</span>
-                            <span class="s2">&quot;I1&quot;</span><span class="p">:</span> <span class="n">mi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;J1&quot;</span><span class="p">:</span> <span class="n">mj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;K1&quot;</span><span class="p">:</span> <span class="n">lmap1</span><span class="p">[</span><span class="n">mk</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;I2&quot;</span><span class="p">:</span> <span class="n">ri</span> <span class="o">+</span> <span class="n">i_offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;J2&quot;</span><span class="p">:</span> <span class="n">rj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;K2&quot;</span><span class="p">:</span> <span class="n">lmap2</span><span class="p">[</span><span class="n">rk</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                            <span class="s2">&quot;DIRECTION&quot;</span><span class="p">:</span> <span class="n">direction</span><span class="p">,</span>
+                            <span class="s2">"I1"</span><span class="p">:</span> <span class="n">mi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"J1"</span><span class="p">:</span> <span class="n">mj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"K1"</span><span class="p">:</span> <span class="n">lmap1</span><span class="p">[</span><span class="n">mk</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"I2"</span><span class="p">:</span> <span class="n">ri</span> <span class="o">+</span> <span class="n">i_offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"J2"</span><span class="p">:</span> <span class="n">rj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"K2"</span><span class="p">:</span> <span class="n">lmap2</span><span class="p">[</span><span class="n">rk</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">"DIRECTION"</span><span class="p">:</span> <span class="n">direction</span><span class="p">,</span>
                         <span class="p">}</span>
                     <span class="p">)</span>
 
     <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-        <span class="s2">&quot;NNC table: </span><span class="si">%d</span><span class="s2"> cell pairs from </span><span class="si">%d</span><span class="s2"> boundary faces&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
+        <span class="s2">"NNC table: </span><span class="si">%d</span><span class="s2"> cell pairs from </span><span class="si">%d</span><span class="s2"> boundary faces"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;DIRECTION&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"I1"</span><span class="p">,</span> <span class="s2">"J1"</span><span class="p">,</span> <span class="s2">"K1"</span><span class="p">,</span> <span class="s2">"I2"</span><span class="p">,</span> <span class="s2">"J2"</span><span class="p">,</span> <span class="s2">"K2"</span><span class="p">,</span> <span class="s2">"DIRECTION"</span><span class="p">])</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_set_actnum_in_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span> <span class="n">active_mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deactivate cells where active_mask is False.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Deactivate cells where active_mask is False."""</span>
     <span class="n">actnum</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_actnum</span><span class="p">()</span>
     <span class="n">actnum</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">active_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">grid</span><span class="o">.</span><span class="n">set_actnum</span><span class="p">(</span><span class="n">actnum</span><span class="p">)</span>
@@ -395,12 +395,12 @@
 <div class="viewcode-block" id="NestedHybridGrid">
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.NestedHybridGrid">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NestedHybridGrid</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to build a nested hybrid grid with a refined target region.</span>
+<span class="w">    </span><span class="sd">"""Class to build a nested hybrid grid with a refined target region.</span>
 
 <span class="sd">    The target region is refined and merged back into the coarse grid.</span>
 <span class="sd">    A **NNC mapping table** is computed that lists every coarse ↔ refined cell</span>
 <span class="sd">    pair that should be connected by a Non-Neighbour Connection (NNC).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -409,7 +409,7 @@
         <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a NestedHybridGrid instance.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a NestedHybridGrid instance."""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_inputs</span><span class="p">(</span><span class="n">coarse_grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">refinement</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span>
 
@@ -442,7 +442,7 @@
         <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">properties</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a NestedHybridGrid instance from an RMS project.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create a NestedHybridGrid instance from an RMS project."""</span>
 
         <span class="n">coarse_grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
         <span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">region_name</span><span class="p">)</span>
@@ -457,7 +457,7 @@
 <div class="viewcode-block" id="NestedHybridGrid.to_rms">
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.NestedHybridGrid.to_rms">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the nested hybrid grid and its properties to an RMS project.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Write the nested hybrid grid and its properties to an RMS project."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
@@ -471,26 +471,26 @@
         <span class="n">refinement</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
         <span class="n">target_region_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate input arguments.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Validate input arguments."""</span>
         <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">!=</span> <span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Region property dimensions </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2"> do not match &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;input grid dimensions </span><span class="si">{</span><span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Region property dimensions </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2"> do not match "</span>
+                <span class="sa">f</span><span class="s2">"input grid dimensions </span><span class="si">{</span><span class="n">coarse_grid</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">target_region_id</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No cells found for target_region_id=</span><span class="si">{</span><span class="n">target_region_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;in region property </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"No cells found for target_region_id=</span><span class="si">{</span><span class="n">target_region_id</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"in region property </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">refinement</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">refinement</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Refinement must be a tuple of three integers: (rcol, rrow, rlay)&quot;</span>
+                <span class="s2">"Refinement must be a tuple of three integers: (rcol, rrow, rlay)"</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_nested_hybrid_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the nested hybrid grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Build the nested hybrid grid."""</span>
         <span class="n">coarse_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="n">region_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_region</span><span class="o">.</span><span class="n">name</span>
@@ -519,26 +519,26 @@
             <span class="n">layer_map1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_coarse</span><span class="p">,</span>
             <span class="n">layer_map2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_layer_map_refined</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Merged grid dimensions: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Merged grid dimensions: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">dimensions</span><span class="p">)</span>
 
         <span class="n">grid</span><span class="o">.</span><span class="n">subgrids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_zonation</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">nlay</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">grid</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The final nested hybrid grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The final nested hybrid grid."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_nested_hybrid_grid</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The final nested hybrid grid properties.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The final nested hybrid grid properties."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">props</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">nnc_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Non-Neighbour Connection (NNC) mapping table.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Non-Neighbour Connection (NNC) mapping table."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_nnc_table</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nnc_table</span>
@@ -546,14 +546,14 @@
 <div class="viewcode-block" id="NestedHybridGrid.write_nnc_table">
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.NestedHybridGrid.write_nnc_table">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write_nnc_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the NNC mapping table to CSV.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Write the NNC mapping table to CSV."""</span>
         <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nnc_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute_nnc_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the NNC mapping table.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Compute the NNC mapping table."""</span>
         <span class="k">return</span> <span class="n">_compute_nnc_table</span><span class="p">(</span>
             <span class="n">refined_area</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_area</span><span class="p">,</span>
             <span class="n">refinement</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="p">,</span>
@@ -563,11 +563,11 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_generate_layer_map_coarse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map original coarse-layer indices to indices in the final merged grid.</span>
+<span class="w">        </span><span class="sd">"""Map original coarse-layer indices to indices in the final merged grid.</span>
 
 <span class="sd">        Layers below the refined K-window are unchanged; layers at/above the window are</span>
 <span class="sd">        shifted to account for extra layers introduced by K-refinement.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">rlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">lay</span>
         <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">coarse_nlay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_dimensions</span><span class="o">.</span><span class="n">nlay</span>
@@ -580,21 +580,21 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_generate_layer_map_refined</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map original refined grid layer indices to indices in the final merged grid.</span>
+<span class="w">        </span><span class="sd">"""Map original refined grid layer indices to indices in the final merged grid.</span>
 
 <span class="sd">        Refined layers are offset by the first layer index of the refined</span>
 <span class="sd">        K-window in the original coarse grid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">lmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_refined_nlay</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">lmap</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_num_refined_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the number of layers of the refined grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the number of layers of the refined grid."""</span>
         <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refined_bbox</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">bbox</span><span class="o">.</span><span class="n">kmax</span> <span class="o">-</span> <span class="n">bbox</span><span class="o">.</span><span class="n">kmin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refinement</span><span class="o">.</span><span class="n">lay</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_set_zonation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nlay</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an updated subgrid dictionary for the merged grid.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Create an updated subgrid dictionary for the merged grid."""</span>
         <span class="n">subgrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_subgrids</span>
         <span class="k">if</span> <span class="n">subgrid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -629,7 +629,7 @@
     <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a nested hybrid grid by refining one region and merging it back.</span>
+<span class="w">    </span><span class="sd">"""Create a nested hybrid grid by refining one region and merging it back.</span>
 
 <span class="sd">    The cells belonging to *target_region_id* are replaced by a refined</span>
 <span class="sd">    (subdivided) version of the same region.</span>
@@ -644,7 +644,7 @@
 
 <span class="sd">    - ``I1, J1, K1``: mother cell indices (1-based) in the merged grid.</span>
 <span class="sd">    - ``I2, J2, K2``: refined cell indices (1-based) in the merged grid.</span>
-<span class="sd">    - ``DIRECTION``: face direction from the mother cell&#39;s perspective</span>
+<span class="sd">    - ``DIRECTION``: face direction from the mother cell's perspective</span>
 <span class="sd">      (``I+``, ``I-``, ``J+``, ``J-``, ``K+``, ``K-``).</span>
 
 <span class="sd">    This table can be passed to</span>
@@ -663,10 +663,10 @@
 <span class="sd">        is a new :class:`xtgeo.Grid` with the refined region stitched back into</span>
 <span class="sd">        the coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping</span>
 <span class="sd">        mother cells to their connected refined cells.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;create_nested_hybrid_grid is currently experimental. It may undergo &quot;</span>
-        <span class="s2">&quot;breaking changes in future versions without notice.&quot;</span><span class="p">,</span>
+        <span class="s2">"create_nested_hybrid_grid is currently experimental. It may undergo "</span>
+        <span class="s2">"breaking changes in future versions without notice."</span><span class="p">,</span>
         <span class="ne">FutureWarning</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -687,15 +687,15 @@
     <span class="n">grid</span><span class="p">:</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">,</span>
     <span class="n">nnc_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">,</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert NNC transmissibility data to three GridProperty instances.</span>
+<span class="w">    </span><span class="sd">"""Convert NNC transmissibility data to three GridProperty instances.</span>
 
 <span class="sd">    Takes the NNC DataFrame produced by :meth:`xtgeo.Grid.get_transmissibilities`</span>
 <span class="sd">    and maps transmissibility values onto grid cells, producing one property per</span>
 <span class="sd">    direction (I, J, K).</span>
 
-<span class="sd">    For rows where DIRECTION contains ``&quot;+&quot;``, the transmissibility value is</span>
+<span class="sd">    For rows where DIRECTION contains ``"+"``, the transmissibility value is</span>
 <span class="sd">    placed in cell ``(I1, J1, K1)``.  For rows where DIRECTION contains</span>
-<span class="sd">    ``&quot;-&quot;``, the value is placed in cell ``(I2, J2, K2)``.  Index columns</span>
+<span class="sd">    ``"-"``, the value is placed in cell ``(I2, J2, K2)``.  Index columns</span>
 <span class="sd">    (I1, J1, K1, I2, J2, K2) are expected to be **1-based**.</span>
 
 <span class="sd">    If multiple rows map to the same cell and direction, the transmissibility</span>
@@ -708,46 +708,46 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A tuple ``(tranx_nnc, trany_nnc, tranz_nnc)`` of</span>
-<span class="sd">        :class:`xtgeo.GridProperty` instances named ``&quot;TRANX_NNC&quot;``,</span>
-<span class="sd">        ``&quot;TRANY_NNC&quot;``, and ``&quot;TRANZ_NNC&quot;`` respectively.</span>
+<span class="sd">        :class:`xtgeo.GridProperty` instances named ``"TRANX_NNC"``,</span>
+<span class="sd">        ``"TRANY_NNC"``, and ``"TRANZ_NNC"`` respectively.</span>
 <span class="sd">        Cells without an NNC value are set to ``-1.0``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;DIRECTION&quot;</span><span class="p">}</span>
+<span class="sd">    """</span>
+    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"I1"</span><span class="p">,</span> <span class="s2">"J1"</span><span class="p">,</span> <span class="s2">"K1"</span><span class="p">,</span> <span class="s2">"I2"</span><span class="p">,</span> <span class="s2">"J2"</span><span class="p">,</span> <span class="s2">"K2"</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">,</span> <span class="s2">"DIRECTION"</span><span class="p">}</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">ncol</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">nrow</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">nlay</span>
     <span class="n">fill</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
 
     <span class="n">arrays</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
-        <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
-        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+        <span class="s2">"I"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+        <span class="s2">"J"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+        <span class="s2">"K"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
     <span class="p">}</span>
     <span class="n">touched</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
-        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"I"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"J"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+        <span class="s2">"K"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncol</span><span class="p">,</span> <span class="n">nrow</span><span class="p">,</span> <span class="n">nlay</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
     <span class="p">}</span>
 
-    <span class="n">direction_col</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="p">[</span><span class="s2">&quot;DIRECTION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-    <span class="n">is_plus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\+&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">is_minus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="n">direction_col</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="p">[</span><span class="s2">"DIRECTION"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">is_plus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\+"</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">is_minus</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
     <span class="n">prefix_col</span> <span class="o">=</span> <span class="n">direction_col</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"I"</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">,</span> <span class="s2">"K"</span><span class="p">):</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">arrays</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
         <span class="n">tch</span> <span class="o">=</span> <span class="n">touched</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
         <span class="n">mask_prefix</span> <span class="o">=</span> <span class="n">prefix_col</span> <span class="o">==</span> <span class="n">prefix</span>
 
-        <span class="c1"># &quot;+&quot; rows → use (I1, J1, K1)</span>
+        <span class="c1"># "+" rows → use (I1, J1, K1)</span>
         <span class="n">sel_plus</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_prefix</span> <span class="o">&amp;</span> <span class="n">is_plus</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sel_plus</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;I1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;J1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;K1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">"I1"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">"J1"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">"K1"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_plus</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="n">ii</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="o">&amp;</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ncol</span><span class="p">)</span>
@@ -759,13 +759,13 @@
             <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="p">(</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]),</span> <span class="n">tt</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
             <span class="n">tch</span><span class="p">[</span><span class="n">ii</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">jj</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span> <span class="n">kk</span><span class="p">[</span><span class="n">valid</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="c1"># &quot;-&quot; rows → use (I2, J2, K2)</span>
+        <span class="c1"># "-" rows → use (I2, J2, K2)</span>
         <span class="n">sel_minus</span> <span class="o">=</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_prefix</span> <span class="o">&amp;</span> <span class="n">is_minus</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">sel_minus</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;I2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;J2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;K2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">"I2"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">jj</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">"J2"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">kk</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">"K2"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="n">sel_minus</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
             <span class="n">valid</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="n">ii</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="o">&amp;</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ncol</span><span class="p">)</span>
@@ -780,9 +780,9 @@
         <span class="c1"># Set untouched cells to fill value</span>
         <span class="n">arr</span><span class="p">[</span><span class="o">~</span><span class="n">tch</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
 
-    <span class="n">prop_names</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANX_NNC&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANY_NNC&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="s2">&quot;TRANZ_NNC&quot;</span><span class="p">}</span>
+    <span class="n">prop_names</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"I"</span><span class="p">:</span> <span class="s2">"TRANX_NNC"</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">:</span> <span class="s2">"TRANY_NNC"</span><span class="p">,</span> <span class="s2">"K"</span><span class="p">:</span> <span class="s2">"TRANZ_NNC"</span><span class="p">}</span>
     <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"I"</span><span class="p">,</span> <span class="s2">"J"</span><span class="p">,</span> <span class="s2">"K"</span><span class="p">):</span>
         <span class="n">props</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">(</span>
             <span class="n">grid</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">prop_names</span><span class="p">[</span><span class="n">prefix</span><span class="p">],</span>
@@ -790,7 +790,7 @@
             <span class="n">discrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;I&quot;</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;J&quot;</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="n">props</span><span class="p">[</span><span class="s2">"I"</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">"J"</span><span class="p">],</span> <span class="n">props</span><span class="p">[</span><span class="s2">"K"</span><span class="p">]</span></div>
 
 
 
@@ -800,7 +800,7 @@
     <span class="n">nnc_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write NNC transmissibilities to a flow-simulator input file.</span>
+<span class="w">    </span><span class="sd">"""Write NNC transmissibilities to a flow-simulator input file.</span>
 
 <span class="sd">    Produces a file with the ``NNC`` keyword suitable for reservoir</span>
 <span class="sd">    simulators that use Eclipse-style input decks, such as Eclipse and</span>
@@ -813,34 +813,34 @@
 <span class="sd">            ``I1, J1, K1, I2, J2, K2, T``.  Optional columns ``TYPE``</span>
 <span class="sd">            and ``DIRECTION`` are written as end-of-line comments.</span>
 <span class="sd">        filepath: Path to the output file.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;I1&quot;</span><span class="p">,</span> <span class="s2">&quot;J1&quot;</span><span class="p">,</span> <span class="s2">&quot;K1&quot;</span><span class="p">,</span> <span class="s2">&quot;I2&quot;</span><span class="p">,</span> <span class="s2">&quot;J2&quot;</span><span class="p">,</span> <span class="s2">&quot;K2&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">}</span>
+<span class="sd">    """</span>
+    <span class="n">required_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"I1"</span><span class="p">,</span> <span class="s2">"J1"</span><span class="p">,</span> <span class="s2">"K1"</span><span class="p">,</span> <span class="s2">"I2"</span><span class="p">,</span> <span class="s2">"J2"</span><span class="p">,</span> <span class="s2">"K2"</span><span class="p">,</span> <span class="s2">"T"</span><span class="p">}</span>
     <span class="n">missing</span> <span class="o">=</span> <span class="n">required_cols</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing required columns in nnc_df: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">has_type</span> <span class="o">=</span> <span class="s2">&quot;TYPE&quot;</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
-    <span class="n">has_dir</span> <span class="o">=</span> <span class="s2">&quot;DIRECTION&quot;</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">has_type</span> <span class="o">=</span> <span class="s2">"TYPE"</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">has_dir</span> <span class="o">=</span> <span class="s2">"DIRECTION"</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">columns</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;NNC</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"NNC</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">nnc_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
             <span class="n">line</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;I1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;J1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;K1&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;I2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;J2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;K2&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">  /&quot;</span>
+                <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'I1'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'J1'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'K1'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'I2'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'J2'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">'K2'</span><span class="p">])</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"   </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'T'</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">  /"</span>
             <span class="p">)</span>
             <span class="n">comment_parts</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="n">has_type</span><span class="p">:</span>
-                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;TYPE&quot;</span><span class="p">]))</span>
+                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"TYPE"</span><span class="p">]))</span>
             <span class="k">if</span> <span class="n">has_dir</span><span class="p">:</span>
-                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;DIRECTION&quot;</span><span class="p">]))</span>
+                <span class="n">comment_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"DIRECTION"</span><span class="p">]))</span>
             <span class="k">if</span> <span class="n">comment_parts</span><span class="p">:</span>
-                <span class="n">line</span> <span class="o">+=</span> <span class="s2">&quot;  -- &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comment_parts</span><span class="p">)</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;/</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">+=</span> <span class="s2">"  -- "</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comment_parts</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"/</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;NNC keyword written to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span></div>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"NNC keyword written to </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rms.copy_rms_param &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>rms.copy_rms_param &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -201,28 +201,28 @@ may contain the original zone number (e.g. 5 if the zone number for the zone was
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy_rms_param</span>
 
 <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;debug_level&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;from_geo_to_ertbox&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"debug_level"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">"Mode"</span><span class="p">:</span> <span class="s2">"from_geo_to_ertbox"</span><span class="p">,</span>
+    <span class="s2">"GeoGridParameters"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">"P1"</span><span class="p">,</span> <span class="s2">"P2"</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">"P1"</span><span class="p">,</span> <span class="s2">"P2"</span><span class="p">],</span>
     <span class="p">},</span>
-    <span class="s2">&quot;ErtboxParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneA_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneB_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
+    <span class="s2">"ErtboxParameters"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ZoneA_P1"</span><span class="p">,</span> <span class="s2">"ZoneA_P2"</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ZoneB_P1"</span><span class="p">,</span> <span class="s2">"ZoneA_P2"</span><span class="p">],</span>
     <span class="p">},</span>
-    <span class="s2">&quot;Conformity&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;BaseConform&quot;</span><span class="p">,</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;TopConform&quot;</span><span class="p">,</span>
+    <span class="s2">"Conformity"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="s2">"BaseConform"</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="s2">"TopConform"</span><span class="p">,</span>
     <span class="p">},</span>
 
-    <span class="s2">&quot;GridModelName&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ZoneParam&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ERTBoxGridName&quot;</span><span class="p">:</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ExtrapolationMethod&quot;</span><span class="p">:</span> <span class="s2">&quot;repeat&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SaveActiveParam&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;AddNoiseToInactive&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">"GridModelName"</span><span class="p">:</span> <span class="s2">"Geogrid"</span><span class="p">,</span>
+    <span class="s2">"ZoneParam"</span><span class="p">:</span> <span class="s2">"Zone"</span><span class="p">,</span>
+    <span class="s2">"ERTBoxGridName"</span><span class="p">:</span> <span class="s2">"ERTBOX"</span><span class="p">,</span>
+    <span class="s2">"ExtrapolationMethod"</span><span class="p">:</span> <span class="s2">"repeat"</span><span class="p">,</span>
+    <span class="s2">"SaveActiveParam"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">"AddNoiseToInactive"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">copy_rms_param</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
@@ -233,25 +233,25 @@ In this case the keywords <em>SaveActiveParam. AddNoiseToInactive,ExtrapolationM
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.rms</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy_rms_param</span>
 
 <span class="n">params</span> <span class="o">=</span><span class="p">{</span>
-    <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
-    <span class="s2">&quot;debug_level&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;from_ertbox_to_geo&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;GeoGridParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2&quot;</span><span class="p">],</span>
+    <span class="s2">"project"</span><span class="p">:</span> <span class="n">project</span><span class="p">,</span>
+    <span class="s2">"debug_level"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">"Mode"</span><span class="p">:</span> <span class="s2">"from_ertbox_to_geo"</span><span class="p">,</span>
+    <span class="s2">"GeoGridParameters"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">"P1"</span><span class="p">,</span> <span class="s2">"P2"</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">"P1"</span><span class="p">,</span> <span class="s2">"P2"</span><span class="p">],</span>
     <span class="p">},</span>
-    <span class="s2">&quot;ErtboxParameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneA_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneA_P2&quot;</span><span class="p">],</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ZoneB_P1&quot;</span><span class="p">,</span> <span class="s2">&quot;ZoneB_P2&quot;</span><span class="p">],</span>
+    <span class="s2">"ErtboxParameters"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ZoneA_P1"</span><span class="p">,</span> <span class="s2">"ZoneA_P2"</span><span class="p">],</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">"ZoneB_P1"</span><span class="p">,</span> <span class="s2">"ZoneB_P2"</span><span class="p">],</span>
     <span class="p">},</span>
-    <span class="s2">&quot;Conformity&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;BaseConform&quot;</span><span class="p">,</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;TopConform&quot;</span><span class="p">,</span>
+    <span class="s2">"Conformity"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="s2">"BaseConform"</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="s2">"TopConform"</span><span class="p">,</span>
     <span class="p">},</span>
 
-    <span class="s2">&quot;GridModelName&quot;</span><span class="p">:</span> <span class="s2">&quot;Geogrid&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ZoneParam&quot;</span><span class="p">:</span> <span class="s2">&quot;Zone&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ERTBoxGridName&quot;</span><span class="p">:</span> <span class="s2">&quot;ERTBOX&quot;</span><span class="p">,</span>
+    <span class="s2">"GridModelName"</span><span class="p">:</span> <span class="s2">"Geogrid"</span><span class="p">,</span>
+    <span class="s2">"ZoneParam"</span><span class="p">:</span> <span class="s2">"Zone"</span><span class="p">,</span>
+    <span class="s2">"ERTBoxGridName"</span><span class="p">:</span> <span class="s2">"ERTBOX"</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">copy_rms_param</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 </pre></div>

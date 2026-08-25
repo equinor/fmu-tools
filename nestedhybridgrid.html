@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev5+g4767e8faf documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.33.1.dev5+g4767e8faf.d20260825 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=e9332e24"></script>
+      <script src="_static/documentation_options.js?v=d8e47600"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -149,17 +149,17 @@ e.g. by using software like RMS.</p></li>
 <span class="c1"># Create nested hybrid grid (refine region 1 by 2×2×1)</span>
 <span class="n">nhg</span> <span class="o">=</span> <span class="n">NestedHybridGrid</span><span class="o">.</span><span class="n">from_rms</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
-    <span class="n">grid_name</span><span class="o">=</span><span class="s2">&quot;Simgrid&quot;</span><span class="p">,</span>
-    <span class="n">region_name</span><span class="o">=</span><span class="s2">&quot;Refinement_region&quot;</span><span class="p">,</span>
+    <span class="n">grid_name</span><span class="o">=</span><span class="s2">"Simgrid"</span><span class="p">,</span>
+    <span class="n">region_name</span><span class="o">=</span><span class="s2">"Refinement_region"</span><span class="p">,</span>
     <span class="n">refinement</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Zone&quot;</span><span class="p">],</span>  <span class="c1"># Optional list of properties to transfer to the output grid</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="s2">"Zone"</span><span class="p">],</span>  <span class="c1"># Optional list of properties to transfer to the output grid</span>
 <span class="p">)</span>
 
 <span class="c1"># store nested grid with properties in RMS</span>
-<span class="n">nhg</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">&quot;NestedHybrid&quot;</span><span class="p">)</span>
+<span class="n">nhg</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"NestedHybrid"</span><span class="p">)</span>
 
-<span class="c1"># write the NNC table to disk; this will be applied for computing NNC&#39;s in the next script</span>
-<span class="n">nhg</span><span class="o">.</span><span class="n">write_nnc_table</span><span class="p">(</span><span class="s2">&quot;path_to_some_csv_file.csv&quot;</span><span class="p">)</span>
+<span class="c1"># write the NNC table to disk; this will be applied for computing NNC's in the next script</span>
+<span class="n">nhg</span><span class="o">.</span><span class="n">write_nnc_table</span><span class="p">(</span><span class="s2">"path_to_some_csv_file.csv"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The next step is to do a rescaling from the original geogrid to the merged grid
@@ -172,20 +172,20 @@ using e.g. the RMS tool.</p>
     <span class="n">nnc_to_gridproperty</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">GNAME</span> <span class="o">=</span> <span class="s2">&quot;NestedHybrid&quot;</span>
+<span class="n">GNAME</span> <span class="o">=</span> <span class="s2">"NestedHybrid"</span>
 
 <span class="c1"># Load grid and region property which may be stored in RMS</span>
 <span class="n">nested</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">)</span>
 
 <span class="c1"># load the NNC table</span>
-<span class="n">nnc_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;path_to_some_nnc_file.csv&quot;</span><span class="p">)</span>
+<span class="n">nnc_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"path_to_some_nnc_file.csv"</span><span class="p">)</span>
 
 
 <span class="c1"># Load rescaled property input for transmissibilities and compute</span>
-<span class="n">permx</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">&quot;PERMX&quot;</span><span class="p">)</span>
-<span class="n">permy</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">&quot;PERMY&quot;</span><span class="p">)</span>
-<span class="n">permz</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">&quot;PERMZ&quot;</span><span class="p">)</span>
-<span class="n">ntg</span>   <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">&quot;NTG&quot;</span><span class="p">)</span>  <span class="c1"># defaults to 1 if no NTG</span>
+<span class="n">permx</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMX"</span><span class="p">)</span>
+<span class="n">permy</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMY"</span><span class="p">)</span>
+<span class="n">permz</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMZ"</span><span class="p">)</span>
+<span class="n">ntg</span>   <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"NTG"</span><span class="p">)</span>  <span class="c1"># defaults to 1 if no NTG</span>
 
 <span class="c1"># compute transmissibilities. Note that flow simulators do this for the normal cells/faults</span>
 <span class="c1"># so strictly speaking, only nnc_hybrid is needed here.</span>
@@ -194,11 +194,11 @@ using e.g. the RMS tool.</p>
 <span class="p">)</span>
 
 <span class="c1"># Export NNC keyword for Eclipse / OPM Flow</span>
-<span class="n">nnc_to_flowsimulator_input</span><span class="p">(</span><span class="n">nnc_hybrid</span><span class="p">,</span> <span class="s2">&quot;some_path/NNC_HYBRID.INC&quot;</span><span class="p">)</span>
+<span class="n">nnc_to_flowsimulator_input</span><span class="p">(</span><span class="n">nnc_hybrid</span><span class="p">,</span> <span class="s2">"some_path/NNC_HYBRID.INC"</span><span class="p">)</span>
 
 <span class="c1"># Or map NNCs onto grid properties for visualisation</span>
 <span class="n">tx_nnc</span><span class="p">,</span> <span class="n">ty_nnc</span><span class="p">,</span> <span class="n">tz_nnc</span> <span class="o">=</span> <span class="n">nnc_to_gridproperty</span><span class="p">(</span><span class="n">nested</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">)</span>
-<span class="n">tx_nnc</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span> <span class="s2">&quot;TRANX_NNC_QC&quot;</span><span class="p">)</span>  <span class="c1"># etc</span>
+<span class="n">tx_nnc</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span> <span class="s2">"TRANX_NNC_QC"</span><span class="p">)</span>  <span class="c1"># etc</span>
 </pre></div>
 </div>
 </section>
@@ -244,7 +244,7 @@ approximation (TPFA).</p>
 <code class="docutils literal notranslate"><span class="pre">NNC</span></code> keyword in Eclipse format.  The output file can be included in the
 simulator deck:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INCLUDE
-  &#39;NNC_HYBRID.INC&#39; /
+  'NNC_HYBRID.INC' /
 </pre></div>
 </div>
 </section>
