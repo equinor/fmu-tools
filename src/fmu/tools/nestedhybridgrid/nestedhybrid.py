@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Literal, Self, TypeAlias
 import numpy as np
 import pandas as pd
 import xtgeo
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 if TYPE_CHECKING:
     import os
@@ -80,20 +80,37 @@ class Refinement(BaseModel):
 
 
 class Upscale(BaseModel):
+    """An (I, J, K) triplet of upscaling maps defined on the geogrid.
+
+    Each property holds, for every geogrid cell, the **1-based** index of the
+    grid cell it upscales to.  A value of ``0`` means "exclude this geogrid
+    cell from upscaling".
+
+    Note that assigning a plain :class:`numpy.ndarray` to
+    ``GridProperty.values`` discards the property mask, so masked input is
+    carried through explicitly as masked arrays.
+    """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     imap: xtgeo.GridProperty
     jmap: xtgeo.GridProperty
     kmap: xtgeo.GridProperty
-
-    class Config:
-        arbitrary_types_allowed = True
 
     @classmethod
     def from_tuple(
         cls,
         upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
     ) -> Self:
-        imap2, jmap2, kmap2 = upscaling
-        return cls(imap=imap2, jmap=jmap2, kmap=kmap2)
+        """Create an upscaling model from an ``(imap, jmap, kmap)`` 3-tuple."""
+        imap, jmap, kmap = upscaling
+        return cls(imap=imap, jmap=jmap, kmap=kmap)
+
+    def as_tuple(
+        self,
+    ) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
+        """Return the maps as an ``(imap, jmap, kmap)`` 3-tuple."""
+        return (self.imap, self.jmap, self.kmap)
 
 
 def _crop_for_region(grid: xtgeo.Grid, refinement_bbox: BoundingBox) -> xtgeo.Grid:
@@ -299,6 +316,195 @@ def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
     grid.set_actnum(actnum)
 
 
+def _zero_based_source_indices(
+    up: Upscale,
+) -> tuple[np.ma.MaskedArray, np.ma.MaskedArray, np.ma.MaskedArray]:
+    """Flatten the 1-based upscaling maps into 0-based index arrays.
+
+    A value of ``0`` in the input (meaning "exclude this geogrid cell") becomes
+    ``-1``.  The property masks are deliberately preserved: they are carried
+    all the way through to the output properties.
+    """
+    return (
+        up.imap.values.reshape(-1) - 1,
+        up.jmap.values.reshape(-1) - 1,
+        up.kmap.values.reshape(-1) - 1,
+    )
+
+
+def _validate_source_indices(
+    iv: np.ma.MaskedArray,
+    jv: np.ma.MaskedArray,
+    kv: np.ma.MaskedArray,
+    region: xtgeo.GridProperty,
+) -> None:
+    """Check that every mapped index lies inside the input grid.
+
+    Raises:
+        ValueError: if any axis maps outside ``0 .. n`` (1-based, 0 = excluded).
+    """
+    for axis, values, size in (
+        ("I", iv, region.ncol),
+        ("J", jv, region.nrow),
+        ("K", kv, region.nlay),
+    ):
+        if values.min() < -1 or values.max() >= size:
+            raise ValueError(
+                "Invalid input upscaling relationships: "
+                f"{axis} map values must lie between 0 (excluded) and {size}, "
+                f"but range from {values.min() + 1:.0f} to {values.max() + 1:.0f}"
+            )
+
+
+def _map_geogrid_to_input_cells(
+    iv: np.ma.MaskedArray,
+    jv: np.ma.MaskedArray,
+    kv: np.ma.MaskedArray,
+    region: xtgeo.GridProperty,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Resolve, for every geogrid cell, the input-grid cell it maps to.
+
+    Args:
+        iv, jv, kv: Flattened 0-based index maps, ``-1`` meaning "excluded".
+        region: Region property, used only for the input grid dimensions.
+
+    Returns:
+        ``(flat_index, valid)`` where *flat_index* is a C-order flat index into
+        the input grid (undefined where *valid* is ``False``) and *valid* marks
+        geogrid cells that carry a usable mapping.
+    """
+    excluded = (iv == -1) | (jv == -1) | (kv == -1)
+    # Masked entries in any of the three maps count as excluded.
+    valid = ~np.ma.filled(excluded, True)
+
+    # TODO: geogrid cells that map onto an *inactive* input-grid cell should
+    # also be excluded here, but never were: the original implementation used
+    # chained fancy indexing (``iv[~mask][...] = -1``), which writes into a
+    # temporary copy and is therefore a silent no-op.  Preserved as-is on
+    # purpose; see the accompanying refactoring report for the analysis and a
+    # suggested fix.
+
+    flat = np.zeros(iv.size, dtype=np.intp)
+    flat[valid] = np.ravel_multi_index(
+        (
+            iv[valid].astype(np.intp),
+            jv[valid].astype(np.intp),
+            kv[valid].astype(np.intp),
+        ),
+        region.dimensions,
+    )
+    return flat, valid
+
+
+def _target_region_mask(
+    region: xtgeo.GridProperty, target_region_id: int
+) -> np.ndarray:
+    """Boolean 3D mask of input-grid cells belonging to the target region.
+
+    Masked (inactive) cells are treated as *not* belonging to the region.
+    """
+    return np.ma.filled(region.values == target_region_id, False)
+
+
+def _geogrid_cells_in_target(
+    flat_index: np.ndarray,
+    valid: np.ndarray,
+    in_target: np.ndarray,
+) -> np.ndarray:
+    """Boolean mask of geogrid cells whose input cell is in the target region."""
+    geo_in_target = np.zeros(valid.shape, dtype=bool)
+    geo_in_target[valid] = in_target.reshape(-1)[flat_index[valid]]
+    return geo_in_target
+
+
+def _derive_geo_per_coarse(
+    in_target: np.ndarray,
+    geo_in_target: np.ndarray,
+    geo_shape: tuple[int, int, int],
+    refinement: Refinement,
+) -> tuple[int, int, int]:
+    """Derive how many geogrid cells cover one input-grid cell, per axis.
+
+    The target region is counted along each axis both on the input grid and on
+    its geogrid image; the quotient is the number of geogrid cells per input
+    cell.  It must be a whole multiple of the corresponding refinement factor,
+    otherwise the refined sub-grid cannot be addressed from the geogrid.
+
+    Raises:
+        ValueError: if the two grids do not correspond on some axis.
+    """
+    geo_in_target_3d = geo_in_target.reshape(geo_shape)
+    factors = (refinement.col, refinement.row, refinement.lay)
+
+    per_coarse = []
+    for axis, (name, factor) in enumerate(zip("IJK", factors)):
+        others = tuple(other for other in range(3) if other != axis)
+        n_input = int(in_target.any(axis=others).sum())
+        n_geo = int(geo_in_target_3d.any(axis=others).sum())
+
+        if n_input == 0 or n_geo % n_input or (n_geo // n_input) % factor:
+            raise ValueError(
+                "Invalid correspondence upscaling between geogrid and input "
+                f"grid: the {name} axis spans {n_geo} geogrid cells for "
+                f"{n_input} input cells, which is not a whole multiple of the "
+                f"refinement factor {factor}"
+            )
+        per_coarse.append(n_geo // n_input)
+
+    return (per_coarse[0], per_coarse[1], per_coarse[2])
+
+
+def _refined_block_indices(
+    offset: BoundingBox,
+    refinement: Refinement,
+    geo_per_coarse: tuple[int, int, int],
+    coarse_ncol: int,
+) -> tuple[tuple[np.ndarray, ...], tuple[np.ndarray, ...]]:
+    """Index maps for the geogrid block covering the refined bounding box.
+
+    The block spans exactly the geogrid cells lying inside the refinement
+    bounding box.  For every such cell two 0-based ijk triplets are produced:
+
+    * *source*: the input-grid cell it was upscaled from;
+    * *dest*: the cell it maps to in the merged grid, where the refined
+      sub-grid is appended after the coarse columns plus a one-column gap.
+
+    Args:
+        offset: 1-based bounding box of the refined region in the input grid.
+        refinement: Refinement factors applied to the target region.
+        geo_per_coarse: Geogrid cells per input cell along each axis.
+        coarse_ncol: Column count of the coarse grid within the merged grid.
+
+    Returns:
+        ``(source_ijk, dest_ijk)``, each a 3-tuple of 3D integer arrays.
+    """
+    origin = (offset.imin - 1, offset.jmin - 1, offset.kmin - 1)
+    ncells = (
+        offset.imax - origin[0],
+        offset.jmax - origin[1],
+        offset.kmax - origin[2],
+    )
+    factors = (refinement.col, refinement.row, refinement.lay)
+    # Geogrid cells per *refined* cell; a whole number because geo_per_coarse
+    # is a multiple of the refinement factor (checked in _derive_geo_per_coarse).
+    geo_per_refined = tuple(g // f for g, f in zip(geo_per_coarse, factors))
+
+    block = tuple(n * g for n, g in zip(ncells, geo_per_coarse))
+    gi, gj, gk = np.indices(block, dtype=np.int32)
+
+    source_ijk = (
+        gi // geo_per_coarse[0] + origin[0],
+        gj // geo_per_coarse[1] + origin[1],
+        gk // geo_per_coarse[2] + origin[2],
+    )
+    dest_ijk = (
+        gi // geo_per_refined[0] + coarse_ncol + 1,
+        gj // geo_per_refined[1],
+        gk // geo_per_refined[2] + origin[2],
+    )
+    return source_ijk, dest_ijk
+
+
 def _modify_upscaling_mapping(
     up: Upscale,
     region: xtgeo.GridProperty,
@@ -307,148 +513,69 @@ def _modify_upscaling_mapping(
     offset: BoundingBox,
     lmap: np.ndarray,
 ) -> Upscale:
+    """Rewrite upscaling maps so that they target the merged grid.
+
+    The input maps address the original (coarse) grid.  In the merged grid the
+    cells of the target region have been replaced by a refined sub-grid that is
+    appended after the coarse columns, and the layers outside the refined
+    K-window have been renumbered.  This function rewrites each geogrid cell's
+    mapping accordingly:
+
+    * cells outside the target region only need their layer index remapped
+      through *lmap*;
+    * cells inside the target region are redirected to the corresponding
+      refined cell in the appended sub-grid.
+
+    Args:
+        up: Upscaling maps addressing the original grid (1-based, 0 = excluded).
+        region: Region property on the original grid.
+        target_region_id: The region value that was refined.
+        refinement: Refinement factors applied to the target region.
+        offset: 1-based bounding box of the refined region.
+        lmap: Layer map from original coarse layer to merged-grid layer.
+
+    Returns:
+        A new :class:`Upscale` addressing the merged grid.
     """
-    Generate an updated version of the upscaling mapping. Converting the input
-    mappings given to reflect the new final merged grid.
-    """
+    imap, jmap, kmap = (prop.copy() for prop in up.as_tuple())
+    iv, jv, kv = _zero_based_source_indices(up)
 
-    imapi = up.imap
-    jmapi = up.jmap
-    kmapi = up.kmap
-    oi = offset.imin - 1
-    oj = offset.jmin - 1
-    ok = offset.kmin - 1
-    ri = refinement.col
-    rj = refinement.row
-    rk = refinement.lay
-    di = (offset.imax - oi) * ri
-    dj = (offset.jmax - oj) * rj
-    dk = (offset.kmax - ok) * rk
+    _validate_source_indices(iv, jv, kv, region)
 
-    imap = imapi.copy()
-    jmap = jmapi.copy()
-    kmap = kmapi.copy()
+    flat_index, valid = _map_geogrid_to_input_cells(iv, jv, kv, region)
+    in_target = _target_region_mask(region, target_region_id)
+    geo_in_target = _geogrid_cells_in_target(flat_index, valid, in_target)
 
-    ivm = region.ncol
-    jvm = region.nrow
-    kvm = region.nlay
-
-    iv = imapi.values.reshape(-1) - 1
-    jv = jmapi.values.reshape(-1) - 1
-    kv = kmapi.values.reshape(-1) - 1
-
-    if (
-        iv.min() < -1
-        or jv.min() < -1
-        or kv.min() < -1
-        or iv.max() >= region.ncol
-        or jv.max() >= region.nrow
-        or kv.max() >= region.nlay
-    ):
-        raise ValueError("Invalid input upscaling relationships")
-
-    exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
-
-    # map region from input grid to geogrid
-    # excluding any enteries for cells in geogrid that are excluded
-    cn = np.ma.masked_where(exclude_mask, iv * jvm * kvm + jv * kvm + kv)
-    # mask any inactive cells in the input grid that are mapped by geogrid
-    iv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
-    jv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
-    kv[~cn.mask][region.values.mask.reshape(-1)[cn[~cn.mask].astype(np.int32)]] = -1
-    exclude_mask = (iv == -1) | (jv == -1) | (kv == -1)
-    cn = np.ma.masked_where(exclude_mask, cn)
-
-    region2 = np.ma.MaskedArray(np.zeros(len(cn)), mask=cn.mask, dtype=np.int32)
-    region2[~cn.mask] = region.values.reshape(-1)[cn[~cn.mask].astype(np.int32)].astype(
-        np.int32
+    geo_shape = up.imap.values.shape
+    geo_per_coarse = _derive_geo_per_coarse(
+        in_target, geo_in_target, geo_shape, refinement
+    )
+    _logger.info(
+        "Upscaling: %d of %d geogrid cells mapped, %d inside the target region; "
+        "geogrid cells per input cell: %s",
+        int(valid.sum()),
+        valid.size,
+        int(geo_in_target.sum()),
+        geo_per_coarse,
     )
 
-    # for cells that aren't refined only layer numbering updates
-    kv[(~cn.mask) & (region2 != target_region_id)] = lmap[
-        kv[(~cn.mask) & (region2 != target_region_id)].astype(np.int32)
-    ]
+    # Outside the target region only the layer numbering changes.
+    unrefined = valid & ~geo_in_target
+    kv[unrefined] = lmap[kv[unrefined].astype(np.int32)]
 
-    # for cells that are refined find the levels of refinement
-    cijk = np.argwhere(region.values == target_region_id)
-    cijk2 = np.argwhere(region2.reshape(imap.values.shape) == target_region_id)
-    cnr = cijk[:, 0] * jvm * kvm + cijk[:, 1] * kvm + cijk[:, 2]
-
-    # find number of cells in refined region on geogrid and normal grid
-    ccnt = [len(np.unique(cijk[:, x])) for x in range(3)]
-    ccnt2 = [len(np.unique(cijk2[:, x])) for x in range(3)]
-
-    uri = ccnt2[0] / ccnt[0]
-    urj = ccnt2[1] / ccnt[1]
-    urk = ccnt2[2] / ccnt[2]
-
-    if any(not x.is_integer() for x in [uri, uri / ri, urj, urj / rj, urk, urk / rk]):
-        raise ValueError(
-            "Invalid correspondence upscaling between geogrid and input grid"
-        )
-
-    # original index map of refined cells
-    il2 = (
-        np.repeat(np.arange(int(di / ri), dtype=np.int32) + oi, ri * dj * dk)
-    ).reshape((di, dj, dk))
-    jl2 = np.swapaxes(
-        (np.repeat(np.arange(int(dj / rj), dtype=np.int32) + oj, rj * di * dk)).reshape(
-            (dj, di, dk)
-        ),
-        0,
-        1,
+    # Inside the target region, redirect to the appended refined sub-grid.
+    source_ijk, dest_ijk = _refined_block_indices(
+        offset, refinement, geo_per_coarse, region.ncol
     )
-    kl2 = np.swapaxes(
-        (np.repeat(np.arange(int(dk / rk), dtype=np.int32) + ok, rk * di * dj)).reshape(
-            (dk, dj, di)
-        ),
-        0,
-        2,
-    )
-    # map the updated refined grid cells to geogrid
-    cmap2 = np.arange(di, dtype=np.float32) + ivm + 1
-    cmap2 = np.repeat(cmap2, dj * dk).reshape((di, dj, dk))
-    rmap2 = np.arange(dj, dtype=np.float32)
-    rmap2 = np.swapaxes(np.repeat(rmap2, di * dk).reshape((dj, di, dk)), 0, 1)
-    lmap2 = np.arange(dk, dtype=np.float32) + ok
-    lmap2 = np.tile(lmap2, di * dj).reshape((di, dj, dk))
+    selected = in_target[source_ijk]
+    iv[geo_in_target] = dest_ijk[0][selected]
+    jv[geo_in_target] = dest_ijk[1][selected]
+    kv[geo_in_target] = dest_ijk[2][selected]
 
-    if uri > ri:
-        il2 = np.repeat(il2, int(uri / ri), axis=0)
-        jl2 = np.repeat(jl2, int(uri / ri), axis=0)
-        kl2 = np.repeat(kl2, int(uri / ri), axis=0)
-        cmap2 = np.repeat(cmap2, int(uri / ri), axis=0)
-        rmap2 = np.repeat(rmap2, int(uri / ri), axis=0)
-        lmap2 = np.repeat(lmap2, int(uri / ri), axis=0)
-    if urj > rj:
-        il2 = np.repeat(il2, int(urj / rj), axis=1)
-        jl2 = np.repeat(jl2, int(urj / rj), axis=1)
-        kl2 = np.repeat(kl2, int(urj / rj), axis=1)
-        cmap2 = np.repeat(cmap2, int(urj / rj), axis=1)
-        rmap2 = np.repeat(rmap2, int(urj / rj), axis=1)
-        lmap2 = np.repeat(lmap2, int(urj / rj), axis=1)
-    if urk > rk:
-        il2 = np.repeat(il2, int(urk / rk), axis=2)
-        jl2 = np.repeat(jl2, int(urk / rk), axis=2)
-        kl2 = np.repeat(kl2, int(urk / rk), axis=2)
-        cmap2 = np.repeat(cmap2, int(urk / rk), axis=2)
-        rmap2 = np.repeat(rmap2, int(urk / rk), axis=2)
-        lmap2 = np.repeat(lmap2, int(urk / rk), axis=2)
+    for prop, values in ((imap, iv), (jmap, jv), (kmap, kv)):
+        prop.values = values.reshape(prop.values.shape).astype(np.float32) + 1.0
 
-    cl2 = il2.reshape(-1) * jvm * kvm + jl2.reshape(-1) * kvm + kl2.reshape(-1)
-
-    # ensure only correct cells are updated
-    geomask = region2 == target_region_id
-    refmask = np.isin(cl2, cnr)
-    iv[geomask] = cmap2.reshape(-1)[refmask]
-    jv[geomask] = rmap2.reshape(-1)[refmask]
-    kv[geomask] = lmap2.reshape(-1)[refmask]
-
-    imap.values = iv.reshape(imap.values.shape).astype(np.float32) + 1.0
-    jmap.values = jv.reshape(imap.values.shape).astype(np.float32) + 1.0
-    kmap.values = kv.reshape(imap.values.shape).astype(np.float32) + 1.0
-
-    return Upscale.from_tuple((imap, jmap, kmap))
+    return Upscale(imap=imap, jmap=jmap, kmap=kmap)
 
 
 # ---------------------------------------------------------------------------
