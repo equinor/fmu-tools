@@ -571,6 +571,17 @@ def _modify_upscaling_mapping(
         offset, refinement, geo_per_coarse, region.ncol
     )
     selected = in_target[source_ijk]
+
+    # The scatter below pairs geogrid cells with block cells positionally: both
+    # are enumerated in C order, so the counts must agree. This holds by
+    # construction, but a mismatch would otherwise corrupt the maps silently.
+    if int(selected.sum()) != int(geo_in_target.sum()):
+        raise ValueError(
+            "Inconsistent upscaling mapping: "
+            f"{int(geo_in_target.sum())} geogrid cells fall in the target region "
+            f"but {int(selected.sum())} refined cells were addressed"
+        )
+
     iv[geo_in_target] = dest_ijk[0][selected]
     jv[geo_in_target] = dest_ijk[1][selected]
     kv[geo_in_target] = dest_ijk[2][selected]
