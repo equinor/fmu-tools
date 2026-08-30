@@ -69,11 +69,9 @@ The example here runs within RMS, but similar workflows can be created for file 
 
 
 The next step is to do a rescaling from the original geogrid to the merged grid
-using e.g. the RMS tool. Optionally the create_nested_hybrid_grid_upscale job can be used
-instead to also update upscaling mappings. This takes an additional input upscaling as a
-tuple of valid :class:`~xtgeo.GridProperty` (i,j,k) that maps from the geogrid to the input
-grid. This also returns a third value; a tuple of :class:`~xtgeo.GridProperty` with the 
-updated mappings.
+using e.g. the RMS tool. Alternatively, if you already have upscaling mappings from
+the geogrid to the input grid, ``NestedHybridGrid`` can rewrite them to address the
+merged grid; see `Upscaling mappings`_ below.
 
 Further, we need to create NNC transmissibilities and generate file for flow simulator:
 
@@ -141,6 +139,57 @@ This table is passed to :meth:`xtgeo.Grid.get_transmissibilities` via the
 ``nnc_table`` parameter.  The transmissibility computation uses geometric
 face-overlap calculations (Sutherland–Hodgman algorithm) and two-point flux
 approximation (TPFA).
+
+Upscaling mappings
+^^^^^^^^^^^^^^^^^^
+
+If you already have an upscaling mapping from a geogrid to the *input* grid,
+:class:`~fmu.tools.nestedhybridgrid.NestedHybridGrid` can rewrite it so that it
+addresses the *merged* grid instead, removing the need to redo the upscaling
+after nesting.
+
+The mapping is supplied as a tuple of three :class:`~xtgeo.GridProperty`
+instances ``(imap, jmap, kmap)`` defined on the geogrid. For each geogrid cell
+they hold the **1-based** ``I``, ``J`` and ``K`` index of the input-grid cell
+that it upscales to. A value of ``0`` excludes that geogrid cell from
+upscaling.
+
+The geogrid must be a whole multiple of the input grid along every axis, and
+that multiple must itself be a whole multiple of the corresponding refinement
+factor — otherwise the individual refined cells cannot be addressed from the
+geogrid and a ``ValueError`` is raised.
+
+.. code-block:: python
+
+    import xtgeo
+    from fmu.tools.nestedhybridgrid import NestedHybridGrid
+
+    grid = xtgeo.grid_from_roxar(project, "Simgrid")
+    region = xtgeo.gridproperty_from_roxar(project, "Simgrid", "REGION")
+
+    # Existing upscaling mapping from the geogrid to Simgrid
+    imap = xtgeo.gridproperty_from_roxar(project, "Geogrid", "UPSCALE_I")
+    jmap = xtgeo.gridproperty_from_roxar(project, "Geogrid", "UPSCALE_J")
+    kmap = xtgeo.gridproperty_from_roxar(project, "Geogrid", "UPSCALE_K")
+
+    nhg = NestedHybridGrid(
+        coarse_grid=grid,
+        region=region,
+        refinement=(2, 2, 1),
+        target_region_id=2,
+        upscaling=(imap, jmap, kmap),
+    )
+
+    merged = nhg.grid
+    nnc_table = nhg.nnc_table
+
+    # Same geogrid, but now mapping into the merged grid
+    new_imap, new_jmap, new_kmap = nhg.upscale_map
+
+The returned properties are defined on the same geogrid and use the same
+1-based convention, with ``0`` still meaning "excluded". The result is computed
+on first access and cached. Accessing ``upscale_map`` on an instance created
+without ``upscaling`` raises a ``ValueError``.
 
 Eclipse / OPM Flow export
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

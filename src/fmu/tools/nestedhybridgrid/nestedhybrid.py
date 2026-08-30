@@ -5,9 +5,12 @@ back into the original grid via Non-Neighbour Connections (NNCs).
 
 Public API
 ----------
+NestedHybridGrid : class
+    Build a nested hybrid grid and, optionally, rewrite upscaling maps so
+    that they address the merged grid (see the ``upscale_map`` property).
 create_nested_hybrid_grid : function
-    Build a nested hybrid grid from a coarse grid, a region property,
-    and a refinement specification.
+    Convenience wrapper around :class:`NestedHybridGrid` returning the merged
+    grid and the NNC table.
 nnc_to_gridproperty : function
     Convert NNC transmissibility DataFrames to GridProperty instances.
 nnc_to_flowsimulator_input : function
@@ -600,7 +603,20 @@ class NestedHybridGrid:
         upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]
         | None = None,
     ) -> None:
-        """Create a NestedHybridGrid instance."""
+        """Create a NestedHybridGrid instance.
+
+        Args:
+            coarse_grid: The original coarse grid.
+            region: A :class:`xtgeo.GridProperty` whose values identify the
+                regions (e.g. an integer region parameter).
+            refinement: ``(ncol, nrow, nlay)`` refinement factors.
+            target_region_id: The region value to refine.
+            upscaling: Optional ``(imap, jmap, kmap)`` properties defined on a
+                geogrid, holding 1-based indices of the coarse-grid cell each
+                geogrid cell upscales to (``0`` excludes the cell).  When
+                given, :attr:`upscale_map` returns the same maps rewritten to
+                address the merged grid.
+        """
 
         self._validate_inputs(coarse_grid, region, refinement, target_region_id)
 
@@ -710,10 +726,21 @@ class NestedHybridGrid:
     def upscale_map(
         self,
     ) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
-        """updated upscaling mappings from geogrid to final merged grid."""
+        """Upscaling maps rewritten from the geogrid to the merged grid.
+
+        The returned ``(imap, jmap, kmap)`` properties are defined on the same
+        geogrid as the ``upscaling`` argument passed to the constructor, and
+        hold **1-based** indices into the merged grid.  A value of ``0`` means
+        the geogrid cell is excluded from upscaling.
+
+        The result is computed on first access and cached.
+
+        Raises:
+            ValueError: if the instance was created without ``upscaling``.
+        """
         if self._upscaled is None:
             self._upscaled = self._update_upscaling()
-        return (self._upscaled.imap, self._upscaled.jmap, self._upscaled.kmap)
+        return self._upscaled.as_tuple()
 
     def _compute_nnc_table(self) -> pd.DataFrame:
         """Compute the NNC mapping table."""
@@ -756,10 +783,8 @@ class NestedHybridGrid:
         bbox = self._refined_bbox
         return (bbox.kmax - bbox.kmin + 1) * self._refinement.lay
 
-    def _update_upscaling(
-        self,
-    ) -> Upscale:
-        """Update the upscaling mapping"""
+    def _update_upscaling(self) -> Upscale:
+        """Rewrite the input upscaling maps to address the merged grid."""
         if self._upscale is None:
             raise ValueError("No input data given for upscaling.")
         return _modify_upscaling_mapping(
@@ -853,76 +878,6 @@ def create_nested_hybrid_grid(
     )
 
     return nhg.grid, nhg.nnc_table
-
-
-def create_nested_hybrid_grid_upscale(
-    grid: xtgeo.Grid,
-    region: xtgeo.GridProperty,
-    target_region_id: int,
-    refinement: tuple[int, int, int],
-    upscaling: tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
-) -> tuple[
-    xtgeo.Grid,
-    pd.DataFrame,
-    tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty],
-]:
-    """Create a nested hybrid grid by refining one region and merging it back.
-
-    The cells belonging to *target_region_id* are replaced by a refined
-    (subdivided) version of the same region.
-
-    A **NNC mapping table** is returned that lists every
-    mother ↔ refined cell pair that should be connected by a Non-Neighbour
-    Connection (NNC).  The table is derived from the topological knowledge
-    available at merge time (which original cell was refined and how its
-    sub-cells map into the merged grid).
-
-    The table columns are:
-
-    - ``I1, J1, K1``: mother cell indices (1-based) in the merged grid.
-    - ``I2, J2, K2``: refined cell indices (1-based) in the merged grid.
-    - ``DIRECTION``: face direction from the mother cell's perspective
-      (``I+``, ``I-``, ``J+``, ``J-``, ``K+``, ``K-``).
-
-    This table can be passed to
-    :meth:`xtgeo.Grid.get_transmissibilities` to compute NNC
-    transmissibilities for the specified cell pairs.
-
-    Args:
-        grid: The original coarse grid.
-        region: A :class:`xtgeo.GridProperty` whose values identify the
-            regions (e.g. an integer region parameter).
-        target_region_id: The region value to refine.
-        refinement: ``(ncol, nrow, nlay)`` refinement factors.
-        upscaling: Optional tuple of `xtgeo.GridProperty` for (I,J,K)
-            Geogrid properties. These map from geogrid cell to input grid
-            The input values must be a valid mapping for upscaling from
-            the geogrid to the input grid give. A value of 0 can be used
-            to exclude the geogrid cell from upscaling
-
-    Returns:
-        A tuple ``(merged_grid, nnc_table)`` where *merged_grid*
-        is a new :class:`xtgeo.Grid` with the refined region stitched back into
-        the coarse grid and *nnc_table* is a :class:`pandas.DataFrame` mapping
-        mother cells to their connected refined cells. Upscaling tuple is a tuple
-        with 3 :class:`xtgeo.GridProperty` (I, J, K) with the updated mapping
-        from geogrid to merged grid for upscaling.
-    """
-    warnings.warn(
-        "create_nested_hybrid_grid_upscale is currently experimental. It may "
-        " undergo breaking changes in future versions without notice.",
-        FutureWarning,
-    )
-
-    nhg = NestedHybridGrid(
-        coarse_grid=grid,
-        region=region,
-        refinement=refinement,
-        target_region_id=target_region_id,
-        upscaling=upscaling,
-    )
-
-    return nhg.grid, nhg.nnc_table, nhg.upscale_map
 
 
 def nnc_to_gridproperty(
