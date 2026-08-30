@@ -1,5 +1,7 @@
 """Tests for fmu.tools.nestedhybridgrid.nestedhybrid."""
 
+from typing import NamedTuple
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -50,50 +52,45 @@ def _make_constant_property(grid, name, value):
     return xtgeo.GridProperty(grid, name=name, values=vals)
 
 
-def _upscale_test_setup():
-    """Create grids and properties to test upscaling."""
+class UpscaleCase(NamedTuple):
+    """Grids and properties for an upscaling scenario."""
 
+    grid: xtgeo.Grid
+    region: xtgeo.GridProperty
+    target_region_id: int
+    geogrid: xtgeo.Grid
+    ui: xtgeo.GridProperty
+    uj: xtgeo.GridProperty
+    uk: xtgeo.GridProperty
+
+
+def _axis_index_property(geogrid, name, axis, factor):
+    """Build a 1-based upscaling map along one axis.
+
+    Geogrid cell ``n`` along *axis* maps to input-grid cell ``n // factor + 1``.
+    """
+    values = np.indices(geogrid.dimensions, dtype=np.float32)[axis] // factor + 1.0
+    return xtgeo.GridProperty(geogrid, name=name, values=values)
+
+
+@pytest.fixture
+def upscale_case():
+    """A 3x3x3 grid whose centre cell is the target region, plus a 6x6x6 geogrid."""
     grid = xtgeo.create_box_grid((3, 3, 3), increment=(100.0, 100.0, 20.0))
     geogrid = xtgeo.create_box_grid((6, 6, 6), increment=(50.0, 50.0, 10.0))
 
     region = _make_constant_property(grid, "REGION", 1)
     region.values[1][1][1] = 2
 
-    rid = 2
-
-    il2 = (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)) + 1
-    il2 = np.repeat(il2, 2, axis=0)
-    il2 = np.repeat(il2, 2, axis=1)
-    il2 = np.repeat(il2, 2, axis=2)
-    ui = xtgeo.GridProperty(geogrid, name="UI", values=il2.astype(np.float32))
-
-    jl2 = (
-        np.swapaxes(
-            (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)),
-            0,
-            1,
-        )
-        + 1
+    return UpscaleCase(
+        grid=grid,
+        region=region,
+        target_region_id=2,
+        geogrid=geogrid,
+        ui=_axis_index_property(geogrid, "UI", 0, 2),
+        uj=_axis_index_property(geogrid, "UJ", 1, 2),
+        uk=_axis_index_property(geogrid, "UK", 2, 2),
     )
-    jl2 = np.repeat(jl2, 2, axis=0)
-    jl2 = np.repeat(jl2, 2, axis=1)
-    jl2 = np.repeat(jl2, 2, axis=2)
-    uj = xtgeo.GridProperty(geogrid, name="UJ", values=jl2.astype(np.float32))
-
-    kl2 = (
-        np.swapaxes(
-            (np.repeat(np.arange(3, dtype=np.float32), 3 * 3)).reshape((3, 3, 3)),
-            0,
-            2,
-        )
-        + 1
-    )
-    kl2 = np.repeat(kl2, 2, axis=0)
-    kl2 = np.repeat(kl2, 2, axis=1)
-    kl2 = np.repeat(kl2, 2, axis=2)
-    uk = xtgeo.GridProperty(geogrid, name="UK", values=kl2.astype(np.float32))
-
-    return (grid, region, rid, geogrid, ui, uj, uk)
 
 
 def test_set_actnum_in_grid_deactivates_cells_where_mask_is_false():
@@ -602,212 +599,136 @@ class TestNestedHybridGridClass:
         assert np.array_equal(lmap1, np.array([0, 1, 11]))
         assert np.array_equal(lmap2, np.arange(20) + 1)
 
-    def test_upscaling_no_input(self):
-        """test upscaling output is None for no input"""
+    @staticmethod
+    def _build(case, refinement, upscaling=None):
+        return NestedHybridGrid(
+            coarse_grid=case.grid,
+            region=case.region,
+            refinement=refinement,
+            target_region_id=case.target_region_id,
+            upscaling=upscaling,
+        )
 
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+    def test_upscaling_without_input_raises(self, upscale_case):
+        """upscale_map is unavailable when no upscaling was supplied."""
+        nhg = self._build(upscale_case, (2, 2, 2))
 
         with pytest.raises(ValueError, match="No input data given for upscaling."):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-            )
             nhg.upscale_map
 
-    def test_upscaling_ranges_i_min(self):
-        """test upscaling raises error if ui<0"""
+    @pytest.mark.parametrize("axis", ["ui", "uj", "uk"])
+    @pytest.mark.parametrize("delta", [-2, 2], ids=["below_min", "above_max"])
+    def test_upscaling_out_of_range_indices_raise(self, upscale_case, axis, delta):
+        """Index maps pointing outside the input grid are rejected."""
+        prop = getattr(upscale_case, axis)
+        prop.values = prop.values + delta
 
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+        nhg = self._build(
+            upscale_case,
+            (2, 2, 2),
+            (upscale_case.ui, upscale_case.uj, upscale_case.uk),
+        )
 
-        ui.values = ui.values - 2
         with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
             nhg.upscale_map
 
-    def test_upscaling_ranges_i_max(self):
-        """test upscaling raises error if ui>grid.ncol"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-
-        ui.values = ui.values + 2
-        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ranges_j_min(self):
-        """test upscaling raises error if uj<0"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-
-        uj.values = uj.values - 2
-        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ranges_j_max(self):
-        """test upscaling raises error if uj>grid.nrow"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-
-        uj.values = uj.values + 2
-        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ranges_k_min(self):
-        """test upscaling raises error if uk<0"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-
-        uk.values = uk.values - 2
-        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ranges_k_max(self):
-        """test upscaling raises error if uk>grid.nlay"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-
-        uk.values = uk.values + 2
-        with pytest.raises(ValueError, match="Invalid input upscaling relationships"):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ratio_i(self):
-        """test upscaling for incompatible i ratio of geogrid to input grid"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-        with pytest.raises(
-            ValueError,
-            match="Invalid correspondence upscaling between geogrid and input grid",
-        ):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(3, 2, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
-
-    def test_upscaling_ratio_j(self):
-        """test upscaling for incompatible j ratio of geogrid to input grid"""
-
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+    @pytest.mark.parametrize(
+        "refinement", [(3, 2, 2), (2, 3, 2), (2, 2, 3)], ids=["i", "j", "k"]
+    )
+    def test_upscaling_incompatible_ratio_raises(self, upscale_case, refinement):
+        """The geogrid must be a whole multiple of the refined grid on every axis."""
+        nhg = self._build(
+            upscale_case,
+            refinement,
+            (upscale_case.ui, upscale_case.uj, upscale_case.uk),
+        )
 
         with pytest.raises(
             ValueError,
             match="Invalid correspondence upscaling between geogrid and input grid",
         ):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 3, 2),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
             nhg.upscale_map
 
-    def test_upscaling_ratio_k(self):
-        """test upscaling for incompatible k ratio of geogrid to input grid"""
+    def test_upscaling_is_cached(self, upscale_case):
+        """upscale_map is computed once and reused."""
+        nhg = self._build(
+            upscale_case,
+            (2, 2, 2),
+            (upscale_case.ui, upscale_case.uj, upscale_case.uk),
+        )
 
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
+        first = nhg.upscale_map
+        assert nhg.upscale_map is not None
+        assert all(a is b for a, b in zip(first, nhg.upscale_map))
 
-        with pytest.raises(
-            ValueError,
-            match="Invalid correspondence upscaling between geogrid and input grid",
-        ):
-            nhg = NestedHybridGrid(
-                coarse_grid=grid,
-                region=region,
-                refinement=(2, 2, 3),
-                target_region_id=rid,
-                upscaling=(ui, uj, uk),
-            )
-            nhg.upscale_map
+    def test_upscaling_output(self, upscale_case):
+        """The rewritten maps address the merged grid."""
+        ui, uj, uk = upscale_case.ui, upscale_case.uj, upscale_case.uk
+        nhg = self._build(upscale_case, (2, 2, 2), (ui, uj, uk))
+        upi, upj, upk = nhg.upscale_map
 
-    def test_upscaling_output(self):
-        """test upscaling output mapping"""
+        # The I and J maps are untouched outside the refined region: the first
+        # and last slice along every axis lies outside it.
+        for first_or_last in (0, -1):
+            for updated, original in ((upi, ui), (upj, uj)):
+                assert np.array_equal(
+                    updated.values[first_or_last, :, :],
+                    original.values[first_or_last, :, :],
+                )
+                assert np.array_equal(
+                    updated.values[:, first_or_last, :],
+                    original.values[:, first_or_last, :],
+                )
+                assert np.array_equal(
+                    updated.values[:, :, first_or_last],
+                    original.values[:, :, first_or_last],
+                )
 
-        (grid, region, rid, geogrid, ui, uj, uk) = _upscale_test_setup()
-        nhg = NestedHybridGrid(
-            coarse_grid=grid,
-            region=region,
-            refinement=(2, 2, 2),
-            target_region_id=rid,
-            upscaling=(ui, uj, uk),
+        # Outside the refined region only the layer numbering changes, since
+        # K-refinement inserts extra layers into the merged grid.
+        expected_layers = np.array([1.0, 1.0, 2.0, 2.0, 4.0, 4.0])
+        assert np.array_equal(upk.values[0, 0, :], expected_layers)
+        assert np.array_equal(upk.values[-1, -1, :], expected_layers)
+
+        # Inside the refined region the maps point at the appended sub-grid,
+        # which starts one column after the three coarse columns.
+        expected_i = [[[5.0, 5.0], [5.0, 5.0]], [[6.0, 6.0], [6.0, 6.0]]]
+        expected_j = [[[1.0, 1.0], [2.0, 2.0]], [[1.0, 1.0], [2.0, 2.0]]]
+        expected_k = [[[2.0, 3.0], [2.0, 3.0]], [[2.0, 3.0], [2.0, 3.0]]]
+        assert np.array_equal(upi.values[2:4, 2:4, 2:4], np.array(expected_i))
+        assert np.array_equal(upj.values[2:4, 2:4, 2:4], np.array(expected_j))
+        assert np.array_equal(upk.values[2:4, 2:4, 2:4], np.array(expected_k))
+
+    def test_upscaling_ignores_inactive_input_cells(self, upscale_case):
+        """Characterisation test: inactive input cells are *not* excluded.
+
+        Geogrid cells mapping onto an inactive input-grid cell should arguably
+        be excluded from the upscaling, but currently are not. This pins the
+        existing behaviour so that a future fix has to be deliberate; see the
+        TODO in ``_map_geogrid_to_input_cells``.
+        """
+        actnum = upscale_case.grid.get_actnum()
+        actnum.values[0, 0, 0] = 0
+        upscale_case.grid.set_actnum(actnum)
+
+        # The region must be rebuilt so that it picks up the new actnum mask.
+        region = _make_constant_property(upscale_case.grid, "REGION", 1)
+        region.values[1][1][1] = upscale_case.target_region_id
+        case = upscale_case._replace(region=region)
+        assert np.ma.getmaskarray(case.region.values).sum() == 1
+
+        nhg = self._build(
+            case,
+            (2, 2, 2),
+            (case.ui, case.uj, case.uk),
         )
         upi, upj, upk = nhg.upscale_map
 
-        # test i,j==0 not modified
-        assert np.array_equal(upi.values[0, :, :], ui.values[0, :, :])
-        assert np.array_equal(upi.values[:, 0, :], ui.values[:, 0, :])
-        assert np.array_equal(upi.values[:, :, 0], ui.values[:, :, 0])
-        assert np.array_equal(upj.values[0, :, :], uj.values[0, :, :])
-        assert np.array_equal(upj.values[:, 0, :], uj.values[:, 0, :])
-        assert np.array_equal(upj.values[:, :, 0], uj.values[:, :, 0])
-        # test i,j==-1 not modified
-        assert np.array_equal(upi.values[-1, :, :], ui.values[-1, :, :])
-        assert np.array_equal(upi.values[:, -1, :], ui.values[:, -1, :])
-        assert np.array_equal(upi.values[:, :, -1], ui.values[:, :, -1])
-        assert np.array_equal(upj.values[-1, :, :], uj.values[-1, :, :])
-        assert np.array_equal(upj.values[:, -1, :], uj.values[:, -1, :])
-        assert np.array_equal(upj.values[:, :, -1], uj.values[:, :, -1])
-        # test layer modified in unrefined area
-        kt = [1.0, 1.0, 2.0, 2.0, 4.0, 4.0]
-        assert np.array_equal(upk.values[0, 0, :], np.array(kt))
-        assert np.array_equal(upk.values[-1, -1, :], np.array(kt))
-        # test refined area
-        ti = [[5.0, 5.0], [5.0, 5.0]], [[6.0, 6.0], [6.0, 6.0]]
-        tj = [[1.0, 1.0], [2.0, 2.0]], [[1.0, 1.0], [2.0, 2.0]]
-        tk = [[2.0, 3.0], [2.0, 3.0]], [[2.0, 3.0], [2.0, 3.0]]
-        assert np.array_equal(upi.values[2:4, 2:4, 2:4], np.array(ti))
-        assert np.array_equal(upj.values[2:4, 2:4, 2:4], np.array(tj))
-        assert np.array_equal(upk.values[2:4, 2:4, 2:4], np.array(tk))
-
-
-# ---------------------------------------------------------------------------
-# Tests for get_transmissibilities with nested hybrid NNCs
-# ---------------------------------------------------------------------------
+        # The geogrid cells over the deactivated input cell keep a mapping
+        # rather than being flagged as excluded (which would be 0).
+        assert np.all(upi.values[:2, :2, :2] == 1.0)
+        assert np.all(upj.values[:2, :2, :2] == 1.0)
+        assert np.all(upk.values[:2, :2, :2] == 1.0)
 
 
 class TestTransmissibilitiesOnMergedGrid:
