@@ -699,16 +699,21 @@ class TestNestedHybridGridClass:
         assert np.array_equal(upj.values[2:4, 2:4, 2:4], np.array(expected_j))
         assert np.array_equal(upk.values[2:4, 2:4, 2:4], np.array(expected_k))
 
-    def test_upscaling_ignores_inactive_input_cells(self, upscale_case):
-        """Characterisation test: inactive input cells are *not* excluded.
+    def test_upscaling_leaves_inactive_input_cells_untouched(self, upscale_case):
+        """Characterisation test: mappings onto inactive input cells are frozen.
 
-        Geogrid cells mapping onto an inactive input-grid cell should arguably
-        be excluded from the upscaling, but currently are not. This pins the
-        existing behaviour so that a future fix has to be deliberate; see the
-        TODO in ``_map_geogrid_to_input_cells``.
+        Geogrid cells landing on an inactive input-grid cell are neither
+        excluded (set to 0) nor layer-remapped; they keep their original
+        mapping. This is inherited behaviour rather than a deliberate design
+        -- see ``_modify_upscaling_mapping`` -- so it is pinned here to force
+        any future change to be explicit.
+
+        The deactivated cell is at K=2, *above* the refined K-window, where the
+        layer map is not the identity. A cell at K=0 would remap to itself and
+        make the behaviour unobservable.
         """
         actnum = upscale_case.grid.get_actnum()
-        actnum.values[0, 0, 0] = 0
+        actnum.values[0, 0, 2] = 0
         upscale_case.grid.set_actnum(actnum)
 
         # The region must be rebuilt so that it picks up the new actnum mask.
@@ -717,18 +722,18 @@ class TestNestedHybridGridClass:
         case = upscale_case._replace(region=region)
         assert np.ma.getmaskarray(case.region.values).sum() == 1
 
-        nhg = self._build(
-            case,
-            (2, 2, 2),
-            (case.ui, case.uj, case.uk),
-        )
+        nhg = self._build(case, (2, 2, 2), (case.ui, case.uj, case.uk))
         upi, upj, upk = nhg.upscale_map
 
-        # The geogrid cells over the deactivated input cell keep a mapping
-        # rather than being flagged as excluded (which would be 0).
-        assert np.all(upi.values[:2, :2, :2] == 1.0)
-        assert np.all(upj.values[:2, :2, :2] == 1.0)
-        assert np.all(upk.values[:2, :2, :2] == 1.0)
+        # Geogrid cells over the deactivated input cell (0, 0, 2) keep a
+        # mapping rather than being flagged as excluded (which would be 0)...
+        over_inactive = (slice(0, 2), slice(0, 2), slice(4, 6))
+        assert np.all(upi.values[over_inactive] == 1.0)
+        assert np.all(upj.values[over_inactive] == 1.0)
+        # ...and keep their original layer, un-remapped. An active cell in the
+        # same layer is remapped from 3 to 4 by the two extra refined layers.
+        assert np.all(upk.values[over_inactive] == 3.0)
+        assert np.all(upk.values[2:4, 0:2, 4:6] == 4.0)
 
 
 class TestTransmissibilitiesOnMergedGrid:

@@ -364,7 +364,7 @@ def _map_geogrid_to_input_cells(
     jv: np.ma.MaskedArray,
     kv: np.ma.MaskedArray,
     region: xtgeo.GridProperty,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Resolve, for every geogrid cell, the input-grid cell it maps to.
 
     Args:
@@ -372,20 +372,14 @@ def _map_geogrid_to_input_cells(
         region: Region property, used only for the input grid dimensions.
 
     Returns:
-        ``(flat_index, valid)`` where *flat_index* is a C-order flat index into
-        the input grid (undefined where *valid* is ``False``) and *valid* marks
-        geogrid cells that carry a usable mapping.
+        ``(flat_index, valid, hits_inactive)`` where *flat_index* is a C-order
+        flat index into the input grid (undefined where *valid* is ``False``),
+        *valid* marks geogrid cells that carry a usable mapping, and
+        *hits_inactive* marks cells whose input-grid cell is inactive.
     """
     excluded = (iv == -1) | (jv == -1) | (kv == -1)
     # Masked entries in any of the three maps count as excluded.
     valid = ~np.ma.filled(excluded, True)
-
-    # TODO: geogrid cells that map onto an *inactive* input-grid cell should
-    # also be excluded here, but never were: the original implementation used
-    # chained fancy indexing (``iv[~mask][...] = -1``), which writes into a
-    # temporary copy and is therefore a silent no-op.  Preserved as-is on
-    # purpose; see the accompanying refactoring report for the analysis and a
-    # suggested fix.
 
     flat = np.zeros(iv.size, dtype=np.intp)
     flat[valid] = np.ravel_multi_index(
@@ -396,7 +390,16 @@ def _map_geogrid_to_input_cells(
         ),
         region.dimensions,
     )
-    return flat, valid
+
+    # Geogrid cells landing on an inactive input cell are left untouched: they
+    # are neither layer-remapped nor redirected into the refined block.  Note
+    # they are *not* flagged as excluded either, which is arguably what should
+    # happen; see ``_modify_upscaling_mapping`` for the history.
+    inactive = np.ma.getmaskarray(region.values).reshape(-1)
+    hits_inactive = np.zeros_like(valid)
+    hits_inactive[valid] = inactive[flat[valid]]
+
+    return flat, valid, hits_inactive
 
 
 def _target_region_mask(
@@ -527,7 +530,18 @@ def _modify_upscaling_mapping(
     * cells outside the target region only need their layer index remapped
       through *lmap*;
     * cells inside the target region are redirected to the corresponding
-      refined cell in the appended sub-grid.
+      refined cell in the appended sub-grid;
+    * cells landing on an *inactive* input cell are left untouched.
+
+    That last rule is inherited behaviour rather than a deliberate design.  The
+    original implementation tried to exclude such cells outright, but did so
+    with chained fancy indexing (``iv[~mask][...] = -1``), which writes into a
+    temporary copy and is a silent no-op.  They were nonetheless spared the
+    layer remap, because the intermediate ``region2`` array shared its mask
+    buffer with the index array, so assigning masked values into it mutated
+    that mask as a side effect.  The net effect is reproduced explicitly here.
+    Excluding these cells properly (mapping them to 0) would be a behavioural
+    change and is deliberately not done.
 
     Args:
         up: Upscaling maps addressing the original grid (1-based, 0 = excluded).
@@ -545,7 +559,7 @@ def _modify_upscaling_mapping(
 
     _validate_source_indices(iv, jv, kv, region)
 
-    flat_index, valid = _map_geogrid_to_input_cells(iv, jv, kv, region)
+    flat_index, valid, hits_inactive = _map_geogrid_to_input_cells(iv, jv, kv, region)
     in_target = _target_region_mask(region, target_region_id)
     geo_in_target = _geogrid_cells_in_target(flat_index, valid, in_target)
 
@@ -562,8 +576,9 @@ def _modify_upscaling_mapping(
         geo_per_coarse,
     )
 
-    # Outside the target region only the layer numbering changes.
-    unrefined = valid & ~geo_in_target
+    # Outside the target region only the layer numbering changes.  Cells over
+    # an inactive input cell are skipped: they keep their original mapping.
+    unrefined = valid & ~geo_in_target & ~hits_inactive
     kv[unrefined] = lmap[kv[unrefined].astype(np.int32)]
 
     # Inside the target region, redirect to the appended refined sub-grid.
