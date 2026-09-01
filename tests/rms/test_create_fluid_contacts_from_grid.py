@@ -272,12 +272,28 @@ def test_rms_data_loader_find_available_contact_properties(
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
 
     # GWC is not present in the grid model
-    contacts = mock_loader.find_available_contact_properties("myfwl", "GOC", "mygwc")
+    contacts = mock_loader.find_available_contact_properties(
+        "myfwl", "GOC", "mygwc", "OWC"
+    )
     assert len(contacts) == 2
     assert contacts[0].name == "myfwl"
     assert contacts[0].type == "fwl"
     assert contacts[1].name == "mygwc"
     assert contacts[1].type == "gwc"
+
+
+def test_rms_data_loader_find_available_owc_contact_property(
+    mock_loader: MockRMSDataLoader,
+) -> None:
+    """Test finding OWC contact property using RMSDataLoader."""
+    mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myowc"])
+
+    contacts = mock_loader.find_available_contact_properties(
+        "FWL", "GOC", "GWC", "myowc"
+    )
+    assert len(contacts) == 1
+    assert contacts[0].name == "myowc"
+    assert contacts[0].type == "owc"
 
 
 def test_rms_data_loader_raises_error_when_no_contacts_found(
@@ -287,7 +303,7 @@ def test_rms_data_loader_raises_error_when_no_contacts_found(
     mock_loader.project.grid_models["mygrid"] = MagicMock(properties=["myfwl", "mygwc"])
 
     with pytest.raises(ValueError, match="None of the contact properties"):
-        mock_loader.find_available_contact_properties("OWC", "GOC", "GWC")
+        mock_loader.find_available_contact_properties("FWL", "GOC", "GWC", "OWC")
 
 
 def test_create_fluid_contacts_from_grid(mock_loader: MockRMSDataLoader) -> None:
