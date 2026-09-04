@@ -1,0 +1,51 @@
+summary_observation:
+  - well_name: 
+      rms_name: "55_33-A-1"
+      sim_name: A1
+    position:
+        xpos: 462588.5
+        ypos: 5934081.0
+        hwell_length: 0.0
+        hwell_angle:  0.0
+    influence:
+      - type: 
+          - WGOR
+          - WWCT
+        xrange: 1500.0
+        yrange: 1250.0
+        angle:  45.0
+      - type: 
+          - WBHP
+        xrange: 100.0
+        yrange: 150.0
+        angle:  45.0
+    obs:
+      - id: WGOR_A1_0
+        type: WGOR
+        value: 138.32456970214844
+        uncertainty: 50.0
+        date: "2018-03-30"
+        
+      - id: WGOR_A1_1 
+        type: WGOR
+        value: 138.32456970214844
+        uncertainty: 50.0
+        date: "2018-06-30" 
+      - id: WGOR_A1_2 
+        type: WGOR
+        value: 140.0
+        uncertainty: 50.0
+        date: "2018-09-30" 
+      - type: WWCT
+        value: 0.035560693591833115
+        uncertainty: 0.1
+        date: "2018-03-30" 
+      - type: WBHP
+        value: 248.1
+        uncertainty: 1.0
+        date: "2018-03-30" 
+      - type: WGOR
+        value: 138.32456970214844
+        uncertainty: 50.0
+        date: "2018-03-30" 
+
