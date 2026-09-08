@@ -38,7 +38,7 @@ class GridStatistics(QCForward):
         data: Union[dict, str],
         project: Optional[Union[object, str]] = None,
     ) -> None:
-        """Main routine for evaulating if statistics from 3D grids is
+        """Main routine for evaluating if statistics from 3D grids is
         within user specified thresholds.
 
         The routine depends on existing fmu.tools functionality for
@@ -85,7 +85,7 @@ class GridStatistics(QCForward):
 
             selectors, calculation = self._get_selecors_and_calculation(action)
 
-            # Create datframe with statistics
+            # Create dataframe with statistics
             dframe = qcp.get_grid_statistics(project=project, data=data_upd)
 
             # Get value from statistics for given property and selectors
@@ -172,7 +172,7 @@ class GridStatistics(QCForward):
     def _get_selecors_and_calculation(action: dict) -> tuple:
         """
         Get selectors and selected calculation from the action.
-        If a discrete property has been input it is added to the selctors.
+        If a discrete property has been input it is added to the selectors.
         If calculation is not specified a default is set.
         """
         selectors = action.get("selectors", {})
@@ -189,7 +189,7 @@ class GridStatistics(QCForward):
         selectors: Optional[dict] = None,
     ) -> float:
         """
-        Retrive statistical value from the property statistic dataframe
+        Retrieve statistical value from the property statistic dataframe
         """
 
         dframe = dframe[dframe["PROPERTY"] == prop].copy()

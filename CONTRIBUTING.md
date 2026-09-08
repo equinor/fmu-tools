@@ -49,7 +49,7 @@ If you are proposing a feature:
 
 ## Code standards
 
-It is required to be complient to code standards. A summary:
+It is required to be compliant to code standards. A summary:
 
 ### Formatted with ruff
 
