@@ -55,7 +55,7 @@ class _QCCommon(object):
 
 
 def preserve_cwd(func):
-    """Decorator to return to orginal CWD, applied in testing"""
+    """Decorator to return to original CWD, applied in testing"""
 
     @wraps(func)
     def wrapper(*args, **kwargs):
