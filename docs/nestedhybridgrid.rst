@@ -105,9 +105,9 @@ Concepts
 NNC table
 ^^^^^^^^^
 
-The NNC table captures which coarse (mother) cells connect to which refined cells — information that 
-xtgeo needs to compute transmissibilities across the refinement boundary. It is accessed via the property 
-``nnc_table`` on the :class:`~fmu.tools.nestedhybridgrid.NestedHybridGrid` instance and is of type 
+The NNC table captures which coarse (mother) cells connect to which refined cells — information that
+xtgeo needs to compute transmissibilities across the refinement boundary. It is accessed via the property
+``nnc_table`` on the :class:`~fmu.tools.nestedhybridgrid.NestedHybridGrid` instance and is of type
 :class:`~pandas.DataFrame` with columns:
 
 .. list-table::
