@@ -35,7 +35,7 @@ def merge_rms_volumetrics(filebase: str, rmsrealsuffix: str = "_1") -> pd.DataFr
         set.intersection(*[set(frame.columns) for frame in volframes])
     )
 
-    # Merge all frames on the commmon columns:
+    # Merge all frames on the common columns:
     merged_dframe = pd.DataFrame(columns=common_columns)
     for frame in volframes:
         merged_dframe = pd.merge(merged_dframe, frame, on=common_columns, how="outer")
