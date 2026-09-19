@@ -16,7 +16,7 @@ and to BVW and Brooks-Corey methods. The function offers several options:
 * Both normal and inverse formulation of Leverett J is supported.
 * Normalization is supported.
 
-The theory is given in the PDF file provided here: :download:`pdf <pdf/sw_calc.pdf>`.
+The theory is described in :doc:`the water saturation theory <sw_theory>`.
 
 Note that this library will not give exact same values as RMS built-in Sw GUI will give.
 This is partly due to computing height across a cell is a bit different implemented.
@@ -27,7 +27,8 @@ The library input is documented here: :meth:`.SwFunction`
 Example: Using simple Sw Leverett J
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Leverett J is given as $S_w = a J^b$, where $J$ is $h\sqrt(k/\phi)$. In this example, the
+The Leverett J is given as :math:`S_w = a J^b`, where :math:`J` is
+:math:`h\sqrt{k/\phi}`. In this example, the
 factors are constant numbers:
 
 .. code-block:: python

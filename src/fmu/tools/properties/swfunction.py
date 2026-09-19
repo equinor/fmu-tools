@@ -35,7 +35,7 @@ ALLOWED_METHODS = [
 class SwFunction:
     """Generic Sw calc for formulation Sw = a * (m + x * h)^b.
 
-    Some theory for this is shown here: :download:`pdf <pdf/sw_calc.pdf>`.
+    Some theory for this is shown in :doc:`the water saturation theory </sw_theory>`.
 
     Args:
         grid: The xtgeo grid object
