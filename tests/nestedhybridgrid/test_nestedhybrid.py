@@ -1056,6 +1056,44 @@ class TestNestedHybridGridRmsIO:
             assert isinstance(prop, xtgeo.GridProperty)
             assert prop.dimensions == nhg.grid.dimensions
 
+    def test_from_rms_accepts_properties_positionally(self):
+        """properties must remain a positional argument (not keyword-only)."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        poro = _make_constant_property(grid, "PORO", 0.3)
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", side_effect=[region, poro]),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                "mock_project", "Grid", "REGION", (2, 2, 2), ["PORO"]
+            )
+
+        prop_names = {p.name for p in nhg.properties}
+        assert prop_names == {"REGION", "PORO"}
+
+    def test_from_rms_accepts_non_default_target_region_id(self):
+        """from_rms should accept target_region_id as keyword argument."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_region_id=2
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+                target_region_id=2,
+            )
+
+        # check that the refined bounding box is set correct from input region
+        assert nhg._target_region_id == 2
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == 2)
+
     def test_to_rms_writes_grid_and_region_by_default(self):
         """to_rms should write the grid and region by default."""
 
