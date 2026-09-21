@@ -13,6 +13,7 @@ Contents:
    qcreset
    generate_petro_jobs_for_field_update
    properties
+   swmodel
    domain_conversion
    nestedhybridgrid
    create_rft_ertobs

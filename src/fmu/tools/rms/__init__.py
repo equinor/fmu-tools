@@ -2,6 +2,8 @@
 Initialize modules for use in RMS
 """
 
+from fmu.tools.swmodel import run_swmodel
+
 from .copy_rms_param_to_ertbox_grid import copy_rms_param
 from .fluid_contacts_from_grid import create_fluid_contacts_from_grid
 from .generate_bw_per_facies import create_bw_per_facies
@@ -26,4 +28,5 @@ __all__ = [
     "export_initial_field_parameters",
     "copy_rms_param",
     "create_fluid_contacts_from_grid",
+    "run_swmodel",
 ]
