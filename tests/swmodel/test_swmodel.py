@@ -229,6 +229,26 @@ def test_main_creates_output_folder(
     assert (outfolder / "mygrid--sw_h.roff").exists()
 
 
+def test_file_backend_write_logs_individual_files(
+    tmp_path: Path,
+    make_valid_config_dict,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    backend = FileBackend(SwConfig(**make_valid_config_dict()))
+    outfolder = tmp_path / "results"
+    props = {
+        "sw": DummyGridProperty("sw", (1, 1, 1)),
+        "sw_h": DummyGridProperty("sw_hcenter", (1, 1, 1)),
+    }
+
+    with caplog.at_level("INFO", logger="fmu.tools.swmodel._io"):
+        backend.write("MYGRID", props, outfolder)
+
+    assert "Write swmodel properties to" in caplog.text
+    assert f"Wrote swmodel file {outfolder / 'mygrid--sw.roff'}" in caplog.text
+    assert f"Wrote swmodel file {outfolder / 'mygrid--sw_h.roff'}" in caplog.text
+
+
 def test_main_wraps_validation_error_with_key_path(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
