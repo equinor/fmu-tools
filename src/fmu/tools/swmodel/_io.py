@@ -111,7 +111,9 @@ class FileBackend:
         outfolder.mkdir(parents=True, exist_ok=True)
         logger.info("Write swmodel properties to %s", outfolder)
         for prop_key, prop in props.items():
-            prop.to_file(outfolder / f"{gridname.lower()}--{prop_key}.roff")
+            output_file = outfolder / f"{gridname.lower()}--{prop_key}.roff"
+            prop.to_file(output_file)
+            logger.info("Wrote swmodel file %s", output_file)
 
 
 class RmsBackend:
