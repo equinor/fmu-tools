@@ -463,6 +463,28 @@ class TestNestedHybridGridClass:
         # right neighbor → connects to I+ face of refined patch
         assert _has_single_row(i1=3, j1=2, k1=1, i2=6, j2=2, k2=1, direction="I-")
 
+    def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
+        """NNC table can be written to CSV without the pandas index."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        written = pd.read_csv(outfile)
+        assert "Unnamed: 0" not in written.columns
+        pd.testing.assert_frame_equal(written, nhg.nnc_table, check_dtype=False)
+
+    def test_write_nnc_table_creates_output_directories(self, tmp_path):
+        """Missing parent directories are created before writing the table."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nested" / "output" / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        assert outfile.is_file()
+
     def test_inactive_neighbor_excluded_from_nnc(self):
         """Inactive coarse neighbor cells should not appear in the NNC table.
 
@@ -1058,6 +1080,44 @@ class TestNestedHybridGridRmsIO:
         for prop in nhg.properties:
             assert isinstance(prop, xtgeo.GridProperty)
             assert prop.dimensions == nhg.grid.dimensions
+
+    def test_from_rms_accepts_properties_positionally(self):
+        """properties must remain a positional argument (not keyword-only)."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        poro = _make_constant_property(grid, "PORO", 0.3)
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", side_effect=[region, poro]),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                "mock_project", "Grid", "REGION", (2, 2, 2), ["PORO"]
+            )
+
+        prop_names = {p.name for p in nhg.properties}
+        assert prop_names == {"REGION", "PORO"}
+
+    def test_from_rms_accepts_non_default_target_region_id(self):
+        """from_rms should accept target_region_id as keyword argument."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_region_id=2
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+                target_region_id=2,
+            )
+
+        # check that the refined bounding box is set correct from input region
+        assert nhg._target_region_id == 2
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == 2)
 
     def test_to_rms_writes_grid_and_region_by_default(self):
         """to_rms should write the grid and region, but not parent indices."""
