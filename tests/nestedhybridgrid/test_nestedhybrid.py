@@ -1095,7 +1095,7 @@ class TestNestedHybridGridRmsIO:
             )
 
         prop_names = {p.name for p in nhg.properties}
-        assert prop_names == {"REGION", "PORO"}
+        assert prop_names == {"REGION", "PORO", *ORIGINAL_IJK_PROPERTY_NAMES}
 
     def test_from_rms_accepts_non_default_target_region_id(self):
         """from_rms should accept target_region_id as keyword argument."""
