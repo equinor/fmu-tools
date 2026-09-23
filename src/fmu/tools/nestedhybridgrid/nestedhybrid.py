@@ -39,7 +39,7 @@ _logger = logging.getLogger(__name__)
 FaceDirection: TypeAlias = Literal["i+", "i-", "j+", "j-", "k+", "k-"]
 IJKIndex: TypeAlias = tuple[int, int, int]
 BoundaryCellFace: TypeAlias = tuple[IJKIndex, IJKIndex, FaceDirection]
-ORIGINAL_IJK_PROPERTY_NAMES = ("I_orig", "J_orig", "K_orig")
+ORIGINAL_IJK_PROPERTY_NAMES = ("parent_I", "parent_J", "parent_K")
 
 
 class BoundingBox(BaseModel):
@@ -350,7 +350,8 @@ class NestedHybridGrid:
         self.grid.to_roxar(project, grid_name)
 
         for prop in self.properties:
-            prop.to_roxar(project, grid_name, prop.name)
+            if prop.name not in ORIGINAL_IJK_PROPERTY_NAMES:
+                prop.to_roxar(project, grid_name, prop.name)
 
     @staticmethod
     def _validate_inputs(

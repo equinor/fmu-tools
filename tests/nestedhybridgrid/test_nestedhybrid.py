@@ -387,7 +387,7 @@ class TestNestedHybridGridClass:
         assert len(nhg.properties) == 5
 
         prop_names = [prop.name for prop in nhg.properties]
-        assert set(prop_names) == {"CUSTOM", "REGION", "I_orig", "J_orig", "K_orig"}
+        assert set(prop_names) == {"CUSTOM", "REGION", *ORIGINAL_IJK_PROPERTY_NAMES}
 
         region_prop = nhg.grid.get_prop_by_name("REGION")
 
@@ -395,21 +395,21 @@ class TestNestedHybridGridClass:
         assert region_prop.name == "REGION"
         assert region_prop.values.shape == nhg.grid.dimensions
 
-        i_orig = nhg.grid.get_prop_by_name("I_orig")
-        j_orig = nhg.grid.get_prop_by_name("J_orig")
-        k_orig = nhg.grid.get_prop_by_name("K_orig")
+        parent_i, parent_j, parent_k = (
+            nhg.grid.get_prop_by_name(name) for name in ORIGINAL_IJK_PROPERTY_NAMES
+        )
 
-        assert i_orig.values.shape == nhg.grid.dimensions
-        assert j_orig.values.shape == nhg.grid.dimensions
-        assert k_orig.values.shape == nhg.grid.dimensions
+        assert parent_i.values.shape == nhg.grid.dimensions
+        assert parent_j.values.shape == nhg.grid.dimensions
+        assert parent_k.values.shape == nhg.grid.dimensions
 
-        assert i_orig.values[0, 0, 0] == 1
-        assert j_orig.values[0, 0, 0] == 1
-        assert k_orig.values[0, 0, 0] == 1
+        assert parent_i.values[0, 0, 0] == 1
+        assert parent_j.values[0, 0, 0] == 1
+        assert parent_k.values[0, 0, 0] == 1
 
-        assert set(np.unique(i_orig.values[7:11, 0:4, 0:4])) == {5, 6}
-        assert set(np.unique(j_orig.values[7:11, 0:4, 0:4])) == {3, 4}
-        assert set(np.unique(k_orig.values[7:11, 0:4, 0:4])) == {1, 2}
+        assert set(np.unique(parent_i.values[7:11, 0:4, 0:4])) == {5, 6}
+        assert set(np.unique(parent_j.values[7:11, 0:4, 0:4])) == {3, 4}
+        assert set(np.unique(parent_k.values[7:11, 0:4, 0:4])) == {1, 2}
 
     def test_nestedhybridgrid_nnc_table_as_expected(self):
         """Test NNC table contains one row per coarse-to-refined cell face."""
@@ -1060,7 +1060,7 @@ class TestNestedHybridGridRmsIO:
             assert prop.dimensions == nhg.grid.dimensions
 
     def test_to_rms_writes_grid_and_region_by_default(self):
-        """to_rms should write the grid and region by default."""
+        """to_rms should write the grid and region, but not parent indices."""
 
         grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
@@ -1072,13 +1072,10 @@ class TestNestedHybridGridRmsIO:
             nhg.to_rms("mock_project", "NestedGrid")
 
         mock_grid_write.assert_called_once_with("mock_project", "NestedGrid")
-        assert mock_prop_write.call_count == 1 + len(ORIGINAL_IJK_PROPERTY_NAMES)
-        mock_prop_write.assert_any_call("mock_project", "NestedGrid", "REGION")
-        for prop_name in ORIGINAL_IJK_PROPERTY_NAMES:
-            mock_prop_write.assert_any_call("mock_project", "NestedGrid", prop_name)
+        mock_prop_write.assert_called_once_with("mock_project", "NestedGrid", "REGION")
 
     def test_to_rms_writes_each_property(self):
-        """to_rms should call to_roxar for every property."""
+        """to_rms should export each non-parent-index property."""
         grid, region, _ = _make_box_grid_with_region(
             dimension=(6, 6, 2), target_region_id=1
         )
@@ -1093,9 +1090,7 @@ class TestNestedHybridGridRmsIO:
         ):
             nhg.to_rms("mock_project", "NestedGrid")
 
-        assert mock_prop_write.call_count == len(nhg.properties)
-
-        mock_prop_write.assert_any_call("mock_project", "NestedGrid", "REGION")
-        mock_prop_write.assert_any_call("mock_project", "NestedGrid", "PORO")
-        for prop_name in ORIGINAL_IJK_PROPERTY_NAMES:
-            mock_prop_write.assert_any_call("mock_project", "NestedGrid", prop_name)
+        exported_property_names = {
+            mock_call.args[2] for mock_call in mock_prop_write.call_args_list
+        }
+        assert exported_property_names == {"REGION", "PORO"}
