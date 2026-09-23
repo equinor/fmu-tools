@@ -48,6 +48,7 @@ The example here runs within RMS, but similar workflows can be created for file 
         region_name="Refinement_region",
         refinement=(2, 2, 1),
         properties=["Zone"],  # Optional list of properties to transfer to the output grid
+        target_region_id=1,  # Region value to refine (default: 1)
     )
 
     # store nested grid with properties in RMS
