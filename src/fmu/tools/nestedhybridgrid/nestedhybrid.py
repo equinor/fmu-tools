@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias
 
 import numpy as np
@@ -333,8 +334,19 @@ class NestedHybridGrid:
         region_name: str,
         refinement: tuple[int, int, int],
         properties: list[str] | None = None,
+        *,
+        target_region_id: int = 1,
     ) -> Self:
-        """Create a NestedHybridGrid instance from an RMS project."""
+        """Create a NestedHybridGrid instance from an RMS project.
+
+        Args:
+            project: RMS project instance.
+            grid_name: Name of the grid in the RMS project.
+            region_name: Name of the region property in the RMS project.
+            refinement: Refinement factors as (ncol, nrow, nlay).
+            properties: Optional list of property names to load from the project.
+            target_region_id: Region value to refine (default: 1).
+        """
 
         coarse_grid = xtgeo.grid_from_roxar(project, grid_name)
         region = xtgeo.gridproperty_from_roxar(project, grid_name, region_name)
@@ -343,7 +355,7 @@ class NestedHybridGrid:
             prop = xtgeo.gridproperty_from_roxar(project, grid_name, propname)
             coarse_grid.append_prop(prop)
 
-        return cls(coarse_grid, region, refinement)
+        return cls(coarse_grid, region, refinement, target_region_id)
 
     def to_rms(self, project: Any, grid_name: str) -> None:
         """Write the nested hybrid grid and its properties to an RMS project."""
@@ -433,6 +445,12 @@ class NestedHybridGrid:
         if self._nnc_table is None:
             self._nnc_table = self._compute_nnc_table()
         return self._nnc_table
+
+    def write_nnc_table(self, filename: str | Path) -> None:
+        """Write the NNC mapping table to CSV."""
+        output_path = Path(filename)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        self.nnc_table.to_csv(output_path, index=False)
 
     def _compute_nnc_table(self) -> pd.DataFrame:
         """Compute the NNC mapping table."""

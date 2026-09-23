@@ -17,6 +17,7 @@ The function will check for supported contact types in the project and create ou
 for the ones available. The supported contact types are:
 
 - ``FWL`` (Free water level)
+- ``OWC`` (Oil-water contact)
 - ``GOC`` (Gas-oil contact)
 - ``GWC`` (Gas-water contact)
 

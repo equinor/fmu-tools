@@ -22,7 +22,7 @@ class FluidContact(BaseModel):
     """Fluid contact class."""
 
     name: str
-    type: Literal["fwl", "goc", "gwc"]
+    type: Literal["fwl", "goc", "gwc", "owc"]
 
 
 class _RMSDataLoader:
@@ -43,7 +43,7 @@ class _RMSDataLoader:
         )
 
     def find_available_contact_properties(
-        self, fwl_name: str, goc_name: str, gwc_name: str
+        self, fwl_name: str, goc_name: str, gwc_name: str, owc_name: str
     ) -> list[FluidContact]:
         """Return contact properties that are available in the project."""
         properties = self.project.grid_models[self.grid_name].properties
@@ -54,11 +54,13 @@ class _RMSDataLoader:
             contacts.append(FluidContact(name=goc_name, type="goc"))
         if gwc_name in properties:
             contacts.append(FluidContact(name=gwc_name, type="gwc"))
+        if owc_name in properties:
+            contacts.append(FluidContact(name=owc_name, type="owc"))
 
         if not contacts:
             raise ValueError(
-                f"None of the contact properties {fwl_name}, {goc_name}, or "
-                f"{gwc_name} were found in the project."
+                f"None of the contact properties {fwl_name}, {goc_name}, {gwc_name}, "
+                f"or {owc_name} were found in the project."
             )
         return contacts
 
@@ -198,6 +200,7 @@ def create_fluid_contacts_from_grid(
     fwl_name: str = "FWL",
     goc_name: str = "GOC",
     gwc_name: str = "GWC",
+    owc_name: str = "OWC",
     zone_name: str | None = None,
     min_value_filter: float = 0,
     template_surf: xtgeo.RegularSurface | None = None,
@@ -218,9 +221,10 @@ def create_fluid_contacts_from_grid(
     extracted as the boundary polygon of cells whose centers lie above the contact.
 
     The supported contact types are ``FWL`` (free water level), ``GOC``
-    (gas-oil contact), and ``GWC`` (gas-water contact). The function will check which
-    of these are available in the project. It is not necessary to have all contact types
-    in the project, and the function will create output only for the ones available.
+    (gas-oil contact), ``GWC`` (gas-water contact), and ``OWC`` (oil-water contact).
+    The function will check which of these are available in the project. It is not
+    necessary to have all contact types in the project, and the function will create
+    output only for the ones available.
 
     A value filter can be applied to remove values below a certain threshold via the
     ``min_value_filter`` argument. This is useful for removing contact values in
@@ -242,6 +246,7 @@ def create_fluid_contacts_from_grid(
         fwl_name: The name of the free water level property. Default is ``FWL``.
         goc_name: The name of the gas-oil contact property. Default is ``GOC``.
         gwc_name: The name of the gas-water contact property. Default is ``GWC``.
+        owc_name: The name of the oil-water contact property. Default is ``OWC``.
         zone_name: Optional name of the zone property to use for creating contacts for
           coarse zones.
         min_value_filter: Minimum value filter. Surface values below this will be set
@@ -254,7 +259,9 @@ def create_fluid_contacts_from_grid(
         rescale_distance: Optional target spacing used to resample contact outlines.
     """
     loader = _RMSDataLoader(project, grid_name)
-    contacts = loader.find_available_contact_properties(fwl_name, goc_name, gwc_name)
+    contacts = loader.find_available_contact_properties(
+        fwl_name, goc_name, gwc_name, owc_name
+    )
 
     grid_data = _GridDataAssembler(
         loader=loader,
