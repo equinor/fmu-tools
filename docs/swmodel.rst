@@ -205,6 +205,9 @@ Configuration notes
 * ``algorithm.calc: integrated`` does not support J-functions with ``b = -1``.
 * ``swl_min`` and ``swl_max`` must be within ``[0, 1]``.
 * ``swl_min <= swl_max`` when both are provided.
+* J-function  a  and  b  values can be given in RMS convention or petrophysical
+  convention. If they are given in RMS convention, set  invert_jfunc: true ; otherwise
+  leave it at the default  false .
 
 Command line arguments
 ----------------------
