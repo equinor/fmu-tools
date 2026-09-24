@@ -19,7 +19,7 @@ def _make_rms_config() -> dict:
     return {
         "grid": "Geogrid",
         "gridparameter": {
-            "swfunc_region": "SWFUNC_REGION",
+            "swfunction_region": "SWFUNC_REGION",
             "poro": "PORO",
             "perm": "PERM",
             "fwl": "FWL",
@@ -96,7 +96,7 @@ def test_run_swmodel_configures_logging(monkeypatch: pytest.MonkeyPatch) -> None
 
 def test_run_swmodel_wraps_validation_error_with_key_path() -> None:
     project = FakeProject({})
-    # Deliberately omit swfunc_region so validation fails before any RMS I/O.
+    # Deliberately omit swfunction_region so validation fails before any RMS I/O.
     config = {
         "swmodel": {
             "geogrid": {

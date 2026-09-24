@@ -59,7 +59,7 @@ def compute_sw_func_parameters(
     b.values.fill(0.0)
     swirr.values.fill(0.0)
 
-    group_prop = gridprops["swfunc_region"]
+    group_prop = gridprops["swfunction_region"]
 
     for group_idx, group_name in group_prop.codes.items():
         logger.info("Computing sw-function parameters for group %s", group_name)

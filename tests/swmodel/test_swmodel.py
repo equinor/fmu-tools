@@ -164,11 +164,11 @@ def test_compute_reuses_grid_z_values(
 
     grid = CountingGrid(shape)
     region = DummyGridProperty(
-        "swfunc_region", shape, values=np.zeros(shape, dtype=int)
+        "swfunction_region", shape, values=np.zeros(shape, dtype=int)
     )
     region.codes = {0: "Channel"}
     gridprops = {
-        "swfunc_region": region,
+        "swfunction_region": region,
         "poro": DummyGridProperty("poro", shape, values=np.full(shape, 0.2)),
         "perm": DummyGridProperty("perm", shape, values=np.full(shape, 100.0)),
         "fwl": DummyGridProperty("fwl", shape, values=np.full(shape, 111.0)),
@@ -253,7 +253,7 @@ def test_main_wraps_validation_error_with_key_path(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     config_file = tmp_path / "cfg.yaml"
-    # Deliberately omit swfunc_region so validation fails after resolving key_path.
+    # Deliberately omit swfunction_region so validation fails after resolving key_path.
     config_file.write_text(
         "\n".join(
             [
@@ -386,7 +386,7 @@ def test_compute_sw_func_parameters_preserves_poro_mask(
     )
     grid = DummyGrid(shape)
     region = DummyGridProperty(
-        "swfunc_region",
+        "swfunction_region",
         shape,
         values=np.ma.array(np.zeros(shape, dtype=int), mask=mask),
     )
@@ -399,7 +399,7 @@ def test_compute_sw_func_parameters_preserves_poro_mask(
 
     a, b, swirr = _compute.compute_sw_func_parameters(
         grid,
-        {"swfunc_region": region, "poro": poro},
+        {"swfunction_region": region, "poro": poro},
         cfg,
         {"oil"},
     )
@@ -563,11 +563,11 @@ def test_compute_sw_swl_height_preserves_mask(
 
     grid = DummyGrid(shape)
     region = DummyGridProperty(
-        "swfunc_region", shape, values=np.zeros(shape, dtype=int)
+        "swfunction_region", shape, values=np.zeros(shape, dtype=int)
     )
     region.codes = {0: "Channel"}
     gridprops = {
-        "swfunc_region": region,
+        "swfunction_region": region,
         "poro": DummyGridProperty("poro", shape, values=np.full(shape, 0.2)),
         "perm": DummyGridProperty("perm", shape, values=np.full(shape, 100.0)),
         "fwl": DummyGridProperty("fwl", shape, values=np.full(shape, 111.0)),
@@ -626,11 +626,11 @@ def test_compute_sw_preserves_masked_ffl_selection(
 
     grid = MaskedZGrid(shape)
     region = DummyGridProperty(
-        "swfunc_region", shape, values=np.zeros(shape, dtype=int)
+        "swfunction_region", shape, values=np.zeros(shape, dtype=int)
     )
     region.codes = {0: "Channel"}
     gridprops = {
-        "swfunc_region": region,
+        "swfunction_region": region,
         "poro": DummyGridProperty("poro", shape, values=np.full(shape, 0.2)),
         "perm": DummyGridProperty("perm", shape, values=np.full(shape, 100.0)),
         "fwl": DummyGridProperty("fwl", shape, values=np.full(shape, 111.0)),
