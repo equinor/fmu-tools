@@ -118,7 +118,7 @@ def test_run_swmodel_in_roxenv() -> None:
     config = {
         "grid": GRIDNAME,
         "gridparameter": {
-            "swfunc_region": REGIONNAME,
+            "swfunction_region": REGIONNAME,
             "poro": PORONAME,
             "perm": PERMNAME,
             "fwl": FWLNAME,
@@ -137,13 +137,13 @@ def test_run_swmodel_in_roxenv() -> None:
 
     assert {"sw", "sw_h", "so", "sg"} <= set(props)
 
-    swfunc_region = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, REGIONNAME)
+    swfunction_region = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, REGIONNAME)
     sw = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, "sw")
     sw_h = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, "sw_hcenter")
     so = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, "so")
     sg = xtgeo.gridproperty_from_roxar(rox.project, GRIDNAME, "sg")
 
-    assert swfunc_region.codes == {1: "Channel"}
+    assert swfunction_region.codes == {1: "Channel"}
     sw_vals = np.ma.asarray(sw.values).compressed()
     so_vals = np.ma.asarray(so.values).compressed()
     sg_vals = np.ma.asarray(sg.values).compressed()

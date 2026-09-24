@@ -24,28 +24,30 @@ def validate_code_names_vs_cfg_names(
     code_names = {str(code_name) for code_name in sw_region_param.codes.values()}
     if not code_names:
         raise ValueError(
-            f"Sw-function region property ({cfg.gridparameter.swfunc_region}) does "
+            f"Sw-function region property ({cfg.gridparameter.swfunction_region}) does "
             "not define any code names; discrete code names must match the keys "
             "under YAML sw_functions."
         )
     unnamed_codes = sorted(active_codes - set(sw_region_param.codes))
     if unnamed_codes:
         raise ValueError(
-            f"Sw-function region property ({cfg.gridparameter.swfunc_region}) uses "
+            f"Sw-function region property ({cfg.gridparameter.swfunction_region}) uses "
             f"codes without names: {unnamed_codes}"
         )
 
     unknown_groups = code_names - set(cfg.sw_functions)
     if unknown_groups:
         raise ValueError(
-            f"Sw-function region property ({cfg.gridparameter.swfunc_region}) contains "
+            "Sw-function region property "
+            f"({cfg.gridparameter.swfunction_region}) contains "
             f"codes not present in YAML sw_functions: {sorted(unknown_groups)}"
         )
 
     unused_groups = set(cfg.sw_functions) - code_names
     if unused_groups:
         logger.warning(
-            "YAML sw_functions contains groups that are not defined in swfunc_region "
+            "YAML sw_functions contains groups that are not defined in "
+            "swfunction_region "
             "parameter: %s",
             sorted(unused_groups),
         )
@@ -73,8 +75,8 @@ class FileBackend:
         cfg_gp = self.cfg.gridparameter
 
         gridprops: dict[str, xtgeo.GridProperty] = {}
-        gridprops["swfunc_region"] = xtgeo.gridproperty_from_file(
-            self._require_file(cfg_gp.swfunc_region)
+        gridprops["swfunction_region"] = xtgeo.gridproperty_from_file(
+            self._require_file(cfg_gp.swfunction_region)
         )
         gridprops["poro"] = xtgeo.gridproperty_from_file(
             self._require_file(cfg_gp.poro)
@@ -96,7 +98,7 @@ class FileBackend:
                 self._require_file(cfg_gp.fwlwg)
             )
 
-        validate_code_names_vs_cfg_names(gridprops["swfunc_region"], self.cfg)
+        validate_code_names_vs_cfg_names(gridprops["swfunction_region"], self.cfg)
         return grid, gridprops
 
     def write(
@@ -158,7 +160,7 @@ class RmsBackend:
         self._grid_model()
         cfg_gp = self.cfg.gridparameter
         required = {
-            "swfunc_region": cfg_gp.swfunc_region,
+            "swfunction_region": cfg_gp.swfunction_region,
             "poro": cfg_gp.poro,
             "perm": cfg_gp.perm,
         }
@@ -198,7 +200,7 @@ class RmsBackend:
                 realisation=self.realisation,
             )
 
-        validate_code_names_vs_cfg_names(gridprops["swfunc_region"], self.cfg)
+        validate_code_names_vs_cfg_names(gridprops["swfunction_region"], self.cfg)
         return grid, gridprops
 
     def write(self, props: dict[str, xtgeo.GridProperty]) -> None:

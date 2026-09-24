@@ -29,9 +29,9 @@ class _SwBaseModel(BaseModel):
 class GridParameter(_SwBaseModel):
     """Parameter grid paths or RMS property names."""
 
-    swfunc_region: str = Field(
+    swfunction_region: str = Field(
         description="Discrete parameter or RMS property matching sw_functions groups.",
-        examples=["path/to/swfunc_region.roff", "SWFUNC_REGION"],
+        examples=["path/to/swfunction_region.roff", "SWFUNC_REGION"],
         min_length=1,
     )
     poro: str = Field(

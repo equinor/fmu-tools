@@ -27,7 +27,7 @@ Create a YAML configuration file:
    grid: grids/geogrid.roff
 
    gridparameter:
-     swfunc_region: grids/geogrid--swfunc_region.roff
+     swfunction_region: grids/geogrid--swfunction_region.roff
      poro: grids/geogrid--poro.roff
      perm: grids/geogrid--perm.roff
      fwl: grids/geogrid--fwl.roff
@@ -77,7 +77,7 @@ are RMS grid-model and property names instead of file paths:
        grid: Geogrid
 
        gridparameter:
-         swfunc_region: SWFUNC_REGION
+         swfunction_region: SWFUNC_REGION
          poro: PORO
          perm: PERM
          fwl: FWL
@@ -140,7 +140,7 @@ Configuration reference
      - Grid to process.
      - ROFF grid file path.
      - RMS grid model name.
-   * - ``gridparameter.swfunc_region``
+   * - ``gridparameter.swfunction_region``
      - Yes
      - Discrete region selector. Code names must match the keys under
        ``sw_functions``.
@@ -199,7 +199,7 @@ Configuration notes
 * ``fwl`` is required when any oil J-function is present.
 * ``goc`` and ``fwlwg`` are required when any gas J-function is present. In
   gas/water-only cases, they are expected to represent the same contact.
-* ``swfunc_region`` code names must match the keys under ``sw_functions``.
+* ``swfunction_region`` code names must match the keys under ``sw_functions``.
 * All ``sw_functions`` groups must define the same phase set: all oil, all gas,
   or all oil+gas.
 * ``algorithm.calc: integrated`` does not support J-functions with ``b = -1``.

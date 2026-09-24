@@ -77,9 +77,9 @@ def _make_dummy_property(
 ) -> DummyGridProperty:
     token = Path(name).stem.lower().split("--")[-1]
 
-    if token == "swfunc_region":
+    if token in {"swfunction_region", "swfunc_region"}:
         prop = DummyGridProperty(
-            "swfunc_region", dummy_shape, values=np.zeros(dummy_shape, dtype=int)
+            "swfunction_region", dummy_shape, values=np.zeros(dummy_shape, dtype=int)
         )
         prop.codes = {0: "Channel"}
         return prop
@@ -182,8 +182,8 @@ def patch_rms_io_and_swfunc(
 def _make_valid_config_dict(tmp_path: Path) -> dict:
     grid_file = tmp_path / "grid.roff"
     grid_file.write_text("dummy", encoding="utf-8")
-    swfunc_region_file = tmp_path / "swfunc_region.roff"
-    swfunc_region_file.write_text("dummy", encoding="utf-8")
+    swfunction_region_file = tmp_path / "swfunction_region.roff"
+    swfunction_region_file.write_text("dummy", encoding="utf-8")
     poro_file = tmp_path / "poro.roff"
     poro_file.write_text("dummy", encoding="utf-8")
     perm_file = tmp_path / "perm.roff"
@@ -198,7 +198,7 @@ def _make_valid_config_dict(tmp_path: Path) -> dict:
     return {
         "grid": str(grid_file),
         "gridparameter": {
-            "swfunc_region": str(swfunc_region_file),
+            "swfunction_region": str(swfunction_region_file),
             "poro": str(poro_file),
             "perm": str(perm_file),
             "fwl": str(fwl_file),
