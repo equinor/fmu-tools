@@ -66,7 +66,7 @@ class _LocalData:
 
 class WellZonationVsGrid(QCForward):
     def run(self, data, reuse=False, project=None):
-        """Main routine for evaulating well zonation match in 3D grids.
+        """Main routine for evaluating well zonation match in 3D grids.
 
         The routine depends on existing XTGeo functions for this purpose
 
