@@ -1,5 +1,6 @@
 import logging
 import os
+import warnings
 from typing import Any, Literal
 
 import numpy as np
@@ -208,6 +209,53 @@ def test_generate_simple_velocube(
     assert velocube.xlines == smallcube.xlines
 
     plot_section(velocube, simplesurfs, title="Avg Velocity cube in T")
+
+
+def test_depth_convert_cube_warns_only_when_method_is_omitted(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
+    """FutureWarning should only be emitted when method is not explicitly set."""
+
+    dc = DomainConversion(*simplesurfs)
+
+    with pytest.warns(FutureWarning, match="Default trace interpolation method"):
+        dc.depth_convert_cube(smallcube, zinc=1.0, zmin=0.0, zmax=100.0)
+
+    with warnings.catch_warnings(record=True) as recorded:
+        dc.depth_convert_cube(
+            smallcube, zinc=1.0, zmin=0.0, zmax=100.0, method="linear"
+        )
+
+    assert not any(
+        isinstance(w.message, FutureWarning)
+        and "Default trace interpolation method" in str(w.message)
+        for w in recorded
+    )
+
+
+def test_time_convert_cube_warns_only_when_method_is_omitted(
+    smallcube: xtgeo.Cube,
+    simplesurfs: tuple[list[xtgeo.RegularSurface], list[xtgeo.RegularSurface]],
+) -> None:
+    """FutureWarning should only be emitted when method is not explicitly set."""
+
+    dc = DomainConversion(*simplesurfs)
+    depthcube = dc.depth_convert_cube(
+        smallcube, zinc=1.0, zmin=0.0, zmax=100.0, method="linear"
+    )
+
+    with pytest.warns(FutureWarning, match="Default trace interpolation method"):
+        dc.time_convert_cube(depthcube, tinc=1.0, tmin=0.0, tmax=100.0)
+
+    with warnings.catch_warnings(record=True) as recorded:
+        dc.time_convert_cube(depthcube, tinc=1.0, tmin=0.0, tmax=100.0, method="linear")
+
+    assert not any(
+        isinstance(w.message, FutureWarning)
+        and "Default trace interpolation method" in str(w.message)
+        for w in recorded
+    )
 
 
 @pytest.mark.parametrize(

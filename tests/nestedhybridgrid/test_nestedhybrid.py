@@ -1,5 +1,7 @@
 """Tests for fmu.tools.nestedhybridgrid.nestedhybrid."""
 
+from unittest.mock import patch
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -11,7 +13,11 @@ from fmu.tools.nestedhybridgrid import (
     nnc_to_flowsimulator_input,
     nnc_to_gridproperty,
 )
-from fmu.tools.nestedhybridgrid.nestedhybrid import BoundingBox, _set_actnum_in_grid
+from fmu.tools.nestedhybridgrid.nestedhybrid import (
+    ORIGINAL_IJK_PROPERTY_NAMES,
+    BoundingBox,
+    _set_actnum_in_grid,
+)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -21,7 +27,8 @@ from fmu.tools.nestedhybridgrid.nestedhybrid import BoundingBox, _set_actnum_in_
 def _make_box_grid_with_region(
     dimension=(6, 6, 3),
     increment=(50.0, 50.0, 10.0),
-    target_region_id=2,
+    target_region_id=1,
+    target_layer_ids: list[int] | None = None,
 ):
     """Create a simple box grid with a region property.
 
@@ -34,9 +41,9 @@ def _make_box_grid_with_region(
     grid = xtgeo.create_box_grid(dimension, increment=increment)
     ncol, nrow, nlay = dimension
 
-    region_values = np.ones((ncol, nrow, nlay), dtype=np.int32)
+    region_values = np.zeros((ncol, nrow, nlay), dtype=np.int32)
     half = ncol // 2
-    region_values[half:, :, :] = target_region_id
+    region_values[half:, :, target_layer_ids or range(nlay)] = target_region_id
 
     region = xtgeo.GridProperty(
         grid, name="REGION", discrete=True, values=region_values
@@ -176,12 +183,12 @@ class TestCreateNestedHybridGrid:
         nest_id = merged.get_prop_by_name(region.name)
         assert nest_id is not None
         unique_vals = set(np.unique(np.ma.filled(nest_id.values, fill_value=0)))
-        # Must contain at least coarse (1) and refined (2) cells
+        # Must contain at least coarse (0) and refined (1) cells
+        assert 0 in unique_vals
         assert 1 in unique_vals
-        assert 2 in unique_vals
 
     def test_nest_id_values_consistent(self):
-        """Active cells should only have refinement region in {1, 2}."""
+        """Active cells should only have refinement region in {0, 1}."""
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 2))
         merged, _ = create_nested_hybrid_grid(grid, region, rid, refinement=(1, 1, 1))
 
@@ -190,7 +197,7 @@ class TestCreateNestedHybridGrid:
 
         active_mask = actnum.values == 1
         nest_active = np.ma.filled(nest_id.values, fill_value=0)[active_mask]
-        assert set(np.unique(nest_active)).issubset({1, 2})
+        assert set(np.unique(nest_active)).issubset({0, 1})
 
     def test_refinement_increases_cells(self):
         """Refinement > 1 should produce a merged grid with more total cells."""
@@ -229,7 +236,7 @@ class TestCreateNestedHybridGrid:
         """
         grid, region, rid = _make_box_grid_with_region(dimension=(3, 3, 3))
 
-        region.values = np.ones(region.values.shape)
+        region.values = np.zeros(region.values.shape)
         region.values[1, 1, 1] = rid
 
         _, nnc_table = create_nested_hybrid_grid(
@@ -274,7 +281,7 @@ class TestCreateNestedHybridGrid:
         grid, region, rid = _make_box_grid_with_region(dimension=(6, 6, 3))
         grid.subgrids = {"ZONE1": [1], "ZONE2": [2, 3]}
 
-        region.values[:, :, 0] = 1  # set value in first layer to not be rid
+        region.values[:, :, 0] = 0  # set value in first layer to not be rid
 
         merged, nnc_table = create_nested_hybrid_grid(
             grid, region, rid, refinement=(2, 2, 2)
@@ -330,6 +337,39 @@ class TestNestedHybridGridClass:
             imin=1, imax=6, jmin=1, jmax=5, kmin=1, kmax=3
         )
 
+    def test_nestedhybridgrid_with_target_region_id_2_builds_expected_grid(self):
+        """Non-default target_region_id should drive which cells are refined."""
+        grid = xtgeo.create_box_grid((6, 5, 2))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+
+        rid = 2
+        region.values[4:, 2:4, :] = rid
+
+        nhg = NestedHybridGrid(
+            coarse_grid=grid,
+            region=region,
+            refinement=(2, 2, 2),
+            target_region_id=rid,
+        )
+
+        merged = nhg.grid
+        assert isinstance(merged, xtgeo.Grid)
+        assert nhg.grid.dimensions == (11, 5, 4)
+
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == rid)
+        assert nhg._refined_bbox == BoundingBox(
+            imin=5, imax=6, jmin=3, jmax=4, kmin=1, kmax=2
+        )
+
+        region_merged = merged.get_prop_by_name("REGION")
+        assert region_merged is not None
+
+        bbox_refined_area = BoundingBox.from_condition(region_merged.values == rid)
+        assert bbox_refined_area == BoundingBox(
+            imin=8, imax=11, jmin=1, jmax=4, kmin=1, kmax=4
+        )
+
     def test_nestedhybridgrid_properties_as_expected(self):
         """Test NestedHybridGrid preserves appended gridproperties."""
 
@@ -344,16 +384,32 @@ class TestNestedHybridGridClass:
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
 
         # check that the region property is attached to the merged grid
-        assert len(nhg.properties) == 2
+        assert len(nhg.properties) == 5
 
         prop_names = [prop.name for prop in nhg.properties]
-        assert set(prop_names) == {"CUSTOM", "REGION"}
+        assert set(prop_names) == {"CUSTOM", "REGION", *ORIGINAL_IJK_PROPERTY_NAMES}
 
-        region_prop = nhg.properties[0]
+        region_prop = nhg.grid.get_prop_by_name("REGION")
 
         assert isinstance(region_prop, xtgeo.GridProperty)
         assert region_prop.name == "REGION"
         assert region_prop.values.shape == nhg.grid.dimensions
+
+        parent_i, parent_j, parent_k = (
+            nhg.grid.get_prop_by_name(name) for name in ORIGINAL_IJK_PROPERTY_NAMES
+        )
+
+        assert parent_i.values.shape == nhg.grid.dimensions
+        assert parent_j.values.shape == nhg.grid.dimensions
+        assert parent_k.values.shape == nhg.grid.dimensions
+
+        assert parent_i.values[0, 0, 0] == 1
+        assert parent_j.values[0, 0, 0] == 1
+        assert parent_k.values[0, 0, 0] == 1
+
+        assert set(np.unique(parent_i.values[7:11, 0:4, 0:4])) == {5, 6}
+        assert set(np.unique(parent_j.values[7:11, 0:4, 0:4])) == {3, 4}
+        assert set(np.unique(parent_k.values[7:11, 0:4, 0:4])) == {1, 2}
 
     def test_nestedhybridgrid_nnc_table_as_expected(self):
         """Test NNC table contains one row per coarse-to-refined cell face."""
@@ -406,6 +462,28 @@ class TestNestedHybridGridClass:
         assert _has_single_row(i1=2, j1=3, k1=1, i2=5, j2=2, k2=1, direction="J-")
         # right neighbor → connects to I+ face of refined patch
         assert _has_single_row(i1=3, j1=2, k1=1, i2=6, j2=2, k2=1, direction="I-")
+
+    def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
+        """NNC table can be written to CSV without the pandas index."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        written = pd.read_csv(outfile)
+        assert "Unnamed: 0" not in written.columns
+        pd.testing.assert_frame_equal(written, nhg.nnc_table, check_dtype=False)
+
+    def test_write_nnc_table_creates_output_directories(self, tmp_path):
+        """Missing parent directories are created before writing the table."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(3, 3, 1))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        outfile = tmp_path / "nested" / "output" / "nnc_table.csv"
+
+        nhg.write_nnc_table(outfile)
+
+        assert outfile.is_file()
 
     def test_inactive_neighbor_excluded_from_nnc(self):
         """Inactive coarse neighbor cells should not appear in the NNC table.
@@ -864,3 +942,215 @@ class TestNncToFlowsimulatorInput:
         nnc_to_flowsimulator_input(df, out)
         lines = out.read_text().splitlines()
         assert lines == ["NNC", "/"]
+
+
+# ---------------------------------------------------------------------------
+# Tests for NestedHybridGrid.from_rms and .to_rms
+# ---------------------------------------------------------------------------
+
+
+class TestNestedHybridGridRmsIO:
+    """Tests for from_rms and to_rms."""
+
+    def test_from_rms_returns_nestedhybridgrid(self):
+        """from_rms should return a NestedHybridGrid instance."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 2), target_layer_ids=[1], target_region_id=1
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid) as mock_grid,
+            patch("xtgeo.gridproperty_from_roxar", return_value=region) as mock_prop,
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+            )
+
+        assert isinstance(nhg, NestedHybridGrid)
+        assert isinstance(nhg.grid, xtgeo.Grid)
+        mock_grid.assert_called_once_with("mock_project", "Grid")
+        mock_prop.assert_called_once_with("mock_project", "Grid", "REGION")
+
+    def test_from_rms_refines_region_1_by_default(self):
+        """from_rms currently uses default target_region_id=1."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_layer_ids=[0, 1], target_region_id=1
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+            )
+
+        # check that the refined bounding box is set correct from input region
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == 1)
+        assert nhg._refined_bbox == BoundingBox(
+            imin=4, imax=6, jmin=1, jmax=6, kmin=1, kmax=2
+        )
+
+        # check that bounding box for the refined region in the merged grid is correct
+        output_region = nhg.grid.get_prop_by_name("REGION")
+        assert BoundingBox.from_condition(output_region.values == 1) == BoundingBox(
+            imin=8, imax=13, jmin=1, jmax=12, kmin=1, kmax=4
+        )
+
+    def test_from_rms_fails_if_no_region_1(self):
+        """from_rms fails when no cells in the region have value 1."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_region_id=2
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+            pytest.raises(ValueError, match="No cells found for target_region_id"),
+        ):
+            NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+            )
+
+    def test_from_rms_no_properties_does_not_load_extras(self):
+        """from_rms with properties=None should only load the region property."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 2), target_region_id=1
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region) as mock_prop,
+        ):
+            NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+            )
+
+        mock_prop.assert_called_once_with("mock_project", "Grid", "REGION")
+
+    def test_from_rms_loads_optional_properties(self):
+        """from_rms should load and append extra properties when provided."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 2), target_region_id=1
+        )
+        poro = _make_constant_property(grid, "PORO", 0.3)
+        sw = _make_constant_property(grid, "SW", 0.8)
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch(
+                "xtgeo.gridproperty_from_roxar", side_effect=[region, poro, sw]
+            ) as mock_prop,
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+                properties=["PORO", "SW"],
+            )
+
+        assert mock_prop.call_count == 3
+        mock_prop.assert_any_call("mock_project", "Grid", "REGION")
+        mock_prop.assert_any_call("mock_project", "Grid", "PORO")
+        mock_prop.assert_any_call("mock_project", "Grid", "SW")
+
+        assert isinstance(nhg.grid, xtgeo.Grid)
+
+        prop_names = {p.name for p in nhg.properties}
+        assert prop_names == {
+            "REGION",
+            "PORO",
+            "SW",
+            *ORIGINAL_IJK_PROPERTY_NAMES,
+        }
+
+        for prop in nhg.properties:
+            assert isinstance(prop, xtgeo.GridProperty)
+            assert prop.dimensions == nhg.grid.dimensions
+
+    def test_from_rms_accepts_properties_positionally(self):
+        """properties must remain a positional argument (not keyword-only)."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        poro = _make_constant_property(grid, "PORO", 0.3)
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", side_effect=[region, poro]),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                "mock_project", "Grid", "REGION", (2, 2, 2), ["PORO"]
+            )
+
+        prop_names = {p.name for p in nhg.properties}
+        assert prop_names == {"REGION", "PORO", *ORIGINAL_IJK_PROPERTY_NAMES}
+
+    def test_from_rms_accepts_non_default_target_region_id(self):
+        """from_rms should accept target_region_id as keyword argument."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_region_id=2
+        )
+
+        with (
+            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+        ):
+            nhg = NestedHybridGrid.from_rms(
+                project="mock_project",
+                grid_name="Grid",
+                region_name="REGION",
+                refinement=(2, 2, 2),
+                target_region_id=2,
+            )
+
+        # check that the refined bounding box is set correct from input region
+        assert nhg._target_region_id == 2
+        assert nhg._refined_bbox == BoundingBox.from_condition(region.values == 2)
+
+    def test_to_rms_writes_grid_and_region_by_default(self):
+        """to_rms should write the grid and region, but not parent indices."""
+
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        with (
+            patch.object(xtgeo.Grid, "to_roxar") as mock_grid_write,
+            patch.object(xtgeo.GridProperty, "to_roxar") as mock_prop_write,
+        ):
+            nhg.to_rms("mock_project", "NestedGrid")
+
+        mock_grid_write.assert_called_once_with("mock_project", "NestedGrid")
+        mock_prop_write.assert_called_once_with("mock_project", "NestedGrid", "REGION")
+
+    def test_to_rms_writes_each_property(self):
+        """to_rms should export each non-parent-index property."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 2), target_region_id=1
+        )
+        poro = _make_constant_property(grid, "PORO", 0.3)
+        grid.append_prop(poro)
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        with (
+            patch.object(xtgeo.Grid, "to_roxar"),
+            patch.object(xtgeo.GridProperty, "to_roxar") as mock_prop_write,
+        ):
+            nhg.to_rms("mock_project", "NestedGrid")
+
+        exported_property_names = {
+            mock_call.args[2] for mock_call in mock_prop_write.call_args_list
+        }
+        assert exported_property_names == {"REGION", "PORO"}

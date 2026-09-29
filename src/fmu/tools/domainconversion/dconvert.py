@@ -945,7 +945,7 @@ class DomainConversion:
         zmin: float | None = None,
         zmax: float | None = None,
         undefined: float = -999.25,
-        method: Literal["fft", "linear"] = "linear",
+        method: Literal["fft", "linear"] | None = None,
     ) -> xtgeo.Cube:
         """Depth convert a cube (time to depth).
 
@@ -964,13 +964,15 @@ class DomainConversion:
             for technical reasons.
 
         """
-        warnings.warn(
-            "Default trace interpolation method will be set to 'fft' in the near "
-            "future. Explicitely set method='linear' to keep the same results: "
-            "vm.depth_convert_cube(incube, zinc, zmin, zmax, method='linear').",
-            category=FutureWarning,
-            stacklevel=2,
-        )
+        if method is None:
+            warnings.warn(
+                "Default trace interpolation method will be set to 'fft' in the near "
+                "future. Explicitly set method='linear' to keep the same results: "
+                "vm.depth_convert_cube(incube, zinc, zmin, zmax, method='linear').",
+                category=FutureWarning,
+                stacklevel=2,
+            )
+            method = "linear"
 
         return self._domain_convert_cube(
             incube,
@@ -989,7 +991,7 @@ class DomainConversion:
         tmin: float | None = None,
         tmax: float | None = None,
         undefined: float = -999.25,
-        method: Literal["fft", "linear"] = "linear",
+        method: Literal["fft", "linear"] | None = None,
     ) -> xtgeo.Cube:
         """Time convert a cube (depth to time).
 
@@ -1008,13 +1010,15 @@ class DomainConversion:
             reasons.
 
         """
-        warnings.warn(
-            "Default trace interpolation method will be set to 'fft' in the near "
-            "future. Explicitely set method='linear' to keep the same results: "
-            "vm.time_convert_cube(incube, tinc, tmin, tmax, method='linear').",
-            category=FutureWarning,
-            stacklevel=2,
-        )
+        if method is None:
+            warnings.warn(
+                "Default trace interpolation method will be set to 'fft' in the near "
+                "future. Explicitly set method='linear' to keep the same results: "
+                "vm.time_convert_cube(incube, tinc, tmin, tmax, method='linear').",
+                category=FutureWarning,
+                stacklevel=2,
+            )
+            method = "linear"
 
         return self._domain_convert_cube(
             incube,
