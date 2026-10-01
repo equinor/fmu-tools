@@ -6,7 +6,7 @@ This page documents the CLI tool ``fmudesign``, which is used to generate design
 For instance, it can be used to generate design matrices for DESIGN2PARAMS and DESIGN_KW in ERT.
 Before you read further, here is a list of useful resources:
 
-- The `source code <https://github.com/equinor/semeio>`_ for ``fmudesign``
+- The `source code <https://github.com/equinor/ert>`_ for ``fmudesign``
 - `FMU course docs <https://fmu-docs.equinor.com/docs/fmu-coursedocs/fmu-howto/sensitivities/index.html>`_
 - You can run ``fmudesign --help`` to get help and to generate example files.
 
@@ -34,13 +34,13 @@ Run ``fmudesign --help`` to see all available options.
 
 **From Python.**
 Instead of using the CLI, you can call the functions from Python directly.
-The best approach is to read the `code <https://github.com/equinor/semeio>`_.
+The best approach is to read the `code <https://github.com/equinor/ert>`_.
 
 -------------------------------------------------
 Create design matrix for one by one sensitivities
 -------------------------------------------------
 
-The examples below show how to use the ``semeio.fmudesign`` package to generate design matrices.
+The examples below show how to use the ``fmudesign`` package to generate design matrices.
 The input is a Python dictionary, which is read and parsed from an excel workbook.
 The workbook must be set up using a specific format.
 
@@ -308,7 +308,7 @@ Use ``summarize_design`` on a design matrix on standard FMU format for one-by-on
 
 .. code-block:: python
 
-    from semeio.fmudesign import summarize_design
+    from fmudesign import summarize_design
 
     # Full or relative path to design matrix .xlsx or .csv format
     designname = '../tests/data/sensitivities/distributions/design.xlsx'
