@@ -140,9 +140,7 @@ Three sheets must exist in the input Excel workbook:
 The default names can be changed using CLI arguments, see ``fmudesign run --help``.
 
 Run ``fmudesign init --help`` to learn how to set up example workbooks.
-In the example notebooks, all config options in the **general_input** sheet are documented.
-
-Some of the **general_input** options are shown in the screenshot below:
+The screenshot below shows the **general_input** sheet from the ``fmudesign_ex_montecarlo.xlsx`` example, where all options are documented:
 
 .. image:: images/design_general_input.png
 
@@ -169,7 +167,7 @@ Example 1: One by one sensitivities with repeating RMS seeds
    The Excel config files that correspond to these examples can be created and run using ``fmudesign init``.
    That way you can follow along and run the files as you read through the examples!
 
-In this example the *general_input* and *defaultvalues* are as in the figures above.
+In this example *repeats* is set to 10 in the *general_input* sheet, and the *defaultvalues* are as in the figure above.
 In the *designinput* sheet four sensitivities are specified in addition to the seed sensitivity: 'faults', 'velmodel', 'contacts' and 'multz'.
 Each sensitivity can contain one or several rows with parameters, but the sensitivity type and senscase (names for the 1-2 cases per scenario) is defined in the first row of the sensitivity.
 In the *faults* sensitivity two alternative values for the parameter *FAULT_POSITION* are specified, in senscase 'east' and 'west'.
