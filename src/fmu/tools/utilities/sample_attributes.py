@@ -146,11 +146,8 @@ def sample_attributes_for_sim2seis(
     attribute_sampled = template.copy()
     attribute_error_sampled = template.copy()
 
-    # do the resampling and get the points as dataframe
+    # do the resampling
     attribute_sampled.resample(attribute)
-    dataframe = _dataframe_from_surface(
-        attribute_sampled, newname=Attrs.OBS.value, debug=debug
-    )
 
     if isinstance(attribute_error, float):
         if attribute_error < 0:
@@ -166,16 +163,33 @@ def sample_attributes_for_sim2seis(
         err.values = np.maximum(err.values, attribute_error_minimum)
 
     attribute_error_sampled.resample(err)
+
+    region_sampled = None
+    if region:
+        region_sampled = xtgeo.surface_from_grid3d(
+            grid, template=template, where=layer, property=region
+        )
+
+    sampled = [attribute_sampled, attribute_error_sampled]
+    if region_sampled is not None:
+        sampled.append(region_sampled)
+    common_mask = np.logical_or.reduce(
+        [np.ma.getmaskarray(surface.values) for surface in sampled]
+    )
+    for surface in sampled:
+        values = surface.values
+        values.mask = common_mask
+        surface.values = values
+
+    dataframe = _dataframe_from_surface(
+        attribute_sampled, newname=Attrs.OBS.value, debug=debug
+    )
     df_err = _dataframe_from_surface(
         attribute_error_sampled, newname=Attrs.OBS_ERROR.value, debug=debug
     )
     dataframe[Attrs.OBS_ERROR.value] = df_err[Attrs.OBS_ERROR.value]
 
-    df_region = None
-    if region:
-        region_sampled = xtgeo.surface_from_grid3d(
-            grid, template=template, where=layer, property=region
-        )
+    if region_sampled is not None:
         df_region = _dataframe_from_surface(
             region_sampled, newname=Attrs.REGION.value, debug=debug
         )
