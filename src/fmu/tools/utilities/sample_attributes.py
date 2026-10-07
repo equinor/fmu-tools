@@ -164,22 +164,19 @@ def sample_attributes_for_sim2seis(
 
     attribute_error_sampled.resample(err)
 
-    region_sampled = None
+    sampled = [attribute_sampled, attribute_error_sampled]
+
     if region:
         region_sampled = xtgeo.surface_from_grid3d(
             grid, template=template, where=layer, property=region
         )
-
-    sampled = [attribute_sampled, attribute_error_sampled]
-    if region_sampled is not None:
         sampled.append(region_sampled)
+
     common_mask = np.logical_or.reduce(
         [np.ma.getmaskarray(surface.values) for surface in sampled]
     )
     for surface in sampled:
-        values = surface.values
-        values.mask = common_mask
-        surface.values = values
+        surface.values.mask = common_mask
 
     dataframe = _dataframe_from_surface(
         attribute_sampled, newname=Attrs.OBS.value, debug=debug
@@ -189,7 +186,7 @@ def sample_attributes_for_sim2seis(
     )
     dataframe[Attrs.OBS_ERROR.value] = df_err[Attrs.OBS_ERROR.value]
 
-    if region_sampled is not None:
+    if region:
         df_region = _dataframe_from_surface(
             region_sampled, newname=Attrs.REGION.value, debug=debug
         )
