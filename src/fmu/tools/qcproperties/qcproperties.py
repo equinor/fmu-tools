@@ -20,7 +20,7 @@ class QCProperties:
     The QCProperties class consists of a set of methods for extracting
     property statistics from 3D Grids, Raw and Blocked wells.
 
-    Statistics can be collected from either discrete or continous properties.
+    Statistics can be collected from either discrete or continuous properties.
     Dependent on the property different statistics are collected.
 
     The methods for statistics extraction can be run individually, or a
@@ -103,7 +103,7 @@ class QCProperties:
         if not all(ptype == self._proptypes_all[0] for ptype in self._proptypes_all):
             QCC.give_warn(
                 "Merging statistics dataframes from different property types "
-                "(continous/discrete). Is this intentional?"
+                "(continuous/discrete). Is this intentional?"
             )
 
     def _adjust_id_if_duplicate(self, run_id: str) -> str:
@@ -122,7 +122,7 @@ class QCProperties:
         self, statistics: PropertyAggregation, source: str, run_id: str
     ):
         """
-        Set source and id column of statistics datframe, and different
+        Set source and id column of statistics dataframe, and different
         class attributes.
         """
         run_id = self._adjust_id_if_duplicate(run_id)

@@ -70,7 +70,7 @@ class ConfigParser:
 
     @property
     def aggregation_controls(self) -> dict:
-        """Attribute to use for statisticts aggregation"""
+        """Attribute to use for statistics aggregation"""
         return self._aggregation_controls
 
     @property
@@ -139,7 +139,7 @@ class ConfigParser:
             if "pfile" in values:
                 self._data_loading_input["pfiles"][name] = values["pfile"]
 
-            # support using a selector prop as filter. If the selctor
+            # support using a selector prop as filter. If the selector
             # has filters specified in its values, they will be ignored
             if name in self._prop2df_controls["filters"]:
                 QCC.give_warn(

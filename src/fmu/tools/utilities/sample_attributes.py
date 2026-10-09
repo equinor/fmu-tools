@@ -101,7 +101,7 @@ def sample_attributes_for_sim2seis(
     position: tuple[str, Position] = ("", Position.CENTER),
     **kwargs: Any,
 ) -> pd.DataFrame:
-    """Sample attributes on grid resolution as poinst sets.
+    """Sample attributes on grid resolution as points sets.
 
     This usage is for setting attributes on grid resolution, e.g. a seismic attribute
     (from a map) combined with a region parameter from the grid.
@@ -113,7 +113,7 @@ def sample_attributes_for_sim2seis(
         attribute: The seismic (or custom) map/surface to sample the attribute from.
         attribute_error: The error to apply to the attribute (optional).
             Shall be absolute (positive) values. If the user wants to apply a polygons
-            with different error values, the user can ise surface-polygons functions
+            with different error values, the user can use surface-polygons functions
             in xtgeo to achieve this.
         attribute_error_minimum: The minimum error to apply to the attribute (optional).
         region: The region parameter to sample from the grid (optional).
@@ -127,7 +127,7 @@ def sample_attributes_for_sim2seis(
         **kwargs: Additional keywords (developer settings).
 
     Returns:
-        pd.Dataframe: Points with the sampled attributes and attributes combined.
+        pd.DataFrame: Points with the sampled attributes and attributes combined.
     """
     logger.info("Sampling attributes on grid resolution as points set.")
 

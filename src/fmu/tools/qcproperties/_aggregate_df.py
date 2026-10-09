@@ -12,7 +12,7 @@ QCC = _QCCommon()
 class PropertyAggregation:
     """
     Class for extracting statistics from a property dataframe.
-    Statistics for multiple properties can be calculated simultaneosly. The
+    Statistics for multiple properties can be calculated simultaneously. The
     aggregation methods and statistics are based on the property type.
     Selectors can be used to extract statistics per value in discrete properties.
     """
@@ -65,7 +65,7 @@ class PropertyAggregation:
     # ==================================================================================
 
     def _disc_aggregations(self):
-        """Statistical aggregations to extract from continous data"""
+        """Statistical aggregations to extract from discrete data"""
         return [
             ("Count", "count"),
             (
@@ -79,7 +79,7 @@ class PropertyAggregation:
         ]
 
     def _cont_aggregations(self, dframe=None):
-        """Statistical aggregations to extract from discrete data"""
+        """Statistical aggregations to extract from continuous data"""
         return [
             ("Avg", np.mean),
             ("Stddev", np.std),
@@ -105,7 +105,7 @@ class PropertyAggregation:
 
     def _calculate_continous_statistics(self, selector_combo_list):
         """
-        Calculate statistics for continous properties.
+        Calculate statistics for continuous properties.
         Returns a pandas dataframe.
         """
 
