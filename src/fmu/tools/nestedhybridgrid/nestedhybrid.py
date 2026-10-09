@@ -284,6 +284,286 @@ def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
     grid.set_actnum(actnum)
 
 
+def _flatten_cell_indexes(
+    i: np.ndarray, j: np.ndarray, k: np.ndarray, jdim: int, kdim: int
+) -> np.ndarray:
+    """Flatten 0-based IJK indices in C order."""
+    return i * jdim * kdim + j * kdim + k
+
+
+def _group_by_parent_cell(
+    parent_indices: np.ndarray, selected_mask: np.ndarray
+) -> dict[int, np.ndarray]:
+    """
+    Group selected cell positions by parent-cell index.
+
+    Returns a mapping from parent-cell index to the positions of selected
+    cells belonging to that parent cell.
+    """
+
+    selected_parent_indices = parent_indices[selected_mask]
+    selected_mask_indices = np.flatnonzero(selected_mask)
+
+    if selected_parent_indices.size == 0:
+        return {}
+
+    # Sort so cells belonging to the same parent cell become contiguous.
+    sort_order = np.argsort(selected_parent_indices, kind="stable")
+
+    sorted_parent_indices = selected_parent_indices[sort_order]
+    sorted_selected_mask_indices = selected_mask_indices[sort_order]
+
+    # Split whenever the parent-cell index changes.
+    cuts = np.flatnonzero(np.diff(sorted_parent_indices)) + 1
+    selected_indices_by_parent_cell = np.split(sorted_selected_mask_indices, cuts)
+
+    # Get the parent-cell index for each group.
+    parent_idx_keys = sorted_parent_indices[np.r_[0, cuts]]
+
+    return dict(zip(parent_idx_keys, selected_indices_by_parent_cell))
+
+
+def _create_ijk_mappings(
+    geo_parent_i: xtgeo.GridProperty,
+    geo_parent_j: xtgeo.GridProperty,
+    geo_parent_k: xtgeo.GridProperty,
+    nested_parent_i: xtgeo.GridProperty,
+    nested_parent_j: xtgeo.GridProperty,
+    nested_parent_k: xtgeo.GridProperty,
+    layer_map_coarse: np.ndarray,
+    refinement: Refinement,
+) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
+    """
+    Remap geogrid-to-parent IJK references into geogrid-to-nestedgrid
+    IJK references. Parent here refers to the parent input grid that the
+    nested grid is derived from.
+
+    Inputs 'geo_parent_i', 'geo_parent_j' and 'geo_parent_k' are geogrid properties
+    that reference the IJK of the parent grid.
+    Inputs 'nested_parent_i', 'nested_parent_j' and 'nested_parent_k' are the
+    corresponding nested grid properties.
+
+    For each refined parent cell:
+
+    1. Identify geogrid cells mapped to that parent cell.
+    2. Derive the corresponding refined block origin in nested-grid IJK.
+    3. Compute each geogrid cell's local position within that refined block.
+    4. Convert local positions into merged-grid IJK coordinates.
+
+    Cells outside refined regions only require a K-layer remapping through
+    the supplied layer mapping for the unrefined area.
+
+    Returns:
+        A 3-tuple of :class:`xtgeo.GridProperty` objects with mapped
+        geogrid-to-nested-grid references, ordered as I, J, K.
+    """
+
+    expected_refined_cell_count = refinement.col * refinement.row * refinement.lay
+
+    parent_ncol = nested_parent_i.values.max()
+    parent_nrow = nested_parent_j.values.max()
+    parent_nlay = nested_parent_k.values.max()
+
+    bounds = (
+        (geo_parent_i, parent_ncol),
+        (geo_parent_j, parent_nrow),
+        (geo_parent_k, parent_nlay),
+    )
+    for prop, upper_bound in bounds:
+        if not np.all(prop.values % 1 == 0):
+            raise ValueError(f"Property '{prop.name}' must contain integer values.")
+
+        if prop.values.min() < 1 or prop.values.max() > upper_bound:
+            raise ValueError(
+                f"Property '{prop.name}' contains values outside the valid "
+                f"range [1, {upper_bound}]."
+            )
+    # ------------------------------------------------------------------
+    # Build parent-cell identifiers for geogrid and nested grid
+    # ------------------------------------------------------------------
+
+    nested_active = ~np.ma.getmaskarray(nested_parent_i.values)
+
+    nested_parent_cell_indices = _flatten_cell_indexes(
+        nested_parent_i.values[nested_active] - 1,
+        nested_parent_j.values[nested_active] - 1,
+        nested_parent_k.values[nested_active] - 1,
+        parent_nrow,
+        parent_nlay,
+    )
+
+    geo_active = ~np.ma.getmaskarray(geo_parent_i.values)
+
+    geo_parent_cell_indices = _flatten_cell_indexes(
+        geo_parent_i.values[geo_active] - 1,
+        geo_parent_j.values[geo_active] - 1,
+        geo_parent_k.values[geo_active] - 1,
+        parent_nrow,
+        parent_nlay,
+    )
+
+    parent_cell_indices, nested_parent_indices, nested_counts = np.unique(
+        nested_parent_cell_indices, return_inverse=True, return_counts=True
+    )
+
+    if not np.array_equal(parent_cell_indices, np.unique(geo_parent_cell_indices)):
+        raise ValueError(
+            "Parent IJK coverage mismatch between nested and geogrid. "
+            "Both inputs must reference the same set of parent cells."
+        )
+    if not np.all(
+        (nested_counts == 1) | (nested_counts == expected_refined_cell_count)
+    ):
+        raise ValueError(
+            "Found unexpected number of nested cells per parent cell. "
+            f"Expected 1 or {expected_refined_cell_count}."
+        )
+
+    geo_i_indices, geo_j_indices, geo_k_indices = np.where(geo_active)
+    nested_i_indices, nested_j_indices, nested_k_indices = np.where(nested_active)
+
+    # ------------------------------------------------------------------
+    # Find refined sim-cells and group geogrid cells by sim-cell
+    # ------------------------------------------------------------------
+
+    is_refined_parent_cell = nested_counts == expected_refined_cell_count
+
+    geo_parent_indices = np.searchsorted(parent_cell_indices, geo_parent_cell_indices)
+
+    geo_cells_per_parent_cell = _group_by_parent_cell(
+        parent_indices=geo_parent_indices,
+        selected_mask=is_refined_parent_cell[geo_parent_indices],
+    )
+
+    # ------------------------------------------------------------------
+    # Precompute the origin (minimum IJK) of each refined nested region
+    # ------------------------------------------------------------------
+
+    is_refined_nested_mask = is_refined_parent_cell[nested_parent_indices]
+    refined_parent_indices_per_nested = nested_parent_indices[is_refined_nested_mask]
+
+    parent_cell_count = len(parent_cell_indices)
+    fill_value = np.iinfo(np.int32).max  # large fill value
+
+    nested_i_min_by_parent = np.full(parent_cell_count, fill_value, dtype=np.int32)
+    nested_j_min_by_parent = np.full(parent_cell_count, fill_value, dtype=np.int32)
+    nested_k_min_by_parent = np.full(parent_cell_count, fill_value, dtype=np.int32)
+
+    np.minimum.at(
+        nested_i_min_by_parent,
+        refined_parent_indices_per_nested,
+        nested_i_indices[is_refined_nested_mask],
+    )
+    np.minimum.at(
+        nested_j_min_by_parent,
+        refined_parent_indices_per_nested,
+        nested_j_indices[is_refined_nested_mask],
+    )
+    np.minimum.at(
+        nested_k_min_by_parent,
+        refined_parent_indices_per_nested,
+        nested_k_indices[is_refined_nested_mask],
+    )
+
+    # ------------------------------------------------------------------
+    # Prepare output properties for geogrid-nested mapping
+    # ------------------------------------------------------------------
+
+    i_map = geo_parent_i.copy()
+    j_map = geo_parent_j.copy()
+    k_map = geo_parent_k.copy()
+
+    # Update layer mapping for non-refined cells
+    parent_k = k_map.values[geo_active].astype(np.int32) - 1
+    k_map.values[geo_active] = layer_map_coarse[parent_k] + 1
+
+    # Lists to collect updates and apply them in one batch for performance
+    flat_updates: list[np.ndarray] = []
+    i_updates: list[np.ndarray] = []
+    j_updates: list[np.ndarray] = []
+    k_updates: list[np.ndarray] = []
+
+    # ------------------------------------------------------------------
+    # Compute merged-grid IJK coordinates for refined regions
+    # ------------------------------------------------------------------
+
+    for parent_cell, geo_cells in geo_cells_per_parent_cell.items():
+        geo_i = geo_i_indices[geo_cells]
+        geo_j = geo_j_indices[geo_cells]
+        geo_k = geo_k_indices[geo_cells]
+
+        geo_i_min = geo_i.min()
+        geo_j_min = geo_j.min()
+        geo_k_min = geo_k.min()
+
+        geo_i_max = geo_i.max()
+        geo_j_max = geo_j.max()
+        geo_k_max = geo_k.max()
+
+        geo_i_span = geo_i_max - geo_i_min + 1
+        geo_j_span = geo_j_max - geo_j_min + 1
+        geo_k_span = geo_k_max - geo_k_min + 1
+
+        n_geo_cells = geo_cells.size
+        expected_geo_cells = geo_i_span * geo_j_span * geo_k_span
+
+        if (
+            geo_i_span % refinement.col != 0
+            or geo_j_span % refinement.row != 0
+            or geo_k_span % refinement.lay != 0
+            or n_geo_cells != expected_geo_cells
+        ):
+            parent_ijk = np.stack(
+                [
+                    geo_parent_i.values[geo_active][geo_cells],
+                    geo_parent_j.values[geo_active][geo_cells],
+                    geo_parent_k.values[geo_active][geo_cells],
+                ],
+                axis=1,
+            )
+            parent_ijk = np.unique(parent_ijk, axis=0).astype(np.int32)[0]
+
+            raise ValueError(
+                "Invalid input mapping for cells referencing parent cell IJK: "
+                f"{parent_ijk}. Expected geogrid spans per parent cell must "
+                f"be divisible by refinement {refinement}, got spans "
+                f"(col={geo_i_span}, row={geo_j_span}, lay={geo_k_span})."
+            )
+
+        geo_cells_per_nested_i = geo_i_span // refinement.col
+        geo_cells_per_nested_j = geo_j_span // refinement.row
+        geo_cells_per_nested_k = geo_k_span // refinement.lay
+
+        # Convert geogrid coordinates into local coordinates
+        # within the refined block.
+        local_i = (geo_i - geo_i_min) // geo_cells_per_nested_i
+        local_j = (geo_j - geo_j_min) // geo_cells_per_nested_j
+        local_k = (geo_k - geo_k_min) // geo_cells_per_nested_k
+
+        # Convert local coordinates into merged-grid coordinates.
+        i_out = local_i + nested_i_min_by_parent[parent_cell] + 1
+        j_out = local_j + nested_j_min_by_parent[parent_cell] + 1
+        k_out = local_k + nested_k_min_by_parent[parent_cell] + 1
+
+        geo_flat = _flatten_cell_indexes(
+            geo_i, geo_j, geo_k, geo_parent_i.nrow, geo_parent_i.nlay
+        )
+
+        flat_updates.append(geo_flat)
+        i_updates.append(i_out)
+        j_updates.append(j_out)
+        k_updates.append(k_out)
+
+    if flat_updates:
+        all_geo_flat = np.concatenate(flat_updates)
+
+        i_map.values1d[all_geo_flat] = np.concatenate(i_updates)
+        j_map.values1d[all_geo_flat] = np.concatenate(j_updates)
+        k_map.values1d[all_geo_flat] = np.concatenate(k_updates)
+
+    return i_map, j_map, k_map
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -309,12 +589,11 @@ class NestedHybridGrid:
         self._validate_inputs(coarse_grid, region, refinement, target_region_id)
 
         self._nnc_table: pd.DataFrame | None = None
-        self._grid: xtgeo.Grid | None = None
 
-        self._original_grid = coarse_grid
-        self._original_dimensions = coarse_grid.dimensions
-        self._original_subgrids = coarse_grid.subgrids
-        self._original_region = region
+        self._parent_grid = coarse_grid
+        self._parent_dimensions = coarse_grid.dimensions
+        self._parent_subgrids = coarse_grid.subgrids
+        self._parent_region = region
 
         self._target_region_id = target_region_id
         self._refinement = Refinement.from_tuple(refinement)
@@ -325,6 +604,8 @@ class NestedHybridGrid:
 
         self._layer_map_coarse = self._generate_layer_map_coarse()
         self._layer_map_refined = self._generate_layer_map_refined()
+
+        self._grid = self._build_nested_hybrid_grid()
 
     @classmethod
     def from_rms(
@@ -348,14 +629,14 @@ class NestedHybridGrid:
             target_region_id: Region value to refine (default: 1).
         """
 
-        coarse_grid = xtgeo.grid_from_roxar(project, grid_name)
+        parent_grid = xtgeo.grid_from_roxar(project, grid_name)
         region = xtgeo.gridproperty_from_roxar(project, grid_name, region_name)
 
         for propname in properties or []:
             prop = xtgeo.gridproperty_from_roxar(project, grid_name, propname)
-            coarse_grid.append_prop(prop)
+            parent_grid.append_prop(prop)
 
-        return cls(coarse_grid, region, refinement, target_region_id)
+        return cls(parent_grid, region, refinement, target_region_id)
 
     def to_rms(self, project: Any, grid_name: str) -> None:
         """Write the nested hybrid grid and its properties to an RMS project."""
@@ -367,16 +648,16 @@ class NestedHybridGrid:
 
     @staticmethod
     def _validate_inputs(
-        coarse_grid: xtgeo.Grid,
+        parent_grid: xtgeo.Grid,
         region: xtgeo.GridProperty,
         refinement: tuple[int, int, int],
         target_region_id: int,
     ) -> None:
         """Validate input arguments."""
-        if region.dimensions != coarse_grid.dimensions:
+        if region.dimensions != parent_grid.dimensions:
             raise ValueError(
                 f"Region property dimensions {region.dimensions} do not match "
-                f"input grid dimensions {coarse_grid.dimensions}"
+                f"input grid dimensions {parent_grid.dimensions}"
             )
 
         if not (region.values == target_region_id).any():
@@ -392,11 +673,11 @@ class NestedHybridGrid:
 
     def _build_nested_hybrid_grid(self) -> xtgeo.Grid:
         """Build the nested hybrid grid."""
-        coarse_grid = self._original_grid.copy()
+        coarse_grid = self._parent_grid.copy()
 
-        region_name = self._original_region.name
+        region_name = self._parent_region.name
         if region_name not in coarse_grid.propnames:
-            coarse_grid.append_prop(self._original_region)
+            coarse_grid.append_prop(self._parent_region)
         for prop in coarse_grid.get_ijk(names=ORIGINAL_IJK_PROPERTY_NAMES):
             coarse_grid.append_prop(prop)
 
@@ -430,8 +711,6 @@ class NestedHybridGrid:
     @property
     def grid(self) -> xtgeo.Grid:
         """The final nested hybrid grid."""
-        if self._grid is None:
-            self._grid = self._build_nested_hybrid_grid()
         return self._grid
 
     @property
@@ -446,6 +725,43 @@ class NestedHybridGrid:
             self._nnc_table = self._compute_nnc_table()
         return self._nnc_table
 
+    def create_ijk_mappings(
+        self,
+        i_map: xtgeo.GridProperty,
+        j_map: xtgeo.GridProperty,
+        k_map: xtgeo.GridProperty,
+    ) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
+        """
+        Method to remap geogrid-to-parent IJK references into
+        geogrid-to-nestedgrid IJK references. These properties can in turn be used
+        when upscaling properties from geogrid to the nested hybrid grid.
+
+        Inputs 'i_map', 'j_map' and 'k_map' are geogrid properties
+        that reference the IJK of the input grid that the nested grid is based on.
+        The nested grid already contains the same parent grid references through the
+        'parent_I', 'parent_J' and 'parent_K' properties.
+
+        Returns:
+            A 3-tuple of :class:`xtgeo.GridProperty` objects with mapped
+            geogrid-to-nested-grid references, ordered as I, J, K.
+        """
+
+        i_name, j_name, k_name = ORIGINAL_IJK_PROPERTY_NAMES
+        nested_parent_i = self.grid.get_prop_by_name(i_name)
+        nested_parent_j = self.grid.get_prop_by_name(j_name)
+        nested_parent_k = self.grid.get_prop_by_name(k_name)
+
+        return _create_ijk_mappings(
+            geo_parent_i=i_map,
+            geo_parent_j=j_map,
+            geo_parent_k=k_map,
+            nested_parent_i=nested_parent_i,
+            nested_parent_j=nested_parent_j,
+            nested_parent_k=nested_parent_k,
+            layer_map_coarse=self._layer_map_coarse,
+            refinement=self._refinement,
+        )
+
     def write_nnc_table(self, filename: str | Path) -> None:
         """Write the NNC mapping table to CSV."""
         output_path = Path(filename)
@@ -457,7 +773,7 @@ class NestedHybridGrid:
         return _compute_nnc_table(
             refined_area=self._refined_area,
             refinement=self._refinement,
-            coarse_ncol=self._original_dimensions.ncol,
+            coarse_ncol=self._parent_dimensions.ncol,
             lmap1=self._layer_map_coarse,
             lmap2=self._layer_map_refined,
         )
@@ -470,9 +786,9 @@ class NestedHybridGrid:
         """
         rlay = self._refinement.lay
         k0 = self._refined_bbox.kmin - 1
-        coarse_nlay = self._original_dimensions.nlay
+        parent_nlay = self._parent_dimensions.nlay
 
-        lmap = np.arange(coarse_nlay, dtype=np.int32)
+        lmap = np.arange(parent_nlay, dtype=np.int32)
         return lmap + np.where(
             lmap < k0,
             0,
@@ -495,7 +811,7 @@ class NestedHybridGrid:
 
     def _set_zonation(self, nlay: int) -> dict | None:
         """Create an updated subgrid dictionary for the merged grid."""
-        subgrid = self._original_subgrids
+        subgrid = self._parent_subgrids
         if subgrid is None:
             return None
 
