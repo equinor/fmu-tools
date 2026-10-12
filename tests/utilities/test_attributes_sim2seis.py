@@ -84,6 +84,48 @@ def test_attr_maps_sim2seis(
     assert df.REGION.max() == 7.0
 
 
+def test_attr_maps_sim2seis_with_different_region_mask(
+    local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
+) -> None:
+    """Test that a different region mask does not misalign sampled points."""
+
+    grid, region, zone, attr_surface = local_testdata
+    masked_region = region.copy()
+    region_values = masked_region.values.copy()
+    region_values.mask = np.ma.getmaskarray(region_values).copy()
+    region_values.mask[: region_values.shape[0] // 2, :, :] = True
+    masked_region.values = region_values
+
+    df = sample_attributes_for_sim2seis(
+        grid,
+        attr_surface,
+        region=masked_region,
+        position=("Valysar", Position.TOP),
+        zone=zone,
+    )
+
+    template = xtgeo.surface_from_grid3d(grid, template="native", where=1, property="i")
+    attribute_surface = template.copy()
+    attribute_surface.resample(attr_surface)
+    region_surface = xtgeo.surface_from_grid3d(
+        grid, template=template, where=1, property=masked_region
+    )
+    common_mask = np.logical_or(
+        np.ma.getmaskarray(attribute_surface.values),
+        np.ma.getmaskarray(region_surface.values),
+    )
+    region_values = region_surface.values
+    region_values.mask = common_mask
+    region_surface.values = region_values
+    region_points = xtgeo.points_from_surface(region_surface)
+    region_points.zname = Attrs.REGION.value
+    expected = region_points.get_dataframe()
+
+    assert len(df) == len(expected)
+    np.testing.assert_allclose(df[["X_UTME", "Y_UTMN"]], expected[["X_UTME", "Y_UTMN"]])
+    np.testing.assert_allclose(df[Attrs.REGION.value], expected[Attrs.REGION.value])
+
+
 def test_attr_maps_sim2seis_error_notabsolute(
     local_testdata: tuple[Any, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.surface],
 ) -> None:
