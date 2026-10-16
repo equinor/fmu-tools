@@ -327,17 +327,47 @@ def _group_by_parent_cell(
     return dict(zip(parent_idx_keys, selected_indices_by_parent_cell))
 
 
-def _create_upscaling_mappings(
+def _validate_create_upscaling_mapping_inputs(
     geo_parent_i: xtgeo.GridProperty,
     geo_parent_j: xtgeo.GridProperty,
     geo_parent_k: xtgeo.GridProperty,
-    nested_parent_i: xtgeo.GridProperty,
-    nested_parent_j: xtgeo.GridProperty,
-    nested_parent_k: xtgeo.GridProperty,
+    parent_dimensions: Dimensions,
+) -> None:
+    """Validate geogrid parent-IJK properties before upscaling remapping."""
+
+    for prop in (geo_parent_i, geo_parent_j, geo_parent_k):
+        if not isinstance(prop, xtgeo.GridProperty):
+            raise ValueError("Input IJK mapping properties must be xtgeo.GridProperty.")
+
+    bounds = (
+        (geo_parent_i, parent_dimensions.ncol),
+        (geo_parent_j, parent_dimensions.nrow),
+        (geo_parent_k, parent_dimensions.nlay),
+    )
+    for prop, upper_bound in bounds:
+        prop_values = prop.values[~prop.values.mask]
+
+        if not np.all(prop_values % 1 == 0):
+            raise ValueError(f"Property '{prop.name}' must contain integer values.")
+
+        if prop_values.min() < 1 or prop_values.max() > upper_bound:
+            raise ValueError(
+                f"Property '{prop.name}' contains values outside the valid "
+                f"range [1, {upper_bound}]."
+            )
+
+
+def _create_upscaling_mappings_arrays(
+    geo_parent_i_values: np.ndarray,
+    geo_parent_j_values: np.ndarray,
+    geo_parent_k_values: np.ndarray,
+    nested_parent_i_values: np.ndarray,
+    nested_parent_j_values: np.ndarray,
+    nested_parent_k_values: np.ndarray,
     parent_dimensions: Dimensions,
     layer_map_coarse: np.ndarray,
     refinement: Refinement,
-) -> tuple[xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Remap geogrid-to-parent IJK references into geogrid-to-nestedgrid
     IJK references. Parent here refers to the parent input grid that the
@@ -365,40 +395,26 @@ def _create_upscaling_mappings(
 
     expected_refined_cell_count = refinement.col * refinement.row * refinement.lay
 
-    bounds = (
-        (geo_parent_i, parent_dimensions.ncol),
-        (geo_parent_j, parent_dimensions.nrow),
-        (geo_parent_k, parent_dimensions.nlay),
-    )
-    for prop, upper_bound in bounds:
-        if not np.all(prop.values % 1 == 0):
-            raise ValueError(f"Property '{prop.name}' must contain integer values.")
-
-        if prop.values.min() < 1 or prop.values.max() > upper_bound:
-            raise ValueError(
-                f"Property '{prop.name}' contains values outside the valid "
-                f"range [1, {upper_bound}]."
-            )
     # ------------------------------------------------------------------
     # Build parent-cell identifiers for geogrid and nested grid
     # ------------------------------------------------------------------
 
-    nested_active = ~np.ma.getmaskarray(nested_parent_i.values)
+    nested_active = ~np.ma.getmaskarray(nested_parent_i_values)
 
     nested_parent_cell_indices = _ijk_to_flat_index(
-        nested_parent_i.values[nested_active] - 1,
-        nested_parent_j.values[nested_active] - 1,
-        nested_parent_k.values[nested_active] - 1,
+        nested_parent_i_values[nested_active] - 1,
+        nested_parent_j_values[nested_active] - 1,
+        nested_parent_k_values[nested_active] - 1,
         parent_dimensions.nrow,
         parent_dimensions.nlay,
     )
 
-    geo_active = ~np.ma.getmaskarray(geo_parent_i.values)
+    geo_active = ~np.ma.getmaskarray(geo_parent_i_values)
 
     geo_parent_cell_indices = _ijk_to_flat_index(
-        geo_parent_i.values[geo_active] - 1,
-        geo_parent_j.values[geo_active] - 1,
-        geo_parent_k.values[geo_active] - 1,
+        geo_parent_i_values[geo_active] - 1,
+        geo_parent_j_values[geo_active] - 1,
+        geo_parent_k_values[geo_active] - 1,
         parent_dimensions.nrow,
         parent_dimensions.nlay,
     )
@@ -467,19 +483,21 @@ def _create_upscaling_mappings(
     )
 
     # ------------------------------------------------------------------
-    # Prepare output properties for geogrid-nested mapping
+    # Prepare output arrays for geogrid-nested mapping
     # ------------------------------------------------------------------
 
-    i_map = geo_parent_i.copy()
-    j_map = geo_parent_j.copy()
-    k_map = geo_parent_k.copy()
+    i_map_values = geo_parent_i_values.copy()
+    j_map_values = geo_parent_j_values.copy()
+    k_map_values = geo_parent_k_values.copy()
 
     # Update layer mapping for non-refined cells
-    parent_k = k_map.values[geo_active].astype(np.int32) - 1
-    k_map.values[geo_active] = layer_map_coarse[parent_k] + 1
+    k = k_map_values[geo_active].astype(np.int32) - 1
+    k_map_values[geo_active] = layer_map_coarse[k] + 1
 
     # Lists to collect updates and apply them in one batch for performance
-    flat_updates: list[np.ndarray] = []
+    geo_i_updates: list[np.ndarray] = []
+    geo_j_updates: list[np.ndarray] = []
+    geo_k_updates: list[np.ndarray] = []
     i_updates: list[np.ndarray] = []
     j_updates: list[np.ndarray] = []
     k_updates: list[np.ndarray] = []
@@ -510,9 +528,9 @@ def _create_upscaling_mappings(
             or geo_k_span % refinement.lay != 0
             or n_geo_cells != expected_geo_cells
         ):
-            parent_i = int(geo_parent_i.values[geo_active][geo_cells][0])
-            parent_j = int(geo_parent_j.values[geo_active][geo_cells][0])
-            parent_k = int(geo_parent_k.values[geo_active][geo_cells][0])
+            parent_i = int(geo_parent_i_values[geo_active][geo_cells][0])
+            parent_j = int(geo_parent_j_values[geo_active][geo_cells][0])
+            parent_k = int(geo_parent_k_values[geo_active][geo_cells][0])
 
             raise ValueError(
                 "Invalid input mapping for cells referencing parent cell IJK: "
@@ -536,23 +554,23 @@ def _create_upscaling_mappings(
         j_out = local_j + nested_j_min_by_parent[parent_cell] + 1
         k_out = local_k + nested_k_min_by_parent[parent_cell] + 1
 
-        geo_flat = _ijk_to_flat_index(
-            geo_i, geo_j, geo_k, geo_parent_i.nrow, geo_parent_i.nlay
-        )
-
-        flat_updates.append(geo_flat)
+        geo_i_updates.append(geo_i)
+        geo_j_updates.append(geo_j)
+        geo_k_updates.append(geo_k)
         i_updates.append(i_out)
         j_updates.append(j_out)
         k_updates.append(k_out)
 
-    if flat_updates:
-        all_geo_flat = np.concatenate(flat_updates)
+    if geo_i_updates:
+        all_geo_i = np.concatenate(geo_i_updates)
+        all_geo_j = np.concatenate(geo_j_updates)
+        all_geo_k = np.concatenate(geo_k_updates)
 
-        i_map.values1d[all_geo_flat] = np.concatenate(i_updates)
-        j_map.values1d[all_geo_flat] = np.concatenate(j_updates)
-        k_map.values1d[all_geo_flat] = np.concatenate(k_updates)
+        i_map_values[all_geo_i, all_geo_j, all_geo_k] = np.concatenate(i_updates)
+        j_map_values[all_geo_i, all_geo_j, all_geo_k] = np.concatenate(j_updates)
+        k_map_values[all_geo_i, all_geo_j, all_geo_k] = np.concatenate(k_updates)
 
-    return i_map, j_map, k_map
+    return i_map_values, j_map_values, k_map_values
 
 
 # ---------------------------------------------------------------------------
@@ -737,21 +755,34 @@ class NestedHybridGrid:
             geogrid-to-nested-grid references, ordered as I, J, K.
         """
 
+        _validate_create_upscaling_mapping_inputs(
+            geo_parent_i=i_map,
+            geo_parent_j=j_map,
+            geo_parent_k=k_map,
+            parent_dimensions=self._parent_dimensions,
+        )
+
         i_name, j_name, k_name = ORIGINAL_IJK_PROPERTY_NAMES
         nested_parent_i = self.grid.get_prop_by_name(i_name)
         nested_parent_j = self.grid.get_prop_by_name(j_name)
         nested_parent_k = self.grid.get_prop_by_name(k_name)
 
-        return _create_upscaling_mappings(
-            geo_parent_i=i_map,
-            geo_parent_j=j_map,
-            geo_parent_k=k_map,
-            nested_parent_i=nested_parent_i,
-            nested_parent_j=nested_parent_j,
-            nested_parent_k=nested_parent_k,
+        i_map_values, j_map_values, k_map_values = _create_upscaling_mappings_arrays(
+            geo_parent_i_values=i_map.values,
+            geo_parent_j_values=j_map.values,
+            geo_parent_k_values=k_map.values,
+            nested_parent_i_values=nested_parent_i.values,
+            nested_parent_j_values=nested_parent_j.values,
+            nested_parent_k_values=nested_parent_k.values,
             parent_dimensions=self._parent_dimensions,
             layer_map_coarse=self._layer_map_coarse,
             refinement=self._refinement,
+        )
+
+        return (
+            xtgeo.GridProperty(i_map, name="NESTED_I", values=i_map_values),
+            xtgeo.GridProperty(j_map, name="NESTED_J", values=j_map_values),
+            xtgeo.GridProperty(k_map, name="NESTED_K", values=k_map_values),
         )
 
     def write_nnc_table(self, filename: str | Path) -> None:

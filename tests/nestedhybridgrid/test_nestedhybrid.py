@@ -16,6 +16,7 @@ from fmu.tools.nestedhybridgrid import (
 from fmu.tools.nestedhybridgrid.nestedhybrid import (
     ORIGINAL_IJK_PROPERTY_NAMES,
     BoundingBox,
+    _create_upscaling_mappings_arrays,
     _group_by_parent_cell,
     _ijk_to_flat_index,
     _set_actnum_in_grid,
@@ -536,10 +537,14 @@ class TestNestedHybridGridClass:
 
         i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
 
-        # output mappings have the same dimensions as the geogrid
         assert isinstance(i_out, xtgeo.GridProperty)
         assert isinstance(j_out, xtgeo.GridProperty)
         assert isinstance(k_out, xtgeo.GridProperty)
+        assert i_out.name == "NESTED_I"
+        assert j_out.name == "NESTED_J"
+        assert k_out.name == "NESTED_K"
+
+        # output mappings have the same dimensions as the geogrid
         assert i_out.dimensions == i_map.dimensions == (24, 12, 6)
         assert j_out.dimensions == j_map.dimensions == (24, 12, 6)
         assert k_out.dimensions == k_map.dimensions == (24, 12, 6)
@@ -664,6 +669,78 @@ class TestNestedHybridGridClass:
 
         with pytest.raises(ValueError, match="Invalid input mapping for cells"):
             nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+    def test_create_upscaling_mappings_raises_on_non_gridproperty_input(self):
+        """Input mapping objects must be xtgeo.GridProperty instances."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        _, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+
+        with pytest.raises(ValueError, match="must be xtgeo.GridProperty"):
+            nhg.create_upscaling_mappings("invalid", j_map, k_map)
+
+    def test_create_upscaling_mappings_raises_on_non_integer_parent_values(self):
+        """Fractional parent-IJK values should fail input validation."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+        i_bad = i_map.copy()
+        i_bad.discrete_to_continuous()
+        i_bad.values[0, 0, 0] = 1.5
+
+        with pytest.raises(ValueError, match="must contain integer values"):
+            nhg.create_upscaling_mappings(i_bad, j_map, k_map)
+
+    def test_create_upscaling_mappings_preserves_masked_cells(self):
+        """Masked geogrid cells should remain masked in mapped outputs."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region=region, refinement=(4, 2, 2)
+        )
+        i_map.values[0, 0, 0] = np.ma.masked
+        j_map.values[0, 0, 0] = np.ma.masked
+        k_map.values[0, 0, 0] = np.ma.masked
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        assert i_out.values.mask[0, 0, 0]
+        assert j_out.values.mask[0, 0, 0]
+        assert k_out.values.mask[0, 0, 0]
+
+        assert (i_out.values.mask == i_map.values.mask).all()
+        assert (j_out.values.mask == j_map.values.mask).all()
+        assert (k_out.values.mask == k_map.values.mask).all()
+
+    def test_create_upscaling_mappings_arrays_raises_on_parent_coverage_mismatch(self):
+        """Array core should reject mismatched parent-cell coverage."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+        i_name, j_name, k_name = ORIGINAL_IJK_PROPERTY_NAMES
+        nested_i = nhg.grid.get_prop_by_name(i_name)
+        nested_j = nhg.grid.get_prop_by_name(j_name)
+        nested_k = nhg.grid.get_prop_by_name(k_name)
+
+        nested_i_values = np.ma.array(nested_i.values, copy=True)
+        nested_i_values[0, 0, 0] = nhg._parent_dimensions.ncol + 100
+
+        with pytest.raises(ValueError, match="coverage mismatch"):
+            _create_upscaling_mappings_arrays(
+                geo_parent_i_values=i_map.values,
+                geo_parent_j_values=j_map.values,
+                geo_parent_k_values=k_map.values,
+                nested_parent_i_values=nested_i_values,
+                nested_parent_j_values=nested_j.values,
+                nested_parent_k_values=nested_k.values,
+                parent_dimensions=nhg._parent_dimensions,
+                layer_map_coarse=nhg._layer_map_coarse,
+                refinement=nhg._refinement,
+            )
 
     def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
         """NNC table can be written to CSV without the pandas index."""
