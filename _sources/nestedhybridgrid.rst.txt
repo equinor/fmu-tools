@@ -7,6 +7,10 @@ Nested Hybrid Grids
    This module is currently experimental. It may undergo breaking changes 
    in future versions without notice.
 
+   This feature may break common post-processing tools used in FMU that are not aware of the
+   NNC-connected merged grid. Work is ongoing to identify and solve these
+   issues.
+
 .. contents:: Table of Contents
    :local:
    :depth: 2
