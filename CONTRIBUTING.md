@@ -108,5 +108,6 @@ And ask for review on GitHub.
 ### Generating docs for preliminary view
 
 ```sh
+    sphinx-apidoc -f -H "API for fmu.tools" -o docs src
     sphinx-build -W -b html docs build/docs/html
 ```
