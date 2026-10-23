@@ -513,6 +513,62 @@ class TestNestedHybridGridClass:
         direction_counts = nnc_table["DIRECTION"].value_counts().to_dict()
         assert direction_counts == {"J+": 4, "J-": 4, "I-": 4}
 
+    def test_nnc_table_exact_rows(self):
+        """Test exact NNC rows for a 3x3x1 case."""
+        grid = xtgeo.create_box_grid((3, 3, 1))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        actual = nhg.nnc_table.sort_values(
+            by=["I1", "J1", "K1", "I2", "J2", "K2", "DIRECTION"]
+        ).reset_index(drop=True)
+
+        expected_rows = [
+            {"I1": 1, "J1": 2, "K1": 1, "I2": 5, "J2": 1, "K2": 1, "DIRECTION": "I+"},
+            {"I1": 1, "J1": 2, "K1": 1, "I2": 5, "J2": 1, "K2": 2, "DIRECTION": "I+"},
+            {"I1": 1, "J1": 2, "K1": 1, "I2": 5, "J2": 2, "K2": 1, "DIRECTION": "I+"},
+            {"I1": 1, "J1": 2, "K1": 1, "I2": 5, "J2": 2, "K2": 2, "DIRECTION": "I+"},
+            {"I1": 2, "J1": 1, "K1": 1, "I2": 5, "J2": 1, "K2": 1, "DIRECTION": "J+"},
+            {"I1": 2, "J1": 1, "K1": 1, "I2": 5, "J2": 1, "K2": 2, "DIRECTION": "J+"},
+            {"I1": 2, "J1": 1, "K1": 1, "I2": 6, "J2": 1, "K2": 1, "DIRECTION": "J+"},
+            {"I1": 2, "J1": 1, "K1": 1, "I2": 6, "J2": 1, "K2": 2, "DIRECTION": "J+"},
+            {"I1": 2, "J1": 3, "K1": 1, "I2": 5, "J2": 2, "K2": 1, "DIRECTION": "J-"},
+            {"I1": 2, "J1": 3, "K1": 1, "I2": 5, "J2": 2, "K2": 2, "DIRECTION": "J-"},
+            {"I1": 2, "J1": 3, "K1": 1, "I2": 6, "J2": 2, "K2": 1, "DIRECTION": "J-"},
+            {"I1": 2, "J1": 3, "K1": 1, "I2": 6, "J2": 2, "K2": 2, "DIRECTION": "J-"},
+            {"I1": 3, "J1": 2, "K1": 1, "I2": 6, "J2": 1, "K2": 1, "DIRECTION": "I-"},
+            {"I1": 3, "J1": 2, "K1": 1, "I2": 6, "J2": 1, "K2": 2, "DIRECTION": "I-"},
+            {"I1": 3, "J1": 2, "K1": 1, "I2": 6, "J2": 2, "K2": 1, "DIRECTION": "I-"},
+            {"I1": 3, "J1": 2, "K1": 1, "I2": 6, "J2": 2, "K2": 2, "DIRECTION": "I-"},
+        ]
+        expected = (
+            pd.DataFrame.from_records(expected_rows)
+            .sort_values(by=["I1", "J1", "K1", "I2", "J2", "K2", "DIRECTION"])
+            .reset_index(drop=True)
+        )
+
+        pd.testing.assert_frame_equal(actual, expected, check_dtype=False)
+
+    def test_all_outside_neighbors_inactive_produces_no_nnc(self):
+        """No active outside neighbors means no boundary NNC rows."""
+        grid = xtgeo.create_box_grid((3, 3, 1))
+
+        # Deactivate the four lateral neighbors around the refined cell.
+        actnum = grid.get_actnum()
+        actnum.values[0, 1, 0] = 0
+        actnum.values[2, 1, 0] = 0
+        actnum.values[1, 0, 0] = 0
+        actnum.values[1, 2, 0] = 0
+        grid.set_actnum(actnum)
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+        assert nhg.nnc_table.empty
+
     def test_region_dimension_mismatch_raises(self):
         """Region dimensions must match the input grid dimensions."""
         grid = xtgeo.create_box_grid((1, 1, 1))
@@ -539,6 +595,17 @@ class TestNestedHybridGridClass:
                 refinement=(2, 2, 1),
                 target_region_id=999,
             )
+
+    def test_fully_inactive_target_region_raises(self):
+        """A target region with no active cells should raise a clear error."""
+        grid = xtgeo.create_box_grid((3, 3, 1))
+
+        region = xtgeo.GridProperty(grid, name="REGION", discrete=True, values=0)
+        region.values[1, 1, 0] = 1
+        region.values = np.ma.masked_array(region.values, mask=(region.values == 1))
+
+        with pytest.raises(ValueError, match="No cells found for target_region_id=1"):
+            NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
 
     def test_zonation_preserved(self):
         """Merged grid should have expected updated zonation."""
