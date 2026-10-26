@@ -18,7 +18,7 @@ permissions: {}
 
 jobs:
   fmu-tools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ["3.11", "3.12", "3.13", "3.14"]
@@ -116,7 +116,7 @@ jobs:
         config:
           - {
               name: "RMS 14.2",
-              os: ubuntu-latest,
+              os: ubuntu-24.04,
               python: 3.11.3,
               pip: 23.3.1,
               wheel: 0.37.1,
