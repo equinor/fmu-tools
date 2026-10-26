@@ -16,6 +16,9 @@ from fmu.tools.nestedhybridgrid import (
 from fmu.tools.nestedhybridgrid.nestedhybrid import (
     ORIGINAL_IJK_PROPERTY_NAMES,
     BoundingBox,
+    CellsByParent,
+    _create_upscaling_mappings_arrays,
+    _ijk_to_flat_index,
     _set_actnum_in_grid,
 )
 
@@ -55,6 +58,31 @@ def _make_constant_property(grid, name, value):
     """Create a continuous GridProperty with a constant value."""
     vals = np.full(grid.dimensions, value, dtype=np.float64)
     return xtgeo.GridProperty(grid, name=name, values=vals)
+
+
+def _build_geogrid_parent_ijk_maps_and_region(
+    grid: xtgeo.Grid,
+    region: xtgeo.GridProperty,
+    refinement: tuple[int, int, int],
+) -> tuple[
+    xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty, xtgeo.GridProperty
+]:
+    """Refine a grid and return preserved parent I/J/K properties."""
+    geogrid = grid.copy()
+
+    geogrid.append_prop(region)
+
+    for prop in geogrid.get_ijk(names=ORIGINAL_IJK_PROPERTY_NAMES):
+        geogrid.append_prop(prop)
+
+    geogrid.refine(*refinement)
+
+    return (
+        geogrid.get_prop_by_name("parent_I"),
+        geogrid.get_prop_by_name("parent_J"),
+        geogrid.get_prop_by_name("parent_K"),
+        geogrid.get_prop_by_name(region.name),
+    )
 
 
 def test_set_actnum_in_grid_deactivates_cells_where_mask_is_false():
@@ -106,6 +134,59 @@ def test_set_actnum_in_grid_all_cells_activated():
     _set_actnum_in_grid(grid, active_mask)
 
     assert grid.nactive == nactive_before
+
+
+def test_ijk_to_flat_index_matches_c_order_formula():
+    """Flat index mapping should match NumPy's C-order ravel mapping."""
+    grid = xtgeo.create_box_grid((3, 4, 5))
+
+    i, j, k = grid.get_ijk()
+    i0 = i.values - 1
+    j0 = j.values - 1
+    k0 = k.values - 1
+
+    got = _ijk_to_flat_index(i=i0, j=j0, k=k0, jdim=4, kdim=5)
+    expected = np.ravel_multi_index((i0, j0, k0), dims=(3, 4, 5))
+    np.testing.assert_array_equal(got, expected)
+
+
+def test_cell_by_parent_groups_selected_positions():
+    """Selected indices should be grouped by parent cell in sorted key order."""
+    parent_indices = np.array([3, 7, 3, 5, 7, 5, 3])
+    selected_mask = np.array([True, False, True, True, False, True, False])
+
+    grouped = CellsByParent.from_parent_indices(
+        parent_indices=parent_indices,
+        selected_mask=selected_mask,
+        parent_cell_count=8,
+    )
+    np.testing.assert_array_equal(grouped.mapped_parent_indices, [3, 5])
+    np.testing.assert_array_equal(grouped.cell_indices, np.array([0, 2, 3, 5]))
+    np.testing.assert_array_equal(grouped.counts, np.array([0, 0, 0, 2, 0, 2, 0, 0]))
+
+    expected_active_mask = [False, False, False, True, False, True, False, False]
+    np.testing.assert_array_equal(grouped.counts > 0, expected_active_mask)
+
+    np.testing.assert_array_equal(grouped.get_indices(3), np.array([0, 2]))
+    np.testing.assert_array_equal(grouped.get_indices(5), np.array([3, 5]))
+
+    with pytest.raises(ValueError, match="No cells found for parent index 0"):
+        grouped.get_indices(0)
+    with pytest.raises(ValueError, match="No cells found for parent index 7"):
+        grouped.get_indices(7)
+
+
+def test_cell_by_parent_raises_when_nothing_selected():
+    """No selected entries should raise ValueError."""
+    parent_indices = np.array([2, 2, 5])
+    selected_mask = np.array([False, False, False])
+
+    with pytest.raises(ValueError, match="No selected parent indices found"):
+        CellsByParent.from_parent_indices(
+            parent_indices=parent_indices,
+            selected_mask=selected_mask,
+            parent_cell_count=6,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -462,6 +543,336 @@ class TestNestedHybridGridClass:
         assert _has_single_row(i1=2, j1=3, k1=1, i2=5, j2=2, k2=1, direction="J-")
         # right neighbor → connects to I+ face of refined patch
         assert _has_single_row(i1=3, j1=2, k1=1, i2=6, j2=2, k2=1, direction="I-")
+
+    def test_create_upscaling_mappings_with_even_refinement(self):
+        """create_upscaling_mappings behave as expected with even refinement."""
+        grid, region, target_region_id = _make_box_grid_with_region(dimension=(6, 6, 3))
+        refinement = (2, 2, 2)
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=refinement)
+
+        i_map, j_map, k_map, gg_region = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region=region, refinement=(4, 2, 2)
+        )
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        assert isinstance(i_out, xtgeo.GridProperty)
+        assert isinstance(j_out, xtgeo.GridProperty)
+        assert isinstance(k_out, xtgeo.GridProperty)
+        assert i_out.name == "nested_I"
+        assert j_out.name == "nested_J"
+        assert k_out.name == "nested_K"
+
+        # output mappings have the same dimensions as the geogrid
+        assert i_out.dimensions == i_map.dimensions == (24, 12, 6)
+        assert j_out.dimensions == j_map.dimensions == (24, 12, 6)
+        assert k_out.dimensions == k_map.dimensions == (24, 12, 6)
+
+        in_refined = gg_region.values == target_region_id
+        outside_refined = ~in_refined
+
+        # Outside refinement: I/J unchanged, K uses coarse layer mapping.
+        np.testing.assert_array_equal(
+            i_out.values[outside_refined],
+            i_map.values[outside_refined],
+        )
+        np.testing.assert_array_equal(
+            j_out.values[outside_refined],
+            j_map.values[outside_refined],
+        )
+        expected_k_outside = (
+            nhg._layer_map_coarse[k_map.values[outside_refined].astype(int) - 1] + 1
+        )
+        np.testing.assert_array_equal(k_out.values[outside_refined], expected_k_outside)
+
+        # Inside refinement: I/J/K should follow the refined mapping.
+        i_parent = i_map.values[in_refined]
+        j_parent = j_map.values[in_refined]
+        k_parent = k_map.values[in_refined]
+
+        i_refined = i_out.values[in_refined]
+        j_refined = j_out.values[in_refined]
+        k_refined = k_out.values[in_refined]
+
+        # Each mapped cell should land in the expected 2-cell span per parent index
+        # There is a one column offset in the nested grid hence the shift in I.
+        assert np.all((i_refined == 2 * i_parent) | (i_refined == 2 * i_parent + 1))
+        assert np.all((j_refined == 2 * j_parent - 1) | (j_refined == 2 * j_parent))
+        assert np.all((k_refined == 2 * k_parent - 1) | (k_refined == 2 * k_parent))
+
+    @pytest.mark.parametrize("inactive_parent", [False, True])
+    def test_create_upscaling_mappings_accepts_integer_valued_floats(
+        self, inactive_parent
+    ):
+        """Continuous IJK properties should map like discrete IJK properties."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 3))
+        if inactive_parent:
+            actnum = grid.get_actnum()
+            actnum.values[0, 0, 0] = 0
+            grid.set_actnum(actnum)
+
+        nhg = NestedHybridGrid(grid, region, refinement=(2, 2, 2))
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region, refinement=(4, 2, 2)
+        )
+        expected = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+        for prop in (i_map, j_map, k_map):
+            prop.isdiscrete = False
+            assert np.issubdtype(prop.values.dtype, np.floating)
+            prop.values.data[np.ma.getmaskarray(prop.values)] = np.nan
+
+        with np.errstate(invalid="raise"):
+            actual = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        for actual_prop, expected_prop in zip(actual, expected):
+            np.testing.assert_array_equal(
+                actual_prop.values.compressed(), expected_prop.values.compressed()
+            )
+            np.testing.assert_array_equal(
+                np.ma.getmaskarray(actual_prop.values),
+                np.ma.getmaskarray(expected_prop.values),
+            )
+
+    def test_create_upscaling_mappings_with_uneven_refinement(self):
+        """create_upscaling_mappings behave as expected with uneven refinement."""
+        grid, region, target_region_id = _make_box_grid_with_region(dimension=(6, 6, 2))
+
+        refinement = (3, 2, 4)
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=refinement)
+
+        # refinement for the geogrid must be divisible by nhg refinement
+        i_map, j_map, k_map, gg_region = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region=region, refinement=(6, 2, 8)
+        )
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        in_refined = gg_region.values == target_region_id
+        outside_refined = ~in_refined
+
+        # Outside refinement: I/J unchanged, K uses coarse layer mapping.
+        np.testing.assert_array_equal(
+            i_out.values[outside_refined],
+            i_map.values[outside_refined],
+        )
+        np.testing.assert_array_equal(
+            j_out.values[outside_refined],
+            j_map.values[outside_refined],
+        )
+        expected_k_outside = (
+            nhg._layer_map_coarse[k_map.values[outside_refined].astype(int) - 1] + 1
+        )
+        np.testing.assert_array_equal(k_out.values[outside_refined], expected_k_outside)
+
+        # Inside refinement: I/J/K should follow the refined mapping.
+        i_parent = i_map.values[in_refined]
+        j_parent = j_map.values[in_refined]
+        k_parent = k_map.values[in_refined]
+
+        i_refined = i_out.values[in_refined]
+        j_refined = j_out.values[in_refined]
+        k_refined = k_out.values[in_refined]
+
+        # Each parent index should map to a block with size equal to
+        # the configured refinement factor on that axis.
+        for p_i in np.unique(i_parent):
+            u_i_out = np.unique(i_refined[i_parent == p_i])
+            assert u_i_out.size == refinement[0] == 3
+            assert np.array_equal(u_i_out, np.arange(u_i_out.min(), u_i_out.min() + 3))
+
+        for p_j in np.unique(j_parent):
+            u_j_out = np.unique(j_refined[j_parent == p_j])
+            assert u_j_out.size == refinement[1] == 2
+            assert np.array_equal(u_j_out, np.arange(u_j_out.min(), u_j_out.min() + 2))
+
+        for p_k in np.unique(k_parent):
+            u_k_out = np.unique(k_refined[k_parent == p_k])
+            assert u_k_out.size == refinement[2] == 4
+            assert np.array_equal(u_k_out, np.arange(u_k_out.min(), u_k_out.min() + 4))
+
+    def test_create_upscaling_mappings_raises_on_out_of_range_parent_values(self):
+        """Out-of-range values in input parent maps should raise ValueError."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+        i_bad = i_map.copy()
+
+        # Test with an out-of-range I index (too low).
+        i_bad.values[0, 0, 0] = -1
+        with pytest.raises(ValueError, match="outside the valid range"):
+            nhg.create_upscaling_mappings(i_bad, j_map, k_map)
+
+        # Test with an out-of-range I index (too high).
+        i_bad.values[0, 0, 0] = grid.ncol + 1
+        with pytest.raises(ValueError, match="outside the valid range"):
+            nhg.create_upscaling_mappings(i_bad, j_map, k_map)
+
+    def test_create_upscaling_mappings_raises_on_different_input_dimensions(self):
+        """Input parent maps with different dimensions should raise ValueError."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, _, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region, refinement=(4, 2, 2)
+        )
+        # make a property with different dimensions than i_map
+        j_map = xtgeo.GridProperty(ncol=10, nrow=10, nlay=10)
+
+        with pytest.raises(ValueError, match="same dimensions"):
+            nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+    def test_create_upscaling_mappings_excludes_all_zero_input_values(self):
+        """All-zero input coordinates produce zeroes in all three output axes."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(grid, region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region, refinement=(4, 2, 2)
+        )
+        for mapping in (i_map, j_map, k_map):
+            mapping.values[1, 2, 3] = 0
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        assert i_out.values[1, 2, 3] == 0
+        assert j_out.values[1, 2, 3] == 0
+        assert k_out.values[1, 2, 3] == 0
+
+    @pytest.mark.parametrize("zero_axis", [0, 1, 2])
+    def test_create_upscaling_mappings_raises_on_partial_zero_input_values(
+        self, zero_axis
+    ):
+        """A zero on one input axis requires zeroes on the other two axes."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(grid, region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region, refinement=(4, 2, 2)
+        )
+        ijk_maps = [i_map, j_map, k_map]
+        ijk_maps[zero_axis].values[1, 2, 3] = 0
+
+        with pytest.raises(ValueError, match="all must be zero"):
+            nhg.create_upscaling_mappings(*ijk_maps)
+
+    def test_create_upscaling_mappings_excludes_layers_with_zero(self):
+        """Test excluding whole layers while keeping deeper cells mapped."""
+        grid, region, _ = _make_box_grid_with_region(
+            dimension=(6, 6, 4), target_layer_ids=[2, 3]
+        )
+        nhg = NestedHybridGrid(grid, region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region, refinement=(4, 2, 2)
+        )
+
+        # create baseline mapping before zeroing out layers
+        i_baseline, j_baseline, k_baseline = nhg.create_upscaling_mappings(
+            i_map, j_map, k_map
+        )
+
+        # Two parent layers correspond to four geogrid layers.
+        i_map.values[:, :, :4] = 0
+        j_map.values[:, :, :4] = 0
+        k_map.values[:, :, :4] = 0
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        assert (i_out.values[:, :, :4] == 0).all()
+        assert (i_out.values[:, :, 4:] == i_baseline.values[:, :, 4:]).all()
+        assert (j_out.values[:, :, :4] == 0).all()
+        assert (j_out.values[:, :, 4:] == j_baseline.values[:, :, 4:]).all()
+        assert (k_out.values[:, :, :4] == 0).all()
+        assert (k_out.values[:, :, 4:] == k_baseline.values[:, :, 4:]).all()
+
+    def test_create_upscaling_mappings_raises_on_invalid_refined_block(self):
+        """Non-divisible geogrid spans per parent cell should raise ValueError."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        # Build geogrid mappings with 3x2x2 refinement, which is incompatible
+        # with nhg refinement=(2,2,2)
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region=region, refinement=(3, 2, 2)
+        )
+
+        with pytest.raises(ValueError, match="Invalid input mapping for cells"):
+            nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+    def test_create_upscaling_mappings_raises_on_non_gridproperty_input(self):
+        """Input mapping objects must be xtgeo.GridProperty instances."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        _, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+
+        with pytest.raises(ValueError, match="must be xtgeo.GridProperty"):
+            nhg.create_upscaling_mappings("invalid", j_map, k_map)
+
+    def test_create_upscaling_mappings_raises_on_non_integer_parent_values(self):
+        """Fractional parent-IJK values should fail input validation."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+        i_bad = i_map.copy()
+        i_bad.discrete_to_continuous()
+        i_bad.values[0, 0, 0] = 1.5
+
+        with pytest.raises(ValueError, match="must contain integer values"):
+            nhg.create_upscaling_mappings(i_bad, j_map, k_map)
+
+    def test_create_upscaling_mappings_preserves_masked_cells(self):
+        """Masked geogrid cells should remain masked in mapped outputs."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map, _ = _build_geogrid_parent_ijk_maps_and_region(
+            grid, region=region, refinement=(4, 2, 2)
+        )
+        i_map.values[0, 0, 0] = np.ma.masked
+        j_map.values[0, 0, 0] = np.ma.masked
+        k_map.values[0, 0, 0] = np.ma.masked
+
+        i_out, j_out, k_out = nhg.create_upscaling_mappings(i_map, j_map, k_map)
+
+        assert i_out.values.mask[0, 0, 0]
+        assert j_out.values.mask[0, 0, 0]
+        assert k_out.values.mask[0, 0, 0]
+
+        assert (i_out.values.mask == i_map.values.mask).all()
+        assert (j_out.values.mask == j_map.values.mask).all()
+        assert (k_out.values.mask == k_map.values.mask).all()
+
+    def test_create_upscaling_mappings_arrays_raises_on_parent_coverage_mismatch(self):
+        """Array core should reject mismatched parent-cell coverage."""
+        grid, region, _ = _make_box_grid_with_region(dimension=(6, 6, 2))
+        nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
+
+        i_map, j_map, k_map = grid.get_ijk(names=("GI", "GJ", "GK"))
+
+        mapping = nhg.nested_cells_by_parent
+        missing_parent = mapping.mapped_parent_indices[0]
+        mapping.group_start[missing_parent] = mapping.group_stop[missing_parent] = -1
+
+        bad_parent_mapping = CellsByParent(
+            cell_indices=mapping.cell_indices,
+            group_start=mapping.group_start,
+            group_stop=mapping.group_stop,
+        )
+
+        with pytest.raises(ValueError, match="do not match"):
+            _create_upscaling_mappings_arrays(
+                geo_parent_i_values=i_map.values,
+                geo_parent_j_values=j_map.values,
+                geo_parent_k_values=k_map.values,
+                nested_cells_by_parent=bad_parent_mapping,
+                nested_dimensions=nhg.grid.dimensions,
+                parent_dimensions=nhg._parent_dimensions,
+                layer_map_coarse=nhg._layer_map_coarse,
+                refinement=nhg._refinement,
+            )
 
     def test_write_nnc_table_writes_csv_without_index(self, tmp_path):
         """NNC table can be written to CSV without the pandas index."""
