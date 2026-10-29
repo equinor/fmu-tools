@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.35.1.dev10+gf1d912eab.d20261029 documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.35.1.dev11+g9b09f4fc8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=08bf1def"></script>
+      <script src="_static/documentation_options.js?v=4096f2b1"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -166,9 +166,35 @@ e.g. by using software like RMS.</p></li>
 <span class="n">nhg</span><span class="o">.</span><span class="n">write_nnc_table</span><span class="p">(</span><span class="s2">"path_to_some_csv_file.csv"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The next step is to do a rescaling from the original geogrid to the merged grid
-using e.g. the RMS tool.</p>
-<p>Further, we need to create NNC transmissibilities and generate file for flow simulator:</p>
+<p>The next step is to upscale properties from the original geogrid to the merged
+grid, for example using an RMS rescaling job.</p>
+<p>For more robust and efficient rescaling, it is recommended to use
+<code class="docutils literal notranslate"><span class="pre">Sampling</span> <span class="pre">index</span> <span class="pre">parameters</span></code> in the rescaling job. Existing geogrid-to-parent
+I/J/K mappings can be converted to reference the nested hybrid grid using
+<a class="reference internal" href="fmu.tools.nestedhybridgrid.html#fmu.tools.nestedhybridgrid.NestedHybridGrid.create_upscaling_mappings" title="fmu.tools.nestedhybridgrid.NestedHybridGrid.create_upscaling_mappings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_upscaling_mappings()</span></code></a>.</p>
+<p>The example below creates the nested-grid I/J/K mappings from existing
+geogrid-to-parent mappings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.nestedhybridgrid</span><span class="w"> </span><span class="kn">import</span> <span class="n">NestedHybridGrid</span>
+
+<span class="c1"># Create nested hybrid grid</span>
+<span class="n">nhg</span> <span class="o">=</span> <span class="n">NestedHybridGrid</span><span class="o">.</span><span class="n">from_rms</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># Load existing geogrid-to-parent mappings</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingColumn"</span><span class="p">)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingRow"</span><span class="p">)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingLayer"</span><span class="p">)</span>
+
+<span class="c1"># Convert them to geogrid-to-nested-grid mappings</span>
+<span class="n">nested_i</span><span class="p">,</span> <span class="n">nested_j</span><span class="p">,</span> <span class="n">nested_k</span> <span class="o">=</span> <span class="n">nhg</span><span class="o">.</span><span class="n">create_upscaling_mappings</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+<span class="n">nested_i</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_I"</span><span class="p">)</span>
+<span class="n">nested_j</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_J"</span><span class="p">)</span>
+<span class="n">nested_k</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_K"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After rescaling, compute the NNC transmissibilities and export them for the
+flow simulator:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xtgeo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fmu.tools.nestedhybridgrid</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>

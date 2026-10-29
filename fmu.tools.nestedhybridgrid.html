@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.nestedhybridgrid package &mdash; fmu-tools 1.35.1.dev10+gf1d912eab.d20261029 documentation</title>
+  <title>fmu.tools.nestedhybridgrid package &mdash; fmu-tools 1.35.1.dev11+g9b09f4fc8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=08bf1def"></script>
+      <script src="_static/documentation_options.js?v=4096f2b1"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -127,6 +127,68 @@ and a refinement specification.</p>
 </dd>
 </dl>
 </section>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.nestedhybridgrid.nestedhybrid.</span></span><span class="sig-name descname"><span class="pre">CellsByParent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_stop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#CellsByParent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Group flattened cell indices by parent.</p>
+<p>group_start and group_stop are indexed by parent and define slices
+into cell_indices. Unmapped parents have both set to -1.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.cell_indices">
+<span class="sig-name descname"><span class="pre">cell_indices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.cell_indices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.group_start">
+<span class="sig-name descname"><span class="pre">group_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.group_start" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.group_stop">
+<span class="sig-name descname"><span class="pre">group_stop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.group_stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.from_parent_indices">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_parent_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_cell_count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#CellsByParent.from_parent_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.from_parent_indices" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Self</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.mapped_mask">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mapped_mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.mapped_mask" title="Link to this definition"></a></dt>
+<dd><p>Return a boolean mask indicating which parents have mapped cells.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.mapped_parent_indices">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mapped_parent_indices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.mapped_parent_indices" title="Link to this definition"></a></dt>
+<dd><p>Return parent indices that have mapped cells.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.counts">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">counts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.counts" title="Link to this definition"></a></dt>
+<dd><p>Return the number of cells mapped to each parent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.get_indices">
+<span class="sig-name descname"><span class="pre">get_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#CellsByParent.get_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent.get_indices" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmu.tools.nestedhybridgrid.nestedhybrid.</span></span><span class="sig-name descname"><span class="pre">BoundingBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#BoundingBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.BoundingBox" title="Link to this definition"></a></dt>
@@ -274,6 +336,33 @@ pair that should be connected by a Non-Neighbour Connection (NNC).</p>
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.nnc_table">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nnc_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.nnc_table" title="Link to this definition"></a></dt>
 <dd><p>Non-Neighbour Connection (NNC) mapping table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.nested_cells_by_parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nested_cells_by_parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent" title="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent"><span class="pre">CellsByParent</span></a></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.nested_cells_by_parent" title="Link to this definition"></a></dt>
+<dd><p>Lazy mapping from parent-grid indices to active merged-grid cells.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.create_upscaling_mappings">
+<span class="sig-name descname"><span class="pre">create_upscaling_mappings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.create_upscaling_mappings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.nestedhybrid.NestedHybridGrid.create_upscaling_mappings" title="Link to this definition"></a></dt>
+<dd><p>Method to remap geogrid-to-parent IJK references into
+geogrid-to-nestedgrid IJK references. These properties can in turn be used
+when upscaling properties from geogrid to the nested hybrid grid.</p>
+<p>Inputs ‘i_map’, ‘j_map’ and ‘k_map’ are geogrid properties
+that reference the IJK of the input grid that the nested grid is based on.
+The nested grid already contains the same parent grid references through the
+‘parent_I’, ‘parent_J’ and ‘parent_K’ properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>]</span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3-tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.GridProperty</span></code> objects with mapped
+geogrid-to-nested-grid references, ordered as I, J, K.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -548,6 +637,33 @@ pair that should be connected by a Non-Neighbour Connection (NNC).</p>
 <dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.nnc_table">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nnc_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.nnc_table" title="Link to this definition"></a></dt>
 <dd><p>Non-Neighbour Connection (NNC) mapping table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.nested_cells_by_parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nested_cells_by_parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent" title="fmu.tools.nestedhybridgrid.nestedhybrid.CellsByParent"><span class="pre">CellsByParent</span></a></em><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.nested_cells_by_parent" title="Link to this definition"></a></dt>
+<dd><p>Lazy mapping from parent-grid indices to active merged-grid cells.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmu.tools.nestedhybridgrid.NestedHybridGrid.create_upscaling_mappings">
+<span class="sig-name descname"><span class="pre">create_upscaling_mappings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fmu/tools/nestedhybridgrid/nestedhybrid.html#NestedHybridGrid.create_upscaling_mappings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmu.tools.nestedhybridgrid.NestedHybridGrid.create_upscaling_mappings" title="Link to this definition"></a></dt>
+<dd><p>Method to remap geogrid-to-parent IJK references into
+geogrid-to-nestedgrid IJK references. These properties can in turn be used
+when upscaling properties from geogrid to the nested hybrid grid.</p>
+<p>Inputs ‘i_map’, ‘j_map’ and ‘k_map’ are geogrid properties
+that reference the IJK of the input grid that the nested grid is based on.
+The nested grid already contains the same parent grid references through the
+‘parent_I’, ‘parent_J’ and ‘parent_K’ properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GridProperty</span></code>]</span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3-tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">xtgeo.GridProperty</span></code> objects with mapped
+geogrid-to-nested-grid references, ordered as I, J, K.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

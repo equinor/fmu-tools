@@ -62,10 +62,40 @@ The example here runs within RMS, but similar workflows can be created for file 
     nhg.write_nnc_table("path_to_some_csv_file.csv")
 
 
-The next step is to do a rescaling from the original geogrid to the merged grid
-using e.g. the RMS tool.
+The next step is to upscale properties from the original geogrid to the merged
+grid, for example using an RMS rescaling job.
 
-Further, we need to create NNC transmissibilities and generate file for flow simulator:
+For more robust and efficient rescaling, it is recommended to use
+``Sampling index parameters`` in the rescaling job. Existing geogrid-to-parent
+I/J/K mappings can be converted to reference the nested hybrid grid using
+:meth:`~fmu.tools.nestedhybridgrid.NestedHybridGrid.create_upscaling_mappings`.
+
+The example below creates the nested-grid I/J/K mappings from existing
+geogrid-to-parent mappings:
+
+.. code-block:: python
+
+    import xtgeo
+    from fmu.tools.nestedhybridgrid import NestedHybridGrid
+
+    # Create nested hybrid grid
+    nhg = NestedHybridGrid.from_rms(...)
+
+    # Load existing geogrid-to-parent mappings
+    i = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingColumn")
+    j = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingRow")
+    k = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingLayer")
+
+    # Convert them to geogrid-to-nested-grid mappings
+    nested_i, nested_j, nested_k = nhg.create_upscaling_mappings(i, j, k)
+
+    nested_i.to_roxar(project, "Geogrid", "Nested_I")
+    nested_j.to_roxar(project, "Geogrid", "Nested_J")
+    nested_k.to_roxar(project, "Geogrid", "Nested_K")
+   
+
+After rescaling, compute the NNC transmissibilities and export them for the
+flow simulator:
 
 .. code-block:: python
 
