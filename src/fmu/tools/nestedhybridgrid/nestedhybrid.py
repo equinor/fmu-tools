@@ -20,7 +20,7 @@ import logging
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -29,21 +29,30 @@ from pydantic import BaseModel, Field, ValidationError
 
 if TYPE_CHECKING:
     import os
-    from collections.abc import Iterable
 
     from xtgeo.common.types import Dimensions
 
-_logger = logging.getLogger(__name__)
 
+_logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+FaceDirection: TypeAlias = Literal["I+", "I-", "J+", "J-", "K+", "K-"]
 
-FaceDirection: TypeAlias = Literal["i+", "i-", "j+", "j-", "k+", "k-"]
 IJKIndex: TypeAlias = tuple[int, int, int]
-BoundaryCellFace: TypeAlias = tuple[IJKIndex, IJKIndex, FaceDirection]
+IndexLike = TypeVar("IndexLike", int, np.ndarray)
+BoundaryCellFace: TypeAlias = tuple[int, int, FaceDirection]
 ORIGINAL_IJK_PROPERTY_NAMES = ("parent_I", "parent_J", "parent_K")
+
+_FACE_OPPOSITES: dict[FaceDirection, FaceDirection] = {
+    "I+": "I-",
+    "I-": "I+",
+    "J+": "J-",
+    "J-": "J+",
+    "K+": "K-",
+    "K-": "K+",
+}
 
 
 @dataclass(frozen=True)
@@ -171,6 +180,29 @@ def _crop_for_region(grid: xtgeo.Grid, refinement_bbox: BoundingBox) -> xtgeo.Gr
     return cropped_grid
 
 
+def _get_cell_boundary_mask(
+    ii: np.ndarray,
+    jj: np.ndarray,
+    kk: np.ndarray,
+    direction: FaceDirection,
+) -> np.ndarray:
+    """Return a boolean face-selection mask from precomputed I, J, K arrays."""
+
+    if direction == "I-":
+        return ii == ii.min()
+    if direction == "I+":
+        return ii == ii.max()
+    if direction == "J-":
+        return jj == jj.min()
+    if direction == "J+":
+        return jj == jj.max()
+    if direction == "K-":
+        return kk == kk.min()
+    if direction == "K+":
+        return kk == kk.max()
+    raise ValueError(f"Unexpected face direction: {direction}")
+
+
 def _find_boundary_faces(refined_area: np.ma.MaskedArray) -> list[BoundaryCellFace]:
     """Find cell faces on the boundary of a refinement area.
 
@@ -178,10 +210,11 @@ def _find_boundary_faces(refined_area: np.ma.MaskedArray) -> list[BoundaryCellFa
         refined_area: 3D boolean array where ``True`` marks cells to refine.
 
     Returns:
-        A list of ``(outside_ijk, inside_ijk, face_dir)`` where indices are
-        0-based and *face_dir* is one of ``'i+', 'i-', 'j+', 'j-', 'k+', 'k-'``.
+        A list of ``(outside_idx, inside_idx, face_dir)`` where indices are
+        flattened parent-grid cell indices. ``face_dir`` is from the inside
+        (refined) cell perspective.
     """
-    ni, nj, nk = refined_area.shape
+    _, nrow, nlay = refined_area.shape
     active = ~refined_area.mask
 
     in_target = refined_area & active
@@ -189,35 +222,45 @@ def _find_boundary_faces(refined_area: np.ma.MaskedArray) -> list[BoundaryCellFa
 
     faces: list[BoundaryCellFace] = []
 
+    def add_face(
+        ijk_outside: IJKIndex,
+        ijk_inside: IJKIndex,
+        face_direction: FaceDirection,
+    ):
+        outside_idx = _ijk_to_flat_index(*ijk_outside, jdim=nrow, kdim=nlay)
+        inside_idx = _ijk_to_flat_index(*ijk_inside, jdim=nrow, kdim=nlay)
+
+        faces.append((int(outside_idx), int(inside_idx), face_direction))
+
     # i+
-    mask = in_target[: ni - 1, :, :] & outside_active[1:ni, :, :]
+    mask = in_target[:-1, :, :] & outside_active[1:, :, :]
     for i, j, k in np.argwhere(mask):
-        faces.append(((int(i + 1), int(j), int(k)), (int(i), int(j), int(k)), "i+"))
+        add_face((i + 1, j, k), (i, j, k), "I+")
 
     # i-
-    mask = in_target[1:ni, :, :] & outside_active[: ni - 1, :, :]
-    for idx, j, k in np.argwhere(mask):
-        faces.append(((int(idx), int(j), int(k)), (int(idx + 1), int(j), int(k)), "i-"))
+    mask = in_target[1:, :, :] & outside_active[:-1, :, :]
+    for i, j, k in np.argwhere(mask):
+        add_face((i, j, k), (i + 1, j, k), "I-")
 
     # j+
-    mask = in_target[:, : nj - 1, :] & outside_active[:, 1:nj, :]
+    mask = in_target[:, :-1, :] & outside_active[:, 1:, :]
     for i, j, k in np.argwhere(mask):
-        faces.append(((int(i), int(j + 1), int(k)), (int(i), int(j), int(k)), "j+"))
+        add_face((i, j + 1, k), (i, j, k), "J+")
 
     # j-
-    mask = in_target[:, 1:nj, :] & outside_active[:, : nj - 1, :]
-    for i, jdx, k in np.argwhere(mask):
-        faces.append(((int(i), int(jdx), int(k)), (int(i), int(jdx + 1), int(k)), "j-"))
+    mask = in_target[:, 1:, :] & outside_active[:, :-1, :]
+    for i, j, k in np.argwhere(mask):
+        add_face((i, j, k), (i, j + 1, k), "J-")
 
     # k+
-    mask = in_target[:, :, : nk - 1] & outside_active[:, :, 1:nk]
+    mask = in_target[:, :, :-1] & outside_active[:, :, 1:]
     for i, j, k in np.argwhere(mask):
-        faces.append(((int(i), int(j), int(k + 1)), (int(i), int(j), int(k)), "k+"))
+        add_face((i, j, k + 1), (i, j, k), "K+")
 
     # k-
-    mask = in_target[:, :, 1:nk] & outside_active[:, :, : nk - 1]
-    for i, j, kdx in np.argwhere(mask):
-        faces.append(((int(i), int(j), int(kdx)), (int(i), int(j), int(kdx + 1)), "k-"))
+    mask = in_target[:, :, 1:] & outside_active[:, :, :-1]
+    for i, j, k in np.argwhere(mask):
+        add_face((i, j, k), (i, j, k + 1), "K-")
 
     _logger.info("Found %d boundary faces for refinement area", len(faces))
     return faces
@@ -225,10 +268,8 @@ def _find_boundary_faces(refined_area: np.ma.MaskedArray) -> list[BoundaryCellFa
 
 def _compute_nnc_table(
     refined_area: np.ma.MaskedArray,
-    refinement: Refinement,
-    coarse_ncol: int,
-    lmap1: np.ndarray,
-    lmap2: np.ndarray,
+    nested_cells_by_parent: CellsByParent,
+    nested_dimensions: Dimensions,
 ) -> pd.DataFrame:
     """Compute NNC cell-pair mapping between mother and refined cells.
 
@@ -250,101 +291,56 @@ def _compute_nnc_table(
 
     Args:
         refined_area: 3D boolean array where ``True`` marks cells to refine.
-        refinement: ``(rcol, rrow, rlay)`` refinement factors.
-        coarse_ncol: Number of columns in the coarse grid (grid1 in the merge).
-        lmap1: Numpy array with layer_mapping (input k -> output k) for grid1
-        lmap2: Numpy array with layer_mapping (input k -> output k) for grid2
-
+        nested_cells_by_parent: Mapping from parent cell indices to merged grid indices.
+        nested_dimensions: Dimensions of the merged grid.
 
     Returns:
         A DataFrame with columns ``I1, J1, K1, I2, J2, K2, DIRECTION``.
     """
     faces = _find_boundary_faces(refined_area)
-    bbox = BoundingBox.from_condition(refined_area)
-
-    rcol, rrow, rlay = refinement.col, refinement.row, refinement.lay
-    i0 = bbox.imin - 1
-    j0 = bbox.jmin - 1
-    k0 = bbox.kmin - 1
-
-    # In the merged grid, grid2 (refined) starts after a 1-column gap:
-    i_offset = coarse_ncol + 1
-
     rows: list[dict[str, int | str]] = []
 
-    for outside_ijk, inside_ijk, face_dir in faces:
-        # outside_ijk = mother cell (0-based in original/merged grid)
-        mi, mj, mk = outside_ijk
+    for outside_idx, inside_idx, direction in faces:
+        outside_cells = nested_cells_by_parent.get_indices(outside_idx)
+        refined_cells = nested_cells_by_parent.get_indices(inside_idx)
 
-        # inside_ijk = target cell (0-based in original grid) → cropped coords
-        ci = inside_ijk[0] - i0
-        cj = inside_ijk[1] - j0
-        ck = inside_ijk[2] - k0
+        if outside_cells is None or refined_cells is None:
+            # Don't produce NNC if one side is inactive (missing)
+            continue
 
-        # Determine direction from mother and which refined cells lie on the face.
-        # face_dir is from the *inside* (target) cell's perspective;
-        # the mother's perspective is the opposite sign.
-        #
-        # For I-faces: the varying refined indices are J and K  (rrow × rlay cells)
-        # For J-faces: the varying refined indices are I and K  (rcol × rlay cells)
-        # For K-faces: the varying refined indices are I and J  (rcol × rrow cells)
-        ref_is: Iterable[int]
-        ref_js: Iterable[int]
-        ref_ks: Iterable[int]
+        if outside_cells.size != 1:
+            raise ValueError(
+                "Expected exactly one merged-grid cell for unrefined parent "
+                f"{outside_idx}, found {outside_cells.size}."
+            )
 
-        if face_dir == "i-":
-            # Target at higher I than mother → mother's I+ face
-            direction = "I+"
-            ref_is = [ci * rcol]  # first i-column of refined block (I- face)
-            ref_js = range(cj * rrow, cj * rrow + rrow)
-            ref_ks = range(ck * rlay, ck * rlay + rlay)
-        elif face_dir == "i+":
-            # Target at lower I than mother → mother's I- face
-            direction = "I-"
-            ref_is = [ci * rcol + rcol - 1]  # last i-column (I+ face)
-            ref_js = range(cj * rrow, cj * rrow + rrow)
-            ref_ks = range(ck * rlay, ck * rlay + rlay)
-        elif face_dir == "j-":
-            # Target at higher J than mother → mother's J+ face
-            direction = "J+"
-            ref_is = range(ci * rcol, ci * rcol + rcol)
-            ref_js = [cj * rrow]  # first j-row (J- face)
-            ref_ks = range(ck * rlay, ck * rlay + rlay)
-        elif face_dir == "j+":
-            # Target at lower J than mother → mother's J- face
-            direction = "J-"
-            ref_is = range(ci * rcol, ci * rcol + rcol)
-            ref_js = [cj * rrow + rrow - 1]  # last j-row (J+ face)
-            ref_ks = range(ck * rlay, ck * rlay + rlay)
-        elif face_dir == "k-":
-            # Target at higher K than mother → mother's K+ face
-            direction = "K+"
-            ref_is = range(ci * rcol, ci * rcol + rcol)
-            ref_js = range(cj * rrow, cj * rrow + rrow)
-            ref_ks = [ck * rlay]  # first k-layer (K- face)
-        elif face_dir == "k+":
-            # Target at lower K than mother → mother's K- face
-            direction = "K-"
-            ref_is = range(ci * rcol, ci * rcol + rcol)
-            ref_js = range(cj * rrow, cj * rrow + rrow)
-            ref_ks = [ck * rlay + rlay - 1]  # last k-layer (K+ face)
-        else:
-            raise ValueError(f"Unexpected face direction: {face_dir!r}")
+        outside_i, outside_j, outside_k = np.unravel_index(
+            outside_cells[0], nested_dimensions
+        )
+        refined_i, refined_j, refined_k = np.unravel_index(
+            refined_cells, nested_dimensions
+        )
 
-        for ri in ref_is:
-            for rj in ref_js:
-                for rk in ref_ks:
-                    rows.append(
-                        {
-                            "I1": mi + 1,
-                            "J1": mj + 1,
-                            "K1": lmap1[mk] + 1,
-                            "I2": ri + i_offset + 1,
-                            "J2": rj + 1,
-                            "K2": lmap2[rk] + 1,
-                            "DIRECTION": direction,
-                        }
-                    )
+        boundary_mask = _get_cell_boundary_mask(
+            refined_i, refined_j, refined_k, direction
+        )
+
+        for ri, rj, rk in zip(
+            refined_i[boundary_mask],
+            refined_j[boundary_mask],
+            refined_k[boundary_mask],
+        ):
+            rows.append(
+                {
+                    "I1": int(outside_i) + 1,
+                    "J1": int(outside_j) + 1,
+                    "K1": int(outside_k) + 1,
+                    "I2": int(ri) + 1,
+                    "J2": int(rj) + 1,
+                    "K2": int(rk) + 1,
+                    "DIRECTION": _FACE_OPPOSITES[direction],
+                }
+            )
 
     _logger.info(
         "NNC table: %d cell pairs from %d boundary faces", len(rows), len(faces)
@@ -360,8 +356,8 @@ def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
 
 
 def _ijk_to_flat_index(
-    i: np.ndarray, j: np.ndarray, k: np.ndarray, jdim: int, kdim: int
-) -> np.ndarray:
+    i: IndexLike, j: IndexLike, k: IndexLike, jdim: int, kdim: int
+) -> IndexLike:
     """Convert 0-based (i, j, k) indices to positions in a 1D flattened array.
     This follows NumPy C-order (row-major) indexing.
     """
@@ -736,6 +732,11 @@ class NestedHybridGrid:
         return self.grid.props
 
     @property
+    def dimensions(self) -> Dimensions:
+        """The final nested hybrid grid dimensions."""
+        return self._grid.dimensions
+
+    @property
     def nnc_table(self) -> pd.DataFrame:
         """Non-Neighbour Connection (NNC) mapping table."""
         if self._nnc_table is None:
@@ -823,10 +824,8 @@ class NestedHybridGrid:
         """Compute the NNC mapping table."""
         return _compute_nnc_table(
             refined_area=self._refined_area,
-            refinement=self._refinement,
-            coarse_ncol=self._parent_dimensions.ncol,
-            lmap1=self._layer_map_coarse,
-            lmap2=self._layer_map_refined,
+            nested_cells_by_parent=self.nested_cells_by_parent,
+            nested_dimensions=self.dimensions,
         )
 
     def _generate_layer_map_coarse(self) -> np.ndarray:
