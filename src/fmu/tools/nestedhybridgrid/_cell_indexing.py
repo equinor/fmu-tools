@@ -82,6 +82,23 @@ class CellsByParent:
         """Return the number of cells mapped to each parent."""
         return self.group_stop - self.group_start
 
+    def expand(self, parent_indices: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        """Return nested cells for each parent and their parent group.
+
+        The parent group gives the position in ``parent_indices`` corresponding
+        to each returned nested cell.
+        """
+        counts = self.counts[parent_indices]
+        starts = self.group_start[parent_indices]
+
+        parent_group = np.repeat(np.arange(parent_indices.size), counts)
+
+        first_of_group = np.cumsum(counts) - counts
+        offsets = np.arange(parent_group.size) - first_of_group[parent_group]
+
+        positions = starts[parent_group] + offsets
+        return self.cell_indices[positions], parent_group
+
     def get_indices(self, parent_idx: int | np.intp) -> np.ndarray:
         start = self.group_start[parent_idx]
 

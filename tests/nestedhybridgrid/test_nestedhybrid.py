@@ -1430,6 +1430,15 @@ class TestNncToFlowsimulatorInput:
 class TestNestedHybridGridRmsIO:
     """Tests for from_rms and to_rms."""
 
+    @pytest.fixture(autouse=True)
+    def _no_rms_faults(self):
+        """The mock project has no grid faults to read."""
+        with patch(
+            "fmu.tools.nestedhybridgrid.nestedhybrid.read_grid_faults",
+            return_value=[],
+        ):
+            yield
+
     def test_from_rms_returns_nestedhybridgrid(self):
         """from_rms should return a NestedHybridGrid instance."""
         grid, region, _ = _make_box_grid_with_region(

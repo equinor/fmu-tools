@@ -27,6 +27,7 @@ import xtgeo
 from pydantic import BaseModel, Field, ValidationError
 
 from ._cell_indexing import CellsByParent, ijk_to_flat_index
+from ._faults import GridFault, read_grid_faults, write_grid_faults
 
 if TYPE_CHECKING:
     import os
@@ -515,6 +516,7 @@ class NestedHybridGrid:
         self._validate_inputs(coarse_grid, region, refinement, target_region_id)
 
         self._nnc_table: pd.DataFrame | None = None
+        self._parent_faults: list[GridFault] | None = None
 
         self._parent_grid = coarse_grid
         self._parent_dimensions = coarse_grid.dimensions
@@ -554,6 +556,10 @@ class NestedHybridGrid:
             refinement: Refinement factors as (ncol, nrow, nlay).
             properties: Optional list of property names to load from the project.
             target_region_id: Region value to refine (default: 1).
+
+        Note:
+            Grid faults are transferred to the nested grid by :meth:`to_rms`, but
+            only for right-handed grids.
         """
 
         parent_grid = xtgeo.grid_from_roxar(project, grid_name)
@@ -563,15 +569,35 @@ class NestedHybridGrid:
             prop = xtgeo.gridproperty_from_roxar(project, grid_name, propname)
             parent_grid.append_prop(prop)
 
-        return cls(parent_grid, region, refinement, target_region_id)
+        instance = cls(parent_grid, region, refinement, target_region_id)
+        instance._parent_faults = read_grid_faults(project=project, grid_name=grid_name)
+        return instance
 
     def to_rms(self, project: Any, grid_name: str) -> None:
-        """Write the nested hybrid grid and its properties to an RMS project."""
+        """Write the nested hybrid grid and its properties to an RMS project.
+
+        Args:
+            project: RMS project instance.
+            grid_name: Name of the output grid in the RMS project.
+
+        Note:
+            Grid faults are transferred to the nested grid if the class was
+            initialized with method :meth:`from_rms` but only for right-handed grids.
+        """
         self.grid.to_roxar(project, grid_name)
 
         for prop in self.properties:
             if prop.name not in ORIGINAL_IJK_PROPERTY_NAMES:
                 prop.to_roxar(project, grid_name, prop.name)
+
+        if self._parent_faults is not None:
+            write_grid_faults(
+                project=project,
+                grid_name=grid_name,
+                parent_faults=self._parent_faults,
+                nested_dimensions=self.dimensions,
+                nested_cells_by_parent=self.nested_cells_by_parent,
+            )
 
     @staticmethod
     def _validate_inputs(
