@@ -18,14 +18,15 @@ from __future__ import annotations
 
 import logging
 import warnings
-from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias, TypeVar
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeAlias
 
 import numpy as np
 import pandas as pd
 import xtgeo
 from pydantic import BaseModel, Field, ValidationError
+
+from ._cell_indexing import CellsByParent, ijk_to_flat_index
 
 if TYPE_CHECKING:
     import os
@@ -40,7 +41,6 @@ _logger = logging.getLogger(__name__)
 
 FaceDirection: TypeAlias = Literal["I+", "I-", "J+", "J-", "K+", "K-"]
 IJKIndex: TypeAlias = tuple[int, int, int]
-IndexLike = TypeVar("IndexLike", int, np.ndarray)
 BoundaryCellFace: TypeAlias = tuple[int, int, FaceDirection]
 ORIGINAL_IJK_PROPERTY_NAMES = ("parent_I", "parent_J", "parent_K")
 
@@ -52,78 +52,6 @@ _FACE_OPPOSITES: dict[FaceDirection, FaceDirection] = {
     "K+": "K-",
     "K-": "K+",
 }
-
-
-@dataclass(frozen=True)
-class CellsByParent:
-    """Group flattened cell indices by parent.
-
-    group_start and group_stop are indexed by parent and define slices
-    into cell_indices. Unmapped parents have both set to -1.
-    """
-
-    cell_indices: np.ndarray
-    group_start: np.ndarray
-    group_stop: np.ndarray
-
-    @classmethod
-    def from_parent_indices(
-        cls,
-        parent_indices: np.ndarray,
-        selected_mask: np.ndarray,
-        parent_cell_count: int,
-    ) -> Self:
-        selected_parent_indices = parent_indices[selected_mask]
-        selected_cell_indices = np.flatnonzero(selected_mask)
-
-        if selected_parent_indices.size == 0:
-            raise ValueError("No selected parent indices found.")
-
-        sort_order = np.argsort(selected_parent_indices)
-
-        sorted_parent_indices = selected_parent_indices[sort_order]
-        sorted_cell_indices = selected_cell_indices[sort_order]
-
-        cuts = np.flatnonzero(np.diff(sorted_parent_indices)) + 1
-
-        group_starts = np.r_[0, cuts]
-        group_stops = np.r_[cuts, sorted_parent_indices.size]
-        unique_parent_indices = sorted_parent_indices[group_starts]
-
-        group_start = np.full(parent_cell_count, -1, dtype=np.intp)
-        group_stop = np.full(parent_cell_count, -1, dtype=np.intp)
-
-        group_start[unique_parent_indices] = group_starts
-        group_stop[unique_parent_indices] = group_stops
-
-        return cls(
-            cell_indices=sorted_cell_indices,
-            group_start=group_start,
-            group_stop=group_stop,
-        )
-
-    @property
-    def mapped_mask(self) -> np.ndarray:
-        """Return a boolean mask indicating which parents have mapped cells."""
-        return self.group_start >= 0
-
-    @property
-    def mapped_parent_indices(self) -> np.ndarray:
-        """Return parent indices that have mapped cells."""
-        return np.flatnonzero(self.mapped_mask)
-
-    @property
-    def counts(self) -> np.ndarray:
-        """Return the number of cells mapped to each parent."""
-        return self.group_stop - self.group_start
-
-    def get_indices(self, parent_idx: int | np.intp) -> np.ndarray:
-        start = self.group_start[parent_idx]
-
-        if start == -1:
-            raise ValueError(f"No cells found for parent index {parent_idx}.")
-
-        return self.cell_indices[start : self.group_stop[parent_idx]]
 
 
 class BoundingBox(BaseModel):
@@ -226,8 +154,8 @@ def _find_boundary_faces(refined_area: np.ma.MaskedArray) -> list[BoundaryCellFa
         ijk_inside: IJKIndex,
         face_direction: FaceDirection,
     ):
-        outside_idx = _ijk_to_flat_index(*ijk_outside, jdim=nrow, kdim=nlay)
-        inside_idx = _ijk_to_flat_index(*ijk_inside, jdim=nrow, kdim=nlay)
+        outside_idx = ijk_to_flat_index(*ijk_outside, jdim=nrow, kdim=nlay)
+        inside_idx = ijk_to_flat_index(*ijk_inside, jdim=nrow, kdim=nlay)
 
         faces.append((int(outside_idx), int(inside_idx), face_direction))
 
@@ -350,15 +278,6 @@ def _set_actnum_in_grid(grid: xtgeo.Grid, active_mask: np.ndarray) -> None:
     grid.set_actnum(actnum)
 
 
-def _ijk_to_flat_index(
-    i: IndexLike, j: IndexLike, k: IndexLike, jdim: int, kdim: int
-) -> IndexLike:
-    """Convert 0-based (i, j, k) indices to positions in a 1D flattened array.
-    This follows NumPy C-order (row-major) indexing.
-    """
-    return i * jdim * kdim + j * kdim + k
-
-
 def _validate_create_upscaling_mapping_inputs(
     geo_parent_i: xtgeo.GridProperty,
     geo_parent_j: xtgeo.GridProperty,
@@ -457,7 +376,7 @@ def _create_upscaling_mappings_arrays(
     )
 
     geo_parent_cell_indices = np.full(geo_parent_i_values1d.size, -1, dtype=np.intp)
-    geo_parent_cell_indices[cells_to_map] = _ijk_to_flat_index(
+    geo_parent_cell_indices[cells_to_map] = ijk_to_flat_index(
         geo_parent_i_values1d[cells_to_map] - 1,
         geo_parent_j_values1d[cells_to_map] - 1,
         geo_parent_k_values1d[cells_to_map] - 1,
@@ -751,7 +670,7 @@ class NestedHybridGrid:
         parent_j = self._grid.get_prop_by_name("parent_J")
         parent_k = self._grid.get_prop_by_name("parent_K")
 
-        parent_indices = _ijk_to_flat_index(
+        parent_indices = ijk_to_flat_index(
             i=parent_i.values - 1,
             j=parent_j.values - 1,
             k=parent_k.values - 1,

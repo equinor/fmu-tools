@@ -18,8 +18,8 @@ from fmu.tools.nestedhybridgrid.nestedhybrid import (
     BoundingBox,
     CellsByParent,
     _create_upscaling_mappings_arrays,
-    _ijk_to_flat_index,
     _set_actnum_in_grid,
+    ijk_to_flat_index,
 )
 
 # ---------------------------------------------------------------------------
@@ -145,7 +145,7 @@ def test_ijk_to_flat_index_matches_c_order_formula():
     j0 = j.values - 1
     k0 = k.values - 1
 
-    got = _ijk_to_flat_index(i=i0, j=j0, k=k0, jdim=4, kdim=5)
+    got = ijk_to_flat_index(i=i0, j=j0, k=k0, jdim=4, kdim=5)
     expected = np.ravel_multi_index((i0, j0, k0), dims=(3, 4, 5))
     np.testing.assert_array_equal(got, expected)
 
