@@ -68,7 +68,7 @@ ZONE_CODE_NAMES = {
 
 def create_grid(project: Any) -> None:
     grid = xtgeo.create_box_grid(GRID_DIM, origin=ORIGIN, increment=INCREMENT)
-    grid.to_roxar(project, GRIDNAME)
+    grid.to_rms(project, GRIDNAME)
 
 
 def create_wells(project: Any) -> List[str]:
@@ -273,7 +273,7 @@ def test_generate_bw() -> None:
 
 
 def write_bw_to_files(project: Any) -> List[str]:
-    xtgeo_bw = xtgeo.blockedwells_from_roxar(
+    xtgeo_bw = xtgeo.blockedwells_from_rms(
         project, GRIDNAME, BLOCKED_WELL_SET, lognames="all"
     )
     wells = xtgeo_bw.wells

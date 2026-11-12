@@ -82,16 +82,16 @@ geogrid-to-parent mappings:
     nhg = NestedHybridGrid.from_rms(...)
 
     # Load existing geogrid-to-parent mappings
-    i = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingColumn")
-    j = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingRow")
-    k = xtgeo.gridproperty_from_roxar(project, "Geogrid", "RescalingLayer")
+    i = xtgeo.gridproperty_from_rms(project, "Geogrid", "RescalingColumn")
+    j = xtgeo.gridproperty_from_rms(project, "Geogrid", "RescalingRow")
+    k = xtgeo.gridproperty_from_rms(project, "Geogrid", "RescalingLayer")
 
     # Convert them to geogrid-to-nested-grid mappings
     nested_i, nested_j, nested_k = nhg.create_upscaling_mappings(i, j, k)
 
-    nested_i.to_roxar(project, "Geogrid", "Nested_I")
-    nested_j.to_roxar(project, "Geogrid", "Nested_J")
-    nested_k.to_roxar(project, "Geogrid", "Nested_K")
+    nested_i.to_rms(project, "Geogrid", "Nested_I")
+    nested_j.to_rms(project, "Geogrid", "Nested_J")
+    nested_k.to_rms(project, "Geogrid", "Nested_K")
    
 
 After rescaling, compute the NNC transmissibilities and export them for the
@@ -109,17 +109,17 @@ flow simulator:
     GNAME = "NestedHybrid"
 
     # Load grid and region property which may be stored in RMS
-    nested = xtgeo.grid_from_roxar(project, GNAME)
+    nested = xtgeo.grid_from_rms(project, GNAME)
 
     # load the NNC table
     nnc_table = pd.read_csv("path_to_some_nnc_file.csv")
 
 
     # Load rescaled property input for transmissibilities and compute
-    permx = xtgeo.gridproperty_from_roxar(project, GNAME,"PERMX")
-    permy = xtgeo.gridproperty_from_roxar(project, GNAME,"PERMY")
-    permz = xtgeo.gridproperty_from_roxar(project, GNAME,"PERMZ")
-    ntg   = xtgeo.gridproperty_from_roxar(project, GNAME,"NTG")  # defaults to 1 if no NTG
+    permx = xtgeo.gridproperty_from_rms(project, GNAME,"PERMX")
+    permy = xtgeo.gridproperty_from_rms(project, GNAME,"PERMY")
+    permz = xtgeo.gridproperty_from_rms(project, GNAME,"PERMZ")
+    ntg   = xtgeo.gridproperty_from_rms(project, GNAME,"NTG")  # defaults to 1 if no NTG
 
     # compute transmissibilities. Note that flow simulators do this for the normal cells/faults
     # so strictly speaking, only nnc_hybrid is needed here.
@@ -132,7 +132,7 @@ flow simulator:
 
     # Or map NNCs onto grid properties for visualisation
     tx_nnc, ty_nnc, tz_nnc = nnc_to_gridproperty(nested, nnc_hybrid)
-    tx_nnc.to_roxar(project, GNAME, "TRANX_NNC_QC")  # etc
+    tx_nnc.to_rms(project, GNAME, "TRANX_NNC_QC")  # etc
 
 Concepts
 --------

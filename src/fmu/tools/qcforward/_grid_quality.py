@@ -120,7 +120,7 @@ class GridQuality(QCForward):
 
             if self.data["project"] and self.ldata.writeicon and therules is not None:
                 QCC.print_info(f"Write icon in RMS for {prop.name}")
-                prop.to_roxar(self.data["project"], self.data["grid"], prop.name)
+                prop.to_rms(self.data["project"], self.data["grid"], prop.name)
 
             if therules is None:
                 continue

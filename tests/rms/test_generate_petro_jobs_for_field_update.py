@@ -301,12 +301,12 @@ def create_project() -> Any:
     # populate with grid and props
     grid_data = REFERENCE_DIR / grid_file_name
     grd = xtgeo.grid_from_file(grid_data, fformat="roff")
-    grd.to_roxar(project, rms_grid_name)
+    grd.to_rms(project, rms_grid_name)
     facies_data = REFERENCE_DIR / facies_file_name
     facies = xtgeo.gridproperty_from_file(
         facies_data, name=rms_facies_real_name, fformat="roff"
     )
-    facies.to_roxar(project, rms_grid_name, rms_facies_real_name)
+    facies.to_rms(project, rms_grid_name, rms_facies_real_name)
 
     job_name = create_original_petro_job(spec_original_dict)
     petro_job = roxar.jobs.Job.get_job(OWNER_STRING_SINGLE_ZONE, JOB_TYPE, job_name)
@@ -327,12 +327,12 @@ def create_project() -> Any:
     grid_data = REFERENCE_DIR / grid_file_name
     grd = xtgeo.grid_from_file(grid_data, fformat="roff")
     rename_subgrids(grd)
-    grd.to_roxar(project, rms_grid_name)
+    grd.to_rms(project, rms_grid_name)
     facies_data = REFERENCE_DIR / facies_file_name
     facies = xtgeo.gridproperty_from_file(
         facies_data, name=rms_facies_real_name, fformat="roff"
     )
-    facies.to_roxar(project, rms_grid_name, rms_facies_real_name)
+    facies.to_rms(project, rms_grid_name, rms_facies_real_name)
 
     job_name = create_original_petro_job(spec_original_dict)
     petro_job = roxar.jobs.Job.get_job(OWNER_STRING_MULTI_ZONE, JOB_TYPE, job_name)

@@ -1437,8 +1437,8 @@ class TestNestedHybridGridRmsIO:
         )
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid) as mock_grid,
-            patch("xtgeo.gridproperty_from_roxar", return_value=region) as mock_prop,
+            patch("xtgeo.grid_from_rms", return_value=grid) as mock_grid,
+            patch("xtgeo.gridproperty_from_rms", return_value=region) as mock_prop,
         ):
             nhg = NestedHybridGrid.from_rms(
                 project="mock_project",
@@ -1459,8 +1459,8 @@ class TestNestedHybridGridRmsIO:
         )
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
-            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+            patch("xtgeo.grid_from_rms", return_value=grid),
+            patch("xtgeo.gridproperty_from_rms", return_value=region),
         ):
             nhg = NestedHybridGrid.from_rms(
                 project="mock_project",
@@ -1488,8 +1488,8 @@ class TestNestedHybridGridRmsIO:
         )
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
-            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+            patch("xtgeo.grid_from_rms", return_value=grid),
+            patch("xtgeo.gridproperty_from_rms", return_value=region),
             pytest.raises(ValueError, match="No cells found for target_region_id"),
         ):
             NestedHybridGrid.from_rms(
@@ -1506,8 +1506,8 @@ class TestNestedHybridGridRmsIO:
         )
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
-            patch("xtgeo.gridproperty_from_roxar", return_value=region) as mock_prop,
+            patch("xtgeo.grid_from_rms", return_value=grid),
+            patch("xtgeo.gridproperty_from_rms", return_value=region) as mock_prop,
         ):
             NestedHybridGrid.from_rms(
                 project="mock_project",
@@ -1527,9 +1527,9 @@ class TestNestedHybridGridRmsIO:
         sw = _make_constant_property(grid, "SW", 0.8)
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
+            patch("xtgeo.grid_from_rms", return_value=grid),
             patch(
-                "xtgeo.gridproperty_from_roxar", side_effect=[region, poro, sw]
+                "xtgeo.gridproperty_from_rms", side_effect=[region, poro, sw]
             ) as mock_prop,
         ):
             nhg = NestedHybridGrid.from_rms(
@@ -1565,8 +1565,8 @@ class TestNestedHybridGridRmsIO:
         poro = _make_constant_property(grid, "PORO", 0.3)
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
-            patch("xtgeo.gridproperty_from_roxar", side_effect=[region, poro]),
+            patch("xtgeo.grid_from_rms", return_value=grid),
+            patch("xtgeo.gridproperty_from_rms", side_effect=[region, poro]),
         ):
             nhg = NestedHybridGrid.from_rms(
                 "mock_project", "Grid", "REGION", (2, 2, 2), ["PORO"]
@@ -1582,8 +1582,8 @@ class TestNestedHybridGridRmsIO:
         )
 
         with (
-            patch("xtgeo.grid_from_roxar", return_value=grid),
-            patch("xtgeo.gridproperty_from_roxar", return_value=region),
+            patch("xtgeo.grid_from_rms", return_value=grid),
+            patch("xtgeo.gridproperty_from_rms", return_value=region),
         ):
             nhg = NestedHybridGrid.from_rms(
                 project="mock_project",
@@ -1604,8 +1604,8 @@ class TestNestedHybridGridRmsIO:
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
 
         with (
-            patch.object(xtgeo.Grid, "to_roxar") as mock_grid_write,
-            patch.object(xtgeo.GridProperty, "to_roxar") as mock_prop_write,
+            patch.object(xtgeo.Grid, "to_rms") as mock_grid_write,
+            patch.object(xtgeo.GridProperty, "to_rms") as mock_prop_write,
         ):
             nhg.to_rms("mock_project", "NestedGrid")
 
@@ -1623,8 +1623,8 @@ class TestNestedHybridGridRmsIO:
         nhg = NestedHybridGrid(coarse_grid=grid, region=region, refinement=(2, 2, 2))
 
         with (
-            patch.object(xtgeo.Grid, "to_roxar"),
-            patch.object(xtgeo.GridProperty, "to_roxar") as mock_prop_write,
+            patch.object(xtgeo.Grid, "to_rms"),
+            patch.object(xtgeo.GridProperty, "to_rms") as mock_prop_write,
         ):
             nhg.to_rms("mock_project", "NestedGrid")
 
