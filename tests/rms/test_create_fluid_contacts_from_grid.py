@@ -313,8 +313,8 @@ def test_create_fluid_contacts_from_grid(mock_loader: MockRMSDataLoader) -> None
             "fmu.tools.rms.fluid_contacts_from_grid._RMSDataLoader",
             return_value=mock_loader,
         ),
-        patch.object(xtgeo.RegularSurface, "to_roxar") as mock_surface_to_roxar,
-        patch.object(xtgeo.Polygons, "to_roxar") as mock_polygons_to_roxar,
+        patch.object(xtgeo.RegularSurface, "to_rms") as mock_surface_to_rms,
+        patch.object(xtgeo.Polygons, "to_rms") as mock_polygons_to_rms,
     ):
         create_fluid_contacts_from_grid(
             project=mock_project,
@@ -329,17 +329,17 @@ def test_create_fluid_contacts_from_grid(mock_loader: MockRMSDataLoader) -> None
     mock_loader.load_property_mock.assert_any_call("FWL")
 
     # check that surfaces was created for both zones
-    mock_surface_to_roxar.assert_any_call(
+    mock_surface_to_rms.assert_any_call(
         mock_project, "ZONE1", "fluid_contact_surfaces/fwl", stype="general2d_data"
     )
-    mock_surface_to_roxar.assert_any_call(
+    mock_surface_to_rms.assert_any_call(
         mock_project, "ZONE2", "fluid_contact_surfaces/fwl", stype="general2d_data"
     )
 
     # check that polygons was created for both zones
-    mock_polygons_to_roxar.assert_any_call(
+    mock_polygons_to_rms.assert_any_call(
         mock_project, "ZONE1", "fluid_contact_outlines/fwl", stype="general2d_data"
     )
-    mock_polygons_to_roxar.assert_any_call(
+    mock_polygons_to_rms.assert_any_call(
         mock_project, "ZONE2", "fluid_contact_outlines/fwl", stype="general2d_data"
     )

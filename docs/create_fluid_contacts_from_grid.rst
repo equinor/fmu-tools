@@ -109,7 +109,7 @@ Example with the use of a template surface and grid refinement by 2 to enhance r
     import xtgeo
     from fmu.tools.rms import create_fluid_contacts_from_grid
 
-    template_surf = xtgeo.surface_from_roxar(project, "template_surface", "templates", stype="clipboard")
+    template_surf = xtgeo.surface_from_rms(project, "template_surface", "templates", stype="clipboard")
 
     create_fluid_contacts_from_grid(
         project=project,

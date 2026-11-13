@@ -147,7 +147,7 @@ class QCData(object):
             self._grid = (
                 xtgeo.grid_from_file(gridname)
                 if self._project is None
-                else xtgeo.grid_from_roxar(self._project, gridname)
+                else xtgeo.grid_from_rms(self._project, gridname)
             )
             self._xtgdata["grid"][gridname] = self._grid
             self._xtgdata["gridprops"][gridname] = {}
@@ -188,9 +188,7 @@ class QCData(object):
         else:
             # read from RMS/ROXAPI
             for pname in gridprops:
-                xtg_gprop = xtgeo.gridproperty_from_roxar(
-                    self._project, gridname, pname
-                )
+                xtg_gprop = xtgeo.gridproperty_from_rms(self._project, gridname, pname)
                 gprops.append(xtg_gprop)
                 self._xtgdata["gridprops"][gridname][pname] = xtg_gprop
 
@@ -240,7 +238,7 @@ class QCData(object):
                             well, lognames=settings.get("lognames", "all")
                         )
                         if self._project is None
-                        else xtgeo.well_from_roxar(
+                        else xtgeo.well_from_rms(
                             project=self._project,
                             name=well,
                             lognames=settings.get("lognames", "all"),
@@ -252,7 +250,7 @@ class QCData(object):
                     mywell = (
                         xtgeo.blockedwell_from_file(well)
                         if self._project is None
-                        else xtgeo.blockedwell_from_roxar(
+                        else xtgeo.blockedwell_from_rms(
                             project=self._project,
                             gname=wells.get("grid", "Geogrid"),
                             bwname=wells.get("bwname", "BW"),

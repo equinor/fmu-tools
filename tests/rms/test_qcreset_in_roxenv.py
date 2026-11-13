@@ -80,27 +80,27 @@ def fixture_create_project(testdata_path: Path) -> Generator[Any, None, None]:
         if "XP_with" in wfile:
             wobj.name = "OP2_w_repeat"
 
-        wobj.to_roxar(project, wobj.name, logrun="log", trajectory="My trajectory")
+        wobj.to_rms(project, wobj.name, logrun="log", trajectory="My trajectory")
 
     # populate with cube data
     cube = xtgeo.cube_from_file(cubedata1)
-    cube.to_roxar(project, CUBENAME1, domain="depth")
+    cube.to_rms(project, CUBENAME1, domain="depth")
 
     # populate with surface data
     rox.create_horizons_category(SURFCAT1)
     for num, name in enumerate(SURFNAMES1):
         srf = xtgeo.surface_from_file(surftops1[num])
         project.horizons.create(name, roxar.HorizonType.interpreted)
-        srf.to_roxar(project, name, SURFCAT1)
+        srf.to_rms(project, name, SURFCAT1)
 
     # populate with grid and props
     grd = xtgeo.grid_from_file(griddata1)
-    grd.to_roxar(project, GRIDNAME1)
+    grd.to_rms(project, GRIDNAME1)
     por = xtgeo.gridproperty_from_file(porodata1, name=PORONAME1)
-    por.to_roxar(project, GRIDNAME1, PORONAME1)
+    por.to_rms(project, GRIDNAME1, PORONAME1)
     zon = xtgeo.gridproperty_from_file(zonedata1, name=ZONENAME1)
     zon.values = zon.values.astype(np.uint8)
-    zon.to_roxar(project, GRIDNAME1, ZONENAME1)
+    zon.to_rms(project, GRIDNAME1, ZONENAME1)
 
     # save project (both an initla version and a work version) and exit
     project.save_as(prj1)
@@ -146,10 +146,10 @@ def test_qcreset() -> None:
 
     qcreset.set_data_constant(SETUP1)
 
-    topr = xtgeo.surface_from_roxar(rox.project, "TopReek", "DS_whatever")
+    topr = xtgeo.surface_from_rms(rox.project, "TopReek", "DS_whatever")
     assert topr.values.mean() == pytest.approx(0.088)
 
-    poro = xtgeo.gridproperty_from_roxar(rox.project, "Simgrid", "PORO")
+    poro = xtgeo.gridproperty_from_rms(rox.project, "Simgrid", "PORO")
     assert poro.values.mean() == pytest.approx(0.088)
 
     qcreset.set_data_empty(SETUP2)
