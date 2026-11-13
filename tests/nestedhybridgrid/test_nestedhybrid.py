@@ -1114,12 +1114,12 @@ class TestNestedHybridGridClass:
 
 
 # ---------------------------------------------------------------------------
-# Tests for get_transmissibilities with nested hybrid NNCs
+# Tests for transmissibilities with nested hybrid NNCs
 # ---------------------------------------------------------------------------
 
 
 class TestTransmissibilitiesOnMergedGrid:
-    """Test calling get_transmissibilities on the merged grid"""
+    """Test transmissibility calculations on the merged grid."""
 
     @staticmethod
     def _build_merged_with_props(dimension=(6, 6, 2), refinement=(1, 1, 1)):
@@ -1136,10 +1136,16 @@ class TestTransmissibilitiesOnMergedGrid:
         return merged, nnc_table, permx, permy, permz, ntg
 
     def test_transmissibilities_return_types(self):
-        """get_transmissibilities should return the expected types."""
+        """The transmissibility methods should return the expected types."""
         merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
 
-        tranx, trany, tranz, nnc, nnc_nh, rbnd = merged.get_transmissibilities(
+        tranx, trany, tranz, nnc = merged.get_cell_transmissibilities(
+            permx=permx,
+            permy=permy,
+            permz=permz,
+            ntg=ntg,
+        )
+        nnc_nh = merged.get_nested_hybrid_nnc_transmissibilities(
             permx=permx,
             permy=permy,
             permz=permz,
@@ -1150,19 +1156,21 @@ class TestTransmissibilitiesOnMergedGrid:
         assert isinstance(trany, xtgeo.GridProperty)
         assert isinstance(tranz, xtgeo.GridProperty)
         assert isinstance(nnc, pd.DataFrame)
-        assert nnc_nh is None or isinstance(nnc_nh, pd.DataFrame)
-        assert rbnd is None or isinstance(rbnd, xtgeo.GridProperty)
+        assert isinstance(nnc_nh, pd.DataFrame)
+        assert len(nnc_nh) == len(nnc_table)
+        assert {"I1", "J1", "K1", "I2", "J2", "K2", "T", "TYPE", "DIRECTION"}.issubset(
+            nnc_nh.columns
+        )
 
     def test_transmissibilities_positive(self):
         """Transmissibility values should be non-negative for a uniform grid."""
-        merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
+        merged, _, permx, permy, permz, ntg = self._build_merged_with_props()
 
-        tranx, trany, tranz, *_ = merged.get_transmissibilities(
+        tranx, trany, tranz, _ = merged.get_cell_transmissibilities(
             permx=permx,
             permy=permy,
             permz=permz,
             ntg=ntg,
-            nnc_table=nnc_table,
         )
         for tprop in (tranx, trany, tranz):
             vals = np.ma.filled(tprop.values, fill_value=0.0)
@@ -1170,31 +1178,31 @@ class TestTransmissibilitiesOnMergedGrid:
 
     def test_nnc_dataframe_has_expected_columns(self):
         """The NNC DataFrame should have the standard columns."""
-        merged, nnc_table, permx, permy, permz, ntg = self._build_merged_with_props()
+        merged, _, permx, permy, permz, ntg = self._build_merged_with_props()
 
-        _, _, _, nnc, *_ = merged.get_transmissibilities(
+        _, _, _, nnc = merged.get_cell_transmissibilities(
             permx=permx,
             permy=permy,
             permz=permz,
             ntg=ntg,
-            nnc_table=nnc_table,
         )
         expected = {"I1", "J1", "K1", "I2", "J2", "K2", "T", "TYPE"}
         assert expected.issubset(set(nnc.columns))
 
     def test_without_nnc_table(self):
-        """get_transmissibilities without nnc_table should still work."""
+        """Ordinary transmissibilities do not require an NNC table."""
         merged, _, permx, permy, permz, ntg = self._build_merged_with_props()
 
-        tranx, trany, tranz, nnc, nnc_nh, rbnd = merged.get_transmissibilities(
+        tranx, trany, tranz, nnc = merged.get_cell_transmissibilities(
             permx=permx,
             permy=permy,
             permz=permz,
             ntg=ntg,
         )
         assert isinstance(tranx, xtgeo.GridProperty)
-        assert nnc_nh is None
-        assert rbnd is None
+        assert isinstance(trany, xtgeo.GridProperty)
+        assert isinstance(tranz, xtgeo.GridProperty)
+        assert isinstance(nnc, pd.DataFrame)
 
 
 # ---------------------------------------------------------------------------
