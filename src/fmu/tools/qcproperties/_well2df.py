@@ -13,7 +13,8 @@ QCC = _QCCommon()
 class WellLogs2df:
     """
     Class responsible for generating a property dataframe from well logs, and
-    providing control arguments for the statisics extraction using PropertyAggregation()
+    providing control arguments for the statistics extraction using
+    PropertyAggregation()
     """
 
     def __init__(
@@ -47,7 +48,7 @@ class WellLogs2df:
 
     @property
     def property_type(self) -> Optional[str]:
-        """Property type (continous/discrete)"""
+        """Property type (continuous/discrete)"""
         return self._property_type
 
     @property
@@ -117,7 +118,7 @@ class WellLogs2df:
     def _check_logs_and_set_property_type(self):
         """
         Use XTGeo to check that selectors are discrete, and also
-        check if input properties are continous or discrete.
+        check if input properties are continuous or discrete.
         Raise errors if not desired format.
         """
         # check that all selectors are discrete
@@ -138,12 +139,12 @@ class WellLogs2df:
         # Set attribute used to control aggregation method
         discrete = self._wells[0].isdiscrete(properties[0])
         QCC.print_debug(
-            f"{'Discrete' if discrete else 'Continous'} properties in input"
+            f"{'Discrete' if discrete else 'Continuous'} properties in input"
         )
         self._property_type = "DISC" if discrete else "CONT"
 
     def _codes_to_codenames(self):
-        """Replace codes in dicrete parameters with codenames"""
+        """Replace codes in discrete parameters with codenames"""
         for param in self._controls["unique_parameters"]:
             if self._wells[0].isdiscrete(param):
                 codes = self._wells[0].get_logrecord(param).copy()
