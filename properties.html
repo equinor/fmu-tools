@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The properties package &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>The properties package &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="_static/documentation_options.js?v=de60e6bc"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -140,9 +140,9 @@ factors are constant numbers:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_saturation</span><span class="p">():</span>
-    <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">)</span>
-    <span class="n">poro</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PORONAME</span><span class="p">)</span>
-    <span class="n">perm</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PERMNAME</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">)</span>
+    <span class="n">poro</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PORONAME</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">PERMNAME</span><span class="p">)</span>
 
     <span class="c1"># avoid zero porosities in the division below</span>
     <span class="n">poro</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">poro</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
@@ -160,7 +160,7 @@ factors are constant numbers:</p>
     <span class="p">)</span>
     <span class="n">sw</span> <span class="o">=</span> <span class="n">sw_func</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">CALC</span><span class="p">)[</span><span class="s2">"SW"</span><span class="p">]</span>
     <span class="n">sw</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">poro</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># 100% water when low porosity</span>
-    <span class="n">sw</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">SW_RESULT</span><span class="p">)</span>
+    <span class="n">sw</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GRIDNAME</span><span class="p">,</span> <span class="n">SW_RESULT</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>

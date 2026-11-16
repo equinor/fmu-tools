@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>fmu.tools.rms.fluid_contacts_from_grid &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="../../../../_static/documentation_options.js?v=de60e6bc"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -129,13 +129,11 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">Grid</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Load grid from RMS."""</span>
-        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_rms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">property_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">GridProperty</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Load a property from RMS."""</span>
-        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">,</span> <span class="n">property_name</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_name</span><span class="p">,</span> <span class="n">property_name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">find_available_contact_properties</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">fwl_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">goc_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gwc_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">owc_name</span><span class="p">:</span> <span class="nb">str</span>
@@ -387,7 +385,7 @@
                 <span class="k">if</span> <span class="n">template_surf</span><span class="p">:</span>
                     <span class="n">surf</span> <span class="o">=</span> <span class="n">resample_surf_to_template</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">template_surf</span><span class="p">)</span>
 
-                <span class="n">surf</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+                <span class="n">surf</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>
                     <span class="n">zonename</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_SURFACES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
@@ -400,7 +398,7 @@
                 <span class="n">min_value_filter</span><span class="p">,</span>
                 <span class="n">rescale_distance</span><span class="p">,</span>
             <span class="p">):</span>
-                <span class="n">outline</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+                <span class="n">outline</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>
                     <span class="n">zonename</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_FOLDER_OUTLINES</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">contact</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>

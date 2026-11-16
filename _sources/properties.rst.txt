@@ -51,9 +51,9 @@ factors are constant numbers:
 
 
     def compute_saturation():
-        grid = xtgeo.grid_from_roxar(project, GRIDNAME)
-        poro = xtgeo.gridproperty_from_roxar(project, GRIDNAME, PORONAME)
-        perm = xtgeo.gridproperty_from_roxar(project, GRIDNAME, PERMNAME)
+        grid = xtgeo.grid_from_rms(project, GRIDNAME)
+        poro = xtgeo.gridproperty_from_rms(project, GRIDNAME, PORONAME)
+        perm = xtgeo.gridproperty_from_rms(project, GRIDNAME, PERMNAME)
 
         # avoid zero porosities in the division below
         poro.values[poro.values == 0.0] = 0.01
@@ -71,7 +71,7 @@ factors are constant numbers:
         )
         sw = sw_func.compute(CALC)["SW"]
         sw.values[poro.values < 0.05] = 1.0  # 100% water when low porosity
-        sw.to_roxar(project, GRIDNAME, SW_RESULT)
+        sw.to_rms(project, GRIDNAME, SW_RESULT)
 
 
     if __name__ == "__main__":

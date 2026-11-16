@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Domain conversion &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>Domain conversion &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="_static/documentation_options.js?v=de60e6bc"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -199,19 +199,19 @@ method is planned to become the default in a future release.</p></li>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">load_input</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">"""Load input data, such as cubes and surfaces."""</span>
-    <span class="n">amplcube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">AMPL_TIME_CUBE</span><span class="p">)</span>
-    <span class="n">aicube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">AI_TIME_CUBE</span><span class="p">)</span>
+    <span class="n">amplcube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">AMPL_TIME_CUBE</span><span class="p">)</span>
+    <span class="n">aicube</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">cube_from_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">AI_TIME_CUBE</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading cubes </span><span class="si">{</span><span class="n">AMPL_TIME_CUBE</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">AI_TIME_CUBE</span><span class="si">}</span><span class="s2">... DONE"</span><span class="p">)</span>
 
     <span class="n">depthsurfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">timesurfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">HORIZONS</span><span class="p">:</span>
-        <span class="n">depthsurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">DEPTH_CATEGORY</span><span class="p">))</span>
-        <span class="n">timesurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">TIME_CATEGORY</span><span class="p">))</span>
+        <span class="n">depthsurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">DEPTH_CATEGORY</span><span class="p">))</span>
+        <span class="n">timesurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">TIME_CATEGORY</span><span class="p">))</span>
     <span class="c1"># read some other time surfaces to be converted</span>
     <span class="n">othertimesurfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">surf</span> <span class="ow">in</span> <span class="n">HORIZONS</span><span class="p">:</span>
-        <span class="n">tsfr</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">TIME_CATEGORY_OTHER</span><span class="p">)</span>
+        <span class="n">tsfr</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">surface_from_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">surf</span><span class="p">,</span> <span class="n">TIME_CATEGORY_OTHER</span><span class="p">)</span>
         <span class="n">othertimesurfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tsfr</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Loading surfaces... DONE"</span><span class="p">)</span>
@@ -246,8 +246,8 @@ method is planned to become the default in a future release.</p></li>
 <span class="w">    </span><span class="sd">"""Convert a cube to depth and back again for demonstration."""</span>
     <span class="n">dcube</span> <span class="o">=</span> <span class="n">_depth_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">tcube</span><span class="p">)</span>
     <span class="n">tcube_again</span> <span class="o">=</span> <span class="n">_time_convert_cube</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">dcube</span><span class="p">)</span>  <span class="c1"># going back again, for demonstration</span>
-    <span class="n">dcube</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">nickname</span> <span class="o">+</span> <span class="s2">"_depth"</span><span class="p">)</span>
-    <span class="n">tcube_again</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">nickname</span> <span class="o">+</span> <span class="s2">"_time_again"</span><span class="p">)</span>
+    <span class="n">dcube</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">nickname</span> <span class="o">+</span> <span class="s2">"_depth"</span><span class="p">)</span>
+    <span class="n">tcube_again</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="n">nickname</span> <span class="o">+</span> <span class="s2">"_time_again"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Save cubes in RMS... (</span><span class="si">{</span><span class="n">nickname</span><span class="si">}</span><span class="s2">...) DONE"</span><span class="p">)</span>
 
 
@@ -257,12 +257,12 @@ method is planned to become the default in a future release.</p></li>
     <span class="n">depthsurfaces</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">depth_convert_surfaces</span><span class="p">(</span><span class="n">othertimesurfs</span><span class="p">)</span>
     <span class="c1"># store on clipboard</span>
     <span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">depthsurfaces</span><span class="p">,</span> <span class="n">HORIZONS</span><span class="p">):</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_depth"</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">"clipboard"</span><span class="p">)</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_depth"</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">"clipboard"</span><span class="p">)</span>
     <span class="c1"># surfaces back to time domain</span>
     <span class="n">new_timesurfaces</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">time_convert_surfaces</span><span class="p">(</span><span class="n">depthsurfaces</span><span class="p">)</span>
     <span class="c1"># store new timesurfaces on clipboard</span>
     <span class="k">for</span> <span class="n">ts</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">new_timesurfaces</span><span class="p">,</span> <span class="n">HORIZONS</span><span class="p">):</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_time"</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">"clipboard"</span><span class="p">)</span>
+        <span class="n">ts</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">PRJ</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_time"</span><span class="p">,</span> <span class="n">CLIP_CATALOG</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">"clipboard"</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Depth and time convert surfaces... DONE"</span><span class="p">)</span>
 
 

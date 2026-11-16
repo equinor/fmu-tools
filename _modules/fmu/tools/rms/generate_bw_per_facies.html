@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.rms.generate_bw_per_facies &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>fmu.tools.rms.generate_bw_per_facies &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="../../../../_static/documentation_options.js?v=de60e6bc"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -138,7 +138,7 @@
 
     <span class="n">original_log_names</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">original_petro_log_names</span><span class="p">)</span>
     <span class="n">original_log_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">facies_log_name</span><span class="p">)</span>
-    <span class="n">bw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">blockedwells_from_roxar</span><span class="p">(</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">blockedwells_from_rms</span><span class="p">(</span>
         <span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">bw_name</span><span class="p">,</span> <span class="n">lognames</span><span class="o">=</span><span class="n">original_log_names</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>
@@ -180,7 +180,7 @@
         <span class="k">if</span> <span class="n">debug_print</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
 
-        <span class="n">well</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span>
+        <span class="n">well</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span>
             <span class="n">project</span><span class="p">,</span>
             <span class="n">grid_name</span><span class="p">,</span>
             <span class="n">bw_name</span><span class="p">,</span>

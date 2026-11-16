@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>fmu.tools.nestedhybridgrid.nestedhybrid &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="../../../../_static/documentation_options.js?v=de60e6bc"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -754,11 +754,11 @@
 <span class="sd">            target_region_id: Region value to refine (default: 1).</span>
 <span class="sd">        """</span>
 
-        <span class="n">parent_grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
-        <span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">region_name</span><span class="p">)</span>
+        <span class="n">parent_grid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
+        <span class="n">region</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">region_name</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">propname</span> <span class="ow">in</span> <span class="n">properties</span> <span class="ow">or</span> <span class="p">[]:</span>
-            <span class="n">prop</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">propname</span><span class="p">)</span>
+            <span class="n">prop</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">propname</span><span class="p">)</span>
             <span class="n">parent_grid</span><span class="o">.</span><span class="n">append_prop</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">parent_grid</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">refinement</span><span class="p">,</span> <span class="n">target_region_id</span><span class="p">)</span></div>
@@ -768,11 +768,11 @@
 <a class="viewcode-back" href="../../../../fmu.tools.nestedhybridgrid.html#fmu.tools.NestedHybridGrid.to_rms">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_rms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Write the nested hybrid grid and its properties to an RMS project."""</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ORIGINAL_IJK_PROPERTY_NAMES</span><span class="p">:</span>
-                <span class="n">prop</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+                <span class="n">prop</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid_name</span><span class="p">,</span> <span class="n">prop</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
     <span class="nd">@staticmethod</span>

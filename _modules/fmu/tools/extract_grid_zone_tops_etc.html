@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmu.tools.extract_grid_zone_tops_etc &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>fmu.tools.extract_grid_zone_tops_etc &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="../../../_static/documentation_options.js?v=de60e6bc"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -130,8 +130,8 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_gridzonelog</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">zone_param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
-                <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">zone_param</span><span class="p">)</span>
+                <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>
+                <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">zone_param</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mygrid</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_file</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
                 <span class="n">gridzones</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_file</span><span class="p">(</span><span class="n">zone_param</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">mygrid</span><span class="p">)</span>
@@ -147,7 +147,7 @@
     <span class="k">for</span> <span class="n">well</span> <span class="ow">in</span> <span class="n">well_list</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">xtg_well</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_roxar</span><span class="p">(</span>
+                <span class="n">xtg_well</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">well_from_rms</span><span class="p">(</span>
                     <span class="n">project</span><span class="p">,</span>
                     <span class="nb">str</span><span class="p">(</span><span class="n">well</span><span class="p">),</span>
                     <span class="n">trajectory</span><span class="o">=</span><span class="n">trajectory</span><span class="p">,</span>

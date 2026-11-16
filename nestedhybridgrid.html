@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nested Hybrid Grids &mdash; fmu-tools 1.35.1.dev17+g87e5cdb03.d20261116 documentation</title>
+  <title>Nested Hybrid Grids &mdash; fmu-tools 1.35.1.dev18+g12b65f980 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a0e0a953"></script>
+      <script src="_static/documentation_options.js?v=de60e6bc"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -181,16 +181,16 @@ geogrid-to-parent mappings:</p>
 <span class="n">nhg</span> <span class="o">=</span> <span class="n">NestedHybridGrid</span><span class="o">.</span><span class="n">from_rms</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 
 <span class="c1"># Load existing geogrid-to-parent mappings</span>
-<span class="n">i</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingColumn"</span><span class="p">)</span>
-<span class="n">j</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingRow"</span><span class="p">)</span>
-<span class="n">k</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingLayer"</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingColumn"</span><span class="p">)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingRow"</span><span class="p">)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"RescalingLayer"</span><span class="p">)</span>
 
 <span class="c1"># Convert them to geogrid-to-nested-grid mappings</span>
 <span class="n">nested_i</span><span class="p">,</span> <span class="n">nested_j</span><span class="p">,</span> <span class="n">nested_k</span> <span class="o">=</span> <span class="n">nhg</span><span class="o">.</span><span class="n">create_upscaling_mappings</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
-<span class="n">nested_i</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_I"</span><span class="p">)</span>
-<span class="n">nested_j</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_J"</span><span class="p">)</span>
-<span class="n">nested_k</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_K"</span><span class="p">)</span>
+<span class="n">nested_i</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_I"</span><span class="p">)</span>
+<span class="n">nested_j</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_J"</span><span class="p">)</span>
+<span class="n">nested_k</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="s2">"Geogrid"</span><span class="p">,</span> <span class="s2">"Nested_K"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>After rescaling, compute the NNC transmissibilities and export them for the
@@ -205,17 +205,17 @@ flow simulator:</p>
 <span class="n">GNAME</span> <span class="o">=</span> <span class="s2">"NestedHybrid"</span>
 
 <span class="c1"># Load grid and region property which may be stored in RMS</span>
-<span class="n">nested</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">)</span>
+<span class="n">nested</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">grid_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">)</span>
 
 <span class="c1"># load the NNC table</span>
 <span class="n">nnc_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"path_to_some_nnc_file.csv"</span><span class="p">)</span>
 
 
 <span class="c1"># Load rescaled property input for transmissibilities and compute</span>
-<span class="n">permx</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMX"</span><span class="p">)</span>
-<span class="n">permy</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMY"</span><span class="p">)</span>
-<span class="n">permz</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMZ"</span><span class="p">)</span>
-<span class="n">ntg</span>   <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"NTG"</span><span class="p">)</span>  <span class="c1"># defaults to 1 if no NTG</span>
+<span class="n">permx</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMX"</span><span class="p">)</span>
+<span class="n">permy</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMY"</span><span class="p">)</span>
+<span class="n">permz</span> <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"PERMZ"</span><span class="p">)</span>
+<span class="n">ntg</span>   <span class="o">=</span> <span class="n">xtgeo</span><span class="o">.</span><span class="n">gridproperty_from_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span><span class="s2">"NTG"</span><span class="p">)</span>  <span class="c1"># defaults to 1 if no NTG</span>
 
 <span class="c1"># compute transmissibilities. Note that flow simulators do this for the normal cells/faults</span>
 <span class="c1"># so strictly speaking, only nnc_hybrid is needed here.</span>
@@ -228,7 +228,7 @@ flow simulator:</p>
 
 <span class="c1"># Or map NNCs onto grid properties for visualisation</span>
 <span class="n">tx_nnc</span><span class="p">,</span> <span class="n">ty_nnc</span><span class="p">,</span> <span class="n">tz_nnc</span> <span class="o">=</span> <span class="n">nnc_to_gridproperty</span><span class="p">(</span><span class="n">nested</span><span class="p">,</span> <span class="n">nnc_hybrid</span><span class="p">)</span>
-<span class="n">tx_nnc</span><span class="o">.</span><span class="n">to_roxar</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span> <span class="s2">"TRANX_NNC_QC"</span><span class="p">)</span>  <span class="c1"># etc</span>
+<span class="n">tx_nnc</span><span class="o">.</span><span class="n">to_rms</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">GNAME</span><span class="p">,</span> <span class="s2">"TRANX_NNC_QC"</span><span class="p">)</span>  <span class="c1"># etc</span>
 </pre></div>
 </div>
 </section>

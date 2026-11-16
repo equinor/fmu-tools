@@ -110,19 +110,19 @@ A larger example using cubes and surfaces in an RMS Python environment.
 
     def load_input():
         """Load input data, such as cubes and surfaces."""
-        amplcube = xtgeo.cube_from_roxar(PRJ, AMPL_TIME_CUBE)
-        aicube = xtgeo.cube_from_roxar(PRJ, AI_TIME_CUBE)
+        amplcube = xtgeo.cube_from_rms(PRJ, AMPL_TIME_CUBE)
+        aicube = xtgeo.cube_from_rms(PRJ, AI_TIME_CUBE)
         print(f"Loading cubes {AMPL_TIME_CUBE} and {AI_TIME_CUBE}... DONE")
 
         depthsurfs = []
         timesurfs = []
         for ds in HORIZONS:
-            depthsurfs.append(xtgeo.surface_from_roxar(PRJ, ds, DEPTH_CATEGORY))
-            timesurfs.append(xtgeo.surface_from_roxar(PRJ, ds, TIME_CATEGORY))
+            depthsurfs.append(xtgeo.surface_from_rms(PRJ, ds, DEPTH_CATEGORY))
+            timesurfs.append(xtgeo.surface_from_rms(PRJ, ds, TIME_CATEGORY))
         # read some other time surfaces to be converted
         othertimesurfs = []
         for surf in HORIZONS:
-            tsfr = xtgeo.surface_from_roxar(PRJ, surf, TIME_CATEGORY_OTHER)
+            tsfr = xtgeo.surface_from_rms(PRJ, surf, TIME_CATEGORY_OTHER)
             othertimesurfs.append(tsfr)
 
         print("Loading surfaces... DONE")
@@ -157,8 +157,8 @@ A larger example using cubes and surfaces in an RMS Python environment.
         """Convert a cube to depth and back again for demonstration."""
         dcube = _depth_convert_cube(dc, tcube)
         tcube_again = _time_convert_cube(dc, dcube)  # going back again, for demonstration
-        dcube.to_roxar(PRJ, nickname + "_depth")
-        tcube_again.to_roxar(PRJ, nickname + "_time_again")
+        dcube.to_rms(PRJ, nickname + "_depth")
+        tcube_again.to_rms(PRJ, nickname + "_time_again")
         print(f"Save cubes in RMS... ({nickname}...) DONE")
 
 
@@ -168,12 +168,12 @@ A larger example using cubes and surfaces in an RMS Python environment.
         depthsurfaces = dc.depth_convert_surfaces(othertimesurfs)
         # store on clipboard
         for ds, name in zip(depthsurfaces, HORIZONS):
-            ds.to_roxar(PRJ, f"{name}_depth", CLIP_CATALOG, stype="clipboard")
+            ds.to_rms(PRJ, f"{name}_depth", CLIP_CATALOG, stype="clipboard")
         # surfaces back to time domain
         new_timesurfaces = dc.time_convert_surfaces(depthsurfaces)
         # store new timesurfaces on clipboard
         for ts, name in zip(new_timesurfaces, HORIZONS):
-            ts.to_roxar(PRJ, f"{name}_time", CLIP_CATALOG, stype="clipboard")
+            ts.to_rms(PRJ, f"{name}_time", CLIP_CATALOG, stype="clipboard")
         print("Depth and time convert surfaces... DONE")
 
 
