@@ -36,8 +36,8 @@ def extract_grid_zone_tops(
     if not use_gridzonelog:
         if grid is not None and zone_param is not None:
             if project is not None:
-                mygrid = xtgeo.grid_from_roxar(project, grid)
-                gridzones = xtgeo.gridproperty_from_roxar(project, grid, zone_param)
+                mygrid = xtgeo.grid_from_rms(project, grid)
+                gridzones = xtgeo.gridproperty_from_rms(project, grid, zone_param)
             else:
                 mygrid = xtgeo.grid_from_file(grid)
                 gridzones = xtgeo.gridproperty_from_file(zone_param, grid=mygrid)
@@ -53,7 +53,7 @@ def extract_grid_zone_tops(
     for well in well_list:
         try:
             if project is not None:
-                xtg_well = xtgeo.well_from_roxar(
+                xtg_well = xtgeo.well_from_rms(
                     project,
                     str(well),
                     trajectory=trajectory,

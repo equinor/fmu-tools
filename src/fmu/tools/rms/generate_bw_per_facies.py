@@ -44,7 +44,7 @@ def create_bw_per_facies(
 
     original_log_names = copy.copy(original_petro_log_names)
     original_log_names.append(facies_log_name)
-    bw = xtgeo.blockedwells_from_roxar(
+    bw = xtgeo.blockedwells_from_rms(
         project, grid_name, bw_name, lognames=original_log_names
     )
     print(" ")
@@ -86,7 +86,7 @@ def create_bw_per_facies(
         if debug_print:
             print("-" * 100)
 
-        well.to_roxar(
+        well.to_rms(
             project,
             grid_name,
             bw_name,

@@ -637,22 +637,22 @@ class NestedHybridGrid:
             target_region_id: Region value to refine (default: 1).
         """
 
-        parent_grid = xtgeo.grid_from_roxar(project, grid_name)
-        region = xtgeo.gridproperty_from_roxar(project, grid_name, region_name)
+        parent_grid = xtgeo.grid_from_rms(project, grid_name)
+        region = xtgeo.gridproperty_from_rms(project, grid_name, region_name)
 
         for propname in properties or []:
-            prop = xtgeo.gridproperty_from_roxar(project, grid_name, propname)
+            prop = xtgeo.gridproperty_from_rms(project, grid_name, propname)
             parent_grid.append_prop(prop)
 
         return cls(parent_grid, region, refinement, target_region_id)
 
     def to_rms(self, project: Any, grid_name: str) -> None:
         """Write the nested hybrid grid and its properties to an RMS project."""
-        self.grid.to_roxar(project, grid_name)
+        self.grid.to_rms(project, grid_name)
 
         for prop in self.properties:
             if prop.name not in ORIGINAL_IJK_PROPERTY_NAMES:
-                prop.to_roxar(project, grid_name, prop.name)
+                prop.to_rms(project, grid_name, prop.name)
 
     @staticmethod
     def _validate_inputs(

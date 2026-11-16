@@ -664,7 +664,7 @@ requires-dist = [
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'" },
     { name = "types-pyyaml", marker = "extra == 'tests'" },
     { name = "xlrd", specifier = ">=1.2" },
-    { name = "xtgeo", specifier = ">=4.23.0" },
+    { name = "xtgeo", specifier = ">=4.27.0" },
 ]
 provides-extras = ["tests", "docs"]
 

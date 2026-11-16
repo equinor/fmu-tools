@@ -262,17 +262,17 @@ def create_project() -> Generator[Any, None, None]:
 
     dimensions = (NX, NY, NZ_ERTBOX)
     xtgeo_ertbox_grid = xtgeo.create_box_grid(dimensions, increment=(50.0, 50.0, 1.0))
-    xtgeo_ertbox_grid.to_roxar(project, GRID_MODEL_ERTBOX)
+    xtgeo_ertbox_grid.to_rms(project, GRID_MODEL_ERTBOX)
 
     dimensions = (NX, NY, NZ)
     xtgeo_grid_single = xtgeo.create_box_grid(dimensions, increment=(50.0, 50.0, 1.0))
-    xtgeo_grid_single.to_roxar(project, GRID_MODEL_GEO_SINGLE)
+    xtgeo_grid_single.to_rms(project, GRID_MODEL_GEO_SINGLE)
 
     xtgeo_grid_multizone = xtgeo.create_box_grid(
         dimensions, increment=(50.0, 50.0, 1.0)
     )
     xtgeo_grid_multizone.set_subgrids(SUBGRID_DICT)
-    xtgeo_grid_multizone.to_roxar(project, GRID_MODEL_GEO_MULTI)
+    xtgeo_grid_multizone.to_rms(project, GRID_MODEL_GEO_MULTI)
 
     values = make_facies_param_multizone((NX, NY, NZ))
     xtgeo_facies_param_multi = xtgeo.GridProperty(
@@ -286,7 +286,7 @@ def create_project() -> Generator[Any, None, None]:
         roxar_dtype=np.uint8,
         values=values,
     )
-    xtgeo_facies_param_multi.to_roxar(project, GRID_MODEL_GEO_MULTI, FACIES_REAL_NAME)
+    xtgeo_facies_param_multi.to_rms(project, GRID_MODEL_GEO_MULTI, FACIES_REAL_NAME)
 
     values = make_facies_param_singlezone((NX, NY, NZ))
     xtgeo_facies_param_single = xtgeo.GridProperty(
@@ -300,7 +300,7 @@ def create_project() -> Generator[Any, None, None]:
         roxar_dtype=np.uint8,
         values=values,
     )
-    xtgeo_facies_param_single.to_roxar(project, GRID_MODEL_GEO_SINGLE, FACIES_REAL_NAME)
+    xtgeo_facies_param_single.to_rms(project, GRID_MODEL_GEO_SINGLE, FACIES_REAL_NAME)
 
     values = make_zone_param((NX, NY, NZ))
     xtgeo_zone_param_multi = xtgeo.GridProperty(
@@ -314,7 +314,7 @@ def create_project() -> Generator[Any, None, None]:
         roxar_dtype=np.uint8,
         values=values,
     )
-    xtgeo_zone_param_multi.to_roxar(project, GRID_MODEL_GEO_MULTI, ZONE_PARAM_NAME)
+    xtgeo_zone_param_multi.to_rms(project, GRID_MODEL_GEO_MULTI, ZONE_PARAM_NAME)
 
     values = np.ones((NX, NY, NZ), dtype=np.uint8)
     xtgeo_zone_param_single = xtgeo.GridProperty(
@@ -328,7 +328,7 @@ def create_project() -> Generator[Any, None, None]:
         roxar_dtype=np.uint8,
         values=values,
     )
-    xtgeo_zone_param_single.to_roxar(project, GRID_MODEL_GEO_SINGLE, ZONE_PARAM_NAME)
+    xtgeo_zone_param_single.to_rms(project, GRID_MODEL_GEO_SINGLE, ZONE_PARAM_NAME)
 
     # make petro param per zone and facies for ertbox grid
     for zone_name, petro_per_facies_dict in USED_PETRO_DICT.items():
@@ -349,7 +349,7 @@ def create_project() -> Generator[Any, None, None]:
                     roxar_dtype=np.float32,
                     values=values,
                 )
-                xtgeo_petro_param.to_roxar(project, GRID_MODEL_ERTBOX, new_petro_name)
+                xtgeo_petro_param.to_rms(project, GRID_MODEL_ERTBOX, new_petro_name)
 
     # make inital and reference params for petro variables for geo grids
     petro_names = get_petro_variable_names()
@@ -375,7 +375,7 @@ def create_project() -> Generator[Any, None, None]:
             roxar_dtype=np.float32,
             values=values,
         )
-        xtgeo_petro_param.to_roxar(project, GRID_MODEL_GEO_MULTI, petro_name_ref)
+        xtgeo_petro_param.to_rms(project, GRID_MODEL_GEO_MULTI, petro_name_ref)
 
         values = make_reference_petro_param(
             (NX, NY, NZ), petro_name, facies_values_single, zone_values_single
@@ -389,7 +389,7 @@ def create_project() -> Generator[Any, None, None]:
             roxar_dtype=np.float32,
             values=values,
         )
-        xtgeo_petro_param.to_roxar(project, GRID_MODEL_GEO_SINGLE, petro_name_ref)
+        xtgeo_petro_param.to_rms(project, GRID_MODEL_GEO_SINGLE, petro_name_ref)
 
         # Set initial value of petro params to 0
         # They will be updated and checked with reference after that.
@@ -403,8 +403,8 @@ def create_project() -> Generator[Any, None, None]:
             roxar_dtype=np.float32,
             values=values,
         )
-        xtgeo_petro_param_initial.to_roxar(project, GRID_MODEL_GEO_MULTI, petro_name)
-        xtgeo_petro_param_initial.to_roxar(project, GRID_MODEL_GEO_SINGLE, petro_name)
+        xtgeo_petro_param_initial.to_rms(project, GRID_MODEL_GEO_MULTI, petro_name)
+        xtgeo_petro_param_initial.to_rms(project, GRID_MODEL_GEO_SINGLE, petro_name)
 
     # make petro param per facies for multizone grid.
     # They are use as input when updating the petro params
@@ -452,7 +452,7 @@ def create_project() -> Generator[Any, None, None]:
                         roxar_dtype=np.float32,
                         values=values,
                     )
-                    xtgeo_petro_param.to_roxar(
+                    xtgeo_petro_param.to_rms(
                         project, GRID_MODEL_GEO_MULTI, new_petro_name
                     )
 
@@ -484,7 +484,7 @@ def create_project() -> Generator[Any, None, None]:
                 roxar_dtype=np.float32,
                 values=values_per_zone,
             )
-            xtgeo_petro_param.to_roxar(project, GRID_MODEL_GEO_SINGLE, new_petro_name)
+            xtgeo_petro_param.to_rms(project, GRID_MODEL_GEO_SINGLE, new_petro_name)
 
     project.save_as(prj1)
     project.close()
@@ -545,7 +545,7 @@ def test_import_export_updated_field_parameters(
                     xtgeo_property = xtgeo.gridproperty_from_file(
                         filename, fformat="roff"
                     )
-                    xtgeo_property.to_roxar(
+                    xtgeo_property.to_rms(
                         rox.project, GRID_MODEL_ERTBOX, name_from_export
                     )
                     value1 = (
@@ -580,7 +580,7 @@ def test_import_export_updated_field_parameters(
                     xtgeo_property = xtgeo.gridproperty_from_file(
                         filename, fformat="roff"
                     )
-                    xtgeo_property.to_roxar(
+                    xtgeo_property.to_rms(
                         rox.project, GRID_MODEL_ERTBOX, name_from_export
                     )
                     values1 = (

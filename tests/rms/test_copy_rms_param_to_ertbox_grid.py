@@ -525,7 +525,7 @@ def create_grids(project: Any) -> None:
     actnum.values[5:30, 5:25, 20:] = 0
     geogrid.set_actnum(actnum)
     geogrid.set_subgrids(subgrid_dict)
-    geogrid.to_roxar(project, GRID_MODEL)
+    geogrid.to_rms(project, GRID_MODEL)
 
     ertboxgrid = xtgeo.create_box_grid(
         dimension_ertbox,
@@ -534,7 +534,7 @@ def create_grids(project: Any) -> None:
         rotation=rotation,
         flip=-1,
     )
-    ertboxgrid.to_roxar(project, GRID_MODEL_ERTBOX)
+    ertboxgrid.to_rms(project, GRID_MODEL_ERTBOX)
 
 
 def compare_results_with_reference(project: Any, test=1) -> None:
@@ -563,10 +563,10 @@ def import_petro_params(project: Any, file_name_for_zone_param: str) -> None:
         petro_name_reference = PETROPARAMS_REFERENCE[i]
         filename = Path(REFERENCE_DIR) / Path(petro_name_reference + ".roff")
         petro_reference = xtgeo.gridproperty_from_file(filename, fformat="roff")
-        petro_reference.to_roxar(project, GRID_MODEL, petro_name_reference)
+        petro_reference.to_rms(project, GRID_MODEL, petro_name_reference)
 
     zone_param = xtgeo.gridproperty_from_file(file_name_for_zone_param, fformat="roff")
-    zone_param.to_roxar(project, GRID_MODEL, "Zone")
+    zone_param.to_rms(project, GRID_MODEL, "Zone")
 
 
 @pytest.mark.skipunlessroxar

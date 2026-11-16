@@ -80,7 +80,7 @@ def update_petro_real(
                 "Need to specify the facies realization name when "
                 "config file is not specified."
             )
-    grid = xtgeo.grid_from_roxar(project, grid_name)
+    grid = xtgeo.grid_from_rms(project, grid_name)
     subgrids = grid.subgrids
 
     if subgrids:
@@ -166,7 +166,7 @@ def import_updated_field_parameters(
                 xtgeo_prop = xtgeo.gridproperty_from_file(
                     file_name, fformat="roff", name=property_name
                 )
-                xtgeo_prop.to_roxar(project, grid_model_name, property_name)
+                xtgeo_prop.to_rms(project, grid_model_name, property_name)
 
 
 def export_initial_field_parameters(
@@ -216,7 +216,7 @@ def export_initial_field_parameters(
                 property_name = zone_name + "_" + fname + "_" + petro_name
                 file_name = Path(export_path) / Path(property_name + ".roff")
                 print(f"Export file: {file_name} into {grid_model_name}")
-                xtgeo_prop = xtgeo.gridproperty_from_roxar(
+                xtgeo_prop = xtgeo.gridproperty_from_rms(
                     project, grid_model_name, property_name
                 )
                 xtgeo_prop.to_file(file_name, fformat="roff", name=property_name)
@@ -247,14 +247,14 @@ def combine_petro_real_from_multiple_facies(
     petro_var_list = get_petro_var(used_petro_dict)
 
     # Get facies realization
-    prop_facies = xtgeo.gridproperty_from_roxar(
+    prop_facies = xtgeo.gridproperty_from_rms(
         project, grid_name, facies_real_name, faciescodes=True
     )
     prop_facies_values = prop_facies.values
 
     # Get zone realization for multi zone grid
     if not single_zone_grid:
-        prop_zone = xtgeo.gridproperty_from_roxar(project, grid_name, zone_param_name)
+        prop_zone = xtgeo.gridproperty_from_rms(project, grid_name, zone_param_name)
         prop_zone_values = prop_zone.values
 
     err_msg = []
@@ -270,9 +270,7 @@ def combine_petro_real_from_multiple_facies(
             if zone_code_names:
                 zone_code = code_per_name(zone_code_names, zone_name)
         for pname in petro_var_list:
-            prop_petro_original = xtgeo.gridproperty_from_roxar(
-                project, grid_name, pname
-            )
+            prop_petro_original = xtgeo.gridproperty_from_rms(project, grid_name, pname)
             prop_petro_original_values = prop_petro_original.values
             is_updated = False
             for fname in petro_per_facies_dict:
@@ -297,7 +295,7 @@ def combine_petro_real_from_multiple_facies(
                         )
                         continue
 
-                    prop_petro = xtgeo.gridproperty_from_roxar(
+                    prop_petro = xtgeo.gridproperty_from_rms(
                         project, grid_name, petro_name_per_facies
                     )
                     prop_petro_values = prop_petro.values
@@ -338,7 +336,7 @@ def combine_petro_real_from_multiple_facies(
                     print(
                         f"Write updated petro param {pname} for grid model {grid_name}"
                     )
-            prop_petro_original.to_roxar(project, grid_name, pname)
+            prop_petro_original.to_rms(project, grid_name, pname)
     if not ignore_missing_parameters and len(err_msg) > 0:
         print(
             f"Missing or empty petrophysical 3D parameters for grid model: {grid_name}:"

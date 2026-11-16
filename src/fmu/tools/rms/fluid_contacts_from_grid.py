@@ -34,13 +34,11 @@ class _RMSDataLoader:
 
     def load_grid(self) -> xtgeo.Grid:
         """Load grid from RMS."""
-        return xtgeo.grid_from_roxar(self.project, self.grid_name)
+        return xtgeo.grid_from_rms(self.project, self.grid_name)
 
     def load_property(self, property_name: str) -> xtgeo.GridProperty:
         """Load a property from RMS."""
-        return xtgeo.gridproperty_from_roxar(
-            self.project, self.grid_name, property_name
-        )
+        return xtgeo.gridproperty_from_rms(self.project, self.grid_name, property_name)
 
     def find_available_contact_properties(
         self, fwl_name: str, goc_name: str, gwc_name: str, owc_name: str
@@ -290,7 +288,7 @@ def create_fluid_contacts_from_grid(
                 if template_surf:
                     surf = resample_surf_to_template(surf, template_surf)
 
-                surf.to_roxar(
+                surf.to_rms(
                     project,
                     zonename,
                     f"{OUTPUT_FOLDER_SURFACES}/{contact.type}",
@@ -303,7 +301,7 @@ def create_fluid_contacts_from_grid(
                 min_value_filter,
                 rescale_distance,
             ):
-                outline.to_roxar(
+                outline.to_rms(
                     project,
                     zonename,
                     f"{OUTPUT_FOLDER_OUTLINES}/{contact.type}",
